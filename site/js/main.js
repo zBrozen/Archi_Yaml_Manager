@@ -203,9 +203,8 @@ function PlayerCard({ js, index, games, update }) {
     <div class="fields">
       <label>
         <span>Nom du joueur</span>
-        <input type="text" value=${name} maxlength=${String(name).includes("{") ? undefined : 16}
-          onChange=${(e) => update(["name"], e.target.value.trim())} />
-        ${tooLong && html`<span class="error small">16 caractères maximum.</span>`}
+        <input type="text" value=${name} onChange=${(e) => update(["name"], e.target.value.trim())} />
+        ${tooLong && html`<span class="hint">Archipelago ne garde que les 16 premiers caractères : « ${String(name).trim().slice(0, 16).trim()} ».</span>`}
       </label>
       <${GameField} value=${js.game} index=${index} onChange=${(v) => update(["game"], v)} />
       <label class="span-all">
