@@ -173,7 +173,7 @@ jobs:
           pip install argostranslate docutils
 
       - name: Traduire les descriptions
-        run: python tools/translate_docs.py --data site/data --cache translations/fr.json
+        run: python tools/translate_docs.py --data site/data --cache translations/fr.json --max-minutes 20
 
       - uses: actions/upload-artifact@v4
         with:

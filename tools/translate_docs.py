@@ -20,6 +20,7 @@ import argparse
 import json
 import re
 import sys
+import time
 from pathlib import Path
 from typing import Callable
 
@@ -120,7 +121,10 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--data", required=True, help="Dossier des données du site (contient games/)")
     parser.add_argument("--cache", required=True, help="Fichier JSON des traductions déjà faites")
+    parser.add_argument("--max-minutes", type=float, help="durée maximale de traduction ; le reste attend "
+                        "l'exécution suivante (les descriptions restent en anglais en attendant)")
     args = parser.parse_args()
+    deadline = time.monotonic() + args.max_minutes * 60 if args.max_minutes else None
 
     cache_path = Path(args.cache)
     cache: dict[str, str] = json.loads(cache_path.read_text(encoding="utf-8")) if cache_path.exists() else {}
@@ -136,6 +140,9 @@ def main() -> int:
     elif missing:
         print(f"{len(missing)} descriptions à traduire ({len(docs) - len(missing)} déjà en cache).", flush=True)
         for n, doc in enumerate(missing, 1):
+            if deadline and time.monotonic() > deadline:
+                print(f"Durée maximale atteinte : {len(missing) - n + 1} descriptions restent pour la prochaine fois.")
+                break
             cache[doc] = translate_doc(doc, translate)
             if n % 100 == 0:
                 print(f"  {n}/{len(missing)}", flush=True)
