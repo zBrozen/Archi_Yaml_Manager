@@ -1,7 +1,7 @@
 import { html, render, useState, useEffect } from "../vendor/preact-htm.js";
 import { loadIndex, loadGame, cachedGame, gameEntry, compareVersions, localGames, forgetLocalGame } from "./data.js";
 import { parseFile, exportFile, gamesOf, setIn, getIn, markDirty, isPlainObject, RESERVED_KEYS } from "./yaml-model.js";
-import { checkValue, sameAsDefault, GROUP_NAMES } from "./options.js";
+import { checkValue, sameAsDefault, yamlDefault, yamlComment, GROUP_NAMES } from "./options.js";
 import { useApworldLoader } from "./apworld.js";
 import { OptionRow, RawEditor } from "./editors.js";
 
@@ -40,6 +40,32 @@ function useGame(name) {
 function isWeightPath(path) {
   if (path.length !== 2) return false;
   return !!cachedGame(path[0])?.options.get(path[1])?.weighted;
+}
+
+function commentFor(path) {
+  const option = path.length === 2 ? cachedGame(path[0])?.options.get(path[1]) : null;
+  return option ? yamlComment(option) : null;
+}
+
+// Le fichier exporté contient toutes les options du jeu, comme les modèles d'Archipelago :
+// celles qui manquent sont ajoutées à leur valeur par défaut.
+function completeDocs(docs, knownGames) {
+  return docs.map((entry) => {
+    let { js, dirty } = entry;
+    for (const game of gamesOf(js, knownGames)) {
+      const data = cachedGame(game);
+      if (!data) continue;
+      for (const group of data.groups) {
+        for (const option of group.options) {
+          const path = [game, option.key];
+          if (option.kind === "removed" || (option.visibility & 1) !== 1 || getIn(js, path) !== undefined) continue;
+          js = setIn(js, path, yamlDefault(option));
+          dirty = [...dirty, JSON.stringify(path)];
+        }
+      }
+    }
+    return { ...entry, js, dirty };
+  });
 }
 
 // Zone de dépôt d'un apworld, obligatoire pour un jeu absent de la base du site.
@@ -362,7 +388,7 @@ function Editor({ index, file, setFile, onClose, advanced }) {
     return { ...f, docs };
   });
 
-  const exported = () => exportFile(file.original, file.docs, isWeightPath);
+  const exported = () => exportFile(file.original, completeDocs(file.docs, knownGames), isWeightPath, commentFor);
   const fileName = () => {
     if (file.name) return file.name.replace(/\.(ya?ml|txt)$/i, "") + ".yaml";
     const base = String(file.docs[0].js.name || "joueur").replace(/\{[^}]*\}/g, "").replace(/[^\w\- ]+/g, "").trim();

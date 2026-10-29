@@ -167,6 +167,18 @@ export function defaultValue(option) {
   return value;
 }
 
+// Valeur par défaut telle qu'elle s'écrit dans le YAML (oui/non en booléen).
+export function yamlDefault(option) {
+  if (option.kind === "toggle") return option.default === "true";
+  return defaultValue(option);
+}
+
+// Commentaire placé au-dessus d'une option ajoutée au fichier : son nom et le début de sa description.
+export function yamlComment(option) {
+  const paragraph = (option.doc || "").split(/\n\s*\n/)[0].replace(/\*\*|``?/g, "").trim();
+  return paragraph ? `${option.name}\n${paragraph}` : option.name;
+}
+
 export function describeScalar(option, value) {
   if (value === undefined || value === null) return "—";
   const text = String(value).toLowerCase();

@@ -166,8 +166,21 @@ function applyPath(doc, path, value, weights) {
   }
 }
 
-// `isWeightPath(path)` indique si la valeur à ce chemin est une option pondérable.
-export function exportFile(originalText, docs, isWeightPath) {
+// Commentaire au-dessus d'une clé (une ligne vide la sépare de la précédente).
+function setKeyComment(doc, path, text) {
+  const parent = doc.getIn(path.slice(0, -1), true);
+  if (!YAML.isMap(parent)) return;
+  const pair = parent.items.find((p) => keyText(p.key) === String(path[path.length - 1]));
+  if (!pair) return;
+  if (!YAML.isScalar(pair.key)) pair.key = doc.createNode(pair.key); // clé ajoutée par setIn : simple texte
+  if (pair.key.commentBefore) return;
+  pair.key.commentBefore = text.split("\n").map((line) => ` ${line}`).join("\n");
+  pair.key.spaceBefore = parent.items[0] !== pair;
+}
+
+// `isWeightPath(path)` indique si la valeur à ce chemin est une option pondérable ;
+// `commentFor(path)` donne le commentaire d'une option ajoutée au fichier (ou null).
+export function exportFile(originalText, docs, isWeightPath, commentFor = () => null) {
   const sources = originalText != null
     ? YAML.parseAllDocuments(cleanText(originalText), PARSE_OPTIONS)
     : [];
@@ -177,13 +190,19 @@ export function exportFile(originalText, docs, isWeightPath) {
       doc = new YAML.Document(entry.js, { version: "1.1" });
       for (const [key, value] of Object.entries(entry.js)) {
         if (isPlainObject(value)) for (const optionKey of Object.keys(value)) {
-          if (isWeightPath([key, optionKey])) unquoteWeightKeys(doc, [key, optionKey]);
+          const path = [key, optionKey];
+          if (isWeightPath(path)) unquoteWeightKeys(doc, path);
+          const comment = commentFor(path);
+          if (comment) setKeyComment(doc, path, comment);
         }
       }
     } else {
       for (const id of entry.dirty) {
         const path = JSON.parse(id);
+        const added = !doc.hasIn(path);
         applyPath(doc, path, getIn(entry.js, path), isWeightPath(path));
+        const comment = added && doc.hasIn(path) ? commentFor(path) : null;
+        if (comment) setKeyComment(doc, path, comment);
       }
     }
     return fixFloats(doc.toString(STRINGIFY_OPTIONS));

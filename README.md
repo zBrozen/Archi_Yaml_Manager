@@ -11,8 +11,10 @@ sans éditer le code à la main.
   de chaque valeur, options de plando et YAML brut.
 - **Repérer les problèmes** : option inconnue ou supprimée, valeur hors limites, nom d'objet invalide,
   YAML écrit pour une ancienne version d'Archipelago.
-- **Exporter** : seules les options modifiées sont réécrites, et une table de poids garde sa forme
-  (la valeur choisie prend le poids, les autres passent à 0). Les commentaires du fichier sont conservés.
+- **Exporter** : le fichier contient toutes les options du jeu, comme les modèles d'Archipelago ; celles qui
+  manquaient sont ajoutées à leur valeur par défaut, avec leur description en commentaire. Le reste du fichier
+  (commentaires, mise en forme) est conservé, et une table de poids garde sa forme (la valeur choisie prend
+  le poids, les autres passent à 0).
 - **Partir de zéro** : créer un YAML vide pour n'importe quel jeu de la base.
 - **Jeux non officiels** : le fichier `.apworld` du jeu est obligatoire. Le joueur le dépose avec son YAML
   (ou dans l'encadré qui le demande) et le site le lit avec Archipelago lui-même, exécuté dans le navigateur
