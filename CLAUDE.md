@@ -15,3 +15,7 @@
 - Tester les scripts en local sous Windows : `py -3`, et si erreur SSL, `SSL_CERT_FILE` vers le
   `ca-bundle.crt` de Git. Sans jeton GitHub, l'API limite à 60 requêtes par heure : tester sur un
   extrait de `apworlds.json`.
+- `extract_options.py` charge les apworlds par lots, chacun dans son propre processus (temps et
+  mémoire limités) ; un lot qui plante est coupé en deux jusqu'à isoler le fautif, signalé dans
+  `index.json` (`errors`). `fetch_apworlds.py` écarte en amont les apworlds dont le manifeste ferait
+  planter Archipelago pour tous les mondes (version mal formée, zip invalide).

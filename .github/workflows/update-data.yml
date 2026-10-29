@@ -100,8 +100,9 @@ jobs:
           done
 
       # Apworlds déjà téléchargés et réponses de l'API GitHub : évite de tout retélécharger
-      # et de dépasser la limite de requêtes. Une nouvelle entrée est enregistrée à chaque exécution.
-      - uses: actions/cache@v4
+      # et de dépasser la limite de requêtes. Enregistré juste après le téléchargement, même si
+      # l'extraction échoue ensuite.
+      - uses: actions/cache/restore@v4
         with:
           path: ${{ runner.temp }}/apworld-cache
           key: apworlds-${{ github.run_id }}
@@ -115,6 +116,13 @@ jobs:
           --dest "$RUNNER_TEMP/Archipelago/custom_worlds" --cache "$RUNNER_TEMP/apworld-cache"
           --credits site/data/apworld-credits.json
 
+      - uses: actions/cache/save@v4
+        if: always()
+        with:
+          path: ${{ runner.temp }}/apworld-cache
+          key: apworlds-${{ github.run_id }}
+
+      # Chaque lot d'apworlds est chargé dans un processus séparé (voir extract_options.py).
       - name: Extraire les options
         run: python tools/extract_options.py --ap "$RUNNER_TEMP/Archipelago" --out site/data < /dev/null
 
