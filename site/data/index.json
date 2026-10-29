@@ -1,13 +1,70 @@
 {
  "ap_version": "0.6.8",
- "generated_at": "2026-10-29T15:46:45+00:00",
+ "generated_at": "2026-10-29T21:44:55+00:00",
  "games": [
+  {
+   "game": "2048",
+   "file": "games/2048.json",
+   "source": "custom",
+   "apworld": "2048.apworld",
+   "world_version": "1.1.3",
+   "sheet": {
+    "game": "2048",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "7 Days To Die",
+   "file": "games/7-days-to-die.json",
+   "source": "custom",
+   "apworld": "7dtd_world.apworld",
+   "world_version": "1.2.1",
+   "sheet": {
+    "game": "7 Days to Die",
+    "stability": "Unstable",
+    "pr_status": "Not PRing",
+    "adult": true
+   }
+  },
+  {
+   "game": "A Dance of Fire and Ice",
+   "file": "games/a-dance-of-fire-and-ice.json",
+   "source": "custom",
+   "apworld": "adofai.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "A Dance Of Fire And Ice",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "A Difficult Game About Climbing",
+   "file": "games/a-difficult-game-about-climbing.json",
+   "source": "custom",
+   "apworld": "difficult_climbing.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "A Difficult Game About Climbing",
+    "stability": "Stable"
+   }
+  },
   {
    "game": "A Hat in Time",
    "file": "games/a-hat-in-time.json",
    "source": "core",
    "apworld": null,
    "world_version": null
+  },
+  {
+   "game": "A Link Between Worlds",
+   "file": "games/a-link-between-worlds.json",
+   "source": "custom",
+   "apworld": "albw.apworld",
+   "world_version": "0.3.6",
+   "sheet": {
+    "game": "The Legend of Zelda: A Link Between Worlds",
+    "stability": "Stable"
+   }
   },
   {
    "game": "A Link to the Past",
@@ -24,11 +81,223 @@
    "world_version": null
   },
   {
+   "game": "Actraiser",
+   "file": "games/actraiser.json",
+   "source": "custom",
+   "apworld": "actraiser.apworld",
+   "world_version": "1.3.4",
+   "sheet": {
+    "game": "ActRaiser",
+    "stability": "Stable"
+   }
+  },
+  {
    "game": "Adventure",
    "file": "games/adventure.json",
    "source": "core",
    "apworld": null,
    "world_version": null
+  },
+  {
+   "game": "AEMinecraft",
+   "file": "games/aeminecraft.json",
+   "source": "custom",
+   "apworld": "minecraft_aem.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Minecraft [AEM]",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Against the Storm",
+   "file": "games/against-the-storm.json",
+   "source": "custom",
+   "apworld": "against_the_storm.apworld",
+   "world_version": "1.2.1",
+   "sheet": {
+    "game": "Against the Storm",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Age Of Empires II: Definitive Edition",
+   "file": "games/age-of-empires-ii-definitive-edition.json",
+   "source": "custom",
+   "apworld": "age2de.apworld",
+   "world_version": "0.0.1",
+   "sheet": {
+    "game": "Age of Empires II: Definite Edition",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Age Of Mythology Retold",
+   "file": "games/age-of-mythology-retold.json",
+   "source": "custom",
+   "apworld": "aom.apworld",
+   "world_version": "1.3.7",
+   "sheet": {
+    "game": "Age of Mythology: Retold",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Air Delivery",
+   "file": "games/air-delivery.json",
+   "source": "custom",
+   "apworld": "air_delivery.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Air Delivery",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Alabaster Dawn",
+   "file": "games/alabaster-dawn.json",
+   "source": "custom",
+   "apworld": "alabaster_dawn.apworld",
+   "world_version": "0.2.2",
+   "sheet": {
+    "game": "Alabaster Dawn",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "An Untitled Story",
+   "file": "games/an-untitled-story.json",
+   "source": "custom",
+   "apworld": "aus.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "An Untitled Story",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Angband",
+   "file": "games/angband.json",
+   "source": "custom",
+   "apworld": "angband.apworld",
+   "world_version": "0.4.0",
+   "sheet": {
+    "game": "Angband",
+    "stability": "Unstable",
+    "pr_status": "Not PRing"
+   }
+  },
+  {
+   "game": "Animal Crossing",
+   "file": "games/animal-crossing.json",
+   "source": "custom",
+   "apworld": "animal_crossing.apworld",
+   "world_version": "0.5.4",
+   "sheet": {
+    "game": "Animal Crossing (GameCube)",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "ANIMAL WELL",
+   "file": "games/animal-well.json",
+   "source": "custom",
+   "apworld": "animal_well.apworld",
+   "world_version": "0.5.4",
+   "sheet": {
+    "game": "ANIMAL WELL",
+    "stability": "Stable",
+    "pr_status": "Not PRing"
+   }
+  },
+  {
+   "game": "Anno 1800",
+   "file": "games/anno-1800.json",
+   "source": "custom",
+   "apworld": "a1800.apworld",
+   "world_version": "1.5.0",
+   "sheet": {
+    "game": "Anno 1800",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Anodyne",
+   "file": "games/anodyne.json",
+   "source": "custom",
+   "apworld": "anodyne.apworld",
+   "world_version": "0.6.3",
+   "sheet": {
+    "game": "Anodyne",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Another Crabs Treasure",
+   "file": "games/another-crabs-treasure.json",
+   "source": "custom",
+   "apworld": "another_crab.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Another Crab's Treasure",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "AP Tombola",
+   "file": "games/ap-tombola.json",
+   "source": "custom",
+   "apworld": "aptombola.apworld",
+   "world_version": "0.4.0",
+   "sheet": {
+    "game": "Tombola",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "AP-Rummy",
+   "file": "games/ap-rummy.json",
+   "source": "custom",
+   "apworld": "rummy.apworld",
+   "world_version": "1.0.0",
+   "sheet": {
+    "game": "AP Rummy",
+    "stability": "Unstable",
+    "pr_status": "Not PRing"
+   }
+  },
+  {
+   "game": "Ape Escape",
+   "file": "games/ape-escape.json",
+   "source": "custom",
+   "apworld": "apeescape.apworld",
+   "world_version": "0.9.10",
+   "sheet": {
+    "game": "Ape Escape",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Ape Escape 2",
+   "file": "games/ape-escape-2.json",
+   "source": "custom",
+   "apworld": "ae2.apworld",
+   "world_version": "1.3.4",
+   "sheet": {
+    "game": "Ape Escape 2",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Ape Escape 3",
+   "file": "games/ape-escape-3.json",
+   "source": "custom",
+   "apworld": "ape_escape_3.apworld",
+   "world_version": "2.1.0",
+   "sheet": {
+    "game": "Ape Escape 3",
+    "stability": "Stable"
+   }
   },
   {
    "game": "APQuest",
@@ -45,11 +314,344 @@
    "world_version": "1.5.2"
   },
   {
+   "game": "Archipela-Go!",
+   "file": "games/archipela-go.json",
+   "source": "custom",
+   "apworld": "apgo.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Archipela-Go!",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "ArchipelaCode",
+   "file": "games/archipelacode.json",
+   "source": "custom",
+   "apworld": "archipelacode.apworld",
+   "world_version": "0.0.1",
+   "sheet": {
+    "game": "Archipelacode",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Archipeladoku",
+   "file": "games/archipeladoku.json",
+   "source": "custom",
+   "apworld": "archipeladoku.apworld",
+   "world_version": "2026.9.26",
+   "sheet": {
+    "game": "Archipeladoku (Sudoku)",
+    "stability": "Stable",
+    "pr_status": "Not PRing"
+   }
+  },
+  {
+   "game": "ARK Survival Evolved",
+   "file": "games/ark-survival-evolved.json",
+   "source": "custom",
+   "apworld": "ark_ase.apworld",
+   "world_version": "1.0.0",
+   "sheet": {
+    "game": "Ark: Survival Evolved",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Arkham Horror The Card Game",
+   "file": "games/arkham-horror-the-card-game.json",
+   "source": "custom",
+   "apworld": "ahlcg.apworld",
+   "world_version": "0.1.4",
+   "sheet": {
+    "game": "Arkham Horror The Card Game",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Armored Core",
+   "file": "games/armored-core.json",
+   "source": "custom",
+   "apworld": "armoredcore.apworld",
+   "world_version": "0.3.0",
+   "sheet": {
+    "game": "Armored Core (PSX)",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Armored Core 3",
+   "file": "games/armored-core-3.json",
+   "source": "custom",
+   "apworld": "armoredcore3.apworld",
+   "world_version": "0.2.0",
+   "sheet": {
+    "game": "Armored Core 3",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Arzette: The Jewel of Faramore",
+   "file": "games/arzette-the-jewel-of-faramore.json",
+   "source": "custom",
+   "apworld": "arzette.apworld",
+   "world_version": "1.0.0",
+   "sheet": {
+    "game": "Arzette: The Jewel of Faramore",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Astalon",
+   "file": "games/astalon.json",
+   "source": "custom",
+   "apworld": "astalon.apworld",
+   "world_version": "0.27.1",
+   "sheet": {
+    "game": "Astalon: Tears of the Earth",
+    "stability": "Stable",
+    "pr_status": "Not PRing"
+   }
+  },
+  {
+   "game": "Autopelago",
+   "file": "games/autopelago.json",
+   "source": "custom",
+   "apworld": "autopelago.apworld",
+   "world_version": "1.1.1",
+   "sheet": {
+    "game": "Autopelago",
+    "stability": "Stable",
+    "pr_status": "In Review"
+   }
+  },
+  {
+   "game": "Axiom Verge",
+   "file": "games/axiom-verge.json",
+   "source": "custom",
+   "apworld": "axiomverge.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Axiom Verge",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Baba Is You",
+   "file": "games/baba-is-you.json",
+   "source": "custom",
+   "apworld": "baba_is_you.apworld",
+   "world_version": "0.3.5",
+   "sheet": {
+    "game": "Baba Is You",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Balatro",
+   "file": "games/balatro.json",
+   "source": "custom",
+   "apworld": "balatro.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Balatro",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Baldur's Gate 3",
+   "file": "games/baldur-s-gate-3.json",
+   "source": "custom",
+   "apworld": "bg3.apworld",
+   "world_version": "0.8.0",
+   "sheet": {
+    "game": "Baldur's Gate 3",
+    "stability": "Stable",
+    "pr_status": "Not PRing",
+    "adult": true
+   }
+  },
+  {
+   "game": "Baldur's Gate 3 - ToT",
+   "file": "games/baldur-s-gate-3-tot.json",
+   "source": "custom",
+   "apworld": "bg3tot.apworld",
+   "world_version": "1.2.2",
+   "sheet": {
+    "game": "Baldur's Gate 3 - Trials of Tav",
+    "stability": "Unstable",
+    "pr_status": "Not PRing",
+    "adult": true
+   }
+  },
+  {
+   "game": "Banjo-Tooie",
+   "file": "games/banjo-tooie.json",
+   "source": "custom",
+   "apworld": "banjo_tooie.apworld",
+   "world_version": "4.13.1",
+   "sheet": {
+    "game": "Banjo-Tooie",
+    "stability": "Stable",
+    "pr_status": "In Review"
+   }
+  },
+  {
+   "game": "Bat to the Heavens",
+   "file": "games/bat-to-the-heavens.json",
+   "source": "custom",
+   "apworld": "bat_to_the_heavens.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Bat to the Heavens",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Bayonetta",
+   "file": "games/bayonetta.json",
+   "source": "custom",
+   "apworld": "bayonetta.apworld",
+   "world_version": "3.3.0",
+   "sheet": {
+    "game": "Bayonetta",
+    "stability": "Unstable",
+    "pr_status": "Not PRing",
+    "adult": true
+   }
+  },
+  {
+   "game": "Beat Saber",
+   "file": "games/beat-saber.json",
+   "source": "custom",
+   "apworld": "beat_saber.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Beat Saber",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Bits & Bops",
+   "file": "games/bits-bops.json",
+   "source": "custom",
+   "apworld": "bits_and_bops.apworld",
+   "world_version": "1.1.0",
+   "sheet": {
+    "game": "Bits & Bops",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Bitty Buddies",
+   "file": "games/bitty-buddies.json",
+   "source": "custom",
+   "apworld": "bitty_buddies.apworld",
+   "world_version": "1.0.0",
+   "sheet": {
+    "game": "Bitty Buddies",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "BKSimulator",
+   "file": "games/bksimulator.json",
+   "source": "custom",
+   "apworld": "bksim.apworld",
+   "world_version": "1.0.2",
+   "sheet": {
+    "game": "BK Simulator",
+    "stability": "Stable",
+    "pr_status": "In Review"
+   }
+  },
+  {
+   "game": "Black Market of Bulletphilia ~ 100th Black Market",
+   "file": "games/black-market-of-bulletphilia-100th-black-market.json",
+   "source": "custom",
+   "apworld": "th185.apworld",
+   "world_version": "0.4.52",
+   "sheet": {
+    "game": "Black Market of Bulletphilia ~ 100th Black Market (Touhou 18.5)",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Black Ops 3 - Zombies",
+   "file": "games/black-ops-3-zombies.json",
+   "source": "custom",
+   "apworld": "cod_bo3.apworld",
+   "world_version": "0.5.12",
+   "sheet": {
+    "game": "Call of Duty: Black Ops 3 - Zombies",
+    "stability": "Unstable",
+    "pr_status": "Not PRing",
+    "adult": true
+   }
+  },
+  {
    "game": "Blasphemous",
    "file": "games/blasphemous.json",
    "source": "core",
    "apworld": null,
    "world_version": null
+  },
+  {
+   "game": "Blender",
+   "file": "games/blender.json",
+   "source": "custom",
+   "apworld": "blender.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Blender",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Blockupelago",
+   "file": "games/blockupelago.json",
+   "source": "custom",
+   "apworld": "blockupelago.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Blockupelago",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Bloons TD6",
+   "file": "games/bloons-td6.json",
+   "source": "custom",
+   "apworld": "bloonstd6.apworld",
+   "world_version": "0.8.3",
+   "sheet": {
+    "game": "Bloons Tower Defense 6",
+    "stability": "Stable",
+    "pr_status": "Not PRing"
+   }
+  },
+  {
+   "game": "Blue Fire",
+   "file": "games/blue-fire.json",
+   "source": "custom",
+   "apworld": "bluefire.apworld",
+   "world_version": "0.1.0",
+   "sheet": {
+    "game": "Blue Fire",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Blue Prince",
+   "file": "games/blue-prince.json",
+   "source": "custom",
+   "apworld": "blueprince.apworld",
+   "world_version": "0.1.3",
+   "sheet": {
+    "game": "Blue Prince",
+    "stability": "Unstable"
+   }
   },
   {
    "game": "Bomb Rush Cyberfunk",
@@ -59,11 +661,192 @@
    "world_version": "1.0.6"
   },
   {
+   "game": "Bomberman Quest",
+   "file": "games/bomberman-quest.json",
+   "source": "custom",
+   "apworld": "bomberman_quest.apworld",
+   "world_version": "0.1.2",
+   "sheet": {
+    "game": "Bomberman 64",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Borderlands 2",
+   "file": "games/borderlands-2.json",
+   "source": "custom",
+   "apworld": "borderlands2.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Borderlands 2",
+    "stability": "Unstable",
+    "pr_status": "Not PRing",
+    "adult": true
+   }
+  },
+  {
+   "game": "Brave Fencer Musashi",
+   "file": "games/brave-fencer-musashi.json",
+   "source": "custom",
+   "apworld": "bfm.apworld",
+   "world_version": "0.8.1",
+   "sheet": {
+    "game": "Brave Fencer Musashi",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Brotato",
+   "file": "games/brotato.json",
+   "source": "custom",
+   "apworld": "brotato.apworld",
+   "world_version": "0.17.2",
+   "sheet": {
+    "game": "Brotato",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Bubble Bobble",
+   "file": "games/bubble-bobble.json",
+   "source": "custom",
+   "apworld": "bubblebobble.apworld",
+   "world_version": "1.2.2",
+   "sheet": {
+    "game": "Bubble Bobble",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Buckshot Roulette",
+   "file": "games/buckshot-roulette.json",
+   "source": "custom",
+   "apworld": "buckshot.apworld",
+   "world_version": "0.4.1",
+   "sheet": {
+    "game": "Buckshot Roulette",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Bugs Bunny Lost in Time",
+   "file": "games/bugs-bunny-lost-in-time.json",
+   "source": "custom",
+   "apworld": "bugsbunnylit.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Bugs Bunny Lost in Time",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Bugsnax",
+   "file": "games/bugsnax.json",
+   "source": "custom",
+   "apworld": "bugsnax.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Bugsnax",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Build a Jetpack",
+   "file": "games/build-a-jetpack.json",
+   "source": "custom",
+   "apworld": "build_a_jetpack.apworld",
+   "world_version": "0.3.0",
+   "sheet": {
+    "game": "Build a Jetpack",
+    "stability": "Stable",
+    "pr_status": "Not PRing"
+   }
+  },
+  {
    "game": "Bumper Stickers",
    "file": "games/bumper-stickers.json",
    "source": "core",
    "apworld": null,
    "world_version": "1.0.0"
+  },
+  {
+   "game": "Burger Shop",
+   "file": "games/burger-shop.json",
+   "source": "custom",
+   "apworld": "burger_shop.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Burger Shop",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Burnout 3",
+   "file": "games/burnout-3.json",
+   "source": "custom",
+   "apworld": "burnout3.apworld",
+   "world_version": "0.1.0",
+   "sheet": {
+    "game": "Burnout 3: Takedown",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "C&C Reloaded",
+   "file": "games/c-c-reloaded.json",
+   "source": "custom",
+   "apworld": "cnc_reloaded.apworld",
+   "world_version": "1.9.0",
+   "sheet": {
+    "game": "C&C Reloaded",
+    "stability": "Unstable",
+    "pr_status": "Not PRing"
+   }
+  },
+  {
+   "game": "Candy Box 2",
+   "file": "games/candy-box-2.json",
+   "source": "custom",
+   "apworld": "candybox2.apworld",
+   "world_version": "1.20260822.1",
+   "sheet": {
+    "game": "Candy Box 2",
+    "stability": "Stable",
+    "pr_status": "In Review"
+   }
+  },
+  {
+   "game": "Carnival Games MiniGolf",
+   "file": "games/carnival-games-minigolf.json",
+   "source": "custom",
+   "apworld": "carnival_games_minigolf.apworld",
+   "world_version": "0.1.0",
+   "sheet": {
+    "game": "Carnival Games MiniGolf",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Cash cleaner simulator",
+   "file": "games/cash-cleaner-simulator.json",
+   "source": "custom",
+   "apworld": "ccs.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Cash Cleaner Simulator",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Cassette Beasts",
+   "file": "games/cassette-beasts.json",
+   "source": "custom",
+   "apworld": "cassette_beasts.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Cassette Beasts",
+    "stability": "Unstable"
+   }
   },
   {
    "game": "Castlevania - Circle of the Moon",
@@ -80,6 +863,85 @@
    "world_version": null
   },
   {
+   "game": "Castlevania: Legacy of Darkness",
+   "file": "games/castlevania-legacy-of-darkness.json",
+   "source": "custom",
+   "apworld": "cvlod.apworld",
+   "world_version": "2.0.2",
+   "sheet": {
+    "game": "Castlevania: Harmony of Dissonance",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Castlevania: Lords of Shadow",
+   "file": "games/castlevania-lords-of-shadow.json",
+   "source": "custom",
+   "apworld": "los.apworld",
+   "world_version": "0.7.4",
+   "sheet": {
+    "game": "Castlevania: Lords of Shadow",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Castlevania: Order of Ecclesia",
+   "file": "games/castlevania-order-of-ecclesia.json",
+   "source": "custom",
+   "apworld": "cv_ooe.apworld",
+   "world_version": "2.1.0",
+   "sheet": {
+    "game": "Castlevania: Dawn of Sorrow",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Casualties: Unknown",
+   "file": "games/casualties-unknown.json",
+   "source": "custom",
+   "apworld": "casualtiesunknown.apworld",
+   "world_version": "0.12.1",
+   "sheet": {
+    "game": "Casualties: Unknown (Scav Prototype Demo)",
+    "stability": "Unstable",
+    "pr_status": "Not PRing",
+    "adult": true
+   }
+  },
+  {
+   "game": "Cave Story",
+   "file": "games/cave-story.json",
+   "source": "custom",
+   "apworld": "cave_story.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Cave Story",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Cavern of Dreams",
+   "file": "games/cavern-of-dreams.json",
+   "source": "custom",
+   "apworld": "cavern_of_dreams.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Cavern of Dreams",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Caves of Qud",
+   "file": "games/caves-of-qud.json",
+   "source": "custom",
+   "apworld": "cavesofqud.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Caves of Qud",
+    "stability": "Unstable"
+   }
+  },
+  {
    "game": "Celeste (Open World)",
    "file": "games/celeste-open-world.json",
    "source": "core",
@@ -94,11 +956,68 @@
    "world_version": "1.3.1"
   },
   {
+   "game": "Celeste Classic",
+   "file": "games/celeste-classic.json",
+   "source": "custom",
+   "apworld": "celeste_classic.apworld",
+   "world_version": "0.2.0",
+   "sheet": {
+    "game": "Celeste Classic",
+    "stability": "Unstable",
+    "pr_status": "Not PRing"
+   }
+  },
+  {
+   "game": "Chained Echoes",
+   "file": "games/chained-echoes.json",
+   "source": "custom",
+   "apworld": "chainedechoes.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Chained Echoes",
+    "stability": "Unstable"
+   }
+  },
+  {
    "game": "ChecksFinder",
    "file": "games/checksfinder.json",
    "source": "core",
    "apworld": null,
    "world_version": null
+  },
+  {
+   "game": "ChecksMate",
+   "file": "games/checksmate.json",
+   "source": "custom",
+   "apworld": "checksmate.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "ChecksMate (Chess)",
+    "stability": "Stable",
+    "pr_status": "In Review"
+   }
+  },
+  {
+   "game": "Chibi Robo",
+   "file": "games/chibi-robo.json",
+   "source": "custom",
+   "apworld": "chibi_robo.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Chibi Robo! Plug into Adventure",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Children of Morta",
+   "file": "games/children-of-morta.json",
+   "source": "custom",
+   "apworld": "children_of_morta.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Children of Morta",
+    "stability": "Unstable"
+   }
   },
   {
    "game": "Choo-Choo Charles",
@@ -108,11 +1027,417 @@
    "world_version": null
   },
   {
+   "game": "Chrono Trigger Rando-Dalton Imperial",
+   "file": "games/chrono-trigger-rando-dalton-imperial.json",
+   "source": "custom",
+   "apworld": "ctrdi.apworld",
+   "world_version": "0.0.4",
+   "sheet": {
+    "game": "Chrono Trigger Rando-Dalton Imperial (SNES)",
+    "stability": "Unstable",
+    "pr_status": "Not PRing"
+   }
+  },
+  {
+   "game": "Civilization IV",
+   "file": "games/civilization-iv.json",
+   "source": "custom",
+   "apworld": "civ_4.apworld",
+   "world_version": "0.0.1",
+   "sheet": {
+    "game": "Civilization IV",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Civilization V",
+   "file": "games/civilization-v.json",
+   "source": "custom",
+   "apworld": "civv.apworld",
+   "world_version": "0.10.10",
+   "sheet": {
+    "game": "Civilization V",
+    "stability": "Stable"
+   }
+  },
+  {
    "game": "Civilization VI",
    "file": "games/civilization-vi.json",
    "source": "core",
    "apworld": null,
    "world_version": null
+  },
+  {
+   "game": "Clair Obscur Expedition 33",
+   "file": "games/clair-obscur-expedition-33.json",
+   "source": "custom",
+   "apworld": "clair_obscur.apworld",
+   "world_version": "0.4.3",
+   "sheet": {
+    "game": "Clair Obscur Expedition 33",
+    "stability": "Unstable",
+    "pr_status": "Not PRing",
+    "adult": true
+   }
+  },
+  {
+   "game": "CloverPit",
+   "file": "games/cloverpit.json",
+   "source": "custom",
+   "apworld": "cloverpit.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "CloverPit",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "ClusterTruck",
+   "file": "games/clustertruck.json",
+   "source": "custom",
+   "apworld": "cluster_truck.apworld",
+   "world_version": "1.3.2",
+   "sheet": {
+    "game": "ClusterTruck",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Cobalt Core",
+   "file": "games/cobalt-core.json",
+   "source": "custom",
+   "apworld": "cobalt_core.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Cobalt Core",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Codeforces",
+   "file": "games/codeforces.json",
+   "source": "custom",
+   "apworld": "codeforces.apworld",
+   "world_version": "0.0.3",
+   "sheet": {
+    "game": "Codeforces",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Commander Keen",
+   "file": "games/commander-keen.json",
+   "source": "custom",
+   "apworld": "keen.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Commander Keen in Goodbye, Galaxy",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Conbunn Cardboard",
+   "file": "games/conbunn-cardboard.json",
+   "source": "custom",
+   "apworld": "conbunn_cardboard.apworld",
+   "world_version": "0.1.3",
+   "sheet": {
+    "game": "Conbunn Cardboard",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Content Warning",
+   "file": "games/content-warning.json",
+   "source": "custom",
+   "apworld": "content_warning.apworld",
+   "world_version": "0.1.0",
+   "sheet": {
+    "game": "Content Warning",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Control",
+   "file": "games/control.json",
+   "source": "custom",
+   "apworld": "control.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Control (Ultimate Edition)",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Cookie Clicker",
+   "file": "games/cookie-clicker.json",
+   "source": "custom",
+   "apworld": "cookieclicker.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Cookie Clicker",
+    "stability": "Unstable",
+    "pr_status": "Not PRing"
+   }
+  },
+  {
+   "game": "Cooking Mama 3",
+   "file": "games/cooking-mama-3.json",
+   "source": "custom",
+   "apworld": "cookingmama3.apworld",
+   "world_version": "1.0.0",
+   "sheet": {
+    "game": "Cooking Mama 3",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Corn Kidz 64",
+   "file": "games/corn-kidz-64.json",
+   "source": "custom",
+   "apworld": "cornkidz64.apworld",
+   "world_version": "0.0.7",
+   "sheet": {
+    "game": "Corn Kidz 64",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "CorruObserver",
+   "file": "games/corruobserver.json",
+   "source": "custom",
+   "apworld": "corruobserver.apworld",
+   "world_version": "0.1.4",
+   "sheet": {
+    "game": "corru.observer",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Cowtastic Cafe",
+   "file": "games/cowtastic-cafe.json",
+   "source": "custom",
+   "apworld": "cowtastic_cafe.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Cowtastic Cafe",
+    "stability": "Stable",
+    "pr_status": "Not PRing",
+    "adult": true
+   }
+  },
+  {
+   "game": "Crab Champions",
+   "file": "games/crab-champions.json",
+   "source": "custom",
+   "apworld": "crabchampions.apworld",
+   "world_version": "1.4.0",
+   "sheet": {
+    "game": "Crab Champions",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Crash Bandicoot 3: Warped",
+   "file": "games/crash-bandicoot-3-warped.json",
+   "source": "custom",
+   "apworld": "crash3.apworld",
+   "world_version": "0.1.0",
+   "sheet": {
+    "game": "Crash Bandicoot 3: Warped",
+    "stability": "Unstable",
+    "pr_status": "Not PRing"
+   }
+  },
+  {
+   "game": "Crash Bandicoot N. Sane Trilogy",
+   "file": "games/crash-bandicoot-n-sane-trilogy.json",
+   "source": "custom",
+   "apworld": "crash_nst.apworld",
+   "world_version": "1.0.7",
+   "sheet": {
+    "game": "Crash Bandicoot N. Sane Trilogy",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Crash Bash",
+   "file": "games/crash-bash.json",
+   "source": "custom",
+   "apworld": "crashbash.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Crash Bash",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Crash Team Racing",
+   "file": "games/crash-team-racing.json",
+   "source": "custom",
+   "apworld": "ctr.apworld",
+   "world_version": "0.2.4",
+   "sheet": {
+    "game": "Crash Team Racing",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Create",
+   "file": "games/create.json",
+   "source": "custom",
+   "apworld": "create.apworld",
+   "world_version": "0.1.3",
+   "sheet": {
+    "game": "Create",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "CrossCode",
+   "file": "games/crosscode.json",
+   "source": "custom",
+   "apworld": "crosscode.apworld",
+   "world_version": "0.9.8",
+   "sheet": {
+    "game": "CrossCode",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Crossword",
+   "file": "games/crossword.json",
+   "source": "custom",
+   "apworld": "crossword.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Crosswords",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Crypt of the NecroDancer",
+   "file": "games/crypt-of-the-necrodancer.json",
+   "source": "custom",
+   "apworld": "cotnd.apworld",
+   "world_version": "0.8.4",
+   "sheet": {
+    "game": "Crypt of the NecroDancer",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Crystal Project",
+   "file": "games/crystal-project.json",
+   "source": "custom",
+   "apworld": "crystal_project.apworld",
+   "world_version": "0.19.0",
+   "sheet": {
+    "game": "Crystal Project",
+    "stability": "Stable",
+    "pr_status": "Not PRing"
+   }
+  },
+  {
+   "game": "Crystalis",
+   "file": "games/crystalis.json",
+   "source": "custom",
+   "apworld": "crystalis.apworld",
+   "world_version": "3.1.0",
+   "sheet": {
+    "game": "Crystalis",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Cult of the Lamb",
+   "file": "games/cult-of-the-lamb.json",
+   "source": "custom",
+   "apworld": "cult_of_the_lamb.apworld",
+   "world_version": "0.9.5",
+   "sheet": {
+    "game": "Cult of the Lamb",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Cuphead",
+   "file": "games/cuphead.json",
+   "source": "custom",
+   "apworld": "cuphead.apworld",
+   "world_version": "0.2.20021210",
+   "sheet": {
+    "game": "Cuphead",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Cursed Mario 64",
+   "file": "games/cursed-mario-64.json",
+   "source": "custom",
+   "apworld": "Cursed_Mario_64.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Cursed Mario 64",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Custom Robo",
+   "file": "games/custom-robo.json",
+   "source": "custom",
+   "apworld": "custom_robo.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Custom Robo",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Cyber Hook",
+   "file": "games/cyber-hook.json",
+   "source": "custom",
+   "apworld": "cyberhook.apworld",
+   "world_version": "0.1.0",
+   "sheet": {
+    "game": "Cyber Hook",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Cyberpunk 2077",
+   "file": "games/cyberpunk-2077.json",
+   "source": "custom",
+   "apworld": "cyberpunk2077.apworld",
+   "world_version": "0.7.0",
+   "sheet": {
+    "game": "Cyberpunk 2077",
+    "stability": "Unstable",
+    "pr_status": "Not PRing",
+    "adult": true
+   }
+  },
+  {
+   "game": "Dark Cloud 1",
+   "file": "games/dark-cloud-1.json",
+   "source": "custom",
+   "apworld": "dc1.apworld",
+   "world_version": "0.6.0",
+   "sheet": {
+    "game": "Dark Cloud 1",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Dark Souls II",
+   "file": "games/dark-souls-ii.json",
+   "source": "custom",
+   "apworld": "dark_souls_2.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Dark Souls II",
+    "stability": "Stable"
+   }
   },
   {
    "game": "Dark Souls III",
@@ -122,11 +1447,216 @@
    "world_version": null
   },
   {
+   "game": "Dark Souls Remastered",
+   "file": "games/dark-souls-remastered.json",
+   "source": "custom",
+   "apworld": "dsr.apworld",
+   "world_version": "0.2.6",
+   "sheet": {
+    "game": "Dark Souls Remastered",
+    "stability": "Unstable",
+    "pr_status": "Not PRing"
+   }
+  },
+  {
+   "game": "Dead Cells",
+   "file": "games/dead-cells.json",
+   "source": "custom",
+   "apworld": "dead_cells.apworld",
+   "world_version": "0.1.10",
+   "sheet": {
+    "game": "Dead Cells",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Dead Rising Deluxe Remaster",
+   "file": "games/dead-rising-deluxe-remaster.json",
+   "source": "custom",
+   "apworld": "drdr.apworld",
+   "world_version": "1.1.1",
+   "sheet": {
+    "game": "Dead Rising Deluxe Remastered",
+    "stability": "Stable",
+    "pr_status": "Not PRing",
+    "adult": true
+   }
+  },
+  {
+   "game": "Deadlock",
+   "file": "games/deadlock.json",
+   "source": "custom",
+   "apworld": "deadlock.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Deadlock",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Death Road to Canada",
+   "file": "games/death-road-to-canada.json",
+   "source": "custom",
+   "apworld": "death_road_to_canada.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Death Road to Canada",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Death's Door",
+   "file": "games/death-s-door.json",
+   "source": "custom",
+   "apworld": "deaths_door.apworld",
+   "world_version": "0.4.2",
+   "sheet": {
+    "game": "Death's Door",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Deathbulge",
+   "file": "games/deathbulge.json",
+   "source": "custom",
+   "apworld": "deathbulge.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Deathbulge Battle of the Bands",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Deep Rock Galactic",
+   "file": "games/deep-rock-galactic.json",
+   "source": "custom",
+   "apworld": "deep_rock_galactic.apworld",
+   "world_version": "0.20.1",
+   "sheet": {
+    "game": "Deep Rock Galactic",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Delivering Hope",
+   "file": "games/delivering-hope.json",
+   "source": "custom",
+   "apworld": "DeliveringHope.apworld",
+   "world_version": "0.3.0",
+   "sheet": {
+    "game": "Delivering Hope",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "DELTARUNE",
+   "file": "games/deltarune.json",
+   "source": "custom",
+   "apworld": "deltarune.apworld",
+   "world_version": "2.3.0",
+   "sheet": {
+    "game": "DELTARUNE",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Devil May Cry 3",
+   "file": "games/devil-may-cry-3.json",
+   "source": "custom",
+   "apworld": "dmc3.apworld",
+   "world_version": "0.5.1",
+   "sheet": {
+    "game": "Devil May Cry 3 (Special Edition)",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Dicey Dungeons",
+   "file": "games/dicey-dungeons.json",
+   "source": "custom",
+   "apworld": "diceydungeons.apworld",
+   "world_version": "0.6.0",
+   "sheet": {
+    "game": "Dicey Dungeons",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Diddy Kong Racing",
+   "file": "games/diddy-kong-racing.json",
+   "source": "custom",
+   "apworld": "diddy_kong_racing.apworld",
+   "world_version": "1.1.4",
+   "sheet": {
+    "game": "Diddy Kong Racing",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Divinity Original Sin 2",
+   "file": "games/divinity-original-sin-2.json",
+   "source": "custom",
+   "apworld": "dos2.apworld",
+   "world_version": "0.9.1",
+   "sheet": {
+    "game": "Divinity: Original Sin 2",
+    "stability": "Unstable",
+    "pr_status": "Not PRing",
+    "adult": true
+   }
+  },
+  {
    "game": "DLCQuest",
    "file": "games/dlcquest.json",
    "source": "core",
    "apworld": null,
    "world_version": null
+  },
+  {
+   "game": "Dome Keeper",
+   "file": "games/dome-keeper.json",
+   "source": "custom",
+   "apworld": "dome_keeper.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Dome Keeper",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Don't Starve Together",
+   "file": "games/don-t-starve-together.json",
+   "source": "custom",
+   "apworld": "dontstarvetogether.apworld",
+   "world_version": "1.3.3",
+   "sheet": {
+    "game": "Don't Starve Together",
+    "stability": "Stable",
+    "pr_status": "Not PRing"
+   }
+  },
+  {
+   "game": "Donkey Kong 64",
+   "file": "games/donkey-kong-64.json",
+   "source": "custom",
+   "apworld": "dk64.apworld",
+   "world_version": "2.0.5",
+   "sheet": {
+    "game": "Donkey Kong 64",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Donut County",
+   "file": "games/donut-county.json",
+   "source": "custom",
+   "apworld": "donutcounty.apworld",
+   "world_version": "0.2.0",
+   "sheet": {
+    "game": "Donut County",
+    "stability": "Unstable",
+    "pr_status": "Not PRing"
+   }
   },
   {
    "game": "DOOM 1993",
@@ -136,11 +1666,191 @@
    "world_version": null
   },
   {
+   "game": "DOOM Eternal",
+   "file": "games/doom-eternal.json",
+   "source": "custom",
+   "apworld": "doometernal.apworld",
+   "world_version": "0.7.1",
+   "sheet": {
+    "game": "DOOM Eternal",
+    "stability": "Unstable",
+    "adult": true
+   }
+  },
+  {
    "game": "DOOM II",
    "file": "games/doom-ii.json",
    "source": "core",
    "apworld": null,
    "world_version": null
+  },
+  {
+   "game": "Door to Door Door Salesman",
+   "file": "games/door-to-door-door-salesman.json",
+   "source": "custom",
+   "apworld": "dtdds.apworld",
+   "world_version": "0.0.2",
+   "sheet": {
+    "game": "Door to Door Door Salesman",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "DORONKO WANKO",
+   "file": "games/doronko-wanko.json",
+   "source": "custom",
+   "apworld": "doronko_wanko.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "DORONKO WANKO",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "DOTA 2",
+   "file": "games/dota-2.json",
+   "source": "custom",
+   "apworld": "dota_2.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "DOTA 2",
+    "stability": "Unstable",
+    "pr_status": "Not PRing"
+   }
+  },
+  {
+   "game": "Dracomino",
+   "file": "games/dracomino.json",
+   "source": "custom",
+   "apworld": "dracomino.apworld",
+   "world_version": "0.3.0",
+   "sheet": {
+    "game": "Dracomino",
+    "stability": "Stable",
+    "pr_status": "Not PRing"
+   }
+  },
+  {
+   "game": "Dragon Ball Z Budokai 3",
+   "file": "games/dragon-ball-z-budokai-3.json",
+   "source": "custom",
+   "apworld": "budokai3.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Dragon Ball Z: Budokai 3",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Dragon Ball Z Budokai Tenkaichi 2",
+   "file": "games/dragon-ball-z-budokai-tenkaichi-2.json",
+   "source": "custom",
+   "apworld": "budokai_tenkaichi2.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Dragon Ball Z: Budokai Tenkaichi 2",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Dragon Quest III HD-2D Remake",
+   "file": "games/dragon-quest-iii-hd-2d-remake.json",
+   "source": "custom",
+   "apworld": "dq3.apworld",
+   "world_version": "0.4.1",
+   "sheet": {
+    "game": "Dragon Quest III HD-2D Remake",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Dragon Warrior",
+   "file": "games/dragon-warrior.json",
+   "source": "custom",
+   "apworld": "dragon_warrior.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Dragon Warrior",
+    "stability": "Stable",
+    "pr_status": "Not PRing"
+   }
+  },
+  {
+   "game": "DREDGE",
+   "file": "games/dredge.json",
+   "source": "custom",
+   "apworld": "dredge.apworld",
+   "world_version": "0.7.0",
+   "sheet": {
+    "game": "DREDGE",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Drehmal",
+   "file": "games/drehmal.json",
+   "source": "custom",
+   "apworld": "drehmal.apworld",
+   "world_version": "0.3.0",
+   "sheet": {
+    "game": "Drehmal APOTHEOSIS (Minecraft Map)",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Duck Life 4",
+   "file": "games/duck-life-4.json",
+   "source": "custom",
+   "apworld": "DuckLife4.apworld",
+   "world_version": "1.0.0",
+   "sheet": {
+    "game": "Duck Life 4",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "DuckGame",
+   "file": "games/duckgame.json",
+   "source": "custom",
+   "apworld": "duckgame.apworld",
+   "world_version": "0.1.0",
+   "sheet": {
+    "game": "Duck Game",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Duke Nukem 3D",
+   "file": "games/duke-nukem-3d.json",
+   "source": "custom",
+   "apworld": "duke3d.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Duke Nukem 3D",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Dungeon Defenders",
+   "file": "games/dungeon-defenders.json",
+   "source": "custom",
+   "apworld": "dungeon_defenders.apworld",
+   "world_version": "0.8.1",
+   "sheet": {
+    "game": "Dungeon Defenders",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Dwarf Fortress",
+   "file": "games/dwarf-fortress.json",
+   "source": "custom",
+   "apworld": "dwarf_fortress.apworld",
+   "world_version": "2.1.2",
+   "sheet": {
+    "game": "Dwarf Fortress",
+    "stability": "Unstable"
+   }
   },
   {
    "game": "EarthBound",
@@ -150,11 +1860,202 @@
    "world_version": "4.3.1"
   },
   {
+   "game": "Easy Delivery Co.",
+   "file": "games/easy-delivery-co.json",
+   "source": "custom",
+   "apworld": "easy_delivery_co.apworld",
+   "world_version": "0.3.0",
+   "sheet": {
+    "game": "Easy Delivery Co.",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Elden Ring Nightreign",
+   "file": "games/elden-ring-nightreign.json",
+   "source": "custom",
+   "apworld": "nightreign.apworld",
+   "world_version": "0.4.7",
+   "sheet": {
+    "game": "Elden Ring Nightreign",
+    "stability": "Unstable",
+    "pr_status": "Not PRing"
+   }
+  },
+  {
+   "game": "EldenRing",
+   "file": "games/eldenring.json",
+   "source": "custom",
+   "apworld": "eldenring.apworld",
+   "world_version": "0.1.4",
+   "sheet": {
+    "game": "Elden Ring",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Elder Scrolls Online",
+   "file": "games/elder-scrolls-online.json",
+   "source": "custom",
+   "apworld": "eso.apworld",
+   "world_version": "0.4.0",
+   "sheet": {
+    "game": "The Elder Scrolls Online",
+    "stability": "Unstable",
+    "pr_status": "Not PRing",
+    "adult": true
+   }
+  },
+  {
+   "game": "Elementipelago",
+   "file": "games/elementipelago.json",
+   "source": "custom",
+   "apworld": "elementipelago.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Elementipelago",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Ender Magnolia",
+   "file": "games/ender-magnolia.json",
+   "source": "custom",
+   "apworld": "endermagnolia.apworld",
+   "world_version": "0.1.8",
+   "sheet": {
+    "game": "Ender Magnolia: Bloom In The Mist",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Enter The Gungeon",
+   "file": "games/enter-the-gungeon.json",
+   "source": "custom",
+   "apworld": "enter_the_gungeon.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Enter the Gungeon",
+    "stability": "Unstable",
+    "pr_status": "Not PRing"
+   }
+  },
+  {
+   "game": "Equilinox",
+   "file": "games/equilinox.json",
+   "source": "custom",
+   "apworld": "equilinox.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Equilinox",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Etrian Odyssey",
+   "file": "games/etrian-odyssey.json",
+   "source": "custom",
+   "apworld": "etrian_odyssey.apworld",
+   "world_version": "0.4.1",
+   "sheet": {
+    "game": "Etrian Odyssey (DS)",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Everhood 2",
+   "file": "games/everhood-2.json",
+   "source": "custom",
+   "apworld": "everhood_2.apworld",
+   "world_version": "0.4.8",
+   "sheet": {
+    "game": "Everhood 2",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Evolve",
+   "file": "games/evolve.json",
+   "source": "custom",
+   "apworld": "evolve.apworld",
+   "world_version": "0.3.17",
+   "sheet": {
+    "game": "Evolve Incremental",
+    "stability": "Unstable"
+   }
+  },
+  {
    "game": "Factorio",
    "file": "games/factorio.json",
    "source": "core",
    "apworld": null,
    "world_version": null
+  },
+  {
+   "game": "Factorio - Space Age Without Space",
+   "file": "games/factorio-space-age-without-space.json",
+   "source": "custom",
+   "apworld": "factorio_saws.apworld",
+   "world_version": "0.9.5",
+   "sheet": {
+    "game": "Factorio - Space Age Without Space",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Factorio Modpacks",
+   "file": "games/factorio-modpacks.json",
+   "source": "custom",
+   "apworld": "factorio_modpacks.apworld",
+   "world_version": "2.3.1",
+   "sheet": {
+    "game": "Factorio w/ Bob's Mods",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Factorio: Platformer",
+   "file": "games/factorio-platformer.json",
+   "source": "custom",
+   "apworld": "factorio_platformer.apworld",
+   "world_version": "0.4.6",
+   "sheet": {
+    "game": "Factorio Platformer",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Fakutori",
+   "file": "games/fakutori.json",
+   "source": "custom",
+   "apworld": "fakutori.apworld",
+   "world_version": "0.1.1",
+   "sheet": {
+    "game": "Fakutori",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Fall Guys",
+   "file": "games/fall-guys.json",
+   "source": "custom",
+   "apworld": "fall_guys.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Fall Guys",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Fantastic Fist",
+   "file": "games/fantastic-fist.json",
+   "source": "custom",
+   "apworld": "fantastic_fist.apworld",
+   "world_version": "0.0.6",
+   "sheet": {
+    "game": "Fantastic Fist",
+    "stability": "Unstable"
+   }
   },
   {
    "game": "Faxanadu",
@@ -164,11 +2065,66 @@
    "world_version": null
   },
   {
+   "game": "Feeding Frenzy 2",
+   "file": "games/feeding-frenzy-2.json",
+   "source": "custom",
+   "apworld": "feeding_frenzy_2.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Feeding Frenzy 2",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "FF1 Pixel Remaster",
+   "file": "games/ff1-pixel-remaster.json",
+   "source": "custom",
+   "apworld": "ff1pr.apworld",
+   "world_version": "0.6.0",
+   "sheet": {
+    "game": "Final Fantasy 1: Pixel Remaster",
+    "stability": "Unstable"
+   }
+  },
+  {
    "game": "Final Fantasy",
    "file": "games/final-fantasy.json",
    "source": "core",
    "apworld": null,
    "world_version": "1.0.0"
+  },
+  {
+   "game": "Final Fantasy 1 PSP",
+   "file": "games/final-fantasy-1-psp.json",
+   "source": "custom",
+   "apworld": "ff1psp.apworld",
+   "world_version": "0.2.4",
+   "sheet": {
+    "game": "Final Fantasy 1 (PSP)",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Final Fantasy 12 Open World",
+   "file": "games/final-fantasy-12-open-world.json",
+   "source": "custom",
+   "apworld": "ff12_open_world.apworld",
+   "world_version": "0.6.3",
+   "sheet": {
+    "game": "Final Fantasy XII: Open World",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Final Fantasy Crystal Chronicles",
+   "file": "games/final-fantasy-crystal-chronicles.json",
+   "source": "custom",
+   "apworld": "ffcc.apworld",
+   "world_version": "0.2.0",
+   "sheet": {
+    "game": "Final Fantasy: Crystal Chronicles",
+    "stability": "Unstable"
+   }
   },
   {
    "game": "Final Fantasy Mystic Quest",
@@ -178,11 +2134,478 @@
    "world_version": null
   },
   {
+   "game": "Final Fantasy Tactics Ivalice Island",
+   "file": "games/final-fantasy-tactics-ivalice-island.json",
+   "source": "custom",
+   "apworld": "fftii.apworld",
+   "world_version": "0.4.0",
+   "sheet": {
+    "game": "Final Fantasy Tactics: Ivalice Island (FFT PSX)",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Final Fantasy VII",
+   "file": "games/final-fantasy-vii.json",
+   "source": "custom",
+   "apworld": "ff7.apworld",
+   "world_version": "0.0.6",
+   "sheet": {
+    "game": "Final Fantasy VII",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Final Fantasy X",
+   "file": "games/final-fantasy-x.json",
+   "source": "custom",
+   "apworld": "ffx.apworld",
+   "world_version": "0.10.0",
+   "sheet": {
+    "game": "Final Fantasy X",
+    "stability": "Stable",
+    "pr_status": "Not PRing"
+   }
+  },
+  {
+   "game": "Final Fantasy XIII-2",
+   "file": "games/final-fantasy-xiii-2.json",
+   "source": "custom",
+   "apworld": "ff132.apworld",
+   "world_version": "0.3.0",
+   "sheet": {
+    "game": "Final Fantasy XIII-2",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Fire Emblem Sacred Stones",
+   "file": "games/fire-emblem-sacred-stones.json",
+   "source": "custom",
+   "apworld": "fe8.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Fire Emblem: The Sacred Stones",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Flipwitch Forbidden Sex Hex",
+   "file": "games/flipwitch-forbidden-sex-hex.json",
+   "source": "custom",
+   "apworld": "flipwitch.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Flipwitch",
+    "stability": "Stable",
+    "pr_status": "Not PRing",
+    "adult": true
+   }
+  },
+  {
+   "game": "FNaFW",
+   "file": "games/fnafw.json",
+   "source": "custom",
+   "apworld": "fnafw.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "FNAF World",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Forager",
+   "file": "games/forager.json",
+   "source": "custom",
+   "apworld": "forager.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Forager",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Forged Curse",
+   "file": "games/forged-curse.json",
+   "source": "custom",
+   "apworld": "forgedcurse.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "The Forged Curse",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Frogmonster",
+   "file": "games/frogmonster.json",
+   "source": "custom",
+   "apworld": "frogmonster.apworld",
+   "world_version": "0.2.5",
+   "sheet": {
+    "game": "Frogmonster",
+    "stability": "Stable",
+    "pr_status": "Not PRing"
+   }
+  },
+  {
+   "game": "Funi Raccoon Game",
+   "file": "games/funi-raccoon-game.json",
+   "source": "custom",
+   "apworld": "funi_raccoon.apworld",
+   "world_version": "1.8.1",
+   "sheet": {
+    "game": "Funi Raccoon Game",
+    "stability": "Stable",
+    "pr_status": "Not PRing"
+   }
+  },
+  {
+   "game": "Garfield Kart - Furious Racing",
+   "file": "games/garfield-kart-furious-racing.json",
+   "source": "custom",
+   "apworld": "garfkart.apworld",
+   "world_version": "1.1.0",
+   "sheet": {
+    "game": "Garfield Kart: Furious Racing",
+    "stability": "Stable",
+    "pr_status": "Not PRing"
+   }
+  },
+  {
+   "game": "Gato Roboto",
+   "file": "games/gato-roboto.json",
+   "source": "custom",
+   "apworld": "gatoroboto.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Gato Roboto",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Gato Roboto B-Side",
+   "file": "games/gato-roboto-b-side.json",
+   "source": "custom",
+   "apworld": "gatoroboto_b_side.apworld",
+   "world_version": "0.8.1",
+   "sheet": {
+    "game": "Gato Roboto B-Side",
+    "stability": "Stable"
+   }
+  },
+  {
    "game": "Gauntlet Legends",
    "file": "games/gauntlet-legends.json",
    "source": "core",
    "apworld": null,
    "world_version": "2.1.7"
+  },
+  {
+   "game": "GBAPQuest",
+   "file": "games/gbapquest.json",
+   "source": "custom",
+   "apworld": "gbapquest.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "GBAPQuest",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "GemCraft: Frostborn Wrath",
+   "file": "games/gemcraft-frostborn-wrath.json",
+   "source": "custom",
+   "apworld": "gcfw.apworld",
+   "world_version": "0.6.2",
+   "sheet": {
+    "game": "Gemcraft: Frostborn Wrath",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Geometry Dash",
+   "file": "games/geometry-dash.json",
+   "source": "custom",
+   "apworld": "geometrydash.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Geometry Dash",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Getting Over It",
+   "file": "games/getting-over-it.json",
+   "source": "custom",
+   "apworld": "getting_over_it.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Getting Over It with Bennett Foddy",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Glover",
+   "file": "games/glover.json",
+   "source": "custom",
+   "apworld": "glover.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Glover",
+    "stability": "Stable",
+    "pr_status": "In Review"
+   }
+  },
+  {
+   "game": "GLYPHS",
+   "file": "games/glyphs.json",
+   "source": "custom",
+   "apworld": "glyphs.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "GLYPHS",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "GMod - apAdventure",
+   "file": "games/gmod-apadventure.json",
+   "source": "custom",
+   "apworld": "gmod_apadv.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Garry's Mod (apAdventure)",
+    "stability": "Unstable",
+    "pr_status": "Not PRing",
+    "adult": true
+   }
+  },
+  {
+   "game": "Gnosia",
+   "file": "games/gnosia.json",
+   "source": "custom",
+   "apworld": "gnosia.apworld",
+   "world_version": "0.1.4",
+   "sheet": {
+    "game": "Gnosia",
+    "stability": "Unstable",
+    "pr_status": "Not PRing"
+   }
+  },
+  {
+   "game": "Golden Sun The Lost Age",
+   "file": "games/golden-sun-the-lost-age.json",
+   "source": "custom",
+   "apworld": "gstla.apworld",
+   "world_version": "0.2.3",
+   "sheet": {
+    "game": "Golden Sun: The Lost Age",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "GoldenEye 007",
+   "file": "games/goldeneye-007.json",
+   "source": "custom",
+   "apworld": "goldeneye.apworld",
+   "world_version": "0.1.1",
+   "sheet": {
+    "game": "GoldenEye 007",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Grand Theft Auto III",
+   "file": "games/grand-theft-auto-iii.json",
+   "source": "custom",
+   "apworld": "gta3.apworld",
+   "world_version": "0.2.0",
+   "sheet": {
+    "game": "Grand Theft Auto III",
+    "stability": "Unstable",
+    "pr_status": "Not PRing",
+    "adult": true
+   }
+  },
+  {
+   "game": "Grand Theft Auto: San Andreas",
+   "file": "games/grand-theft-auto-san-andreas.json",
+   "source": "custom",
+   "apworld": "gta_sa.apworld",
+   "world_version": "0.9.0",
+   "sheet": {
+    "game": "Grand Theft Auto: San Andreas",
+    "stability": "Unstable",
+    "pr_status": "Not PRing",
+    "adult": true
+   }
+  },
+  {
+   "game": "Grandia",
+   "file": "games/grandia.json",
+   "source": "custom",
+   "apworld": "grandia.apworld",
+   "world_version": "0.15.0",
+   "sheet": {
+    "game": "Grandia HD Remaster",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Grapple Dog",
+   "file": "games/grapple-dog.json",
+   "source": "custom",
+   "apworld": "grappledog.apworld",
+   "world_version": "1.2.0",
+   "sheet": {
+    "game": "Grapple Dog",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Grim Dawn",
+   "file": "games/grim-dawn.json",
+   "source": "custom",
+   "apworld": "grim_dawn.apworld",
+   "world_version": "0.4.1",
+   "sheet": {
+    "game": "Grim Dawn",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Grunn",
+   "file": "games/grunn.json",
+   "source": "custom",
+   "apworld": "grunn.apworld",
+   "world_version": "1.1.6",
+   "sheet": {
+    "game": "Grunn",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "GTFO (Vanilla)",
+   "file": "games/gtfo-vanilla.json",
+   "source": "custom",
+   "apworld": "gtfo.apworld",
+   "world_version": "0.0.4",
+   "sheet": {
+    "game": "GTFO",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Hacknet",
+   "file": "games/hacknet.json",
+   "source": "custom",
+   "apworld": "hacknet.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Hacknet",
+    "stability": "Unstable",
+    "pr_status": "Not PRing"
+   }
+  },
+  {
+   "game": "Hades",
+   "file": "games/hades.json",
+   "source": "custom",
+   "apworld": "hades.apworld",
+   "world_version": "0.16.3",
+   "sheet": {
+    "game": "Hades",
+    "stability": "Stable",
+    "pr_status": "In Review"
+   }
+  },
+  {
+   "game": "Hades2Rogue",
+   "file": "games/hades2rogue.json",
+   "source": "custom",
+   "apworld": "Hades2Rogue.apworld",
+   "world_version": "0.10.0",
+   "sheet": {
+    "game": "Hades 2 (Rogue)",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Half-Life",
+   "file": "games/half-life.json",
+   "source": "custom",
+   "apworld": "half_life.apworld",
+   "world_version": "0.3.0",
+   "sheet": {
+    "game": "Half-Life Trilogy",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Half-Life (Sven Co-op)",
+   "file": "games/half-life-sven-co-op.json",
+   "source": "custom",
+   "apworld": "half_life_sven.apworld",
+   "world_version": "0.4.0",
+   "sheet": {
+    "game": "Sven Co-op",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Halo The Master Chief Collection",
+   "file": "games/halo-the-master-chief-collection.json",
+   "source": "custom",
+   "apworld": "halo_mcc.apworld",
+   "world_version": "1.2.1",
+   "sheet": {
+    "game": "Halo The Master Chief Collection",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Hammerwatch",
+   "file": "games/hammerwatch.json",
+   "source": "custom",
+   "apworld": "hammerwatch.apworld",
+   "world_version": "4.1.4",
+   "sheet": {
+    "game": "Hammerwatch",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Haste",
+   "file": "games/haste.json",
+   "source": "custom",
+   "apworld": "haste.apworld",
+   "world_version": "0.5.1",
+   "sheet": {
+    "game": "HASTE: Broken Worlds",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Hatsune Miku Project Diva Mega Mix+",
+   "file": "games/hatsune-miku-project-diva-mega-mix.json",
+   "source": "custom",
+   "apworld": "megamix.apworld",
+   "world_version": "1.5.3",
+   "sheet": {
+    "game": "Hatsune Miku: Project Diva Megamix+",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Here Comes Niko!",
+   "file": "games/here-comes-niko.json",
+   "source": "custom",
+   "apworld": "hcniko.apworld",
+   "world_version": "0.8.5",
+   "sheet": {
+    "game": "Here Comes Niko!",
+    "stability": "Stable"
+   }
   },
   {
    "game": "Heretic",
@@ -192,11 +2615,184 @@
    "world_version": null
   },
   {
+   "game": "Hero Core",
+   "file": "games/hero-core.json",
+   "source": "custom",
+   "apworld": "herocore.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Hero Core",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Heroes of the Storm",
+   "file": "games/heroes-of-the-storm.json",
+   "source": "custom",
+   "apworld": "hots.apworld",
+   "world_version": "0.6.1",
+   "sheet": {
+    "game": "Heroes of the Storm",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Hexcells Infinite",
+   "file": "games/hexcells-infinite.json",
+   "source": "custom",
+   "apworld": "hexcells_infinite.apworld",
+   "world_version": "1.3.4",
+   "sheet": {
+    "game": "Hexcells Infinite",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Hi-Fi RUSH",
+   "file": "games/hi-fi-rush.json",
+   "source": "custom",
+   "apworld": "hi_fi_rush.apworld",
+   "world_version": "0.3.1",
+   "sheet": {
+    "game": "Hi-Fi Rush",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "High Roller",
+   "file": "games/high-roller.json",
+   "source": "custom",
+   "apworld": "high_roller.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "High Roller",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "HITMAN World of Assassination",
+   "file": "games/hitman-world-of-assassination.json",
+   "source": "custom",
+   "apworld": "hitman_woa.apworld",
+   "world_version": "0.8.2",
+   "sheet": {
+    "game": "HITMAN: World of Assassination",
+    "stability": "Unstable",
+    "pr_status": "Not PRing",
+    "adult": true
+   }
+  },
+  {
    "game": "Hollow Knight",
    "file": "games/hollow-knight.json",
    "source": "core",
    "apworld": null,
    "world_version": null
+  },
+  {
+   "game": "Hollow Knight: Silksong",
+   "file": "games/hollow-knight-silksong.json",
+   "source": "custom",
+   "apworld": "silksong.apworld",
+   "world_version": "0.5.3",
+   "sheet": {
+    "game": "Hollow Knight: Silksong (Batsong)",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "holo8",
+   "file": "games/holo8.json",
+   "source": "custom",
+   "apworld": "holo8.apworld",
+   "world_version": "0.3.0",
+   "sheet": {
+    "game": "holo8",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Hololive Treasure Mountain",
+   "file": "games/hololive-treasure-mountain.json",
+   "source": "custom",
+   "apworld": "HololiveTreasureMountain.apworld",
+   "world_version": "1.0.0",
+   "sheet": {
+    "game": "Hololive Treasure Mountain",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Horse Magnifier",
+   "file": "games/horse-magnifier.json",
+   "source": "custom",
+   "apworld": "horse_magnifier.apworld",
+   "world_version": "1.3.1",
+   "sheet": {
+    "game": "Horse Magnifier: The Full Horse",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Hot Lava",
+   "file": "games/hot-lava.json",
+   "source": "custom",
+   "apworld": "hot_lava.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Hot Lava",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Hungry Pumkin",
+   "file": "games/hungry-pumkin.json",
+   "source": "custom",
+   "apworld": "HungryPumkinAP.apworld",
+   "world_version": "0.1.0",
+   "sheet": {
+    "game": "Hungry Pumkin",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Hunie Cam Studio",
+   "file": "games/hunie-cam-studio.json",
+   "source": "custom",
+   "apworld": "huniecamstudio.apworld",
+   "world_version": "0.4.0",
+   "sheet": {
+    "game": "Huniecam Studio",
+    "stability": "Unstable",
+    "pr_status": "Not PRing",
+    "adult": true
+   }
+  },
+  {
+   "game": "Hunie Pop",
+   "file": "games/hunie-pop.json",
+   "source": "custom",
+   "apworld": "huniepop.apworld",
+   "world_version": "2.3.1",
+   "sheet": {
+    "game": "Huniepop",
+    "stability": "Stable",
+    "pr_status": "Not PRing",
+    "adult": true
+   }
+  },
+  {
+   "game": "Hunie Pop 2",
+   "file": "games/hunie-pop-2.json",
+   "source": "custom",
+   "apworld": "huniepop2.apworld",
+   "world_version": "3.1.0",
+   "sheet": {
+    "game": "Huniepop 2: Double Date",
+    "stability": "Stable",
+    "pr_status": "Not PRing",
+    "adult": true
+   }
   },
   {
    "game": "Hylics 2",
@@ -206,6 +2802,105 @@
    "world_version": null
   },
   {
+   "game": "Hyperdimension Neptunia Re;Birth3 V GENERATION",
+   "file": "games/hyperdimension-neptunia-re-birth3-v-generation.json",
+   "source": "custom",
+   "apworld": "nep_rb3.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Hyperdimension Neptunia Re;Birth3 V Generation",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Hyperrogue",
+   "file": "games/hyperrogue.json",
+   "source": "custom",
+   "apworld": "hyperrogue.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "HyperRogue",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "hytale",
+   "file": "games/hytale.json",
+   "source": "custom",
+   "apworld": "hytale.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Hytale",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "I Hate You, Please Suffer",
+   "file": "games/i-hate-you-please-suffer.json",
+   "source": "custom",
+   "apworld": "ihyps.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "I Hate You, Please Suffer",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "I Was a Teenage Exocolonist",
+   "file": "games/i-was-a-teenage-exocolonist.json",
+   "source": "custom",
+   "apworld": "exocolonist.apworld",
+   "world_version": "1.1.0",
+   "sheet": {
+    "game": "I Was A Teenage Exocolonist",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "IAmYourBeast",
+   "file": "games/iamyourbeast.json",
+   "source": "custom",
+   "apworld": "i_am_your_beast.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "I am Your Beast",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "ICEwall",
+   "file": "games/icewall.json",
+   "source": "custom",
+   "apworld": "icewall.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "ICEwall",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Idle Loops",
+   "file": "games/idle-loops.json",
+   "source": "custom",
+   "apworld": "idleloops.apworld",
+   "world_version": "0.4.7",
+   "sheet": {
+    "game": "Idle Loops",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Iji",
+   "file": "games/iji.json",
+   "source": "custom",
+   "apworld": "iji.apworld",
+   "world_version": "1.2.6",
+   "sheet": {
+    "game": "Iji",
+    "stability": "Stable"
+   }
+  },
+  {
    "game": "Inscryption",
    "file": "games/inscryption.json",
    "source": "core",
@@ -213,11 +2908,168 @@
    "world_version": null
   },
   {
+   "game": "Into the Breach",
+   "file": "games/into-the-breach.json",
+   "source": "custom",
+   "apworld": "into_the_breach.apworld",
+   "world_version": "0.15.18",
+   "sheet": {
+    "game": "Into the Breach",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Isles Of Sea And Sky",
+   "file": "games/isles-of-sea-and-sky.json",
+   "source": "custom",
+   "apworld": "isles_of_sea_and_sky.apworld",
+   "world_version": "2.1.2",
+   "sheet": {
+    "game": "Isles of Sea and Sky",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Isles of Trials",
+   "file": "games/isles-of-trials.json",
+   "source": "custom",
+   "apworld": "isles_of_trials.apworld",
+   "world_version": "0.2.0",
+   "sheet": {
+    "game": "Isles of Trials",
+    "stability": "Stable",
+    "pr_status": "Not PRing"
+   }
+  },
+  {
+   "game": "Ittle Dew 2",
+   "file": "games/ittle-dew-2.json",
+   "source": "custom",
+   "apworld": "ittle_dew_2.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Ittle Dew 2+",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Jak 3",
+   "file": "games/jak-3.json",
+   "source": "custom",
+   "apworld": "jak3.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Jak 3",
+    "stability": "Stable"
+   }
+  },
+  {
    "game": "Jak and Daxter: The Precursor Legacy",
    "file": "games/jak-and-daxter-the-precursor-legacy.json",
    "source": "core",
    "apworld": null,
    "world_version": "1.1.6"
+  },
+  {
+   "game": "Jak II",
+   "file": "games/jak-ii.json",
+   "source": "custom",
+   "apworld": "jakii.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Jak II",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Jigsaw",
+   "file": "games/jigsaw.json",
+   "source": "custom",
+   "apworld": "jigsaw.apworld",
+   "world_version": "0.10.0",
+   "sheet": {
+    "game": "Jigsaw Puzzle for Archipelago",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Johnny Upgrade",
+   "file": "games/johnny-upgrade.json",
+   "source": "custom",
+   "apworld": "johnny_upgrade.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Johnny Upgrade",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Jurassic Park",
+   "file": "games/jurassic-park.json",
+   "source": "custom",
+   "apworld": "jurassic_park.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Jurassic Park (SNES)",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "K-On! After School Live!!",
+   "file": "games/k-on-after-school-live.json",
+   "source": "custom",
+   "apworld": "kon.apworld",
+   "world_version": "1.1.5",
+   "sheet": {
+    "game": "K-On! After School Live!!",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Keep Talking and Nobody Explodes",
+   "file": "games/keep-talking-and-nobody-explodes.json",
+   "source": "custom",
+   "apworld": "ktane.apworld",
+   "world_version": "0.3.0",
+   "sheet": {
+    "game": "Keep Talking and Nobody Explodes",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Kerbal Space Program 1",
+   "file": "games/kerbal-space-program-1.json",
+   "source": "custom",
+   "apworld": "ksp1.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Kerbal Space Program",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "KeyWe",
+   "file": "games/keywe.json",
+   "source": "custom",
+   "apworld": "keywe.apworld",
+   "world_version": "1.1.0",
+   "sheet": {
+    "game": "KeyWe",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Kindergarten 2",
+   "file": "games/kindergarten-2.json",
+   "source": "custom",
+   "apworld": "kindergarten_2.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Kindergarten 2",
+    "stability": "Stable",
+    "pr_status": "Not PRing",
+    "adult": true
+   }
   },
   {
    "game": "Kingdom Hearts",
@@ -234,6 +3086,95 @@
    "world_version": "2.0.0"
   },
   {
+   "game": "Kingdom Hearts Birth by Sleep",
+   "file": "games/kingdom-hearts-birth-by-sleep.json",
+   "source": "custom",
+   "apworld": "khbbs.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Kingdom Hearts: Birth by Sleep Final Mix",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Kingdom Hearts Chain of Memories",
+   "file": "games/kingdom-hearts-chain-of-memories.json",
+   "source": "custom",
+   "apworld": "khcom.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Kingdom Hearts: Chain of Memories (GBA)",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Kingdom Hearts Dream Drop Distance",
+   "file": "games/kingdom-hearts-dream-drop-distance.json",
+   "source": "custom",
+   "apworld": "khddd.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Kingdom Hearts Dream Drop Distance",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Kingdom Hearts RE Chain of Memories",
+   "file": "games/kingdom-hearts-re-chain-of-memories.json",
+   "source": "custom",
+   "apworld": "khrecom.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Kingdom Hearts: RE Chain of Memories",
+    "stability": "Stable",
+    "pr_status": "In Review"
+   }
+  },
+  {
+   "game": "Kirby & The Amazing Mirror",
+   "file": "games/kirby-the-amazing-mirror.json",
+   "source": "custom",
+   "apworld": "kirbyam.apworld",
+   "world_version": "0.4.1",
+   "sheet": {
+    "game": "Kirby & The Amazing Mirror",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Kirby Air Ride",
+   "file": "games/kirby-air-ride.json",
+   "source": "custom",
+   "apworld": "kirby_air_ride.apworld",
+   "world_version": "1.3.0",
+   "sheet": {
+    "game": "Kirby Air Ride",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Kirby Squeak Squad",
+   "file": "games/kirby-squeak-squad.json",
+   "source": "custom",
+   "apworld": "kirby_squeak_squad.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Kirby Squeak Squad",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Kirby Super Star Ultra",
+   "file": "games/kirby-super-star-ultra.json",
+   "source": "custom",
+   "apworld": "kssu.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Kirby Super Star Ultra",
+    "stability": "Unstable"
+   }
+  },
+  {
    "game": "Kirby's Dream Land 3",
    "file": "games/kirby-s-dream-land-3.json",
    "source": "core",
@@ -241,11 +3182,156 @@
    "world_version": null
   },
   {
+   "game": "Kirby: Planet Robobot",
+   "file": "games/kirby-planet-robobot.json",
+   "source": "custom",
+   "apworld": "kirby_robobot.apworld",
+   "world_version": "0.1.0",
+   "sheet": {
+    "game": "Kirby Planet Robobot",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "La-Mulana 2",
+   "file": "games/la-mulana-2.json",
+   "source": "custom",
+   "apworld": "lamulana2.apworld",
+   "world_version": "1.1.2",
+   "sheet": {
+    "game": "La-Mulana 2",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Laika: Aged Through Blood",
+   "file": "games/laika-aged-through-blood.json",
+   "source": "custom",
+   "apworld": "laika_aged_through_blood.apworld",
+   "world_version": "0.1.7",
+   "sheet": {
+    "game": "Laika: Aged Through Blood",
+    "stability": "Unstable"
+   }
+  },
+  {
    "game": "Landstalker - The Treasures of King Nole",
    "file": "games/landstalker-the-treasures-of-king-nole.json",
    "source": "core",
    "apworld": null,
    "world_version": "1.8.7"
+  },
+  {
+   "game": "Layer8Problem",
+   "file": "games/layer8problem.json",
+   "source": "custom",
+   "apworld": "layer8problem.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Layer8Problem",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "League of Legends",
+   "file": "games/league-of-legends.json",
+   "source": "custom",
+   "apworld": "lol.apworld",
+   "world_version": "0.2.6",
+   "sheet": {
+    "game": "League of Legends",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Lego Batman: The Video Game",
+   "file": "games/lego-batman-the-video-game.json",
+   "source": "custom",
+   "apworld": "lego_batman_1.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "LEGO Batman: The Video Game",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "LEGO Star Wars III: The Clone Wars",
+   "file": "games/lego-star-wars-iii-the-clone-wars.json",
+   "source": "custom",
+   "apworld": "lsw3.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "LEGO Star Wars III (Wii)",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Lego Star Wars: The Complete Saga",
+   "file": "games/lego-star-wars-the-complete-saga.json",
+   "source": "custom",
+   "apworld": "lego_star_wars_tcs.apworld",
+   "world_version": "1.4.4",
+   "sheet": {
+    "game": "Lego Star Wars: The Complete Saga",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Lethal Company",
+   "file": "games/lethal-company.json",
+   "source": "custom",
+   "apworld": "lethal_company.apworld",
+   "world_version": "0.8.0",
+   "sheet": {
+    "game": "Lethal Company",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Lethal Crisis",
+   "file": "games/lethal-crisis.json",
+   "source": "custom",
+   "apworld": "lethalcrisis.apworld",
+   "world_version": "0.1.0",
+   "sheet": {
+    "game": "Lethal Crisis",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Librarian Tidy Up the Arcane Library",
+   "file": "games/librarian-tidy-up-the-arcane-library.json",
+   "source": "custom",
+   "apworld": "librarian.apworld",
+   "world_version": "3.0.2",
+   "sheet": {
+    "game": "Librarian: Tidy Up the Arcane Library",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Library of Babel",
+   "file": "games/library-of-babel.json",
+   "source": "custom",
+   "apworld": "lobap.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Library of Babel",
+    "stability": "Unstable",
+    "pr_status": "Not PRing",
+    "adult": true
+   }
+  },
+  {
+   "game": "Lies Of P",
+   "file": "games/lies-of-p.json",
+   "source": "custom",
+   "apworld": "liesofp.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Lies of P",
+    "stability": "Unstable"
+   }
   },
   {
    "game": "Lingo",
@@ -262,6 +3348,64 @@
    "world_version": "2.0.2"
   },
   {
+   "game": "Little Witch Nobeta",
+   "file": "games/little-witch-nobeta.json",
+   "source": "custom",
+   "apworld": "little_witch_nobeta.apworld",
+   "world_version": "0.3.3",
+   "sheet": {
+    "game": "Little Witch Nobeta",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Lobotomy Corporation",
+   "file": "games/lobotomy-corporation.json",
+   "source": "custom",
+   "apworld": "lobotomycorporation.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Lobotomy Corporation",
+    "stability": "Unstable",
+    "pr_status": "Not PRing",
+    "adult": true
+   }
+  },
+  {
+   "game": "Look Outside",
+   "file": "games/look-outside.json",
+   "source": "custom",
+   "apworld": "look_outside.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Look Outside",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Loonyland",
+   "file": "games/loonyland.json",
+   "source": "custom",
+   "apworld": "loonyland.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Loonyland: Halloween Hill",
+    "stability": "Stable",
+    "pr_status": "In Review"
+   }
+  },
+  {
+   "game": "Lost Kingdoms II",
+   "file": "games/lost-kingdoms-ii.json",
+   "source": "custom",
+   "apworld": "LostKingdoms2.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Lost Kingdoms 2",
+    "stability": "Unstable"
+   }
+  },
+  {
    "game": "Lufia II Ancient Cave",
    "file": "games/lufia-ii-ancient-cave.json",
    "source": "core",
@@ -269,11 +3413,214 @@
    "world_version": null
   },
   {
+   "game": "Luigi's Mansion",
+   "file": "games/luigi-s-mansion.json",
+   "source": "custom",
+   "apworld": "luigismansion.apworld",
+   "world_version": "0.6.4",
+   "sheet": {
+    "game": "Luigi's Mansion",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Lunacid",
+   "file": "games/lunacid.json",
+   "source": "custom",
+   "apworld": "lunacid.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Lunacid",
+    "stability": "Stable",
+    "pr_status": "Not PRing"
+   }
+  },
+  {
+   "game": "Madou Monogatari Hanamaru Daiyouchienji",
+   "file": "games/madou-monogatari-hanamaru-daiyouchienji.json",
+   "source": "custom",
+   "apworld": "madou.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Madou Monogatari Hanamaru Dai Youchienji",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Majora's Mask Recompiled",
+   "file": "games/majora-s-mask-recompiled.json",
+   "source": "custom",
+   "apworld": "mm_recomp.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "The Legend of Zelda: Majora's Mask",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Manic Miners",
+   "file": "games/manic-miners.json",
+   "source": "custom",
+   "apworld": "manicminers.apworld",
+   "world_version": "1.6.0",
+   "sheet": {
+    "game": "LEGO Rock Raiders/Manic Miners",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Manual_FreedomPlanet2_Knuxfan24",
+   "file": "games/manual-freedomplanet2-knuxfan24.json",
+   "source": "custom",
+   "apworld": "manual_freedomplanet2_knuxfan24.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Freedom Planet 2",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Marble It Up! Ultra",
+   "file": "games/marble-it-up-ultra.json",
+   "source": "custom",
+   "apworld": "miuultra.apworld",
+   "world_version": "0.3.0",
+   "sheet": {
+    "game": "Marble It Up! Ultra",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Marbles! Balance Challenge",
+   "file": "games/marbles-balance-challenge.json",
+   "source": "custom",
+   "apworld": "marbles_balance_challenge.apworld",
+   "world_version": "0.1.0",
+   "sheet": {
+    "game": "Marbles! Balance Challenge",
+    "stability": "Stable"
+   }
+  },
+  {
    "game": "Mario & Luigi Superstar Saga",
    "file": "games/mario-luigi-superstar-saga.json",
    "source": "core",
    "apworld": null,
    "world_version": "1.10.2"
+  },
+  {
+   "game": "Mario and Luigi Dream Team",
+   "file": "games/mario-and-luigi-dream-team.json",
+   "source": "custom",
+   "apworld": "mldt.apworld",
+   "world_version": "0.1.3",
+   "sheet": {
+    "game": "Mario & Luigi: Dream Team",
+    "stability": "Unstable",
+    "pr_status": "Not PRing"
+   }
+  },
+  {
+   "game": "Mario is Missing",
+   "file": "games/mario-is-missing.json",
+   "source": "custom",
+   "apworld": "mariomissing.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Mario is Missing (SNES)",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Mario Kart 64",
+   "file": "games/mario-kart-64.json",
+   "source": "custom",
+   "apworld": "mk64.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Mario Kart 64",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Mario Kart Double Dash",
+   "file": "games/mario-kart-double-dash.json",
+   "source": "custom",
+   "apworld": "mario_kart_double_dash.apworld",
+   "world_version": "1.0.1",
+   "sheet": {
+    "game": "Mario Kart: Double Dash",
+    "stability": "Stable",
+    "pr_status": "Not PRing"
+   }
+  },
+  {
+   "game": "Mario Party Advance",
+   "file": "games/mario-party-advance.json",
+   "source": "custom",
+   "apworld": "mpadv.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Mario Party Advance",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Mario Sports Mix",
+   "file": "games/mario-sports-mix.json",
+   "source": "custom",
+   "apworld": "mario_sports_mix.apworld",
+   "world_version": "3.1.3",
+   "sheet": {
+    "game": "Mario Sports Mix",
+    "stability": "Unstable",
+    "pr_status": "Not PRing"
+   }
+  },
+  {
+   "game": "Mario Super Sluggers",
+   "file": "games/mario-super-sluggers.json",
+   "source": "custom",
+   "apworld": "mario_super_sluggers.apworld",
+   "world_version": "1.0.0",
+   "sheet": {
+    "game": "Mario Super Sluggers",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Mario Tennis GBC",
+   "file": "games/mario-tennis-gbc.json",
+   "source": "custom",
+   "apworld": "mario_tennis_gbc.apworld",
+   "world_version": "0.3.0",
+   "sheet": {
+    "game": "Mario Tennis (GBC)",
+    "stability": "Unstable",
+    "pr_status": "Not PRing"
+   }
+  },
+  {
+   "game": "Medievil",
+   "file": "games/medievil.json",
+   "source": "custom",
+   "apworld": "medievil.apworld",
+   "world_version": "0.3.0",
+   "sheet": {
+    "game": "MediEvil (1998)",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Medievil 2",
+   "file": "games/medievil-2.json",
+   "source": "custom",
+   "apworld": "medievil2.apworld",
+   "world_version": "0.2.3",
+   "sheet": {
+    "game": "MediEvil 2",
+    "stability": "Unstable"
+   }
   },
   {
    "game": "Mega Man 2",
@@ -290,11 +3637,112 @@
    "world_version": "0.1.8"
   },
   {
+   "game": "Mega Man X Command Mission",
+   "file": "games/mega-man-x-command-mission.json",
+   "source": "custom",
+   "apworld": "commandmission.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Mega Man X Command Mission",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Mega Man X2",
+   "file": "games/mega-man-x2.json",
+   "source": "custom",
+   "apworld": "mmx2.apworld",
+   "world_version": "2.0.6",
+   "sheet": {
+    "game": "Mega Man X2",
+    "stability": "Stable",
+    "pr_status": "Not PRing"
+   }
+  },
+  {
+   "game": "Mega Man X4",
+   "file": "games/mega-man-x4.json",
+   "source": "custom",
+   "apworld": "mmx4.apworld",
+   "world_version": "0.1.4",
+   "sheet": {
+    "game": "Mega Man X4",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Mega Man Zero 3",
+   "file": "games/mega-man-zero-3.json",
+   "source": "custom",
+   "apworld": "mmzero3.apworld",
+   "world_version": "0.4.1",
+   "sheet": {
+    "game": "Mega Man Zero 3",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Mega Man ZX",
+   "file": "games/mega-man-zx.json",
+   "source": "custom",
+   "apworld": "mmzx.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Mega Man ZX",
+    "stability": "Unstable"
+   }
+  },
+  {
    "game": "MegaMan Battle Network 3",
    "file": "games/megaman-battle-network-3.json",
    "source": "core",
    "apworld": null,
    "world_version": null
+  },
+  {
+   "game": "MegaMan Battle Network 6",
+   "file": "games/megaman-battle-network-6.json",
+   "source": "custom",
+   "apworld": "mmbn6.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Mega Man Battle Network 6",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Melatonin",
+   "file": "games/melatonin.json",
+   "source": "custom",
+   "apworld": "melatonin.apworld",
+   "world_version": "1.1.0",
+   "sheet": {
+    "game": "Melatonin",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Memories in Orbit",
+   "file": "games/memories-in-orbit.json",
+   "source": "custom",
+   "apworld": "mio.apworld",
+   "world_version": "0.0.1",
+   "sheet": {
+    "game": "MIO: Memories in Orbit",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Mental Omega",
+   "file": "games/mental-omega.json",
+   "source": "custom",
+   "apworld": "mental_omega.apworld",
+   "world_version": "0.6.9",
+   "sheet": {
+    "game": "Command & Conquer: Mental Omega",
+    "stability": "Unstable",
+    "pr_status": "Not PRing"
+   }
   },
   {
    "game": "Meritous",
@@ -304,6 +3752,298 @@
    "world_version": "1.0.0"
   },
   {
+   "game": "Metal Gear Solid",
+   "file": "games/metal-gear-solid.json",
+   "source": "custom",
+   "apworld": "mgs.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Metal Gear Solid",
+    "stability": "Unstable",
+    "pr_status": "Not PRing",
+    "adult": true
+   }
+  },
+  {
+   "game": "Metal: Hellsinger",
+   "file": "games/metal-hellsinger.json",
+   "source": "custom",
+   "apworld": "metal_hellsinger.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Metal Hellsinger",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "MetroCUBEvania",
+   "file": "games/metrocubevania.json",
+   "source": "custom",
+   "apworld": "metrocubevania.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "MetroCUBEvania",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Metroid Fusion",
+   "file": "games/metroid-fusion.json",
+   "source": "custom",
+   "apworld": "metroidfusion.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Metroid Fusion",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Metroid Prime",
+   "file": "games/metroid-prime.json",
+   "source": "custom",
+   "apworld": "metroidprime.apworld",
+   "world_version": "0.5.4",
+   "sheet": {
+    "game": "Metroid Prime",
+    "stability": "Stable",
+    "pr_status": "In Review"
+   }
+  },
+  {
+   "game": "Metroid: Samus Returns",
+   "file": "games/metroid-samus-returns.json",
+   "source": "custom",
+   "apworld": "msr.apworld",
+   "world_version": "0.3.2",
+   "sheet": {
+    "game": "Metroid: Samus Returns",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Metroid: Zero Mission",
+   "file": "games/metroid-zero-mission.json",
+   "source": "custom",
+   "apworld": "mzm.apworld",
+   "world_version": "0.5.3",
+   "sheet": {
+    "game": "Metroid: Zero Mission",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "MGS: Masala Garden Salad",
+   "file": "games/mgs-masala-garden-salad.json",
+   "source": "custom",
+   "apworld": "mgsalad.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Metal Gear Solid - Masala Garden Salad",
+    "stability": "Stable",
+    "pr_status": "Not PRing",
+    "adult": true
+   }
+  },
+  {
+   "game": "Mina The Hollower",
+   "file": "games/mina-the-hollower.json",
+   "source": "custom",
+   "apworld": "mina_the_hollower.apworld",
+   "world_version": "1.1.1",
+   "sheet": {
+    "game": "Mina the Hollower",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Minecraft",
+   "file": "games/minecraft.json",
+   "source": "custom",
+   "apworld": "minecraft.apworld",
+   "world_version": "2.2.0",
+   "sheet": {
+    "game": "Minecraft",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Minecraft Dig",
+   "file": "games/minecraft-dig.json",
+   "source": "custom",
+   "apworld": "minecraft_dig.apworld",
+   "world_version": "0.0.11",
+   "sheet": {
+    "game": "Minecraft Dig",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Minecraft Fabric",
+   "file": "games/minecraft-fabric.json",
+   "source": "custom",
+   "apworld": "minecraft_fabric.apworld",
+   "world_version": "1.2.0",
+   "sheet": {
+    "game": "Minecraft Fabric",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Mini Metro",
+   "file": "games/mini-metro.json",
+   "source": "custom",
+   "apworld": "mini_metro.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Mini Metro",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Minishoot Adventures",
+   "file": "games/minishoot-adventures.json",
+   "source": "custom",
+   "apworld": "minishoot.apworld",
+   "world_version": "0.6.0",
+   "sheet": {
+    "game": "Minishoot' Adventures",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Minit",
+   "file": "games/minit.json",
+   "source": "custom",
+   "apworld": "minit.apworld",
+   "world_version": "0.7.0",
+   "sheet": {
+    "game": "Minit",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Modded Minecraft",
+   "file": "games/modded-minecraft.json",
+   "source": "custom",
+   "apworld": "moddedminecraft.apworld",
+   "world_version": "3.0.11",
+   "sheet": {
+    "game": "Minecraft Modded",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Momodora 4 - Reverie Under the Moonlight",
+   "file": "games/momodora-4-reverie-under-the-moonlight.json",
+   "source": "custom",
+   "apworld": "momo4.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Momodora 4 - Reverie Under the Moonlight",
+    "stability": "Broken on Main"
+   }
+  },
+  {
+   "game": "Momodora Moonlit Farewell",
+   "file": "games/momodora-moonlit-farewell.json",
+   "source": "custom",
+   "apworld": "momodoramoonlitfarewell.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Momodora: Moonlit Farewell",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Monster Hunter Freedom Unite",
+   "file": "games/monster-hunter-freedom-unite.json",
+   "source": "custom",
+   "apworld": "mhfu.apworld",
+   "world_version": "0.0.3",
+   "sheet": {
+    "game": "Monster Hunter Freedom Unite",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Monster Hunter Rise",
+   "file": "games/monster-hunter-rise.json",
+   "source": "custom",
+   "apworld": "mhrise.apworld",
+   "world_version": "0.5.2",
+   "sheet": {
+    "game": "Monster Hunter Rise",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Monster Hunter World",
+   "file": "games/monster-hunter-world.json",
+   "source": "custom",
+   "apworld": "mhw.apworld",
+   "world_version": "0.1.3",
+   "sheet": {
+    "game": "Monster Hunter World",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Monster Sanctuary",
+   "file": "games/monster-sanctuary.json",
+   "source": "custom",
+   "apworld": "monster_sanctuary.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Monster Sanctuary",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Moonlighter",
+   "file": "games/moonlighter.json",
+   "source": "custom",
+   "apworld": "moonlighter.apworld",
+   "world_version": "0.1.0",
+   "sheet": {
+    "game": "Moonlighter",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Mortal Kombat: Shaolin Monks",
+   "file": "games/mortal-kombat-shaolin-monks.json",
+   "source": "custom",
+   "apworld": "mksm.apworld",
+   "world_version": "1.1.1",
+   "sheet": {
+    "game": "Mortal Kombat: Shaolin Monks",
+    "stability": "Unstable",
+    "adult": true
+   }
+  },
+  {
+   "game": "Mount And Blade Bannerlord",
+   "file": "games/mount-and-blade-bannerlord.json",
+   "source": "custom",
+   "apworld": "bannerlord.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Mount & Blade II: Bannerlord",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Muck",
+   "file": "games/muck.json",
+   "source": "custom",
+   "apworld": "muck.apworld",
+   "world_version": "1.2.1",
+   "sheet": {
+    "game": "Muck",
+    "stability": "Unstable"
+   }
+  },
+  {
    "game": "Muse Dash",
    "file": "games/muse-dash.json",
    "source": "core",
@@ -311,11 +4051,83 @@
    "world_version": "1.5.37"
   },
   {
+   "game": "Naruto Clash of Ninja 2",
+   "file": "games/naruto-clash-of-ninja-2.json",
+   "source": "custom",
+   "apworld": "naruto_con_2.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Naruto Clash of Ninja 2",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "NEO: The World Ends with You",
+   "file": "games/neo-the-world-ends-with-you.json",
+   "source": "custom",
+   "apworld": "neotwewy.apworld",
+   "world_version": "0.0.4",
+   "sheet": {
+    "game": "NEO: The World Ends with You",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Neon White",
+   "file": "games/neon-white.json",
+   "source": "custom",
+   "apworld": "neonwhite.apworld",
+   "world_version": "0.1.1",
+   "sheet": {
+    "game": "Neon White",
+    "stability": "Unstable",
+    "pr_status": "Not PRing"
+   }
+  },
+  {
    "game": "New Super Mario Bros. DS",
    "file": "games/new-super-mario-bros-ds.json",
    "source": "custom",
    "apworld": "nsmbds.apworld",
-   "world_version": "0.5.3"
+   "world_version": "0.5.3",
+   "sheet": {
+    "game": "New Super Mario Bros DS",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Nicktoons: Battle for Volcano Island",
+   "file": "games/nicktoons-battle-for-volcano-island.json",
+   "source": "custom",
+   "apworld": "nicktoons_bfvi.apworld",
+   "world_version": "2.1.0",
+   "sheet": {
+    "game": "Nicktoons: Battle for Volcano Island",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Nine Sols",
+   "file": "games/nine-sols.json",
+   "source": "custom",
+   "apworld": "nine_sols.apworld",
+   "world_version": "0.6.4",
+   "sheet": {
+    "game": "Nine Sols",
+    "stability": "Stable",
+    "pr_status": "Not PRing"
+   }
+  },
+  {
+   "game": "Nodebuster",
+   "file": "games/nodebuster.json",
+   "source": "custom",
+   "apworld": "nodebuster.apworld",
+   "world_version": "0.1.3",
+   "sheet": {
+    "game": "Nodebuster",
+    "stability": "Unstable"
+   }
   },
   {
    "game": "Noita",
@@ -325,11 +4137,125 @@
    "world_version": "1.4.0"
   },
   {
+   "game": "Noita-Killsanity",
+   "file": "games/noita-killsanity.json",
+   "source": "custom",
+   "apworld": "noita-killsanity.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Noita - Enemysanity",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Nonograhmm",
+   "file": "games/nonograhmm.json",
+   "source": "custom",
+   "apworld": "nonograhmm.apworld",
+   "world_version": "0.3.1",
+   "sheet": {
+    "game": "Nonograhmm",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Nonopelagram",
+   "file": "games/nonopelagram.json",
+   "source": "custom",
+   "apworld": "nonopelagram.apworld",
+   "world_version": "1.0.2",
+   "sheet": {
+    "game": "Nonopelagram",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Northgard",
+   "file": "games/northgard.json",
+   "source": "custom",
+   "apworld": "northgard.apworld",
+   "world_version": "2026.10.25",
+   "sheet": {
+    "game": "Northgard",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Nova Lands",
+   "file": "games/nova-lands.json",
+   "source": "custom",
+   "apworld": "novalands.apworld",
+   "world_version": "0.2.0",
+   "sheet": {
+    "game": "Nova Lands",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Nubby's Number Factory",
+   "file": "games/nubby-s-number-factory.json",
+   "source": "custom",
+   "apworld": "nubbys_number_factory.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Nubby's Number Factory",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Nuclear Throne",
+   "file": "games/nuclear-throne.json",
+   "source": "custom",
+   "apworld": "nuclear_throne.apworld",
+   "world_version": "1.4.3",
+   "sheet": {
+    "game": "Nuclear Throne",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Oblivion Remastered",
+   "file": "games/oblivion-remastered.json",
+   "source": "custom",
+   "apworld": "oblivion.apworld",
+   "world_version": "0.6.0",
+   "sheet": {
+    "game": "The Elder Scrolls IV: Oblivion Remastered",
+    "stability": "Stable",
+    "pr_status": "Not PRing",
+    "adult": true
+   }
+  },
+  {
    "game": "Ocarina of Time",
    "file": "games/ocarina-of-time.json",
    "source": "core",
    "apworld": null,
    "world_version": "7.0.0"
+  },
+  {
+   "game": "Oh So Hero!",
+   "file": "games/oh-so-hero.json",
+   "source": "custom",
+   "apworld": "oh_so_hero.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Oh So Hero",
+    "stability": "Unstable",
+    "pr_status": "Not PRing",
+    "adult": true
+   }
+  },
+  {
+   "game": "Okami HD",
+   "file": "games/okami-hd.json",
+   "source": "custom",
+   "apworld": "okamihd.apworld",
+   "world_version": "0.5.4",
+   "sheet": {
+    "game": "Okami HD",
+    "stability": "Unstable"
+   }
   },
   {
    "game": "Old School Runescape",
@@ -339,11 +4265,139 @@
    "world_version": null
   },
   {
+   "game": "Once Upon a Katamari",
+   "file": "games/once-upon-a-katamari.json",
+   "source": "custom",
+   "apworld": "ouakatamari.apworld",
+   "world_version": "0.3.0",
+   "sheet": {
+    "game": "Once Upon a Katamari",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "One Must Fall: 2097",
+   "file": "games/one-must-fall-2097.json",
+   "source": "custom",
+   "apworld": "openomf.apworld",
+   "world_version": "0.0.4",
+   "sheet": {
+    "game": "One Must Fall: 2097",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "OpenRCT2",
+   "file": "games/openrct2.json",
+   "source": "custom",
+   "apworld": "openrct2.apworld",
+   "world_version": "0.1.22",
+   "sheet": {
+    "game": "OpenRCT2",
+    "stability": "Stable",
+    "pr_status": "In Review"
+   }
+  },
+  {
+   "game": "OpenTTD",
+   "file": "games/openttd.json",
+   "source": "custom",
+   "apworld": "openttd.apworld",
+   "world_version": "2.6.0",
+   "sheet": {
+    "game": "OpenTTD",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "OpenTTD Cargolock",
+   "file": "games/openttd-cargolock.json",
+   "source": "custom",
+   "apworld": "openttd_cargolock.apworld",
+   "world_version": "0.3.1",
+   "sheet": {
+    "game": "OpenTTD Cargolock",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Operation Octo",
+   "file": "games/operation-octo.json",
+   "source": "custom",
+   "apworld": "operationocto.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Operation Octo",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Ori and the Blind Forest",
+   "file": "games/ori-and-the-blind-forest.json",
+   "source": "custom",
+   "apworld": "oribf.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Ori and the Blind Forest Definitive Edition",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Ori and the Will of the Wisps",
+   "file": "games/ori-and-the-will-of-the-wisps.json",
+   "source": "custom",
+   "apworld": "ori_wotw.apworld",
+   "world_version": "0.6.5",
+   "sheet": {
+    "game": "Ori and the Will of the Wisps",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "osu!",
+   "file": "games/osu.json",
+   "source": "custom",
+   "apworld": "osu.apworld",
+   "world_version": "1.3.2",
+   "sheet": {
+    "game": "osu!",
+    "stability": "Stable",
+    "pr_status": "Not PRing"
+   }
+  },
+  {
+   "game": "Our Ascent",
+   "file": "games/our-ascent.json",
+   "source": "custom",
+   "apworld": "ourascent.apworld",
+   "world_version": "0.0.1",
+   "sheet": {
+    "game": "Our Ascent",
+    "stability": "Unstable"
+   }
+  },
+  {
    "game": "Outer Wilds",
    "file": "games/outer-wilds.json",
    "source": "custom",
    "apworld": "outer_wilds.apworld",
-   "world_version": "1.4.0"
+   "world_version": "1.4.0",
+   "sheet": {
+    "game": "Outer Wilds",
+    "stability": "Stable",
+    "pr_status": "Not PRing"
+   }
+  },
+  {
+   "game": "Outward: Definitive Edition",
+   "file": "games/outward-definitive-edition.json",
+   "source": "custom",
+   "apworld": "outward.apworld",
+   "world_version": "0.2.2",
+   "sheet": {
+    "game": "Outward: Definitive Edition",
+    "stability": "Unstable"
+   }
   },
   {
    "game": "Overcooked! 2",
@@ -353,11 +4407,341 @@
    "world_version": null
   },
   {
+   "game": "Oxygen Not Included",
+   "file": "games/oxygen-not-included.json",
+   "source": "custom",
+   "apworld": "oni.apworld",
+   "world_version": "7.0.0",
+   "sheet": {
+    "game": "Oxygen Not Included",
+    "stability": "Stable",
+    "pr_status": "Not PRing"
+   }
+  },
+  {
+   "game": "Pac-Man World 2 Re-Pac",
+   "file": "games/pac-man-world-2-re-pac.json",
+   "source": "custom",
+   "apworld": "pmw2repac.apworld",
+   "world_version": "0.1.2",
+   "sheet": {
+    "game": "PAC-MAN WORLD 2 Re-PAC",
+    "stability": "Stable",
+    "pr_status": "Not PRing"
+   }
+  },
+  {
    "game": "Paint",
    "file": "games/paint.json",
    "source": "core",
    "apworld": null,
    "world_version": "0.5.2"
+  },
+  {
+   "game": "Paper Mario",
+   "file": "games/paper-mario.json",
+   "source": "custom",
+   "apworld": "papermario.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Paper Mario 64",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Paper Mario: The Thousand-Year Door",
+   "file": "games/paper-mario-the-thousand-year-door.json",
+   "source": "custom",
+   "apworld": "ttyd.apworld",
+   "world_version": "0.14.1",
+   "sheet": {
+    "game": "Paper Mario: The Thousand Year Door",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Paquerette Down The Bunburrows",
+   "file": "games/paquerette-down-the-bunburrows.json",
+   "source": "custom",
+   "apworld": "paquerette_down_the_bunburrows.apworld",
+   "world_version": "0.2.0",
+   "sheet": {
+    "game": "Paquerette Down the Bunburrows",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Parkitect",
+   "file": "games/parkitect.json",
+   "source": "custom",
+   "apworld": "parkitect.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Parkitect",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Path of Exile",
+   "file": "games/path-of-exile.json",
+   "source": "custom",
+   "apworld": "poe.apworld",
+   "world_version": "2.2.1",
+   "sheet": {
+    "game": "Path of Exile",
+    "stability": "Stable",
+    "pr_status": "Not PRing",
+    "adult": true
+   }
+  },
+  {
+   "game": "PAYDAY 2: Criminal Dawn",
+   "file": "games/payday-2-criminal-dawn.json",
+   "source": "custom",
+   "apworld": "pd2_crimdawn.apworld",
+   "world_version": "1.0.4",
+   "sheet": {
+    "game": "PAYDAY 2: Criminal Dawn",
+    "stability": "Unstable",
+    "pr_status": "Not PRing",
+    "adult": true
+   }
+  },
+  {
+   "game": "PEAK",
+   "file": "games/peak.json",
+   "source": "custom",
+   "apworld": "peak.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "PEAK",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Peggle Deluxe",
+   "file": "games/peggle-deluxe.json",
+   "source": "custom",
+   "apworld": "peggle_deluxe.apworld",
+   "world_version": "2.2.0",
+   "sheet": {
+    "game": "Peggle Deluxe",
+    "stability": "Stable",
+    "pr_status": "Not PRing"
+   }
+  },
+  {
+   "game": "Peggle Nights",
+   "file": "games/peggle-nights.json",
+   "source": "custom",
+   "apworld": "peggle_nights.apworld",
+   "world_version": "2.0.0",
+   "sheet": {
+    "game": "Peggle Nights",
+    "stability": "Stable",
+    "pr_status": "Not PRing"
+   }
+  },
+  {
+   "game": "Perfect Dark",
+   "file": "games/perfect-dark.json",
+   "source": "custom",
+   "apworld": "perfect_dark.apworld",
+   "world_version": "0.7.0",
+   "sheet": {
+    "game": "Perfect Dark",
+    "stability": "Unstable",
+    "adult": true
+   }
+  },
+  {
+   "game": "Persona 5 Royal",
+   "file": "games/persona-5-royal.json",
+   "source": "custom",
+   "apworld": "p5r.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Persona 5 Royal",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Phantasy Star II",
+   "file": "games/phantasy-star-ii.json",
+   "source": "custom",
+   "apworld": "phantasy_star_2.apworld",
+   "world_version": "0.1.3",
+   "sheet": {
+    "game": "Phantasy Star II",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Phoenotopia: Awakening",
+   "file": "games/phoenotopia-awakening.json",
+   "source": "custom",
+   "apworld": "phoa.apworld",
+   "world_version": "0.4.0",
+   "sheet": {
+    "game": "Phoenotopia: Awakening",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Pikmin",
+   "file": "games/pikmin.json",
+   "source": "custom",
+   "apworld": "pikmin.apworld",
+   "world_version": "0.6.0",
+   "sheet": {
+    "game": "Pikmin 1",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Pikmin 2",
+   "file": "games/pikmin-2.json",
+   "source": "custom",
+   "apworld": "pikmin2.apworld",
+   "world_version": "1.0.0",
+   "sheet": {
+    "game": "Pikmin 2",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Pikuniku",
+   "file": "games/pikuniku.json",
+   "source": "custom",
+   "apworld": "pikuniku.apworld",
+   "world_version": "0.3.1",
+   "sheet": {
+    "game": "Pikuniku",
+    "stability": "Stable",
+    "pr_status": "Not PRing"
+   }
+  },
+  {
+   "game": "Pipistrello and the Cursed Yoyo",
+   "file": "games/pipistrello-and-the-cursed-yoyo.json",
+   "source": "custom",
+   "apworld": "pipistrello.apworld",
+   "world_version": "0.3.0",
+   "sheet": {
+    "game": "Pipistrello and the Cursed Yoyo",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "PixelDraw",
+   "file": "games/pixeldraw.json",
+   "source": "custom",
+   "apworld": "pixeldraw.apworld",
+   "world_version": "1.3.3",
+   "sheet": {
+    "game": "PixelDraw",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Pizza Tower",
+   "file": "games/pizza-tower.json",
+   "source": "custom",
+   "apworld": "pizza_tower.apworld",
+   "world_version": "1.3.3",
+   "sheet": {
+    "game": "Pizza Tower",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Placid Plastic Duck Simulator",
+   "file": "games/placid-plastic-duck-simulator.json",
+   "source": "custom",
+   "apworld": "placidplasticducksim.apworld",
+   "world_version": "0.3.2",
+   "sheet": {
+    "game": "Placid Plastic Duck Simulator",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Planet Zoo",
+   "file": "games/planet-zoo.json",
+   "source": "custom",
+   "apworld": "planetzoo.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Planet Zoo",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Plants vs. Zombies",
+   "file": "games/plants-vs-zombies.json",
+   "source": "custom",
+   "apworld": "pvzr.apworld",
+   "world_version": "1.10.2",
+   "sheet": {
+    "game": "Plants vs. Zombies: GOTY",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "PlateUp",
+   "file": "games/plateup.json",
+   "source": "custom",
+   "apworld": "plateup.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Plateup!",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Plok",
+   "file": "games/plok.json",
+   "source": "custom",
+   "apworld": "plok.apworld",
+   "world_version": "0.1.1",
+   "sheet": {
+    "game": "Plok",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Poco",
+   "file": "games/poco.json",
+   "source": "custom",
+   "apworld": "poco.apworld",
+   "world_version": "0.1.3",
+   "sheet": {
+    "game": "Poco",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Pokemon Black and White",
+   "file": "games/pokemon-black-and-white.json",
+   "source": "custom",
+   "apworld": "pokemon_bw.apworld",
+   "world_version": "0.4.3",
+   "sheet": {
+    "game": "Pokémon Black and White",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Pokemon Crystal",
+   "file": "games/pokemon-crystal.json",
+   "source": "custom",
+   "apworld": "pokemon_crystal.apworld",
+   "world_version": "6.0.5",
+   "sheet": {
+    "game": "Pokémon Crystal",
+    "stability": "Stable",
+    "pr_status": "Not PRing"
+   }
   },
   {
    "game": "Pokemon Emerald",
@@ -367,18 +4751,70 @@
    "world_version": "2.6.0"
   },
   {
+   "game": "Pokemon FireRed and LeafGreen",
+   "file": "games/pokemon-firered-and-leafgreen.json",
+   "source": "custom",
+   "apworld": "pokemon_frlg.apworld",
+   "world_version": "1.1.5",
+   "sheet": {
+    "game": "Pokémon FireRed and LeafGreen",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Pokemon HeartGold",
+   "file": "games/pokemon-heartgold.json",
+   "source": "custom",
+   "apworld": "pokemon_heartgold.apworld",
+   "world_version": "0.2.0",
+   "sheet": {
+    "game": "Pokémon HeartGold & SoulSilver (Singe)",
+    "stability": "Unstable"
+   }
+  },
+  {
    "game": "Pokemon Mystery Dungeon Explorers of Sky",
    "file": "games/pokemon-mystery-dungeon-explorers-of-sky.json",
    "source": "custom",
    "apworld": "pmd_eos.apworld",
-   "world_version": "0.3.2"
+   "world_version": "0.3.2",
+   "sheet": {
+    "game": "Pokémon Mystery Dungeon: Explorers of Sky",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Pokemon Pinball Ruby & Sapphire",
+   "file": "games/pokemon-pinball-ruby-sapphire.json",
+   "source": "custom",
+   "apworld": "pokemon_pinball_rs.apworld",
+   "world_version": "0.3.2",
+   "sheet": {
+    "game": "Pokémon Pinball Ruby & Sapphire",
+    "stability": "Unstable"
+   }
   },
   {
    "game": "Pokemon Platinum",
    "file": "games/pokemon-platinum.json",
    "source": "custom",
    "apworld": "pokemon_platinum.apworld",
-   "world_version": "0.2.2"
+   "world_version": "0.2.2",
+   "sheet": {
+    "game": "Pokémon Platinum",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Pokemon Ranger (Quest)",
+   "file": "games/pokemon-ranger-quest.json",
+   "source": "custom",
+   "apworld": "pkmn_ranger_quest.apworld",
+   "world_version": "1.0.5",
+   "sheet": {
+    "game": "Pokémon Ranger (Quest)",
+    "stability": "Unstable"
+   }
   },
   {
    "game": "Pokemon Red and Blue",
@@ -388,6 +4824,230 @@
    "world_version": null
   },
   {
+   "game": "Pokemon Snap",
+   "file": "games/pokemon-snap.json",
+   "source": "custom",
+   "apworld": "pokemon_snap.apworld",
+   "world_version": "0.8.0",
+   "sheet": {
+    "game": "Pokémon Snap",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Pokemon Stadium",
+   "file": "games/pokemon-stadium.json",
+   "source": "custom",
+   "apworld": "pokemon_stadium.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Pokémon Stadium",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Pokemon Trozei",
+   "file": "games/pokemon-trozei.json",
+   "source": "custom",
+   "apworld": "pokemon_trozei.apworld",
+   "world_version": "0.0.3",
+   "sheet": {
+    "game": "Pokémon Trozei / Link",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Pokemon XD Gale of Darkness",
+   "file": "games/pokemon-xd-gale-of-darkness.json",
+   "source": "custom",
+   "apworld": "pokemon_xd.apworld",
+   "world_version": "0.1.6",
+   "sheet": {
+    "game": "Pokémon XD: Gale of Darkness",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "PokePark",
+   "file": "games/pokepark.json",
+   "source": "custom",
+   "apworld": "pokepark.apworld",
+   "world_version": "1.2.8",
+   "sheet": {
+    "game": "PokéPark Wii: Pikachu's Adventure",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Pokepelago",
+   "file": "games/pokepelago.json",
+   "source": "custom",
+   "apworld": "pokepelago.apworld",
+   "world_version": "0.6.6",
+   "sheet": {
+    "game": "Poképelago",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Pokémon Battle Revolution",
+   "file": "games/pok-mon-battle-revolution.json",
+   "source": "custom",
+   "apworld": "pokemon_revo.apworld",
+   "world_version": "0.1.1",
+   "sheet": {
+    "game": "Pokémon Battle Revolution",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Portal 2",
+   "file": "games/portal-2.json",
+   "source": "custom",
+   "apworld": "portal2.apworld",
+   "world_version": "0.8.2",
+   "sheet": {
+    "game": "Portal 2",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Powerwash Simulator",
+   "file": "games/powerwash-simulator.json",
+   "source": "custom",
+   "apworld": "powerwashsimulator.apworld",
+   "world_version": "0.5.14",
+   "sheet": {
+    "game": "PowerWash Simulator",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Prisma Road",
+   "file": "games/prisma-road.json",
+   "source": "custom",
+   "apworld": "prisma_road.apworld",
+   "world_version": "0.1.0",
+   "sheet": {
+    "game": "Prisma Road",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Prodigal",
+   "file": "games/prodigal.json",
+   "source": "custom",
+   "apworld": "prodigal.apworld",
+   "world_version": "0.2.4",
+   "sheet": {
+    "game": "Prodigal",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Pseudoregalia",
+   "file": "games/pseudoregalia.json",
+   "source": "custom",
+   "apworld": "pseudoregalia.apworld",
+   "world_version": "0.11.0",
+   "sheet": {
+    "game": "Pseudoregalia",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Psychonauts",
+   "file": "games/psychonauts.json",
+   "source": "custom",
+   "apworld": "psychonauts.apworld",
+   "world_version": "1.0.0",
+   "sheet": {
+    "game": "Psychonauts",
+    "stability": "Stable",
+    "pr_status": "In Review"
+   }
+  },
+  {
+   "game": "Puzzle Bobble 4",
+   "file": "games/puzzle-bobble-4.json",
+   "source": "custom",
+   "apworld": "puzzlebobble4.apworld",
+   "world_version": "0.8.0",
+   "sheet": {
+    "game": "Puzzle Bobble 4",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Q-UP",
+   "file": "games/q-up.json",
+   "source": "custom",
+   "apworld": "q_up.apworld",
+   "world_version": "3.0.1",
+   "sheet": {
+    "game": "Q-Up",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Quake 1",
+   "file": "games/quake-1.json",
+   "source": "custom",
+   "apworld": "quake.apworld",
+   "world_version": "1.2.3",
+   "sheet": {
+    "game": "Quake",
+    "stability": "Unstable",
+    "pr_status": "Not PRing",
+    "adult": true
+   }
+  },
+  {
+   "game": "Quest 64 Recompiled",
+   "file": "games/quest-64-recompiled.json",
+   "source": "custom",
+   "apworld": "quest64.apworld",
+   "world_version": "1.10.0",
+   "sheet": {
+    "game": "Quest 64 (Recomp)",
+    "stability": "Unstable",
+    "pr_status": "Not PRing"
+   }
+  },
+  {
+   "game": "R.E.P.O",
+   "file": "games/r-e-p-o.json",
+   "source": "custom",
+   "apworld": "repo.apworld",
+   "world_version": "0.4.4",
+   "sheet": {
+    "game": "R.E.P.O",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Rabbit and Steel",
+   "file": "games/rabbit-and-steel.json",
+   "source": "custom",
+   "apworld": "rabbit_and_steel.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Rabbit and Steel",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Rabi-Ribi",
+   "file": "games/rabi-ribi.json",
+   "source": "custom",
+   "apworld": "rabi_ribi.apworld",
+   "world_version": "1.5.3",
+   "sheet": {
+    "game": "Rabi-Ribi",
+    "stability": "Stable"
+   }
+  },
+  {
    "game": "Raft",
    "file": "games/raft.json",
    "source": "core",
@@ -395,11 +5055,214 @@
    "world_version": null
   },
   {
+   "game": "Rain World",
+   "file": "games/rain-world.json",
+   "source": "custom",
+   "apworld": "rain_world.apworld",
+   "world_version": "1.6.1",
+   "sheet": {
+    "game": "Rain World",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Ratchet & Clank 2",
+   "file": "games/ratchet-clank-2.json",
+   "source": "custom",
+   "apworld": "rac2.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Ratchet & Clank 2: Going Commando",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Ratchet & Clank: Size Matters",
+   "file": "games/ratchet-clank-size-matters.json",
+   "source": "custom",
+   "apworld": "rac_size_matters.apworld",
+   "world_version": "0.5.8",
+   "sheet": {
+    "game": "Ratchet & Clank: Size Matters",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Ratchet and Clank",
+   "file": "games/ratchet-and-clank.json",
+   "source": "custom",
+   "apworld": "rac1.apworld",
+   "world_version": "0.3.0",
+   "sheet": {
+    "game": "Ratchet & Clank",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Ratchet and Clank 3",
+   "file": "games/ratchet-and-clank-3.json",
+   "source": "custom",
+   "apworld": "rac3.apworld",
+   "world_version": "0.7.0",
+   "sheet": {
+    "game": "Ratchet & Clank 3: Up Your Arsenal",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Rayman 2",
+   "file": "games/rayman-2.json",
+   "source": "custom",
+   "apworld": "rayman2.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Rayman 2: The Great Escape",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "RE3Remake",
+   "file": "games/re3remake.json",
+   "source": "custom",
+   "apworld": "re3remake.apworld",
+   "world_version": "0.3.0",
+   "sheet": {
+    "game": "Resident Evil 3 Remake",
+    "stability": "Stable",
+    "pr_status": "Not PRing",
+    "adult": true
+   }
+  },
+  {
+   "game": "RE:RUN",
+   "file": "games/re-run.json",
+   "source": "custom",
+   "apworld": "rerun.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "RE:RUN",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Red Faction: Guerrilla Re-Mars-tered",
+   "file": "games/red-faction-guerrilla-re-mars-tered.json",
+   "source": "custom",
+   "apworld": "red_faction_guerrilla.apworld",
+   "world_version": "0.6.5",
+   "sheet": {
+    "game": "Red Faction Guerrilla Re-Mars-tered",
+    "stability": "Unstable",
+    "pr_status": "Not PRing",
+    "adult": true
+   }
+  },
+  {
+   "game": "Refunct",
+   "file": "games/refunct.json",
+   "source": "custom",
+   "apworld": "refunct.apworld",
+   "world_version": "1.8.0",
+   "sheet": {
+    "game": "Refunct",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Resident Evil 2 Remake",
+   "file": "games/resident-evil-2-remake.json",
+   "source": "custom",
+   "apworld": "residentevil2remake.apworld",
+   "world_version": "0.3.5",
+   "sheet": {
+    "game": "Resident Evil 2 Remake",
+    "stability": "Stable",
+    "pr_status": "Not PRing",
+    "adult": true
+   }
+  },
+  {
+   "game": "Resident Evil 7",
+   "file": "games/resident-evil-7.json",
+   "source": "custom",
+   "apworld": "residentevil7biohazard.apworld",
+   "world_version": "0.4.0",
+   "sheet": {
+    "game": "Resident Evil 7",
+    "stability": "Unstable",
+    "pr_status": "Not PRing",
+    "adult": true
+   }
+  },
+  {
    "game": "Return of the Obra Dinn",
    "file": "games/return-of-the-obra-dinn.json",
    "source": "custom",
    "apworld": "obradinn.apworld",
-   "world_version": null
+   "world_version": null,
+   "sheet": {
+    "game": "Return of the Obra Dinn",
+    "stability": "Stable",
+    "pr_status": "Not PRing",
+    "adult": true
+   }
+  },
+  {
+   "game": "Rhythm Tengoku",
+   "file": "games/rhythm-tengoku.json",
+   "source": "custom",
+   "apworld": "rhythm_tengoku.apworld",
+   "world_version": "1.0.3",
+   "sheet": {
+    "game": "Rhythm Tengoku",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Rift of the Necrodancer",
+   "file": "games/rift-of-the-necrodancer.json",
+   "source": "custom",
+   "apworld": "rotn.apworld",
+   "world_version": "0.17.0",
+   "sheet": {
+    "game": "Rift of the Necrodancer",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Rift Wizard",
+   "file": "games/rift-wizard.json",
+   "source": "custom",
+   "apworld": "riftwizard.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Rift Wizard",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Rimworld",
+   "file": "games/rimworld.json",
+   "source": "custom",
+   "apworld": "rimworld.apworld",
+   "world_version": "1.0.0",
+   "sheet": {
+    "game": "Rimworld",
+    "stability": "Unstable",
+    "pr_status": "Not PRing",
+    "adult": true
+   }
+  },
+  {
+   "game": "Risk of Rain",
+   "file": "games/risk-of-rain.json",
+   "source": "custom",
+   "apworld": "ror1.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Risk of Rain",
+    "stability": "Unstable"
+   }
   },
   {
    "game": "Risk of Rain 2",
@@ -407,6 +5270,108 @@
    "source": "core",
    "apworld": null,
    "world_version": "1.5.0"
+  },
+  {
+   "game": "Road Trip Adventure",
+   "file": "games/road-trip-adventure.json",
+   "source": "custom",
+   "apworld": "roadtrip.apworld",
+   "world_version": "0.3.1",
+   "sheet": {
+    "game": "Road Trip Adventure",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Rogue Legacy",
+   "file": "games/rogue-legacy.json",
+   "source": "custom",
+   "apworld": "rogue_legacy.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Rogue Legacy",
+    "stability": "Stable",
+    "pr_status": "Not PRing"
+   }
+  },
+  {
+   "game": "Rogue Legacy 2",
+   "file": "games/rogue-legacy-2.json",
+   "source": "custom",
+   "apworld": "rogue_legacy_2.apworld",
+   "world_version": "0.1.0",
+   "sheet": {
+    "game": "Rogue Legacy 2",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Rune Factory 4",
+   "file": "games/rune-factory-4.json",
+   "source": "custom",
+   "apworld": "rune4.apworld",
+   "world_version": "0.3.2",
+   "sheet": {
+    "game": "Rune Factory 4 Special",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Running with Rifles",
+   "file": "games/running-with-rifles.json",
+   "source": "custom",
+   "apworld": "rwr.apworld",
+   "world_version": "0.1.0",
+   "sheet": {
+    "game": "Running with Rifles",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Rusted Moss",
+   "file": "games/rusted-moss.json",
+   "source": "custom",
+   "apworld": "rusted_moss.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Rusted Moss",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "RWBY Grimm Eclipse",
+   "file": "games/rwby-grimm-eclipse.json",
+   "source": "custom",
+   "apworld": "rwby_ge.apworld",
+   "world_version": "0.2.3",
+   "sheet": {
+    "game": "RWBY: Grimm Eclipse",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Saints Row 2",
+   "file": "games/saints-row-2.json",
+   "source": "custom",
+   "apworld": "saints_row_2.apworld",
+   "world_version": "0.3.2",
+   "sheet": {
+    "game": "Saints Row 2",
+    "stability": "Unstable",
+    "pr_status": "Not PRing",
+    "adult": true
+   }
+  },
+  {
+   "game": "Santa",
+   "file": "games/santa.json",
+   "source": "custom",
+   "apworld": "santa.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Santa Needs YOU!",
+    "stability": "Broken on Main"
+   }
   },
   {
    "game": "Satisfactory",
@@ -423,6 +5388,53 @@
    "world_version": "1.0.0"
   },
   {
+   "game": "Sayonara Wild Hearts",
+   "file": "games/sayonara-wild-hearts.json",
+   "source": "custom",
+   "apworld": "sayonarawildhearts.apworld",
+   "world_version": "1.1.0",
+   "sheet": {
+    "game": "Sayonara Wild Hearts",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Schedule I",
+   "file": "games/schedule-i.json",
+   "source": "custom",
+   "apworld": "schedule_I.apworld",
+   "world_version": "3.6.6",
+   "sheet": {
+    "game": "Schedule I",
+    "stability": "Unstable",
+    "pr_status": "Not PRing",
+    "adult": true
+   }
+  },
+  {
+   "game": "Scooby-Doo! Night of 100 Frights",
+   "file": "games/scooby-doo-night-of-100-frights.json",
+   "source": "custom",
+   "apworld": "no100f.apworld",
+   "world_version": "1.4.2",
+   "sheet": {
+    "game": "Scooby-Doo! Night of 100 Frights",
+    "stability": "Stable",
+    "pr_status": "In Review"
+   }
+  },
+  {
+   "game": "Scorpion Swamp",
+   "file": "games/scorpion-swamp.json",
+   "source": "custom",
+   "apworld": "scorpion_swamp.apworld",
+   "world_version": "1.0.1",
+   "sheet": {
+    "game": "Scorpion Swamp",
+    "stability": "Stable"
+   }
+  },
+  {
    "game": "Secret of Evermore",
    "file": "games/secret-of-evermore.json",
    "source": "core",
@@ -430,11 +5442,106 @@
    "world_version": "0.50.1"
   },
   {
+   "game": "Seedling",
+   "file": "games/seedling.json",
+   "source": "custom",
+   "apworld": "seedling.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Seedling",
+    "stability": "Broken on Main"
+   }
+  },
+  {
+   "game": "Sekiro: Shadows Die Twice",
+   "file": "games/sekiro-shadows-die-twice.json",
+   "source": "custom",
+   "apworld": "sekiro.apworld",
+   "world_version": "1.0.1",
+   "sheet": {
+    "game": "Sekiro: Shadows Die Twice",
+    "stability": "Stable",
+    "pr_status": "Not PRing",
+    "adult": true
+   }
+  },
+  {
+   "game": "Sentinels of the Multiverse",
+   "file": "games/sentinels-of-the-multiverse.json",
+   "source": "custom",
+   "apworld": "sotm.apworld",
+   "world_version": "0.4.6",
+   "sheet": {
+    "game": "Sentinels of the Multiverse",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "SEUM Speedrunners from Hell",
+   "file": "games/seum-speedrunners-from-hell.json",
+   "source": "custom",
+   "apworld": "seum.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "SEUM: Speedrunners from Hell",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Severed Soul",
+   "file": "games/severed-soul.json",
+   "source": "custom",
+   "apworld": "severed_soul.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Severed Soul",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Severed Steel",
+   "file": "games/severed-steel.json",
+   "source": "custom",
+   "apworld": "severed_steel.apworld",
+   "world_version": "1.0.1",
+   "sheet": {
+    "game": "Severed Steel",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Shadow Generations",
+   "file": "games/shadow-generations.json",
+   "source": "custom",
+   "apworld": "shadow_generations.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Shadow Generations",
+    "stability": "Unstable",
+    "pr_status": "Not PRing"
+   }
+  },
+  {
    "game": "Shadow The Hedgehog",
    "file": "games/shadow-the-hedgehog.json",
    "source": "custom",
    "apworld": "shadow_the_hedgehog.apworld",
-   "world_version": "0.5.2"
+   "world_version": "0.5.2",
+   "sheet": {
+    "game": "Shadow the Hedgehog",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Shadowgate 64",
+   "file": "games/shadowgate-64.json",
+   "source": "custom",
+   "apworld": "shadowgate64.apworld",
+   "world_version": "1.0.1",
+   "sheet": {
+    "game": "Shadowgate 64: Trials of the Four Towers",
+    "stability": "Unstable"
+   }
   },
   {
    "game": "shapez",
@@ -444,6 +5551,51 @@
    "world_version": null
   },
   {
+   "game": "shapez 2",
+   "file": "games/shapez-2.json",
+   "source": "custom",
+   "apworld": "shapez_2.apworld",
+   "world_version": "1.0.1",
+   "sheet": {
+    "game": "shapez 2",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Shellipelago",
+   "file": "games/shellipelago.json",
+   "source": "custom",
+   "apworld": "shellipelago.apworld",
+   "world_version": "1.15.0",
+   "sheet": {
+    "game": "Shellipelago",
+    "stability": "Stable",
+    "pr_status": "Not PRing"
+   }
+  },
+  {
+   "game": "Shining in the Darkness",
+   "file": "games/shining-in-the-darkness.json",
+   "source": "custom",
+   "apworld": "shining_itd.apworld",
+   "world_version": "0.0.4",
+   "sheet": {
+    "game": "Shining in the Darkness",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Ship of Harkinian",
+   "file": "games/ship-of-harkinian.json",
+   "source": "custom",
+   "apworld": "oot_soh.apworld",
+   "world_version": "1.4.1",
+   "sheet": {
+    "game": "The Legend of Zelda: Ocarina of Time - Ship of Harkinian",
+    "stability": "Stable"
+   }
+  },
+  {
    "game": "Shivers",
    "file": "games/shivers.json",
    "source": "core",
@@ -451,11 +5603,195 @@
    "world_version": "2.7.5"
   },
   {
+   "game": "Shovel Knight Pocket Dungeon",
+   "file": "games/shovel-knight-pocket-dungeon.json",
+   "source": "custom",
+   "apworld": "pocket_dungeon.apworld",
+   "world_version": "1.0.0",
+   "sheet": {
+    "game": "Shovel Knight Pocket Dungeon",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Signalis",
+   "file": "games/signalis.json",
+   "source": "custom",
+   "apworld": "signalis.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Signalis",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Silver Daze",
+   "file": "games/silver-daze.json",
+   "source": "custom",
+   "apworld": "silverdaze.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Silver Daze",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Simon Tatham's Portable Puzzle Collection",
+   "file": "games/simon-tatham-s-portable-puzzle-collection.json",
+   "source": "custom",
+   "apworld": "sgtpuzzles.apworld",
+   "world_version": "0.1.20",
+   "sheet": {
+    "game": "Simon Tatham's Portable Puzzle Collection",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Simpsons Hit and Run",
+   "file": "games/simpsons-hit-and-run.json",
+   "source": "custom",
+   "apworld": "simpsonshitnrun.apworld",
+   "world_version": "0.5.5",
+   "sheet": {
+    "game": "The Simpsons: Hit & Run",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Skul: The Hero Slayer",
+   "file": "games/skul-the-hero-slayer.json",
+   "source": "custom",
+   "apworld": "skul.apworld",
+   "world_version": "1.0.2",
+   "sheet": {
+    "game": "Skul: The Hero Slayer",
+    "stability": "Stable",
+    "pr_status": "Not PRing"
+   }
+  },
+  {
    "game": "Skyward Sword",
    "file": "games/skyward-sword.json",
    "source": "custom",
    "apworld": "ss.apworld",
-   "world_version": "0.5.6"
+   "world_version": "0.5.6",
+   "sheet": {
+    "game": "The Legend of Zelda: Skyward Sword",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Slay The Princess",
+   "file": "games/slay-the-princess.json",
+   "source": "custom",
+   "apworld": "slay_the_princess.apworld",
+   "world_version": "1.0.0",
+   "sheet": {
+    "game": "Slay the Princess — The Pristine Cut",
+    "stability": "Unstable",
+    "pr_status": "Not PRing",
+    "adult": true
+   }
+  },
+  {
+   "game": "Slay the Spire",
+   "file": "games/slay-the-spire.json",
+   "source": "custom",
+   "apworld": "spire.apworld",
+   "world_version": "2.3.5",
+   "sheet": {
+    "game": "Slay the Spire",
+    "stability": "Stable",
+    "pr_status": "Not PRing"
+   }
+  },
+  {
+   "game": "Slay the Spire II",
+   "file": "games/slay-the-spire-ii.json",
+   "source": "custom",
+   "apworld": "spire2.apworld",
+   "world_version": "1.2.0",
+   "sheet": {
+    "game": "Slay the Spire 2",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Slime Rancher",
+   "file": "games/slime-rancher.json",
+   "source": "custom",
+   "apworld": "slime_rancher.apworld",
+   "world_version": "0.3.2",
+   "sheet": {
+    "game": "Slime Rancher",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Slime Rancher 2",
+   "file": "games/slime-rancher-2.json",
+   "source": "custom",
+   "apworld": "slime_rancher_2.apworld",
+   "world_version": "0.15.0",
+   "sheet": {
+    "game": "Slime Rancher 2",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Sly 2: Band of Thieves",
+   "file": "games/sly-2-band-of-thieves.json",
+   "source": "custom",
+   "apworld": "sly2.apworld",
+   "world_version": "1.1.2",
+   "sheet": {
+    "game": "Sly 2: Band of Thieves",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Sly 3: Honor Among Thieves",
+   "file": "games/sly-3-honor-among-thieves.json",
+   "source": "custom",
+   "apworld": "sly3.apworld",
+   "world_version": "0.3.0",
+   "sheet": {
+    "game": "Sly 3: Honor Among Thieves",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Sly Cooper and the Thievius Raccoonus",
+   "file": "games/sly-cooper-and-the-thievius-raccoonus.json",
+   "source": "custom",
+   "apworld": "sly1.apworld",
+   "world_version": "0.3.5",
+   "sheet": {
+    "game": "Sly Cooper and the Thievius Raccoonus",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "SM64: Spicy Mycena 64",
+   "file": "games/sm64-spicy-mycena-64.json",
+   "source": "custom",
+   "apworld": "sm64ex_spicy.apworld",
+   "world_version": "1.0.4",
+   "sheet": {
+    "game": "Super Mario 64 - Spicy Mycena 64",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Smushi Come Home",
+   "file": "games/smushi-come-home.json",
+   "source": "custom",
+   "apworld": "smushi_come_home.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Smushi Come Home",
+    "stability": "Unstable"
+   }
   },
   {
    "game": "SMZ3",
@@ -465,11 +5801,313 @@
    "world_version": null
   },
   {
+   "game": "Sneak King",
+   "file": "games/sneak-king.json",
+   "source": "custom",
+   "apworld": "sneak_king.apworld",
+   "world_version": "0.1.0",
+   "sheet": {
+    "game": "Sneak King",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Sonic Advance 2",
+   "file": "games/sonic-advance-2.json",
+   "source": "custom",
+   "apworld": "sadv2.apworld",
+   "world_version": "0.1.0",
+   "sheet": {
+    "game": "Sonic Advance 2",
+    "stability": "Unstable"
+   }
+  },
+  {
    "game": "Sonic Adventure 2 Battle",
    "file": "games/sonic-adventure-2-battle.json",
    "source": "core",
    "apworld": null,
    "world_version": "2.4.6"
+  },
+  {
+   "game": "Sonic Adventure DX",
+   "file": "games/sonic-adventure-dx.json",
+   "source": "custom",
+   "apworld": "sadx.apworld",
+   "world_version": "1.2.2",
+   "sheet": {
+    "game": "Sonic Adventure DX",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Sonic Battle",
+   "file": "games/sonic-battle.json",
+   "source": "custom",
+   "apworld": "sonic_battle.apworld",
+   "world_version": "0.1.7",
+   "sheet": {
+    "game": "Sonic Battle",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Sonic Colours (DS)",
+   "file": "games/sonic-colours-ds.json",
+   "source": "custom",
+   "apworld": "sonic_colours_ds.apworld",
+   "world_version": "0.2.4",
+   "sheet": {
+    "game": "Sonic Colors (DS)",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Sonic Colours (Wii)",
+   "file": "games/sonic-colours-wii.json",
+   "source": "custom",
+   "apworld": "sonic_colours_wii.apworld",
+   "world_version": "0.6.0",
+   "sheet": {
+    "game": "Sonic Colors (Wii)",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Sonic Dreams Collection",
+   "file": "games/sonic-dreams-collection.json",
+   "source": "custom",
+   "apworld": "sdc.apworld",
+   "world_version": "0.4.0",
+   "sheet": {
+    "game": "Sonic Dreams Collection",
+    "stability": "Unstable",
+    "pr_status": "Not PRing",
+    "adult": true
+   }
+  },
+  {
+   "game": "Sonic Frontiers",
+   "file": "games/sonic-frontiers.json",
+   "source": "custom",
+   "apworld": "sonic_frontiers.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Sonic Frontiers",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Sonic Heroes",
+   "file": "games/sonic-heroes.json",
+   "source": "custom",
+   "apworld": "sonic_heroes.apworld",
+   "world_version": "2.2.0",
+   "sheet": {
+    "game": "Sonic Heroes",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Sonic Riders",
+   "file": "games/sonic-riders.json",
+   "source": "custom",
+   "apworld": "sonicriders.apworld",
+   "world_version": "0.2.3",
+   "sheet": {
+    "game": "Sonic Riders",
+    "stability": "Stable",
+    "pr_status": "Not PRing"
+   }
+  },
+  {
+   "game": "Sonic Rush",
+   "file": "games/sonic-rush.json",
+   "source": "custom",
+   "apworld": "sonic_rush.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Sonic Rush",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Sonic the Hedgehog 1",
+   "file": "games/sonic-the-hedgehog-1.json",
+   "source": "custom",
+   "apworld": "sonic1.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Sonic the Hedgehog",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Soul Blazer",
+   "file": "games/soul-blazer.json",
+   "source": "custom",
+   "apworld": "soulblazer.apworld",
+   "world_version": "0.6.2",
+   "sheet": {
+    "game": "SoulBlazer",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Spark the Electric Jester 3",
+   "file": "games/spark-the-electric-jester-3.json",
+   "source": "custom",
+   "apworld": "spark3.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Spark the Electric Jester 3",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Spelunky 2",
+   "file": "games/spelunky-2.json",
+   "source": "custom",
+   "apworld": "spelunky2.apworld",
+   "world_version": "0.5.0",
+   "sheet": {
+    "game": "Spelunky 2",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Spinball",
+   "file": "games/spinball.json",
+   "source": "custom",
+   "apworld": "spinball.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Spinball",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Spirit Island",
+   "file": "games/spirit-island.json",
+   "source": "custom",
+   "apworld": "spirit_island.apworld",
+   "world_version": "0.1.5",
+   "sheet": {
+    "game": "Spirit Island",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Spirit Tracks",
+   "file": "games/spirit-tracks.json",
+   "source": "custom",
+   "apworld": "tloz_st.apworld",
+   "world_version": "0.8.4",
+   "sheet": {
+    "game": "The Legend of Zelda: Spirit Tracks",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Spirit Valley",
+   "file": "games/spirit-valley.json",
+   "source": "custom",
+   "apworld": "spiritvalley.apworld",
+   "world_version": "2.1.2",
+   "sheet": {
+    "game": "Spirit Valley",
+    "stability": "Unstable",
+    "pr_status": "Not PRing",
+    "adult": true
+   }
+  },
+  {
+   "game": "Splasher",
+   "file": "games/splasher.json",
+   "source": "custom",
+   "apworld": "splasher.apworld",
+   "world_version": "0.0.9",
+   "sheet": {
+    "game": "Splasher",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Spyro 2",
+   "file": "games/spyro-2.json",
+   "source": "custom",
+   "apworld": "spyro2.apworld",
+   "world_version": "2.2.1",
+   "sheet": {
+    "game": "Spyro 2: Ripto's Rage",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Spyro 3",
+   "file": "games/spyro-3.json",
+   "source": "custom",
+   "apworld": "spyro3.apworld",
+   "world_version": "1.4.0",
+   "sheet": {
+    "game": "Spyro 3: Year of the Dragon",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Spyro: A Hero's Tail",
+   "file": "games/spyro-a-hero-s-tail.json",
+   "source": "custom",
+   "apworld": "spyro_aht.apworld",
+   "world_version": "2.2.0",
+   "sheet": {
+    "game": "Spyro: A Hero's Tail",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Stacklands",
+   "file": "games/stacklands.json",
+   "source": "custom",
+   "apworld": "stacklands.apworld",
+   "world_version": "0.2.6",
+   "sheet": {
+    "game": "Stacklands",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Star Fox 64",
+   "file": "games/star-fox-64.json",
+   "source": "custom",
+   "apworld": "star_fox_64.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Star Fox 64",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Star Fox Adventures",
+   "file": "games/star-fox-adventures.json",
+   "source": "custom",
+   "apworld": "sfa.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Star Fox Adventures",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Star Wars Episode I Racer",
+   "file": "games/star-wars-episode-i-racer.json",
+   "source": "custom",
+   "apworld": "swr.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Star Wars: Episode 1 Racer",
+    "stability": "Unstable"
+   }
   },
   {
    "game": "Starcraft 2",
@@ -486,11 +6124,147 @@
    "world_version": "7.4.25"
   },
   {
+   "game": "Starship Titanic",
+   "file": "games/starship-titanic.json",
+   "source": "custom",
+   "apworld": "starship_titanic.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Starship Titanic",
+    "stability": "Unstable",
+    "pr_status": "Not PRing"
+   }
+  },
+  {
+   "game": "SteamWorld Dig 2",
+   "file": "games/steamworld-dig-2.json",
+   "source": "custom",
+   "apworld": "swd2.apworld",
+   "world_version": "0.2.0",
+   "sheet": {
+    "game": "SteamWorld Dig 2",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Stella",
+   "file": "games/stella.json",
+   "source": "custom",
+   "apworld": "stella.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Stella",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Sternly Worded Adventures",
+   "file": "games/sternly-worded-adventures.json",
+   "source": "custom",
+   "apworld": "sternly_worded_adventures.apworld",
+   "world_version": "1.0.0",
+   "sheet": {
+    "game": "Sternly Worded Adventures",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Stick Ranger",
+   "file": "games/stick-ranger.json",
+   "source": "custom",
+   "apworld": "stick_ranger.apworld",
+   "world_version": "1.8.12",
+   "sheet": {
+    "game": "Stick Ranger",
+    "stability": "Stable",
+    "pr_status": "In Review"
+   }
+  },
+  {
+   "game": "Stray",
+   "file": "games/stray.json",
+   "source": "custom",
+   "apworld": "stray.apworld",
+   "world_version": "0.0.4",
+   "sheet": {
+    "game": "Stray",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Streets of Rage",
+   "file": "games/streets-of-rage.json",
+   "source": "custom",
+   "apworld": "streets_of_rage.apworld",
+   "world_version": "0.1.5",
+   "sheet": {
+    "game": "Streets of Rage",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Streets of Rogue",
+   "file": "games/streets-of-rogue.json",
+   "source": "custom",
+   "apworld": "SoRWorld.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Streets of Rogue",
+    "stability": "Unstable"
+   }
+  },
+  {
    "game": "Subnautica",
    "file": "games/subnautica.json",
    "source": "core",
    "apworld": null,
    "world_version": null
+  },
+  {
+   "game": "Suikapelago",
+   "file": "games/suikapelago.json",
+   "source": "custom",
+   "apworld": "suikapelago.apworld",
+   "world_version": "1.1.2",
+   "sheet": {
+    "game": "Suikapelago",
+    "stability": "Unstable",
+    "pr_status": "Not PRing"
+   }
+  },
+  {
+   "game": "Super Cat Planet",
+   "file": "games/super-cat-planet.json",
+   "source": "custom",
+   "apworld": "scp.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Super Cat Planet",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Super Hexagon",
+   "file": "games/super-hexagon.json",
+   "source": "custom",
+   "apworld": "super_hexagon.apworld",
+   "world_version": "1.1.0",
+   "sheet": {
+    "game": "Super Hexagon",
+    "stability": "Unstable",
+    "pr_status": "Not PRing"
+   }
+  },
+  {
+   "game": "Super Junkoid",
+   "file": "games/super-junkoid.json",
+   "source": "custom",
+   "apworld": "superjunkoid.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Super Junkoid",
+    "stability": "Stable"
+   }
   },
   {
    "game": "Super Mario 64",
@@ -500,11 +6274,44 @@
    "world_version": null
   },
   {
+   "game": "Super Mario Galaxy",
+   "file": "games/super-mario-galaxy.json",
+   "source": "custom",
+   "apworld": "smgalaxy.apworld",
+   "world_version": "0.0.1",
+   "sheet": {
+    "game": "Super Mario Galaxy",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Super Mario Land",
+   "file": "games/super-mario-land.json",
+   "source": "custom",
+   "apworld": "marioland.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Super Mario Land",
+    "stability": "Unstable"
+   }
+  },
+  {
    "game": "Super Mario Land 2",
    "file": "games/super-mario-land-2.json",
    "source": "core",
    "apworld": null,
    "world_version": null
+  },
+  {
+   "game": "Super Mario Sunshine",
+   "file": "games/super-mario-sunshine.json",
+   "source": "custom",
+   "apworld": "sms.apworld",
+   "world_version": "0.6.2",
+   "sheet": {
+    "game": "Super Mario Sunshine",
+    "stability": "Unstable"
+   }
   },
   {
    "game": "Super Mario World",
@@ -514,11 +6321,133 @@
    "world_version": "2.1.1"
   },
   {
+   "game": "Super Meat Boy",
+   "file": "games/super-meat-boy.json",
+   "source": "custom",
+   "apworld": "super_meat_boy.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Super Meat Boy",
+    "stability": "Unstable"
+   }
+  },
+  {
    "game": "Super Metroid",
    "file": "games/super-metroid.json",
    "source": "core",
    "apworld": null,
    "world_version": null
+  },
+  {
+   "game": "Super Smash Bros. Brawl - The Subspace Emissary",
+   "file": "games/super-smash-bros-brawl-the-subspace-emissary.json",
+   "source": "custom",
+   "apworld": "ssbb_sse.apworld",
+   "world_version": "0.2.7",
+   "sheet": {
+    "game": "Super Smash Bros. Brawl - The Subspace Emissary",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "SUPERHOT",
+   "file": "games/superhot.json",
+   "source": "custom",
+   "apworld": "superhot.apworld",
+   "world_version": "0.1.0",
+   "sheet": {
+    "game": "SUPERHOT",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Supermarket Simulator",
+   "file": "games/supermarket-simulator.json",
+   "source": "custom",
+   "apworld": "supermarket_simulator.apworld",
+   "world_version": "0.3.5",
+   "sheet": {
+    "game": "Supermarket Simulator",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Symphony of the Night",
+   "file": "games/symphony-of-the-night.json",
+   "source": "custom",
+   "apworld": "sotn.apworld",
+   "world_version": "0.8.16",
+   "sheet": {
+    "game": "Castlevania: Symphony of the Night",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Symphony of the Night (Recomp)",
+   "file": "games/symphony-of-the-night-recomp.json",
+   "source": "custom",
+   "apworld": "sotn_recomp.apworld",
+   "world_version": "0.3.3",
+   "sheet": {
+    "game": "Castlevania: Symphony of the Night (SymphonyRecomp)",
+    "stability": "Unstable",
+    "pr_status": "Not PRing"
+   }
+  },
+  {
+   "game": "Taz Wanted",
+   "file": "games/taz-wanted.json",
+   "source": "custom",
+   "apworld": "tazwanted.apworld",
+   "world_version": "1.2.4",
+   "sheet": {
+    "game": "Taz: Wanted",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "TCG Card Shop Simulator",
+   "file": "games/tcg-card-shop-simulator.json",
+   "source": "custom",
+   "apworld": "tcg_card_shop_simulator.apworld",
+   "world_version": "1.2.0",
+   "sheet": {
+    "game": "TCG Card Shop Simulator",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Team Fortress 2 Mann vs Machine",
+   "file": "games/team-fortress-2-mann-vs-machine.json",
+   "source": "custom",
+   "apworld": "tf2_mvm.apworld",
+   "world_version": "1.18.4",
+   "sheet": {
+    "game": "Team Fortress 2 (Mann vs Machine)",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Teardown",
+   "file": "games/teardown.json",
+   "source": "custom",
+   "apworld": "teardown.apworld",
+   "world_version": "0.3.1",
+   "sheet": {
+    "game": "Teardown",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "TerraNil",
+   "file": "games/terranil.json",
+   "source": "custom",
+   "apworld": "TerraNil.apworld",
+   "world_version": "0.2.1",
+   "sheet": {
+    "game": "Terra Nil",
+    "stability": "Unstable"
+   }
   },
   {
    "game": "Terraria",
@@ -528,11 +6457,179 @@
    "world_version": null
   },
   {
+   "game": "Tetris Attack",
+   "file": "games/tetris-attack.json",
+   "source": "custom",
+   "apworld": "tetrisattack.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Tetris Attack",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Tevi",
+   "file": "games/tevi.json",
+   "source": "custom",
+   "apworld": "tevi.apworld",
+   "world_version": "0.7.6",
+   "sheet": {
+    "game": "Tevi",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "The Binding of Isaac Repentance",
+   "file": "games/the-binding-of-isaac-repentance.json",
+   "source": "custom",
+   "apworld": "tboir.apworld",
+   "world_version": "0.4.3",
+   "sheet": {
+    "game": "The Binding of Isaac: Repentance",
+    "stability": "Stable",
+    "pr_status": "Not PRing"
+   }
+  },
+  {
+   "game": "The Escapists 2",
+   "file": "games/the-escapists-2.json",
+   "source": "custom",
+   "apworld": "the_escapists_2.apworld",
+   "world_version": "0.1.1",
+   "sheet": {
+    "game": "The Escapists 2",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "The Forest's End",
+   "file": "games/the-forest-s-end.json",
+   "source": "custom",
+   "apworld": "forestsend.apworld",
+   "world_version": "1.0.0",
+   "sheet": {
+    "game": "The Forest's End",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "The Grinch",
+   "file": "games/the-grinch.json",
+   "source": "custom",
+   "apworld": "grinch.apworld",
+   "world_version": "1.6.3",
+   "sheet": {
+    "game": "The Grinch",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "The Guardian Legend",
+   "file": "games/the-guardian-legend.json",
+   "source": "custom",
+   "apworld": "guardianlegend.apworld",
+   "world_version": "0.7.0",
+   "sheet": {
+    "game": "The Guardian Legend",
+    "stability": "Stable",
+    "pr_status": "Not PRing",
+    "adult": true
+   }
+  },
+  {
+   "game": "The Henry Stickmin Collection",
+   "file": "games/the-henry-stickmin-collection.json",
+   "source": "custom",
+   "apworld": "henry.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "The Henry Stickmin Collection",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "The Legend of Dragoon",
+   "file": "games/the-legend-of-dragoon.json",
+   "source": "custom",
+   "apworld": "legend_of_dragoon.apworld",
+   "world_version": "2.0.0",
+   "sheet": {
+    "game": "The Legend of Dragoon",
+    "stability": "Unstable"
+   }
+  },
+  {
    "game": "The Legend of Zelda",
    "file": "games/the-legend-of-zelda.json",
    "source": "core",
    "apworld": null,
    "world_version": "1.0.0"
+  },
+  {
+   "game": "The Legend of Zelda - Oracle of Ages",
+   "file": "games/the-legend-of-zelda-oracle-of-ages.json",
+   "source": "custom",
+   "apworld": "tloz_ooa.apworld",
+   "world_version": "2.0.0",
+   "sheet": {
+    "game": "The Legend of Zelda: Oracle of Ages",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "The Legend of Zelda - Oracle of Seasons",
+   "file": "games/the-legend-of-zelda-oracle-of-seasons.json",
+   "source": "custom",
+   "apworld": "tloz_oos.apworld",
+   "world_version": "20.1.13",
+   "sheet": {
+    "game": "The Legend of Zelda: Oracle of Seasons",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "The Legend of Zelda - Phantom Hourglass",
+   "file": "games/the-legend-of-zelda-phantom-hourglass.json",
+   "source": "custom",
+   "apworld": "tloz_ph.apworld",
+   "world_version": "0.10.2",
+   "sheet": {
+    "game": "The Legend of Zelda: Phantom Hourglass",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "The Legend of Zelda: A Link to the Past",
+   "file": "games/the-legend-of-zelda-a-link-to-the-past.json",
+   "source": "custom",
+   "apworld": "alttpr.apworld",
+   "world_version": "1.7.0",
+   "sheet": {
+    "game": "The Legend of Zelda: A Link to the Past OWR",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "The Legend of Zelda: Four Swords Adventures",
+   "file": "games/the-legend-of-zelda-four-swords-adventures.json",
+   "source": "custom",
+   "apworld": "ZeldaFSA.apworld",
+   "world_version": "0.0.10",
+   "sheet": {
+    "game": "The Legend of Zelda: Four Swords Adventure",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "The Magical Quest Starring Mickey Mouse",
+   "file": "games/the-magical-quest-starring-mickey-mouse.json",
+   "source": "custom",
+   "apworld": "magical_quest.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "The Magical Quest starring Mickey Mouse",
+    "stability": "Unstable"
+   }
   },
   {
    "game": "The Messenger",
@@ -542,11 +6639,77 @@
    "world_version": null
   },
   {
+   "game": "The Minish Cap",
+   "file": "games/the-minish-cap.json",
+   "source": "custom",
+   "apworld": "tmc.apworld",
+   "world_version": "0.3.1",
+   "sheet": {
+    "game": "The Legend of Zelda: The Minish Cap",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "The Murder of Sonic the Hedgehog",
+   "file": "games/the-murder-of-sonic-the-hedgehog.json",
+   "source": "custom",
+   "apworld": "tmosth.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "The Murder of Sonic the Hedgehog",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "The Sims 4",
+   "file": "games/the-sims-4.json",
+   "source": "custom",
+   "apworld": "sims4.apworld",
+   "world_version": "2.0.1",
+   "sheet": {
+    "game": "The Sims 4",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "The Talos Principle Reawakened",
+   "file": "games/the-talos-principle-reawakened.json",
+   "source": "custom",
+   "apworld": "talos_principle_reawakened.apworld",
+   "world_version": "1.4.0",
+   "sheet": {
+    "game": "The Talos Principle Reawakened",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "The WereCleaner",
+   "file": "games/the-werecleaner.json",
+   "source": "custom",
+   "apworld": "the_werecleaner.apworld",
+   "world_version": "0.1.2",
+   "sheet": {
+    "game": "The WereCleaner",
+    "stability": "Stable"
+   }
+  },
+  {
    "game": "The Wind Waker",
    "file": "games/the-wind-waker.json",
    "source": "core",
    "apworld": null,
    "world_version": null
+  },
+  {
+   "game": "The Wind Waker HD",
+   "file": "games/the-wind-waker-hd.json",
+   "source": "custom",
+   "apworld": "twwhd.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "The Legend of Zelda: Wind Waker HD",
+    "stability": "Stable"
+   }
   },
   {
    "game": "The Witness",
@@ -556,11 +6719,208 @@
    "world_version": "8.0.0"
   },
   {
+   "game": "Three Goblin Wobblin",
+   "file": "games/three-goblin-wobblin.json",
+   "source": "custom",
+   "apworld": "three_goblin_wobblin.apworld",
+   "world_version": "0.0.1",
+   "sheet": {
+    "game": "Three Goblin Wobblin'",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Time Rifters",
+   "file": "games/time-rifters.json",
+   "source": "custom",
+   "apworld": "timerifters.apworld",
+   "world_version": "1.0.13",
+   "sheet": {
+    "game": "Time Rifters",
+    "stability": "Unstable"
+   }
+  },
+  {
    "game": "Timespinner",
    "file": "games/timespinner.json",
    "source": "core",
    "apworld": null,
    "world_version": "1.38.1"
+  },
+  {
+   "game": "TimeSplitters 2",
+   "file": "games/timesplitters-2.json",
+   "source": "custom",
+   "apworld": "timesplitters_2.apworld",
+   "world_version": "1.0.1",
+   "sheet": {
+    "game": "Timesplitters 2",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "TimeSplitters Future Perfect",
+   "file": "games/timesplitters-future-perfect.json",
+   "source": "custom",
+   "apworld": "timesplitters_future_perfect.apworld",
+   "world_version": "1.1.0",
+   "sheet": {
+    "game": "TimeSplitters: Future Perfect",
+    "stability": "Unstable",
+    "pr_status": "Not PRing",
+    "adult": true
+   }
+  },
+  {
+   "game": "ToeJam and Earl",
+   "file": "games/toejam-and-earl.json",
+   "source": "custom",
+   "apworld": "tje.apworld",
+   "world_version": "0.5.4",
+   "sheet": {
+    "game": "Toejam & Earl",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "TOEM: A Photo Adventure",
+   "file": "games/toem-a-photo-adventure.json",
+   "source": "custom",
+   "apworld": "toem.apworld",
+   "world_version": "2.1.0",
+   "sheet": {
+    "game": "TOEM: A Photo Adventure",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Tomba!",
+   "file": "games/tomba.json",
+   "source": "custom",
+   "apworld": "tomba.apworld",
+   "world_version": "1.6.0",
+   "sheet": {
+    "game": "Tomba!",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Tony Hawk's American Wasteland",
+   "file": "games/tony-hawk-s-american-wasteland.json",
+   "source": "custom",
+   "apworld": "thaw.apworld",
+   "world_version": "0.0.1",
+   "sheet": {
+    "game": "Tony Hawk's American Wasteland",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Touhou Eiyashou ~ Imperishable Night",
+   "file": "games/touhou-eiyashou-imperishable-night.json",
+   "source": "custom",
+   "apworld": "th08.apworld",
+   "world_version": "1.1.3",
+   "sheet": {
+    "game": "Touhou Eiyashou ~ Imperishable Night",
+    "stability": "Unstable",
+    "pr_status": "Not PRing",
+    "adult": true
+   }
+  },
+  {
+   "game": "Touhou Fuujinroku ~ Mountain of Faith",
+   "file": "games/touhou-fuujinroku-mountain-of-faith.json",
+   "source": "custom",
+   "apworld": "th10.apworld",
+   "world_version": "0.2.0",
+   "sheet": {
+    "game": "Touhou Fuujinroku ~ Mountain of Faith",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Touhou Koumakyou ~ the Embodiment of Scarlet Devil",
+   "file": "games/touhou-koumakyou-the-embodiment-of-scarlet-devil.json",
+   "source": "custom",
+   "apworld": "th06.apworld",
+   "world_version": "1.5.0",
+   "sheet": {
+    "game": "Touhou Koumakyou ~ the Embodiment of Scarlet Devil",
+    "stability": "Stable",
+    "pr_status": "Not PRing"
+   }
+  },
+  {
+   "game": "Touhou Youyoumu ~ Perfect Cherry Blossom",
+   "file": "games/touhou-youyoumu-perfect-cherry-blossom.json",
+   "source": "custom",
+   "apworld": "th07.apworld",
+   "world_version": "1.2.3",
+   "sheet": {
+    "game": "Touhou Youyoumu ~ Perfect Cherry Blossom",
+    "stability": "Stable",
+    "pr_status": "Not PRing",
+    "adult": true
+   }
+  },
+  {
+   "game": "Toy Story 2",
+   "file": "games/toy-story-2.json",
+   "source": "custom",
+   "apworld": "toystory2.apworld",
+   "world_version": "2.3.3",
+   "sheet": {
+    "game": "Toy Story 2 (PS1)",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Toy Story Racer",
+   "file": "games/toy-story-racer.json",
+   "source": "custom",
+   "apworld": "toy_story_racer.apworld",
+   "world_version": "0.1.0",
+   "sheet": {
+    "game": "Toy Story Racer",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Trackmania",
+   "file": "games/trackmania.json",
+   "source": "custom",
+   "apworld": "trackmania.apworld",
+   "world_version": "1.3.2",
+   "sheet": {
+    "game": "Trackmania",
+    "stability": "Stable",
+    "pr_status": "In Review"
+   }
+  },
+  {
+   "game": "Trails Beyond the Horizon",
+   "file": "games/trails-beyond-the-horizon.json",
+   "source": "custom",
+   "apworld": "beyondthehorizon.apworld",
+   "world_version": "0.1.2",
+   "sheet": {
+    "game": "The Legend of Heroes: Trails Beyond the Horizon",
+    "stability": "Unstable",
+    "pr_status": "Not PRing",
+    "adult": true
+   }
+  },
+  {
+   "game": "Trails in the Sky the 3rd",
+   "file": "games/trails-in-the-sky-the-3rd.json",
+   "source": "custom",
+   "apworld": "tits_the_3rd.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "The Legend of Heroes: Trails in the Sky the 3rd",
+    "stability": "Unstable"
+   }
   },
   {
    "game": "TUNIC",
@@ -570,11 +6930,139 @@
    "world_version": "5.0.2"
   },
   {
+   "game": "TurnipBoy",
+   "file": "games/turnipboy.json",
+   "source": "custom",
+   "apworld": "turnipboy.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Turnip Boy Commits Tax Evasion",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Turok 2",
+   "file": "games/turok-2.json",
+   "source": "custom",
+   "apworld": "turok2.apworld",
+   "world_version": "0.6.0",
+   "sheet": {
+    "game": "Turok 2",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Twisty Cube",
+   "file": "games/twisty-cube.json",
+   "source": "custom",
+   "apworld": "twistycube.apworld",
+   "world_version": "1.0.0",
+   "sheet": {
+    "game": "Twisty Cube",
+    "stability": "Stable"
+   }
+  },
+  {
    "game": "Ty the Tasmanian Tiger",
    "file": "games/ty-the-tasmanian-tiger.json",
    "source": "custom",
    "apworld": "ty_the_tasmanian_tiger.apworld",
-   "world_version": "1.5.0"
+   "world_version": "1.5.0",
+   "sheet": {
+    "game": "Ty The Tasmanian Tiger HD Remaster (PC)",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Ty the Tasmanian Tiger 2",
+   "file": "games/ty-the-tasmanian-tiger-2.json",
+   "source": "custom",
+   "apworld": "ty_the_tasmanian_tiger_2.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Ty the Tasmanian Tiger 2",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Ty the Tasmanian Tiger 3",
+   "file": "games/ty-the-tasmanian-tiger-3.json",
+   "source": "custom",
+   "apworld": "ty_the_tasmanian_tiger_3.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Ty the Tasmanian Tiger 3",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Tyrian",
+   "file": "games/tyrian.json",
+   "source": "custom",
+   "apworld": "tyrian.apworld",
+   "world_version": "1.0.5",
+   "sheet": {
+    "game": "Tyrian / Tyrian 2000",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "UFO 50",
+   "file": "games/ufo-50.json",
+   "source": "custom",
+   "apworld": "ufo50.apworld",
+   "world_version": "0.3.0",
+   "sheet": {
+    "game": "UFO 50",
+    "stability": "Stable",
+    "pr_status": "Not PRing"
+   }
+  },
+  {
+   "game": "Ultimate Custom Night",
+   "file": "games/ultimate-custom-night.json",
+   "source": "custom",
+   "apworld": "ucn.apworld",
+   "world_version": "0.1.1",
+   "sheet": {
+    "game": "Ultimate Custom Night",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "ULTRAKILL",
+   "file": "games/ultrakill.json",
+   "source": "custom",
+   "apworld": "ultrakill.apworld",
+   "world_version": "3.5.6",
+   "sheet": {
+    "game": "ULTRAKILL",
+    "stability": "Stable",
+    "pr_status": "Not PRing"
+   }
+  },
+  {
+   "game": "UNBEATABLE Arcade",
+   "file": "games/unbeatable-arcade.json",
+   "source": "custom",
+   "apworld": "unbeatable_arcade.apworld",
+   "world_version": "0.8.0",
+   "sheet": {
+    "game": "UNBEATABLE",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Uncanny Cat Golf",
+   "file": "games/uncanny-cat-golf.json",
+   "source": "custom",
+   "apworld": "ucg.apworld",
+   "world_version": "1.4.1",
+   "sheet": {
+    "game": "Uncanny Cat Golf",
+    "stability": "Stable",
+    "pr_status": "Not PRing"
+   }
   },
   {
    "game": "Undertale",
@@ -584,11 +7072,237 @@
    "world_version": null
   },
   {
+   "game": "Undertale Yellow",
+   "file": "games/undertale-yellow.json",
+   "source": "custom",
+   "apworld": "undertale_yellow.apworld",
+   "world_version": "0.3.0",
+   "sheet": {
+    "game": "Undertale Yellow",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Unfair Flips",
+   "file": "games/unfair-flips.json",
+   "source": "custom",
+   "apworld": "unfair_flips.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Unfair Flips",
+    "stability": "Stable",
+    "pr_status": "Not PRing"
+   }
+  },
+  {
+   "game": "Untitled Goose Game",
+   "file": "games/untitled-goose-game.json",
+   "source": "custom",
+   "apworld": "untitled_goose_game.apworld",
+   "world_version": "1.2.1",
+   "sheet": {
+    "game": "Untitled Goose Game",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "V Rising",
+   "file": "games/v-rising.json",
+   "source": "custom",
+   "apworld": "vrising.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "V Rising",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Vacation Simulator",
+   "file": "games/vacation-simulator.json",
+   "source": "custom",
+   "apworld": "vsim.apworld",
+   "world_version": "0.0.5",
+   "sheet": {
+    "game": "Vacation Simulator",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Valheim",
+   "file": "games/valheim.json",
+   "source": "custom",
+   "apworld": "valheim.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Valheim",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Vampire Survivors",
+   "file": "games/vampire-survivors.json",
+   "source": "custom",
+   "apworld": "vampire_survivors.apworld",
+   "world_version": "0.3.5",
+   "sheet": {
+    "game": "Vampire Survivors",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "vardrain--",
+   "file": "games/vardrain.json",
+   "source": "custom",
+   "apworld": "vardrain--.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "vardrain--",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Vault Hunters",
+   "file": "games/vault-hunters.json",
+   "source": "custom",
+   "apworld": "VHAP.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Minecraft: Vault Hunters (Modpack)",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Vertical Drop Heroes HD",
+   "file": "games/vertical-drop-heroes-hd.json",
+   "source": "custom",
+   "apworld": "vertical_drop_heroes.apworld",
+   "world_version": "0.4.0",
+   "sheet": {
+    "game": "Vertical Drop Heroes HD",
+    "stability": "Unstable",
+    "pr_status": "Not PRing"
+   }
+  },
+  {
+   "game": "Very Very Valet",
+   "file": "games/very-very-valet.json",
+   "source": "custom",
+   "apworld": "very_very_valet.apworld",
+   "world_version": "1.0.1",
+   "sheet": {
+    "game": "Very Very Valet",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Vespadian",
+   "file": "games/vespadian.json",
+   "source": "custom",
+   "apworld": "vespadian.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Vespadian",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Viscera Cleanup Detail",
+   "file": "games/viscera-cleanup-detail.json",
+   "source": "custom",
+   "apworld": "viscera_cleanup_detail.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Viscera Cleanup Details",
+    "stability": "Unstable",
+    "pr_status": "Not PRing",
+    "adult": true
+   }
+  },
+  {
+   "game": "Vision Soft Reset",
+   "file": "games/vision-soft-reset.json",
+   "source": "custom",
+   "apworld": "vision_soft_reset.apworld",
+   "world_version": "1.0.1",
+   "sheet": {
+    "game": "Vision Soft Reset",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Void Sols",
+   "file": "games/void-sols.json",
+   "source": "custom",
+   "apworld": "void_sols.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Void Sols",
+    "stability": "Stable",
+    "pr_status": "In Review"
+   }
+  },
+  {
+   "game": "Void Stranger",
+   "file": "games/void-stranger.json",
+   "source": "custom",
+   "apworld": "voidstranger.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Void Stranger",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Voidloop",
+   "file": "games/voidloop.json",
+   "source": "custom",
+   "apworld": "voidloop.apworld",
+   "world_version": "0.0.1",
+   "sheet": {
+    "game": "Voidloop",
+    "stability": "Unstable",
+    "pr_status": "Not PRing"
+   }
+  },
+  {
+   "game": "Voltorb Flip",
+   "file": "games/voltorb-flip.json",
+   "source": "custom",
+   "apworld": "voltorb_flip.apworld",
+   "world_version": "1.1.1",
+   "sheet": {
+    "game": "Voltorb Flip (from Pokémon HG & SS)",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "VRChat",
+   "file": "games/vrchat.json",
+   "source": "custom",
+   "apworld": "vrchat.apworld",
+   "world_version": "0.0.2",
+   "sheet": {
+    "game": "VRChat",
+    "stability": "Unstable"
+   }
+  },
+  {
    "game": "VVVVVV",
    "file": "games/vvvvvv.json",
    "source": "core",
    "apworld": null,
    "world_version": null
+  },
+  {
+   "game": "Warcraft 3",
+   "file": "games/warcraft-3.json",
+   "source": "custom",
+   "apworld": "wc3.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Warcraft 3",
+    "stability": "Unstable"
+   }
   },
   {
    "game": "Wargroove",
@@ -598,11 +7312,315 @@
    "world_version": "1.0.0"
   },
   {
+   "game": "Wargroove 2",
+   "file": "games/wargroove-2.json",
+   "source": "custom",
+   "apworld": "wargroove2.apworld",
+   "world_version": "1.1.5",
+   "sheet": {
+    "game": "Wargroove 2",
+    "stability": "Stable",
+    "pr_status": "In Review"
+   }
+  },
+  {
+   "game": "Wario Land",
+   "file": "games/wario-land.json",
+   "source": "custom",
+   "apworld": "wl.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Wario Land 1",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Wario Land 3",
+   "file": "games/wario-land-3.json",
+   "source": "custom",
+   "apworld": "wl3.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Wario Land 3",
+    "stability": "Stable",
+    "pr_status": "Not PRing"
+   }
+  },
+  {
+   "game": "Wario Land 4",
+   "file": "games/wario-land-4.json",
+   "source": "custom",
+   "apworld": "wl4.apworld",
+   "world_version": "3.4.0",
+   "sheet": {
+    "game": "Wario Land 4",
+    "stability": "Stable",
+    "pr_status": "In Review"
+   }
+  },
+  {
+   "game": "WarioWare, Inc. - Mega Microgame$!",
+   "file": "games/warioware-inc-mega-microgame.json",
+   "source": "custom",
+   "apworld": "wario_ware_inc.apworld",
+   "world_version": "1.1.2",
+   "sheet": {
+    "game": "WarioWare, Inc. - Mega Microgame$!",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Watery Words",
+   "file": "games/watery-words.json",
+   "source": "custom",
+   "apworld": "waterywords.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Watery Words",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "We Love Katamari Reroll",
+   "file": "games/we-love-katamari-reroll.json",
+   "source": "custom",
+   "apworld": "wlkrr.apworld",
+   "world_version": "0.1.0",
+   "sheet": {
+    "game": "We Love Katamari Reroll",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "WEBFISHING",
+   "file": "games/webfishing.json",
+   "source": "custom",
+   "apworld": "webfishing.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "WEBFISHING",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "West of Loathing",
+   "file": "games/west-of-loathing.json",
+   "source": "custom",
+   "apworld": "westofloathing.apworld",
+   "world_version": "0.3.2",
+   "sheet": {
+    "game": "West of Loathing",
+    "stability": "Stable",
+    "pr_status": "Not PRing"
+   }
+  },
+  {
+   "game": "White Knuckle",
+   "file": "games/white-knuckle.json",
+   "source": "custom",
+   "apworld": "whiteknuckle.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "White Knuckle",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Widget Inc",
+   "file": "games/widget-inc.json",
+   "source": "custom",
+   "apworld": "widget_inc.apworld",
+   "world_version": "0.2.0",
+   "sheet": {
+    "game": "Widget Inc",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Wikipelago",
+   "file": "games/wikipelago.json",
+   "source": "custom",
+   "apworld": "wikipelago.apworld",
+   "world_version": "1.1.1",
+   "sheet": {
+    "game": "Wikipelago",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Witchspring R",
+   "file": "games/witchspring-r.json",
+   "source": "custom",
+   "apworld": "witchspringrap.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Witchspring R",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Wizard of Legend",
+   "file": "games/wizard-of-legend.json",
+   "source": "custom",
+   "apworld": "wizardoflegend.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Wizard of Legende",
+    "stability": "Unstable",
+    "pr_status": "Not PRing"
+   }
+  },
+  {
+   "game": "Wordipelago",
+   "file": "games/wordipelago.json",
+   "source": "custom",
+   "apworld": "wordipelago.apworld",
+   "world_version": "1.0.1",
+   "sheet": {
+    "game": "Wordipelago",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "WordSearch",
+   "file": "games/wordsearch.json",
+   "source": "custom",
+   "apworld": "wordsearch.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Word Search",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Wynncraft",
+   "file": "games/wynncraft.json",
+   "source": "custom",
+   "apworld": "wynncraft.apworld",
+   "world_version": "0.4.7",
+   "sheet": {
+    "game": "Wynncraft (Minecraft Server)",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "XCOM 2 War of the Chosen",
+   "file": "games/xcom-2-war-of-the-chosen.json",
+   "source": "custom",
+   "apworld": "x2wotc.apworld",
+   "world_version": "1.0.0",
+   "sheet": {
+    "game": "XCOM 2: War of the Chosen",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Xenoblade X",
+   "file": "games/xenoblade-x.json",
+   "source": "custom",
+   "apworld": "xenobladex.apworld",
+   "world_version": "0.2.10",
+   "sheet": {
+    "game": "Xenoblade Chronicles X",
+    "stability": "Unstable"
+   }
+  },
+  {
    "game": "Yacht Dice",
    "file": "games/yacht-dice.json",
    "source": "core",
    "apworld": null,
    "world_version": "2.1.4"
+  },
+  {
+   "game": "Yacht Dice Bliss",
+   "file": "games/yacht-dice-bliss.json",
+   "source": "custom",
+   "apworld": "yachtdicebliss.apworld",
+   "world_version": "2.3.4",
+   "sheet": {
+    "game": "Yacht Dice Bliss",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "YARG",
+   "file": "games/yarg.json",
+   "source": "custom",
+   "apworld": "yarg.apworld",
+   "world_version": "1.3.0",
+   "sheet": {
+    "game": "Yet Another Rhythm Game (YARG)",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "YARGGuitarHero1",
+   "file": "games/yargguitarhero1.json",
+   "source": "custom",
+   "apworld": "YARGGuitarHero1.apworld",
+   "world_version": "26.9.17",
+   "sheet": {
+    "game": "YARG (Guitar Hero/Rockband)",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Yarimono",
+   "file": "games/yarimono.json",
+   "source": "custom",
+   "apworld": "yarimono.apworld",
+   "world_version": "1.0.0",
+   "sheet": {
+    "game": "Yarimono",
+    "stability": "Unstable",
+    "pr_status": "Not PRing",
+    "adult": true
+   }
+  },
+  {
+   "game": "YAYARG",
+   "file": "games/yayarg.json",
+   "source": "custom",
+   "apworld": "yayarg.apworld",
+   "world_version": "2.5.0",
+   "sheet": {
+    "game": "YAYARG (YARG Custom Songs)",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Yellow Taxi Goes Vroom",
+   "file": "games/yellow-taxi-goes-vroom.json",
+   "source": "custom",
+   "apworld": "yellowtaxi.apworld",
+   "world_version": "0.8.0",
+   "sheet": {
+    "game": "Yellow Taxi Goes Vroom",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "YOHANE THE PARHELION -BLAZE in the DEEPBLUE-",
+   "file": "games/yohane-the-parhelion-blaze-in-the-deepblue.json",
+   "source": "custom",
+   "apworld": "yohane_deepblue.apworld",
+   "world_version": "0.2.5",
+   "sheet": {
+    "game": "YOHANE THE PARHELION -BLAZE in the DEEPBLUE-",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Yooka-Replaylee",
+   "file": "games/yooka-replaylee.json",
+   "source": "custom",
+   "apworld": "yooka_replaylee.apworld",
+   "world_version": "0.0.3",
+   "sheet": {
+    "game": "Yooka-Replaylee",
+    "stability": "Unstable"
+   }
   },
   {
    "game": "Yoshi's Island",
@@ -612,6 +7630,28 @@
    "world_version": "1.0.0"
   },
   {
+   "game": "You Have to Win the Game",
+   "file": "games/you-have-to-win-the-game.json",
+   "source": "custom",
+   "apworld": "yhtwtg.apworld",
+   "world_version": "1.1.0",
+   "sheet": {
+    "game": "You Have to Win the Game",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Ys Origin",
+   "file": "games/ys-origin.json",
+   "source": "custom",
+   "apworld": "ys_origin.apworld",
+   "world_version": "2.1.1",
+   "sheet": {
+    "game": "Ys Origin",
+    "stability": "Unstable"
+   }
+  },
+  {
    "game": "Yu-Gi-Oh! 2006",
    "file": "games/yu-gi-oh-2006.json",
    "source": "core",
@@ -619,12 +7659,99 @@
    "world_version": null
   },
   {
+   "game": "Yu-Gi-Oh! Dungeon Dice Monsters",
+   "file": "games/yu-gi-oh-dungeon-dice-monsters.json",
+   "source": "custom",
+   "apworld": "yugiohddm.apworld",
+   "world_version": "0.3.4",
+   "sheet": {
+    "game": "Yu-Gi-Oh! Dungeon Dice Monsters",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Yu-Gi-Oh! Forbidden Memories",
+   "file": "games/yu-gi-oh-forbidden-memories.json",
+   "source": "custom",
+   "apworld": "fm.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Yu-Gi-Oh! Forbidden Memories",
+    "stability": "Stable"
+   }
+  },
+  {
+   "game": "Yu-Gi-Oh! World Championship 2008",
+   "file": "games/yu-gi-oh-world-championship-2008.json",
+   "source": "custom",
+   "apworld": "yugioh_wc2008.apworld",
+   "world_version": "1.0.1",
+   "sheet": {
+    "game": "Yu-Gi-Oh! World Championship 2008",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Zelda's Adventure GDX",
+   "file": "games/zelda-s-adventure-gdx.json",
+   "source": "custom",
+   "apworld": "zagdx.apworld",
+   "world_version": "0.1.0",
+   "sheet": {
+    "game": "Zelda's Adventure GDX",
+    "stability": "Unstable"
+   }
+  },
+  {
    "game": "Zillion",
    "file": "games/zillion.json",
    "source": "core",
    "apworld": null,
    "world_version": null
+  },
+  {
+   "game": "Zoominoes",
+   "file": "games/zoominoes.json",
+   "source": "custom",
+   "apworld": "zoominoes.apworld",
+   "world_version": "0.1.2",
+   "sheet": {
+    "game": "Zoominoes",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Zork Grand Inquisitor",
+   "file": "games/zork-grand-inquisitor.json",
+   "source": "custom",
+   "apworld": "zork_grand_inquisitor.apworld",
+   "world_version": "3.0.0",
+   "sheet": {
+    "game": "Zork: Grand Inquisitor",
+    "stability": "Stable",
+    "pr_status": "Not PRing"
+   }
+  },
+  {
+   "game": "Zuma Deluxe",
+   "file": "games/zuma-deluxe.json",
+   "source": "custom",
+   "apworld": "zuma_deluxe.apworld",
+   "world_version": "0.1.9",
+   "sheet": {
+    "game": "Zuma Deluxe",
+    "stability": "Unstable"
+   }
   }
  ],
- "errors": {}
+ "errors": {
+  "bugsbunnylit": "TypeError: 'NoneType' object is not iterable",
+  "lil_gator_game": "ImportError: cannot import name 'RuleWorldMixin' from 'rule_builder' (/home/runner/work/_temp/Archipelago/rule_builder/__init__.py)",
+  "LostButFound": "ModuleNotFoundError: No module named 'worlds.LostButFound'",
+  "pokemon_hgss": "worlds.Files.ImproperlyConfiguredAutoPatchError: Two auto patch containers are using the same file extension: <class 'worlds.pokemon_hgss.rom.PokemonHeartgoldPatch'>, <class 'output_patch.HeartGoldProcedurePatch'>",
+  "scooby_doo_unmasked": "AssertionError: Choice option 'random' cannot be manually assigned.",
+  "smash64": "AssertionError: Choice option 'random' cannot be manually assigned.",
+  "super_chipflake_u_0.1.0": "ModuleNotFoundError: No module named 'worlds.super_chipflake_u_0'",
+  "tww3": "ModuleNotFoundError: No module named 'pygments'"
+ }
 }
