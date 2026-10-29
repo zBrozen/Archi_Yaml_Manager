@@ -40,7 +40,8 @@ jobs:
           python-version: "3.12"
 
       - name: Recopier la liste des jeux
-        run: python tools/sync_sheet.py --config apworlds.json || echo "::warning::Tableur des jeux illisible : liste inchangée"
+        run: |
+          python tools/sync_sheet.py --config apworlds.json || echo "::warning::Tableur des jeux illisible, liste inchangée"
 
       - name: Enregistrer la liste
         id: save
