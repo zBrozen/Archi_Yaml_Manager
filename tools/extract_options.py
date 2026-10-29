@@ -24,6 +24,8 @@ from typing import Any
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "site" / "py"))
 from ap_extract import describe_world  # noqa: E402
 
+TRANSLATED_FIELDS = ("doc_fr", "doc_html_fr")
+
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -47,10 +49,13 @@ def fingerprint(data: dict[str, Any]) -> str:
 
     Quelques mondes numérotent leurs choix en parcourant un set : l'ordre et les
     identifiants changent d'une exécution à l'autre sans que les options changent.
+    Les traductions (ajoutées ensuite par translate_docs.py) ne comptent pas.
     """
     copy = json.loads(json.dumps(data))
     for group in copy["groups"]:
         for option in group["options"]:
+            for field in TRANSLATED_FIELDS:
+                option.pop(field, None)
             if "choices" in option:
                 option["choices"] = sorted((c["value"], c["label"]) for c in option["choices"])
     return json.dumps(copy, sort_keys=True, ensure_ascii=False)

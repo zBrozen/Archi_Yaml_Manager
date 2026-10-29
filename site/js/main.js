@@ -1,7 +1,7 @@
 import { html, render, useState, useEffect } from "../vendor/preact-htm.js";
 import { loadIndex, loadGame, cachedGame, gameEntry, compareVersions, localGames, forgetLocalGame } from "./data.js";
 import { parseFile, exportFile, gamesOf, setIn, getIn, markDirty, isPlainObject, RESERVED_KEYS } from "./yaml-model.js";
-import { checkValue, sameAsDefault, yamlDefault, yamlComment, GROUP_NAMES } from "./options.js";
+import { checkValue, sameAsDefault, yamlDefault, yamlComment, setDocLanguage, GROUP_NAMES } from "./options.js";
 import { useApworldLoader } from "./apworld.js";
 import { OptionRow, RawEditor } from "./editors.js";
 
@@ -246,7 +246,7 @@ function GameField({ value, index, onChange }) {
 function matches(option, search) {
   if (!search) return true;
   const needle = search.toLowerCase();
-  return [option.name, option.key, option.doc].some((t) => (t || "").toLowerCase().includes(needle));
+  return [option.name, option.key, option.doc, option.doc_fr].some((t) => (t || "").toLowerCase().includes(needle));
 }
 
 function isVisible(option, value, { filter, search, advanced }) {
@@ -474,7 +474,7 @@ function newDocument(index, game) {
   };
 }
 
-function Header({ index, advanced, setAdvanced, theme, setTheme }) {
+function Header({ index, advanced, setAdvanced, docLanguage, setDocLanguage, theme, setTheme }) {
   return html`<header class="site-header">
     <div class="brand"><span class="logo" aria-hidden="true">◆</span> Archipelago YAML Manager</div>
     <div class="header-tools">
@@ -482,6 +482,11 @@ function Header({ index, advanced, setAdvanced, theme, setTheme }) {
         <input type="checkbox" checked=${advanced} onChange=${(e) => setAdvanced(e.target.checked)} />
         <span class="track"></span> Mode avancé
       </label>
+      <select class="theme" value=${docLanguage} onChange=${(e) => setDocLanguage(e.target.value)} aria-label="Langue des descriptions"
+        title="Les descriptions des options sont traduites automatiquement depuis l'anglais">
+        <option value="fr">Descriptions FR</option>
+        <option value="en">Descriptions EN</option>
+      </select>
       <select class="theme" value=${theme} onChange=${(e) => setTheme(e.target.value)} aria-label="Thème">
         <option value="auto">Thème auto</option>
         <option value="light">Clair</option>
@@ -497,6 +502,8 @@ function App() {
   const [file, setFile] = useState(null);
   const [advanced, setAdvanced] = useSetting("advanced", false);
   const [theme, setTheme] = useSetting("theme", "auto");
+  const [docLanguage, setDocLanguageSetting] = useSetting("docLanguage", "fr");
+  setDocLanguage(docLanguage); // lu par les éditeurs pendant ce rendu
 
   useEffect(() => { loadIndex().then(setIndex).catch((e) => setError(e.message)); }, []);
   useEffect(() => {
@@ -514,7 +521,8 @@ function App() {
     body = html`<${Editor} index=${index} file=${file} setFile=${setFile} advanced=${advanced} onClose=${() => setFile(null)} />`;
   }
 
-  return html`<${Header} index=${index} advanced=${advanced} setAdvanced=${setAdvanced} theme=${theme} setTheme=${setTheme} />${body}`;
+  return html`<${Header} index=${index} advanced=${advanced} setAdvanced=${setAdvanced}
+    docLanguage=${docLanguage} setDocLanguage=${setDocLanguageSetting} theme=${theme} setTheme=${setTheme} />${body}`;
 }
 
 render(html`<${App} />`, document.getElementById("app"));

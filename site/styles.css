@@ -386,5 +386,6 @@ table.compact td { padding: .15rem .6rem .15rem 0; }
   .search { flex-basis: 100%; }
   .game-head .stats { margin-left: 0; width: 100%; }
   .weights select, .weights input[type="text"] { width: 9.5rem; }
-  .header-tools { width: 100%; justify-content: space-between; }
+  .header-tools { width: 100%; justify-content: space-between; flex-wrap: wrap; gap: .5rem; }
+  .header-tools .switch { flex-basis: 100%; }
 }

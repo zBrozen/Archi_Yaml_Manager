@@ -16,6 +16,7 @@ on:
       - "apworlds/**"
       - "apworlds.json"
       - "tools/**"
+      - "translations/**"
       - ".github/workflows/update-data.yml"
 
 concurrency:
@@ -83,8 +84,55 @@ jobs:
           path: site/data
           retention-days: 7
 
-  commit:
+  # Traduction des descriptions en français (Argos Translate, hors ligne). Seuls les textes
+  # absents de translations/fr.json sont traduits.
+  translate:
     needs: extract
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Récupérer les données
+        run: rm -rf site/data
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: data
+          path: site/data
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # Modèle de traduction anglais → français, gardé d'une exécution à l'autre.
+      - uses: actions/cache@v4
+        with:
+          path: ~/.local/share/argos-translate
+          key: argos-en-fr-v1
+
+      - name: Installer Argos Translate
+        run: |
+          # Version de PyTorch sans GPU, bien plus légère.
+          pip install torch --index-url https://download.pytorch.org/whl/cpu
+          pip install argostranslate docutils
+
+      - name: Traduire les descriptions
+        run: python tools/translate_docs.py --data site/data --cache translations/fr.json
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: translated
+          path: |
+            site/data
+            translations
+          retention-days: 7
+
+  commit:
+    needs: [extract, translate]
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -98,13 +146,13 @@ jobs:
 
       - uses: actions/download-artifact@v4
         with:
-          name: data
-          path: site/data
+          name: translated
+          path: .
 
       - name: Enregistrer les données
         id: save
         run: |
-          git add -A site/data
+          git add -A site/data translations
           if git diff --cached --quiet; then
             echo "Aucun changement."
             echo "changed=false" >> "$GITHUB_OUTPUT"

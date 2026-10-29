@@ -7,7 +7,7 @@ import { isPlainObject, toYamlSnippet, parseSnippet } from "./yaml-model.js";
 import {
   RANDOM_LABELS, COMMON_TEXT, parseRandomRange, keyUniverse, toggleState, resolveChoice,
   checkValue, sameAsDefault, defaultValue, describeDefault, describeScalar,
-  keyForValue, valueForKey, singleValue, writeSingle,
+  keyForValue, valueForKey, singleValue, writeSingle, optionDoc,
 } from "./options.js";
 
 let idCounter = 0;
@@ -98,15 +98,17 @@ function summaryOf(doc) {
 function Description({ option }) {
   const [open, setOpen] = useState(false);
   const fr = COMMON_TEXT[option.key];
-  const summary = fr ? fr[1] : summaryOf(option.doc);
-  const full = (option.doc || "").trim();
+  const doc = optionDoc(option);
+  const summary = fr ? fr[1] : summaryOf(doc.text);
+  const full = doc.text.trim();
   const more = full && (fr || full.replace(/\s+/g, " ") !== summary.replace(/\s+/g, " "));
   if (!summary && !full) return null;
   return html`<div class="opt-desc">
     <p>${summary}${more && html` <button type="button" class="link" onClick=${() => setOpen(!open)}>${open ? "Masquer" : summary ? "Détails" : "Voir l'explication"}</button>`}</p>
-    ${open && (option.doc_html
-      ? html`<div class="doc rich" dangerouslySetInnerHTML=${{ __html: option.doc_html }}></div>`
+    ${open && (doc.html
+      ? html`<div class="doc rich" dangerouslySetInnerHTML=${{ __html: doc.html }}></div>`
       : html`<div class="doc">${full}</div>`)}
+    ${open && doc.translated && html`<p class="hint small">Traduction automatique : l'original anglais s'affiche avec « Descriptions EN » en haut de page.</p>`}
   </div>`;
 }
 

@@ -286,6 +286,25 @@ export const COMMON_TEXT = {
   plando_items: ["Plando d'objets", "Placement manuel d'objets à des endroits précis."],
 };
 
+// --- Langue des descriptions -------------------------------------------------------
+//
+// Les descriptions des jeux de la base sont traduites automatiquement (tools/translate_docs.py) ;
+// l'original anglais reste disponible. Un jeu lu depuis un apworld n'a que l'original.
+
+let docLanguage = "fr";
+
+export function setDocLanguage(language) {
+  docLanguage = language;
+}
+
+// { text, html, translated } : description à afficher selon la langue choisie.
+export function optionDoc(option) {
+  if (docLanguage === "fr" && option.doc_fr) {
+    return { text: option.doc_fr, html: option.doc_html ? option.doc_html_fr : undefined, translated: true };
+  }
+  return { text: option.doc || "", html: option.doc_html, translated: false };
+}
+
 export function describeDefault(option) {
   if (option.default === null || option.default === undefined) return "—";
   const value = option.default;
