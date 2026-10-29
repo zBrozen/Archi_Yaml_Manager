@@ -199,6 +199,22 @@ function PlayerCard({ js, index, games, update }) {
   const older = requires.version && compareVersions(requires.version, index.ap_version) < 0;
   const tooLong = String(name).length > 16 && !String(name).includes("{");
 
+  // Changer de jeu repart d'un fichier propre pour le nouveau jeu : Archipelago ne lit que la section
+  // du jeu choisi, l'ancienne section et sa version requise ne servent plus.
+  const changeGame = (next) => {
+    const previous = js.game;
+    update(["game"], next);
+    if (typeof previous !== "string" || previous === next) return;
+    update([previous], undefined);
+    if (!isPlainObject(js[next])) update([next], {});
+    if (js.description === `YAML ${previous}`) update(["description"], `YAML ${next}`);
+    const versions = isPlainObject(requires.game) ? { ...requires.game } : {};
+    delete versions[previous];
+    const version = gameEntry(next)?.world_version;
+    if (version) versions[next] = version;
+    if (isPlainObject(requires.game) || version) update(["requires", "game"], Object.keys(versions).length ? versions : undefined);
+  };
+
   return html`<section class="card player">
     <div class="fields">
       <label>
@@ -206,7 +222,7 @@ function PlayerCard({ js, index, games, update }) {
         <input type="text" value=${name} onChange=${(e) => update(["name"], e.target.value.trim())} />
         ${tooLong && html`<span class="hint">Archipelago ne garde que les 16 premiers caractères : « ${String(name).trim().slice(0, 16).trim()} ».</span>`}
       </label>
-      <${GameField} value=${js.game} index=${index} onChange=${(v) => update(["game"], v)} />
+      <${GameField} value=${js.game} index=${index} onChange=${changeGame} />
       <label class="span-all">
         <span>Description <span class="hint">(facultatif)</span></span>
         <input type="text" value=${js.description ?? ""} onChange=${(e) => update(["description"], e.target.value)} />
@@ -223,7 +239,7 @@ function PlayerCard({ js, index, games, update }) {
 }
 
 function GameField({ value, index, onChange }) {
-  const names = index.games.map((g) => g.game);
+  const names = [...localGames(), ...index.games].map((g) => g.game);
   if (isPlainObject(value)) {
     return html`<div class="label-like">
       <span>Jeux (tirés au sort selon leur poids)</span>
