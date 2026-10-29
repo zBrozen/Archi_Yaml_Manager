@@ -194,17 +194,9 @@ function Home({ index, onOpen, onCreate }) {
 function PlayerCard({ js, index, games, update }) {
   const name = js.name ?? "";
   const requires = isPlainObject(js.requires) ? js.requires : {};
-  const outdated = requires.version && compareVersions(requires.version, index.ap_version) < 0;
-  const updateRequires = () => {
-    const next = { ...requires, version: index.ap_version };
-    const gameVersions = isPlainObject(requires.game) ? { ...requires.game } : {};
-    for (const g of games) {
-      const version = gameEntry(g)?.world_version;
-      if (version) gameVersions[g] = version;
-    }
-    if (Object.keys(gameVersions).length) next.game = gameVersions;
-    update(["requires"], next);
-  };
+  // Archipelago refuse un fichier qui demande une version plus récente que la sienne.
+  const tooNew = requires.version && compareVersions(requires.version, index.ap_version) > 0;
+  const older = requires.version && compareVersions(requires.version, index.ap_version) < 0;
   const tooLong = String(name).length > 16 && !String(name).includes("{");
 
   return html`<section class="card player">
@@ -221,9 +213,12 @@ function PlayerCard({ js, index, games, update }) {
         <input type="text" value=${js.description ?? ""} onChange=${(e) => update(["description"], e.target.value)} />
       </label>
     </div>
-    ${outdated && html`<div class="notice warn">
-      Fichier prévu pour Archipelago ${requires.version} (actuel : ${index.ap_version}). Vérifiez les options signalées.
-      <button type="button" class="small" onClick=${updateRequires}>Indiquer la version actuelle</button>
+    ${tooNew && html`<div class="notice error">
+      Ce YAML demande Archipelago ${requires.version}, plus récent que la version du serveur (${index.ap_version}) :
+      le générateur le refusera. Il faut un YAML et des apworlds prévus pour Archipelago ${index.ap_version}.
+    </div>`}
+    ${older && html`<div class="notice">
+      Fichier écrit pour Archipelago ${requires.version} (serveur : ${index.ap_version}). Vérifiez les options signalées.
     </div>`}
   </section>`;
 }
@@ -268,6 +263,18 @@ function isVisible(option, value, { filter, search, advanced }) {
 
 const unknownOption = (key) => ({ key, name: key, kind: "unknown", weighted: false, doc: "" });
 
+// Version du jeu demandée par le fichier (`requires.game` : version minimale, ou { min, max }),
+// vérifiée comme le fait Archipelago avant de générer.
+function versionProblem(js, game) {
+  const version = cachedGame(game)?.world_version;
+  const required = getIn(js, ["requires", "game", game]);
+  if (!version || required == null) return null;
+  const { min, max } = isPlainObject(required) ? required : { min: required };
+  if (min && compareVersions(min, version) > 0) return { need: `${min} ou plus récente`, have: version };
+  if (max && compareVersions(max, version) < 0) return { need: `${max} ou plus ancienne`, have: version };
+  return null;
+}
+
 function GameSection({ name, entry, index, update, view, onApworld }) {
   const { data, loading, error, refresh } = useGame(name);
   const schema = data;
@@ -290,10 +297,20 @@ function GameSection({ name, entry, index, update, view, onApworld }) {
     </section>`;
   }
 
-  // Version du jeu demandée par le fichier (`requires.game`), vérifiée comme le fait Archipelago.
-  const required = getIn(entry.js, ["requires", "game", name]);
-  const minimum = isPlainObject(required) ? required.min : required;
-  const tooOld = minimum && data.world_version && compareVersions(minimum, data.world_version) > 0;
+  // Version du jeu incompatible avec le fichier : la génération échouerait, on demande la bonne version.
+  const mismatch = versionProblem(entry.js, name);
+  if (mismatch) {
+    return html`<section class="game">
+      ${head(html`<span class="badge warn">${data.source === "apworld" ? "Apworld à mettre à jour" : "Version incompatible"}</span>`)}
+      <div class="card stack">
+        <p>Ce YAML demande la version <strong>${mismatch.need}</strong> de ${name}, ${data.source === "apworld" ? "mais l'apworld fourni" : "mais le serveur"} est en version <strong>${mismatch.have}</strong>. Archipelago refusera de générer la partie.</p>
+        ${data.source === "apworld"
+          ? html`<p>Déposez l'apworld de la bonne version (celui avec lequel ce YAML a été fait).</p>
+            <${ApworldDrop} game=${name} onLoaded=${() => { refresh(); onApworld(); }} />`
+          : html`<p>Il faut un YAML prévu pour la version ${mismatch.have} de ce jeu.</p>`}
+      </div>
+    </section>`;
+  }
 
   const extraAllowed = new Set(["triggers", ...(schema.extra_keys || [])]);
   const extraKeys = Object.keys(section).filter((k) => extraAllowed.has(k) && !schema.options.has(k));
@@ -320,8 +337,6 @@ function GameSection({ name, entry, index, update, view, onApworld }) {
       ${data.source === "apworld" && html`<span class="badge accent">Apworld ${data.world_version || ""}</span>`}
       <span class="stats">${changed} ${changed > 1 ? "options modifiées" : "option modifiée"}${problems > 0
         ? html` · <span class="error">${plural(problems, "problème")}</span>` : ""}</span>`)}
-    ${tooOld && html`<div class="notice warn">Ce YAML demande la version ${minimum} du jeu, l'apworld fourni est en
-      version ${data.world_version} : Archipelago refusera de générer la partie.</div>`}
     ${groups.length === 0 && shownUnknown.length === 0 && html`<p class="hint">Aucune option à afficher.</p>`}
     ${shownUnknown.length > 0 && html`<div class="group">
       <div class="group-title warn">Options non reconnues</div>
@@ -366,13 +381,19 @@ function Editor({ index, file, setFile, onClose, advanced }) {
   const [, setApworlds] = useState(0);
   const knownGames = new Set([...index.games, ...localGames()].map((g) => g.game));
   const games = gamesOf(entry.js, knownGames);
-  const missing = games.filter((g) => !gameEntry(g));
+  const missing = games.filter((g) => !gameEntry(g) || versionProblem(entry.js, g));
   const dirty = file.docs.some((d) => d.dirty.length);
+  const requiredAp = getIn(entry.js, ["requires", "version"]);
   const blocked = missing.length
-    ? `Ajoutez d'abord l'apworld de ${missing.map((g) => `« ${g} »`).join(", ")}.`
-    : null;
+    ? `Il faut d'abord un apworld compatible pour ${missing.map((g) => `« ${g} »`).join(", ")}.`
+    : requiredAp && compareVersions(requiredAp, index.ap_version) > 0
+      ? `Ce YAML demande Archipelago ${requiredAp}, le serveur est en ${index.ap_version}.`
+      : null;
 
-  useEffect(() => { games.forEach((g) => gameEntry(g) && loadGame(g).catch(() => {})); }, [games.join("|")]);
+  // Une fois les jeux chargés, on recalcule ce qui bloque l'export (apworld manquant, version).
+  useEffect(() => {
+    Promise.all(games.map((g) => gameEntry(g) && loadGame(g).catch(() => {}))).then(() => setApworlds((n) => n + 1));
+  }, [games.join("|")]);
 
   useEffect(() => {
     if (!dirty) return;

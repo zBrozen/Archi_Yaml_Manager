@@ -14,6 +14,10 @@ export async function loadIndex() {
   return index;
 }
 
+export function apVersion() {
+  return index?.ap_version || null;
+}
+
 export function gameEntry(name) {
   return index?.games.find((g) => g.game === name) || local.get(name) || null;
 }

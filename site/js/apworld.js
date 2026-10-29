@@ -1,6 +1,6 @@
 // Lecture d'un apworld : Archipelago s'exécute dans un worker (voir apworld-worker.js).
 import { useState } from "../vendor/preact-htm.js";
-import { registerLocalGame } from "./data.js";
+import { registerLocalGame, apVersion } from "./data.js";
 
 let worker = null;
 let nextId = 0;
@@ -54,7 +54,10 @@ export function useApworldLoader() {
       const names = result.games.map((g) => g.game);
       const failures = Object.values(result.errors);
       if (!names.length) {
-        setError(failures.length ? `Cet apworld n'a pas pu être chargé : ${failures.join(" ; ")}` : "Aucun jeu trouvé dans cet apworld.");
+        // Le plus souvent un apworld fait pour une autre version d'Archipelago : il en faut un à jour.
+        setError(failures.length
+          ? `Cet apworld n'a pas pu être chargé (${failures.join(" ; ")}). Il faut une version de l'apworld compatible avec Archipelago ${apVersion()}.`
+          : "Aucun jeu trouvé dans cet apworld.");
       } else if (expected && !names.includes(expected)) {
         setError(`Cet apworld est celui de « ${names.join(", ")} », pas de « ${expected} ».`);
       }
