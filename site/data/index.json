@@ -1,6 +1,6 @@
 {
  "ap_version": "0.6.8",
- "generated_at": "2026-10-29T13:45:00+00:00",
+ "generated_at": "2026-10-29T15:46:45+00:00",
  "games": [
   {
    "game": "A Hat in Time",
@@ -311,6 +311,13 @@
    "world_version": "1.5.37"
   },
   {
+   "game": "New Super Mario Bros. DS",
+   "file": "games/new-super-mario-bros-ds.json",
+   "source": "custom",
+   "apworld": "nsmbds.apworld",
+   "world_version": "0.5.3"
+  },
+  {
    "game": "Noita",
    "file": "games/noita.json",
    "source": "core",
@@ -330,6 +337,13 @@
    "source": "core",
    "apworld": null,
    "world_version": null
+  },
+  {
+   "game": "Outer Wilds",
+   "file": "games/outer-wilds.json",
+   "source": "custom",
+   "apworld": "outer_wilds.apworld",
+   "world_version": "1.4.0"
   },
   {
    "game": "Overcooked! 2",
@@ -353,6 +367,20 @@
    "world_version": "2.6.0"
   },
   {
+   "game": "Pokemon Mystery Dungeon Explorers of Sky",
+   "file": "games/pokemon-mystery-dungeon-explorers-of-sky.json",
+   "source": "custom",
+   "apworld": "pmd_eos.apworld",
+   "world_version": "0.3.2"
+  },
+  {
+   "game": "Pokemon Platinum",
+   "file": "games/pokemon-platinum.json",
+   "source": "custom",
+   "apworld": "pokemon_platinum.apworld",
+   "world_version": "0.2.2"
+  },
+  {
    "game": "Pokemon Red and Blue",
    "file": "games/pokemon-red-and-blue.json",
    "source": "core",
@@ -364,6 +392,13 @@
    "file": "games/raft.json",
    "source": "core",
    "apworld": null,
+   "world_version": null
+  },
+  {
+   "game": "Return of the Obra Dinn",
+   "file": "games/return-of-the-obra-dinn.json",
+   "source": "custom",
+   "apworld": "obradinn.apworld",
    "world_version": null
   },
   {
@@ -395,6 +430,13 @@
    "world_version": "0.50.1"
   },
   {
+   "game": "Shadow The Hedgehog",
+   "file": "games/shadow-the-hedgehog.json",
+   "source": "custom",
+   "apworld": "shadow_the_hedgehog.apworld",
+   "world_version": "0.5.2"
+  },
+  {
    "game": "shapez",
    "file": "games/shapez.json",
    "source": "core",
@@ -407,6 +449,13 @@
    "source": "core",
    "apworld": null,
    "world_version": "2.7.5"
+  },
+  {
+   "game": "Skyward Sword",
+   "file": "games/skyward-sword.json",
+   "source": "custom",
+   "apworld": "ss.apworld",
+   "world_version": "0.5.6"
   },
   {
    "game": "SMZ3",
@@ -519,6 +568,13 @@
    "source": "core",
    "apworld": null,
    "world_version": "5.0.2"
+  },
+  {
+   "game": "Ty the Tasmanian Tiger",
+   "file": "games/ty-the-tasmanian-tiger.json",
+   "source": "custom",
+   "apworld": "ty_the_tasmanian_tiger.apworld",
+   "world_version": "1.5.0"
   },
   {
    "game": "Undertale",
