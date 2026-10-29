@@ -288,10 +288,10 @@ export const COMMON_TEXT = {
 
 // --- Langue des descriptions -------------------------------------------------------
 //
-// Les descriptions des jeux de la base sont traduites automatiquement (tools/translate_docs.py) ;
-// l'original anglais reste disponible. Un jeu lu depuis un apworld n'a que l'original.
+// Les descriptions des jeux de la base existent aussi en traduction automatique (tools/translate_docs.py),
+// proposée sans être imposée : l'original anglais est affiché par défaut. Un jeu lu depuis un apworld n'a que l'original.
 
-let docLanguage = "fr";
+let docLanguage = "en";
 
 export function setDocLanguage(language) {
   docLanguage = language;

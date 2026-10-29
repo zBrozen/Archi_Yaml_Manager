@@ -5,9 +5,9 @@ sans éditer le code à la main.
 
 - **Déposer un YAML** : chaque option s'affiche avec son explication et un réglage adapté
   (oui/non, liste de choix, curseur, liste d'objets…). Les options communes à tous les jeux sont expliquées en français.
-- **Descriptions en français** : les descriptions des options des jeux de la base sont traduites automatiquement
-  (voir ci-dessous). Le menu en haut de page permet de revenir à l'original anglais. Un jeu lu depuis un apworld
-  déposé par le joueur garde ses descriptions en anglais.
+- **Descriptions en français (facultatif)** : les descriptions des options sont affichées en anglais, comme dans
+  Archipelago. Le menu « Descriptions FR » en haut de page affiche à la place une traduction automatique
+  (voir ci-dessous), approximative. Un jeu lu depuis un apworld déposé par le joueur n'a que l'original anglais.
 - **Mode simple (par défaut)** : une valeur par option, uniquement des valeurs valides. Les lignes à poids 0
   des modèles (`random: 0`, `random-low: 0`…) sont masquées : l'option apparaît avec sa seule valeur active.
 - **Mode avancé** (interrupteur en haut de page) : tirages au sort, tables de poids avec le pourcentage de chance

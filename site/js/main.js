@@ -518,7 +518,7 @@ function App() {
   const [file, setFile] = useState(null);
   const [advanced, setAdvanced] = useSetting("advanced", false);
   const [theme, setTheme] = useSetting("theme", "auto");
-  const [docLanguage, setDocLanguageSetting] = useSetting("docLanguage", "fr");
+  const [docLanguage, setDocLanguageSetting] = useSetting("docLanguage", "en");
   setDocLanguage(docLanguage); // lu par les éditeurs pendant ce rendu
 
   useEffect(() => { loadIndex().then(setIndex).catch((e) => setError(e.message)); }, []);
