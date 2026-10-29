@@ -238,6 +238,29 @@ def pick_release(releases: list[dict], entry: dict) -> dict | None:
     return allowed[0] if allowed else None
 
 
+def apworld_problem(data: bytes) -> str | None:
+    """Défaut qui ferait planter le chargement de *tous* les mondes d'Archipelago ; None sinon.
+
+    Un manifeste absent ou illisible est toléré (simple avertissement), mais un zip invalide ou un
+    numéro de version mal formé ne le sont pas : le second lit le manifeste après avoir chargé le
+    monde, sans rattraper l'erreur (worlds/__init__.py, load_apworlds)."""
+    try:
+        with zipfile.ZipFile(io.BytesIO(data)) as archive:
+            name = next((n for n in archive.namelist() if n.endswith("archipelago.json")), None)
+            manifest = json.loads(archive.read(name)) if name else {}
+    except zipfile.BadZipFile:
+        return "archive zip invalide"
+    except ValueError:
+        return None
+    if not isinstance(manifest, dict):
+        return None
+    for key in ("world_version", "minimum_ap_version", "maximum_ap_version"):
+        # Archipelago attend exactement trois nombres (« 1.0 » ou « 1.0.0-beta » le font planter).
+        if key in manifest and not re.fullmatch(r"\d+\.\d+\.\d+", str(manifest[key])):
+            return f"{key} invalide ({manifest[key]!r})"
+    return None
+
+
 def manifest_game(data: bytes) -> str | None:
     try:
         with zipfile.ZipFile(io.BytesIO(data)) as archive:
@@ -421,6 +444,9 @@ def main() -> int:
     local = Path(args.local)
     if local.is_dir():
         for file in sorted(local.glob("*.apworld")):
+            if problem := apworld_problem(file.read_bytes()):
+                warn(f"apworlds/{file.name} écarté, {problem}")
+                continue
             (dest / file.name).write_bytes(file.read_bytes())
             print(f"  - {file.name} (dossier apworlds/)")
             files.append((dest / file.name, None, {}))
@@ -438,6 +464,9 @@ def main() -> int:
         if downloaded:
             new_last[entry_key(entry)] = [{k: v for k, v in f.items() if k != "data"} for f in downloaded]
         for f in downloaded:
+            if problem := apworld_problem(f["data"]):
+                warn(f"{entry_key(entry)} : {f['name']} écarté, {problem}")
+                continue
             if f["name"] in taken:
                 warn(f"{entry_key(entry)} : {f['name']} déjà fourni par un autre jeu, ignoré")
                 continue
