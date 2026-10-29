@@ -1,0 +1,127 @@
+# Met à jour les options des jeux à partir de la dernière version d'Archipelago
+# et des apworlds du serveur, puis republie le site.
+name: Mettre à jour les options
+
+on:
+  schedule:
+    - cron: "0 5 * * *" # tous les jours à 5 h (UTC)
+  workflow_dispatch:
+    inputs:
+      ap_version:
+        description: "Version d'Archipelago (tag Git, vide = dernière release)"
+        required: false
+  push:
+    branches: [main]
+    paths:
+      - "apworlds/**"
+      - "apworlds.json"
+      - "tools/**"
+      - ".github/workflows/update-data.yml"
+
+concurrency:
+  group: update-data
+  cancel-in-progress: false
+
+jobs:
+  # Ce job exécute le code des apworlds : il n'a qu'un accès en lecture au dépôt.
+  extract:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      tag: ${{ steps.ap.outputs.tag }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Trouver la version d'Archipelago
+        id: ap
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REQUESTED: ${{ inputs.ap_version }}
+        run: |
+          tag="$REQUESTED"
+          if [ -z "$tag" ]; then
+            tag=$(gh release view --repo ArchipelagoMW/Archipelago --json tagName -q .tagName)
+          fi
+          echo "Archipelago $tag"
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+
+      - name: Télécharger Archipelago
+        run: git clone --depth 1 --branch "${{ steps.ap.outputs.tag }}" https://github.com/ArchipelagoMW/Archipelago.git "$RUNNER_TEMP/Archipelago"
+
+      - name: Installer les dépendances
+        run: |
+          AP="$RUNNER_TEMP/Archipelago"
+          # Kivy ne sert qu'aux interfaces graphiques des clients.
+          grep -viE '^\s*kivy' "$AP/requirements.txt" > "$RUNNER_TEMP/requirements.txt"
+          pip install -r "$RUNNER_TEMP/requirements.txt" docutils requests "setuptools<81"
+          for f in "$AP"/worlds/*/requirements.txt; do
+            pip install -r "$f" || echo "::warning::Dépendances non installées : $f"
+          done
+
+      - name: Ajouter les apworlds du serveur
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python tools/fetch_apworlds.py --config apworlds.json --local apworlds --dest "$RUNNER_TEMP/Archipelago/custom_worlds"
+
+      - name: Extraire les options
+        run: python tools/extract_options.py --ap "$RUNNER_TEMP/Archipelago" --out site/data < /dev/null
+
+      # Archipelago pour le navigateur : lecture des apworlds déposés par les joueurs.
+      - name: Construire le paquet Archipelago du site
+        run: python tools/build_ap_core.py --ap "$RUNNER_TEMP/Archipelago" --out site/data/ap-core.zip
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: data
+          path: site/data
+          retention-days: 7
+
+  commit:
+    needs: extract
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    outputs:
+      changed: ${{ steps.save.outputs.changed }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Récupérer les données
+        run: rm -rf site/data
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: data
+          path: site/data
+
+      - name: Enregistrer les données
+        id: save
+        run: |
+          git add -A site/data
+          if git diff --cached --quiet; then
+            echo "Aucun changement."
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Données : Archipelago ${{ needs.extract.outputs.tag }}"
+          git push
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+
+  # Un push fait par le workflow ne relance pas les autres workflows : on publie ici.
+  deploy:
+    needs: commit
+    if: needs.commit.outputs.changed == 'true'
+    uses: ./.github/workflows/deploy.yml
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
