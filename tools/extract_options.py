@@ -116,6 +116,14 @@ def main() -> int:
     for name, reason in worlds.failed_world_loads.items():
         errors[name] = reason.strip().splitlines()[-1] if reason.strip() else "échec du chargement"
 
+    # Infos du tableur des jeux (stabilité, 18+…), relevées par fetch_apworlds.py.
+    credits_path = out_dir / "apworld-credits.json"
+    if credits_path.exists():
+        sheet = {c["file"]: c["sheet"] for c in json.loads(credits_path.read_text(encoding="utf-8")) if c.get("sheet")}
+        for entry in index_games:
+            if entry["apworld"] in sheet:
+                entry["sheet"] = sheet[entry["apworld"]]
+
     index = {
         "ap_version": Utils.__version__,
         "generated_at": datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="seconds"),

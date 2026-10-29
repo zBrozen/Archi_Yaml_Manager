@@ -39,7 +39,8 @@ def package_files(name: str) -> list[tuple[Path, str]]:
 
 
 def ap_files(ap: Path) -> list[tuple[Path, str]]:
-    files = [f for f in ap.glob("*.py")] + [f for f in (ap / "worlds").glob("*.py")]
+    # LICENSE : la licence MIT d'Archipelago impose de joindre sa notice à toute copie.
+    files = [f for f in ap.glob("*.py")] + [f for f in (ap / "worlds").glob("*.py")] + [ap / "LICENSE"]
     for folder in AP_FOLDERS:
         files += [f for f in (ap / folder).rglob("*") if f.is_file()]
     return [(f, f.relative_to(ap).as_posix()) for f in files

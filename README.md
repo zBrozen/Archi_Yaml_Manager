@@ -32,8 +32,9 @@ Tout se passe dans le navigateur : les fichiers des joueurs ne sont envoyés nul
 Les options ne sont pas recopiées à la main. Le workflow GitHub
 [`update-data.yml`](.github/workflows/update-data.yml) tourne chaque jour :
 
-1. il télécharge la dernière release d'Archipelago ;
-2. il y ajoute les apworlds du serveur (voir ci-dessous) ;
+1. il recopie dans `apworlds.json` la liste des jeux du tableur du Discord d'Archipelago
+   ([`tools/sync_sheet.py`](tools/sync_sheet.py)) ;
+2. il télécharge la dernière release d'Archipelago et y ajoute les apworlds de ces jeux (voir ci-dessous) ;
 3. il charge tous les jeux avec Archipelago et exporte leurs options en JSON dans `site/data/`
    ([`tools/extract_options.py`](tools/extract_options.py)) ;
 4. il traduit en français les descriptions nouvelles ou modifiées
@@ -58,32 +59,62 @@ valeurs d'option) ne sont pas traduits.
 **Corriger une traduction** : modifier le texte français dans `translations/fr.json` puis pousser sur `main`.
 La mise à jour reprend la correction dans les données du site.
 
-## Ajouter un apworld à la base du site
+## Jeux non officiels
 
-Un jeu ajouté à la base n'a plus besoin de son apworld côté joueur. Deux possibilités, cumulables :
+Tous les jeux de la [liste des jeux du Discord d'Archipelago](https://docs.google.com/spreadsheets/d/1iuzDTOAvdoNe8Ne8i461qGNucg5OuEoF-Ikqs8aUQZw)
+(feuille « Playable Worlds ») sont ajoutés à la base du site, sans rien faire à la main :
 
-- **Fichier** : déposer le `.apworld` dans le dossier [`apworlds/`](apworlds/) puis pousser sur `main`.
-- **Release GitHub** : ajouter le dépôt dans [`apworlds.json`](apworlds.json). Le dernier `.apworld` publié
-  est retéléchargé à chaque mise à jour.
+1. [`tools/sync_sheet.py`](tools/sync_sheet.py) réécrit la clé `"games"` de [`apworlds.json`](apworlds.json) :
+   un jeu par ligne du tableur, avec sa stabilité (`Stable`, `Unstable`, `Broken on Main`), son statut
+   d'intégration (`In Review`, `Not PRing`) et l'indication 18+. Les jeux déjà officiels (`Core`) et ceux
+   sans lien GitHub ou GitLab (apworld publié sur Discord, itch.io…) sont laissés de côté.
+2. [`tools/fetch_apworlds.py`](tools/fetch_apworlds.py) trouve le dépôt de chaque jeu dans la colonne
+   « Links & Downloads » et télécharge l'apworld de sa dernière release. Si le dépôt publie plusieurs jeux,
+   il prend le fichier qui porte le nom du jeu, et refuse un apworld d'un autre jeu.
+3. Sur le site, ces jeux apparaissent dans la liste de choix, rangés par stabilité, avec une mention 18+,
+   et leur page affiche les mêmes badges.
 
-  ```json
-  {
-    "github": [
-      { "repo": "auteur/MonJeu-AP" },
-      { "repo": "auteur/AutreJeu", "tag": "v1.2.0" },
-      { "repo": "auteur/PlusieursJeux", "asset": "^monjeu.*\\.apworld$" }
-    ]
-  }
-  ```
+Un jeu sans release avec un `.apworld` est simplement ignoré (résumé à la fin du journal du workflow).
+Les apworlds téléchargés et les réponses de l'API GitHub sont gardés en cache d'une exécution à l'autre :
+un téléchargement qui échoue reprend la dernière version connue, et la limite de requêtes de GitHub
+n'est pas dépassée.
 
-  `tag` (facultatif) fixe une version ; `asset` (facultatif) est une expression régulière pour choisir
-  le bon fichier quand une release en contient plusieurs.
+**Réglages à la main** dans `apworlds.json` (conservés par la synchronisation) :
+
+```json
+{
+  "options": {
+    "Shadow the Hedgehog": { "prereleases": true },
+    "Un jeu": { "asset": "^monjeu.*\.apworld$" },
+    "Autre jeu": { "repo": "auteur/AutreDepot", "tag": "v1.2.0" }
+  },
+  "exclude": ["Jeu à ne pas proposer"],
+  "github": [
+    { "repo": "auteur/JeuAbsentDuTableur" }
+  ],
+  "games": ["… réécrit automatiquement, ne pas modifier …"]
+}
+```
+
+- `options` règle un jeu par son nom dans le tableur : `prereleases: true` accepte les préversions (utile
+  quand l'auteur ne publie que des préversions récentes), `asset` est une expression régulière du nom du
+  fichier, `tag` fixe une version, `repo` (GitHub) ou `gitlab` remplace le dépôt du tableur.
+- `exclude` écarte des jeux du tableur.
+- `github` ajoute un dépôt GitHub pour un jeu absent du tableur (mêmes réglages possibles).
+- En dernier recours, un `.apworld` peut être déposé dans [`apworlds/`](apworlds/), seulement si sa licence
+  en autorise la redistribution.
+
+**Crédits et licences.** Pour chaque apworld, `site/data/apworld-credits.json` relève le jeu, sa version et
+ses auteurs (`archipelago.json` de l'apworld), son dépôt, sa licence (celle incluse dans l'apworld, sinon
+celle du dépôt, avec les lignes de copyright) et ses infos du tableur. Le site les affiche via le lien
+« Jeux non officiels : auteurs et licences » du pied de page.
 
 Un apworld qui ne se charge pas (par exemple incompatible avec la version d'Archipelago) n'empêche pas
 la mise à jour des autres jeux. Il apparaît sur la page d'accueil du site et dans les avertissements du workflow.
 
-> Le code d'un apworld est exécuté pendant l'extraction. Ce job n'a qu'un accès en lecture au dépôt,
-> mais n'ajoutez que des apworlds de sources de confiance.
+> Le code de chaque apworld (plusieurs centaines, écrits par la communauté) est exécuté pendant
+> l'extraction. Ce job n'a qu'un accès en lecture au dépôt et ne reçoit pas de jeton d'écriture ;
+> `exclude` permet d'écarter un jeu douteux.
 
 ## Mise en ligne (GitHub Pages)
 
@@ -137,4 +168,10 @@ Les apworlds à tester localement se copient dans `../Archipelago/custom_worlds/
 | `site/vendor/` | Bibliothèques [Preact/htm](https://github.com/developit/htm) et [yaml](https://github.com/eemeli/yaml) |
 | `tools/` | Scripts d'extraction et de traduction des options, et de récupération des apworlds |
 | `translations/fr.json` | Traductions des descriptions (modifiables à la main) |
-| `apworlds/`, `apworlds.json` | Apworlds du serveur |
+| `apworlds.json`, `apworlds/` | Jeux non officiels de la base (voir « Jeux non officiels ») |
+
+## Licence et mentions
+
+Outil non officiel, non affilié à Archipelago ni aux éditeurs des jeux cités. Le code du projet est sous
+licence MIT ([`LICENSE`](LICENSE)). Archipelago (MIT), les bibliothèques intégrées et les apworlds non
+officiels, avec leurs auteurs et leurs sources, sont crédités dans [`THIRD_PARTY_LICENSES.md`](THIRD_PARTY_LICENSES.md).

@@ -24,9 +24,40 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  # Recopie dans apworlds.json la liste des jeux du tableur du Discord d'Archipelago.
+  # N'exécute aucun apworld : seul ce job peut écrire dans le dépôt avant l'extraction.
+  sync:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    outputs:
+      sha: ${{ steps.save.outputs.sha }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Recopier la liste des jeux
+        run: python tools/sync_sheet.py --config apworlds.json || echo "::warning::Tableur des jeux illisible : liste inchangée"
+
+      - name: Enregistrer la liste
+        id: save
+        run: |
+          if ! git diff --quiet apworlds.json; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git commit -m "Jeux non officiels : liste du tableur" apworlds.json
+            git push
+          fi
+          echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
   # Ce job exécute le code des apworlds : il n'a qu'un accès en lecture au dépôt.
   extract:
+    needs: sync
     runs-on: ubuntu-latest
+    timeout-minutes: 120
     permissions:
       contents: read
     outputs:
@@ -34,6 +65,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
+          ref: ${{ needs.sync.outputs.sha }}
           persist-credentials: false
 
       - uses: actions/setup-python@v5
@@ -66,10 +98,21 @@ jobs:
             pip install -r "$f" || echo "::warning::Dépendances non installées : $f"
           done
 
+      # Apworlds déjà téléchargés et réponses de l'API GitHub : évite de tout retélécharger
+      # et de dépasser la limite de requêtes. Une nouvelle entrée est enregistrée à chaque exécution.
+      - uses: actions/cache@v4
+        with:
+          path: ${{ runner.temp }}/apworld-cache
+          key: apworlds-${{ github.run_id }}
+          restore-keys: apworlds-
+
       - name: Ajouter les apworlds du serveur
         env:
           GH_TOKEN: ${{ github.token }}
-        run: python tools/fetch_apworlds.py --config apworlds.json --local apworlds --dest "$RUNNER_TEMP/Archipelago/custom_worlds"
+        run: >
+          python tools/fetch_apworlds.py --config apworlds.json --local apworlds
+          --dest "$RUNNER_TEMP/Archipelago/custom_worlds" --cache "$RUNNER_TEMP/apworld-cache"
+          --credits site/data/apworld-credits.json
 
       - name: Extraire les options
         run: python tools/extract_options.py --ap "$RUNNER_TEMP/Archipelago" --out site/data < /dev/null
@@ -132,14 +175,17 @@ jobs:
           retention-days: 7
 
   commit:
-    needs: [extract, translate]
+    needs: [sync, extract, translate]
     runs-on: ubuntu-latest
     permissions:
       contents: write
     outputs:
       changed: ${{ steps.save.outputs.changed }}
     steps:
+      # La branche à jour, avec la liste des jeux que le job sync vient peut-être d'enregistrer.
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
 
       - name: Récupérer les données
         run: rm -rf site/data

@@ -103,6 +103,37 @@ function download(name, text) {
 
 // --- Accueil -------------------------------------------------------------------
 
+// Infos du tableur des jeux du Discord d'Archipelago, pour les jeux non officiels.
+const STABILITY = {
+  Stable: { label: "Stable", group: "stables", cls: "" },
+  Unstable: { label: "Instable", group: "instables", cls: "warn" },
+  "Broken on Main": { label: "Cassé sur la version actuelle", group: "cassés sur la version actuelle", cls: "danger" },
+};
+
+function SheetBadges({ sheet }) {
+  if (!sheet) return null;
+  const stability = STABILITY[sheet.stability];
+  return html`${stability && html`<span class=${`badge ${stability.cls}`} title="Stabilité indiquée dans la liste des jeux du Discord d'Archipelago">${stability.label}</span>`}
+    ${sheet.pr_status === "In Review" && html`<span class="badge" title="En cours d'intégration aux jeux officiels">Bientôt officiel</span>`}
+    ${sheet.adult && html`<span class="badge danger" title="Contenu pour adultes ou non classé">18+</span>`}`;
+}
+
+function gameLabel(g) {
+  return g.sheet?.adult ? `${g.game} (18+)` : g.game;
+}
+
+function customGroups(custom) {
+  const groups = new Map();
+  for (const g of custom) {
+    const stability = STABILITY[g.sheet?.stability];
+    const label = stability ? `Jeux non officiels ${stability.group}` : "Jeux du serveur";
+    if (!groups.has(label)) groups.set(label, []);
+    groups.get(label).push(g);
+  }
+  const order = ["Jeux du serveur", ...Object.values(STABILITY).map((s) => `Jeux non officiels ${s.group}`)];
+  return [...groups].sort((a, b) => order.indexOf(a[0]) - order.indexOf(b[0]));
+}
+
 function Home({ index, onOpen, onCreate }) {
   const [errors, setErrors] = useState([]);
   const [hover, setHover] = useState(false);
@@ -164,7 +195,7 @@ function Home({ index, onOpen, onCreate }) {
         <select class="grow" value=${game} onChange=${(e) => setGame(e.target.value)}>
           <option value="">Choisir un jeu…</option>
           ${imported.length > 0 && html`<optgroup label="Ajoutés avec un apworld">${imported.map((g) => html`<option value=${g.game}>${g.game}</option>`)}</optgroup>`}
-          ${custom.length > 0 && html`<optgroup label="Jeux du serveur">${custom.map((g) => html`<option value=${g.game}>${g.game}</option>`)}</optgroup>`}
+          ${customGroups(custom).map(([label, games]) => html`<optgroup label=${label}>${games.map((g) => html`<option value=${g.game}>${gameLabel(g)}</option>`)}</optgroup>`)}
           <optgroup label="Jeux officiels">${core.map((g) => html`<option value=${g.game}>${g.game}</option>`)}</optgroup>
         </select>
         <button type="button" disabled=${!game} onClick=${() => onCreate(game)}>Créer un YAML</button>
@@ -348,7 +379,8 @@ function GameSection({ name, entry, index, update, view, onApworld }) {
 
   return html`<section class="game">
     ${head(html`
-      ${data.source === "custom" && html`<span class="badge accent">Jeu du serveur</span>`}
+      ${data.source === "custom" && html`<span class="badge accent">Jeu non officiel</span>`}
+      <${SheetBadges} sheet=${gameEntry(name)?.sheet} />
       ${data.source === "apworld" && html`<span class="badge accent">Apworld ${data.world_version || ""}</span>`}
       <span class="stats">${changed} ${changed > 1 ? "options modifiées" : "option modifiée"}${problems > 0
         ? html` · <span class="error">${plural(problems, "problème")}</span>` : ""}</span>`)}
@@ -538,7 +570,43 @@ function App() {
   }
 
   return html`<${Header} index=${index} advanced=${advanced} setAdvanced=${setAdvanced}
-    docLanguage=${docLanguage} setDocLanguage=${setDocLanguageSetting} theme=${theme} setTheme=${setTheme} />${body}`;
+    docLanguage=${docLanguage} setDocLanguage=${setDocLanguageSetting} theme=${theme} setTheme=${setTheme} />${body}<${Footer} />`;
+}
+
+function Footer() {
+  const repo = "https://github.com/zBrozen/Archi_Yaml_Manager";
+  const [credits, setCredits] = useState(null);
+  const openCredits = (e) => {
+    e.preventDefault();
+    fetch("data/apworld-credits.json", { cache: "no-cache" })
+      .then((r) => (r.ok ? r.json() : []))
+      .catch(() => [])
+      .then(setCredits);
+  };
+  return html`<footer class="site-footer hint">
+    <p>Outil non officiel, non affilié à <a href="https://archipelago.gg">Archipelago</a> ni aux éditeurs des jeux cités,
+    dont les noms appartiennent à leurs propriétaires.
+    Options lues depuis Archipelago (licence MIT) et les apworlds de leurs auteurs.</p>
+    <p><a href=${repo + "/blob/main/LICENSE"}>Licence</a>${" · "}<a href=${repo + "/blob/main/THIRD_PARTY_LICENSES.md"}>Licences tierces</a>${" · "}<a href="#" onClick=${openCredits}>Jeux non officiels : auteurs et licences</a>${" · "}<a href=${repo}>Code source</a></p>
+    ${credits !== null && html`<div class="modal" onClick=${(e) => e.target === e.currentTarget && setCredits(null)}>
+      <div class="modal-box">
+        <div class="toolbar-row"><strong>Jeux non officiels : auteurs et licences</strong><span class="spacer"></span>
+          <button type="button" class="ghost" onClick=${() => setCredits(null)}>Fermer</button></div>
+        <div class="credits">
+          ${credits.length === 0 && html`<p>Aucun jeu non officiel dans la base.</p>`}
+          ${credits.map((c) => html`<div class="credit" key=${c.file}>
+            <div><strong>${c.game}</strong>${c.version && html` <span class="hint">v${c.version}</span>`} <${SheetBadges} sheet=${c.sheet} /></div>
+            ${c.authors.length > 0 && html`<div>Auteurs : ${c.authors.join(", ")}</div>`}
+            ${c.source && html`<div>Source : <a href=${c.source}>${c.source.replace(/^https:\/\//, "")}</a></div>`}
+            <div>Licence : ${c.license
+              ? (c.license_url ? html`<a href=${c.license_url}>${c.license}</a>` : c.license)
+              : "aucune licence indiquée par l'auteur"}</div>
+            ${c.copyright.map((line) => html`<div class="hint">${line}</div>`)}
+          </div>`)}
+        </div>
+      </div>
+    </div>`}
+  </footer>`;
 }
 
 render(html`<${App} />`, document.getElementById("app"));

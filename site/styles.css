@@ -389,3 +389,11 @@ table.compact td { padding: .15rem .6rem .15rem 0; }
   .header-tools { width: 100%; justify-content: space-between; flex-wrap: wrap; gap: .5rem; }
   .header-tools .switch { flex-basis: 100%; }
 }
+
+.site-footer { max-width: 680px; margin: 3rem auto 1.5rem; padding: 0 16px; text-align: center; line-height: 1.5; }
+.site-footer a { color: inherit; }
+.site-footer .modal-box { text-align: left; color: var(--text); font-size: 1rem; }
+.credits { overflow: auto; display: grid; gap: .75rem; }
+.credit { background: var(--surface-2); border-radius: 8px; padding: .6rem .75rem; display: grid; gap: .15rem; font-size: .9rem; }
+.credit a { overflow-wrap: anywhere; }
+.badge.danger { background: var(--error-soft); color: var(--error); }

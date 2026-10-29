@@ -1,7 +1,8 @@
-# Apworlds du serveur
+# Apworlds déposés à la main
 
-Déposez ici les fichiers `.apworld` des jeux non officiels utilisés sur le serveur.
-À chaque push, la mise à jour automatique les charge avec Archipelago et ajoute leurs options au site.
+Dernier recours : les jeux du tableur du Discord d'Archipelago sont déjà ajoutés automatiquement, et un
+jeu absent du tableur s'ajoute par son dépôt dans la clé `"github"` de `apworlds.json` (voir la section
+« Jeux non officiels » du README principal).
 
-Pour un apworld publié en release sur GitHub, il est plus simple de l'ajouter dans `apworlds.json`
-à la racine du dépôt : il sera alors retéléchargé à chaque nouvelle version.
+Ne déposez ici un `.apworld` que s'il n'est publié nulle part en release, et si sa licence en autorise
+la redistribution. Ses auteurs et sa licence sont relevés automatiquement dans les crédits du site.
