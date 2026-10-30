@@ -6,7 +6,7 @@ import { useApworldLoader } from "./apworld.js";
 import { OptionRow, RawEditor } from "./editors.js";
 import { useSetting, download, plural, SheetBadges, GamePicker, loadCredits } from "./ui.js";
 import { versionProblem, checkText, nameProblem } from "./check.js";
-import { RoomsHome, RoomPage } from "./rooms.js";
+import { RoomsHome, RoomPage, shareApworlds } from "./rooms.js";
 import { ScreensOverlay } from "./overlay.js";
 import { api as roomsApi, normalizeCode, roomsEnabled, saveAccess } from "./rooms-api.js";
 
@@ -598,6 +598,11 @@ function App() {
     const slot = { name: doc.name, game: doc.game, filename, content: text, issues: [...doc.problems, ...doc.warnings] };
     if (slotId) await roomsApi.replaceSlot(code, slotId, slot);
     else await roomsApi.addSlot(code, playerId ? { ...slot, player_id: playerId } : slot);
+    // L'apworld mémorisé du jeu part avec le YAML ; à défaut, la page de la room le redemandera.
+    try {
+      const fresh = await roomsApi.get(code);
+      await shareApworlds(code, doc.games, fresh.apworlds || [], { retry: true });
+    } catch { /* envoi retenté depuis la page de la room */ }
     setFile(null);
   };
   useEffect(() => {

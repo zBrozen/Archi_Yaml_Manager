@@ -70,7 +70,7 @@ export async function checkDoc(js) {
     try { data = await loadGame(game); } catch (e) { warnings.push(`${game} : ${e.message}`); continue; }
     if (!data) continue;
     const mismatch = versionProblem(js, game);
-    if (mismatch) problems.push(`${game} : le YAML demande la version ${mismatch.need}, celle ${entry.source === "apworld" ? "de l'apworld déposé" : "du site"} est ${mismatch.have}.`);
+    if (mismatch) problems.push(`${game} : le YAML demande la version ${mismatch.need}, celle ${entry.source === "apworld" || entry.source === "room" ? "de l'apworld déposé" : "du site"} est ${mismatch.have}.`);
     const stability = entry.sheet?.stability;
     if (stability === "Broken on Main") problems.push(`${game} : jeu signalé cassé sur la version actuelle d'Archipelago.`);
     else if (stability === "Unstable") warnings.push(`${game} : jeu signalé instable.`);

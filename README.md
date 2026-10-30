@@ -28,8 +28,8 @@ sans éditer le code à la main.
   (souvent en retard sur le tableur ou sur la dernière release), y compris pour un jeu officiel. La page du jeu le
   signale et propose de revenir à celui du serveur ; un YAML qui demande une version plus récente que celle du
   serveur propose de déposer l'apworld. L'apworld mémorisé est oublié de lui-même quand le serveur passe à une
-  version au moins aussi récente. Dans une room, la vérification se fait avec l'apworld déposé chez l'hôte ; pour
-  la génération en ligne, l'hôte le dépose aussi dans la room (voir « Génération en ligne »).
+  version au moins aussi récente. Le fichier lui-même est gardé dans le navigateur (IndexedDB) pour partir dans
+  les rooms avec les YAML de son jeu (voir « Génération en ligne »).
 
 - **Rooms** : un hôte crée une room, les joueurs la rejoignent avec un code court et leur pseudo, et y déposent
   leurs YAML (un fichier par jeu). L'hôte vérifie la room, télécharge tous les YAML pour générer la partie avec
@@ -270,11 +270,16 @@ spoiler, puis clique sur **Générer en ligne**. Le service lance le workflow
 4. il renvoie la partie au service, et le spoiler à part. La page de la room propose alors à l'hôte (et à lui
    seul) de télécharger la partie, à envoyer sur archipelago.gg, et le spoiler.
 
-**Apworlds de l'hôte.** Sous « Générer en ligne », l'hôte peut déposer ses propres apworlds (un par jeu, 20 au
-plus, 25 Mo chacun) : par exemple une version plus récente que celle du site, ou un jeu absent du site. Le site
-lit d'abord le fichier avec Archipelago pour connaître son jeu (et vérifier la room avec lui), puis l'envoie au
-service (table `room_apworlds`, fichier dans le KV, supprimé avec la room). Le générateur l'installe à la place de
-celui du site ; pour un jeu officiel, il retire le monde intégré, sans quoi Archipelago ignorerait l'apworld.
+**Apworlds de la room.** Un joueur qui a un apworld à lui (plus récent que celui du site, ou jeu absent du site)
+l'envoie à la room avec ses YAML : le site le fait de lui-même pour un apworld mémorisé dans son navigateur, y compris
+pour des YAML déjà déposés, et il peut aussi déposer le fichier `.apworld` avec ses YAML (un apworld mémorisé avant
+l'ajout de cette fonction n'a gardé que ses options : la room demande alors le fichier). L'hôte peut en ajouter ou en
+retirer sous « Générer en ligne ». Un par jeu, 20 au plus, 25 Mo chacun ; un joueur ne remplace ni ne retire que les
+siens, tant que les dépôts sont ouverts. Le site lit le fichier avec Archipelago pour connaître son jeu et ses
+options, envoyés avec lui (table `room_apworlds`, fichier et options dans le KV, supprimés avec la room ou le joueur).
+Sur la page de la room, ces options passent avant celles du site et de l'apworld du navigateur : l'hôte vérifie la
+room avec, sans avoir l'apworld lui-même, et peut le télécharger pour générer chez lui. Le générateur l'installe à
+la place de celui du site ; pour un jeu officiel, il retire le monde intégré, sans quoi Archipelago ignorerait l'apworld.
 
 **Isolement.** N'importe quel hôte peut ainsi faire exécuter du code par le workflow. Archipelago et tous les
 apworlds tournent donc dans un conteneur Docker sans réseau, qui ne voit que le dossier d'Archipelago, les YAML

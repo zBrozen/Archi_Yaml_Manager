@@ -1,6 +1,6 @@
 // Lecture d'un apworld : Archipelago s'exécute dans un worker (voir apworld-worker.js).
 import { useState } from "../vendor/preact-htm.js";
-import { registerLocalGame, apVersion } from "./data.js";
+import { registerLocalGame, apVersion, storeApworldFile } from "./data.js";
 
 let worker = null;
 let nextId = 0;
@@ -52,6 +52,8 @@ export function useApworldLoader() {
       const result = await readApworld(file, setStatus);
       result.games.forEach(registerLocalGame);
       const names = result.games.map((g) => g.game);
+      // Le fichier est gardé pour être envoyé aux rooms avec les YAML de ce jeu.
+      if (names.length === 1) await storeApworldFile(names[0], result.games[0].apworld || file.name, file);
       const failures = Object.values(result.errors);
       if (!names.length) {
         // Le plus souvent un apworld fait pour une autre version d'Archipelago : il en faut un à jour.

@@ -271,11 +271,8 @@ async function getRoom(request, env, room) {
     admin,
     online_generation: generatorConfigured(env),
     screens: !!env.SCREENS,
-    ...(admin ? {
-      overlay_layouts: JSON.parse(room.overlay_layouts || "[]"),
-      overlay_links: await overlayLinks(env, room),
-      apworlds: await roomApworlds(env, room.code),
-    } : {}),
+    ...(admin ? { overlay_layouts: JSON.parse(room.overlay_layouts || "[]"), overlay_links: await overlayLinks(env, room) } : {}),
+    apworlds: await roomApworlds(env, room.code),
     me: me ? { id: me.id, pseudo: me.pseudo } : null,
     wishlists: Object.fromEntries(wishes.results.map((w) => [w.slot, JSON.parse(w.items)])),
     players: players.results.map((p) => ({
@@ -312,7 +309,7 @@ async function deleteFiles(env, code) {
 // Fichiers et lignes d'une room supprimée (par l'hôte ou faute d'activité).
 async function purgeRoom(env, code) {
   await deleteFiles(env, code);
-  if (env.FILES) await Promise.all((await roomApworlds(env, code)).map((a) => env.FILES.delete(apworldKey(code, a.file))));
+  await Promise.all((await roomApworlds(env, code)).map((a) => deleteApworldFiles(env, code, a.file)));
   await env.DB.batch([
     env.DB.prepare("DELETE FROM slots WHERE room_code = ?").bind(code),
     env.DB.prepare("DELETE FROM players WHERE room_code = ?").bind(code),
@@ -360,8 +357,11 @@ async function resetPlayerToken(request, env, room, playerId) {
 async function removePlayer(request, env, room, playerId) {
   const me = await currentPlayer(request, env, room);
   if (me?.id !== playerId) await requireAdmin(request, room);
-  if (!room.direct) requireOpen(room); // retirer un joueur retire aussi ses YAML
+  if (!room.direct) requireOpen(room); // retirer un joueur retire aussi ses YAML et ses apworlds
+  const apworlds = (await roomApworlds(env, room.code)).filter((a) => a.player_id === playerId);
+  await Promise.all(apworlds.map((a) => deleteApworldFiles(env, room.code, a.file)));
   await env.DB.batch([
+    env.DB.prepare("DELETE FROM room_apworlds WHERE room_code = ? AND player_id = ?").bind(room.code, playerId),
     env.DB.prepare("DELETE FROM slots WHERE room_code = ? AND player_id = ?").bind(room.code, playerId),
     env.DB.prepare("DELETE FROM players WHERE room_code = ? AND id = ?").bind(room.code, playerId),
     touch(env, room),
@@ -621,16 +621,21 @@ async function generatorReport(request, env, room) {
   return json({ ok: true });
 }
 
-// --- Apworlds de l'hôte (génération en ligne) -------------------------------------------
-// L'hôte dépose l'apworld d'un jeu (nom du jeu lu par le site avec Archipelago) : le générateur l'installe à la
-// place de celui du site. Son code n'est exécuté que dans un conteneur sans réseau ni secret (generate-room.yml).
+// --- Apworlds de la room -----------------------------------------------------------------
+// L'hôte, ou un joueur avec ses YAML, dépose l'apworld d'un jeu (nom du jeu lu par le site avec Archipelago) : le
+// générateur l'installe à la place de celui du site, et l'hôte peut le télécharger pour générer chez lui. Les options
+// lues par le navigateur qui l'a envoyé sont gardées à côté : l'hôte vérifie la room avec elles. Le code d'un apworld
+// n'est exécuté que dans un conteneur sans réseau ni secret (generate-room.yml).
+// Un joueur ne remplace ni ne retire que ses propres apworlds, tant que les dépôts sont ouverts ; l'hôte, tous.
 
-const APWORLDS = { count: 20, file: 120 };
+const APWORLDS = { count: 20, file: 120, data: 4 * 1024 * 1024 };
 const apworldKey = (code, file) => `${code}/apworld/${file}`;
+const apworldDataKey = (code, file) => `${code}/apworld-data/${file}`;
 
 const roomApworlds = async (env, code) => (await env.DB.prepare(
-  "SELECT game, file, size, uploaded_at FROM room_apworlds WHERE room_code = ? ORDER BY game",
-).bind(code).all()).results;
+  `SELECT a.game, a.file, a.size, a.uploaded_at, a.has_data, a.player_id, p.pseudo AS by
+   FROM room_apworlds a LEFT JOIN players p ON p.id = a.player_id WHERE a.room_code = ? ORDER BY a.game`,
+).bind(code).all()).results.map((a) => ({ ...a, has_data: !!a.has_data }));
 
 function apworldFile(value) {
   const file = String(value ?? "");
@@ -638,10 +643,28 @@ function apworldFile(value) {
   return file;
 }
 
+// Qui dépose : null pour l'hôte, sinon le joueur (dépôts ouverts seulement, comme ses YAML).
+async function apworldUploader(request, env, room) {
+  if (await isAdmin(request, room)) return null;
+  const player = await requirePlayer(request, env, room);
+  requireOpen(room);
+  return player;
+}
+
+function requireOwner(row, player) {
+  if (player && row.player_id !== player.id) {
+    throw new HttpError(409, `L'apworld de ${row.game} a déjà été déposé par ${row.by || "l'hôte"} : seul l'hôte peut le remplacer.`);
+  }
+}
+
+async function deleteApworldFiles(env, code, file) {
+  if (env.FILES) await Promise.all([env.FILES.delete(apworldKey(code, file)), env.FILES.delete(apworldDataKey(code, file))]);
+}
+
 async function uploadApworld(request, env, room, file) {
-  await requireAdmin(request, room);
   requireYamlRoom(room);
-  if (!env.FILES) throw new HttpError(501, "La génération en ligne n'est pas configurée sur ce serveur.");
+  const player = await apworldUploader(request, env, room);
+  if (!env.FILES) throw new HttpError(501, "Le dépôt d'apworlds n'est pas configuré sur ce serveur.");
   file = apworldFile(file);
   const game = text(new URL(request.url).searchParams.get("game"), "jeu", LIMITS.game);
   const data = new Uint8Array(await request.arrayBuffer());
@@ -649,27 +672,67 @@ async function uploadApworld(request, env, room, file) {
   if (data[0] !== 0x50 || data[1] !== 0x4b) throw new HttpError(400, "Ce fichier n'est pas un apworld (archive zip attendue).");
   const list = await roomApworlds(env, room.code);
   const previous = list.find((a) => a.game === game);
+  if (previous) requireOwner(previous, player);
   if (list.some((a) => a.file.toLowerCase() === file.toLowerCase() && a.game !== game)) {
     throw new HttpError(409, `Un autre jeu de la room utilise déjà le fichier ${file}.`);
   }
   if (!previous && list.length >= APWORLDS.count) throw new HttpError(409, `${APWORLDS.count} apworlds au maximum par room.`);
+  if (previous) await deleteApworldFiles(env, room.code, previous.file);
   await env.FILES.put(apworldKey(room.code, file), data);
-  if (previous && previous.file !== file) await env.FILES.delete(apworldKey(room.code, previous.file));
   await env.DB.batch([
     env.DB.prepare(
-      `INSERT INTO room_apworlds (room_code, game, file, size, uploaded_at) VALUES (?, ?, ?, ?, ?)
-       ON CONFLICT (room_code, game) DO UPDATE SET file = excluded.file, size = excluded.size, uploaded_at = excluded.uploaded_at`,
-    ).bind(room.code, game, file, data.length, Date.now()),
+      `INSERT INTO room_apworlds (room_code, game, file, size, uploaded_at, player_id, has_data) VALUES (?, ?, ?, ?, ?, ?, 0)
+       ON CONFLICT (room_code, game) DO UPDATE SET file = excluded.file, size = excluded.size, uploaded_at = excluded.uploaded_at,
+         player_id = excluded.player_id, has_data = 0`,
+    ).bind(room.code, game, file, data.length, Date.now(), player?.id ?? null),
     touch(env, room),
   ]);
   return json({ apworlds: await roomApworlds(env, room.code) });
 }
 
-async function deleteApworld(request, env, room, file) {
-  await requireAdmin(request, room);
+// Options lues dans l'apworld par le navigateur qui l'a déposé (format de site/data/games/*.json).
+async function saveApworldData(request, env, room, file) {
+  const player = await apworldUploader(request, env, room);
   file = apworldFile(file);
-  await env.DB.prepare("DELETE FROM room_apworlds WHERE room_code = ? AND file = ?").bind(room.code, file).run();
-  if (env.FILES) await env.FILES.delete(apworldKey(room.code, file));
+  const row = (await roomApworlds(env, room.code)).find((a) => a.file === file);
+  if (!row) throw new HttpError(404, "Apworld introuvable.");
+  requireOwner(row, player);
+  const body = await request.text();
+  if (body.length > APWORLDS.data) throw new HttpError(413, "Options de l'apworld trop volumineuses.");
+  let data;
+  try { data = JSON.parse(body); } catch { throw new HttpError(400, "Options de l'apworld illisibles."); }
+  if (!data || data.game !== row.game || !Array.isArray(data.groups)) throw new HttpError(400, "Ces options ne sont pas celles de cet apworld.");
+  await env.FILES.put(apworldDataKey(room.code, file), body);
+  await env.DB.prepare("UPDATE room_apworlds SET has_data = 1 WHERE room_code = ? AND file = ?").bind(room.code, file).run();
+  return json({ apworlds: await roomApworlds(env, room.code) });
+}
+
+// Les options sont lisibles par tous ceux qui ont le code (simples définitions d'options) ; le fichier, par l'hôte.
+async function getApworld(request, env, room, file, data) {
+  file = apworldFile(file);
+  if (!data) await requireAdmin(request, room);
+  const known = await env.DB.prepare("SELECT 1 FROM room_apworlds WHERE room_code = ? AND file = ?").bind(room.code, file).first();
+  const stored = known && env.FILES ? await env.FILES.get(data ? apworldDataKey(room.code, file) : apworldKey(room.code, file), "stream") : null;
+  if (!stored) throw new HttpError(404, "Apworld introuvable.");
+  return new Response(stored, {
+    headers: data ? { "Content-Type": "application/json; charset=utf-8", ...CORS } : {
+      "Content-Type": "application/zip",
+      "Content-Disposition": `attachment; filename="${file}"`,
+      "Access-Control-Expose-Headers": "Content-Disposition",
+      ...CORS,
+    },
+  });
+}
+
+async function deleteApworld(request, env, room, file) {
+  const player = await apworldUploader(request, env, room);
+  file = apworldFile(file);
+  const row = (await roomApworlds(env, room.code)).find((a) => a.file === file);
+  if (row) {
+    requireOwner(row, player);
+    await env.DB.prepare("DELETE FROM room_apworlds WHERE room_code = ? AND file = ?").bind(room.code, file).run();
+    await deleteApworldFiles(env, room.code, file);
+  }
   return json({ apworlds: await roomApworlds(env, room.code) });
 }
 
@@ -1011,10 +1074,12 @@ async function route(request, env) {
     return startGeneration(request, env, room);
   } else if (sub === "files" && id && method === "GET") {
     return downloadFile(request, env, room, id);
-  } else if (sub === "apworlds" && id && method === "PUT") {
-    return uploadApworld(request, env, room, id);
-  } else if (sub === "apworlds" && id && method === "DELETE") {
-    return deleteApworld(request, env, room, id);
+  } else if (sub === "apworlds" && id) {
+    const data = parts[5] === "data";
+    if (parts[5] && !data) throw new HttpError(404, "Route inconnue.");
+    if (method === "PUT") return data ? saveApworldData(request, env, room, id) : uploadApworld(request, env, room, id);
+    if (method === "GET") return getApworld(request, env, room, id, data);
+    if (method === "DELETE" && !data) return deleteApworld(request, env, room, id);
   } else if (sub === "screens") {
     if (!id && method === "GET") return screensSocket(request, env, room);
     const linkId = parts[5];

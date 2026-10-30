@@ -1,7 +1,7 @@
 // Pages des rooms : créer ou rejoindre une room, déposer ses YAML, vérifier et préparer la génération (hôte),
 // puis retrouver la partie hébergée sur archipelago.gg (adresse, tracker, fichiers de chaque joueur).
 import { html, useState, useEffect, useRef } from "../vendor/preact-htm.js";
-import { apVersion, gameEntry, localGames } from "./data.js";
+import { apVersion, apworldFileOf, gameEntry, localGameData, localGames, setRoomGames } from "./data.js";
 import { useApworldLoader } from "./apworld.js";
 import { splitFile } from "./yaml-model.js";
 import { checkText, nameProblem, MAX_NAME } from "./check.js";
@@ -46,7 +46,74 @@ function timeLeft(ms) {
 function GameBadges({ game }) {
   const entry = gameEntry(game);
   if (!entry) return game.startsWith("Au hasard") ? null : html`<span class="badge warn" title="Jeu absent de la base du site">Hors base</span>`;
-  return html`${(entry.server?.source ?? entry.source) !== "core" && html`<span class="badge accent">Non officiel</span>`}<${SheetBadges} sheet=${entry.sheet} />`;
+  return html`${(entry.server?.source ?? entry.source) !== "core" && html`<span class="badge accent">Non officiel</span>`}<${SheetBadges} sheet=${entry.sheet} />
+    ${entry.source === "room" && html`<span class="badge accent" title=${`Apworld déposé dans la room par ${entry.by || "l'hôte"}`}>Apworld de la room${entry.world_version ? ` ${entry.world_version}` : ""}</span>`}`;
+}
+
+// --- Apworlds de la room -----------------------------------------------------------------
+// Un apworld mémorisé dans le navigateur (plus récent que celui du site, ou jeu absent du site) part dans la room avec
+// les YAML de son jeu : l'hôte vérifie la room avec ses options et le générateur l'installe à la place de celui du site.
+
+// Nom attendu par Archipelago (celui du dossier du monde), plutôt que celui du fichier (« monjeu (1).apworld »…).
+function apworldName(name) {
+  return /^[\w.-]+\.apworld$/i.test(name || "") ? name : String(name || "monde").replace(/[^\w.-]/g, "_").replace(/(\.apworld)?$/i, ".apworld");
+}
+
+// Envoie le fichier puis ses options ; renvoie { apworlds } (liste à jour de la room).
+async function sendApworld(code, game, file, data) {
+  const name = apworldName(file.name);
+  await api.uploadApworld(code, game, name, file.blob);
+  return api.saveApworldData(code, name, data);
+}
+
+const tried = new Set(); // envois refusés, pour ne pas les retenter à chaque rafraîchissement
+
+// Envoie les apworlds mémorisés pour `games` qui manquent dans la room (ou y sont dans une autre version).
+// Renvoie { sent, missing, errors } : `missing`, jeux dont ce navigateur n'a que les options, pas le fichier.
+export async function shareApworlds(code, games, roomApworlds, { retry = false } = {}) {
+  const result = { sent: [], missing: [], errors: [] };
+  for (const game of new Set(games)) {
+    const data = localGameData(game);
+    if (!data) continue;
+    const existing = roomApworlds.find((a) => a.game === game);
+    const file = await apworldFileOf(game);
+    if (!file) {
+      if (!existing) result.missing.push(game);
+      continue;
+    }
+    if (existing && existing.size === file.blob.size && existing.has_data) continue;
+    const key = `${code}|${game}|${file.blob.size}`;
+    if (tried.has(key) && !retry) continue;
+    tried.add(key);
+    try {
+      await sendApworld(code, game, { name: file.name, blob: file.blob }, data);
+      result.sent.push(game);
+    } catch (e) { result.errors.push(`${game} : ${e.message}`); }
+  }
+  return result;
+}
+
+// Options des apworlds de la room, gardées le temps de la visite.
+const roomData = new Map();
+function useRoomApworlds(code, apworlds) {
+  const [, setVersion] = useState(0);
+  const list = (apworlds || []).filter((a) => a.has_data);
+  const key = list.map((a) => `${a.file}@${a.uploaded_at}`).join("|");
+  useEffect(() => {
+    let alive = true;
+    Promise.all(list.map(async (a) => {
+      const id = `${code}/${a.file}@${a.uploaded_at}`;
+      if (!roomData.has(id)) roomData.set(id, api.apworldData(code, a.file).catch(() => null));
+      const data = await roomData.get(id);
+      return data && { data, by: a.by };
+    })).then((loaded) => {
+      if (!alive) return;
+      setRoomGames(loaded.filter(Boolean));
+      setVersion((v) => v + 1);
+    });
+    return () => { alive = false; };
+  }, [code, key]);
+  useEffect(() => () => setRoomGames([]), []);
 }
 
 // --- Accueil des rooms -------------------------------------------------------------
@@ -173,6 +240,7 @@ export function RoomPage({ index, code, onCreate, onEdit }) {
     return () => clearInterval(timer);
   }, []);
 
+  useRoomApworlds(code, data?.apworlds);
   const online = useApStatus(data?.room);
   // Tracker lu ici une fois pour tous les onglets : progression, wishlists et leur bandeau.
   const tracker = useTracker(online.status);
@@ -215,7 +283,7 @@ export function RoomPage({ index, code, onCreate, onEdit }) {
   }));
   const yaml = me
     ? html`<${MySlots} index=${index} room=${room} me=${me} admin=${admin} players=${players} slots=${mine} allSlots=${allSlots}
-        refresh=${refresh} onCreate=${onCreate} onEdit=${onEdit} />`
+        apworlds=${data.apworlds || []} refresh=${refresh} onCreate=${onCreate} onEdit=${onEdit} />`
     : html`<${JoinForm} room=${room} admin=${admin} refresh=${refresh} />`;
 
   return html`<main class="room">
@@ -370,12 +438,14 @@ async function uploadYaml(room, files, player, own) {
   return added ? `${plural(added, "YAML")} ajouté${added > 1 ? "s" : ""}${forWhom}.` : null;
 }
 
-function MySlots({ index, room, me, admin, players, slots, allSlots, refresh, onCreate, onEdit }) {
+function MySlots({ index, room, me, admin, players, slots, allSlots, apworlds, refresh, onCreate, onEdit }) {
   const action = useAction();
+  const loader = useApworldLoader();
   const [hover, setHover] = useState(false);
   const [picking, setPicking] = useState(false);
   const [game, setGame] = useState("");
   const [done, setDone] = useState(null);
+  const [shared, setShared] = useState({ sent: [], missing: [], errors: [] });
   // L'hôte peut déposer pour un autre joueur de la room ; chacun garde ensuite la main sur ses YAML.
   const [targetId, setTargetId] = useState(me.id);
   const target = (admin && players.find((p) => p.id === targetId)) || players.find((p) => p.id === me.id) || { id: me.id, pseudo: me.pseudo, slots };
@@ -384,9 +454,37 @@ function MySlots({ index, room, me, admin, players, slots, allSlots, refresh, on
   const full = target.slots.length >= room.max_slots;
   const canEdit = room.open; // dépôts fermés : YAML figés, hôte compris
 
+  // Les apworlds mémorisés pour les jeux de vos YAML partent dans la room (aussi pour des YAML déposés avant).
+  const canShare = room.open || admin;
+  const share = async (games, options) => {
+    const fresh = await api.get(room.code);
+    const result = await shareApworlds(room.code, games, fresh.apworlds || [], options);
+    // Un passage sans rien à envoyer garde l'annonce du dernier envoi.
+    setShared((prev) => (result.sent.length || result.missing.length || result.errors.length ? result : { ...result, sent: prev.sent }));
+    if (result.sent.length) refresh();
+    return result;
+  };
+  const myGames = slots.map((s) => s.game).sort().join("|");
+  const roomKey = apworlds.map((a) => `${a.game}@${a.uploaded_at}`).join("|");
+  useEffect(() => {
+    if (canShare && myGames) share(myGames.split("|")).catch(() => {});
+  }, [myGames, roomKey, canShare]);
+
+  // On peut déposer en même temps les YAML et les apworlds de leurs jeux.
   const upload = (files) => action.run(async () => {
     setDone(null);
-    try { setDone(await uploadYaml(room, files, target, own)); } finally { refresh(); }
+    const list = [...files];
+    for (const file of list.filter((f) => /\.apworld$/i.test(f.name))) await loader.load(file);
+    const yamls = list.filter((f) => !/\.apworld$/i.test(f.name));
+    try {
+      if (yamls.length) setDone(await uploadYaml(room, yamls, target, own));
+    } finally {
+      const fresh = await api.get(room.code);
+      const games = fresh.players.find((p) => p.id === target.id)?.slots.map((s) => s.game) || [];
+      const result = await shareApworlds(room.code, games, fresh.apworlds || [], { retry: true });
+      setShared(result);
+      refresh();
+    }
   });
 
   const remove = (slot) => confirm(`Retirer le YAML « ${slot.name} » de la room ?`)
@@ -426,14 +524,22 @@ function MySlots({ index, room, me, admin, players, slots, allSlots, refresh, on
       </select>
       ${!own && html`<span class="hint">Les YAML iront dans la liste de ${target.pseudo}, qui pourra les modifier ou les retirer.</span>`}
     </label>`}
-    ${canEdit && !full && html`<label class=${`drop compact full ${hover ? "hover" : ""} ${action.busy ? "busy" : ""}`}
+    ${canEdit && (!full || shared.missing.length > 0) && html`<label class=${`drop compact full ${hover ? "hover" : ""} ${action.busy || loader.status ? "busy" : ""}`}
       onDragOver=${(e) => { e.preventDefault(); setHover(true); }}
       onDragLeave=${() => setHover(false)}
       onDrop=${(e) => { e.preventDefault(); setHover(false); upload(e.dataTransfer.files); }}>
-      <input type="file" accept=".yaml,.yml,.txt" multiple hidden onChange=${(e) => { upload(e.target.files); e.target.value = ""; }} />
-      <strong>${action.busy ? "Envoi…" : own ? "Déposez un ou plusieurs YAML" : `Déposez les YAML de ${target.pseudo}`}</strong>
+      <input type="file" accept=".yaml,.yml,.txt,.apworld" multiple hidden onChange=${(e) => { upload(e.target.files); e.target.value = ""; }} />
+      <strong>${loader.status || (action.busy ? "Envoi…" : own ? "Déposez un ou plusieurs YAML" : `Déposez les YAML de ${target.pseudo}`)}</strong>
       <span>ou cliquez pour les choisir</span>
+      <span class="hint">Jeu non officiel, ou apworld plus récent que celui du site : déposez aussi son fichier .apworld,
+        il sera utilisé pour vérifier et générer la partie.</span>
     </label>`}
+    ${loader.error && html`<div class="notice error full">${loader.error}</div>`}
+    ${shared.sent.length > 0 && html`<div class="notice ok full" role="status">Apworld envoyé à la room : ${shared.sent.join(", ")}.</div>`}
+    ${canEdit && shared.missing.length > 0 && html`<div class="notice warn full">
+      Votre apworld de ${shared.missing.join(", ")} n'est pas dans la room : ce navigateur n'en a gardé que les options.
+      Déposez son fichier <strong>.apworld</strong> ci-dessus pour que l'hôte vérifie et génère la partie avec.</div>`}
+    ${shared.errors.length > 0 && html`<div class="notice warn full">Apworld non envoyé : ${shared.errors.join(" — ")}</div>`}
     ${canEdit && !full && html`<button type="button" class="ghost" onClick=${() => setPicking(true)}>
       ${own ? "Créer un YAML pour cette room" : `Créer un YAML pour ${target.pseudo}`}</button>`}
     ${full && canEdit && html`<p class="hint">${own ? "Limite atteinte : retirez un YAML pour en ajouter un autre."
@@ -667,25 +773,29 @@ async function checkRoom(room, players, slots, roomApworlds = []) {
   const adult = [...games].filter((g) => gameEntry(g)?.sheet?.adult);
   if (adult.length) notes.push({ level: "info", text: `Jeux 18+ : ${adult.join(", ")}.` });
 
-  // Jeux vérifiés avec un apworld de ce navigateur : la génération en ligne ne l'a que s'il est déposé dans la room.
-  const uploaded = new Set(roomApworlds.map((a) => a.game));
+  // Apworlds déposés dans la room (par l'hôte ou avec les YAML d'un joueur) : vérification et génération se font avec eux.
+  const inRoom = new Map(roomApworlds.map((a) => [a.game, a]));
   const label = (g) => {
     const entry = gameEntry(g);
-    return `${g}${entry.world_version ? ` ${entry.world_version}` : ""}${entry.server ? ` (site : ${entry.server.world_version || "?"})` : ""}`;
+    return `${g}${entry.world_version ? ` ${entry.world_version}` : ""}${entry.server?.world_version ? ` (site : ${entry.server.world_version})` : ""}`;
   };
-  const notSent = [...games].filter((g) => gameEntry(g)?.source === "apworld" && !uploaded.has(g)).sort();
+  const sent = [...games].filter((g) => inRoom.has(g)).sort();
+  if (sent.length) {
+    notes.push({ level: "info", text: `Apworlds de la room, utilisés pour vérifier et générer : ${sent.map((g) => `${label(g)}, déposé par ${inRoom.get(g).by || "vous"}`).join(" ; ")}.` });
+  }
+  // Apworld de ce navigateur seulement : la génération en ligne ne l'a pas.
+  const notSent = [...games].filter((g) => gameEntry(g)?.source === "apworld" && !inRoom.has(g)).sort();
   if (notSent.length) {
     notes.push({ level: "warn", text: `Vérifié avec votre apworld pour ${notSent.map(label).join(", ")}. Pour générer en ligne avec, déposez-le aussi dans « Générer en ligne » : sinon la génération utilise celui du site (ou échoue pour un jeu absent du site).` });
   }
-  const sent = [...games].filter((g) => uploaded.has(g)).sort();
-  if (sent.length) notes.push({ level: "info", text: `Génération en ligne avec l'apworld déposé dans la room pour ${sent.join(", ")}.` });
 
   // Apworlds à installer chez l'hôte avant de générer.
   const credits = await loadCredits();
-  const apworlds = [...games].filter((g) => gameEntry(g)?.source !== "core").sort().map((g) => ({
+  const apworlds = [...games].filter((g) => inRoom.has(g) || gameEntry(g)?.source !== "core").sort().map((g) => ({
     game: g,
     source: credits.find((c) => c.game === g)?.source || null,
     known: !!gameEntry(g),
+    room: inRoom.get(g) || null,
     mine: gameEntry(g)?.source === "apworld" ? gameEntry(g).world_version || "" : null,
   }));
   return { results, notes, apworlds };
@@ -698,6 +808,10 @@ function RoomCheck({ room }) {
   const run = () => action.run(async () => {
     const [{ slots }, fresh] = await Promise.all([api.exportSlots(room.code), api.get(room.code)]);
     setReport({ ...(await checkRoom(fresh.room, fresh.players, slots, fresh.apworlds)), at: Date.now() });
+  });
+  const fetchApworld = (file) => action.run(async () => {
+    const { blob, name } = await api.downloadApworld(room.code, file);
+    download(name, blob);
   });
   const blocking = report ? report.results.filter((r) => r.problems.length).length + report.notes.filter((n) => n.level === "error").length : 0;
   const warnings = report ? report.results.filter((r) => r.warnings.length).length + report.notes.filter((n) => n.level === "warn").length : 0;
@@ -731,7 +845,10 @@ function RoomCheck({ room }) {
       </table></div>
       ${report.apworlds.length > 0 && html`<div class="stack full">
         <p><strong>Apworlds à installer dans votre Archipelago</strong> (dossier <code>custom_worlds</code>) :</p>
-        <ul class="small">${report.apworlds.map((a) => html`<li>${a.game}${" — "}${a.mine != null ? `votre apworld${a.mine ? ` ${a.mine}` : ""}`
+        <ul class="small">${report.apworlds.map((a) => html`<li>${a.game}${" — "}${a.room
+            ? html`apworld de la room (déposé par ${a.room.by || "vous"}) <button type="button" class="ghost small" disabled=${action.busy}
+                onClick=${() => fetchApworld(a.room.file)}>Télécharger ${a.room.file}</button>`
+            : a.mine != null ? `votre apworld${a.mine ? ` ${a.mine}` : ""}`
             : a.source ? html`<a href=${a.source} target="_blank" rel="noopener">${a.source.replace(/^https:\/\//, "")}</a>`
             : a.known ? "source inconnue" : "absent de la base du site, à demander au joueur"}</li>`)}</ul>
       </div>`}`}
@@ -760,9 +877,9 @@ const RELEASE_CHOICES = {
 };
 const REMAINING_CHOICES = { goal: "Une fois fini", enabled: "À tout moment", disabled: "Jamais" };
 
-// Apworlds de l'hôte pour la génération en ligne : chacun remplace celui du site pour son jeu (version plus
-// récente, jeu absent du site). Le site le lit d'abord avec Archipelago pour connaître son jeu, ce qui l'ajoute
-// aussi aux jeux de ce navigateur : la vérification de la room se fait avec lui.
+// Apworlds de la room pour la génération en ligne : chacun remplace celui du site pour son jeu (version plus
+// récente, jeu absent du site). Les joueurs envoient les leurs avec leurs YAML ; l'hôte peut en ajouter ici. Le site
+// lit d'abord le fichier avec Archipelago pour connaître son jeu et ses options, envoyées avec lui.
 function RoomApworlds({ room, data, setData, busy }) {
   const loader = useApworldLoader();
   const action = useAction();
@@ -773,18 +890,17 @@ function RoomApworlds({ room, data, setData, busy }) {
     const names = await loader.load(file);
     if (!names.length) return; // erreur affichée par le lecteur d'apworld
     if (names.length > 1) throw new Error(`Cet apworld contient plusieurs jeux (${names.join(", ")}) : un seul par fichier.`);
-    // Nom lu dans l'apworld (celui qu'attend Archipelago), plutôt que celui du fichier (« monjeu (1).apworld »…).
-    const read = gameEntry(names[0])?.apworld;
-    const name = /^[\w.-]+\.apworld$/i.test(read || "") ? read : file.name.replace(/[^\w.-]/g, "_").replace(/(\.apworld)?$/i, ".apworld");
-    setData({ ...data, ...(await api.uploadApworld(room.code, names[0], name, file)) });
+    const stored = await apworldFileOf(names[0]);
+    const sent = await sendApworld(room.code, names[0], { name: stored?.name || file.name, blob: file }, localGameData(names[0]));
+    setData({ ...data, ...sent });
   });
   const remove = (a) => action.run(async () => setData({ ...data, ...(await api.deleteApworld(room.code, a.file)) }));
 
   return html`<div class="stack full">
-    <p><strong>Vos apworlds</strong> <span class="hint">(facultatif)</span> : un apworld déposé ici passe avant celui du site
-      pour son jeu, par exemple une version plus récente que celle du site.</p>
+    <p><strong>Apworlds de la room</strong> : chacun passe avant celui du site pour son jeu, par exemple une version plus
+      récente. Les joueurs envoient les leurs avec leurs YAML ; vous pouvez en ajouter ou en retirer ici.</p>
     ${list.length > 0 && html`<ul class="check-notes">${list.map((a) => html`<li>
-      <strong>${a.game}</strong> — ${a.file}${" "}
+      <strong>${a.game}</strong> — ${a.file} <span class="hint">(${a.by ? `déposé par ${a.by}` : "déposé par vous"})</span>${" "}
       <button type="button" class="ghost small" disabled=${busy || working} onClick=${() => remove(a)}>Retirer</button>
     </li>`)}</ul>`}
     <label class=${`drop compact ${hover ? "hover" : ""} ${working ? "busy" : ""}`}
