@@ -293,36 +293,72 @@ const isObsCamera = (device) => /obs/i.test(device.label);
 const listCameras = async () => (await navigator.mediaDevices.enumerateDevices()).filter((d) => d.kind === "videoinput");
 
 async function captureCamera(quality, priority, deviceId) {
-  const ask = (id) => navigator.mediaDevices.getUserMedia({
-    audio: false,
-    video: { ...cameraConstraints(quality), ...(id ? { deviceId: { exact: id } } : {}) },
-  });
-  let stream;
-  try {
-    stream = await ask(deviceId);
-  } catch (e) {
-    // Caméra mémorisée disparue (OBS fermé, autre ordinateur) : n'importe quelle caméra, puis celle d'OBS.
-    if (!deviceId || (e.name !== "OverconstrainedError" && e.name !== "NotFoundError")) throw e;
-    stream = await ask(null);
-    deviceId = null;
-  }
-  if (!deviceId) {
-    const obs = (await listCameras()).find(isObsCamera);
-    if (obs && stream.getVideoTracks()[0]?.getSettings().deviceId !== obs.deviceId) {
-      for (const track of stream.getTracks()) track.stop();
-      stream = await ask(obs.deviceId);
+  const open = async (id) => {
+    const device = id ? { deviceId: { exact: id } } : {};
+    try {
+      return await navigator.mediaDevices.getUserMedia({ audio: false, video: { ...cameraConstraints(quality), ...device } });
+    } catch (e) {
+      // Définition ou images par seconde refusées par la caméra : on prend ce qu'elle donne.
+      if (e.name !== "OverconstrainedError" || e.constraint === "deviceId") throw e;
+      return navigator.mediaDevices.getUserMedia({ audio: false, video: id ? device : true });
+    }
+  };
+  const obs = async () => (await listCameras()).find(isObsCamera)?.deviceId || null;
+  // Essais : la caméra choisie (sinon celle d'OBS si son nom est déjà connu), puis celle d'OBS, puis celle par
+  // défaut. Une webcam occupée ou une caméra mémorisée disparue n'empêche donc pas d'ouvrir celle d'OBS, dont le
+  // nom n'apparaît qu'une fois la caméra autorisée.
+  const tried = new Set();
+  let failure = null;
+  for (const pick of [async () => deviceId || obs(), obs, async () => null]) {
+    const id = await pick();
+    if (tried.has(id)) continue;
+    tried.add(id);
+    try {
+      let stream = await open(id);
+      const target = deviceId ? null : await obs();
+      if (target && stream.getVideoTracks()[0]?.getSettings().deviceId !== target) {
+        try {
+          const better = await open(target);
+          for (const track of stream.getTracks()) track.stop();
+          stream = better;
+        } catch { /* on garde la caméra déjà ouverte */ }
+      }
+      const [track] = stream.getVideoTracks();
+      if (track) track.contentHint = priority.hint;
+      return stream;
+    } catch (e) {
+      if (e.name === "NotAllowedError") throw e;
+      failure ??= e;
     }
   }
-  const [track] = stream.getVideoTracks();
-  if (track) track.contentHint = priority.hint;
-  return stream;
+  throw failure;
 }
 
 const CAMERA_ERRORS = {
   NotAllowedError: "Accès à la caméra refusé : autorisez la caméra pour ce site (icône à gauche de l'adresse), puis réessayez.",
-  NotFoundError: "Aucune caméra trouvée : démarrez la caméra virtuelle dans OBS, puis réessayez.",
   NotReadableError: "La caméra ne répond pas : elle est peut-être utilisée par une autre application, ou la caméra virtuelle d'OBS est arrêtée.",
 };
+
+// Le navigateur ne voit pas la caméra d'OBS : ce qu'il voit, et ce qui l'en empêche le plus souvent.
+function CameraHelp({ error, seen }) {
+  const names = seen.map((d) => d.label).filter(Boolean);
+  return html`<div class="notice error full">
+    <strong>Le navigateur ne trouve pas la caméra virtuelle d'OBS.</strong>
+    ${" "}${seen.length === 0 ? "Il ne voit aucune caméra."
+      : names.length ? `Caméras qu'il voit : ${names.join(", ")}.` : `Il voit ${seen.length} caméra(s), dont il ne donne le nom qu'après autorisation.`}
+    <ul>
+      <li>Dans OBS, la caméra virtuelle est bien démarrée (le bouton affiche « Arrêter la caméra virtuelle »).</li>
+      <li>Fermez complètement le navigateur (toutes ses fenêtres) puis rouvrez-le : s'il était ouvert pendant l'installation
+        d'OBS, il ne voit pas encore sa caméra.</li>
+      <li>Windows autorise la caméra aux applications de bureau : Paramètres → Confidentialité et sécurité → Caméra.</li>
+      <li>Avec un OBS « portable » (sans installation), la caméra virtuelle doit être installée à part : lancez une fois
+        OBS en administrateur et démarrez la caméra virtuelle.</li>
+      <li>Pour vérifier, dans Chrome ou Edge : Paramètres → Confidentialité et sécurité → Paramètres des sites → Caméra.
+        La liste en haut montre les caméras que le navigateur voit ; « OBS Virtual Camera » doit y être.</li>
+    </ul>
+    ${error?.message && html`<span class="hint">Erreur du navigateur : ${error.name} (${error.message}).</span>`}
+  </div>`;
+}
 
 const SOURCES = {
   window: { label: "Fenêtre ou écran" },
@@ -463,7 +499,10 @@ function ShareScreen({ room }) {
         update(live.current);
       }
     } catch (e) {
-      if (nextSource === "camera") setError(CAMERA_ERRORS[e?.name] || `Caméra impossible à ouvrir : ${e?.message || e}`);
+      if (nextSource === "camera") {
+        setError(CAMERA_ERRORS[e?.name]
+          || html`<${CameraHelp} error=${e} seen=${await listCameras().catch(() => [])} />`);
+      }
       // Fenêtre de choix fermée sans rien choisir : pas une erreur.
       else if (e?.name !== "NotAllowedError" && e?.name !== "AbortError") setError(`Partage impossible : ${e?.message || e}`);
     } finally {
@@ -534,7 +573,7 @@ function ShareScreen({ room }) {
     ${status && html`<p role="status">${status}</p>`}
     <${SentInfo} sent=${sent} quality=${quality} />
     ${view && html`<video class="screen-preview" ref=${preview} autoplay muted playsinline aria-label="Aperçu de votre partage"></video>`}
-    ${error && html`<div class="notice error full">${error}</div>`}
+    ${error && (typeof error === "string" ? html`<div class="notice error full">${error}</div>` : error)}
     <ul class="hint tips">
       ${!camera && html`<li>Choisissez une <strong>fenêtre</strong> plutôt que l'écran entier : rien d'autre que le jeu ne sera visible.</li>
         <li>Image noire ou figée ? Le jeu est en plein écran exclusif, que le navigateur ne voit pas. Passez-le en fenêtré
