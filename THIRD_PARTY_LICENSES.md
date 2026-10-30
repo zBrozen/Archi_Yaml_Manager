@@ -12,6 +12,7 @@ Le code propre au projet est sous licence MIT (voir [`LICENSE`](LICENSE)). Il r�
 | [Archipelago](https://github.com/ArchipelagoMW/Archipelago) | `site/data/ap-core.zip`, données extraites dans `site/data/games/` | MIT (texte ci-dessous) |
 | [Preact](https://github.com/preactjs/preact) + [htm](https://github.com/developit/htm) | `site/vendor/preact-htm.js` | MIT |
 | [yaml](https://github.com/eemeli/yaml) | `site/vendor/yaml.js` | ISC |
+| [archipelago.js](https://github.com/ThePhar/archipelago.js) | `site/vendor/archipelago.js` (client texte des rooms) | MIT |
 | [Pyodide](https://github.com/pyodide/pyodide) | chargé depuis jsDelivr par `site/js/apworld-worker.js` | MPL-2.0 |
 | [schema](https://github.com/keleshev/schema) | `site/data/ap-core.zip` | MIT |
 | [typing_extensions](https://github.com/python/typing_extensions) | `site/data/ap-core.zip` | PSF-2.0 |

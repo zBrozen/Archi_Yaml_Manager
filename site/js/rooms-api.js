@@ -112,6 +112,7 @@ export async function apRoomStatus(code, roomUrl) {
     host: url.hostname,
     port,
     tracker: data.tracker ? `${url.origin}/tracker/${data.tracker}` : null,
+    trackerId: data.tracker || null,
     // players : [[nom, jeu], …] dans l'ordre des slots (slot = position + 1).
     slots: (data.players || []).map(([name, game], i) => {
       const slot = i + 1;

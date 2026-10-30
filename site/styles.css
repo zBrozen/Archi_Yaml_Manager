@@ -15,6 +15,7 @@
   --error: #b3261e;
   --error-soft: #fdecea;
   --ok: #1b7a3d;
+  --progression: #6d28d9;
   --radius: 10px;
   --shadow: 0 1px 2px rgb(16 24 40 / 6%);
   color-scheme: light;
@@ -37,6 +38,7 @@
     --error: #ff9a91;
     --error-soft: #3a1c1a;
     --ok: #7ad69a;
+    --progression: #c4a5ff;
     --shadow: none;
     color-scheme: dark;
   }
@@ -57,6 +59,7 @@
   --error: #ff9a91;
   --error-soft: #3a1c1a;
   --ok: #7ad69a;
+  --progression: #c4a5ff;
   --shadow: none;
   color-scheme: dark;
 }
@@ -475,3 +478,24 @@ a.button.ghost:hover { background: var(--surface-2); }
 a.button.small { padding: .25rem .7rem; font-size: .875rem; }
 .danger-link { color: var(--error); justify-self: start; }
 .fields label.check { display: flex; align-items: center; gap: .5rem; font-size: .92rem; }
+
+/* Partie en cours : progression et client texte */
+.progress { height: .55rem; border-radius: 99px; background: var(--surface-2); overflow: hidden; }
+.progress.small { height: .4rem; min-width: 6rem; }
+.progress span { display: block; height: 100%; background: var(--accent); border-radius: inherit; }
+.progress span.ok { background: var(--ok); }
+.progress-table td.checks { min-width: 8rem; display: grid; gap: .2rem; }
+.progress-table tr.mine td { background: var(--accent-soft); }
+.client-log {
+  height: 18rem; overflow-y: auto; background: var(--bg); border: 1px solid var(--border); border-radius: 8px;
+  padding: .5rem .7rem; font-family: ui-monospace, "Cascadia Code", Consolas, monospace; font-size: .82rem; line-height: 1.45;
+}
+.client-log > div { white-space: pre-wrap; overflow-wrap: anywhere; }
+.msg-player { font-weight: 700; color: var(--accent); }
+.msg-player.self { color: var(--warn); }
+.msg-item { font-weight: 600; }
+.msg-item.progression { color: var(--progression); }
+.msg-item.useful { color: var(--accent); }
+.msg-item.trap { color: var(--error); }
+.msg-item.filler { color: var(--muted); }
+.msg-location, .msg-ok { color: var(--ok); }

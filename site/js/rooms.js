@@ -6,6 +6,7 @@ import { splitFile } from "./yaml-model.js";
 import { checkText, nameProblem, MAX_NAME } from "./check.js";
 import { GamePicker, SheetBadges, download, loadCredits, plural } from "./ui.js";
 import { makeZip } from "./zip.js";
+import { ProgressPanel, TextClient } from "./room-live.js";
 import {
   api, apRoomStatus, forgetAccess, hostLink, inviteLink, knownRooms, normalizeCode, playerLink,
   roomsEnabled, saveAccess, savedAccess,
@@ -700,6 +701,7 @@ function HostedRoom({ room, setData, data }) {
 
 function PlayPanel({ room, mine }) {
   const [status, setStatus] = useState(null);
+  const [clientOpen, setClientOpen] = useState(false); // client texte chargé à l'ouverture seulement
   const [error, setError] = useState(null);
   const [credits, setCredits] = useState([]);
   useEffect(() => {
@@ -746,6 +748,11 @@ function PlayPanel({ room, mine }) {
         </li>`;
       })}</ul>
     </div>`}
+    ${status && html`<${ProgressPanel} status=${status} mode=${room.mode} mine=${mine} />`}
+    ${status && html`<details class="group full" onToggle=${(e) => setClientOpen(e.currentTarget.open)}>
+      <summary>Client texte (chat et commandes)</summary>
+      <div class="group-body">${clientOpen && html`<${TextClient} room=${room} status=${status} mine=${mine} />`}</div>
+    </details>`}
     ${status && html`<details class="group full">
       <summary>Tous les joueurs (${status.slots.length})</summary>
       <div class="group-body"><table class="room-table"><tbody>${status.slots.map((s) => html`<tr>

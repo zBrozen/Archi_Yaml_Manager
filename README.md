@@ -143,7 +143,12 @@ base D1), toujours disponible sans laisser de PC allumé.
    générée sur [archipelago.gg/uploads](https://archipelago.gg/uploads) lui-même : seul celui qui envoie la
    partie a accès à la console de la room.
 5. L'hôte colle le lien de la room archipelago.gg sur la page de la room. Tout le monde y voit alors l'adresse
-   du serveur, le tracker et ses propres fichiers (patchs), lus avec l'API publique `room_status` d'archipelago.gg.
+   du serveur, le tracker et ses propres fichiers (patchs), lus avec l'API publique `room_status` d'archipelago.gg
+   et sur la page de la room (lue par le service : les liens de l'API ne marchent pas pour les jeux non officiels).
+6. Pendant la partie, la page de la room montre la progression de chaque joueur (checks, état, dernière
+   activité, signalée en async au-delà de 2 jours ; API publique du tracker d'archipelago.gg), et propose un
+   **client texte** : chat et commandes (`!hint`, `!remaining`…) depuis le navigateur, avec
+   [archipelago.js](https://github.com/ThePhar/archipelago.js) (`site/vendor/archipelago.js`).
 
 Les YAML déposés dans une room sont visibles par leur auteur et par l'hôte. Une room sans activité depuis
 90 jours est supprimée automatiquement.
@@ -266,6 +271,7 @@ npx wrangler dev
 | `site/py/` | Code Python exécuté dans le navigateur (`ap_extract.py` est aussi utilisé par la mise à jour) |
 | `site/js/editors.js` | Champs d'édition de chaque type d'option |
 | `site/js/rooms.js`, `site/js/rooms-api.js` | Pages des rooms et appels au service des rooms |
+| `site/js/room-live.js` | Partie en cours : progression des joueurs et client texte |
 | `site/js/check.js` | Vérification d'un YAML hors de l'éditeur (dépôt dans une room, contrôle par l'hôte) |
 | `site/js/config.js` | Adresse du service des rooms |
 | `worker/` | Service des rooms (Cloudflare Worker, base D1 : `migrations/`) |
