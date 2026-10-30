@@ -141,6 +141,8 @@ export function RoomPage({ index, code, onCreate, onEdit }) {
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
   const [tick, setTick] = useState(0);
+  const [tab, setTab] = useRoomTab(code);
+  const [clientSeen, setClientSeen] = useState(false); // le client texte reste connecté d'un onglet à l'autre
   const refresh = () => setTick((n) => n + 1);
 
   useEffect(() => {
@@ -169,6 +171,8 @@ export function RoomPage({ index, code, onCreate, onEdit }) {
     return () => clearInterval(timer);
   }, []);
 
+  const online = useApStatus(data?.room);
+
   if (error && !data) {
     return html`<main class="home">
       <div class="notice error">${error.message}</div>
@@ -182,20 +186,62 @@ export function RoomPage({ index, code, onCreate, onEdit }) {
   const { room, me, admin, players } = data;
   const mine = me ? players.find((p) => p.id === me.id)?.slots || [] : [];
   const allSlots = players.flatMap((p) => p.slots);
+  const tabs = [
+    ["apercu", "Aperçu"],
+    ["yaml", me ? `Mes YAML (${mine.length})` : "Rejoindre"],
+    ["joueurs", `Joueurs (${players.length})`],
+    ...(room.ap_room_url ? [["partie", "Progression"], ["client", "Client texte"]] : []),
+    ...(admin ? [["hote", "Hôte"]] : []),
+  ];
+  const active = tabs.some(([id]) => id === tab) ? tab : "apercu";
+  const go = (id) => { setTab(id); if (id === "client") setClientSeen(true); window.scrollTo({ top: 0, behavior: "smooth" }); };
+  const yaml = me
+    ? html`<${MySlots} index=${index} room=${room} me=${me} slots=${mine} allSlots=${allSlots} refresh=${refresh} onCreate=${onCreate} onEdit=${onEdit} />`
+    : html`<${JoinForm} room=${room} admin=${admin} refresh=${refresh} />`;
 
   return html`<main class="room">
-    <${RoomHeader} room=${room} players=${players} />
-    ${room.ap_room_url && html`<${PlayPanel} room=${room} mine=${mine} />`}
-    ${me
-      ? html`<${MySlots} index=${index} room=${room} me=${me} slots=${mine} allSlots=${allSlots} refresh=${refresh} onCreate=${onCreate} onEdit=${onEdit} />`
-      : html`<${JoinForm} room=${room} admin=${admin} refresh=${refresh} />`}
-    <${PlayersList} room=${room} players=${players} me=${me} admin=${admin} refresh=${refresh} />
-    ${admin && html`<${HostPanel} room=${room} setData=${setData} data=${data} />`}
+    <${RoomHeader} room=${room} />
+    <nav class="room-tabs" role="tablist" aria-label="Vues de la room">${tabs.map(([id, label]) => html`<button type="button"
+      role="tab" aria-selected=${active === id} class=${active === id ? "active" : ""} onClick=${() => go(id)}>${label}</button>`)}
+    </nav>
+    ${active === "apercu" && html`<${Overview} room=${room} me=${me} admin=${admin} mine=${mine} players=${players}
+      online=${online} join=${!me && yaml} go=${go} />`}
+    ${active === "yaml" && yaml}
+    ${active === "joueurs" && html`<${PlayersList} room=${room} players=${players} me=${me} admin=${admin} refresh=${refresh} />`}
+    ${active === "partie" && html`<${GameView} room=${room} online=${online} mine=${mine} />`}
+    ${room.ap_room_url && (clientSeen || active === "client") && html`<div hidden=${active !== "client"}>
+      <${ClientView} room=${room} online=${online} mine=${mine} /></div>`}
+    ${active === "hote" && html`<${HostPanel} room=${room} setData=${setData} data=${data} />`}
   </main>`;
 }
 
-function RoomHeader({ room, players }) {
-  const slots = players.reduce((n, p) => n + p.slots.length, 0);
+// Onglet affiché, mémorisé par room dans ce navigateur.
+function useRoomTab(code) {
+  const key = `roomTab:${code}`;
+  const [tab, setTab] = useState(() => { try { return localStorage.getItem(key) || "apercu"; } catch { return "apercu"; } });
+  const update = (next) => {
+    setTab(next);
+    try { localStorage.setItem(key, next); } catch { /* stockage indisponible */ }
+  };
+  return [tab, update];
+}
+
+// État de la partie hébergée (adresse, liens de chaque joueur), partagé par les onglets.
+function useApStatus(room) {
+  const [state, setState] = useState({ status: null, error: null });
+  const url = room?.ap_room_url;
+  useEffect(() => {
+    if (!url) { setState({ status: null, error: null }); return; }
+    let alive = true;
+    apRoomStatus(room.code, url)
+      .then((status) => alive && setState({ status, error: null }))
+      .catch((e) => alive && setState({ status: null, error: e.message }));
+    return () => { alive = false; };
+  }, [url]);
+  return state;
+}
+
+function RoomHeader({ room }) {
   const closing = room.locked ? " · dépôts fermés par l'hôte"
     : room.closes_at == null ? ""
     : room.open ? ` · fermeture des dépôts le ${formatWhen(room.closes_at)} (${timeLeft(room.closes_at)})`
@@ -211,7 +257,7 @@ function RoomHeader({ room, players }) {
       <${CopyButton} text=${inviteLink(room.code)} label="Copier le lien d'invitation" />
     </div>
     <p class="hint">
-      ${plural(players.length, "joueur")} · ${slots} YAML · ${room.max_slots} YAML maximum par joueur${closing}
+      ${room.max_slots} YAML maximum par joueur${closing}
     </p>
     ${room.notes && html`<p class="room-notes">${room.notes}</p>`}
   </section>`;
@@ -458,13 +504,11 @@ function HostPanel({ room, setData, data }) {
         : room.closes_at ? `Fermeture automatique le ${formatWhen(room.closes_at)}.` : "Pas de date de fermeture."}</span>
     </div>
     ${save.error && html`<div class="notice error full">${save.error}</div>`}
-
-    <${RoomCheck} room=${room} />
-    <${Generation} room=${room} setData=${setData} data=${data} online=${data.online_generation} />
-    <${HostedRoom} room=${room} setData=${setData} data=${data} />
-
-    <button type="button" class="link danger-link" onClick=${destroy}>Supprimer la room</button>
-  </section>`;
+  </section>
+  <section class="card stack"><${RoomCheck} room=${room} /></section>
+  <section class="card stack"><${Generation} room=${room} setData=${setData} data=${data} online=${data.online_generation} /></section>
+  <section class="card stack"><${HostedRoom} room=${room} setData=${setData} data=${data} /></section>
+  <button type="button" class="link danger-link" onClick=${destroy}>Supprimer la room</button>`;
 }
 
 // Vérification de toute la room : chaque YAML (dans le navigateur de l'hôte) et les règles du type de partie.
@@ -699,67 +743,125 @@ function HostedRoom({ room, setData, data }) {
 
 // --- Partie en ligne -------------------------------------------------------------------
 
-function PlayPanel({ room, mine }) {
-  const [status, setStatus] = useState(null);
-  const [clientOpen, setClientOpen] = useState(false); // client texte chargé à l'ouverture seulement
-  const [error, setError] = useState(null);
-  const [credits, setCredits] = useState([]);
-  useEffect(() => {
-    let alive = true;
-    setError(null);
-    apRoomStatus(room.code, room.ap_room_url).then((s) => alive && setStatus(s)).catch((e) => alive && setError(e.message));
-    loadCredits().then((c) => alive && setCredits(c));
-    return () => { alive = false; };
-  }, [room.ap_room_url]);
+// --- Vues de la room ---------------------------------------------------------------
 
-  const names = new Set(mine.map((s) => s.name.toLowerCase()));
-  const own = status ? status.slots.filter((s) => names.has(s.name.toLowerCase())) : [];
-  const help = (game) => {
-    if (gameEntry(game)?.source === "core") return { href: `${status.origin}/games/${encodeURIComponent(game)}/info/en`, label: "Page du jeu (installation)" };
+// Prochaine étape de l'hôte, d'après l'état de la room.
+function hostStep(room) {
+  const gen = room.generation?.status;
+  if (room.ap_room_url) return "La partie est en ligne : suivez-la dans l'onglet « Progression ».";
+  if (room.open) return "Les dépôts sont ouverts. Fermez-les quand tout le monde a déposé, puis vérifiez la room et générez la partie.";
+  if (gen === "queued" || gen === "running") return "Génération en cours…";
+  if (gen === "done") return "Partie générée : envoyez-la sur archipelago.gg, puis collez ici le lien de la room.";
+  return "Dépôts fermés : vérifiez la room, puis générez la partie.";
+}
+
+function Overview({ room, me, admin, mine, players, online, join, go }) {
+  const slots = players.reduce((n, p) => n + p.slots.length, 0);
+  const empty = players.filter((p) => !p.slots.length).length;
+  const games = [...new Set(players.flatMap((p) => p.slots.map((s) => s.game)))].sort();
+  return html`
+    ${room.ap_room_url && html`<${OnlineSummary} room=${room} online=${online} mine=${mine} go=${go} />`}
+    ${join}
+    ${me && html`<section class="card stack">
+      <div class="row full"><h2 class="grow">Vos YAML</h2>
+        <button type="button" class="ghost small" onClick=${() => go("yaml")}>${room.open ? "Gérer mes YAML" : "Voir mes YAML"}</button></div>
+      ${mine.length
+        ? html`<ul class="summary-list full">${mine.map((s) => html`<li><strong>${s.name}</strong> <span class="hint">${s.game}</span> <${GameBadges} game=${s.game} /></li>`)}</ul>`
+        : html`<p class="hint">Aucun YAML déposé${room.open ? " pour l'instant." : "."}</p>`}
+    </section>`}
+    <section class="card stack">
+      <div class="row full"><h2 class="grow">Joueurs</h2>
+        <button type="button" class="ghost small" onClick=${() => go("joueurs")}>Voir le détail</button></div>
+      <p>${plural(players.length, "joueur")} · ${slots} YAML${empty ? html` · <span class="warn-text">${empty} sans YAML</span>` : ""}</p>
+      ${games.length > 0 && html`<div class="chips-row">${games.map((g) => html`<span class="chip">${g}</span>`)}</div>`}
+    </section>
+    ${admin && html`<section class="card stack">
+      <div class="row full"><h2 class="grow">Hôte</h2>
+        <button type="button" class="small" onClick=${() => go("hote")}>Espace de l'hôte</button></div>
+      <p>${hostStep(room)}</p>
+    </section>`}`;
+}
+
+// Liens d'aide pour installer un jeu : page d'archipelago.gg (officiel) ou dépôt du mod (non officiel).
+function useGameHelp(origin) {
+  const [credits, setCredits] = useState([]);
+  useEffect(() => { loadCredits().then(setCredits); }, []);
+  return (game) => {
+    if (gameEntry(game)?.source === "core") return { href: `${origin}/games/${encodeURIComponent(game)}/info/en`, label: "Page du jeu (installation)" };
     const source = credits.find((c) => c.game === game)?.source;
     return source ? { href: source, label: "Mod et client du jeu" } : null;
   };
+}
+
+function OnlineSummary({ room, online, mine, go }) {
+  const { status, error } = online;
+  const help = useGameHelp(status?.origin || "https://archipelago.gg");
+  const names = new Set(mine.map((s) => s.name.toLowerCase()));
+  const own = status ? status.slots.filter((s) => names.has(s.name.toLowerCase())) : [];
   const address = status?.port ? `${status.host}:${status.port}` : null;
 
   return html`<section class="card stack play">
     <h2>La partie est en ligne</h2>
+    ${address
+      ? html`<div class="server-address full"><span class="hint">Adresse du serveur</span>
+          <strong class="room-code">${address}</strong><${CopyButton} text=${address} /></div>`
+      : status && html`<p class="hint">Le serveur est en veille : ouvrez la page de la room pour le réveiller, l'adresse s'affichera ensuite.</p>`}
     <div class="row">
       <a class="button" href=${room.ap_room_url} target="_blank" rel="noopener">Page de la room</a>
       ${status?.tracker && html`<a class="button ghost" href=${status.tracker} target="_blank" rel="noopener">Tracker</a>`}
+      ${status && html`<button type="button" class="ghost" onClick=${() => go("client")}>Client texte</button>`}
     </div>
-    ${address
-      ? html`<div class="row"><span>Adresse du serveur : <strong class="room-code">${address}</strong></span><${CopyButton} text=${address} /></div>`
-      : status && html`<p class="hint">Le serveur est en veille : ouvrez la page de la room pour le réveiller, l'adresse s'affichera ensuite.</p>`}
     ${error && html`<div class="notice warn full">${error} Les liens ci-dessus restent valables.</div>`}
     ${own.length > 0 && html`<div class="stack full">
       <h3>Vos fichiers</h3>
       <ul class="slot-list full">${own.map((s) => {
         const link = help(s.game);
-        return html`<li>
-          <div class="grow"><strong>${s.name}</strong> <span class="hint">${s.game}</span></div>
-          ${link && html`<a href=${link.href} target="_blank" rel="noopener" class="small">${link.label}</a>`}
-          ${s.tracker && html`<a href=${s.tracker} target="_blank" rel="noopener" class="small">Mon tracker</a>`}
-          ${s.connect && html`<a class="button ghost small" href=${s.connect} title="Ouvre le client Archipelago, déjà rempli">Ouvrir le client</a>`}
-          ${s.download
-            ? html`<a class="button small" href=${s.download}>Télécharger le patch</a>`
-            : s.onRoomPage
-              ? html`<a class="button small" href=${room.ap_room_url} target="_blank" rel="noopener">Fichier sur la page de la room</a>`
-              : html`<span class="hint small">Pas de fichier : connectez-vous avec le client du jeu.</span>`}
+        return html`<li class="slot-row">
+          <div class="slot-main">
+            <div><strong>${s.name}</strong> <span class="hint">${s.game}</span></div>
+            <div class="slot-links">
+              ${link && html`<a href=${link.href} target="_blank" rel="noopener">${link.label}</a>`}
+              ${s.tracker && html`<a href=${s.tracker} target="_blank" rel="noopener">Mon tracker</a>`}
+            </div>
+          </div>
+          <div class="slot-actions">
+            ${s.connect && html`<a class="button ghost small" href=${s.connect} title="Ouvre le client Archipelago, déjà rempli">Ouvrir le client</a>`}
+            ${s.download
+              ? html`<a class="button small" href=${s.download}>Télécharger le patch</a>`
+              : s.onRoomPage
+                ? html`<a class="button small" href=${room.ap_room_url} target="_blank" rel="noopener">Fichier sur la page de la room</a>`
+                : html`<span class="hint">Pas de fichier : connectez-vous avec le client du jeu.</span>`}
+          </div>
         </li>`;
       })}</ul>
     </div>`}
-    ${status && html`<${ProgressPanel} status=${status} mode=${room.mode} mine=${mine} />`}
-    ${status && html`<details class="group full" onToggle=${(e) => setClientOpen(e.currentTarget.open)}>
-      <summary>Client texte (chat et commandes)</summary>
-      <div class="group-body">${clientOpen && html`<${TextClient} room=${room} status=${status} mine=${mine} />`}</div>
-    </details>`}
-    ${status && html`<details class="group full">
-      <summary>Tous les joueurs (${status.slots.length})</summary>
-      <div class="group-body"><table class="room-table"><tbody>${status.slots.map((s) => html`<tr>
-        <td>${s.slot}</td><td><strong>${s.name}</strong></td><td>${s.game}</td>
+    ${status && html`<${ProgressPanel} status=${status} mode=${room.mode} mine=${mine} compact onDetails=${() => go("partie")} />`}
+  </section>`;
+}
+
+function GameView({ room, online, mine }) {
+  const { status, error } = online;
+  if (!status) return html`<section class="card"><p class="hint">${error || "Chargement de la partie…"}</p></section>`;
+  return html`<section class="card stack">
+    <${ProgressPanel} status=${status} mode=${room.mode} mine=${mine} />
+  </section>
+  <section class="card stack">
+    <h2>Fichiers de tous les joueurs</h2>
+    <div class="table-wrap full"><table class="room-table">
+      <thead><tr><th>#</th><th>Joueur</th><th>Jeu</th><th></th><th></th></tr></thead>
+      <tbody>${status.slots.map((s) => html`<tr>
+        <td class="hint">${s.slot}</td><td><strong>${s.name}</strong></td><td>${s.game}</td>
         <td>${s.tracker && html`<a href=${s.tracker} target="_blank" rel="noopener">Tracker</a>`}</td>
         <td>${s.download && html`<a href=${s.download}>Fichier</a>`}</td>
-      </tr>`)}</tbody></table></div>
-    </details>`}
+      </tr>`)}</tbody>
+    </table></div>
+  </section>`;
+}
+
+function ClientView({ room, online, mine }) {
+  const { status, error } = online;
+  return html`<section class="card stack">
+    <h2>Client texte</h2>
+    ${status ? html`<${TextClient} room=${room} status=${status} mine=${mine} />` : html`<p class="hint">${error || "Chargement de la partie…"}</p>`}
   </section>`;
 }

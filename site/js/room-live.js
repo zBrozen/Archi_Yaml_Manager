@@ -26,7 +26,8 @@ const bySlot = (list, key) => new Map((list || []).filter((e) => e.team === 0).m
 
 // --- Progression -------------------------------------------------------------------
 
-export function ProgressPanel({ status, mode, mine }) {
+// `compact` : total et lignes de vos joueurs seulement, avec un lien vers la vue détaillée (`onDetails`).
+export function ProgressPanel({ status, mode, mine, compact = false, onDetails }) {
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
   const trackerId = status.trackerId;
@@ -77,6 +78,7 @@ export function ProgressPanel({ status, mode, mine }) {
   const all = rows.reduce((n, r) => n + r.total, 0);
   const finished = rows.filter((r) => r.finished).length;
   const pct = (a, b) => (b ? Math.floor((a / b) * 100) : 0);
+  const shown = compact ? rows.filter((r) => r.mine) : rows;
 
   return html`<div class="stack full">
     <div class="row full">
@@ -84,9 +86,9 @@ export function ProgressPanel({ status, mode, mine }) {
       <span class="hint">${sum} / ${all} checks (${pct(sum, all)} %) · ${finished} / ${rows.length} terminé${finished > 1 ? "s" : ""}</span>
     </div>
     <div class="progress full" title=${`${pct(sum, all)} %`}><span style=${`width: ${pct(sum, all)}%`}></span></div>
-    <div class="table-wrap full"><table class="room-table progress-table">
+    ${shown.length > 0 && html`<div class="table-wrap full"><table class="room-table progress-table">
       <thead><tr><th>Joueur</th><th>Jeu</th><th>Checks</th><th>État</th><th>Dernière activité</th></tr></thead>
-      <tbody>${rows.map((r) => {
+      <tbody>${shown.map((r) => {
         const idle = mode === "async" && !r.finished && r.last && Date.now() - r.last > IDLE_WARNING;
         return html`<tr class=${r.mine ? "mine" : ""}>
           <td><strong>${r.name}</strong>${r.tracker && html` <a href=${r.tracker} target="_blank" rel="noopener" class="small">tracker</a>`}</td>
@@ -99,7 +101,8 @@ export function ProgressPanel({ status, mode, mine }) {
           <td>${r.last ? html`<span class=${idle ? "badge warn" : "hint"}>${ago(r.last)}</span>` : html`<span class="hint">jamais</span>`}</td>
         </tr>`;
       })}</tbody>
-    </table></div>
+    </table></div>`}
+    ${compact && onDetails && html`<button type="button" class="link" onClick=${onDetails}>Voir la progression de tous les joueurs →</button>`}
     ${error && html`<p class="hint">${error} Dernières données affichées.</p>`}
   </div>`;
 }
@@ -115,19 +118,32 @@ const QUICK = [
   { text: "!help", label: "!help", title: "Liste des commandes" },
 ];
 
+// Couleurs du client texte d'Archipelago : vous en magenta, les autres joueurs en jaune, objets selon leur
+// importance (progression, utile, piège, sans importance), lieux en vert, entrées en bleu. Les couleurs et
+// mises en forme envoyées par le serveur (hints trouvés, erreurs…) sont reprises telles quelles.
+const ITEM_KINDS = {
+  progression: { cls: "ap-progression", title: "Objet de progression" },
+  trap: { cls: "ap-trap", title: "Piège" },
+  useful: { cls: "ap-useful", title: "Objet utile" },
+  filler: { cls: "ap-filler", title: "Objet sans importance" },
+};
+const itemKind = (item) => ITEM_KINDS[item.progression ? "progression" : item.trap ? "trap" : item.useful ? "useful" : "filler"];
+
 function MessagePart({ node, self }) {
-  if (node.type === "player") {
-    return html`<span class=${`msg-player ${node.text === self ? "self" : ""}`}>${node.text}</span>`;
+  switch (node.type) {
+    case "player":
+      return html`<span class=${node.player?.name === self || node.text === self ? "ap-self" : "ap-player"}>${node.text}</span>`;
+    case "item":
+      return html`<span class=${itemKind(node.item).cls} title=${itemKind(node.item).title}>${node.text}</span>`;
+    case "location":
+      return html`<span class="ap-location">${node.text}</span>`;
+    case "entrance":
+      return html`<span class="ap-entrance">${node.text}</span>`;
+    case "color":
+      return html`<span class=${`ap-${String(node.color).replace(/_/g, "-")}`}>${node.text}</span>`;
+    default:
+      return node.text;
   }
-  if (node.type === "item") {
-    const item = node.item;
-    const cls = item.progression ? "progression" : item.useful ? "useful" : item.trap ? "trap" : "filler";
-    return html`<span class=${`msg-item ${cls}`}>${node.text}</span>`;
-  }
-  if (node.type === "location") return html`<span class="msg-location">${node.text}</span>`;
-  if (node.type === "color" && /red/.test(node.color)) return html`<span class="error">${node.text}</span>`;
-  if (node.type === "color" && /green/.test(node.color)) return html`<span class="msg-ok">${node.text}</span>`;
-  return node.text;
 }
 
 export function TextClient({ room, status, mine }) {
