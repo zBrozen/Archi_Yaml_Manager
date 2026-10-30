@@ -1141,7 +1141,7 @@ function OnlineSummary({ room, online, tracker, mine, go }) {
         </li>`;
       })}</ul>
     </div>`}
-    ${status && html`<${ProgressPanel} status=${status} tracker=${tracker} mode=${room.mode} mine=${mine} compact onDetails=${() => go("partie")} />`}
+    ${status && html`<${ProgressPanel} status=${status} tracker=${tracker} mode=${room.mode} mine=${mine} code=${room.code} compact onDetails=${() => go("partie")} />`}
   </section>`;
 }
 
@@ -1157,7 +1157,7 @@ function GameView({ room, online, tracker, mine }) {
     itemsCard.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
   return html`<section class="card stack">
-    <${ProgressPanel} status=${status} tracker=${tracker} mode=${room.mode} mine=${mine} onItems=${showItems} />
+    <${ProgressPanel} status=${status} tracker=${tracker} mode=${room.mode} mine=${mine} code=${room.code} onItems=${showItems} />
   </section>
   ${tracker.trackerId && html`<section class="card stack items-card" ref=${itemsCard}>
     <${ItemsPanel} status=${status} tracker=${tracker} mine=${mine} selected=${selected} onSelected=${setItemSlots} />

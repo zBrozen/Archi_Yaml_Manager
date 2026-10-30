@@ -40,6 +40,12 @@
   dans la liste à la réouverture par l'hôte.
   Wishlists (`wishlist.js`, table `wishlists`, par nom de joueur dans la partie) : objets reçus d'après le tracker
   d'archipelago.gg, noms lus dans les datapackages ; le tracker est lu une fois par `RoomPage` pour tous les onglets.
+- Trackers (`#/tracker`, section « Trackers » du README) : packs PopTracker relevés par `tools/fetch_trackers.py`
+  (`site/data/trackers.json`, page HTML du tableur car l'export xlsx perd les liens multiples d'une cellule),
+  téléchargés par le relais `/api/packs` du Worker. `tracker-engine.js` reproduit le format des packs d'après la
+  documentation de PopTracker, sans reprendre son code (GPL-3.0). Lua (wasmoon) n'a accès à aucun objet JS :
+  `enableProxy: false`, une seule passerelle `__js(op, …)` qui n'échange que des valeurs simples, l'interface
+  PopTracker écrite en Lua (`tracker-lua.js`). Ne jamais exposer un objet JS à Lua (remontée jusqu'à `Function`).
 - Lisibilité, y compris en stream : le site (pages des rooms surtout) doit rester lisible quand il est filmé
   ou intégré comme overlay dans un stream (source navigateur OBS) : textes assez grands et aérés, contrastes
   élevés en clair comme en sombre (pas de noir pur sous du blanc pur), information jamais portée par la

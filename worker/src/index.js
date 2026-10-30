@@ -1066,10 +1066,30 @@ async function saveWishlist(request, env, room, slot) {
   return json({ slot: name, items });
 }
 
+// --- Packs PopTracker ------------------------------------------------------------
+
+// Relais des archives des packs (releases GitHub, voir tools/fetch_trackers.py) : GitHub ne permet pas
+// au navigateur de les lire depuis une autre adresse. Rien n'est stocké : la réponse reste dans le
+// cache de Cloudflare une journée.
+const PACK_URL = /^https:\/\/github\.com\/[\w.-]+\/[\w.-]+\/releases\/download\/[^?#]+\.zip$/i;
+const PACK_MAX_SIZE = 64 * 1024 * 1024;
+
+async function relayPack(url) {
+  const target = url.searchParams.get("url") || "";
+  if (!PACK_URL.test(target)) throw new HttpError(400, "Adresse de pack non prise en charge.");
+  const response = await fetch(target, { cf: { cacheTtl: 86400, cacheEverything: true } });
+  if (!response.ok) throw new HttpError(502, `Pack indisponible (${response.status}).`);
+  if (Number(response.headers.get("Content-Length") || 0) > PACK_MAX_SIZE) throw new HttpError(413, "Pack trop volumineux.");
+  return new Response(response.body, {
+    headers: { "Content-Type": "application/zip", "Cache-Control": "public, max-age=86400", ...CORS },
+  });
+}
+
 async function route(request, env) {
   const url = new URL(request.url);
   const parts = url.pathname.split("/").filter(Boolean);
   const method = request.method;
+  if (parts[0] === "api" && parts[1] === "packs" && parts.length === 2 && method === "GET") return relayPack(url);
   if (parts[0] !== "api" || parts[1] !== "rooms") throw new HttpError(404, "Route inconnue.");
   if (parts.length === 2 && method === "POST") return createRoom(request, env);
   if (parts.length < 3) throw new HttpError(404, "Route inconnue.");

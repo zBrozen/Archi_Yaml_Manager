@@ -43,13 +43,21 @@ jobs:
         run: |
           python tools/sync_sheet.py --config apworlds.json || echo "::warning::Tableur des jeux illisible, liste inchangée"
 
+      # Packs PopTracker des jeux (liens du tableur, dernière release) pour les trackers du site.
+      - name: Relever les packs PopTracker
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python tools/fetch_trackers.py --out site/data/trackers.json || echo "::warning::Packs PopTracker non relevés, liste inchangée"
+
       - name: Enregistrer la liste
         id: save
         run: |
-          if ! git diff --quiet apworlds.json; then
+          git add apworlds.json site/data/trackers.json 2>/dev/null || git add apworlds.json
+          if ! git diff --cached --quiet; then
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git commit -m "Jeux non officiels : liste du tableur" apworlds.json
+            git commit -m "Jeux non officiels : liste du tableur"
             git push
           fi
           echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"

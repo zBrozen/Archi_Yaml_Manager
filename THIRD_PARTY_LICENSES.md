@@ -13,6 +13,7 @@ Le code propre au projet est sous licence MIT (voir [`LICENSE`](LICENSE)). Il r�
 | [Preact](https://github.com/preactjs/preact) + [htm](https://github.com/developit/htm) | `site/vendor/preact-htm.js` | MIT |
 | [yaml](https://github.com/eemeli/yaml) | `site/vendor/yaml.js` | ISC |
 | [archipelago.js](https://github.com/ThePhar/archipelago.js) | `site/vendor/archipelago.js` (client texte des rooms) | MIT |
+| [wasmoon](https://github.com/ceifa/wasmoon) + [Lua](https://www.lua.org) | `site/vendor/wasmoon.js`, `site/vendor/wasmoon.wasm` (packs PopTracker) | MIT |
 | [Pyodide](https://github.com/pyodide/pyodide) | chargé depuis jsDelivr par `site/js/apworld-worker.js` | MPL-2.0 |
 | [schema](https://github.com/keleshev/schema) | `site/data/ap-core.zip` | MIT |
 | [typing_extensions](https://github.com/python/typing_extensions) | `site/data/ap-core.zip` | PSF-2.0 |
@@ -33,6 +34,15 @@ Les auteurs, dépôts et licences de chaque jeu sont relevés automatiquement da
 (lien « Jeux non officiels : auteurs et licences » en pied de page).
 
 Un apworld déposé par un joueur dans le site reste dans son navigateur : il n'est ni envoyé ni redistribué.
+
+## Packs PopTracker
+
+Les trackers du site lisent les packs [PopTracker](https://github.com/black-sliver/PopTracker) de leurs
+auteurs, relevés dans le même tableur par [`tools/fetch_trackers.py`](tools/fetch_trackers.py)
+([`site/data/trackers.json`](site/data/trackers.json)). Ni le dépôt ni le site ne les redistribuent :
+le navigateur télécharge la release de l'auteur, par un relais du service des rooms qui ne la stocke pas.
+Le site n'utilise pas le code de PopTracker (GPL-3.0) : il lit le format des packs décrit dans sa
+documentation.
 
 ## Licence d'Archipelago
 
