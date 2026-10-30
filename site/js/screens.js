@@ -9,15 +9,35 @@
 // serveur de la partie sur archipelago.gg comme client texte du premier joueur, comme le client texte de la room.
 import { html, useState, useEffect, useRef } from "../vendor/preact-htm.js";
 import { Client } from "../vendor/archipelago.js";
-import { CopyButton, plural, useAction } from "./ui.js";
+import { CopyButton, plural, useAction, useSetting } from "./ui.js";
 import { MessagePart } from "./room-live.js";
 import { api, apRoomStatus, overlayLink, saveAccess, savedAccess, screensSocketUrl } from "./rooms-api.js";
 
 // Serveurs STUN publics : suffisent pour la plupart des connexions. Sans relais TURN, certains réseaux
 // (NAT strict, 4G, réseaux d'entreprise) ne passent pas : l'overlay l'indique sur l'écran du joueur.
 const ICE_SERVERS = [{ urls: ["stun:stun.cloudflare.com:3478", "stun:stun.l.google.com:19302"] }];
-const VIDEO = { width: { max: 1280 }, height: { max: 720 }, frameRate: { ideal: 30, max: 30 } };
-const MAX_BITRATE = 2_500_000; // par overlay, en bit/s
+
+// Qualité du partage, choisie par chaque joueur. `bitrate` : débit maximum envoyé à chaque overlay, en bit/s.
+// La connexion du joueur (envoi), son processeur (encodage) et la connexion du streamer (réception de tous les
+// écrans) limitent ce qui passe réellement : le navigateur baisse la qualité de lui-même s'il le faut.
+const QUALITIES = {
+  legere: { label: "Légère", detail: "720p, 30 images/s, 1,5 Mb/s", width: 1280, height: 720, fps: 30, bitrate: 1_500_000 },
+  normale: { label: "Normale", detail: "720p, 30 images/s, 3 Mb/s", width: 1280, height: 720, fps: 30, bitrate: 3_000_000 },
+  haute: { label: "Haute", detail: "1080p, 30 images/s, 6 Mb/s", width: 1920, height: 1080, fps: 30, bitrate: 6_000_000 },
+  max: { label: "Maximale", detail: "1080p, 60 images/s, 12 Mb/s", width: 1920, height: 1080, fps: 60, bitrate: 12_000_000 },
+};
+// Ce que le navigateur sacrifie quand le débit manque. `hint` : nature de l'image, pour l'encodeur.
+const PRIORITIES = {
+  equilibre: { label: "Équilibre", detail: "baisse un peu la netteté et la fluidité", hint: "motion", degradation: "balanced" },
+  nettete: { label: "Netteté", detail: "garde la définition, quitte à saccader (jeux lents, pixel art)", hint: "detail", degradation: "maintain-resolution" },
+  fluidite: { label: "Fluidité", detail: "garde les images par seconde, quitte à flouter (jeux rapides)", hint: "motion", degradation: "maintain-framerate" },
+};
+const DEFAULT_QUALITY = "normale";
+const DEFAULT_PRIORITY = "equilibre";
+const qualityOf = (name) => QUALITIES[name] || QUALITIES[DEFAULT_QUALITY];
+const priorityOf = (name) => PRIORITIES[name] || PRIORITIES[DEFAULT_PRIORITY];
+const captureConstraints = (q) => ({ width: { max: q.width }, height: { max: q.height }, frameRate: { ideal: q.fps, max: q.fps } });
+
 const MAX_VIEWERS = 3; // overlays servis par un joueur (le service en refuse un quatrième)
 const DEFAULT_SHOWN = 4;
 const MAX_SHOWN = 6; // au-delà, les écrans deviennent trop petits pour être suivis sur Twitch
@@ -92,8 +112,10 @@ function serial() {
 // --- Joueur : partage de la fenêtre du jeu ---------------------------------------------
 
 class Broadcast {
-  constructor(code, token, stream, onChange) {
+  constructor(code, token, stream, quality, priority, onChange) {
     this.stream = stream;
+    this.quality = quality;
+    this.priority = priority;
     this.peers = new Map(); // overlay → RTCPeerConnection
     this.state = "connecting";
     this.message = null;
@@ -135,12 +157,63 @@ class Broadcast {
       if (pc.connectionState === "failed") this.drop(to);
       this.changed();
     };
-    for (const track of this.stream.getVideoTracks()) {
-      pc.addTransceiver(track, { direction: "sendonly", streams: [this.stream], sendEncodings: [{ maxBitrate: MAX_BITRATE, maxFramerate: 30 }] });
-    }
+    const senders = this.stream.getVideoTracks().map((track) => pc.addTransceiver(track, {
+      direction: "sendonly",
+      streams: [this.stream],
+      sendEncodings: [{ maxBitrate: this.quality.bitrate, maxFramerate: this.quality.fps }],
+    }).sender);
     const offer = await pc.createOffer();
     await pc.setLocalDescription(offer);
+    await Promise.all(senders.map((sender) => this.tune(sender)));
     this.signal.send({ type: "signal", to, data: { type: "offer", sdp: offer.sdp } });
+  }
+
+  // Débit, images par seconde et priorité d'un envoi. Le choix de priorité n'est pas connu de tous les
+  // navigateurs : sans lui, le reste s'applique quand même.
+  async tune(sender) {
+    const apply = async (withPriority) => {
+      const params = sender.getParameters();
+      if (!params.encodings?.length) params.encodings = [{}];
+      for (const encoding of params.encodings) Object.assign(encoding, { maxBitrate: this.quality.bitrate, maxFramerate: this.quality.fps });
+      if (withPriority) params.degradationPreference = this.priority.degradation;
+      await sender.setParameters(params);
+    };
+    try { await apply(true); } catch {
+      try { await apply(false); } catch (e) { console.warn("écrans :", e); }
+    }
+  }
+
+  // Nouvelle qualité, appliquée tout de suite à la capture et à chaque overlay, sans couper le partage.
+  async configure(quality, priority) {
+    this.quality = quality;
+    this.priority = priority;
+    const [track] = this.stream.getVideoTracks();
+    if (track) {
+      track.contentHint = priority.hint;
+      try { await track.applyConstraints(captureConstraints(quality)); } catch (e) { console.warn("écrans :", e); }
+    }
+    const senders = [...this.peers.values()].flatMap((pc) => pc.getSenders().filter((s) => s.track?.kind === "video"));
+    await Promise.all(senders.map((sender) => this.tune(sender)));
+  }
+
+  // Ce qui part réellement vers le premier overlay connecté, et ce qui le limite (connexion, processeur).
+  async sending(previous) {
+    const pc = [...this.peers.values()].find((p) => p.connectionState === "connected");
+    if (!pc) return null;
+    for (const s of (await pc.getStats()).values()) {
+      if (s.type !== "outbound-rtp" || s.kind !== "video") continue;
+      const elapsed = previous ? s.timestamp - previous.at : 0;
+      return {
+        width: s.frameWidth,
+        height: s.frameHeight,
+        fps: s.framesPerSecond,
+        bytes: s.bytesSent,
+        at: s.timestamp,
+        bitrate: elapsed > 0 && s.bytesSent >= previous.bytes ? ((s.bytesSent - previous.bytes) * 8000) / elapsed : null,
+        limit: s.qualityLimitationReason,
+      };
+    }
+    return null;
   }
 
   // Autre fenêtre : la nouvelle image remplace l'ancienne sans refaire les connexions.
@@ -178,24 +251,43 @@ class Broadcast {
   }
 }
 
-async function captureWindow() {
+async function captureWindow(quality, priority) {
   const stream = await navigator.mediaDevices.getDisplayMedia({
-    video: { ...VIDEO, displaySurface: "window" }, // propose d'abord les fenêtres, pas l'écran entier
+    video: { ...captureConstraints(quality), displaySurface: "window" }, // propose d'abord les fenêtres, pas l'écran entier
     audio: false,
     selfBrowserSurface: "exclude",
   });
   const [track] = stream.getVideoTracks();
-  if (track) track.contentHint = "motion"; // un jeu : garder la fluidité plutôt que la netteté du texte
+  if (track) track.contentHint = priority.hint;
   return stream;
+}
+
+const LIMITS = {
+  bandwidth: "Image réduite par votre connexion (envoi trop lent) : c'est normal les premières secondes ; si ça dure, choisissez une qualité plus basse.",
+  cpu: "Image réduite par votre ordinateur (encodage trop lourd) : choisissez une qualité plus basse, ou moins d'images par seconde.",
+};
+const decimal = (n) => n.toLocaleString("fr-FR", { maximumFractionDigits: 1 });
+
+function SentInfo({ sent }) {
+  if (!sent?.width) return null;
+  return html`<div class="stack full">
+    <p class="hint" role="status">Envoyé à l'overlay : ${sent.width} × ${sent.height}${sent.fps ? `, ${Math.round(sent.fps)} images/s` : ""}${sent.bitrate != null ? `, ${decimal(sent.bitrate / 1e6)} Mb/s` : ""}.</p>
+    ${LIMITS[sent.limit] && html`<div class="notice warn full">${LIMITS[sent.limit]}</div>`}
+  </div>`;
 }
 
 function ShareScreen({ room }) {
   const [view, setView] = useState(null); // { state, message, viewers } pendant le partage
   const [error, setError] = useState(null);
   const [busy, setBusy] = useState(false);
+  const [qualityName, setQualityName] = useSetting("screenQuality", DEFAULT_QUALITY);
+  const [priorityName, setPriorityName] = useSetting("screenPriority", DEFAULT_PRIORITY);
+  const [sent, setSent] = useState(null);
   const live = useRef(null);
   const preview = useRef(null);
   const supported = !!navigator.mediaDevices?.getDisplayMedia;
+  const quality = qualityOf(qualityName);
+  const priority = priorityOf(priorityName);
 
   const stop = () => {
     live.current?.stop();
@@ -208,6 +300,23 @@ function ShareScreen({ room }) {
     if (preview.current && preview.current.srcObject !== stream) preview.current.srcObject = stream;
   });
 
+  // Mesure de ce qui part, tant qu'un overlay affiche le jeu.
+  const watched = !!view?.viewers;
+  useEffect(() => {
+    if (!watched) { setSent(null); return undefined; }
+    let alive = true;
+    let previous = null;
+    const read = async () => {
+      const next = await live.current?.sending(previous).catch(() => null);
+      if (!alive) return;
+      previous = next;
+      setSent(next);
+    };
+    read();
+    const timer = setInterval(read, 2000);
+    return () => { alive = false; clearInterval(timer); };
+  }, [watched]);
+
   const update = (broadcast) => {
     if (broadcast !== live.current) return;
     if (broadcast.state === "refused") {
@@ -219,16 +328,22 @@ function ShareScreen({ room }) {
     setView({ state: broadcast.state, viewers: broadcast.viewers });
   };
 
+  const choose = (nextQuality, nextPriority) => {
+    setQualityName(nextQuality);
+    setPriorityName(nextPriority);
+    live.current?.configure(qualityOf(nextQuality), priorityOf(nextPriority));
+  };
+
   const share = async () => {
     setError(null);
     setBusy(true);
     try {
-      const stream = await captureWindow();
+      const stream = await captureWindow(quality, priority);
       // Partage arrêté depuis le bandeau du navigateur.
       stream.getVideoTracks()[0]?.addEventListener("ended", () => { if (live.current?.stream === stream) stop(); });
       if (live.current) live.current.replace(stream);
       else {
-        live.current = new Broadcast(room.code, savedAccess(room.code).player, stream, update);
+        live.current = new Broadcast(room.code, savedAccess(room.code).player, stream, quality, priority, update);
         update(live.current);
       }
     } catch (e) {
@@ -254,20 +369,34 @@ function ShareScreen({ room }) {
       l'image va directement à l'overlay, sans son, et n'est pas enregistrée par le site.</p>
     ${!supported && html`<div class="notice warn full">Ce navigateur ne permet pas de partager une fenêtre (c'est le cas sur téléphone).
       Ouvrez la room dans Chrome, Edge ou Firefox sur l'ordinateur où vous jouez.</div>`}
-    ${supported && html`<div class="row">
+    ${supported && html`<div class="fields full">
+      <label><span>Qualité de l'image</span>
+        <select value=${qualityName in QUALITIES ? qualityName : DEFAULT_QUALITY} onChange=${(e) => choose(e.target.value, priorityName)}>
+          ${Object.entries(QUALITIES).map(([name, q]) => html`<option value=${name}>${q.label} (${q.detail})</option>`)}
+        </select></label>
+      <label><span>Si le débit manque, garder</span>
+        <select value=${priorityName in PRIORITIES ? priorityName : DEFAULT_PRIORITY} onChange=${(e) => choose(qualityName, e.target.value)}>
+          ${Object.entries(PRIORITIES).map(([name, p]) => html`<option value=${name}>${p.label}</option>`)}
+        </select>
+        <span class="hint">${priority.detail}</span></label>
+    </div>
+    <div class="row">
       ${view
         ? html`<button type="button" class="ghost" disabled=${busy} onClick=${share}>Changer de fenêtre</button>
           <button type="button" class="ghost" onClick=${stop}>Arrêter le partage</button>`
         : html`<button type="button" disabled=${busy} onClick=${share}>${busy ? "Choix de la fenêtre…" : "Partager la fenêtre de mon jeu"}</button>`}
     </div>`}
     ${status && html`<p role="status">${status}</p>`}
+    <${SentInfo} sent=${sent} />
     ${view && html`<video class="screen-preview" ref=${preview} autoplay muted playsinline aria-label="Aperçu de votre partage"></video>`}
     ${error && html`<div class="notice error full">${error}</div>`}
     <ul class="hint tips">
       <li>Choisissez une <strong>fenêtre</strong> plutôt que l'écran entier : rien d'autre que le jeu ne sera visible.</li>
       <li>Écran noir dans l'aperçu ? Passez le jeu en mode fenêtré, ou en plein écran fenêtré (sans bordure).</li>
-      <li>Gardez cette page ouverte pendant la partie (les autres onglets de la room ne l'arrêtent pas).
-        Le partage envoie environ 2,5 Mb/s par overlay qui l'affiche.</li>
+      <li>La qualité se change pendant le partage. Chaque overlay qui affiche votre jeu reçoit son propre envoi :
+        le débit choisi compte une fois par overlay. Le 1080p ne se voit que si l'overlay affiche peu d'écrans
+        (avec 4 écrans, chacun fait environ 960 × 540 dans un stream en 1080p).</li>
+      <li>Gardez cette page ouverte pendant la partie (les autres onglets de la room ne l'arrêtent pas).</li>
     </ul>
   </section>`;
 }

@@ -176,9 +176,16 @@ Les YAML déposés dans une room sont visibles par leur auteur et par l'hôte. U
 Onglet « Écrans » de la room :
 
 - **Joueurs** : « Partager la fenêtre de mon jeu » ouvre le choix de fenêtre du navigateur (Chrome, Edge ou
-  Firefox sur ordinateur, rien à installer). L'image part directement vers l'overlay, sans son, en 720p
-  (environ 2,5 Mb/s d'envoi par overlay), et n'est enregistrée nulle part. Un jeu en plein écran exclusif
-  peut donner un écran noir : le passer en fenêtré ou en plein écran fenêtré.
+  Firefox sur ordinateur, rien à installer). L'image part directement vers l'overlay, sans son, et n'est
+  enregistrée nulle part. Un jeu en plein écran exclusif peut donner un écran noir : le passer en fenêtré ou en
+  plein écran fenêtré.
+
+  Chaque joueur règle sa **qualité**, y compris pendant le partage : légère (720p, 30 images/s, 1,5 Mb/s),
+  normale (720p, 3 Mb/s, par défaut), haute (1080p, 6 Mb/s) ou maximale (1080p, 60 images/s, 12 Mb/s), et ce
+  qu'il faut garder si le débit manque (netteté, fluidité ou un équilibre des deux). Le débit est envoyé à
+  chaque overlay qui affiche le jeu, et le streamer reçoit celui de tous les écrans affichés. La page montre ce
+  qui part réellement (définition, images par seconde, débit) et prévient quand la connexion ou le processeur
+  du joueur obligent le navigateur à réduire l'image. Le 1080p ne sert que si l'overlay affiche peu d'écrans.
 - **Hôte** : « Créer le lien de l'overlay » donne une adresse secrète (`#/overlay/CODE/CLÉ`) à mettre dans OBS
   en source **Navigateur** (1920 × 1080, fond transparent). Les écrans partagés s'y placent seuls en grille,
   aussi grands que possible, et les **messages de la partie** (objets envoyés, objectifs atteints, release et
