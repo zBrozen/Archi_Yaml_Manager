@@ -227,8 +227,8 @@ function JoinForm({ room, admin, refresh }) {
       refresh();
     });
   };
-  if (!room.open && !admin) {
-    return html`<section class="card"><p>Les dépôts sont fermés : cette room n'accepte plus de nouveaux joueurs.</p></section>`;
+  if (!room.open) {
+    return html`<section class="card"><p>Les dépôts sont fermés : cette room n'accepte plus de nouveaux joueurs${admin ? " (rouvrez-les pour jouer aussi)" : ""}.</p></section>`;
   }
   return html`<form class="card stack" onSubmit=${submit}>
     <h2>${admin ? "Jouer aussi dans cette room" : "Rejoindre la room"}</h2>
@@ -259,7 +259,7 @@ function MySlots({ index, room, me, slots, allSlots, refresh, onCreate, onEdit }
   const [game, setGame] = useState("");
   const access = savedAccess(room.code);
   const full = slots.length >= room.max_slots;
-  const canEdit = room.open || !!access.admin;
+  const canEdit = room.open; // dépôts fermés : YAML figés, hôte compris
 
   // Chaque document du fichier devient un slot à part (un YAML par jeu, comme le veut Archipelago).
   const upload = (files) => action.run(async () => {
@@ -315,9 +315,9 @@ function MySlots({ index, room, me, slots, allSlots, refresh, onCreate, onEdit }
     ${slots.length > 0 && html`<ul class="slot-list full">${slots.map((slot) => html`<li>
       <div class="grow"><strong>${slot.name}</strong> <span class="hint">${slot.game}</span> <${GameBadges} game=${slot.game} />
         <${IssueList} issues=${slot.issues} /></div>
-      <button type="button" class="ghost small" disabled=${action.busy || !canEdit} onClick=${() => edit(slot)}>Modifier</button>
+      ${canEdit && html`<button type="button" class="ghost small" disabled=${action.busy} onClick=${() => edit(slot)}>Modifier</button>`}
       <button type="button" class="ghost small" disabled=${action.busy} onClick=${() => save(slot)}>Télécharger</button>
-      <button type="button" class="ghost small" disabled=${action.busy || !canEdit} onClick=${() => remove(slot)}>Retirer</button>
+      ${canEdit && html`<button type="button" class="ghost small" disabled=${action.busy} onClick=${() => remove(slot)}>Retirer</button>`}
     </li>`)}</ul>`}
     ${canEdit && !full && html`<label class=${`drop compact full ${hover ? "hover" : ""} ${action.busy ? "busy" : ""}`}
       onDragOver=${(e) => { e.preventDefault(); setHover(true); }}
@@ -329,9 +329,10 @@ function MySlots({ index, room, me, slots, allSlots, refresh, onCreate, onEdit }
     </label>`}
     ${canEdit && !full && html`<button type="button" class="ghost" onClick=${() => setPicking(true)}>Créer un YAML pour cette room</button>`}
     ${full && canEdit && html`<p class="hint">Limite atteinte : retirez un YAML pour en ajouter un autre.</p>`}
-    ${!canEdit && html`<p class="hint">Les dépôts sont fermés : vos YAML ne peuvent plus être modifiés.</p>`}
+    ${!canEdit && html`<p class="hint">Les dépôts sont fermés : vos YAML sont figés tels qu'ils seront générés.
+      Ils redeviendront modifiables si l'hôte rouvre les dépôts.</p>`}
     ${action.error && html`<div class="notice error full">${action.error}</div>`}
-    <button type="button" class="link" onClick=${leave}>Quitter la room</button>
+    ${canEdit && html`<button type="button" class="link" onClick=${leave}>Quitter la room</button>`}
 
     ${picking && html`<${PickerModal} index=${index} value=${game} onChange=${setGame} onClose=${() => setPicking(false)}
       onCreate=${(g) => onCreate(g, freeName(me.pseudo, allSlots))} />`}
@@ -362,17 +363,18 @@ function PlayersList({ room, players, me, admin, refresh }) {
     && action.run(async () => { await api.removePlayer(room.code, player.id); refresh(); });
   const removeSlot = (slot) => confirm(`Retirer le YAML « ${slot.name} » ?`)
     && action.run(async () => { await api.deleteSlot(room.code, slot.id); refresh(); });
+  const manage = admin && room.open; // dépôts fermés : plus aucun retrait
 
   return html`<section class="card stack">
     <h2>Joueurs et jeux</h2>
     ${players.length === 0 && html`<p class="hint">Personne n'a encore rejoint la room. Partagez le code !</p>`}
     ${players.length > 0 && html`<div class="table-wrap full"><table class="room-table">
-      <thead><tr><th>Joueur</th><th>Nom dans la partie</th><th>Jeu</th>${admin && html`<th></th>`}</tr></thead>
+      <thead><tr><th>Joueur</th><th>Nom dans la partie</th><th>Jeu</th>${manage && html`<th></th>`}</tr></thead>
       <tbody>${players.map((p) => (p.slots.length ? p.slots : [null]).map((slot, i) => html`<tr class=${i === 0 ? "first" : ""}>
         <td>${i === 0 && html`<strong>${p.pseudo}</strong>${me?.id === p.id && html` <span class="hint">(vous)</span>`}`}</td>
         <td>${slot ? slot.name : html`<span class="hint">aucun YAML</span>`}</td>
         <td>${slot && html`${slot.game} <${GameBadges} game=${slot.game} />`}</td>
-        ${admin && html`<td class="actions">
+        ${manage && html`<td class="actions">
           ${slot && html`<button type="button" class="icon" title="Retirer ce YAML" onClick=${() => removeSlot(slot)}>✕</button>`}
           ${i === 0 && html`<button type="button" class="link" onClick=${() => kick(p)}>Retirer le joueur</button>`}
         </td>`}
@@ -405,8 +407,10 @@ function HostPanel({ room, setData, data }) {
       setForm(null);
     });
   };
+  // Rouvrir après la date de fin la retire : sinon les dépôts resteraient fermés.
   const close = (locked) => save.run(async () => {
-    const result = await api.update(room.code, { locked });
+    const expired = room.closes_at != null && room.closes_at <= Date.now();
+    const result = await api.update(room.code, locked || !expired ? { locked } : { locked, closes_at: null });
     setData({ ...data, room: result.room });
     setForm(null);
   });
@@ -445,10 +449,12 @@ function HostPanel({ room, setData, data }) {
     </details>
 
     <div class="row">
-      ${room.locked
-        ? html`<button type="button" class="ghost" disabled=${save.busy} onClick=${() => close(false)}>Rouvrir les dépôts</button>`
-        : html`<button type="button" class="ghost" disabled=${save.busy} onClick=${() => close(true)}>Fermer les dépôts maintenant</button>`}
-      <span class="hint">${room.locked ? "Fermée par vous." : room.closes_at ? `Fermeture automatique le ${formatWhen(room.closes_at)}.` : "Pas de date de fermeture."}</span>
+      ${room.open
+        ? html`<button type="button" class="ghost" disabled=${save.busy} onClick=${() => close(true)}>Fermer les dépôts maintenant</button>`
+        : html`<button type="button" class="ghost" disabled=${save.busy} onClick=${() => close(false)}>Rouvrir les dépôts</button>`}
+      <span class="hint">${room.locked ? "Fermée par vous."
+        : !room.open ? `Fermée depuis le ${formatWhen(room.closes_at)} ; la rouvrir retire la date de fin.`
+        : room.closes_at ? `Fermeture automatique le ${formatWhen(room.closes_at)}.` : "Pas de date de fermeture."}</span>
     </div>
     ${save.error && html`<div class="notice error full">${save.error}</div>`}
 

@@ -168,8 +168,10 @@ async function requirePlayer(request, env, room) {
   return player;
 }
 
+// Dépôts fermés : la liste des YAML est figée pour tout le monde, hôte compris, pour qu'elle corresponde
+// à la partie générée. L'hôte rouvre les dépôts pour la changer.
 function requireOpen(room) {
-  if (!isOpen(room)) throw new HttpError(409, "Les dépôts de YAML sont fermés pour cette room.");
+  if (!isOpen(room)) throw new HttpError(409, "Les dépôts sont fermés : les YAML ne peuvent plus être ajoutés, modifiés ni retirés.");
 }
 
 const touch = (env, room) => env.DB.prepare("UPDATE rooms SET updated_at = ? WHERE code = ?").bind(Date.now(), room.code);
@@ -293,7 +295,7 @@ async function deleteRoom(request, env, room) {
 async function joinRoom(request, env, room) {
   const body = await readJson(request);
   const pseudo = text(body.pseudo, "pseudo", LIMITS.pseudo);
-  if (!isOpen(room) && !(await isAdmin(request, room))) throw new HttpError(409, "Cette room n'accepte plus de nouveaux joueurs.");
+  if (!isOpen(room)) throw new HttpError(409, "Les dépôts sont fermés : cette room n'accepte plus de nouveaux joueurs.");
   const { count } = await env.DB.prepare("SELECT COUNT(*) AS count FROM players WHERE room_code = ?").bind(room.code).first();
   if (count >= LIMITS.playersPerRoom) throw new HttpError(409, "Cette room est pleine.");
   const taken = await env.DB.prepare("SELECT 1 FROM players WHERE room_code = ? AND pseudo = ? COLLATE NOCASE").bind(room.code, pseudo).first();
@@ -311,6 +313,7 @@ async function joinRoom(request, env, room) {
 async function removePlayer(request, env, room, playerId) {
   const me = await currentPlayer(request, env, room);
   if (me?.id !== playerId) await requireAdmin(request, room);
+  requireOpen(room); // retirer un joueur retire aussi ses YAML
   await env.DB.batch([
     env.DB.prepare("DELETE FROM slots WHERE room_code = ? AND player_id = ?").bind(room.code, playerId),
     env.DB.prepare("DELETE FROM players WHERE room_code = ? AND id = ?").bind(room.code, playerId),
@@ -340,7 +343,7 @@ async function nameTaken(env, room, name, exceptId) {
 
 async function addSlot(request, env, room) {
   const player = await requirePlayer(request, env, room);
-  if (!(await isAdmin(request, room))) requireOpen(room);
+  requireOpen(room);
   const fields = slotFields(await readJson(request));
   const { count } = await env.DB.prepare("SELECT COUNT(*) AS count FROM slots WHERE player_id = ?").bind(player.id).first();
   if (count >= room.max_slots) throw new HttpError(409, `Limite atteinte : ${room.max_slots} YAML par joueur dans cette room.`);
@@ -361,8 +364,8 @@ async function ownedSlot(request, env, room, slotId, { adminAllowed }) {
   const slot = await env.DB.prepare("SELECT * FROM slots WHERE room_code = ? AND id = ?").bind(room.code, slotId).first();
   if (!slot) throw new HttpError(404, "Ce YAML n'existe plus.");
   const player = await currentPlayer(request, env, room);
-  if (player?.id === slot.player_id) return { slot, admin: await isAdmin(request, room) };
-  if (adminAllowed && (await isAdmin(request, room))) return { slot, admin: true };
+  if (player?.id === slot.player_id) return { slot };
+  if (adminAllowed && (await isAdmin(request, room))) return { slot };
   throw new HttpError(403, "Ce YAML appartient à un autre joueur.");
 }
 
@@ -373,8 +376,8 @@ async function getSlot(request, env, room, slotId) {
 }
 
 async function replaceSlot(request, env, room, slotId) {
-  const { slot, admin } = await ownedSlot(request, env, room, slotId, { adminAllowed: false });
-  if (!admin) requireOpen(room);
+  const { slot } = await ownedSlot(request, env, room, slotId, { adminAllowed: false });
+  requireOpen(room);
   const fields = slotFields(await readJson(request));
   await nameTaken(env, room, fields.name, slot.id);
   await env.DB.batch([
@@ -386,8 +389,8 @@ async function replaceSlot(request, env, room, slotId) {
 }
 
 async function deleteSlot(request, env, room, slotId) {
-  const { slot, admin } = await ownedSlot(request, env, room, slotId, { adminAllowed: true });
-  if (!admin) requireOpen(room);
+  const { slot } = await ownedSlot(request, env, room, slotId, { adminAllowed: true });
+  requireOpen(room);
   await env.DB.batch([env.DB.prepare("DELETE FROM slots WHERE id = ?").bind(slot.id), touch(env, room)]);
   return json({ ok: true });
 }
