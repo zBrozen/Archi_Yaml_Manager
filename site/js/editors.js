@@ -28,7 +28,6 @@ export function Suggest({ items, onPick, placeholder, exclude }) {
     for (const item of items) {
       if (exclude && exclude.has(item)) continue;
       if (!needle || item.toLowerCase().includes(needle)) result.push(item);
-      if (result.length >= 40) break;
     }
     return result;
   }, [text, items, exclude]);

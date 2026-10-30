@@ -48,22 +48,35 @@ function commentFor(path) {
 }
 
 // Le fichier exporté contient toutes les options du jeu, comme les modèles d'Archipelago :
-// celles qui manquent sont ajoutées à leur valeur par défaut.
+// celles qui manquent sont ajoutées à leur valeur par défaut. Les options gardent l'ordre
+// du jeu, même celles modifiées avant les autres (sinon elles sortiraient en tête de section).
 function completeDocs(docs, knownGames) {
   return docs.map((entry) => {
     let { js, dirty } = entry;
+    const rank = new Map();
     for (const game of gamesOf(js, knownGames)) {
       const data = cachedGame(game);
       if (!data) continue;
+      const section = isPlainObject(js[game]) ? js[game] : {};
+      const ordered = {};
       for (const group of data.groups) {
         for (const option of group.options) {
           const path = [game, option.key];
-          if (option.kind === "removed" || (option.visibility & 1) !== 1 || getIn(js, path) !== undefined) continue;
-          js = setIn(js, path, yamlDefault(option));
-          dirty = [...dirty, JSON.stringify(path)];
+          const id = JSON.stringify(path);
+          rank.set(id, rank.size);
+          if (section[option.key] !== undefined) ordered[option.key] = section[option.key];
+          else if (option.kind !== "removed" && (option.visibility & 1) === 1) {
+            ordered[option.key] = yamlDefault(option);
+            if (!dirty.includes(id)) dirty = [...dirty, id];
+          }
         }
       }
+      for (const [key, value] of Object.entries(section)) if (!(key in ordered)) ordered[key] = value;
+      js = setIn(js, [game], ordered);
     }
+    // Les options ajoutées à un fichier existant y sont écrites dans l'ordre du jeu.
+    const order = (id) => rank.get(id) ?? -1;
+    dirty = [...dirty].sort((a, b) => order(a) - order(b));
     return { ...entry, js, dirty };
   });
 }
