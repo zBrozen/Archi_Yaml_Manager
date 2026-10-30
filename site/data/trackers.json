@@ -1,0 +1,1744 @@
+{
+ "games": {
+  "Adventure": [
+   {
+    "page": "https://github.com/ZobeePlays/Adventure-AP-Tracker",
+    "repo": "ZobeePlays/Adventure-AP-Tracker"
+   }
+  ],
+  "Against the Storm": [
+   {
+    "page": "https://github.com/Chfou/ATS-poptracker",
+    "repo": "Chfou/ATS-poptracker",
+    "tag": "v0.6.0",
+    "asset": "ATS-poptracker-v0.6.0.zip",
+    "url": "https://github.com/Sinnz-ZLC/ATS-poptracker/releases/download/v0.6.0/ATS-poptracker-v0.6.0.zip"
+   }
+  ],
+  "A Hat in Time": [
+   {
+    "page": "https://github.com/Mysteryem/ahit-poptracker/releases/latest",
+    "repo": "Mysteryem/ahit-poptracker",
+    "tag": "v1.3.0",
+    "asset": "ahit-poptracker.zip",
+    "url": "https://github.com/Mysteryem/ahit-poptracker/releases/download/v1.3.0/ahit-poptracker.zip"
+   }
+  ],
+  "Ape Escape": [
+   {
+    "page": "https://github.com/lurch9229/Ape-Escape-Tracker/releases/latest",
+    "repo": "lurch9229/Ape-Escape-Tracker",
+    "tag": "0.7.0",
+    "asset": "Ape-Escape-Tracker-0.7.0.zip",
+    "url": "https://github.com/lurch9229/Ape-Escape-Tracker/releases/download/0.7.0/Ape-Escape-Tracker-0.7.0.zip"
+   }
+  ],
+  "Ape Escape 3": [
+   {
+    "page": "https://git.ddd.rip/SophiaNya/ae3-poptracker-pack/releases"
+   }
+  ],
+  "APQuest": [
+   {
+    "page": "https://github.com/palex00/ap-quest-tracker/releases/latest",
+    "repo": "palex00/ap-quest-tracker"
+   }
+  ],
+  "Aquaria": [
+   {
+    "page": "https://github.com/palex00/aquaria-ap-tracker/releases/latest",
+    "repo": "palex00/aquaria-ap-tracker"
+   }
+  ],
+  "A Short Hike": [
+   {
+    "page": "https://github.com/Oshroth/shorthike-archipelago-poptracker/releases/latest",
+    "repo": "Oshroth/shorthike-archipelago-poptracker",
+    "tag": "1.1.2",
+    "asset": "shorthike-archipelago-poptracker-1.1.2.zip",
+    "url": "https://github.com/Oshroth/shorthike-archipelago-poptracker/releases/download/1.1.2/shorthike-archipelago-poptracker-1.1.2.zip"
+   }
+  ],
+  "Balatro": [
+   {
+    "page": "https://github.com/graygooglitch/balatroap_poptracker/releases/latest",
+    "repo": "graygooglitch/balatroap_poptracker",
+    "tag": "v1.2.0.0",
+    "asset": "BalatroAP_Tracker_v1.2.0.0.zip",
+    "url": "https://github.com/graygooglitch/balatroap_poptracker/releases/download/v1.2.0.0/BalatroAP_Tracker_v1.2.0.0.zip"
+   }
+  ],
+  "Baldur's Gate 3": [
+   {
+    "page": "https://github.com/jeditobe1/bg3-ap-tracker/releases/tag/v0.7.0",
+    "repo": "jeditobe1/bg3-ap-tracker",
+    "tag": "v0.7.0",
+    "asset": "bg3-poptracker-0.7.0+release.zip",
+    "url": "https://github.com/jeditobe1/bg3-ap-tracker/releases/download/v0.7.0/bg3-poptracker-0.7.0%2Brelease.zip"
+   }
+  ],
+  "Banjo-Tooie": [
+   {
+    "page": "https://github.com/Ozone31/banjo-tooie-ap-tracker/releases/latest",
+    "repo": "Ozone31/banjo-tooie-ap-tracker"
+   }
+  ],
+  "Black Market of Bulletphilia ~ 100th Black Market (Touhou 18.5)": [
+   {
+    "page": "https://github.com/furret78/hbm-pack/releases/latest",
+    "repo": "furret78/hbm-pack"
+   }
+  ],
+  "Bomberman 64": [
+   {
+    "page": "https://github.com/RunInAWeek/Bomberman-64-AP-Tracker/releases/latest",
+    "repo": "RunInAWeek/Bomberman-64-AP-Tracker",
+    "tag": "v0.5.0.1",
+    "asset": "Bomberman64_0.5.0.1.zip",
+    "url": "https://github.com/RunInAWeek/Bomberman-64-AP-Tracker/releases/download/v0.5.0.1/Bomberman64_0.5.0.1.zip"
+   }
+  ],
+  "Bomberman 64: The Second Attack": [
+   {
+    "page": "https://github.com/Pikachu979/Bomberman-64-The-Second-Attack-Poptracker/releases/latest",
+    "repo": "Pikachu979/Bomberman-64-The-Second-Attack-Poptracker",
+    "tag": "V0.0.2",
+    "asset": "bomberman_tsav0_0_2.zip",
+    "url": "https://github.com/Pikachu979/Bomberman-64-The-Second-Attack-Poptracker/releases/download/V0.0.2/bomberman_tsav0_0_2.zip"
+   }
+  ],
+  "Bomberman Quest": [
+   {
+    "page": "https://github.com/RunInAWeek/Bomberman-Quest-AP-Tracker/releases/latest",
+    "repo": "RunInAWeek/Bomberman-Quest-AP-Tracker",
+    "tag": "V0.2",
+    "asset": "Bomberman-Quest-AP-Tracker.zip",
+    "url": "https://github.com/RunInAWeek/Bomberman-Quest-AP-Tracker/releases/download/V0.2/Bomberman-Quest-AP-Tracker.zip"
+   }
+  ],
+  "Borderlands 2": [
+   {
+    "page": "https://github.com/DDogeOneeSama/Borderlands-2-PopTracker/releases/latest",
+    "repo": "DDogeOneeSama/Borderlands-2-PopTracker",
+    "tag": "0.3.5",
+    "asset": "bl2_poptracker_0_3_5.zip",
+    "url": "https://github.com/DDogeOneeSama/Borderlands-2-PopTracker/releases/download/0.3.5/bl2_poptracker_0_3_5.zip"
+   }
+  ],
+  "Castlevania: Aria of Sorrow": [
+   {
+    "page": "https://github.com/SchwartzGandhi/CVAoSPT",
+    "repo": "SchwartzGandhi/CVAoSPT",
+    "tag": "0.1",
+    "asset": "CVAoSPT.zip",
+    "url": "https://github.com/SchwartzGandhi/CVAoSPT/releases/download/0.1/CVAoSPT.zip"
+   }
+  ],
+  "Castlevania: Circle of the Moon": [
+   {
+    "page": "https://github.com/BowserCrusher/Circle-of-the-Moon-AP-Tracker/releases/latest",
+    "repo": "BowserCrusher/Circle-of-the-Moon-AP-Tracker",
+    "tag": "2.4.3",
+    "asset": "Circle-of-the-Moon-AP-Tracker.zip",
+    "url": "https://github.com/BowserCrusher/Circle-of-the-Moon-AP-Tracker/releases/download/2.4.3/Circle-of-the-Moon-AP-Tracker.zip"
+   }
+  ],
+  "Castlevania: Harmony of Dissonance": [
+   {
+    "page": "https://github.com/Armipotent/HarmonyOfDissonancePoptracker/releases/latest",
+    "repo": "Armipotent/HarmonyOfDissonancePoptracker",
+    "tag": "v1.1.8",
+    "asset": "HarmonyOfDissonancePoptracker.zip",
+    "url": "https://github.com/Armipotent/HarmonyOfDissonancePoptracker/releases/download/v1.1.8/HarmonyOfDissonancePoptracker.zip"
+   }
+  ],
+  "Castlevania: Portrait of Ruin": [
+   {
+    "page": "https://github.com/SchwartzGandhi/CVPoRPT/releases/tag/2.1",
+    "repo": "SchwartzGandhi/CVPoRPT",
+    "tag": "2.1",
+    "asset": "CVPoRPT.zip",
+    "url": "https://github.com/SchwartzGandhi/CVPoRPT/releases/download/2.1/CVPoRPT.zip"
+   }
+  ],
+  "Castlevania: Symphony of the Night": [
+   {
+    "page": "https://github.com/Michpem/SOTN-AP-MapTracker/releases",
+    "repo": "Michpem/SOTN-AP-MapTracker",
+    "tag": "0.2.15",
+    "asset": "SOTN-AP-MapTracker.zip",
+    "url": "https://github.com/Michpem/SOTN-AP-MapTracker/releases/download/0.2.15/SOTN-AP-MapTracker.zip"
+   }
+  ],
+  "Celeste 64": [
+   {
+    "page": "https://github.com/PoryGone/Celeste-64-AP-Tracker/releases/latest",
+    "repo": "PoryGone/Celeste-64-AP-Tracker",
+    "tag": "v1.3.1",
+    "asset": "celeste_64_randomizer_porygone.zip",
+    "url": "https://github.com/PoryGone/Celeste-64-AP-Tracker/releases/download/v1.3.1/celeste_64_randomizer_porygone.zip"
+   }
+  ],
+  "Celeste (Open World)": [
+   {
+    "page": "https://github.com/Zeeveez/CelesteOpenWorldPoptracker/releases/latest",
+    "repo": "Zeeveez/CelesteOpenWorldPoptracker"
+   }
+  ],
+  "ChecksMate (Chess)": [
+   {
+    "page": "https://github.com/checkerslogic/checksmate-poptracker/releases/latest",
+    "repo": "checkerslogic/checksmate-poptracker",
+    "tag": "v0.3.0",
+    "asset": "checksmate-poptracker.zip",
+    "url": "https://github.com/checkerslogic/checksmate-poptracker/releases/download/v0.3.0/checksmate-poptracker.zip"
+   }
+  ],
+  "Choo Choo Charles": [
+   {
+    "page": "https://github.com/Ayden123kitten/Choo-Choo-Charles-PopTracker-Remake/releases",
+    "repo": "Ayden123kitten/Choo-Choo-Charles-PopTracker-Remake",
+    "tag": "3.0.6",
+    "asset": "Choo-Choo-Charles-Tracker.zip",
+    "url": "https://github.com/Ayden123kitten/Choo-Choo-Charles-PopTracker-Remake/releases/download/3.0.6/Choo-Choo-Charles-Tracker.zip"
+   }
+  ],
+  "Civilization V": [
+   {
+    "page": "https://github.com/Sparky5000/Civ5APpoptracker/releases/latest",
+    "repo": "Sparky5000/Civ5APpoptracker",
+    "tag": "v1.3.1",
+    "asset": "civ5_ap_pop.zip",
+    "url": "https://github.com/Sparky5000/Civ5APpoptracker/releases/download/v1.3.1/civ5_ap_pop.zip"
+   }
+  ],
+  "Civilization VI": [
+   {
+    "page": "https://github.com/Gearwcu/CivVI-poptracker-pack/releases/latest",
+    "repo": "Gearwcu/CivVI-poptracker-pack",
+    "tag": "1.1.2",
+    "asset": "CivVI-poptracker-pack.zip",
+    "url": "https://github.com/Gearwcu/CivVI-poptracker-pack/releases/download/1.1.2/CivVI-poptracker-pack.zip"
+   }
+  ],
+  "Clair Obscur Expedition 33": [
+   {
+    "page": "https://github.com/Demorck/ClairObscur-Archipelago-Poptracker",
+    "repo": "Demorck/ClairObscur-Archipelago-Poptracker",
+    "tag": "v0.4.3",
+    "asset": "ClairObscurAP_Poptracker.zip",
+    "url": "https://github.com/Demorck/ClairObscur-Archipelago-Poptracker/releases/download/v0.4.3/ClairObscurAP_Poptracker.zip"
+   }
+  ],
+  "CloverPit": [
+   {
+    "page": "https://github.com/snileaf/CloverPit-poptracker/releases/latest",
+    "repo": "snileaf/CloverPit-poptracker",
+    "tag": "v1.1.1",
+    "asset": "CloverPit-PopTracker.v1.1.1.zip",
+    "url": "https://github.com/snileaf/CloverPit-poptracker/releases/download/v1.1.1/CloverPit-PopTracker.v1.1.1.zip"
+   }
+  ],
+  "Commander Keen in Goodbye, Galaxy": [
+   {
+    "page": "https://github.com/Joxtacy/commander-keen-goodbye-galaxy-ap-tracker/releases/latest",
+    "repo": "Joxtacy/commander-keen-goodbye-galaxy-ap-tracker",
+    "tag": "v0.0.12-rc.1",
+    "asset": "keen_goodbye_galaxy_ap_tracker_0.0.12-rc.1.zip",
+    "url": "https://github.com/Joxtacy/commander-keen-goodbye-galaxy-ap-tracker/releases/download/v0.0.12-rc.1/keen_goodbye_galaxy_ap_tracker_0.0.12-rc.1.zip"
+   }
+  ],
+  "Content Warning": [
+   {
+    "page": "https://github.com/Jakeodude/cw-poptracker/releases",
+    "repo": "Jakeodude/cw-poptracker",
+    "tag": "v1.0.2",
+    "asset": "content_warning_poptracker.zip",
+    "url": "https://github.com/Jakeodude/cw-poptracker/releases/download/v1.0.2/content_warning_poptracker.zip"
+   }
+  ],
+  "Control (Ultimate Edition)": [
+   {
+    "page": "https://github.com/snileaf/Control-poptracker/releases",
+    "repo": "snileaf/Control-poptracker",
+    "tag": "v0.0.2",
+    "asset": "Control-PopTracker.v0.0.2.zip",
+    "url": "https://github.com/snileaf/Control-poptracker/releases/download/v0.0.2/Control-PopTracker.v0.0.2.zip"
+   }
+  ],
+  "Crash Bandicoot 2: Cortex Strikes Back": [
+   {
+    "page": "https://github.com/EvilGod50/crash2-ap-tracker/releases/latest",
+    "repo": "EvilGod50/crash2-ap-tracker",
+    "tag": "0.5.0",
+    "asset": "crash2-ap-tracker.zip",
+    "url": "https://github.com/EvilGod50/crash2-ap-tracker/releases/download/0.5.0/crash2-ap-tracker.zip"
+   }
+  ],
+  "Crystalis": [
+   {
+    "page": "https://github.com/Ars-Ignis/crystalis-randomizer-tracker/releases/latest",
+    "repo": "Ars-Ignis/crystalis-randomizer-tracker",
+    "tag": "v2.0.0-pop",
+    "asset": "crystalis_codegorilla.zip",
+    "url": "https://github.com/Ars-Ignis/crystalis-randomizer-tracker/releases/download/v2.0.0-pop/crystalis_codegorilla.zip"
+   }
+  ],
+  "Custom Robo": [
+   {
+    "page": "https://github.com/Swiftmane/Custom_Robo_Tracker/releases/latest",
+    "repo": "Swiftmane/Custom_Robo_Tracker",
+    "tag": "v0.3.0-STANDARD",
+    "asset": "Custom_Robo_Tracker.zip",
+    "url": "https://github.com/Swiftmane/Custom_Robo_Tracker/releases/download/v0.3.0-STANDARD/Custom_Robo_Tracker.zip"
+   }
+  ],
+  "Dark Souls III": [
+   {
+    "page": "https://github.com/TVV1GK/DS3_AP_Maptracker/releases/latest",
+    "repo": "TVV1GK/DS3_AP_Maptracker",
+    "tag": "v2.0.1",
+    "asset": "ds3_tvv1gk.zip",
+    "url": "https://github.com/TVV1GK/DS3_AP_Maptracker/releases/download/v2.0.1/ds3_tvv1gk.zip"
+   }
+  ],
+  "Dark Souls Remastered": [
+   {
+    "page": "https://github.com/routhken/Dark_Souls_Remastered_tracker/releases",
+    "repo": "routhken/Dark_Souls_Remastered_tracker",
+    "tag": "v1.3.2",
+    "asset": "Dark_Souls_Remastered_aptracker.zip",
+    "url": "https://github.com/routhken/Dark_Souls_Remastered_tracker/releases/download/v1.3.2/Dark_Souls_Remastered_aptracker.zip"
+   }
+  ],
+  "Deadlock": [
+   {
+    "page": "https://github.com/GreenestJ/deadlockipelago-poptracker/releases/latest",
+    "repo": "GreenestJ/deadlockipelago-poptracker",
+    "tag": "Deadlockipelago-1.1.5",
+    "asset": "deadlockipelago-1.1.5-tracker.zip",
+    "url": "https://github.com/GreenestJ/deadlockipelago-poptracker/releases/download/Deadlockipelago-1.1.5/deadlockipelago-1.1.5-tracker.zip"
+   }
+  ],
+  "Dicey Dungeons": [
+   {
+    "page": "https://github.com/Fylcoast/Dicey-Dungeons-AP-Tracker/releases",
+    "repo": "Fylcoast/Dicey-Dungeons-AP-Tracker",
+    "tag": "v0.0.8",
+    "asset": "Dicey-Dungeons-AP-Tracker.zip",
+    "url": "https://github.com/Fylcoast/Dicey-Dungeons-AP-Tracker/releases/download/v0.0.8/Dicey-Dungeons-AP-Tracker.zip"
+   }
+  ],
+  "Digimon World 1": [
+   {
+    "page": "https://github.com/ArsonAssassin/DigimonWorldAPTracker/releases",
+    "repo": "ArsonAssassin/DigimonWorldAPTracker",
+    "tag": "0.0.1",
+    "asset": "digimon_world_tracker.zip",
+    "url": "https://github.com/ArsonAssassin/DigimonWorldAPTracker/releases/download/0.0.1/digimon_world_tracker.zip"
+   }
+  ],
+  "DLCQuest": [
+   {
+    "page": "https://github.com/RaceProUK/DLCQuest-APTracker/releases/latest",
+    "repo": "RaceProUK/DLCQuest-APTracker",
+    "tag": "v0.7.2",
+    "asset": "dlcquest_rando_raceprouk.zip",
+    "url": "https://github.com/RaceProUK/DLCQuest-APTracker/releases/download/v0.7.2/dlcquest_rando_raceprouk.zip"
+   }
+  ],
+  "Donkey Kong Country": [
+   {
+    "page": "https://github.com/pwkfisher/ap-dkc-tracker/releases",
+    "repo": "pwkfisher/ap-dkc-tracker",
+    "tag": "1.1.1a",
+    "asset": "ap-dkc-tracker-1.1.1a.zip",
+    "url": "https://github.com/pwkfisher/ap-dkc-tracker/releases/download/1.1.1a/ap-dkc-tracker-1.1.1a.zip"
+   }
+  ],
+  "Donkey Kong Country 2: Diddy's Kong Quest": [
+   {
+    "page": "https://github.com/pwkfisher/ap-dkc2-tracker/releases/latest",
+    "repo": "pwkfisher/ap-dkc2-tracker",
+    "tag": "1.0",
+    "asset": "ap-dkc2-tracker-1.0.zip",
+    "url": "https://github.com/pwkfisher/ap-dkc2-tracker/releases/download/1.0/ap-dkc2-tracker-1.0.zip"
+   }
+  ],
+  "Donkey Kong Country 3": [
+   {
+    "page": "https://github.com/PoryGone/DKC3_AP_Tracker/releases/latest",
+    "repo": "PoryGone/DKC3_AP_Tracker",
+    "tag": "v1.1.0",
+    "asset": "donkey_kong_country_3_randomizer_porygone.zip",
+    "url": "https://github.com/PoryGone/DKC3_AP_Tracker/releases/download/v1.1.0/donkey_kong_country_3_randomizer_porygone.zip"
+   }
+  ],
+  "Donkey Kong Country Returns": [
+   {
+    "page": "https://github.com/MagicMason1000/DKCR-AP-PopTracker-Package/releases/latest",
+    "repo": "MagicMason1000/DKCR-AP-PopTracker-Package",
+    "tag": "v0.4.0",
+    "asset": "dkcr_ap_tracker_v0.4.0.zip",
+    "url": "https://github.com/MagicMason1000/DKCR-AP-PopTracker-Package/releases/download/v0.4.0/dkcr_ap_tracker_v0.4.0.zip"
+   }
+  ],
+  "Donkey Kong Toluca (DKC3)": [
+   {
+    "page": "https://github.com/pwkfisher/ap-dktoluca-tracker/releases",
+    "repo": "pwkfisher/ap-dktoluca-tracker",
+    "tag": "0.9.7",
+    "asset": "ap-dktoluca-tracker-0.9.7.zip",
+    "url": "https://github.com/pwkfisher/ap-dktoluca-tracker/releases/download/0.9.7/ap-dktoluca-tracker-0.9.7.zip"
+   }
+  ],
+  "DOOM 1993": [
+   {
+    "page": "https://github.com/Ozone31/doom-ap-tracker/releases/latest",
+    "repo": "Ozone31/doom-ap-tracker"
+   }
+  ],
+  "DOOM II": [
+   {
+    "page": "https://github.com/Ozone31/doomii-ap-tracker/releases/latest",
+    "repo": "Ozone31/doomii-ap-tracker"
+   }
+  ],
+  "Duck Game": [
+   {
+    "page": "https://github.com/blakelmenakle/Duck-Game-Poptracker/releases/latest",
+    "repo": "blakelmenakle/Duck-Game-Poptracker",
+    "tag": "v0.1.2",
+    "asset": "Duck-Game_Poptracker-v-0-1-2.zip",
+    "url": "https://github.com/blakelmenakle/Duck-Game-Poptracker/releases/download/v0.1.2/Duck-Game_Poptracker-v-0-1-2.zip"
+   }
+  ],
+  "Earthbound": [
+   {
+    "page": "https://github.com/PinkSwitch/earthbound_poptracker/releases/latest",
+    "repo": "PinkSwitch/earthbound_poptracker",
+    "tag": "ebpoptracker1.0",
+    "asset": "earthbound_maptracker_4.2.3.zip",
+    "url": "https://github.com/PinkSwitch/earthbound_poptracker/releases/download/ebpoptracker1.0/earthbound_maptracker_4.2.3.zip"
+   }
+  ],
+  "Easy Delivery Co.": [
+   {
+    "page": "https://github.com/InkyCodes/Easy-Delivery-co.-AP-Tracker/releases/latest",
+    "repo": "InkyCodes/Easy-Delivery-co.-AP-Tracker"
+   }
+  ],
+  "Everhood 2": [
+   {
+    "page": "https://github.com/commanderdot/Everhood-2-Poptracker/releases",
+    "repo": "commanderdot/Everhood-2-Poptracker",
+    "tag": "0.1.1",
+    "asset": "E2_poptracker.zip",
+    "url": "https://github.com/commanderdot/Everhood-2-Poptracker/releases/download/0.1.1/E2_poptracker.zip"
+   }
+  ],
+  "Faxanadu": [
+   {
+    "page": "https://github.com/Ehseezed/Faxanadu-Tracker/releases/latest",
+    "repo": "Ehseezed/Faxanadu-Tracker",
+    "tag": "1.0.2",
+    "asset": "Faxanadu-Tracker.zip",
+    "url": "https://github.com/Ehseezed/Faxanadu-Tracker/releases/download/1.0.2/Faxanadu-Tracker.zip"
+   }
+  ],
+  "Fez": [
+   {
+    "page": "https://github.com/maYayoh/GAT/releases/",
+    "repo": "maYayoh/GAT",
+    "tag": "v2.0",
+    "asset": "FezTracker_2.0.zip",
+    "url": "https://github.com/maYayoh/GAT/releases/download/v2.0/FezTracker_2.0.zip"
+   }
+  ],
+  "Final Fantasy": [
+   {
+    "page": "https://github.com/haate/FFR_AP_autotracking",
+    "repo": "haate/FFR_AP_autotracking"
+   }
+  ],
+  "Final Fantasy Mystic Quest": [
+   {
+    "page": "https://github.com/D-Skye/ffmq-ap-poptracker/releases/latest",
+    "repo": "D-Skye/ffmq-ap-poptracker",
+    "tag": "v0.6.0",
+    "asset": "ffmq-ap.zip",
+    "url": "https://github.com/D-Skye/ffmq-ap-poptracker/releases/download/v0.6.0/ffmq-ap.zip"
+   }
+  ],
+  "Final Fantasy X": [
+   {
+    "page": "https://github.com/FFX-AP/FFX-Poptracker/releases/latest",
+    "repo": "FFX-AP/FFX-Poptracker",
+    "tag": "v0.10.0",
+    "asset": "FFX.zip",
+    "url": "https://github.com/FFX-AP/FFX-Poptracker/releases/download/v0.10.0/FFX.zip"
+   }
+  ],
+  "Final Fantasy XII: Open World": [
+   {
+    "page": "https://github.com/silasary/ffxii-poptracker/releases/tag/0.3.3",
+    "repo": "silasary/ffxii-poptracker",
+    "tag": "0.3.3",
+    "asset": "ffxii-tracker-0.3.3.zip",
+    "url": "https://github.com/silasary/ffxii-poptracker/releases/download/0.3.3/ffxii-tracker-0.3.3.zip"
+   }
+  ],
+  "Funi Raccoon Game": [
+   {
+    "page": "https://github.com/Jeffdev-Archipelago-Implementations/FuniRaccoonPopTracker/releases/latest",
+    "repo": "Jeffdev-Archipelago-Implementations/FuniRaccoonPopTracker",
+    "tag": "1.4.0",
+    "asset": "FuniRaccoonPopTracker.zip",
+    "url": "https://github.com/Jeffdev-Archipelago-Implementations/FuniRaccoonPopTracker/releases/download/1.4.0/FuniRaccoonPopTracker.zip"
+   }
+  ],
+  "Grim Dawn": [
+   {
+    "page": "https://github.com/routhken/Grim_Dawn_tracker/releases/latest",
+    "repo": "routhken/Grim_Dawn_tracker",
+    "tag": "v2.3.1",
+    "asset": "Grim_Dawn_aptracker.zip",
+    "url": "https://github.com/routhken/Grim_Dawn_tracker/releases/download/v2.3.1/Grim_Dawn_aptracker.zip"
+   }
+  ],
+  "Harry Potter and the Chamber of Secrets": [
+   {
+    "page": "https://github.com/Kryen112/HP2PC_AP_Poptracker/releases/latest",
+    "repo": "Kryen112/HP2PC_AP_Poptracker",
+    "tag": "v1.0.9",
+    "asset": "HP2PC_AP_Poptracker_v1.0.9.zip",
+    "url": "https://github.com/Kryen112/HP2PC_AP_Poptracker/releases/download/v1.0.9/HP2PC_AP_Poptracker_v1.0.9.zip"
+   }
+  ],
+  "Heretic": [
+   {
+    "page": "https://github.com/Forsaken-angel/heretic-ap-tracker/releases/latest",
+    "repo": "Forsaken-angel/heretic-ap-tracker"
+   }
+  ],
+  "Horse Magnifier: The Full Horse": [
+   {
+    "page": "https://github.com/DannySchultzDev/Horse-Magnifier-PopTracker/releases",
+    "repo": "DannySchultzDev/Horse-Magnifier-PopTracker",
+    "tag": "V1.1.2",
+    "asset": "Horse.Magnifier.Poptracker.zip",
+    "url": "https://github.com/DannySchultzDev/Horse-Magnifier-PopTracker/releases/download/V1.1.2/Horse.Magnifier.Poptracker.zip"
+   }
+  ],
+  "Hot Lava": [
+   {
+    "page": "https://github.com/Bongo9911/HotLavaAPTracker",
+    "repo": "Bongo9911/HotLavaAPTracker",
+    "tag": "0.1.0",
+    "asset": "HotLavaAPTracker-v0.1.0.zip",
+    "url": "https://github.com/Bongo9911/HotLavaAPTracker/releases/download/0.1.0/HotLavaAPTracker-v0.1.0.zip"
+   }
+  ],
+  "Hylics 2": [
+   {
+    "page": "https://github.com/superfid2006/Hylics2-poptracker/releases/latest",
+    "repo": "superfid2006/Hylics2-poptracker",
+    "tag": "v0.0.2",
+    "asset": "Hylics2-poptracker.zip",
+    "url": "https://github.com/superfid2006/Hylics2-poptracker/releases/download/v0.0.2/Hylics2-poptracker.zip"
+   }
+  ],
+  "Hyperdimension Neptunia Re;Birth3 V Generation": [
+   {
+    "page": "https://github.com/RazgrizEast/hyperdimension-neptunia-rebirth-3-poptracker-razgriz/releases/latest",
+    "repo": "RazgrizEast/hyperdimension-neptunia-rebirth-3-poptracker-razgriz",
+    "tag": "v0.1.2",
+    "asset": "hyperdimension_rebirth3_poptracker_razgriz_0.1.2.zip",
+    "url": "https://github.com/RazgrizEast/hyperdimension-neptunia-rebirth-3-poptracker-razgriz/releases/download/v0.1.2/hyperdimension_rebirth3_poptracker_razgriz_0.1.2.zip"
+   }
+  ],
+  "Inscryption": [
+   {
+    "page": "https://github.com/DrBibop/Inscryption_Poptracker/releases/latest",
+    "repo": "DrBibop/Inscryption_Poptracker"
+   }
+  ],
+  "Jak and Daxter: The Precursor Legacy": [
+   {
+    "page": "https://github.com/LegsLegsLegs/Jak-and-Daxter-Poptracker/releases/latest",
+    "repo": "LegsLegsLegs/Jak-and-Daxter-Poptracker"
+   }
+  ],
+  "Jak II": [
+   {
+    "page": "https://github.com/Blake645/Jak-II-AP-Poptracker/releases/latest",
+    "repo": "Blake645/Jak-II-AP-Poptracker"
+   }
+  ],
+  "Kindergarten 2": [
+   {
+    "page": "https://github.com/blupeecounter/Kindergarten2-Poptracker/releases/tag/poptracker",
+    "repo": "blupeecounter/Kindergarten2-Poptracker",
+    "tag": "poptracker",
+    "asset": "Kindergarten2_Poptracker.zip",
+    "url": "https://github.com/blupeecounter/Kindergarten2-Poptracker/releases/download/poptracker/Kindergarten2_Poptracker.zip"
+   }
+  ],
+  "Kingdom Hearts": [
+   {
+    "page": "https://github.com/culk/Kingdom-Hearts-FM-AP-Tracker/releases",
+    "repo": "culk/Kingdom-Hearts-FM-AP-Tracker",
+    "tag": "v1.5.2",
+    "asset": "kh1_ap_tracker.zip",
+    "url": "https://github.com/culk/Kingdom-Hearts-FM-AP-Tracker/releases/download/v1.5.2/kh1_ap_tracker.zip"
+   }
+  ],
+  "Kingdom Hearts 2": [
+   {
+    "page": "https://github.com/palex00/kh2-ap-tracker/releases/latest",
+    "repo": "palex00/kh2-ap-tracker"
+   }
+  ],
+  "Kingdom Hearts: Birth by Sleep Final Mix": [
+   {
+    "page": "https://github.com/esutley/Kingdom-Hearts-BBS-AP-Tracker",
+    "repo": "esutley/Kingdom-Hearts-BBS-AP-Tracker"
+   }
+  ],
+  "Kingdom Hearts: Chain of Memories (GBA)": [
+   {
+    "page": "https://discord.com/channels/731205301247803413/1074710550384234587/1238229858530623569"
+   }
+  ],
+  "Kingdom Hearts Dream Drop Distance": [
+   {
+    "page": "https://github.com/jhobz/khddd-ap-tracker/releases/latest",
+    "repo": "jhobz/khddd-ap-tracker",
+    "tag": "v0.2.2",
+    "asset": "khddd-ap-tracker.zip",
+    "url": "https://github.com/jhobz/khddd-ap-tracker/releases/download/v0.2.2/khddd-ap-tracker.zip"
+   }
+  ],
+  "Kingdom Hearts III": [
+   {
+    "page": "https://github.com/z3xox/kh3-archipelago-poptracker/releases/latest",
+    "repo": "z3xox/kh3-archipelago-poptracker",
+    "tag": "v1.0.1",
+    "asset": "kh3-archipelago-poptracker-v1.0.1.zip",
+    "url": "https://github.com/z3xox/kh3-archipelago-poptracker/releases/download/v1.0.1/kh3-archipelago-poptracker-v1.0.1.zip"
+   }
+  ],
+  "Kirby 64 - The Crystal Shards": [
+   {
+    "page": "https://github.com/RunInAWeek/Kirby-64-Archipelago-Tracker/releases/latest",
+    "repo": "RunInAWeek/Kirby-64-Archipelago-Tracker",
+    "tag": "v1.1",
+    "asset": "Kirby64_AP_v1.1.zip",
+    "url": "https://github.com/RunInAWeek/Kirby-64-Archipelago-Tracker/releases/download/v1.1/Kirby64_AP_v1.1.zip"
+   }
+  ],
+  "Kirby Air Ride": [
+   {
+    "page": "https://github.com/lighting8282/KAR-Poptracker/releases/latest",
+    "repo": "lighting8282/KAR-Poptracker",
+    "tag": "v0.5.4",
+    "asset": "KAR-Poptracker-v0.5.4.zip",
+    "url": "https://github.com/lighting8282/KAR-Poptracker/releases/download/v0.5.4/KAR-Poptracker-v0.5.4.zip"
+   }
+  ],
+  "Kirby's Dream Land 3": [
+   {
+    "page": "https://github.com/The-ROT8/Kirby_Dream_Land_3_AP_Poptracker/releases/latest",
+    "repo": "The-ROT8/Kirby_Dream_Land_3_AP_Poptracker",
+    "tag": "v0.1.3",
+    "asset": "KDL3.Poptracker.0.1.3.zip",
+    "url": "https://github.com/The-ROT8/Kirby_Dream_Land_3_AP_Poptracker/releases/download/v0.1.3/KDL3.Poptracker.0.1.3.zip"
+   }
+  ],
+  "Kirby Super Star": [
+   {
+    "page": "https://github.com/Talcerase/kss-ap-poptracker/releases/latest",
+    "repo": "Talcerase/kss-ap-poptracker",
+    "tag": "v0.2.1",
+    "asset": "kss-ap-poptracker-0.2.1.zip",
+    "url": "https://github.com/Talcerase/kss-ap-poptracker/releases/download/v0.2.1/kss-ap-poptracker-0.2.1.zip"
+   }
+  ],
+  "La-Mulana 2": [
+   {
+    "page": "https://github.com/Crownmuri/LaMulana2AP-PopTracker/releases/latest",
+    "repo": "Crownmuri/LaMulana2AP-PopTracker",
+    "tag": "v2.1.2",
+    "asset": "LaMulana2AP-PopTracker.v2.1.2.zip",
+    "url": "https://github.com/Crownmuri/LaMulana2AP-PopTracker/releases/download/v2.1.2/LaMulana2AP-PopTracker.v2.1.2.zip"
+   }
+  ],
+  "Lego Star Wars: The Complete Saga": [
+   {
+    "page": "https://github.com/Mysteryem/TCS_AP_PopTracker/releases/latest",
+    "repo": "Mysteryem/TCS_AP_PopTracker"
+   }
+  ],
+  "Lies of P": [
+   {
+    "page": "https://github.com/CaFlavien/Lies-of-P-Poptracker",
+    "repo": "CaFlavien/Lies-of-P-Poptracker",
+    "tag": "v0.1.10",
+    "asset": "Lies-of-P-Poptracker-v0.1.10.zip",
+    "url": "https://github.com/CaFlavien/Lies-of-P-Poptracker/releases/download/v0.1.10/Lies-of-P-Poptracker-v0.1.10.zip"
+   }
+  ],
+  "Loonyland: Halloween Hill": [
+   {
+    "page": "https://github.com/AutomaticFrenzy/loonyland_archipelago_tracker/releases/latest",
+    "repo": "AutomaticFrenzy/loonyland_archipelago_tracker",
+    "tag": "0.2.3",
+    "asset": "loonyland_archipelago_tracker.zip",
+    "url": "https://github.com/AutomaticFrenzy/loonyland_archipelago_tracker/releases/download/0.2.3/loonyland_archipelago_tracker.zip"
+   }
+  ],
+  "Lost Kingdoms 2": [
+   {
+    "page": "https://github.com/culk/lost-kingdoms-2-poptracker-pack/releases",
+    "repo": "culk/lost-kingdoms-2-poptracker-pack",
+    "tag": "v1.3.1",
+    "asset": "lost_kingdoms_2_ap_tracker.zip",
+    "url": "https://github.com/culk/lost-kingdoms-2-poptracker-pack/releases/download/v1.3.1/lost_kingdoms_2_ap_tracker.zip"
+   }
+  ],
+  "Luigi's Mansion": [
+   {
+    "page": "https://github.com/DevinLB/Luigis_Mansion_Poptracker/releases/latest",
+    "repo": "DevinLB/Luigis_Mansion_Poptracker",
+    "tag": "v0.1.1",
+    "asset": "lmpt.zip",
+    "url": "https://github.com/DevinLB/Luigis_Mansion_Poptracker/releases/download/v0.1.1/lmpt.zip"
+   }
+  ],
+  "Lunacid": [
+   {
+    "page": "https://github.com/ScorpioGameKing/Lunacid-Poptracker/releases/latest",
+    "repo": "ScorpioGameKing/Lunacid-Poptracker",
+    "tag": "beta-0.10.1",
+    "asset": "Lunacid-Poptracker-0.10.1.zip",
+    "url": "https://github.com/ScorpioGameKing/Lunacid-Poptracker/releases/download/beta-0.10.1/Lunacid-Poptracker-0.10.1.zip"
+   }
+  ],
+  "Mario Kart 64": [
+   {
+    "page": "https://github.com/SporyTike/Mario-Kart-64-AP-Tracker/releases",
+    "repo": "SporyTike/Mario-Kart-64-AP-Tracker",
+    "tag": "v0.9.11",
+    "asset": "Mario-Kart-64-AP-Tracker-v0.9.11.zip",
+    "url": "https://github.com/SporyTike/Mario-Kart-64-AP-Tracker/releases/download/v0.9.11/Mario-Kart-64-AP-Tracker-v0.9.11.zip"
+   }
+  ],
+  "Mario Kart: Double Dash": [
+   {
+    "page": "https://github.com/Razerock/double-dash-ap-tracker/releases/latest",
+    "repo": "Razerock/double-dash-ap-tracker"
+   }
+  ],
+  "Mario & Luigi Superstar Saga": [
+   {
+    "page": "https://github.com/seto10987/MLSS-PopTracker/releases/latest",
+    "repo": "seto10987/MLSS-PopTracker"
+   }
+  ],
+  "Mario Super Sluggers": [
+   {
+    "page": "https://github.com/MarioManTAW/MarioSuperSluggersAPTracker/releases/latest",
+    "repo": "MarioManTAW/MarioSuperSluggersAPTracker",
+    "tag": "v0.3.0",
+    "asset": "mss_tracker_0.3.0.zip",
+    "url": "https://github.com/MarioManTAW/MarioSuperSluggersAPTracker/releases/download/v0.3.0/mss_tracker_0.3.0.zip"
+   }
+  ],
+  "Mega Man 2": [
+   {
+    "page": "https://github.com/BrianCumminger/megaman2-ap-poptracker/releases/latest",
+    "repo": "BrianCumminger/megaman2-ap-poptracker",
+    "tag": "v0.0.1",
+    "asset": "megaman2-ap-poptracker.zip",
+    "url": "https://github.com/BrianCumminger/megaman2-ap-poptracker/releases/download/v0.0.1/megaman2-ap-poptracker.zip"
+   }
+  ],
+  "Mega Man 3": [
+   {
+    "page": "https://github.com/drothe/megaman3-ap-poptracker/releases/latest",
+    "repo": "drothe/megaman3-ap-poptracker",
+    "tag": "v0.0.2.2",
+    "asset": "megaman3-ap-poptracker.zip",
+    "url": "https://github.com/drothe/megaman3-ap-poptracker/releases/download/v0.0.2.2/megaman3-ap-poptracker.zip"
+   }
+  ],
+  "Mega Man Battle Network 3": [
+   {
+    "page": "https://github.com/MisterIbis/MMBN3_AP_Tracker/releases/latest",
+    "repo": "MisterIbis/MMBN3_AP_Tracker",
+    "tag": "0.3.0.0",
+    "asset": "MMBN3_AP_Tracker.zip",
+    "url": "https://github.com/MisterIbis/MMBN3_AP_Tracker/releases/download/0.3.0.0/MMBN3_AP_Tracker.zip"
+   }
+  ],
+  "Mega Man X": [
+   {
+    "page": "https://github.com/Michpem/megamanx-ap-poptracker/releases/latest",
+    "repo": "Michpem/megamanx-ap-poptracker",
+    "tag": "1.0.9",
+    "asset": "megamanx-ap-poptracker.zip",
+    "url": "https://github.com/Michpem/megamanx-ap-poptracker/releases/download/1.0.9/megamanx-ap-poptracker.zip"
+   }
+  ],
+  "Mega Man X2": [
+   {
+    "page": "https://github.com/Michpem/megamanx2-ap-poptracker/releases/latest",
+    "repo": "Michpem/megamanx2-ap-poptracker",
+    "tag": "1.1.4",
+    "asset": "megamanx2-ap-poptracker.zip",
+    "url": "https://github.com/Michpem/megamanx2-ap-poptracker/releases/download/1.1.4/megamanx2-ap-poptracker.zip"
+   }
+  ],
+  "Mega Man X3": [
+   {
+    "page": "https://github.com/Michpem/megamanx3-ap-poptracker/releases/latest",
+    "repo": "Michpem/megamanx3-ap-poptracker",
+    "tag": "1.0.6",
+    "asset": "megamanx3-ap-poptracker.zip",
+    "url": "https://github.com/Michpem/megamanx3-ap-poptracker/releases/download/1.0.6/megamanx3-ap-poptracker.zip"
+   }
+  ],
+  "Mega Man X4": [
+   {
+    "page": "https://github.com/l337f00l/mega-man-x4-ap-poptracker/releases/latest",
+    "repo": "l337f00l/mega-man-x4-ap-poptracker",
+    "tag": "V0.1.7",
+    "asset": "mega-man-x4-ap-poptracker_0.1.7.zip",
+    "url": "https://github.com/l337f00l/mega-man-x4-ap-poptracker/releases/download/V0.1.7/mega-man-x4-ap-poptracker_0.1.7.zip"
+   }
+  ],
+  "Metroid Fusion": [
+   {
+    "page": "https://github.com/RunInAWeek/Metroid-Fusion-AP-Tracker/releases/latest",
+    "repo": "RunInAWeek/Metroid-Fusion-AP-Tracker",
+    "tag": "v1.0.9",
+    "asset": "Metroid.Fusion.Pack.zip",
+    "url": "https://github.com/RunInAWeek/Metroid-Fusion-AP-Tracker/releases/download/v1.0.9/Metroid.Fusion.Pack.zip"
+   }
+  ],
+  "Metroid Prime": [
+   {
+    "page": "https://github.com/lilDavid/MetroidPrimeAP-PoptrackerPack/releases/latest",
+    "repo": "lilDavid/MetroidPrimeAP-PoptrackerPack",
+    "tag": "1.2.1",
+    "asset": "MetroidPrime-Archipelago-lilDavid.zip",
+    "url": "https://github.com/lilDavid/MetroidPrimeAP-PoptrackerPack/releases/download/1.2.1/MetroidPrime-Archipelago-lilDavid.zip"
+   }
+  ],
+  "Metroid: Samus Returns": [
+   {
+    "page": "https://github.com/LuigiXRules/Metroid-Samus-Returns-Poptracker-Pack/releases",
+    "repo": "LuigiXRules/Metroid-Samus-Returns-Poptracker-Pack",
+    "tag": "0.4.1",
+    "asset": "samus_returns_pack.zip",
+    "url": "https://github.com/LuigiXRules/Metroid-Samus-Returns-Poptracker-Pack/releases/download/0.4.1/samus_returns_pack.zip"
+   }
+  ],
+  "Metroid: Zero Mission": [
+   {
+    "page": "https://github.com/ladybunne/MetroidZeroMission_PopTrackerPack/releases/latest",
+    "repo": "ladybunne/MetroidZeroMission_PopTrackerPack",
+    "tag": "v1.4.2",
+    "asset": "MetroidZeroMission_PopTrackerPack.zip",
+    "url": "https://github.com/ladybunne/MetroidZeroMission_PopTrackerPack/releases/download/v1.4.2/MetroidZeroMission_PopTrackerPack.zip"
+   }
+  ],
+  "Minecraft": [
+   {
+    "page": "https://github.com/Cyb3RGER/minecraft_rando_tracker/releases/latest",
+    "repo": "Cyb3RGER/minecraft_rando_tracker",
+    "tag": "0.2.4",
+    "asset": "minecraft_rando_tracker-0_2_4.zip",
+    "url": "https://github.com/Cyb3RGER/minecraft_rando_tracker/releases/download/0.2.4/minecraft_rando_tracker-0_2_4.zip"
+   }
+  ],
+  "Momodora: Moonlit Farewell": [
+   {
+    "page": "https://github.com/FuyumiSogeki/Momodora-Moonlit-Farewell-Poptracker/releases/latest",
+    "repo": "FuyumiSogeki/Momodora-Moonlit-Farewell-Poptracker",
+    "tag": "v1.7.7",
+    "asset": "Momodora.MF.Tracker.zip",
+    "url": "https://github.com/FuyumiSogeki/Momodora-Moonlit-Farewell-Poptracker/releases/download/v1.7.7/Momodora.MF.Tracker.zip"
+   }
+  ],
+  "Noita": [
+   {
+    "page": "https://github.com/ScipioWright/Noita-poptracker/releases/latest",
+    "repo": "ScipioWright/Noita-poptracker",
+    "tag": "2.1.0",
+    "asset": "Noita-poptracker.zip",
+    "url": "https://github.com/ScipioWright/Noita-poptracker/releases/download/2.1.0/Noita-poptracker.zip"
+   }
+  ],
+  "Path of Exile": [
+   {
+    "page": "https://github.com/stubobis1/PathOfExilePoptracker/releases/latest",
+    "repo": "stubobis1/PathOfExilePoptracker",
+    "tag": "1.2.1",
+    "asset": "PathOfExilePoptracker.zip",
+    "url": "https://github.com/stubobis1/PathOfExilePoptracker/releases/download/1.2.1/PathOfExilePoptracker.zip"
+   }
+  ],
+  "Persona 5 Royal": [
+   {
+    "page": "https://github.com/AkagiCritMagnet/P5R-poptracker-pack-for-AP/releases",
+    "repo": "AkagiCritMagnet/P5R-poptracker-pack-for-AP",
+    "tag": "V0.3b",
+    "asset": "P5R.Pack.zip",
+    "url": "https://github.com/AkagiCritMagnet/P5R-poptracker-pack-for-AP/releases/download/V0.3b/P5R.Pack.zip"
+   }
+  ],
+  "Phantasy Star II": [
+   {
+    "page": "https://github.com/lagdotcom/poptracker-phantasy-star-2/releases/latest",
+    "repo": "lagdotcom/poptracker-phantasy-star-2",
+    "tag": "1.0.2",
+    "asset": "PhantasyStar2-AP-Tracker-1.0.2.zip",
+    "url": "https://github.com/lagdotcom/poptracker-phantasy-star-2/releases/download/1.0.2/PhantasyStar2-AP-Tracker-1.0.2.zip"
+   }
+  ],
+  "Pikmin 2": [
+   {
+    "page": "https://github.com/Vinaigre1/Pikmin2-PopTracker/releases/latest",
+    "repo": "Vinaigre1/Pikmin2-PopTracker",
+    "tag": "v0.2.1",
+    "asset": "Pikmin2-PopTracker.zip",
+    "url": "https://github.com/Vinaigre1/Pikmin2-PopTracker/releases/download/v0.2.1/Pikmin2-PopTracker.zip"
+   }
+  ],
+  "Planet Zoo": [
+   {
+    "page": "https://github.com/tinkieZo/Planet-Zoo-Poptracker/releases/latest",
+    "repo": "tinkieZo/Planet-Zoo-Poptracker",
+    "tag": "0.0.1",
+    "asset": "Planet-Zoo-Poptracker.zip",
+    "url": "https://github.com/tinkieZo/Planet-Zoo-Poptracker/releases/download/0.0.1/Planet-Zoo-Poptracker.zip"
+   }
+  ],
+  "Plok": [
+   {
+    "page": "https://github.com/Happyhappyism/Plok_Tracker/releases",
+    "repo": "Happyhappyism/Plok_Tracker",
+    "tag": "plok_tracker_v0.1.0",
+    "asset": "Plok_Tracker.zip",
+    "url": "https://github.com/Happyhappyism/Plok_Tracker/releases/download/plok_tracker_v0.1.0/Plok_Tracker.zip"
+   }
+  ],
+  "Pokémon Black and White": [
+   {
+    "page": "https://github.com/Radis7Noir/pokemon-bw-ap-tracker/releases/latest",
+    "repo": "Radis7Noir/pokemon-bw-ap-tracker",
+    "tag": "4.0.3",
+    "asset": "pokemon-bw-ap-tracker.zip",
+    "url": "https://github.com/Radis7Noir/pokemon-bw-ap-tracker/releases/download/4.0.3/pokemon-bw-ap-tracker.zip"
+   }
+  ],
+  "Pokémon Crystal": [
+   {
+    "page": "https://github.com/palex00/crystal-ap-tracker/releases/latest",
+    "repo": "palex00/crystal-ap-tracker"
+   }
+  ],
+  "Pokémon Emerald": [
+   {
+    "page": "https://github.com/seto10987/Archipelago-Emerald-AP-Tracker/releases/latest",
+    "repo": "seto10987/Archipelago-Emerald-AP-Tracker"
+   }
+  ],
+  "Pokémon FireRed and LeafGreen": [
+   {
+    "page": "https://github.com/vyneras/pokemon-frlg-tracker/releases/latest",
+    "repo": "vyneras/pokemon-frlg-tracker",
+    "tag": "4.1.3",
+    "asset": "pokemon-frlg-tracker.zip",
+    "url": "https://github.com/vyneras/pokemon-frlg-tracker/releases/download/4.1.3/pokemon-frlg-tracker.zip"
+   }
+  ],
+  "Pokémon HeartGold & SoulSilver (TrueBlue)": [
+   {
+    "page": "https://github.com/PainSeer/HGSS-AP-poptracker-pack/releases",
+    "repo": "PainSeer/HGSS-AP-poptracker-pack"
+   }
+  ],
+  "Pokémon Mystery Dungeon: Explorers of Sky": [
+   {
+    "page": "https://www.google.com/url?q=https://github.com/ScarredSceptile/pmd_eos-AP-poptracker/releases/&sa=D&source=editors&ust=1776540298593253&usg=AOvVaw2BVMetV7owHyevH4WXXFo7"
+   }
+  ],
+  "Pokémon Pinball Ruby & Sapphire": [
+   {
+    "page": "https://github.com/Kuzurreesh/Pokemon-Pinball-Ruby-Sapphire-Poptracker/releases",
+    "repo": "Kuzurreesh/Pokemon-Pinball-Ruby-Sapphire-Poptracker"
+   }
+  ],
+  "Pokémon Platinum": [
+   {
+    "page": "https://github.com/palex00/platinum-ap-tracker/releases/latest",
+    "repo": "palex00/platinum-ap-tracker"
+   }
+  ],
+  "Pokémon Red and Blue": [
+   {
+    "page": "https://github.com/palex00/rb_tracker/releases/latest",
+    "repo": "palex00/rb_tracker"
+   }
+  ],
+  "Pokémon Snap": [
+   {
+    "page": "https://github.com/lighting8282/Pokemon-Snap-AP-Pop-Tracker/releases",
+    "repo": "lighting8282/Pokemon-Snap-AP-Pop-Tracker",
+    "tag": "v1.7.0.0",
+    "asset": "SnapTracker-1.7.0.0.zip",
+    "url": "https://github.com/lighting8282/Pokemon-Snap-AP-Pop-Tracker/releases/download/v1.7.0.0/SnapTracker-1.7.0.0.zip"
+   }
+  ],
+  "PokéPark Wii: Pikachu's Adventure": [
+   {
+    "page": "https://github.com/Mekurushi/pokepark_ap_poptracker/releases/tag/1.2.4",
+    "repo": "Mekurushi/pokepark_ap_poptracker",
+    "tag": "1.2.4",
+    "asset": "pokepark_ap_poptracker.zip",
+    "url": "https://github.com/Mekurushi/pokepark_ap_poptracker/releases/download/1.2.4/pokepark_ap_poptracker.zip"
+   }
+  ],
+  "Pseudoregalia": [
+   {
+    "page": "https://github.com/highrow623/pseudoregalia_brooty/releases/tag/0.1.11",
+    "repo": "highrow623/pseudoregalia_brooty",
+    "tag": "0.1.11",
+    "asset": "pseudoregalia_brooty.zip",
+    "url": "https://github.com/highrow623/pseudoregalia_brooty/releases/download/0.1.11/pseudoregalia_brooty.zip"
+   }
+  ],
+  "Psychonauts": [
+   {
+    "page": "https://github.com/Mysteryem/Psychonauts_AP_PopTracker/releases/latest",
+    "repo": "Mysteryem/Psychonauts_AP_PopTracker",
+    "tag": "v1.1.1",
+    "asset": "Psychonauts_AP_PopTracker.zip",
+    "url": "https://github.com/Mysteryem/Psychonauts_AP_PopTracker/releases/download/v1.1.1/Psychonauts_AP_PopTracker.zip"
+   }
+  ],
+  "Rabbit and Steel": [
+   {
+    "page": "https://github.com/FuyumiSogeki/Rabbit-and-Steel-Tracker/releases",
+    "repo": "FuyumiSogeki/Rabbit-and-Steel-Tracker",
+    "tag": "0.0.4",
+    "asset": "Rabbit_and_Steel_Tracker.zip",
+    "url": "https://github.com/FuyumiSogeki/Rabbit-and-Steel-Tracker/releases/download/0.0.4/Rabbit_and_Steel_Tracker.zip"
+   }
+  ],
+  "Rabi-Ribi": [
+   {
+    "page": "https://github.com/rajanb/RabiRibiPoptracker/releases/latest",
+    "repo": "rajanb/RabiRibiPoptracker",
+    "tag": "v0.5",
+    "asset": "RabiRibiPoptracker.zip",
+    "url": "https://github.com/rajanb/RabiRibiPoptracker/releases/download/v0.5/RabiRibiPoptracker.zip"
+   }
+  ],
+  "Raft": [
+   {
+    "page": "https://github.com/PrimePentad/Raft-AP-Poptracker/releases",
+    "repo": "PrimePentad/Raft-AP-Poptracker"
+   }
+  ],
+  "Rain World": [
+   {
+    "page": "https://github.com/jdmccork/Rain-World-PopTracker/releases/latest",
+    "repo": "jdmccork/Rain-World-PopTracker",
+    "tag": "v0.7.5",
+    "asset": "Rain-World-PopTracker-0.7.5.zip",
+    "url": "https://github.com/jdmccork/Rain-World-PopTracker/releases/download/v0.7.5/Rain-World-PopTracker-0.7.5.zip"
+   }
+  ],
+  "Ratchet & Clank": [
+   {
+    "page": "https://github.com/SomeLazyGamer/RaC-AP-Poptracker/releases",
+    "repo": "SomeLazyGamer/RaC-AP-Poptracker",
+    "tag": "1.1.2",
+    "asset": "RaC1_Tracker_SLG_1.1.2.zip",
+    "url": "https://github.com/SomeLazyGamer/RaC-AP-Poptracker/releases/download/1.1.2/RaC1_Tracker_SLG_1.1.2.zip"
+   }
+  ],
+  "Ratchet & Clank 2: Going Commando": [
+   {
+    "page": "https://github.com/cloudofdarkhole6/RaC2-poptracker/releases/latest",
+    "repo": "cloudofdarkhole6/RaC2-poptracker",
+    "tag": "0.4.0",
+    "asset": "RaC2-poptracker_0.4.0.zip",
+    "url": "https://github.com/cloudofdarkhole6/RaC2-poptracker/releases/download/0.4.0/RaC2-poptracker_0.4.0.zip"
+   }
+  ],
+  "Ratchet & Clank 3: Up Your Arsenal": [
+   {
+    "page": "https://github.com/SomeLazyGamer/RaC-3-UYA-AP-Poptracker",
+    "repo": "SomeLazyGamer/RaC-3-UYA-AP-Poptracker",
+    "tag": "1.6.9",
+    "asset": "RaC3_Tracker_SLG_1.6.9.zip",
+    "url": "https://github.com/SomeLazyGamer/RaC-3-UYA-AP-Poptracker/releases/download/1.6.9/RaC3_Tracker_SLG_1.6.9.zip"
+   }
+  ],
+  "Ratchet & Clank: Size Matters": [
+   {
+    "page": "https://github.com/SomeLazyGamer/RaC-5-SM-AP-Poptracker/releases",
+    "repo": "SomeLazyGamer/RaC-5-SM-AP-Poptracker",
+    "tag": "1.5.1",
+    "asset": "RaC5_Tracker_SLG_1.5.1.zip",
+    "url": "https://github.com/SomeLazyGamer/RaC-5-SM-AP-Poptracker/releases/download/1.5.1/RaC5_Tracker_SLG_1.5.1.zip"
+   }
+  ],
+  "Resident Evil 3 Remake": [
+   {
+    "page": "https://github.com/TheRealSolidusSnake/RE3R_Poptracker/releases/latest",
+    "repo": "TheRealSolidusSnake/RE3R_Poptracker",
+    "tag": "0.2.6",
+    "asset": "RE3R_POPTRACKER.zip",
+    "url": "https://github.com/TheRealSolidusSnake/RE3R_Poptracker/releases/download/0.2.6/RE3R_POPTRACKER.zip"
+   }
+  ],
+  "Reventure": [
+   {
+    "page": "https://github.com/fhnnhf/reventure_tracker/releases",
+    "repo": "fhnnhf/reventure_tracker"
+   }
+  ],
+  "Risk of Rain 2": [
+   {
+    "page": "https://github.com/Swiftmane/Ror2-AP-tracker/releases/latest",
+    "repo": "Swiftmane/Ror2-AP-tracker",
+    "tag": "v1.6.0",
+    "asset": "Ror2-AP-tracker.zip",
+    "url": "https://github.com/Swiftmane/Ror2-AP-tracker/releases/download/v1.6.0/Ror2-AP-tracker.zip"
+   }
+  ],
+  "Satisfactory": [
+   {
+    "page": "https://github.com/snileaf/Satisfactory-poptracker/releases/latest",
+    "repo": "snileaf/Satisfactory-poptracker",
+    "tag": "v0.1.2",
+    "asset": "Satisfactory-PopTracker.v0.1.2.zip",
+    "url": "https://github.com/snileaf/Satisfactory-poptracker/releases/download/v0.1.2/Satisfactory-PopTracker.v0.1.2.zip"
+   }
+  ],
+  "Schedule I": [
+   {
+    "page": "https://github.com/RazgrizEast/schedule-1-poptracker-razgriz/releases/latest",
+    "repo": "RazgrizEast/schedule-1-poptracker-razgriz",
+    "tag": "v1.3.3",
+    "asset": "schedule_i_poptracker_razgriz_1.3.3.zip",
+    "url": "https://github.com/RazgrizEast/schedule-1-poptracker-razgriz/releases/download/v1.3.3/schedule_i_poptracker_razgriz_1.3.3.zip"
+   }
+  ],
+  "Scooby-Doo! Night of 100 Frights": [
+   {
+    "page": "https://github.com/imklubb/no100f-poptracker/releases/latest",
+    "repo": "imklubb/no100f-poptracker",
+    "tag": "v1.0.1",
+    "asset": "ap_n100f_1.0.1.zip",
+    "url": "https://github.com/imklubb/no100f-poptracker/releases/download/v1.0.1/ap_n100f_1.0.1.zip"
+   }
+  ],
+  "Secret of Evermore": [
+   {
+    "page": "https://github.com/Cyb3RGER/evermizer-tracker-package/releases/latest",
+    "repo": "Cyb3RGER/evermizer-tracker-package",
+    "tag": "v0.4.2.0",
+    "asset": "evermizer-tracker-package-v0_4_2_0.zip",
+    "url": "https://github.com/Cyb3RGER/evermizer-tracker-package/releases/download/v0.4.2.0/evermizer-tracker-package-v0_4_2_0.zip"
+   }
+  ],
+  "Secret of Mana": [
+   {
+    "page": "https://github.com/Cyb3RGER/SoM-Open-Mode-Tracker/releases",
+    "repo": "Cyb3RGER/SoM-Open-Mode-Tracker",
+    "tag": "1.7.0.3",
+    "asset": "SoM-Open-Mode-Tracker-v1_7_0_3.zip",
+    "url": "https://github.com/Cyb3RGER/SoM-Open-Mode-Tracker/releases/download/1.7.0.3/SoM-Open-Mode-Tracker-v1_7_0_3.zip"
+   }
+  ],
+  "Sekiro: Shadows Die Twice": [
+   {
+    "page": "https://github.com/vonTungsten/Sekiro-Poptracker/releases/latest",
+    "repo": "vonTungsten/Sekiro-Poptracker",
+    "tag": "v0.1.0",
+    "asset": "Sekiro-PopTracker-v0.1.0.zip",
+    "url": "https://github.com/vonTungsten/Sekiro-Poptracker/releases/download/v0.1.0/Sekiro-PopTracker-v0.1.0.zip"
+   }
+  ],
+  "Shivers": [
+   {
+    "page": "https://github.com/Shivers-Randomizer/Shivers-AP-Tracker/releases",
+    "repo": "Shivers-Randomizer/Shivers-AP-Tracker",
+    "tag": "v0.5",
+    "asset": "shivers-tracker-0.5.zip",
+    "url": "https://github.com/Shivers-Randomizer/Shivers-AP-Tracker/releases/download/v0.5/shivers-tracker-0.5.zip"
+   }
+  ],
+  "Slay the Princess — The Pristine Cut": [
+   {
+    "page": "https://github.com/DannySchultzDev/Slay-The-Princess-PopTracker/releases",
+    "repo": "DannySchultzDev/Slay-The-Princess-PopTracker",
+    "tag": "V1.0.0",
+    "asset": "Slay.The.Princess.Poptracker.zip",
+    "url": "https://github.com/DannySchultzDev/Slay-The-Princess-PopTracker/releases/download/V1.0.0/Slay.The.Princess.Poptracker.zip"
+   }
+  ],
+  "Sly 2: Band of Thieves": [
+   {
+    "page": "https://github.com/lastingParadox/Sly2-Poptracker/releases/latest",
+    "repo": "lastingParadox/Sly2-Poptracker",
+    "tag": "0.1.6",
+    "asset": "Sly2-Poptracker_0.1.6.zip",
+    "url": "https://github.com/lastingParadox/Sly2-Poptracker/releases/download/0.1.6/Sly2-Poptracker_0.1.6.zip"
+   }
+  ],
+  "Sly Cooper and the Thievius Raccoonus": [
+   {
+    "page": "https://github.com/Slinq17/Sly1-Poptracker/releases",
+    "repo": "Slinq17/Sly1-Poptracker"
+   }
+  ],
+  "SMZ3": [
+   {
+    "page": "https://github.com/Dessyreqt/smz3-ap-tracker/releases/latest",
+    "repo": "Dessyreqt/smz3-ap-tracker",
+    "tag": "1.5.1",
+    "asset": "smz3-ap-tracker-1.5.1.zip",
+    "url": "https://github.com/Dessyreqt/smz3-ap-tracker/releases/download/1.5.1/smz3-ap-tracker-1.5.1.zip"
+   }
+  ],
+  "Sonic Adventure 2 Battle": [
+   {
+    "page": "https://github.com/PoryGone/SA2B_AP_Tracker/releases/latest",
+    "repo": "PoryGone/SA2B_AP_Tracker",
+    "tag": "v2.4.6",
+    "asset": "sonic_adventure_2_battle_randomizer_porygone.zip",
+    "url": "https://github.com/PoryGone/SA2B_AP_Tracker/releases/download/v2.4.6/sonic_adventure_2_battle_randomizer_porygone.zip"
+   }
+  ],
+  "Sonic Battle": [
+   {
+    "page": "https://github.com/Happyhappyism/sonic_battle_poptracker/releases",
+    "repo": "Happyhappyism/sonic_battle_poptracker",
+    "tag": "sonic_battle_poptracker_v0.1.0",
+    "asset": "sonic_battle.zip",
+    "url": "https://github.com/Happyhappyism/sonic_battle_poptracker/releases/download/sonic_battle_poptracker_v0.1.0/sonic_battle.zip"
+   }
+  ],
+  "Sonic Colors (DS)": [
+   {
+    "page": "https://github.com/SilicDev/SonicColoursDS-poptracker/releases/",
+    "repo": "SilicDev/SonicColoursDS-poptracker"
+   }
+  ],
+  "Spelunker": [
+   {
+    "page": "https://github.com/GirambQuamb/spelunker_archipelago_tracker/releases/tag/0.2.0",
+    "repo": "GirambQuamb/spelunker_archipelago_tracker",
+    "tag": "0.2.0",
+    "asset": "spelunker_archipelago_tracker.v0.2.0.zip",
+    "url": "https://github.com/GirambQuamb/spelunker_archipelago_tracker/releases/download/0.2.0/spelunker_archipelago_tracker.v0.2.0.zip"
+   }
+  ],
+  "Spelunky 2": [
+   {
+    "page": "https://github.com/Bogdan1000pink/Spelunky-2-Tracker",
+    "repo": "Bogdan1000pink/Spelunky-2-Tracker",
+    "tag": "Release_4.1",
+    "asset": "Spelunky2_AP_Tracker_4.1.zip",
+    "url": "https://github.com/Bogdan1000pink/Spelunky-2-Tracker/releases/download/Release_4.1/Spelunky2_AP_Tracker_4.1.zip"
+   }
+  ],
+  "Splasher": [
+   {
+    "page": "https://github.com/Ung-W/Splasher-AP-Poptracker/releases/",
+    "repo": "Ung-W/Splasher-AP-Poptracker",
+    "tag": "v0.8.0",
+    "asset": "Splasher-AP-Poptracker-0.8.0.zip",
+    "url": "https://github.com/Ung-W/Splasher-AP-Poptracker/releases/download/v0.8.0/Splasher-AP-Poptracker-0.8.0.zip"
+   }
+  ],
+  "Spongebob Squarepants: Battle for Bikini Bottom": [
+   {
+    "page": "https://github.com/Cyb3RGER/bfbb_ap_pack/releases/latest",
+    "repo": "Cyb3RGER/bfbb_ap_pack",
+    "tag": "v1.2.0",
+    "asset": "bfbb_ap_pack-v1_2_0.zip",
+    "url": "https://github.com/Cyb3RGER/bfbb_ap_pack/releases/download/v1.2.0/bfbb_ap_pack-v1_2_0.zip"
+   }
+  ],
+  "Spyro 2: Ripto's Rage": [
+   {
+    "page": "https://github.com/routhken/Spyro_2_tracker/releases/latest",
+    "repo": "routhken/Spyro_2_tracker",
+    "tag": "v1.4.1",
+    "asset": "Spyro_2_aptracker.zip",
+    "url": "https://github.com/routhken/Spyro_2_tracker/releases/download/v1.4.1/Spyro_2_aptracker.zip"
+   }
+  ],
+  "Streets of Rage": [
+   {
+    "page": "https://github.com/UltiNaruto/SOR_AP_Tracker/releases",
+    "repo": "UltiNaruto/SOR_AP_Tracker",
+    "tag": "v0.0.4",
+    "asset": "SOR_AP_Tracker_0.0.4.zip",
+    "url": "https://github.com/UltiNaruto/SOR_AP_Tracker/releases/download/v0.0.4/SOR_AP_Tracker_0.0.4.zip"
+   }
+  ],
+  "Super Mario 64": [
+   {
+    "page": "https://github.com/ThePhar/APSM64TrackerPack/releases/latest",
+    "repo": "ThePhar/APSM64TrackerPack",
+    "tag": "1.5.1",
+    "asset": "pharware-sm64-pack_1.5.1.zip",
+    "url": "https://github.com/thephar/APSM64TrackerPack/releases/download/1.5.1/pharware-sm64-pack_1.5.1.zip"
+   },
+   {
+    "page": "https://github.com/RaceProUK/SM64EX-APTracker/releases/latest",
+    "repo": "RaceProUK/SM64EX-APTracker",
+    "tag": "v0.6.0",
+    "asset": "sm64ex_rando_raceprouk.zip",
+    "url": "https://github.com/RaceProUK/SM64EX-APTracker/releases/download/v0.6.0/sm64ex_rando_raceprouk.zip"
+   },
+   {
+    "page": "https://github.com/RBmans/SM64APMoveRandoPopTracker/releases/latest",
+    "repo": "RBmans/SM64APMoveRandoPopTracker",
+    "tag": "v1.7.3",
+    "asset": "sm64_moverando_rbm_v1.7.3.zip",
+    "url": "https://github.com/RBmans/SM64APMoveRandoPopTracker/releases/download/v1.7.3/sm64_moverando_rbm_v1.7.3.zip"
+   }
+  ],
+  "Super Mario Land 2: The Golden Coins": [
+   {
+    "page": "https://github.com/mobby45/SuperMarioLand2TrackerAP/releases/latest",
+    "repo": "mobby45/SuperMarioLand2TrackerAP",
+    "tag": "0.8.2",
+    "asset": "SuperMarioLand2TrackerAP.zip",
+    "url": "https://github.com/mobby45/SuperMarioLand2TrackerAP/releases/download/0.8.2/SuperMarioLand2TrackerAP.zip"
+   }
+  ],
+  "Super Mario World": [
+   {
+    "page": "https://github.com/PoryGone/SMW_AP_Tracker/releases/latest",
+    "repo": "PoryGone/SMW_AP_Tracker",
+    "tag": "v2.2.1",
+    "asset": "super_mario_world_randomizer.zip",
+    "url": "https://github.com/PoryGone/SMW_AP_Tracker/releases/download/v2.2.1/super_mario_world_randomizer.zip"
+   }
+  ],
+  "Super Mario World: Spicy Mycena Waffles": [
+   {
+    "page": "https://github.com/IsoFrieze/SMW_AP_Tracker/releases/latest",
+    "repo": "IsoFrieze/SMW_AP_Tracker",
+    "tag": "v1.3.10",
+    "asset": "WafflesTracker.zip",
+    "url": "https://github.com/IsoFrieze/SMW_AP_Tracker/releases/download/v1.3.10/WafflesTracker.zip"
+   }
+  ],
+  "Super Metroid": [
+   {
+    "page": "https://github.com/Cyb3RGER/sm_ap_tracker/releases/latest",
+    "repo": "Cyb3RGER/sm_ap_tracker",
+    "tag": "0.1.1.1",
+    "asset": "sm_ap_tracker-v0_1_1_1.zip",
+    "url": "https://github.com/Cyb3RGER/sm_ap_tracker/releases/download/0.1.1.1/sm_ap_tracker-v0_1_1_1.zip"
+   }
+  ],
+  "Super Smash Bros. Melee": [
+   {
+    "page": "https://github.com/ZobeePlays/Melee-AP-Tracker",
+    "repo": "ZobeePlays/Melee-AP-Tracker"
+   }
+  ],
+  "Supraland": [
+   {
+    "page": "https://discord.com/channels/731205301247803413/1093038054337433670/1532670634490986618"
+   }
+  ],
+  "Taz: Wanted": [
+   {
+    "page": "https://github.com/imklubb/Taz-Wanted-Poptracker/releases/latest",
+    "repo": "imklubb/Taz-Wanted-Poptracker",
+    "tag": "1.2.0",
+    "asset": "Taz-Wanted-Poptracker-1.2.0.zip",
+    "url": "https://github.com/imklubb/Taz-Wanted-Poptracker/releases/download/1.2.0/Taz-Wanted-Poptracker-1.2.0.zip"
+   }
+  ],
+  "Tevi": [
+   {
+    "page": "https://github.com/BlackSoulKnight/Tevi_Poptracker/releases",
+    "repo": "BlackSoulKnight/Tevi_Poptracker",
+    "tag": "0.6.6",
+    "asset": "Tevi_Poptracker.zip",
+    "url": "https://github.com/BlackSoulKnight/Tevi_Poptracker/releases/download/0.6.6/Tevi_Poptracker.zip"
+   }
+  ],
+  "The Grinch": [
+   {
+    "page": "https://www.google.com/url?q=https://github.com/JAHapner01/Grinch-AP-Tracker/releases/latest&sa=D&source=editors&ust=1775835197578395&usg=AOvVaw3cLg7ZDJAc2K_0T7R4ZT7b"
+   }
+  ],
+  "The Legend of Zelda": [
+   {
+    "page": "https://github.com/Br00ty/tloz_brooty/releases/latest",
+    "repo": "Br00ty/tloz_brooty",
+    "tag": "1.5.5.1",
+    "asset": "tloz_brooty.zip",
+    "url": "https://github.com/Br00ty/tloz_brooty/releases/download/1.5.5.1/tloz_brooty.zip"
+   }
+  ],
+  "The Legend of Zelda: A Link Between Worlds": [
+   {
+    "page": "https://github.com/guigui0246/albw-ap-poptracker/releases",
+    "repo": "guigui0246/albw-ap-poptracker",
+    "tag": "2.0.0-prerelease-5",
+    "asset": "albw-ap-poptracker-2.0.0-prerelease-5.zip",
+    "url": "https://github.com/guigui0246/albw-ap-poptracker/releases/download/2.0.0-prerelease-5/albw-ap-poptracker-2.0.0-prerelease-5.zip"
+   }
+  ],
+  "The Legend of Zelda: A Link to the Past": [
+   {
+    "page": "https://github.com/StripesOO7/alttp-ap-poptracker-pack/releases/latest",
+    "repo": "StripesOO7/alttp-ap-poptracker-pack",
+    "tag": "v0.5.2-beta10",
+    "asset": "alttp-ap-tracker-v0.5.2-beta-10.zip",
+    "url": "https://github.com/StripesOO7/alttp-ap-poptracker-pack/releases/download/v0.5.2-beta10/alttp-ap-tracker-v0.5.2-beta-10.zip"
+   },
+   {
+    "page": "https://github.com/Br00ty/tloz_brooty/releases/latest",
+    "repo": "Br00ty/tloz_brooty",
+    "tag": "1.5.5.1",
+    "asset": "tloz_brooty.zip",
+    "url": "https://github.com/Br00ty/tloz_brooty/releases/download/1.5.5.1/tloz_brooty.zip"
+   }
+  ],
+  "The Legend of Zelda: Majora's Mask": [
+   {
+    "page": "https://github.com/G4M3RL1F3/Majoras-Mask-AP-PopTracker-Pack/releases/latest",
+    "repo": "G4M3RL1F3/Majoras-Mask-AP-PopTracker-Pack",
+    "tag": "v0.9.0",
+    "asset": "Majoras-Mask-AP-PopTracker-Pack.zip",
+    "url": "https://github.com/G4M3RL1F3/Majoras-Mask-AP-PopTracker-Pack/releases/download/v0.9.0/Majoras-Mask-AP-PopTracker-Pack.zip"
+   }
+  ],
+  "The Legend of Zelda: Ocarina of Time - Ship of Harkinian": [
+   {
+    "page": "https://github.com/Brian0255/ship-of-harkinian-ap-tracker/releases/tag/1.0.2",
+    "repo": "Brian0255/ship-of-harkinian-ap-tracker",
+    "tag": "1.0.2",
+    "asset": "ship-of-harkinian-ap-tracker-1.0.2.zip",
+    "url": "https://github.com/Brian0255/ship-of-harkinian-ap-tracker/releases/download/1.0.2/ship-of-harkinian-ap-tracker-1.0.2.zip"
+   }
+  ],
+  "The Legend of Zelda: Oracle of Ages": [
+   {
+    "page": "https://github.com/Dranzior/ooa_brooty/releases",
+    "repo": "Dranzior/ooa_brooty",
+    "tag": "0.9.12",
+    "asset": "ooa.zip",
+    "url": "https://github.com/Dranzior/ooa_brooty/releases/download/0.9.12/ooa.zip"
+   }
+  ],
+  "The Legend of Zelda: Oracle of Seasons": [
+   {
+    "page": "https://github.com/OmegaZeron/Oracle-of-Seasons-AP-Poptracker-Pack/releases/latest",
+    "repo": "OmegaZeron/Oracle-of-Seasons-AP-Poptracker-Pack",
+    "tag": "10.1.0",
+    "asset": "seasons_ap.zip",
+    "url": "https://github.com/OmegaZeron/Oracle-of-Seasons-AP-Poptracker-Pack/releases/download/10.1.0/seasons_ap.zip"
+   }
+  ],
+  "The Legend of Zelda: Spirit Tracks": [
+   {
+    "page": "https://github.com/carrotinator/spirit-tracks-poptracker-ap/releases",
+    "repo": "carrotinator/spirit-tracks-poptracker-ap",
+    "tag": "v5.2",
+    "asset": "spirit-tracks-poptracker-ap.zip",
+    "url": "https://github.com/carrotinator/spirit-tracks-poptracker-ap/releases/download/v5.2/spirit-tracks-poptracker-ap.zip"
+   }
+  ],
+  "The Legend of Zelda: The Minish Cap": [
+   {
+    "page": "https://github.com/deoxis9001/tmcrando_maptracker_deoxis/releases/latest",
+    "repo": "deoxis9001/tmcrando_maptracker_deoxis",
+    "tag": "beta_v1.0.0.19",
+    "asset": "BetaTmcrTrackerDeoxis.zip",
+    "url": "https://github.com/deoxis9001/tmcrando_maptracker_deoxis/releases/download/beta_v1.0.0.19/BetaTmcrTrackerDeoxis.zip"
+   }
+  ],
+  "The Legend of Zelda: The Wind Waker": [
+   {
+    "page": "https://github.com/Mysteryem/ww-poptracker/releases/latest",
+    "repo": "Mysteryem/ww-poptracker"
+   }
+  ],
+  "The Legend of Zelda: Twilight Princess": [
+   {
+    "page": "https://github.com/Kizugaya/TPRAP_poptracker/releases/tag/v0.10.2",
+    "repo": "Kizugaya/TPRAP_poptracker",
+    "tag": "v0.10.2",
+    "asset": "TPRAP_poptracker_v0.10.2.zip",
+    "url": "https://github.com/Kizugaya/TPRAP_poptracker/releases/download/v0.10.2/TPRAP_poptracker_v0.10.2.zip"
+   }
+  ],
+  "The Messenger": [
+   {
+    "page": "https://github.com/alwaysintreble/TheMessengerTrackPack/releases/latest",
+    "repo": "alwaysintreble/TheMessengerTrackPack",
+    "tag": "1.4.11",
+    "asset": "TheMessengerTrackPack.zip",
+    "url": "https://github.com/alwaysintreble/TheMessengerTrackPack/releases/download/1.4.11/TheMessengerTrackPack.zip"
+   }
+  ],
+  "The Simpsons: Hit & Run": [
+   {
+    "page": "https://github.com/Tommaygun/SHAR-Poptracker/releases/latest",
+    "repo": "Tommaygun/SHAR-Poptracker",
+    "tag": "v0.2.0",
+    "asset": "SHAR-Poptracker-v0.2.0.zip",
+    "url": "https://github.com/Tommaygun/SHAR-Poptracker/releases/download/v0.2.0/SHAR-Poptracker-v0.2.0.zip"
+   }
+  ],
+  "The Witness": [
+   {
+    "page": "https://github.com/NewSoupVi/witness_archipelago_tracker/releases/latest",
+    "repo": "NewSoupVi/witness_archipelago_tracker",
+    "tag": "v0.6.8.0",
+    "asset": "witness_archipelago_tracker.zip",
+    "url": "https://github.com/NewSoupVi/witness_archipelago_tracker/releases/download/v0.6.8.0/witness_archipelago_tracker.zip"
+   }
+  ],
+  "Timespinner": [
+   {
+    "page": "https://github.com/ZobeePlays/Timespinner-AP-Item-Tracker/tree/main",
+    "repo": "ZobeePlays/Timespinner-AP-Item-Tracker"
+   }
+  ],
+  "Toejam & Earl": [
+   {
+    "page": "https://github.com/graygooglitch/Toejam-and-Earl-AP-Tracker/releases",
+    "repo": "graygooglitch/Toejam-and-Earl-AP-Tracker",
+    "tag": "v1.2.1.0",
+    "asset": "TJE_Tracker_v1.2.1.0.zip",
+    "url": "https://github.com/graygooglitch/Toejam-and-Earl-AP-Tracker/releases/download/v1.2.1.0/TJE_Tracker_v1.2.1.0.zip"
+   }
+  ],
+  "TOEM: A Photo Adventure": [
+   {
+    "page": "https://github.com/culk/toem-poptracker-pack/releases/latest",
+    "repo": "culk/toem-poptracker-pack",
+    "tag": "v1.1.2",
+    "asset": "toem_ap_tracker.zip",
+    "url": "https://github.com/culk/toem-poptracker-pack/releases/download/v1.1.2/toem_ap_tracker.zip"
+   }
+  ],
+  "Tomba!": [
+   {
+    "page": "https://github.com/T4g1/PopTrackerTomba/releases/latest",
+    "repo": "T4g1/PopTrackerTomba",
+    "tag": "v0.0.1",
+    "asset": "Tomba.pack.zip",
+    "url": "https://github.com/T4g1/PopTrackerTomba/releases/download/v0.0.1/Tomba.pack.zip"
+   }
+  ],
+  "Touhou Eiyashou ~ Imperishable Night": [
+   {
+    "page": "https://github.com/Nepley/in-poptracker/releases",
+    "repo": "Nepley/in-poptracker"
+   }
+  ],
+  "Touhou Koumakyou ~ the Embodiment of Scarlet Devil": [
+   {
+    "page": "https://github.com/Nepley/eosd-poptracker/releases",
+    "repo": "Nepley/eosd-poptracker"
+   }
+  ],
+  "Touhou Youyoumu ~ Perfect Cherry Blossom": [
+   {
+    "page": "https://github.com/Nepley/pcb-poptracker/releases",
+    "repo": "Nepley/pcb-poptracker"
+   }
+  ],
+  "TUNIC": [
+   {
+    "page": "https://github.com/SapphireSapphic/TunicTracker/releases/latest",
+    "repo": "SapphireSapphic/TunicTracker",
+    "tag": "2.3.0",
+    "asset": "TunicTracker.zip",
+    "url": "https://github.com/SapphireSapphic/TunicTracker/releases/download/2.3.0/TunicTracker.zip"
+   }
+  ],
+  "Turok 2": [
+   {
+    "page": "https://github.com/chikakoo/Turok-2-Poptracker/releases",
+    "repo": "chikakoo/Turok-2-Poptracker",
+    "tag": "v1.0.1",
+    "asset": "Turok-2-Poptracker-1.0.1.zip",
+    "url": "https://github.com/chikakoo/Turok-2-Poptracker/releases/download/v1.0.1/Turok-2-Poptracker-1.0.1.zip"
+   }
+  ],
+  "Ty The Tasmanian Tiger HD Remaster (PC)": [
+   {
+    "page": "https://github.com/FyreDay/Ty1-Poptracker/releases",
+    "repo": "FyreDay/Ty1-Poptracker",
+    "tag": "v1.0.9",
+    "asset": "Ty1-Poptracker-v1.0.9.zip",
+    "url": "https://github.com/FyreDay/Ty1-Poptracker/releases/download/v1.0.9/Ty1-Poptracker-v1.0.9.zip"
+   }
+  ],
+  "ULTRAKILL": [
+   {
+    "page": "https://github.com/BowserCrusher/UltrakillPoptracker/releases",
+    "repo": "BowserCrusher/UltrakillPoptracker",
+    "tag": "0.7.8",
+    "asset": "UltrakillPoptracker.zip",
+    "url": "https://github.com/BowserCrusher/UltrakillPoptracker/releases/download/0.7.8/UltrakillPoptracker.zip"
+   }
+  ],
+  "Undertale": [
+   {
+    "page": "https://github.com/Pikachu979/Undertale-Poptracker/releases/latest",
+    "repo": "Pikachu979/Undertale-Poptracker",
+    "tag": "0.0.2",
+    "asset": "Undertale-Poptracker-0.0.2.zip",
+    "url": "https://github.com/Pikachu979/Undertale-Poptracker/releases/download/0.0.2/Undertale-Poptracker-0.0.2.zip"
+   }
+  ],
+  "Unfair Flips": [
+   {
+    "page": "https://github.com/lighting8282/Unfair-Flips-PopTracker/releases/latest",
+    "repo": "lighting8282/Unfair-Flips-PopTracker",
+    "tag": "v0.0.4",
+    "asset": "Unfair-Flips-PopTracker-v0.0.4.zip",
+    "url": "https://github.com/lighting8282/Unfair-Flips-PopTracker/releases/download/v0.0.4/Unfair-Flips-PopTracker-v0.0.4.zip"
+   }
+  ],
+  "Vision Soft Reset": [
+   {
+    "page": "https://github.com/kumquat-ir/vsr-tracker/releases",
+    "repo": "kumquat-ir/vsr-tracker",
+    "tag": "1.0.1",
+    "asset": "vsr-tracker-1.0.1.zip",
+    "url": "https://github.com/kumquat-ir/vsr-tracker/releases/download/1.0.1/vsr-tracker-1.0.1.zip"
+   }
+  ],
+  "VVVVVV": [
+   {
+    "page": "https://github.com/JBarrows/vvvvvv_archipelago_tracker/releases",
+    "repo": "JBarrows/vvvvvv_archipelago_tracker",
+    "tag": "v0.2.0",
+    "asset": "vvvvvv_ap_tracker.zip",
+    "url": "https://github.com/JBarrows/vvvvvv_archipelago_tracker/releases/download/v0.2.0/vvvvvv_ap_tracker.zip"
+   }
+  ],
+  "Wario Land 1": [
+   {
+    "page": "https://github.com/randomcodegen/wl_ap_tracker/releases/latest",
+    "repo": "randomcodegen/wl_ap_tracker",
+    "tag": "1.1.7",
+    "asset": "wl_ap_tracker_1.1.7.zip",
+    "url": "https://github.com/randomcodegen/wl_ap_tracker/releases/download/1.1.7/wl_ap_tracker_1.1.7.zip"
+   }
+  ],
+  "Wario Land 3": [
+   {
+    "page": "https://github.com/LizzieTwoShoes/WL3-AP-PopTracker-Pack",
+    "repo": "LizzieTwoShoes/WL3-AP-PopTracker-Pack",
+    "tag": "v0.4.1",
+    "asset": "WL3-AP-PopTracker-Pack.zip",
+    "url": "https://github.com/LizzieTwoShoes/WL3-AP-PopTracker-Pack/releases/download/v0.4.1/WL3-AP-PopTracker-Pack.zip"
+   }
+  ],
+  "Wario Land 4": [
+   {
+    "page": "https://github.com/JackTHerbert/wl4_jth/releases",
+    "repo": "JackTHerbert/wl4_jth",
+    "tag": "v0.10.3",
+    "asset": "wl4_jth.zip",
+    "url": "https://github.com/JackTHerbert/wl4_jth/releases/download/v0.10.3/wl4_jth.zip"
+   }
+  ],
+  "YOHANE THE PARHELION -BLAZE in the DEEPBLUE-": [
+   {
+    "page": "https://github.com/SeanCass/YohaneTheParhelion-BlazeInTheDeepblue-Poptracker/releases",
+    "repo": "SeanCass/YohaneTheParhelion-BlazeInTheDeepblue-Poptracker"
+   }
+  ],
+  "Yoku's Island Express": [
+   {
+    "page": "https://github.com/marcmagus/yoku-randomizer-tracker/releases",
+    "repo": "marcmagus/yoku-randomizer-tracker",
+    "tag": "v0.7.0",
+    "asset": "YokuRandomizerTracker-v0.7.0.zip",
+    "url": "https://github.com/marcmagus/yoku-randomizer-tracker/releases/download/v0.7.0/YokuRandomizerTracker-v0.7.0.zip"
+   }
+  ],
+  "Yooka-Laylee": [
+   {
+    "page": "https://github.com/RisingPhoenix64/Yooka-Laylee-AP-tracker/releases/latest",
+    "repo": "RisingPhoenix64/Yooka-Laylee-AP-tracker",
+    "tag": "v0.0.3",
+    "asset": "Yooka-Laylee-AP-tracker.zip",
+    "url": "https://github.com/RisingPhoenix64/Yooka-Laylee-AP-tracker/releases/download/v0.0.3/Yooka-Laylee-AP-tracker.zip"
+   }
+  ],
+  "Yooka-Replaylee": [
+   {
+    "page": "https://github.com/Xannon-rgb/Yooka-Replaylee-PopTracker/releases/latest",
+    "repo": "Xannon-rgb/Yooka-Replaylee-PopTracker",
+    "tag": "v2.72",
+    "asset": "Yooka-Replaylee_PopTracker_v2.72.zip",
+    "url": "https://github.com/Xannon-rgb/Yooka-Replaylee-PopTracker/releases/download/v2.72/Yooka-Replaylee_PopTracker_v2.72.zip"
+   }
+  ],
+  "Yoshi's Island": [
+   {
+    "page": "https://discord.com/channels/731205301247803413/1224389973336133743/1224394834857427045"
+   }
+  ],
+  "YS VIII: Lacrimosa of Dana": [
+   {
+    "page": "https://github.com/AkagiCritMagnet/Ys-VIII-randomizer-poptracker-pack/releases",
+    "repo": "AkagiCritMagnet/Ys-VIII-randomizer-poptracker-pack",
+    "tag": "v2.3",
+    "asset": "Ys.8.pack.zip",
+    "url": "https://github.com/AkagiCritMagnet/Ys-VIII-randomizer-poptracker-pack/releases/download/v2.3/Ys.8.pack.zip"
+   }
+  ],
+  "Yu-Gi-Oh! 2006": [
+   {
+    "page": "https://github.com/Rensen3/poptracker-ygo06/releases/latest",
+    "repo": "Rensen3/poptracker-ygo06",
+    "tag": "v0.0.3",
+    "asset": "ygo06.-.poptracker.zip",
+    "url": "https://github.com/Rensen3/poptracker-ygo06/releases/download/v0.0.3/ygo06.-.poptracker.zip"
+   }
+  ],
+  "Zelda 2: The Adventure of Link": [
+   {
+    "page": "https://github.com/palex00/zelda-2-ap-tracker/releases/tag/0.0.4",
+    "repo": "palex00/zelda-2-ap-tracker"
+   }
+  ],
+  "Zillion": [
+   {
+    "page": "https://github.com/Br00ty/zillion_brooty/releases/latest",
+    "repo": "Br00ty/zillion_brooty",
+    "tag": "1.0",
+    "asset": "zillion_brooty.zip",
+    "url": "https://github.com/Br00ty/zillion_brooty/releases/download/1.0/zillion_brooty.zip"
+   }
+  ]
+ }
+}
