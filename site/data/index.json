@@ -1,6 +1,6 @@
 {
  "ap_version": "0.6.8",
- "generated_at": "2026-10-30T00:01:40+00:00",
+ "generated_at": "2026-10-30T07:32:24+00:00",
  "games": [
   {
    "game": "2048",
@@ -5947,7 +5947,7 @@
    "file": "games/soul-blazer.json",
    "source": "custom",
    "apworld": "soulblazer.apworld",
-   "world_version": "0.6.2",
+   "world_version": "0.7.0",
    "sheet": {
     "game": "SoulBlazer",
     "stability": "Stable"
