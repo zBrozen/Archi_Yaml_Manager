@@ -1,0 +1,68 @@
+# Génère la partie d'une room, à la demande de son hôte (lancé par le service des rooms, voir worker/).
+# Le journal est public : il montre les noms et les jeux des joueurs, mais ni le contenu des YAML ni
+# l'emplacement des objets. Le spoiler n'est envoyé qu'au service, pour l'hôte.
+name: Générer une room
+run-name: Room ${{ inputs.room }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      room:
+        description: "Code de la room"
+        required: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: generate-${{ inputs.room }}
+  cancel-in-progress: true
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      GENERATOR_SECRET: ${{ secrets.ROOMS_GENERATOR_SECRET }}
+      ROOM: ${{ inputs.room }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Prévenir la room
+        run: python tools/room_generate.py start --room "$ROOM"
+
+      # La même version d'Archipelago que celle des données du site (et donc des vérifications).
+      - name: Télécharger Archipelago
+        run: |
+          tag=$(python -c "import json; print(json.load(open('site/data/index.json'))['ap_version'])")
+          echo "Archipelago $tag"
+          git clone --depth 1 --branch "$tag" https://github.com/ArchipelagoMW/Archipelago.git "$RUNNER_TEMP/Archipelago"
+
+      - name: Installer les dépendances
+        run: |
+          AP="$RUNNER_TEMP/Archipelago"
+          grep -viE '^\s*kivy' "$AP/requirements.txt" > "$RUNNER_TEMP/requirements.txt"
+          pip install -r "$RUNNER_TEMP/requirements.txt" "setuptools<81"
+          for f in "$AP"/worlds/*/requirements.txt; do
+            pip install -r "$f" || echo "::warning::Dépendances non installées : $f"
+          done
+
+      # Apworlds téléchargés par la mise à jour quotidienne (lecture seule).
+      - uses: actions/cache/restore@v4
+        with:
+          path: ${{ runner.temp }}/apworld-cache
+          key: apworlds-none
+          restore-keys: apworlds-
+
+      - name: Générer
+        run: python tools/room_generate.py run --room "$ROOM" --ap "$RUNNER_TEMP/Archipelago" --cache "$RUNNER_TEMP/apworld-cache"
+
+      - name: Signaler l'échec
+        if: failure()
+        run: python tools/room_generate.py fail --room "$ROOM" --message "La génération a échoué (voir le journal du workflow)." || true

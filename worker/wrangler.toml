@@ -1,5 +1,6 @@
 # Service des rooms (voir README, section « Rooms »).
-# Le workflow .github/workflows/deploy-worker.yml remplace database_id par la variable D1_DATABASE_ID du dépôt.
+# Le workflow .github/workflows/deploy-worker.yml remplace database_id par la variable D1_DATABASE_ID du dépôt,
+# et l'id du stockage KV par la variable KV_NAMESPACE_ID (sans elle, le bloc KV est retiré : pas de génération en ligne).
 name = "archi-rooms"
 main = "src/index.js"
 compatibility_date = "2025-09-01"
@@ -9,6 +10,17 @@ binding = "DB"
 database_name = "archi-rooms"
 database_id = "00000000-0000-0000-0000-000000000000"
 migrations_dir = "migrations"
+
+# Fichiers produits par la génération en ligne (partie, spoiler).
+[[kv_namespaces]]
+binding = "FILES"
+id = "00000000000000000000000000000000"
+
+# Génération en ligne : workflow lancé par le service. Les secrets GH_DISPATCH_TOKEN et GENERATOR_SECRET
+# sont envoyés par deploy-worker.yml.
+[vars]
+GITHUB_REPO = "zBrozen/Archi_Yaml_Manager"
+GENERATE_WORKFLOW = "generate-room.yml"
 
 # Nettoyage quotidien des rooms sans activité.
 [triggers]

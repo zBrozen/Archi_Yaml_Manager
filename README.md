@@ -138,9 +138,10 @@ base D1), toujours disponible sans laisser de PC allumé.
 3. L'hôte ferme les dépôts (à la date prévue ou à la main) et clique sur « Vérifier la room ». Chaque YAML est
    contrôlé dans son navigateur avec les règles de l'éditeur. Sont aussi signalés : les joueurs sans YAML, le
    DeathLink en async, les jeux instables ou cassés, et les apworlds non officiels à installer (avec leur dépôt).
-4. L'hôte télécharge le zip des YAML, le décompresse dans le dossier `Players` de son Archipelago et lance
-   **Generate**. Il envoie le résultat sur [archipelago.gg/uploads](https://archipelago.gg/uploads) lui-même :
-   seul celui qui envoie la partie a accès à la console de la room.
+4. L'hôte clique sur **Générer en ligne** (voir « Génération en ligne » ci-dessous), ou télécharge le zip des
+   YAML, le décompresse dans le dossier `Players` de son Archipelago et lance **Generate**. Il envoie la partie
+   générée sur [archipelago.gg/uploads](https://archipelago.gg/uploads) lui-même : seul celui qui envoie la
+   partie a accès à la console de la room.
 5. L'hôte colle le lien de la room archipelago.gg sur la page de la room. Tout le monde y voit alors l'adresse
    du serveur, le tracker et ses propres fichiers (patchs), lus avec l'API publique `room_status` d'archipelago.gg.
 
@@ -162,6 +163,50 @@ Les YAML déposés dans une room sont visibles par leur auteur et par l'hôte. U
    Il se relance seul à chaque modification de `worker/`.
 6. Indiquer cette adresse dans `DEPLOYED` de [`site/js/config.js`](site/js/config.js) et pousser sur `main`.
    Tant qu'elle est vide, l'onglet « Rooms » n'apparaît pas sur le site en ligne.
+
+### Génération en ligne
+
+L'hôte choisit les réglages du serveur (release, collect, `!remaining`, coût des indices) et s'il veut un
+spoiler, puis clique sur **Générer en ligne**. Le service lance le workflow
+[`generate-room.yml`](.github/workflows/generate-room.yml) ([`tools/room_generate.py`](tools/room_generate.py)) :
+
+1. il lit les YAML de la room ;
+2. il installe la version d'Archipelago des données du site, et seulement les apworlds des jeux de la room,
+   pris dans le cache de la mise à jour quotidienne (les mêmes versions que celles vérifiées par le site) ;
+3. il génère la partie en quelques minutes, avec les réglages de l'hôte ;
+4. il renvoie la partie au service, et le spoiler à part. La page de la room propose alors à l'hôte (et à lui
+   seul) de télécharger la partie, à envoyer sur archipelago.gg, et le spoiler.
+
+**Spoilers.** Le zip à héberger ne contient jamais de spoiler : il ne peut donc pas apparaître sur
+archipelago.gg. Le journal du workflow est public (dépôt public) : il montre les noms des joueurs et leurs
+jeux, mais ni le contenu des YAML ni l'emplacement des objets. Les fichiers générés sont gardés 30 jours.
+
+**Limites.** Les jeux qui ont besoin de leur ROM pour générer (A Link to the Past, Ocarina of Time…), les jeux
+absents de la base du site et les parties de plus de 25 minutes de génération se génèrent sur l'ordinateur
+de l'hôte ; la page de la room l'indique en cas d'échec.
+
+**Coût.** Rien : les GitHub Actions sont gratuites et sans limite de minutes pour un dépôt public, et une
+génération n'utilise que quelques requêtes et une ou deux écritures du stockage KV de Cloudflare (limite
+gratuite : 1 000 écritures par jour).
+
+**Mise en place (une seule fois)**
+
+1. Cloudflare, **Storage & Databases → KV → Create** : espace nommé `archi-rooms-files`. Noter son identifiant.
+   Le jeton d'API Cloudflare doit avoir la permission *Account → Workers KV Storage → Edit* (incluse dans le
+   modèle « Edit Cloudflare Workers »).
+2. GitHub, **photo de profil → Settings → Developer settings → Personal access tokens → Fine-grained tokens →
+   Generate new token** : accès au seul dépôt `Archi_Yaml_Manager`, permission *Repository permissions →
+   Actions → Read and write*. Ce jeton permet au service de lancer le workflow.
+3. Dans le dépôt, **Settings → Secrets and variables → Actions** :
+   - secret `ROOMS_DISPATCH_TOKEN` : le jeton GitHub de l'étape 2 ;
+   - secret `ROOMS_GENERATOR_SECRET` : une longue suite de caractères au hasard, inventée pour l'occasion
+     (elle protège les échanges entre le workflow et le service) ;
+   - variable `KV_NAMESPACE_ID` : l'identifiant de l'étape 1.
+4. Relancer le workflow « Publier le service des rooms ». Le bouton **Générer en ligne** apparaît alors dans
+   l'espace de l'hôte.
+
+Le jeton GitHub expire à la date choisie à sa création : il suffit alors d'en créer un nouveau et de remplacer
+le secret, puis de relancer « Publier le service des rooms ».
 
 ## Mise en ligne (GitHub Pages)
 
@@ -224,6 +269,7 @@ npx wrangler dev
 | `site/js/check.js` | Vérification d'un YAML hors de l'éditeur (dépôt dans une room, contrôle par l'hôte) |
 | `site/js/config.js` | Adresse du service des rooms |
 | `worker/` | Service des rooms (Cloudflare Worker, base D1 : `migrations/`) |
+| `tools/room_generate.py` | Génération en ligne d'une room (workflow `generate-room.yml`) |
 | `site/data/` | Options des jeux, générées automatiquement |
 | `site/vendor/` | Bibliothèques [Preact/htm](https://github.com/developit/htm) et [yaml](https://github.com/eemeli/yaml) |
 | `tools/` | Scripts d'extraction et de traduction des options, et de récupération des apworlds |

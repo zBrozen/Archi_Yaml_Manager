@@ -43,7 +43,8 @@ export const inviteLink = (code) => `${pageUrl()}#/room/${code}`;
 export const playerLink = (code, token) => `${pageUrl()}#/room/${code}/p/${token}`;
 export const hostLink = (code, token) => `${pageUrl()}#/room/${code}/h/${token}`;
 
-async function call(method, path, { code, body } = {}) {
+// `file: true` : la réponse est un fichier, rendu en { blob, name }.
+async function call(method, path, { code, body, file = false } = {}) {
   const access = code ? savedAccess(code) : {};
   const headers = {};
   if (body !== undefined) headers["Content-Type"] = "application/json";
@@ -58,6 +59,10 @@ async function call(method, path, { code, body } = {}) {
     });
   } catch {
     throw new Error("Le serveur des rooms ne répond pas. Vérifiez votre connexion et réessayez.");
+  }
+  if (file && response.ok) {
+    const name = /filename="([^"]+)"/.exec(response.headers.get("Content-Disposition") || "")?.[1] || "fichier";
+    return { blob: await response.blob(), name };
   }
   const data = await response.json().catch(() => ({}));
   if (!response.ok) {
@@ -82,6 +87,8 @@ export const api = {
   replaceSlot: (code, id, slot) => call("PUT", at(code, `/slots/${id}`), { code, body: slot }),
   deleteSlot: (code, id) => call("DELETE", at(code, `/slots/${id}`), { code }),
   exportSlots: (code) => call("GET", at(code, "/export"), { code }),
+  generate: (code, options) => call("POST", at(code, "/generate"), { code, body: { options } }),
+  file: (code, kind) => call("GET", at(code, `/files/${kind}`), { code, file: true }),
 };
 
 // --- Partie hébergée sur archipelago.gg (ou un autre site Archipelago) ---------------

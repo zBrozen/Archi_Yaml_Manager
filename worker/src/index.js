@@ -4,7 +4,10 @@
 // reçoit un jeton en rejoignant la room avec son pseudo. Les jetons voyagent dans les en-têtes
 // X-Admin-Token et X-Player-Token (jamais en cookie) : l'API peut donc accepter toutes les origines.
 //
-// La génération ne se fait pas ici : l'hôte télécharge les YAML et génère avec son Archipelago.
+// La génération ne se fait pas ici : l'hôte télécharge les YAML et génère avec son Archipelago, ou
+// demande une génération en ligne, faite par le workflow GitHub generate-room.yml. Ce workflow lit les YAML
+// et renvoie ses résultats avec le secret partagé GENERATOR_SECRET (en-tête X-Generator-Secret) ;
+// les fichiers produits sont gardés dans le stockage KV (binding FILES).
 
 const CODE_ALPHABET = "ABCDEFGHJKMNPQRSTUVWXYZ23456789"; // sans 0/O, 1/I/L
 const LIMITS = {
@@ -20,6 +23,19 @@ const LIMITS = {
   maxSlots: 20,
 };
 const ROOM_LIFETIME_DAYS = 90; // rooms sans activité supprimées par la tâche planifiée
+
+// Génération en ligne.
+const FILE_KINDS = ["output", "spoiler"];
+const FILE_LIFETIME_DAYS = 30;
+const MAX_FILE_SIZE = 25 * 1024 * 1024; // limite d'une valeur KV
+const QUEUED_TIMEOUT = 15 * 60 * 1000; // workflow jamais démarré
+const RUNNING_TIMEOUT = 45 * 60 * 1000; // le workflow s'arrête de lui-même au bout de 30 minutes
+const GEN_DEFAULTS = { spoiler: false, release_mode: "auto", collect_mode: "auto", remaining_mode: "goal", hint_cost: 10 };
+const GEN_CHOICES = {
+  release_mode: ["auto", "enabled", "disabled", "goal", "auto-enabled"],
+  collect_mode: ["auto", "enabled", "disabled", "goal", "auto-enabled"],
+  remaining_mode: ["enabled", "disabled", "goal"],
+};
 
 const CORS = {
   "Access-Control-Allow-Origin": "*",
@@ -182,6 +198,27 @@ async function createRoom(request, env) {
   throw new HttpError(500, "Impossible de créer un code de room, réessayez.");
 }
 
+// État de la génération en ligne ; une demande restée sans nouvelles est considérée comme échouée.
+function generation(room, now = Date.now()) {
+  let status = room.gen_status || null;
+  let message = room.gen_message || null;
+  if (status === "queued" && now - room.gen_at > QUEUED_TIMEOUT) {
+    status = "failed";
+    message = "Le workflow de génération n'a pas démarré (réglages GitHub à vérifier).";
+  } else if (status === "running" && now - room.gen_at > RUNNING_TIMEOUT) {
+    status = "failed";
+    message = "La génération a dépassé le temps maximum.";
+  }
+  return {
+    status,
+    message,
+    at: room.gen_at || null,
+    run_url: room.gen_run_url || null,
+    options: { ...GEN_DEFAULTS, ...JSON.parse(room.gen_options || "{}") },
+    files: status === "done" ? JSON.parse(room.gen_files || "{}") : {},
+  };
+}
+
 function publicRoom(room) {
   return {
     code: room.code,
@@ -193,6 +230,7 @@ function publicRoom(room) {
     max_slots: room.max_slots,
     notes: room.notes,
     ap_room_url: room.ap_room_url,
+    generation: generation(room),
     created_at: room.created_at,
     updated_at: room.updated_at,
   };
@@ -209,6 +247,7 @@ async function getRoom(request, env, room) {
   return json({
     room: publicRoom(room),
     admin,
+    online_generation: generatorConfigured(env),
     me: me ? { id: me.id, pseudo: me.pseudo } : null,
     players: players.results.map((p) => ({
       ...p,
@@ -236,8 +275,13 @@ async function updateRoom(request, env, room) {
   return json({ room: publicRoom(next) });
 }
 
+async function deleteFiles(env, code) {
+  if (env.FILES) await Promise.all(FILE_KINDS.map((kind) => env.FILES.delete(`${code}/${kind}`)));
+}
+
 async function deleteRoom(request, env, room) {
   await requireAdmin(request, room);
+  await deleteFiles(env, room.code);
   await env.DB.batch([
     env.DB.prepare("DELETE FROM slots WHERE room_code = ?").bind(room.code),
     env.DB.prepare("DELETE FROM players WHERE room_code = ?").bind(room.code),
@@ -358,6 +402,125 @@ async function exportSlots(request, env, room) {
   return json({ slots: results.map((s) => ({ ...s, issues: JSON.parse(s.issues) })) });
 }
 
+// --- Génération en ligne -------------------------------------------------------------
+
+function genOptions(body) {
+  const options = { ...GEN_DEFAULTS };
+  if (!body || typeof body !== "object") return options;
+  if ("spoiler" in body) options.spoiler = !!body.spoiler;
+  for (const [key, values] of Object.entries(GEN_CHOICES)) {
+    if (!(key in body)) continue;
+    if (!values.includes(body[key])) throw new HttpError(400, `Valeur invalide pour ${key}.`);
+    options[key] = body[key];
+  }
+  if ("hint_cost" in body) {
+    const cost = Number(body.hint_cost);
+    if (!Number.isInteger(cost) || cost < 0 || cost > 100) throw new HttpError(400, "Coût des indices : entre 0 et 100 (%).");
+    options.hint_cost = cost;
+  }
+  return options;
+}
+
+const generatorConfigured = (env) => !!(env.FILES && env.GH_DISPATCH_TOKEN && env.GENERATOR_SECRET && env.GITHUB_REPO);
+
+async function startGeneration(request, env, room) {
+  await requireAdmin(request, room);
+  if (!generatorConfigured(env)) throw new HttpError(501, "La génération en ligne n'est pas configurée sur ce serveur.");
+  if (isOpen(room)) throw new HttpError(409, "Fermez d'abord les dépôts : la partie doit être générée avec les YAML définitifs.");
+  const { status } = generation(room);
+  if (status === "queued" || status === "running") throw new HttpError(409, "Une génération est déjà en cours.");
+  const { count } = await env.DB.prepare("SELECT COUNT(*) AS count FROM slots WHERE room_code = ?").bind(room.code).first();
+  if (!count) throw new HttpError(409, "Aucun YAML à générer.");
+  const options = genOptions((await readJson(request)).options);
+
+  const workflow = env.GENERATE_WORKFLOW || "generate-room.yml";
+  const response = await fetch(`https://api.github.com/repos/${env.GITHUB_REPO}/actions/workflows/${workflow}/dispatches`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${env.GH_DISPATCH_TOKEN}`,
+      Accept: "application/vnd.github+json",
+      "X-GitHub-Api-Version": "2022-11-28",
+      "User-Agent": "archi-rooms",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ ref: env.GITHUB_REF || "main", inputs: { room: room.code } }),
+  });
+  if (!response.ok) {
+    console.error("dispatch", response.status, await response.text());
+    throw new HttpError(502, `GitHub a refusé de lancer la génération (${response.status}).`);
+  }
+  await deleteFiles(env, room.code);
+  const now = Date.now();
+  await env.DB.prepare(
+    `UPDATE rooms SET gen_status = 'queued', gen_message = NULL, gen_run_url = NULL, gen_at = ?, gen_options = ?, gen_files = '{}', updated_at = ?
+     WHERE code = ?`,
+  ).bind(now, JSON.stringify(options), now, room.code).run();
+  return json({ room: publicRoom(await loadRoom(env, room.code)) });
+}
+
+// Fichiers produits : réservés à l'hôte (le spoiler surtout).
+async function downloadFile(request, env, room, kind) {
+  await requireAdmin(request, room);
+  const name = generation(room).files[kind];
+  const file = FILE_KINDS.includes(kind) && name && env.FILES ? await env.FILES.get(`${room.code}/${kind}`, "stream") : null;
+  if (!file) throw new HttpError(404, "Ce fichier n'existe plus : relancez la génération.");
+  return new Response(file, {
+    headers: {
+      "Content-Type": kind === "output" ? "application/zip" : "text/plain; charset=utf-8",
+      "Content-Disposition": `attachment; filename="${name.replace(/[^\w.-]/g, "_")}"`,
+      "Access-Control-Expose-Headers": "Content-Disposition",
+      ...CORS,
+    },
+  });
+}
+
+async function requireGenerator(request, env) {
+  const given = request.headers.get("X-Generator-Secret");
+  if (!env.GENERATOR_SECRET || !given || (await sha256(given)) !== (await sha256(env.GENERATOR_SECRET))) {
+    throw new HttpError(403, "Accès réservé au générateur.");
+  }
+}
+
+function requireGenerating(room) {
+  const { status } = generation(room);
+  if (status !== "queued" && status !== "running") throw new HttpError(409, "Aucune génération en cours pour cette room.");
+}
+
+// Ce qu'il faut au workflow : les YAML et les réglages choisis par l'hôte.
+async function generatorInput(env, room) {
+  requireGenerating(room);
+  const { results } = await env.DB.prepare("SELECT name, filename, content FROM slots WHERE room_code = ? ORDER BY created_at")
+    .bind(room.code).all();
+  return json({ code: room.code, mode: room.mode, options: generation(room).options, slots: results });
+}
+
+async function generatorUpload(request, env, room, kind) {
+  requireGenerating(room);
+  if (!FILE_KINDS.includes(kind)) throw new HttpError(404, "Type de fichier inconnu.");
+  const size = Number(request.headers.get("Content-Length"));
+  if (!size || size > MAX_FILE_SIZE) throw new HttpError(413, "Fichier vide ou trop gros (25 Mo au maximum).");
+  await env.FILES.put(`${room.code}/${kind}`, request.body, { expirationTtl: FILE_LIFETIME_DAYS * 24 * 3600 });
+  return json({ ok: true });
+}
+
+// Avancement envoyé par le workflow : { status: "running" | "done" | "failed", message, run_url, files }.
+async function generatorReport(request, env, room) {
+  requireGenerating(room);
+  const body = await readJson(request);
+  if (!["running", "done", "failed"].includes(body.status)) throw new HttpError(400, "Statut inconnu.");
+  const files = {};
+  if (body.status === "done") {
+    for (const kind of FILE_KINDS) if (body.files?.[kind]) files[kind] = text(body.files[kind], "nom de fichier", 200);
+    if (!files.output) throw new HttpError(400, "Fichier de la partie manquant.");
+  }
+  const message = text(body.message, "message", 2000, { required: false }) || null;
+  const runUrl = typeof body.run_url === "string" && body.run_url.startsWith("https://github.com/") ? body.run_url : room.gen_run_url;
+  const now = Date.now();
+  await env.DB.prepare("UPDATE rooms SET gen_status = ?, gen_message = ?, gen_run_url = ?, gen_at = ?, gen_files = ?, updated_at = ? WHERE code = ?")
+    .bind(body.status, message, runUrl, now, JSON.stringify(files), now, room.code).run();
+  return json({ ok: true });
+}
+
 async function route(request, env) {
   const url = new URL(request.url);
   const parts = url.pathname.split("/").filter(Boolean);
@@ -382,6 +545,16 @@ async function route(request, env) {
     if (id && method === "DELETE") return deleteSlot(request, env, room, id);
   } else if (sub === "export" && method === "GET") {
     return exportSlots(request, env, room);
+  } else if (sub === "generate" && !id && method === "POST") {
+    return startGeneration(request, env, room);
+  } else if (sub === "files" && id && method === "GET") {
+    return downloadFile(request, env, room, id);
+  } else if (sub === "generator") {
+    await requireGenerator(request, env);
+    const kind = parts[5];
+    if (!id && method === "GET") return generatorInput(env, room);
+    if (!id && method === "POST") return generatorReport(request, env, room);
+    if (id === "files" && kind && method === "PUT") return generatorUpload(request, env, room, kind);
   }
   throw new HttpError(404, "Route inconnue.");
 }
@@ -403,6 +576,7 @@ export default {
     const limit = Date.now() - ROOM_LIFETIME_DAYS * 24 * 3600 * 1000;
     const { results } = await env.DB.prepare("SELECT code FROM rooms WHERE updated_at < ?").bind(limit).all();
     for (const { code } of results) {
+      await deleteFiles(env, code);
       await env.DB.batch([
         env.DB.prepare("DELETE FROM slots WHERE room_code = ?").bind(code),
         env.DB.prepare("DELETE FROM players WHERE room_code = ?").bind(code),

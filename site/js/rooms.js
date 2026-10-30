@@ -453,7 +453,7 @@ function HostPanel({ room, setData, data }) {
     ${save.error && html`<div class="notice error full">${save.error}</div>`}
 
     <${RoomCheck} room=${room} />
-    <${Generation} room=${room} />
+    <${Generation} room=${room} setData=${setData} data=${data} online=${data.online_generation} />
     <${HostedRoom} room=${room} setData=${setData} data=${data} />
 
     <button type="button" class="link danger-link" onClick=${destroy}>Supprimer la room</button>
@@ -563,17 +563,86 @@ function zipNames(slots) {
   });
 }
 
-function Generation({ room }) {
+// Réglages du serveur enregistrés dans la partie générée (section server_options de host.yaml).
+const RELEASE_CHOICES = {
+  auto: "Automatique quand le joueur a fini",
+  "auto-enabled": "Automatique quand il a fini, ou à la demande",
+  goal: "À la demande, une fois fini",
+  enabled: "À la demande, à tout moment",
+  disabled: "Jamais",
+};
+const REMAINING_CHOICES = { goal: "Une fois fini", enabled: "À tout moment", disabled: "Jamais" };
+
+function OnlineGeneration({ room, setData, data }) {
+  const action = useAction();
+  const gen = room.generation;
+  const [options, setOptions] = useState(gen.options);
+  const set = (key, value) => setOptions({ ...options, [key]: value });
+  const busy = gen.status === "queued" || gen.status === "running";
+
+  // Suivi rapproché tant que le workflow tourne.
+  useEffect(() => {
+    if (!busy) return;
+    const timer = setInterval(() => api.get(room.code).then((next) => setData(next)).catch(() => {}), 8000);
+    return () => clearInterval(timer);
+  }, [busy, room.code]);
+
+  const start = () => action.run(async () => {
+    const result = await api.generate(room.code, { ...options, hint_cost: Number(options.hint_cost) });
+    setData({ ...data, room: result.room });
+  });
+  const save = (kind) => action.run(async () => {
+    const file = await api.file(room.code, kind);
+    download(file.name, file.blob);
+  });
+  const select = (key, choices) => html`<select value=${options[key]} disabled=${busy} onChange=${(e) => set(key, e.target.value)}>
+    ${Object.entries(choices).map(([value, label]) => html`<option value=${value}>${label}</option>`)}
+  </select>`;
+
+  return html`<div class="stack full">
+    <p>Archipelago génère la partie sur GitHub, avec les apworlds du site, en quelques minutes.
+      Les jeux qui demandent leur ROM pour générer (A Link to the Past, Ocarina of Time…) doivent être générés sur votre ordinateur.</p>
+    <div class="fields full">
+      <label><span>Release <span class="hint">(envoyer les objets restants d'un joueur)</span></span>${select("release_mode", RELEASE_CHOICES)}</label>
+      <label><span>Collect <span class="hint">(récupérer ses objets chez les autres)</span></span>${select("collect_mode", RELEASE_CHOICES)}</label>
+      <label><span>Commande !remaining</span>${select("remaining_mode", REMAINING_CHOICES)}</label>
+      <label><span>Coût d'un indice <span class="hint">(% des checks du joueur)</span></span>
+        <input type="number" min="0" max="100" value=${options.hint_cost} disabled=${busy} onInput=${(e) => set("hint_cost", e.target.value)} /></label>
+      <label class="check span-all"><input type="checkbox" checked=${options.spoiler} disabled=${busy} onChange=${(e) => set("spoiler", e.target.checked)} />
+        Garder un spoiler (fichier à part, pour vous seul : la partie à héberger n'en contient pas)</label>
+    </div>
+    <div class="row">
+      <button type="button" disabled=${action.busy || busy || room.open} onClick=${start}>
+        ${gen.status === "done" || gen.status === "failed" ? "Relancer la génération" : "Générer en ligne"}</button>
+      ${room.open && html`<span class="hint">Fermez d'abord les dépôts.</span>`}
+    </div>
+    ${busy && html`<div class="notice full">
+      ${gen.status === "queued" ? "Demande envoyée, démarrage du générateur…" : "Génération en cours (quelques minutes)…"}
+      ${gen.run_url && html` <a href=${gen.run_url} target="_blank" rel="noopener">Voir le journal</a>`}
+    </div>`}
+    ${gen.status === "failed" && html`<div class="notice error full">${gen.message || "La génération a échoué."}
+      ${gen.run_url && html` <a href=${gen.run_url} target="_blank" rel="noopener">Voir le journal</a>`}</div>`}
+    ${gen.status === "done" && html`<div class="notice ok full stack">
+      <span>Partie générée le ${formatWhen(gen.at)}.</span>
+      <div class="row">
+        <button type="button" disabled=${action.busy} onClick=${() => save("output")}>Télécharger la partie (.zip)</button>
+        ${gen.files.spoiler && html`<button type="button" class="ghost" disabled=${action.busy} onClick=${() => save("spoiler")}>Spoiler</button>`}
+      </div>
+    </div>`}
+    ${action.error && html`<div class="notice error full">${action.error}</div>`}
+  </div>`;
+}
+
+function Generation({ room, setData, data, online }) {
   const action = useAction();
   const downloadAll = () => action.run(async () => {
     const { slots } = await api.exportSlots(room.code);
     if (!slots.length) throw new Error("Aucun YAML à télécharger.");
     download(`room-${room.code}-yaml.zip`, makeZip(zipNames(slots)));
   });
-  return html`<div class="stack full">
+  const local = html`<div class="stack full">
     <div class="row">
-      <h3 class="grow">2. Générer</h3>
-      <button type="button" disabled=${action.busy} onClick=${downloadAll}>Télécharger les YAML (.zip)</button>
+      <button type="button" class=${online ? "ghost" : ""} disabled=${action.busy} onClick=${downloadAll}>Télécharger les YAML (.zip)</button>
     </div>
     ${action.error && html`<div class="notice error full">${action.error}</div>`}
     <ol class="steps">
@@ -586,6 +655,13 @@ function Generation({ room }) {
           pour ne bloquer personne. Ces réglages sont enregistrés dans la partie générée.`
         : html`Les réglages du serveur (indices, release, collect) sont ceux de la section <code>server_options</code> de <code>host.yaml</code> au moment de la génération.`}</li>
     </ol>
+  </div>`;
+  return html`<div class="stack full">
+    <h3>2. Générer</h3>
+    ${online
+      ? html`<${OnlineGeneration} room=${room} setData=${setData} data=${data} />
+        <details class="group full"><summary>Ou générer sur votre ordinateur</summary><div class="group-body">${local}</div></details>`
+      : local}
   </div>`;
 }
 

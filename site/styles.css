@@ -474,3 +474,4 @@ a.button.ghost { background: var(--surface); color: var(--text); border-color: v
 a.button.ghost:hover { background: var(--surface-2); }
 a.button.small { padding: .25rem .7rem; font-size: .875rem; }
 .danger-link { color: var(--error); justify-self: start; }
+.fields label.check { display: flex; align-items: center; gap: .5rem; font-size: .92rem; }

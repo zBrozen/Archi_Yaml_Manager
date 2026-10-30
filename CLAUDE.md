@@ -21,5 +21,7 @@
   planter Archipelago pour tous les mondes (version mal formée, zip invalide).
 - Rooms : le site appelle le service `worker/` (Cloudflare Worker + D1, publié par `deploy-worker.yml`),
   dont l'adresse est dans `site/js/config.js` (en local : `http://localhost:8787`, `npx wrangler dev`).
-  La génération et l'hébergement ne passent pas par ce service : l'hôte génère avec son Archipelago et
-  héberge sur archipelago.gg. Toute nouvelle table ou colonne passe par une migration dans `worker/migrations/`.
+  L'hébergement passe par archipelago.gg (envoi par l'hôte). La génération se fait chez l'hôte ou en ligne :
+  le service lance `generate-room.yml` (`tools/room_generate.py`), qui lit les YAML et renvoie la partie avec le
+  secret partagé `GENERATOR_SECRET` ; fichiers dans le KV `FILES`. Le spoiler est toujours séparé de la partie.
+  Toute nouvelle table ou colonne passe par une migration dans `worker/migrations/`.
