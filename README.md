@@ -24,6 +24,12 @@ sans éditer le code à la main.
   par [Pyodide](https://pyodide.org) : options, descriptions, noms d'objets et règles sont alors exactement
   ceux du jeu. Tant que l'apworld manque, le téléchargement est bloqué. L'apworld est ensuite mémorisé
   dans le navigateur du joueur (on peut l'oublier depuis l'accueil).
+- **Apworld plus récent que celui du serveur** : un apworld déposé passe toujours avant celui de la base du site
+  (souvent en retard sur le tableur ou sur la dernière release), y compris pour un jeu officiel. La page du jeu le
+  signale et propose de revenir à celui du serveur ; un YAML qui demande une version plus récente que celle du
+  serveur propose de déposer l'apworld. L'apworld mémorisé est oublié de lui-même quand le serveur passe à une
+  version au moins aussi récente. Dans une room, la vérification se fait avec l'apworld déposé chez l'hôte ; pour
+  la génération en ligne, l'hôte le dépose aussi dans la room (voir « Génération en ligne »).
 
 - **Rooms** : un hôte crée une room, les joueurs la rejoignent avec un code court et leur pseudo, et y déposent
   leurs YAML (un fichier par jeu). L'hôte vérifie la room, télécharge tous les YAML pour générer la partie avec
@@ -258,17 +264,29 @@ spoiler, puis clique sur **Générer en ligne**. Le service lance le workflow
 
 1. il lit les YAML de la room ;
 2. il installe la version d'Archipelago des données du site, et seulement les apworlds des jeux de la room,
-   pris dans le cache de la mise à jour quotidienne (les mêmes versions que celles vérifiées par le site) ;
-3. il génère la partie en quelques minutes, avec les réglages de l'hôte ;
+   pris dans le cache de la mise à jour quotidienne (les mêmes versions que celles vérifiées par le site), sauf
+   ceux que l'hôte a déposés (voir ci-dessous) ;
+3. il génère la partie en quelques minutes, avec les réglages de l'hôte, dans un conteneur Docker sans réseau ;
 4. il renvoie la partie au service, et le spoiler à part. La page de la room propose alors à l'hôte (et à lui
    seul) de télécharger la partie, à envoyer sur archipelago.gg, et le spoiler.
+
+**Apworlds de l'hôte.** Sous « Générer en ligne », l'hôte peut déposer ses propres apworlds (un par jeu, 20 au
+plus, 25 Mo chacun) : par exemple une version plus récente que celle du site, ou un jeu absent du site. Le site
+lit d'abord le fichier avec Archipelago pour connaître son jeu (et vérifier la room avec lui), puis l'envoie au
+service (table `room_apworlds`, fichier dans le KV, supprimé avec la room). Le générateur l'installe à la place de
+celui du site ; pour un jeu officiel, il retire le monde intégré, sans quoi Archipelago ignorerait l'apworld.
+
+**Isolement.** N'importe quel hôte peut ainsi faire exécuter du code par le workflow. Archipelago et tous les
+apworlds tournent donc dans un conteneur Docker sans réseau, qui ne voit que le dossier d'Archipelago, les YAML
+et le dossier de sortie : ni le secret `ROOMS_GENERATOR_SECRET`, ni le jeton du workflow, ni le cache des
+apworlds. Les dépendances sont installées dans l'image du conteneur avant l'ajout du moindre apworld.
 
 **Spoilers.** Le zip à héberger ne contient jamais de spoiler : il ne peut donc pas apparaître sur
 archipelago.gg. Le journal du workflow est public (dépôt public) : il montre les noms des joueurs et leurs
 jeux, mais ni le contenu des YAML ni l'emplacement des objets. Les fichiers générés sont gardés 30 jours.
 
 **Limites.** Les jeux qui ont besoin de leur ROM pour générer (A Link to the Past, Ocarina of Time…), les jeux
-absents de la base du site et les parties de plus de 25 minutes de génération se génèrent sur l'ordinateur
+absents de la base du site dont l'hôte n'a pas déposé l'apworld, ceux dont la génération a besoin du réseau, et les parties de plus de 25 minutes de génération se génèrent sur l'ordinateur
 de l'hôte ; la page de la room l'indique en cas d'échec.
 
 **Coût.** Rien : les GitHub Actions sont gratuites et sans limite de minutes pour un dépôt public, et une

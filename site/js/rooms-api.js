@@ -45,11 +45,12 @@ export const hostLink = (code, token) => `${pageUrl()}#/room/${code}/h/${token}`
 export const overlayLink = (code, key) => `${pageUrl()}#/overlay/${code}/${key}`;
 export const screensSocketUrl = (code) => `${ROOMS_API.replace(/^http/, "ws")}/api/rooms${at(code, "/screens")}`;
 
-// `file: true` : la réponse est un fichier, rendu en { blob, name }.
+// `file: true` : la réponse est un fichier, rendu en { blob, name }. Un `body` fichier (Blob) est envoyé tel quel.
 async function call(method, path, { code, body, file = false } = {}) {
   const access = code ? savedAccess(code) : {};
   const headers = {};
-  if (body !== undefined) headers["Content-Type"] = "application/json";
+  const raw = body instanceof Blob;
+  if (body !== undefined) headers["Content-Type"] = raw ? "application/octet-stream" : "application/json";
   if (access.admin) headers["X-Admin-Token"] = access.admin;
   if (access.player) headers["X-Player-Token"] = access.player;
   let response;
@@ -57,7 +58,7 @@ async function call(method, path, { code, body, file = false } = {}) {
     response = await fetch(`${ROOMS_API}/api/rooms${path}`, {
       method,
       headers,
-      body: body === undefined ? undefined : JSON.stringify(body),
+      body: body === undefined || raw ? body : JSON.stringify(body),
     });
   } catch {
     throw new Error("Le serveur des rooms ne répond pas. Vérifiez votre connexion et réessayez.");
@@ -93,6 +94,8 @@ export const api = {
   apLinks: (code) => call("GET", at(code, "/ap-links"), { code }),
   generate: (code, options) => call("POST", at(code, "/generate"), { code, body: { options } }),
   file: (code, kind) => call("GET", at(code, `/files/${kind}`), { code, file: true }),
+  uploadApworld: (code, game, name, file) => call("PUT", at(code, `/apworlds/${encodeURIComponent(name)}?game=${encodeURIComponent(game)}`), { code, body: file }),
+  deleteApworld: (code, name) => call("DELETE", at(code, `/apworlds/${encodeURIComponent(name)}`), { code }),
   createOverlayLink: (code, body) => call("POST", at(code, "/screens/links"), { code, body }),
   renameOverlayLink: (code, id, name) => call("PATCH", at(code, `/screens/links/${id}`), { code, body: { name } }),
   deleteOverlayLink: (code, id) => call("DELETE", at(code, `/screens/links/${id}`), { code }),

@@ -2,6 +2,7 @@
 // puis retrouver la partie hébergée sur archipelago.gg (adresse, tracker, fichiers de chaque joueur).
 import { html, useState, useEffect, useRef } from "../vendor/preact-htm.js";
 import { apVersion, gameEntry, localGames } from "./data.js";
+import { useApworldLoader } from "./apworld.js";
 import { splitFile } from "./yaml-model.js";
 import { checkText, nameProblem, MAX_NAME } from "./check.js";
 import { CopyButton, GamePicker, SheetBadges, download, loadCredits, plural, useAction, useSetting } from "./ui.js";
@@ -45,7 +46,7 @@ function timeLeft(ms) {
 function GameBadges({ game }) {
   const entry = gameEntry(game);
   if (!entry) return game.startsWith("Au hasard") ? null : html`<span class="badge warn" title="Jeu absent de la base du site">Hors base</span>`;
-  return html`${entry.source !== "core" && html`<span class="badge accent">Non officiel</span>`}<${SheetBadges} sheet=${entry.sheet} />`;
+  return html`${(entry.server?.source ?? entry.source) !== "core" && html`<span class="badge accent">Non officiel</span>`}<${SheetBadges} sheet=${entry.sheet} />`;
 }
 
 // --- Accueil des rooms -------------------------------------------------------------
@@ -449,13 +450,14 @@ function MySlots({ index, room, me, admin, players, slots, allSlots, refresh, on
 }
 
 function PickerModal({ index, value, onChange, onClose, onCreate }) {
-  const all = index.games;
+  const imported = localGames();
+  const all = index.games.filter((g) => !imported.some((i) => i.game === g.game));
   return html`<div class="modal" onClick=${(e) => e.target === e.currentTarget && onClose()}>
     <div class="modal-box">
       <div class="toolbar-row"><strong>Choisir un jeu</strong><span class="spacer"></span>
         <button type="button" class="ghost" onClick=${onClose}>Fermer</button></div>
       <${GamePicker} core=${all.filter((g) => g.source === "core")} custom=${all.filter((g) => g.source !== "core")}
-        imported=${localGames()} value=${value} onChange=${onChange} onCreate=${onCreate} />
+        imported=${imported} value=${value} onChange=${onChange} onCreate=${onCreate} />
     </div>
   </div>`;
 }
@@ -630,7 +632,8 @@ function HostPanel({ room, setData, data }) {
 }
 
 // Vérification de toute la room : chaque YAML (dans le navigateur de l'hôte) et les règles du type de partie.
-async function checkRoom(room, players, slots) {
+// `roomApworlds` : apworlds déposés par l'hôte pour la génération en ligne.
+async function checkRoom(room, players, slots, roomApworlds = []) {
   const results = await Promise.all(slots.map(async (slot) => {
     const check = await checkText(slot.content);
     if (check.errors.length) return { slot, problems: check.errors, warnings: [], deathLink: false };
@@ -664,12 +667,26 @@ async function checkRoom(room, players, slots) {
   const adult = [...games].filter((g) => gameEntry(g)?.sheet?.adult);
   if (adult.length) notes.push({ level: "info", text: `Jeux 18+ : ${adult.join(", ")}.` });
 
+  // Jeux vérifiés avec un apworld de ce navigateur : la génération en ligne ne l'a que s'il est déposé dans la room.
+  const uploaded = new Set(roomApworlds.map((a) => a.game));
+  const label = (g) => {
+    const entry = gameEntry(g);
+    return `${g}${entry.world_version ? ` ${entry.world_version}` : ""}${entry.server ? ` (site : ${entry.server.world_version || "?"})` : ""}`;
+  };
+  const notSent = [...games].filter((g) => gameEntry(g)?.source === "apworld" && !uploaded.has(g)).sort();
+  if (notSent.length) {
+    notes.push({ level: "warn", text: `Vérifié avec votre apworld pour ${notSent.map(label).join(", ")}. Pour générer en ligne avec, déposez-le aussi dans « Générer en ligne » : sinon la génération utilise celui du site (ou échoue pour un jeu absent du site).` });
+  }
+  const sent = [...games].filter((g) => uploaded.has(g)).sort();
+  if (sent.length) notes.push({ level: "info", text: `Génération en ligne avec l'apworld déposé dans la room pour ${sent.join(", ")}.` });
+
   // Apworlds à installer chez l'hôte avant de générer.
   const credits = await loadCredits();
   const apworlds = [...games].filter((g) => gameEntry(g)?.source !== "core").sort().map((g) => ({
     game: g,
     source: credits.find((c) => c.game === g)?.source || null,
     known: !!gameEntry(g),
+    mine: gameEntry(g)?.source === "apworld" ? gameEntry(g).world_version || "" : null,
   }));
   return { results, notes, apworlds };
 }
@@ -680,7 +697,7 @@ function RoomCheck({ room }) {
   // Liste des joueurs relue au moment de vérifier : la page peut dater de quelques secondes.
   const run = () => action.run(async () => {
     const [{ slots }, fresh] = await Promise.all([api.exportSlots(room.code), api.get(room.code)]);
-    setReport({ ...(await checkRoom(fresh.room, fresh.players, slots)), at: Date.now() });
+    setReport({ ...(await checkRoom(fresh.room, fresh.players, slots, fresh.apworlds)), at: Date.now() });
   });
   const blocking = report ? report.results.filter((r) => r.problems.length).length + report.notes.filter((n) => n.level === "error").length : 0;
   const warnings = report ? report.results.filter((r) => r.warnings.length).length + report.notes.filter((n) => n.level === "warn").length : 0;
@@ -714,7 +731,8 @@ function RoomCheck({ room }) {
       </table></div>
       ${report.apworlds.length > 0 && html`<div class="stack full">
         <p><strong>Apworlds à installer dans votre Archipelago</strong> (dossier <code>custom_worlds</code>) :</p>
-        <ul class="small">${report.apworlds.map((a) => html`<li>${a.game}${" — "}${a.source ? html`<a href=${a.source} target="_blank" rel="noopener">${a.source.replace(/^https:\/\//, "")}</a>`
+        <ul class="small">${report.apworlds.map((a) => html`<li>${a.game}${" — "}${a.mine != null ? `votre apworld${a.mine ? ` ${a.mine}` : ""}`
+            : a.source ? html`<a href=${a.source} target="_blank" rel="noopener">${a.source.replace(/^https:\/\//, "")}</a>`
             : a.known ? "source inconnue" : "absent de la base du site, à demander au joueur"}</li>`)}</ul>
       </div>`}`}
   </div>`;
@@ -741,6 +759,47 @@ const RELEASE_CHOICES = {
   disabled: "Jamais",
 };
 const REMAINING_CHOICES = { goal: "Une fois fini", enabled: "À tout moment", disabled: "Jamais" };
+
+// Apworlds de l'hôte pour la génération en ligne : chacun remplace celui du site pour son jeu (version plus
+// récente, jeu absent du site). Le site le lit d'abord avec Archipelago pour connaître son jeu, ce qui l'ajoute
+// aussi aux jeux de ce navigateur : la vérification de la room se fait avec lui.
+function RoomApworlds({ room, data, setData, busy }) {
+  const loader = useApworldLoader();
+  const action = useAction();
+  const [hover, setHover] = useState(false);
+  const list = data.apworlds || [];
+  const working = !!loader.status || action.busy;
+  const add = (file) => file && action.run(async () => {
+    const names = await loader.load(file);
+    if (!names.length) return; // erreur affichée par le lecteur d'apworld
+    if (names.length > 1) throw new Error(`Cet apworld contient plusieurs jeux (${names.join(", ")}) : un seul par fichier.`);
+    // Nom lu dans l'apworld (celui qu'attend Archipelago), plutôt que celui du fichier (« monjeu (1).apworld »…).
+    const read = gameEntry(names[0])?.apworld;
+    const name = /^[\w.-]+\.apworld$/i.test(read || "") ? read : file.name.replace(/[^\w.-]/g, "_").replace(/(\.apworld)?$/i, ".apworld");
+    setData({ ...data, ...(await api.uploadApworld(room.code, names[0], name, file)) });
+  });
+  const remove = (a) => action.run(async () => setData({ ...data, ...(await api.deleteApworld(room.code, a.file)) }));
+
+  return html`<div class="stack full">
+    <p><strong>Vos apworlds</strong> <span class="hint">(facultatif)</span> : un apworld déposé ici passe avant celui du site
+      pour son jeu, par exemple une version plus récente que celle du site.</p>
+    ${list.length > 0 && html`<ul class="check-notes">${list.map((a) => html`<li>
+      <strong>${a.game}</strong> — ${a.file}${" "}
+      <button type="button" class="ghost small" disabled=${busy || working} onClick=${() => remove(a)}>Retirer</button>
+    </li>`)}</ul>`}
+    <label class=${`drop compact ${hover ? "hover" : ""} ${working ? "busy" : ""}`}
+      onDragOver=${(e) => { e.preventDefault(); setHover(true); }}
+      onDragLeave=${() => setHover(false)}
+      onDrop=${(e) => { e.preventDefault(); setHover(false); if (!busy && !working) add(e.dataTransfer.files[0]); }}>
+      <input type="file" accept=".apworld" hidden disabled=${busy || working} onChange=${(e) => { add(e.target.files[0]); e.target.value = ""; }} />
+      ${working
+        ? html`<strong>${loader.status || "Envoi de l'apworld…"}</strong>`
+        : html`<strong>Déposez un fichier .apworld</strong><span>ou cliquez pour le choisir</span>`}
+    </label>
+    ${loader.error && html`<div class="notice error">${loader.error}</div>`}
+    ${action.error && html`<div class="notice error">${action.error}</div>`}
+  </div>`;
+}
 
 function OnlineGeneration({ room, setData, data }) {
   const action = useAction();
@@ -769,8 +828,9 @@ function OnlineGeneration({ room, setData, data }) {
   </select>`;
 
   return html`<div class="stack full">
-    <p>Archipelago génère la partie sur GitHub, avec les apworlds du site, en quelques minutes.
+    <p>Archipelago génère la partie sur GitHub, avec les apworlds du site ou les vôtres, en quelques minutes.
       Les jeux qui demandent leur ROM pour générer (A Link to the Past, Ocarina of Time…) doivent être générés sur votre ordinateur.</p>
+    <${RoomApworlds} room=${room} data=${data} setData=${setData} busy=${busy} />
     <div class="fields full">
       <label><span>Release <span class="hint">(envoyer les objets restants d'un joueur)</span></span>${select("release_mode", RELEASE_CHOICES)}</label>
       <label><span>Collect <span class="hint">(récupérer ses objets chez les autres)</span></span>${select("collect_mode", RELEASE_CHOICES)}</label>
@@ -916,7 +976,8 @@ function useGameHelp(origin) {
   const [credits, setCredits] = useState([]);
   useEffect(() => { loadCredits().then(setCredits); }, []);
   return (game) => {
-    if (gameEntry(game)?.source === "core") return { href: `${origin}/games/${encodeURIComponent(game)}/info/en`, label: "Page du jeu (installation)" };
+    const entry = gameEntry(game);
+    if ((entry?.server?.source ?? entry?.source) === "core") return { href: `${origin}/games/${encodeURIComponent(game)}/info/en`, label: "Page du jeu (installation)" };
     const source = credits.find((c) => c.game === game)?.source;
     return source ? { href: source, label: "Mod et client du jeu" } : null;
   };

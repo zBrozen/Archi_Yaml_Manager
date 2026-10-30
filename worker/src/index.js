@@ -271,7 +271,11 @@ async function getRoom(request, env, room) {
     admin,
     online_generation: generatorConfigured(env),
     screens: !!env.SCREENS,
-    ...(admin ? { overlay_layouts: JSON.parse(room.overlay_layouts || "[]"), overlay_links: await overlayLinks(env, room) } : {}),
+    ...(admin ? {
+      overlay_layouts: JSON.parse(room.overlay_layouts || "[]"),
+      overlay_links: await overlayLinks(env, room),
+      apworlds: await roomApworlds(env, room.code),
+    } : {}),
     me: me ? { id: me.id, pseudo: me.pseudo } : null,
     wishlists: Object.fromEntries(wishes.results.map((w) => [w.slot, JSON.parse(w.items)])),
     players: players.results.map((p) => ({
@@ -305,16 +309,23 @@ async function deleteFiles(env, code) {
   if (env.FILES) await Promise.all(FILE_KINDS.map((kind) => env.FILES.delete(`${code}/${kind}`)));
 }
 
+// Fichiers et lignes d'une room supprimée (par l'hôte ou faute d'activité).
+async function purgeRoom(env, code) {
+  await deleteFiles(env, code);
+  if (env.FILES) await Promise.all((await roomApworlds(env, code)).map((a) => env.FILES.delete(apworldKey(code, a.file))));
+  await env.DB.batch([
+    env.DB.prepare("DELETE FROM slots WHERE room_code = ?").bind(code),
+    env.DB.prepare("DELETE FROM players WHERE room_code = ?").bind(code),
+    env.DB.prepare("DELETE FROM wishlists WHERE room_code = ?").bind(code),
+    env.DB.prepare("DELETE FROM overlay_links WHERE room_code = ?").bind(code),
+    env.DB.prepare("DELETE FROM room_apworlds WHERE room_code = ?").bind(code),
+    env.DB.prepare("DELETE FROM rooms WHERE code = ?").bind(code),
+  ]);
+}
+
 async function deleteRoom(request, env, room) {
   await requireAdmin(request, room);
-  await deleteFiles(env, room.code);
-  await env.DB.batch([
-    env.DB.prepare("DELETE FROM slots WHERE room_code = ?").bind(room.code),
-    env.DB.prepare("DELETE FROM players WHERE room_code = ?").bind(room.code),
-    env.DB.prepare("DELETE FROM wishlists WHERE room_code = ?").bind(room.code),
-    env.DB.prepare("DELETE FROM overlay_links WHERE room_code = ?").bind(room.code),
-    env.DB.prepare("DELETE FROM rooms WHERE code = ?").bind(room.code),
-  ]);
+  await purgeRoom(env, room.code);
   return json({ ok: true });
 }
 
@@ -577,7 +588,10 @@ async function generatorInput(env, room) {
   requireGenerating(room);
   const { results } = await env.DB.prepare("SELECT name, filename, content FROM slots WHERE room_code = ? ORDER BY created_at")
     .bind(room.code).all();
-  return json({ code: room.code, mode: room.mode, options: generation(room).options, slots: results });
+  return json({
+    code: room.code, mode: room.mode, options: generation(room).options, slots: results,
+    apworlds: (await roomApworlds(env, room.code)).map(({ game, file }) => ({ game, file })),
+  });
 }
 
 async function generatorUpload(request, env, room, kind) {
@@ -605,6 +619,67 @@ async function generatorReport(request, env, room) {
   await env.DB.prepare("UPDATE rooms SET gen_status = ?, gen_message = ?, gen_run_url = ?, gen_at = ?, gen_files = ?, updated_at = ? WHERE code = ?")
     .bind(body.status, message, runUrl, now, JSON.stringify(files), now, room.code).run();
   return json({ ok: true });
+}
+
+// --- Apworlds de l'hôte (génération en ligne) -------------------------------------------
+// L'hôte dépose l'apworld d'un jeu (nom du jeu lu par le site avec Archipelago) : le générateur l'installe à la
+// place de celui du site. Son code n'est exécuté que dans un conteneur sans réseau ni secret (generate-room.yml).
+
+const APWORLDS = { count: 20, file: 120 };
+const apworldKey = (code, file) => `${code}/apworld/${file}`;
+
+const roomApworlds = async (env, code) => (await env.DB.prepare(
+  "SELECT game, file, size, uploaded_at FROM room_apworlds WHERE room_code = ? ORDER BY game",
+).bind(code).all()).results;
+
+function apworldFile(value) {
+  const file = String(value ?? "");
+  if (file.length > APWORLDS.file || !/^[\w.-]+\.apworld$/i.test(file)) throw new HttpError(400, "Nom de fichier .apworld invalide.");
+  return file;
+}
+
+async function uploadApworld(request, env, room, file) {
+  await requireAdmin(request, room);
+  requireYamlRoom(room);
+  if (!env.FILES) throw new HttpError(501, "La génération en ligne n'est pas configurée sur ce serveur.");
+  file = apworldFile(file);
+  const game = text(new URL(request.url).searchParams.get("game"), "jeu", LIMITS.game);
+  const data = new Uint8Array(await request.arrayBuffer());
+  if (!data.length || data.length > MAX_FILE_SIZE) throw new HttpError(413, "Fichier vide ou trop gros (25 Mo au maximum).");
+  if (data[0] !== 0x50 || data[1] !== 0x4b) throw new HttpError(400, "Ce fichier n'est pas un apworld (archive zip attendue).");
+  const list = await roomApworlds(env, room.code);
+  const previous = list.find((a) => a.game === game);
+  if (list.some((a) => a.file.toLowerCase() === file.toLowerCase() && a.game !== game)) {
+    throw new HttpError(409, `Un autre jeu de la room utilise déjà le fichier ${file}.`);
+  }
+  if (!previous && list.length >= APWORLDS.count) throw new HttpError(409, `${APWORLDS.count} apworlds au maximum par room.`);
+  await env.FILES.put(apworldKey(room.code, file), data);
+  if (previous && previous.file !== file) await env.FILES.delete(apworldKey(room.code, previous.file));
+  await env.DB.batch([
+    env.DB.prepare(
+      `INSERT INTO room_apworlds (room_code, game, file, size, uploaded_at) VALUES (?, ?, ?, ?, ?)
+       ON CONFLICT (room_code, game) DO UPDATE SET file = excluded.file, size = excluded.size, uploaded_at = excluded.uploaded_at`,
+    ).bind(room.code, game, file, data.length, Date.now()),
+    touch(env, room),
+  ]);
+  return json({ apworlds: await roomApworlds(env, room.code) });
+}
+
+async function deleteApworld(request, env, room, file) {
+  await requireAdmin(request, room);
+  file = apworldFile(file);
+  await env.DB.prepare("DELETE FROM room_apworlds WHERE room_code = ? AND file = ?").bind(room.code, file).run();
+  if (env.FILES) await env.FILES.delete(apworldKey(room.code, file));
+  return json({ apworlds: await roomApworlds(env, room.code) });
+}
+
+async function generatorApworld(env, room, file) {
+  requireGenerating(room);
+  file = apworldFile(file);
+  const known = await env.DB.prepare("SELECT 1 FROM room_apworlds WHERE room_code = ? AND file = ?").bind(room.code, file).first();
+  const data = known && env.FILES ? await env.FILES.get(apworldKey(room.code, file), "stream") : null;
+  if (!data) throw new HttpError(404, "Apworld introuvable.");
+  return new Response(data, { headers: { "Content-Type": "application/zip" } });
 }
 
 // --- Écrans des joueurs (overlay OBS) -------------------------------------------------
@@ -936,6 +1011,10 @@ async function route(request, env) {
     return startGeneration(request, env, room);
   } else if (sub === "files" && id && method === "GET") {
     return downloadFile(request, env, room, id);
+  } else if (sub === "apworlds" && id && method === "PUT") {
+    return uploadApworld(request, env, room, id);
+  } else if (sub === "apworlds" && id && method === "DELETE") {
+    return deleteApworld(request, env, room, id);
   } else if (sub === "screens") {
     if (!id && method === "GET") return screensSocket(request, env, room);
     const linkId = parts[5];
@@ -949,6 +1028,7 @@ async function route(request, env) {
     if (!id && method === "GET") return generatorInput(env, room);
     if (!id && method === "POST") return generatorReport(request, env, room);
     if (id === "files" && kind && method === "PUT") return generatorUpload(request, env, room, kind);
+    if (id === "apworlds" && kind && method === "GET") return generatorApworld(env, room, kind);
   }
   throw new HttpError(404, "Route inconnue.");
 }
@@ -969,15 +1049,6 @@ export default {
   async scheduled(event, env) {
     const limit = Date.now() - ROOM_LIFETIME_DAYS * 24 * 3600 * 1000;
     const { results } = await env.DB.prepare("SELECT code FROM rooms WHERE updated_at < ?").bind(limit).all();
-    for (const { code } of results) {
-      await deleteFiles(env, code);
-      await env.DB.batch([
-        env.DB.prepare("DELETE FROM slots WHERE room_code = ?").bind(code),
-        env.DB.prepare("DELETE FROM players WHERE room_code = ?").bind(code),
-        env.DB.prepare("DELETE FROM wishlists WHERE room_code = ?").bind(code),
-        env.DB.prepare("DELETE FROM overlay_links WHERE room_code = ?").bind(code),
-        env.DB.prepare("DELETE FROM rooms WHERE code = ?").bind(code),
-      ]);
-    }
+    for (const { code } of results) await purgeRoom(env, code);
   },
 };

@@ -18,8 +18,13 @@ export function apVersion() {
   return index?.ap_version || null;
 }
 
+// Un apworld déposé par le joueur passe avant le jeu de la base (il est souvent plus récent).
 export function gameEntry(name) {
-  return index?.games.find((g) => g.game === name) || local.get(name) || null;
+  return local.get(name) || serverEntry(name);
+}
+
+function serverEntry(name) {
+  return index?.games.find((g) => g.game === name) || null;
 }
 
 // Noms de tous les jeux connus : ceux de la base et ceux ajoutés avec un apworld.
@@ -48,9 +53,10 @@ export function loadGame(name) {
       return r.json();
     })
     .then((data) => {
-      games.set(name, prepare(data));
+      // Un apworld déposé pendant le téléchargement garde la priorité.
+      if (!local.has(name)) games.set(name, prepare(data));
       pending.delete(name);
-      return data;
+      return games.get(name);
     });
   pending.set(name, promise);
   return promise;
@@ -62,20 +68,33 @@ export function localGames() {
   return [...local.values()];
 }
 
+// `server` : le jeu de la base que l'apworld remplace (sa source et sa version), s'il y en a un.
 function addLocal(data) {
-  if (index?.games.some((g) => g.game === data.game)) return false; // la base du site a priorité
+  const server = serverEntry(data.game);
   data.source = "apworld";
-  local.set(data.game, { game: data.game, source: "apworld", world_version: data.world_version, apworld: data.apworld });
+  local.set(data.game, {
+    game: data.game, source: "apworld", world_version: data.world_version, apworld: data.apworld, sheet: server?.sheet,
+    server: server && { source: server.source, world_version: server.world_version || null },
+  });
   games.set(data.game, prepare(data));
-  return true;
 }
 
 export function registerLocalGame(data) {
-  if (!addLocal(data)) return;
+  addLocal(data);
   try {
     const { options, ...plain } = data;
+    // Version du serveur au moment du dépôt : voir restoreLocalGames.
+    plain.replaced = serverEntry(data.game)?.world_version || null;
     localStorage.setItem(STORAGE_PREFIX + data.game, JSON.stringify(plain));
   } catch { /* stockage plein ou indisponible : il faudra redéposer l'apworld la prochaine fois */ }
+}
+
+// Un apworld mémorisé est oublié quand le serveur a changé de version depuis son dépôt et l'a
+// rattrapé : celui du serveur est alors aussi récent, et ses descriptions sont traduites.
+function outdated(data) {
+  const server = serverEntry(data.game);
+  if (!server || (server.world_version || null) === (data.replaced ?? null)) return false;
+  return !data.world_version || !server.world_version || compareVersions(server.world_version, data.world_version) >= 0;
 }
 
 export function forgetLocalGame(name) {
@@ -86,10 +105,13 @@ export function forgetLocalGame(name) {
 
 function restoreLocalGames() {
   try {
-    for (let i = 0; i < localStorage.length; i++) {
-      const key = localStorage.key(i);
-      if (!key.startsWith(STORAGE_PREFIX)) continue;
-      try { addLocal(JSON.parse(localStorage.getItem(key))); } catch { /* entrée illisible : ignorée */ }
+    const keys = Array.from({ length: localStorage.length }, (_, i) => localStorage.key(i));
+    for (const key of keys.filter((k) => k?.startsWith(STORAGE_PREFIX))) {
+      try {
+        const data = JSON.parse(localStorage.getItem(key));
+        if (outdated(data)) localStorage.removeItem(key);
+        else addLocal(data);
+      } catch { /* entrée illisible : ignorée */ }
     }
   } catch { /* stockage indisponible */ }
 }

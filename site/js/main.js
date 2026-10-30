@@ -105,9 +105,11 @@ function Home({ index, onOpen, onCreate }) {
   const [game, setGame] = useState("");
   const [, setLocalVersion] = useState(0);
   const apworld = useApworldLoader();
-  const core = index.games.filter((g) => g.source === "core");
-  const custom = index.games.filter((g) => g.source !== "core");
   const imported = localGames();
+  // Un jeu dont l'apworld a été déposé n'apparaît que dans « Ajoutés avec un apworld ».
+  const mine = new Set(imported.map((g) => g.game));
+  const core = index.games.filter((g) => g.source === "core" && !mine.has(g.game));
+  const custom = index.games.filter((g) => g.source !== "core" && !mine.has(g.game));
   const failed = Object.entries(index.errors || {});
   const added = (names) => {
     setLocalVersion((v) => v + 1);
@@ -157,11 +159,13 @@ function Home({ index, onOpen, onCreate }) {
     <section class="card stack">
       <h2>Pas encore de YAML ?</h2>
       <${GamePicker} core=${core} custom=${custom} imported=${imported} value=${game} onChange=${setGame} onCreate=${onCreate} />
-      <p class="hint">Jeu absent de la liste ? Déposez son .apworld ci-dessous pour l'ajouter.</p>
+      <p class="hint">Jeu absent de la liste, ou apworld plus récent que celui du serveur ? Déposez son .apworld ci-dessous :
+        il passe avant celui du serveur.</p>
       <${ApworldDrop} onLoaded=${added} />
       ${imported.length > 0 && html`<div class="remembered">
         <span class="hint">Apworlds mémorisés dans ce navigateur :</span>
-        ${imported.map((g) => html`<span class="chip">${g.game}${g.world_version ? ` ${g.world_version}` : ""}
+        ${imported.map((g) => html`<span class="chip">${g.game}${g.world_version ? ` ${g.world_version}` : ""}${g.server
+          ? ` (serveur : ${g.server.world_version || "?"})` : ""}
           <button type="button" title="Oublier cet apworld" onClick=${() => { forgetLocalGame(g.game); added([]); if (game === g.game) setGame(""); }}>✕</button></span>`)}
       </div>`}
     </section>
@@ -227,7 +231,7 @@ function PlayerCard({ js, index, games, update }) {
 }
 
 function GameField({ value, index, onChange }) {
-  const names = [...localGames(), ...index.games].map((g) => g.game);
+  const names = [...new Set([...localGames(), ...index.games].map((g) => g.game))];
   if (isPlainObject(value)) {
     return html`<div class="label-like">
       <span>Jeux (tirés au sort selon leur poids)</span>
@@ -288,6 +292,11 @@ function GameSection({ name, entry, index, update, view, onApworld }) {
     </section>`;
   }
 
+  // Apworld déposé à la place de celui du serveur : on peut revenir à celui du serveur.
+  const replaced = data.source === "apworld" && gameEntry(name)?.server;
+  const revert = html`<button type="button" class="ghost" onClick=${() => { forgetLocalGame(name); refresh(); onApworld(); }}>
+    Revenir à l'apworld du serveur${replaced?.world_version ? ` (${replaced.world_version})` : ""}</button>`;
+
   // Version du jeu incompatible avec le fichier : la génération échouerait, on demande la bonne version.
   const mismatch = versionProblem(entry.js, name);
   if (mismatch) {
@@ -295,10 +304,12 @@ function GameSection({ name, entry, index, update, view, onApworld }) {
       ${head(html`<span class="badge warn">${data.source === "apworld" ? "Apworld à mettre à jour" : "Version incompatible"}</span>`)}
       <div class="card stack">
         <p>Ce YAML demande la version <strong>${mismatch.need}</strong> de ${name}, ${data.source === "apworld" ? "mais l'apworld fourni" : "mais le serveur"} est en version <strong>${mismatch.have}</strong>. Archipelago refusera de générer la partie.</p>
-        ${data.source === "apworld"
-          ? html`<p>Déposez l'apworld de la bonne version (celui avec lequel ce YAML a été fait).</p>
-            <${ApworldDrop} game=${name} onLoaded=${() => { refresh(); onApworld(); }} />`
-          : html`<p>Il faut un YAML prévu pour la version ${mismatch.have} de ce jeu.</p>`}
+        <p>${data.source === "apworld"
+          ? "Déposez l'apworld de la bonne version (celui avec lequel ce YAML a été fait)."
+          : html`Il faut un YAML prévu pour la version ${mismatch.have} de ce jeu, ou l'apworld avec lequel ce YAML a été fait :
+            déposé ici, il remplace celui du serveur.`}</p>
+        <${ApworldDrop} game=${name} onLoaded=${() => { refresh(); onApworld(); }} />
+        ${replaced && revert}
       </div>
     </section>`;
   }
@@ -329,6 +340,10 @@ function GameSection({ name, entry, index, update, view, onApworld }) {
       ${data.source === "apworld" && html`<span class="badge accent">Apworld ${data.world_version || ""}</span>`}
       <span class="stats">${changed} ${changed > 1 ? "options modifiées" : "option modifiée"}${problems > 0
         ? html` · <span class="error">${plural(problems, "problème")}</span>` : ""}</span>`)}
+    ${replaced && html`<div class="notice row">
+      <span class="grow">Options lues dans votre apworld${data.world_version ? ` (${data.world_version})` : ""}, à la place de celui du serveur${replaced.world_version ? ` (${replaced.world_version})` : ""}.</span>
+      ${revert}
+    </div>`}
     ${groups.length === 0 && shownUnknown.length === 0 && html`<p class="hint">Aucune option à afficher.</p>`}
     ${shownUnknown.length > 0 && html`<div class="group">
       <div class="group-title warn">Options non reconnues</div>

@@ -3,8 +3,10 @@
 Le service des rooms (worker/) lance le workflow avec le code de la room. Ce script :
   1. lit les YAML de la room et les réglages choisis par l'hôte (secret GENERATOR_SECRET) ;
   2. installe dans Archipelago les apworlds non officiels des jeux de la room, pris dans le cache
-     des apworlds de la mise à jour quotidienne (même version que celle vérifiée par le site) ;
-  3. lance la génération, avec les réglages du serveur de l'hôte (release, collect, indices) ;
+     des apworlds de la mise à jour quotidienne (même version que celle vérifiée par le site), sauf ceux
+     que l'hôte a déposés dans la room : ils passent avant ceux du site, même pour un jeu officiel ;
+  3. lance la génération, avec les réglages du serveur de l'hôte (release, collect, indices), dans un
+     conteneur Docker sans réseau (--image) : le code des apworlds n'atteint ni le secret ni le réseau ;
   4. envoie la partie au service, et le spoiler à part : il n'est donné qu'à l'hôte, la partie envoyée
      sur archipelago.gg n'en contient pas.
 
@@ -13,12 +15,13 @@ ni l'emplacement des objets.
 
 Usage :
     python tools/room_generate.py start --room CODE
-    python tools/room_generate.py run --room CODE --ap ../Archipelago --cache ../apworld-cache
+    python tools/room_generate.py run --room CODE --ap ../Archipelago --cache ../apworld-cache [--image IMAGE]
     python tools/room_generate.py fail --room CODE --message "…"
 """
 from __future__ import annotations
 
 import argparse
+import io
 import json
 import os
 import re
@@ -31,6 +34,8 @@ import urllib.error
 import urllib.request
 import zipfile
 from pathlib import Path
+
+from fetch_apworlds import apworld_problem
 
 ROOT = Path(__file__).resolve().parent.parent
 GENERATION_TIMEOUT = 25 * 60
@@ -72,7 +77,8 @@ def api_url() -> str:
     return match.group(1).rstrip("/")
 
 
-def call(method: str, path: str, room: str, body=None, data: bytes | None = None, content_type="application/json"):
+def call(method: str, path: str, room: str, body=None, data: bytes | None = None, content_type="application/json",
+         raw: bool = False):
     secret = os.environ.get("GENERATOR_SECRET")
     if not secret:
         raise SystemExit("Secret GENERATOR_SECRET manquant")
@@ -84,7 +90,7 @@ def call(method: str, path: str, room: str, body=None, data: bytes | None = None
     })
     try:
         with urllib.request.urlopen(request, timeout=120) as response:
-            return json.loads(response.read() or b"{}")
+            return response.read() if raw else json.loads(response.read() or b"{}")
     except urllib.error.HTTPError as ex:
         detail = ex.read().decode("utf-8", "replace")
         raise SystemExit(f"Service des rooms : {method} {path or '/'} → {ex.code} {detail}")
@@ -135,19 +141,50 @@ def stored_apworlds(cache: Path) -> dict[str, Path]:
     return found
 
 
-def install_apworlds(games: set[str], ap: Path, cache: Path) -> None:
+def package_name(data: bytes) -> str | None:
+    """Dossier du monde dans l'apworld : Archipelago veut un fichier qui porte ce nom."""
+    try:
+        with zipfile.ZipFile(io.BytesIO(data)) as archive:
+            roots = {n.split("/")[0] for n in archive.namelist() if n.count("/") == 1 and n.endswith("/__init__.py")}
+    except zipfile.BadZipFile:
+        return None
+    return roots.pop() if len(roots) == 1 and re.fullmatch(r"[A-Za-z_][\w]*", next(iter(roots))) else None
+
+
+def install_own(game: str, path: Path, ap: Path, dest: Path) -> None:
+    """Installe l'apworld déposé par l'hôte. Archipelago charge les mondes intégrés avant les apworlds et ignore
+    un apworld dont le jeu est déjà chargé : pour un jeu officiel, le dossier intégré est donc retiré."""
+    data = path.read_bytes()
+    package = package_name(data)
+    if not package:
+        raise Failure(f"L'apworld déposé pour {game} n'est pas valide (un seul dossier de monde attendu).")
+    if problem := apworld_problem(data):
+        raise Failure(f"L'apworld déposé pour {game} ferait échouer Archipelago : {problem}.")
+    builtin = ap / "worlds" / package
+    if builtin.is_dir():
+        shutil.rmtree(builtin)
+    target = dest / f"{package}.apworld"
+    if target.exists():
+        raise Failure(f"L'apworld déposé pour {game} porte le même nom ({target.name}) que celui d'un autre jeu de la partie.")
+    print(f"Apworld de l'hôte : {game} ({target.name})", flush=True)
+    target.write_bytes(data)
+
+
+def install_apworlds(games: set[str], ap: Path, cache: Path, own: dict[str, Path] | None = None) -> None:
+    """`own` : apworlds déposés par l'hôte, par jeu ; ils passent avant ceux du site."""
+    own = own or {}
     index = json.loads((ROOT / "site" / "data" / "index.json").read_text(encoding="utf-8"))
     sources = {g["game"]: g.get("source") for g in index["games"]}
     credits = json.loads((ROOT / "site" / "data" / "apworld-credits.json").read_text(encoding="utf-8"))
     files = {c["game"]: c["file"] for c in credits}
     stored = stored_apworlds(cache)
-    unknown = sorted(g for g in games if g not in sources)
+    unknown = sorted(g for g in games if g not in sources and g not in own)
     if unknown:
         raise Failure(f"Jeux absents de la base du site, impossibles à générer en ligne : {', '.join(unknown)}. "
-                      "Générez la partie sur votre ordinateur avec leurs apworlds.")
+                      "Déposez leur apworld dans la génération en ligne, ou générez la partie sur votre ordinateur.")
     dest = ap / "custom_worlds"
     dest.mkdir(parents=True, exist_ok=True)
-    for game in sorted(g for g in games if sources[g] != "core"):
+    for game in sorted(g for g in games if g not in own and sources[g] != "core"):
         name = files.get(game)
         path = ROOT / "apworlds" / name if name and (ROOT / "apworlds" / name).exists() else stored.get(name)
         if not path:
@@ -155,6 +192,8 @@ def install_apworlds(games: set[str], ap: Path, cache: Path) -> None:
                           "ou générez sur votre ordinateur.")
         print(f"Apworld : {game} ({name})", flush=True)
         shutil.copy2(path, dest / name)
+    for game in sorted(g for g in games if g in own):
+        install_own(game, own[game], ap, dest)
 
 
 # --- Génération --------------------------------------------------------------------------
@@ -188,17 +227,32 @@ def explain(log: str) -> str:
     return f"La génération a échoué : {error[:1500]}"
 
 
-def generate(ap: Path, players: Path, out: Path, options: dict) -> Path:
+def generate(ap: Path, players: Path, out: Path, options: dict, image: str | None = None) -> Path:
+    """Lance Archipelago. Avec `image` (Docker), le code des apworlds tourne dans un conteneur sans réseau, qui ne
+    voit que le dossier d'Archipelago, les YAML et le dossier de sortie : ni le secret du service, ni le reste de
+    la machine du workflow. Indispensable dès qu'un hôte peut déposer son propre apworld."""
     out.mkdir(parents=True, exist_ok=True)
-    args = ["--player_files_path", str(players), "--outputpath", str(out),
-            "--spoiler", str(SPOILER_LEVEL if options.get("spoiler") else 0)]
-    # Le code des apworlds ne reçoit pas le secret du service.
-    env = {k: v for k, v in os.environ.items() if k != "GENERATOR_SECRET"}
+    spoiler = str(SPOILER_LEVEL if options.get("spoiler") else 0)
     log = []
-    process = subprocess.Popen([sys.executable, "-c", WRAPPER, json.dumps(options), *args], cwd=ap, env=env,
+    if image:
+        name = f"room-generation-{os.getpid()}"
+        command = ["docker", "run", "--rm", "--name", name, "--network", "none", "--cap-drop", "ALL",
+                   "--security-opt", "no-new-privileges", "--user", f"{os.getuid()}:{os.getgid()}", "-e", "HOME=/tmp",
+                   "-v", f"{ap}:/ap", "-v", f"{players}:/players:ro", "-v", f"{out}:/out", "-w", "/ap", image,
+                   "python", "-c", WRAPPER, json.dumps(options),
+                   "--player_files_path", "/players", "--outputpath", "/out", "--spoiler", spoiler]
+        env = None
+        stop = lambda: subprocess.run(["docker", "kill", name], capture_output=True)
+    else:
+        command = [sys.executable, "-c", WRAPPER, json.dumps(options),
+                   "--player_files_path", str(players), "--outputpath", str(out), "--spoiler", spoiler]
+        # Le code des apworlds ne reçoit pas le secret du service.
+        env = {k: v for k, v in os.environ.items() if k != "GENERATOR_SECRET"}
+        stop = None
+    process = subprocess.Popen(command, cwd=ap, env=env,
                                stdin=subprocess.DEVNULL, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
                                text=True, encoding="utf-8", errors="replace")
-    watchdog = threading.Timer(GENERATION_TIMEOUT, process.kill)
+    watchdog = threading.Timer(GENERATION_TIMEOUT, stop or process.kill)
     watchdog.start()
     try:
         for line in process.stdout:
@@ -232,16 +286,25 @@ def split_spoiler(archive: Path, folder: Path) -> tuple[Path, Path | None]:
     return clean, spoiler
 
 
-def run(room: str, ap: Path, cache: Path) -> None:
+def run(room: str, ap: Path, cache: Path, image: str | None = None) -> None:
     try:
         data = call("GET", "", room)
         print(f"Room {room} : {len(data['slots'])} YAML, réglages {data['options']}", flush=True)
-        with tempfile.TemporaryDirectory() as tmp:
+        with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as tmp:
             tmp = Path(tmp)
             games = write_players(data["slots"], tmp / "Players")
             print(f"Jeux : {', '.join(sorted(games))}", flush=True)
-            install_apworlds(games, ap, cache)
-            archive = generate(ap, tmp / "Players", tmp / "output", data["options"])
+            own = {}
+            for item in data.get("apworlds", []):
+                if item["game"] in games and re.fullmatch(r"[\w.-]+\.apworld", item["file"]):
+                    path = tmp / "own" / item["file"]
+                    path.parent.mkdir(exist_ok=True)
+                    path.write_bytes(call("GET", f"/apworlds/{item['file']}", room, raw=True))
+                    own[item["game"]] = path
+            if own and not image:
+                print("::warning::Apworlds de l'hôte exécutés sans conteneur (--image absent)", flush=True)
+            install_apworlds(games, ap, cache, own)
+            archive = generate(ap, tmp / "Players", tmp / "output", data["options"], image)
             (tmp / "final").mkdir()
             archive, spoiler = split_spoiler(archive, tmp / "final")
             call("PUT", "/files/output", room, data=archive.read_bytes(), content_type="application/zip")
@@ -262,6 +325,7 @@ def main() -> int:
     parser.add_argument("--room", required=True)
     parser.add_argument("--ap", help="dossier d'Archipelago")
     parser.add_argument("--cache", help="cache des apworlds (fetch_apworlds.py --cache)")
+    parser.add_argument("--image", help="image Docker où lancer Archipelago (conteneur sans réseau)")
     parser.add_argument("--message", default="La génération a échoué.")
     args = parser.parse_args()
     room = re.sub(r"[^A-Z0-9]", "", args.room.upper())
@@ -272,7 +336,7 @@ def main() -> int:
     else:
         if not args.ap or not args.cache:
             parser.error("run demande --ap et --cache")
-        run(room, Path(args.ap).resolve(), Path(args.cache))
+        run(room, Path(args.ap).resolve(), Path(args.cache), args.image)
     return 0
 
 

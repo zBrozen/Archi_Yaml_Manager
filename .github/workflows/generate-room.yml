@@ -44,14 +44,21 @@ jobs:
           echo "Archipelago $tag"
           git clone --depth 1 --branch "$tag" https://github.com/ArchipelagoMW/Archipelago.git "$RUNNER_TEMP/Archipelago"
 
-      - name: Installer les dépendances
+      # Archipelago et le code des apworlds (y compris ceux déposés par l'hôte) ne tournent que dans un conteneur
+      # sans réseau, qui ne reçoit ni le secret ni le reste de la machine (voir room_generate.py, --image).
+      # Les dépendances sont installées dans l'image avant qu'aucun apworld ne soit ajouté.
+      - name: Préparer le conteneur de génération
         run: |
           AP="$RUNNER_TEMP/Archipelago"
           grep -viE '^\s*kivy' "$AP/requirements.txt" > "$RUNNER_TEMP/requirements.txt"
-          pip install -r "$RUNNER_TEMP/requirements.txt" "setuptools<81"
-          for f in "$AP"/worlds/*/requirements.txt; do
-            pip install -r "$f" || echo "::warning::Dépendances non installées : $f"
-          done
+          docker run --name ap-deps -v "$AP:/ap:ro" -v "$RUNNER_TEMP/requirements.txt:/requirements.txt:ro" python:3.12 bash -c '
+            pip install --root-user-action=ignore -r /requirements.txt "setuptools<81"
+            for f in /ap/worlds/*/requirements.txt; do
+              pip install --root-user-action=ignore -r "$f" || echo "::warning::Dépendances non installées : $f"
+            done'
+          docker commit ap-deps ap-generator
+          docker rm ap-deps
+          pip install pyyaml
 
       # Apworlds téléchargés par la mise à jour quotidienne (lecture seule).
       - uses: actions/cache/restore@v4
@@ -61,7 +68,9 @@ jobs:
           restore-keys: apworlds-
 
       - name: Générer
-        run: python tools/room_generate.py run --room "$ROOM" --ap "$RUNNER_TEMP/Archipelago" --cache "$RUNNER_TEMP/apworld-cache"
+        run: >
+          python tools/room_generate.py run --room "$ROOM" --ap "$RUNNER_TEMP/Archipelago"
+          --cache "$RUNNER_TEMP/apworld-cache" --image ap-generator
 
       - name: Signaler l'échec
         if: failure()

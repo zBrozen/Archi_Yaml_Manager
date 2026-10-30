@@ -9,6 +9,8 @@
   `site/data/apworld-credits.json` (auteurs, source, licence, infos du tableur). `extract_options.py`
   recopie les infos du tableur (stabilité, PR, 18+) dans `index.json` (`sheet`), que le site affiche.
   Détails dans la section « Jeux non officiels » du README.
+- Dans le navigateur, un apworld déposé (`data.js`, `local`) passe avant le jeu de la base : `gameEntry` renvoie
+  d'abord l'entrée locale, dont `server` décrit le jeu de la base remplacé (sa source, `core` ou non, est là).
 - Ne pas recommiter de `.apworld` tiers dans `apworlds/` si l'auteur publie des releases : le dépôt ne
   doit pas redistribuer ce qu'il peut télécharger. Mentions légales : `LICENSE`, `THIRD_PARTY_LICENSES.md`,
   pied de page du site (`Footer` dans `site/js/main.js`).
@@ -24,6 +26,9 @@
   L'hébergement passe par archipelago.gg (envoi par l'hôte). La génération se fait chez l'hôte ou en ligne :
   le service lance `generate-room.yml` (`tools/room_generate.py`), qui lit les YAML et renvoie la partie avec le
   secret partagé `GENERATOR_SECRET` ; fichiers dans le KV `FILES`. Le spoiler est toujours séparé de la partie.
+  L'hôte peut déposer ses apworlds (table `room_apworlds`, KV `CODE/apworld/fichier`) : ils passent avant ceux du
+  site. Comme n'importe quel hôte peut ainsi faire exécuter du code, Archipelago ne tourne que dans un conteneur
+  Docker sans réseau (`--image`) : ne jamais lui passer le secret ni monter autre chose que AP, YAML et sortie.
   Toute nouvelle table ou colonne passe par une migration dans `worker/migrations/`.
   Écrans des joueurs (overlay OBS, page `#/overlay/CODE/CLÉ`) : WebRTC entre navigateurs, mise en relation par le
   Durable Object `ScreenRoom` du Worker (une instance par room). `screens.js` : partage du joueur et lien de l'hôte ;
