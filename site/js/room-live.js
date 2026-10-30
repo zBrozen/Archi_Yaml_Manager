@@ -119,6 +119,8 @@ export function ProgressPanel({ status, tracker, mode, mine, compact = false, on
         </tr>`;
       })}</tbody>
     </table></div>`}
+    <p class="hint">Mise à jour toutes les 1 à 3 minutes : archipelago.gg n'enregistre la progression qu'une fois par minute,
+      et son tracker la garde en cache une minute de plus.</p>
     ${compact && onDetails && html`<button type="button" class="link" onClick=${onDetails}>Voir la progression de tous les joueurs →</button>`}
     ${error && html`<p class="hint">${error} Dernières données affichées.</p>`}
   </div>`;
