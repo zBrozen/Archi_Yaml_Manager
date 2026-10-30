@@ -35,6 +35,9 @@ sans éditer le code à la main.
   leurs YAML (un fichier par jeu). L'hôte vérifie la room, télécharge tous les YAML pour générer la partie avec
   son Archipelago, puis l'héberge sur archipelago.gg : chaque joueur retrouve l'adresse, le tracker et ses fichiers
   sur la page de la room. Voir la section « Rooms ».
+- **Trackers** : les packs [PopTracker](https://github.com/black-sliver/PopTracker) des jeux s'ouvrent
+  directement dans le site (objets, cartes, lieux accessibles), et suivent la partie en direct. Voir la section
+  « Trackers (packs PopTracker) ».
 
 Hors rooms, tout se passe dans le navigateur : les fichiers des joueurs ne sont envoyés nulle part.
 
@@ -322,6 +325,32 @@ gratuite : 1 000 écritures par jour).
 Le jeton GitHub expire à la date choisie à sa création : il suffit alors d'en créer un nouveau et de remplacer
 le secret, puis de relancer « Publier le service des rooms ».
 
+## Trackers (packs PopTracker)
+
+Page `#/tracker` : un pack PopTracker lu par le navigateur, sans installer PopTracker. On y arrive par le lien
+« tracker du pack » de chaque joueur dans la progression d'une room (jeu, serveur et nom du joueur déjà remplis),
+ou directement en choisissant le jeu ou en déposant le `.zip` d'un pack.
+
+- **Packs.** `tools/fetch_trackers.py` (job `sync` de `update-data.yml`) relève les liens « Poptracker » du
+  tableur des jeux. Il lit la page HTML du tableur : l'export xlsx ne garde que le premier lien de chaque
+  cellule. Pour chaque pack GitHub, la release visée (sinon la dernière) donne l'archive `.zip`, notée dans
+  `site/data/trackers.json`. Le navigateur la télécharge par le relais `/api/packs` du service des rooms
+  (GitHub n'autorise pas sa lecture directe depuis une autre adresse) ; rien n'est stocké, la réponse reste
+  une journée dans le cache de Cloudflare.
+- **Moteur** (`site/js/tracker-engine.js`) : objets, lieux, cartes et dispositions du pack, règles d'accès
+  (`[facultatif]`, `{visible}`, `$fonction`, `^$niveau`, `@lieu`, `code:nombre`), comme décrit dans
+  la documentation des packs de PopTracker (`doc/PACKS.md`). Aucun code de PopTracker n'est repris (GPL-3.0).
+- **Lua** : les scripts des packs tournent dans Lua 5.4 compilé en WebAssembly (`site/vendor/wasmoon.*`).
+  L'interface PopTracker (`Tracker`, `ScriptHost`, `Archipelago`…) est écrite en Lua dans
+  `site/js/tracker-lua.js`. Les scripts ne reçoivent aucun objet JavaScript : un objet exposé à Lua laisserait
+  remonter jusqu'au constructeur `Function` de la page, et donc à ses jetons. Pas de fichiers, de processus
+  ni de bytecode non plus.
+- **Suivi de la partie** (`site/js/tracker-ap.js`) : connexion au serveur comme simple tracker (tag
+  `Tracker`) sur le slot du joueur. Le pack reçoit ce que PopTracker lui transmettrait : slot_data, lieux
+  faits, objets reçus, stockage. Rien n'est envoyé au serveur.
+- **Limites.** Lecture de la mémoire d'un émulateur (packs sans suivi Archipelago), `recentpins` et une partie
+  des options de mise en page ne sont pas gérés ; l'état coché à la main n'est pas gardé d'une visite à l'autre.
+
 ## Mise en ligne (GitHub Pages)
 
 1. Dans le dépôt GitHub : **Settings → Pages → Build and deployment → Source : GitHub Actions**.
@@ -382,12 +411,13 @@ npx wrangler dev
 | `site/js/rooms.js`, `site/js/rooms-api.js` | Pages des rooms et appels au service des rooms |
 | `site/js/room-live.js` | Partie en cours : progression des joueurs et client texte |
 | `site/js/wishlist.js` | Wishlists des joueurs et bandeau des objets attendus reçus |
+| `site/js/tracker-*.js`, `site/js/trackers.js`, `site/js/unzip.js` | Trackers des packs PopTracker (voir « Trackers ») |
 | `site/js/check.js` | Vérification d'un YAML hors de l'éditeur (dépôt dans une room, contrôle par l'hôte) |
 | `site/js/config.js` | Adresse du service des rooms |
 | `worker/` | Service des rooms (Cloudflare Worker, base D1 : `migrations/`) |
 | `tools/room_generate.py` | Génération en ligne d'une room (workflow `generate-room.yml`) |
 | `site/data/` | Options des jeux, générées automatiquement |
-| `site/vendor/` | Bibliothèques [Preact/htm](https://github.com/developit/htm) et [yaml](https://github.com/eemeli/yaml) |
+| `site/vendor/` | Bibliothèques [Preact/htm](https://github.com/developit/htm), [yaml](https://github.com/eemeli/yaml), [archipelago.js](https://github.com/ThePhar/archipelago.js) et [wasmoon](https://github.com/ceifa/wasmoon) (Lua) |
 | `tools/` | Scripts d'extraction et de traduction des options, et de récupération des apworlds |
 | `translations/fr.json` | Traductions des descriptions (modifiables à la main) |
 | `apworlds.json`, `apworlds/` | Jeux non officiels de la base (voir « Jeux non officiels ») |

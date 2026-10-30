@@ -10,6 +10,18 @@ import { RoomsHome, RoomPage, shareApworlds } from "./rooms.js";
 import { ScreensOverlay } from "./overlay.js";
 import { api as roomsApi, normalizeCode, roomsEnabled, saveAccess } from "./rooms-api.js";
 
+// Page du tracker chargée à la demande : elle embarque Lua (wasmoon), inutile ailleurs.
+function TrackerRoute({ params }) {
+  const [page, setPage] = useState(null);
+  const [error, setError] = useState(null);
+  useEffect(() => {
+    import("./tracker-view.js").then((m) => setPage(() => m.TrackerPage)).catch((e) => setError(e.message));
+  }, []);
+  if (error) return html`<main class="home"><div class="notice error">Impossible de charger le tracker : ${error}</div></main>`;
+  if (!page) return html`<main class="home"><p class="hint center">Chargement…</p></main>`;
+  return html`<${page} params=${params} />`;
+}
+
 const formatDate = (iso) => new Date(iso).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" });
 
 function useGame(name) {
@@ -544,10 +556,12 @@ function Header({ page, advanced, setAdvanced, docLanguage, setDocLanguage, them
 // (#/room/CODE/p/JETON, #/room/CODE/h/JETON) sont mémorisés puis retirés de l'adresse.
 // #/overlay/CODE/CLÉ?max=…&console=…&objets=… : écrans des joueurs et messages de la partie pour OBS,
 // page à part (ni en-tête ni pied de page).
+// #/tracker?game=…&server=…&slot=…&room=… : tracker d'un pack PopTracker (pack=… : adresse directe d'un pack).
 function readRoute() {
   const [path, query = ""] = location.hash.replace(/^#\/?/, "").split("?");
   const parts = path.split("/").filter(Boolean);
   if (parts[0] === "rooms") return { page: "rooms" };
+  if (parts[0] === "tracker") return { page: "tracker", params: Object.fromEntries(new URLSearchParams(query)) };
   if (parts[0] === "overlay" && parts[1] && parts[2]) {
     return { page: "overlay", code: normalizeCode(parts[1]), key: parts[2], params: Object.fromEntries(new URLSearchParams(query)) };
   }
@@ -617,6 +631,8 @@ function App() {
     body = html`<${Editor} index=${index} file=${file} setFile=${setFile} advanced=${advanced} onClose=${() => setFile(null)} onSend=${sendToRoom} />`;
   } else if (route.page === "rooms") {
     body = html`<${RoomsHome} />`;
+  } else if (route.page === "tracker") {
+    body = html`<${TrackerRoute} key=${location.hash} params=${route.params} />`;
   } else if (route.page === "room") {
     body = html`<${RoomPage} key=${route.code} index=${index} code=${route.code}
       onCreate=${(game, name, playerId) => createForRoom(route.code, game, name, playerId)} onEdit=${(slot) => openFromRoom(route.code, slot)} />`;

@@ -4,6 +4,7 @@ import { html, useState, useEffect, useRef } from "../vendor/preact-htm.js";
 import { Client } from "../vendor/archipelago.js";
 import { api, apRoomStatus } from "./rooms-api.js";
 import { plural } from "./ui.js";
+import { useTrackers, packsFor, trackerLink } from "./trackers.js";
 
 const STATUS = {
   0: { label: "Hors ligne", cls: "" },
@@ -80,8 +81,9 @@ export function useTracker(status) {
 
 // `compact` : total et lignes de vos joueurs seulement, avec un lien vers la vue détaillée (`onDetails`).
 // `onItems(slot)` : ouvre les objets reçus d'un joueur.
-export function ProgressPanel({ status, tracker, mode, mine, compact = false, onDetails, onItems }) {
+export function ProgressPanel({ status, tracker, mode, mine, code, compact = false, onDetails, onItems }) {
   const { trackerId, data, error } = tracker;
+  const packs = useTrackers();
   if (!trackerId) return null;
   if (error && !data) return html`<p class="hint">${error}</p>`;
   if (!data) return html`<p class="hint">Chargement de la progression…</p>`;
@@ -105,7 +107,9 @@ export function ProgressPanel({ status, tracker, mode, mine, compact = false, on
       <tbody>${shown.map((r) => {
         const idle = mode === "async" && !r.finished && r.last && Date.now() - r.last > IDLE_WARNING;
         return html`<tr class=${r.mine ? "mine" : ""}>
-          <td><strong>${r.name}</strong>${r.tracker && html` <a href=${r.tracker} target="_blank" rel="noopener" class="small">tracker</a>`}</td>
+          <td><strong>${r.name}</strong>${r.tracker && html` <a href=${r.tracker} target="_blank" rel="noopener" class="small">tracker</a>`}
+            ${packsFor(packs, r.game).some((p) => p.url) && html` <a href=${trackerLink({ game: r.game, server: status.port ? `${status.host}:${status.port}` : "", slot: r.name, room: code })}
+              class="small" title="Objets, cartes et lieux accessibles, d'après le pack PopTracker du jeu">tracker du pack</a>`}</td>
           <td>${r.game}</td>
           <td class="checks">
             <div class="progress small" title=${`${pct(r.checks, r.total)} %`}><span class=${r.finished ? "ok" : ""} style=${`width: ${pct(r.checks, r.total)}%`}></span></div>
