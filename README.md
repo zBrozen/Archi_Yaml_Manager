@@ -222,7 +222,10 @@ Onglet « Écrans » de la room :
   exemple un par streamer ou par ordinateur : ils restent dans la liste de l'onglet « Écrans », à recopier depuis
   tout appareil où il est hôte, sans en recréer (table `overlay_links`, migration 0007). Supprimer un lien ne coupe
   que les overlays ouverts avec lui. Un lien créé avant cette liste (une seule clé par room) la rejoint quand
-  l'hôte rouvre la room dans le navigateur qui l'avait créé. Les écrans partagés s'y placent seuls en grille,
+  l'hôte rouvre la room dans le navigateur qui l'avait créé. Un lien coché « Visible par les joueurs de la room »
+  (migration 0010) apparaît dans l'onglet « Écrans » de chaque joueur inscrit, sous « Overlays de l'hôte » : un
+  co-streamer copie lui-même l'adresse pour son OBS, en grille automatique ou avec une disposition de l'hôte, sans
+  que l'hôte ait à la lui envoyer. Les autres liens restent réservés à l'hôte. Les écrans partagés s'y placent seuls en grille,
   aussi grands que possible, et les **messages de la partie** (objets envoyés, objectifs atteints, release et
   collect) défilent à côté. Les réglages choisis sur la page sont ajoutés au lien copié : nombre d'écrans
   (`max`, 4 par défaut, de 0 = messages seuls à 6), place des messages (`console=droite|bas|non`) et objets

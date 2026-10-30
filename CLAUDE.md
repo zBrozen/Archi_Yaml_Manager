@@ -36,7 +36,7 @@
   Durable Object `ScreenRoom` du Worker (une instance par room). `screens.js` : partage du joueur et lien de l'hôte ;
   `overlay.js` : la page de l'overlay ; `overlay-layout.js` : modèle des dispositions (mêmes limites que le Worker) ;
   `overlay-editor.js` : éditeur ; `screens-net.js` : WebSocket commun. Liens de l'overlay : table `overlay_links`
-  (clé gardée en clair, montrée à l'hôte seul) ; `rooms.overlay_hash` n'est plus que l'ancienne clé unique, reprise
+  (clé gardée en clair, montrée à l'hôte, et aux joueurs inscrits pour les liens `shared` via `shared_overlays`) ; `rooms.overlay_hash` n'est plus que l'ancienne clé unique, reprise
   dans la liste à la réouverture par l'hôte.
   Wishlists (`wishlist.js`, table `wishlists`, par nom de joueur dans la partie) : objets reçus d'après le tracker
   d'archipelago.gg, noms lus dans les datapackages ; le tracker est lu une fois par `RoomPage` pour tous les onglets.

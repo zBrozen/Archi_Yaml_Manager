@@ -591,16 +591,17 @@ function ShareScreen({ room }) {
 
 const formatDay = (ms) => new Date(ms).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" });
 
-// Un lien de la liste : copier (avec les réglages de la grille), ouvrir, renommer, supprimer.
+// Un lien de la liste : copier (avec les réglages de la grille), ouvrir, renommer, montrer aux joueurs, supprimer.
 function OverlayLinkRow({ room, link, url, action, onLinks }) {
   const [name, setName] = useState(null); // nom en cours de modification
   const rename = (e) => {
     e.preventDefault();
     action.run(async () => {
-      onLinks((await api.renameOverlayLink(room.code, link.id, name)).links);
+      onLinks((await api.updateOverlayLink(room.code, link.id, { name })).links);
       setName(null);
     });
   };
+  const share = (shared) => action.run(async () => onLinks((await api.updateOverlayLink(room.code, link.id, { shared })).links));
   const remove = () => confirm(`Supprimer le lien « ${link.name} » ? Les sources OBS qui l'utilisent s'arrêteront.`)
     && action.run(async () => onLinks((await api.deleteOverlayLink(room.code, link.id)).links));
 
@@ -610,7 +611,9 @@ function OverlayLinkRow({ room, link, url, action, onLinks }) {
         <${CopyButton} text=${url} label="Copier" className="small" />
         <a class="button ghost small" href=${url} target="_blank" rel="noopener">Ouvrir</a>
         <button type="button" class="ghost small" disabled=${action.busy} onClick=${() => setName(link.name)}>Renommer</button>
-        <button type="button" class="ghost small" disabled=${action.busy} onClick=${remove}>Supprimer</button>`
+        <button type="button" class="ghost small" disabled=${action.busy} onClick=${remove}>Supprimer</button>
+        <label class="check link-shared"><input type="checkbox" checked=${link.shared} disabled=${action.busy}
+          onChange=${(e) => share(e.target.checked)} /> Visible par les joueurs de la room</label>`
       : html`<form class="row grow" onSubmit=${rename}>
         <input type="text" class="grow" required maxLength="40" value=${name} aria-label="Nouveau nom du lien"
           onInput=${(e) => setName(e.target.value)} />
@@ -663,7 +666,8 @@ function OverlayPanel({ room, data, setData }) {
     <h3>Liens</h3>
     <p class="hint">Chaque lien donne accès à l'overlay : un par streamer ou par ordinateur, par exemple. Ils restent ici,
       à recopier quand vous voulez, depuis tout appareil où vous êtes hôte. Le lien lui-même n'est jamais affiché, pour ne pas
-      apparaître dans votre stream ; supprimer un lien coupe les sources OBS qui l'utilisent.</p>
+      apparaître dans votre stream ; supprimer un lien coupe les sources OBS qui l'utilisent. Un lien « visible par les joueurs »
+      apparaît dans leur onglet « Écrans » : un co-streamer le copie lui-même dans son OBS (il donne accès à tous les écrans partagés).</p>
     ${links.length > 0 && html`<ul class="link-list full">${links.map((link) => html`<${OverlayLinkRow} key=${link.id}
       room=${room} link=${link} url=${overlayUrl(room.code, link.key, options)} action=${action} onLinks=${onLinks} />`)}</ul>`}
     <form class="row full" onSubmit=${create}>
@@ -703,8 +707,37 @@ function OverlayPanel({ room, data, setData }) {
   </section>`;
 }
 
+// --- Joueur : overlays rendus visibles par l'hôte ------------------------------------------
+
+// Un co-streamer copie lui-même l'adresse pour son OBS, en grille automatique ou avec une disposition de l'hôte,
+// sans que l'hôte ait à lui envoyer le lien.
+function SharedOverlays({ room, shared }) {
+  const [view, setView] = useState(""); // "" : grille automatique, sinon identifiant de la disposition
+  if (!shared?.links?.length) return null;
+  const layout = shared.layouts.find((l) => l.id === view);
+  const urlOf = (key) => (layout ? `${overlayLink(room.code, key)}?disposition=${layout.id}` : overlayLink(room.code, key));
+  return html`<section class="card stack">
+    <h2>Overlays de l'hôte</h2>
+    <p>L'hôte vous donne ces liens pour votre propre OBS (source <strong>Navigateur</strong>, 1920 × 1080) : ils montrent
+      les écrans partagés et les messages de la partie. Le lien n'est pas affiché ici ; ne le montrez pas dans votre stream.</p>
+    ${shared.layouts.length > 0 && html`<div class="fields full"><label><span>Affichage</span>
+      <select value=${layout ? view : ""} onChange=${(e) => setView(e.target.value)}>
+        <option value="">Grille automatique</option>
+        ${shared.layouts.map((l) => html`<option value=${l.id}>Disposition « ${l.name} »</option>`)}
+      </select></label></div>`}
+    <ul class="link-list full">${shared.links.map((link) => html`<li key=${link.id}>
+      <div class="grow"><strong>${link.name}</strong></div>
+      <${CopyButton} text=${urlOf(link.key)} label="Copier" className="small" />
+      <a class="button ghost small" href=${urlOf(link.key)} target="_blank" rel="noopener">Ouvrir</a>
+    </li>`)}</ul>
+    <p class="hint">Un overlay ouvert reçoit l'image de chaque joueur affiché, qui n'en envoie qu'à ${MAX_VIEWERS} :
+      après avoir vérifié l'affichage, fermez l'onglet ouvert ici.</p>
+  </section>`;
+}
+
 export function ScreensTab({ room, me, admin, data, setData }) {
   return html`${me && html`<${ShareScreen} room=${room} />`}
+    ${me && !admin && html`<${SharedOverlays} room=${room} shared=${data.shared_overlays} />`}
     ${admin && html`<${OverlayPanel} room=${room} data=${data} setData=${setData} />
       <${LayoutEditor} room=${room} data=${data} setData=${setData} />`}`;
 }

@@ -272,6 +272,7 @@ async function getRoom(request, env, room) {
     online_generation: generatorConfigured(env),
     screens: !!env.SCREENS,
     ...(admin ? { overlay_layouts: JSON.parse(room.overlay_layouts || "[]"), overlay_links: await overlayLinks(env, room) } : {}),
+    ...(me ? { shared_overlays: await sharedOverlays(env, room) } : {}),
     apworlds: await roomApworlds(env, room.code),
     me: me ? { id: me.id, pseudo: me.pseudo } : null,
     wishlists: Object.fromEntries(wishes.results.map((w) => [w.slot, JSON.parse(w.items)])),
@@ -771,8 +772,17 @@ function screensSocket(request, env, room) {
 const OVERLAY_LINKS = { count: 10, name: 40 };
 
 const overlayLinks = async (env, room) => (await env.DB.prepare(
-  "SELECT id, name, key, created_at FROM overlay_links WHERE room_code = ? ORDER BY created_at",
-).bind(room.code).all()).results;
+  "SELECT id, name, key, shared, created_at FROM overlay_links WHERE room_code = ? ORDER BY created_at",
+).bind(room.code).all()).results.map((l) => ({ ...l, shared: !!l.shared }));
+
+// Pour les joueurs de la room : les liens que l'hôte leur a rendus visibles, et le nom des dispositions,
+// pour qu'ils copient eux-mêmes l'adresse à mettre dans OBS.
+async function sharedOverlays(env, room) {
+  const links = (await overlayLinks(env, room)).filter((l) => l.shared).map(({ id, name, key }) => ({ id, name, key }));
+  if (!links.length) return null;
+  const layouts = JSON.parse(room.overlay_layouts || "[]").map(({ id, name }) => ({ id, name }));
+  return { links, layouts };
+}
 
 // `key` : ancienne clé unique, gardée par le navigateur de l'hôte (rooms.overlay_hash) ; elle rejoint la liste
 // telle quelle, pour que les sources OBS qui l'utilisent continuent de marcher.
@@ -793,11 +803,15 @@ async function createOverlayLink(request, env, room) {
   return json({ links: await overlayLinks(env, room) }, 201);
 }
 
-async function renameOverlayLink(request, env, room, linkId) {
+// Nom du lien et `shared` : visible ou non par les joueurs de la room.
+async function updateOverlayLink(request, env, room, linkId) {
   await requireAdmin(request, room);
-  const name = text((await readJson(request)).name, "nom du lien", OVERLAY_LINKS.name);
-  const result = await env.DB.prepare("UPDATE overlay_links SET name = ? WHERE room_code = ? AND id = ?").bind(name, room.code, linkId).run();
-  if (!result.meta.changes) throw new HttpError(404, "Ce lien n'existe plus.");
+  const body = await readJson(request);
+  const link = await env.DB.prepare("SELECT name, shared FROM overlay_links WHERE room_code = ? AND id = ?").bind(room.code, linkId).first();
+  if (!link) throw new HttpError(404, "Ce lien n'existe plus.");
+  const name = "name" in body ? text(body.name, "nom du lien", OVERLAY_LINKS.name) : link.name;
+  const shared = "shared" in body ? (body.shared ? 1 : 0) : link.shared;
+  await env.DB.prepare("UPDATE overlay_links SET name = ?, shared = ? WHERE room_code = ? AND id = ?").bind(name, shared, room.code, linkId).run();
   return json({ links: await overlayLinks(env, room) });
 }
 
@@ -1084,7 +1098,7 @@ async function route(request, env) {
     if (!id && method === "GET") return screensSocket(request, env, room);
     const linkId = parts[5];
     if (id === "links" && !linkId && method === "POST") return createOverlayLink(request, env, room);
-    if (id === "links" && linkId && method === "PATCH") return renameOverlayLink(request, env, room, linkId);
+    if (id === "links" && linkId && method === "PATCH") return updateOverlayLink(request, env, room, linkId);
     if (id === "links" && linkId && method === "DELETE") return deleteOverlayLink(request, env, room, linkId);
     if (id === "layouts" && method === "PUT") return saveLayouts(request, env, room);
   } else if (sub === "generator") {

@@ -758,3 +758,4 @@ html.overlay-page body { background: transparent; overflow: hidden; }
 }
 .link-list li .grow { min-width: 12rem; }
 .inline-field { display: inline-flex; align-items: center; gap: .5rem; font-size: .9rem; font-weight: 600; }
+.link-list li .link-shared { flex-basis: 100%; font-size: .9rem; display: flex; align-items: center; gap: .45rem; }
