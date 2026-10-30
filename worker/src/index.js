@@ -179,6 +179,11 @@ function requireOpen(room) {
   if (!isOpen(room)) throw new HttpError(409, "Les dépôts sont fermés : les YAML ne peuvent plus être ajoutés, modifiés ni retirés.");
 }
 
+// Room créée avec le lien d'une partie déjà hébergée : on y suit la partie, sans YAML ni génération.
+function requireYamlRoom(room) {
+  if (room.direct) throw new HttpError(409, "Cette room suit une partie déjà hébergée sur archipelago.gg : il n'y a pas de YAML à déposer ni de partie à générer.");
+}
+
 const touch = (env, room) => env.DB.prepare("UPDATE rooms SET updated_at = ? WHERE code = ?").bind(Date.now(), room.code);
 
 // --- Routes --------------------------------------------------------------------
@@ -187,19 +192,23 @@ async function createRoom(request, env) {
   const body = await readJson(request);
   const now = Date.now();
   const token = newToken();
+  // Avec `ap_room_url`, la room suit directement une partie déjà hébergée (pas de dépôts : ni date ni limite).
+  const ap_room_url = apRoomUrl(body.ap_room_url);
+  const direct = ap_room_url ? 1 : 0;
   const values = {
     title: text(body.title, "nom de la room", LIMITS.title),
     mode: mode(body.mode),
-    closes_at: closesAt(body.closes_at),
-    max_slots: maxSlots(body.max_slots ?? 3),
+    closes_at: direct ? null : closesAt(body.closes_at),
+    max_slots: direct ? 3 : maxSlots(body.max_slots ?? 3),
     notes: text(body.notes, "message", LIMITS.notes, { required: false }),
   };
   for (let attempt = 0; attempt < 5; attempt++) {
     const code = randomString(CODE_ALPHABET, 6);
     const result = await env.DB.prepare(
-      `INSERT OR IGNORE INTO rooms (code, title, mode, closes_at, max_slots, notes, admin_hash, created_at, updated_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-    ).bind(code, values.title, values.mode, values.closes_at, values.max_slots, values.notes, await sha256(token), now, now).run();
+      `INSERT OR IGNORE INTO rooms (code, title, mode, closes_at, max_slots, notes, ap_room_url, direct, admin_hash, created_at, updated_at)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    ).bind(code, values.title, values.mode, values.closes_at, values.max_slots, values.notes, ap_room_url, direct,
+      await sha256(token), now, now).run();
     if (result.meta.changes) return json({ code, admin_token: token }, 201);
   }
   throw new HttpError(500, "Impossible de créer un code de room, réessayez.");
@@ -237,6 +246,7 @@ function publicRoom(room) {
     max_slots: room.max_slots,
     notes: room.notes,
     ap_room_url: room.ap_room_url,
+    direct: !!room.direct,
     overlay: !!room.overlay_hash,
     generation: generation(room),
     created_at: room.created_at,
@@ -277,6 +287,7 @@ async function updateRoom(request, env, room) {
   if ("max_slots" in body) next.max_slots = maxSlots(body.max_slots);
   if ("notes" in body) next.notes = text(body.notes, "message", LIMITS.notes, { required: false });
   if ("ap_room_url" in body) next.ap_room_url = apRoomUrl(body.ap_room_url);
+  if (room.direct && !next.ap_room_url) throw new HttpError(400, "Cette room suit une partie hébergée : son lien est obligatoire.");
   next.updated_at = Date.now();
   await env.DB.prepare(
     `UPDATE rooms SET title = ?, mode = ?, closes_at = ?, locked = ?, max_slots = ?, notes = ?, ap_room_url = ?, updated_at = ?
@@ -303,7 +314,7 @@ async function deleteRoom(request, env, room) {
 async function joinRoom(request, env, room) {
   const body = await readJson(request);
   const pseudo = text(body.pseudo, "pseudo", LIMITS.pseudo);
-  if (!isOpen(room)) throw new HttpError(409, "Les dépôts sont fermés : cette room n'accepte plus de nouveaux joueurs.");
+  if (!room.direct && !isOpen(room)) throw new HttpError(409, "Les dépôts sont fermés : cette room n'accepte plus de nouveaux joueurs.");
   const { count } = await env.DB.prepare("SELECT COUNT(*) AS count FROM players WHERE room_code = ?").bind(room.code).first();
   if (count >= LIMITS.playersPerRoom) throw new HttpError(409, "Cette room est pleine.");
   const taken = await env.DB.prepare("SELECT 1 FROM players WHERE room_code = ? AND pseudo = ? COLLATE NOCASE").bind(room.code, pseudo).first();
@@ -321,7 +332,7 @@ async function joinRoom(request, env, room) {
 async function removePlayer(request, env, room, playerId) {
   const me = await currentPlayer(request, env, room);
   if (me?.id !== playerId) await requireAdmin(request, room);
-  requireOpen(room); // retirer un joueur retire aussi ses YAML
+  if (!room.direct) requireOpen(room); // retirer un joueur retire aussi ses YAML
   await env.DB.batch([
     env.DB.prepare("DELETE FROM slots WHERE room_code = ? AND player_id = ?").bind(room.code, playerId),
     env.DB.prepare("DELETE FROM players WHERE room_code = ? AND id = ?").bind(room.code, playerId),
@@ -351,6 +362,7 @@ async function nameTaken(env, room, name, exceptId) {
 
 async function addSlot(request, env, room) {
   const player = await requirePlayer(request, env, room);
+  requireYamlRoom(room);
   requireOpen(room);
   const fields = slotFields(await readJson(request));
   const { count } = await env.DB.prepare("SELECT COUNT(*) AS count FROM slots WHERE player_id = ?").bind(player.id).first();
@@ -467,6 +479,7 @@ const generatorConfigured = (env) => !!(env.FILES && env.GH_DISPATCH_TOKEN && en
 
 async function startGeneration(request, env, room) {
   await requireAdmin(request, room);
+  requireYamlRoom(room);
   if (!generatorConfigured(env)) throw new HttpError(501, "La génération en ligne n'est pas configurée sur ce serveur.");
   if (isOpen(room)) throw new HttpError(409, "Fermez d'abord les dépôts : la partie doit être générée avec les YAML définitifs.");
   const { status } = generation(room);

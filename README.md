@@ -127,6 +127,11 @@ Une room rassemble les YAML de tous les joueurs d'une partie, en ligne. Le site 
 sont gardées par un petit service gratuit sur Cloudflare (dossier [`worker/`](worker/) : un Worker et une
 base D1), toujours disponible sans laisser de PC allumé.
 
+À la création, l'hôte choisit entre **rassembler les YAML** (déroulement ci-dessous) et suivre une **partie
+déjà hébergée** : il colle alors le lien de la room archipelago.gg, et la room passe directement à l'étape 5
+(adresse, fichiers, progression, client texte, écrans), sans dépôt ni génération. Les joueurs la rejoignent avec
+leur nom dans la partie, qui sert à retrouver leurs fichiers.
+
 **Déroulement**
 
 1. L'hôte crée la room (onglet « Rooms ») : nom, type de partie (sync ou async), nombre de YAML par joueur,

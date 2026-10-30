@@ -4,7 +4,7 @@ import { html, useState, useEffect, useRef } from "../vendor/preact-htm.js";
 import { apVersion, gameEntry, localGames } from "./data.js";
 import { splitFile } from "./yaml-model.js";
 import { checkText, nameProblem, MAX_NAME } from "./check.js";
-import { CopyButton, GamePicker, SheetBadges, download, loadCredits, plural, useAction } from "./ui.js";
+import { CopyButton, GamePicker, SheetBadges, download, loadCredits, plural, useAction, useSetting } from "./ui.js";
 import { makeZip } from "./zip.js";
 import { ItemsPanel, ProgressPanel, TextClient, useTracker } from "./room-live.js";
 import { ScreensTab } from "./screens.js";
@@ -17,6 +17,11 @@ const MODES = {
   sync: { label: "Sync", text: "Tout le monde joue en même temps, en une session." },
   async: { label: "Async", text: "Chacun joue à son rythme, sur plusieurs jours ou semaines." },
 };
+
+const START_CHOICES = [
+  ["yaml", "Rassembler les YAML", "Les joueurs déposent leurs YAML, puis vous générez et hébergez la partie."],
+  ["direct", "Partie déjà hébergée", "Collez le lien de la room archipelago.gg : progression, client texte et écrans, sans dépôt."],
+];
 
 const pad = (n) => String(n).padStart(2, "0");
 const toInput = (ms) => {
@@ -47,8 +52,10 @@ function GameBadges({ game }) {
 export function RoomsHome() {
   const [code, setCode] = useState("");
   const create = useAction();
-  const [form, setForm] = useState({ title: "", mode: "async", closes: "", max_slots: 3 });
+  const [form, setForm] = useState({ title: "", mode: "async", closes: "", max_slots: 3, link: "" });
+  const [start, setStart] = useSetting("roomStart", "yaml"); // yaml : rassembler les YAML ; direct : partie déjà hébergée
   const set = (key) => (e) => setForm({ ...form, [key]: e.target.value });
+  const direct = start === "direct";
   const rooms = knownRooms();
 
   if (!roomsEnabled()) {
@@ -59,7 +66,9 @@ export function RoomsHome() {
   const submit = (e) => {
     e.preventDefault();
     create.run(async () => {
-      const result = await api.create({ title: form.title, mode: form.mode, closes_at: fromInput(form.closes), max_slots: Number(form.max_slots) });
+      const result = await api.create(direct
+        ? { title: form.title, mode: form.mode, ap_room_url: form.link.trim() }
+        : { title: form.title, mode: form.mode, closes_at: fromInput(form.closes), max_slots: Number(form.max_slots) });
       saveAccess(result.code, { admin: result.admin_token, title: form.title });
       location.hash = `#/room/${result.code}`;
     });
@@ -87,20 +96,29 @@ export function RoomsHome() {
 
     <form class="card stack" onSubmit=${submit}>
       <h2>Créer une room</h2>
+      <fieldset class="start-choice full">
+        <legend class="sr-only">Point de départ</legend>
+        ${START_CHOICES.map(([value, title, text]) => html`<label class=${`start-option ${start === value ? "selected" : ""}`}>
+          <input type="radio" name="start" value=${value} checked=${start === value} onChange=${() => setStart(value)} />
+          <span><strong>${title}</strong><span class="hint">${text}</span></span>
+        </label>`)}
+      </fieldset>
       <div class="fields full">
         <label class="span-all"><span>Nom de la room</span>
           <input type="text" required maxLength="80" value=${form.title} onInput=${set("title")} placeholder="Async du vendredi" /></label>
-        <label><span>Type de partie</span>
+        ${direct && html`<label class="span-all"><span>Lien de la room sur archipelago.gg</span>
+          <input type="url" required value=${form.link} onInput=${set("link")} placeholder="https://archipelago.gg/room/…" /></label>`}
+        <label class=${direct ? "span-all" : ""}><span>Type de partie</span>
           <select value=${form.mode} onChange=${set("mode")}>
             ${Object.entries(MODES).map(([k, m]) => html`<option value=${k}>${m.label} — ${m.text}</option>`)}
           </select></label>
-        <label><span>YAML par joueur (maximum)</span>
+        ${!direct && html`<label><span>YAML par joueur (maximum)</span>
           <input type="number" min="1" max="20" value=${form.max_slots} onInput=${set("max_slots")} /></label>
         <label class="span-all"><span>Fin des dépôts <span class="hint">(facultatif, modifiable ensuite)</span></span>
-          <input type="datetime-local" value=${form.closes} onInput=${set("closes")} /></label>
+          <input type="datetime-local" value=${form.closes} onInput=${set("closes")} /></label>`}
       </div>
       ${create.error && html`<div class="notice error full">${create.error}</div>`}
-      <button type="submit" disabled=${create.busy || !form.title.trim()}>${create.busy ? "Création…" : "Créer la room"}</button>
+      <button type="submit" disabled=${create.busy || !form.title.trim() || (direct && !form.link.trim())}>${create.busy ? "Création…" : "Créer la room"}</button>
     </form>
 
     ${rooms.length > 0 && html`<section class="card stack">
@@ -166,12 +184,13 @@ export function RoomPage({ index, code, onCreate, onEdit }) {
   if (!data) return html`<main class="home"><p class="hint center">Chargement de la room…</p></main>`;
 
   const { room, me, admin, players } = data;
-  const mine = me ? players.find((p) => p.id === me.id)?.slots || [] : [];
+  // Room d'une partie déjà hébergée : pas de YAML, le pseudo sert de nom dans la partie.
+  const mine = !me ? [] : room.direct ? [{ name: me.pseudo }] : players.find((p) => p.id === me.id)?.slots || [];
   const allSlots = players.flatMap((p) => p.slots);
   const tabs = [
     ["apercu", "Aperçu"],
-    ["yaml", me ? `Mes YAML (${mine.length})` : "Rejoindre"],
-    ["joueurs", `Joueurs (${players.length})`],
+    ...(!room.direct ? [["yaml", me ? `Mes YAML (${mine.length})` : "Rejoindre"], ["joueurs", `Joueurs (${players.length})`]]
+      : me ? [] : [["yaml", "Rejoindre"]]),
     ...(room.ap_room_url ? [["partie", "Progression"], ["client", "Client texte"]] : []),
     ...(data.screens && (me || admin) ? [["ecrans", "Écrans"]] : []),
     ...(admin ? [["hote", "Hôte"]] : []),
@@ -241,14 +260,17 @@ function RoomHeader({ room }) {
     <div class="row">
       <h1 class="grow">${room.title}</h1>
       <span class="badge accent" title=${MODES[room.mode].text}>${MODES[room.mode].label}</span>
-      ${room.open ? html`<span class="badge ok">Dépôts ouverts</span>` : html`<span class="badge danger">Dépôts fermés</span>`}
+      ${room.direct ? html`<span class="badge ok">Partie hébergée</span>`
+        : room.open ? html`<span class="badge ok">Dépôts ouverts</span>` : html`<span class="badge danger">Dépôts fermés</span>`}
     </div>
     <div class="row">
       <span>Code : <strong class="room-code">${room.code}</strong></span>
       <${CopyButton} text=${inviteLink(room.code)} label="Copier le lien d'invitation" />
     </div>
     <p class="hint">
-      ${room.max_slots} YAML maximum par joueur${closing}
+      ${room.direct
+        ? html`Suivi de la partie <a href=${room.ap_room_url} target="_blank" rel="noopener">hébergée sur archipelago.gg</a>`
+        : `${room.max_slots} YAML maximum par joueur${closing}`}
     </p>
     ${room.notes && html`<p class="room-notes">${room.notes}</p>`}
   </section>`;
@@ -271,10 +293,13 @@ function JoinForm({ room, admin, refresh }) {
   return html`<form class="card stack" onSubmit=${submit}>
     <h2>${admin ? "Jouer aussi dans cette room" : "Rejoindre la room"}</h2>
     <div class="row full">
-      <input type="text" class="grow" required maxLength="32" placeholder="Votre pseudo" value=${pseudo} onInput=${(e) => setPseudo(e.target.value)} />
+      <input type="text" class="grow" required maxLength="32" placeholder=${room.direct ? "Votre nom dans la partie" : "Votre pseudo"}
+        value=${pseudo} onInput=${(e) => setPseudo(e.target.value)} />
       <button type="submit" disabled=${join.busy || !pseudo.trim()}>Rejoindre</button>
     </div>
     ${join.error && html`<div class="notice error full">${join.error}</div>`}
+    ${room.direct && html`<p class="hint">Avec votre nom dans la partie, la room met en avant vos fichiers et votre progression ;
+      rejoindre permet aussi de partager votre écran pour le stream.</p>`}
     <p class="hint">Déjà inscrit sur un autre appareil ? Ouvrez plutôt votre lien personnel.</p>
   </form>`;
 }
@@ -472,10 +497,10 @@ function HostPanel({ room, setData, data }) {
             <select value=${current.mode} onChange=${(e) => set("mode", e.target.value)}>
               ${Object.entries(MODES).map(([k, m]) => html`<option value=${k}>${m.label}</option>`)}
             </select></label>
-          <label><span>YAML par joueur (maximum)</span>
+          ${!room.direct && html`<label><span>YAML par joueur (maximum)</span>
             <input type="number" min="1" max="20" value=${current.max_slots} onInput=${(e) => set("max_slots", e.target.value)} /></label>
           <label class="span-all"><span>Fin des dépôts</span>
-            <input type="datetime-local" value=${current.closes} onInput=${(e) => set("closes", e.target.value)} /></label>
+            <input type="datetime-local" value=${current.closes} onInput=${(e) => set("closes", e.target.value)} /></label>`}
           <label class="span-all"><span>Message aux joueurs <span class="hint">(facultatif)</span></span>
             <textarea rows="3" maxLength="2000" value=${current.notes} onInput=${(e) => set("notes", e.target.value)}></textarea></label>
         </div>
@@ -486,18 +511,18 @@ function HostPanel({ room, setData, data }) {
       </form>
     </details>
 
-    <div class="row">
+    ${!room.direct && html`<div class="row">
       ${room.open
         ? html`<button type="button" class="ghost" disabled=${save.busy} onClick=${() => close(true)}>Fermer les dépôts maintenant</button>`
         : html`<button type="button" class="ghost" disabled=${save.busy} onClick=${() => close(false)}>Rouvrir les dépôts</button>`}
       <span class="hint">${room.locked ? "Fermée par vous."
         : !room.open ? `Fermée depuis le ${formatWhen(room.closes_at)} ; la rouvrir retire la date de fin.`
         : room.closes_at ? `Fermeture automatique le ${formatWhen(room.closes_at)}.` : "Pas de date de fermeture."}</span>
-    </div>
+    </div>`}
     ${save.error && html`<div class="notice error full">${save.error}</div>`}
   </section>
-  <section class="card stack"><${RoomCheck} room=${room} /></section>
-  <section class="card stack"><${Generation} room=${room} setData=${setData} data=${data} online=${data.online_generation} /></section>
+  ${!room.direct && html`<section class="card stack"><${RoomCheck} room=${room} /></section>
+  <section class="card stack"><${Generation} room=${room} setData=${setData} data=${data} online=${data.online_generation} /></section>`}
   <section class="card stack"><${HostedRoom} room=${room} setData=${setData} data=${data} /></section>
   <button type="button" class="link danger-link" onClick=${destroy}>Supprimer la room</button>`;
 }
@@ -715,6 +740,17 @@ function HostedRoom({ room, setData, data }) {
     setData({ ...data, room: result.room });
     setUrl(result.room.ap_room_url || "");
   });
+  if (room.direct) {
+    return html`<div class="stack full">
+      <h3>Partie sur archipelago.gg</h3>
+      <p class="hint">Lien de la room suivie. Pour la remplacer par une autre partie, collez le nouveau lien.</p>
+      <div class="row full">
+        <input type="url" class="grow" placeholder="https://archipelago.gg/room/…" value=${url} onInput=${(e) => setUrl(e.target.value)} />
+        <button type="button" disabled=${action.busy || !url.trim() || url.trim() === room.ap_room_url} onClick=${() => save(url.trim())}>Enregistrer</button>
+      </div>
+      ${action.error && html`<div class="notice error full">${action.error}</div>`}
+    </div>`;
+  }
   return html`<div class="stack full">
     <h3>3. Héberger</h3>
     <ol class="steps">
@@ -753,19 +789,19 @@ function Overview({ room, me, admin, mine, players, online, join, go }) {
   return html`
     ${room.ap_room_url && html`<${OnlineSummary} room=${room} online=${online} mine=${mine} go=${go} />`}
     ${join}
-    ${me && html`<section class="card stack">
+    ${me && !room.direct && html`<section class="card stack">
       <div class="row full"><h2 class="grow">Vos YAML</h2>
         <button type="button" class="ghost small" onClick=${() => go("yaml")}>${room.open ? "Gérer mes YAML" : "Voir mes YAML"}</button></div>
       ${mine.length
         ? html`<ul class="summary-list full">${mine.map((s) => html`<li><strong>${s.name}</strong> <span class="hint">${s.game}</span> <${GameBadges} game=${s.game} /></li>`)}</ul>`
         : html`<p class="hint">Aucun YAML déposé${room.open ? " pour l'instant." : "."}</p>`}
     </section>`}
-    <section class="card stack">
+    ${!room.direct && html`<section class="card stack">
       <div class="row full"><h2 class="grow">Joueurs</h2>
         <button type="button" class="ghost small" onClick=${() => go("joueurs")}>Voir le détail</button></div>
       <p>${plural(players.length, "joueur")} · ${slots} YAML${empty ? html` · <span class="warn-text">${empty} sans YAML</span>` : ""}</p>
       ${games.length > 0 && html`<div class="chips-row">${games.map((g) => html`<span class="chip">${g}</span>`)}</div>`}
-    </section>
+    </section>`}
     ${admin && html`<section class="card stack">
       <div class="row full"><h2 class="grow">Hôte</h2>
         <button type="button" class="small" onClick=${() => go("hote")}>Espace de l'hôte</button></div>

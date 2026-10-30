@@ -440,6 +440,17 @@ input[type="url"], input[type="datetime-local"] {
 .fields label { display: grid; gap: .3rem; align-content: start; }
 .fields label > span:first-child { font-size: .875rem; font-weight: 600; }
 .code-input { text-transform: uppercase; letter-spacing: .15em; font-weight: 700; }
+/* Création d'une room : rassembler les YAML ou suivre une partie déjà hébergée */
+.start-choice { border: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); gap: .75rem; }
+.start-option {
+  display: flex; align-items: flex-start; gap: .65rem; padding: .85rem 1rem; cursor: pointer;
+  border: 2px solid var(--border); border-radius: 10px; background: var(--surface);
+}
+.start-option:hover { border-color: var(--accent); }
+.start-option.selected { border-color: var(--accent); background: var(--accent-soft); }
+.start-option input { margin-top: .3rem; accent-color: var(--accent); }
+.start-option > span { display: grid; gap: .2rem; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 .room-head { display: grid; gap: .6rem; }
 .room-head h1 { margin: 0; }
 .room-code { font-family: ui-monospace, "Cascadia Code", Consolas, monospace; font-size: 1.15rem; letter-spacing: .08em; }
