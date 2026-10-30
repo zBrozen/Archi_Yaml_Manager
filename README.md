@@ -179,8 +179,11 @@ Onglet « Écrans » de la room :
 
 - **Joueurs** : « Partager la fenêtre de mon jeu » ouvre le choix de fenêtre du navigateur (Chrome, Edge ou
   Firefox sur ordinateur, rien à installer). L'image part directement vers l'overlay, sans son, et n'est
-  enregistrée nulle part. Un jeu en plein écran exclusif peut donner un écran noir : le passer en fenêtré ou en
-  plein écran fenêtré.
+  enregistrée nulle part. Un jeu en plein écran exclusif donne une image noire ou figée, car le navigateur ne le
+  voit pas : le passer en fenêtré (certains, comme Jak avec OpenGOAL, restent figés même sans bordure), ou
+  partager la **caméra virtuelle d'OBS** à la place de la fenêtre. Dans OBS, une source « Capture de jeu » voit
+  aussi les jeux en plein écran ; « Démarrer la caméra virtuelle » la rend disponible comme une webcam, que le
+  site choisit d'office parmi les caméras (avec la définition et les images par seconde de la qualité choisie).
 
   Chaque joueur règle sa **qualité**, y compris pendant le partage : légère (720p, 30 images/s, 1,5 Mb/s),
   normale (720p, 3 Mb/s, par défaut), haute (1080p, 6 Mb/s) ou maximale (1080p, 60 images/s, 12 Mb/s), et ce

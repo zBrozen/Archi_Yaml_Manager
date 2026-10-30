@@ -33,6 +33,9 @@ const DEFAULT_PRIORITY = "equilibre";
 const qualityOf = (name) => QUALITIES[name] || QUALITIES[DEFAULT_QUALITY];
 const priorityOf = (name) => PRIORITIES[name] || PRIORITIES[DEFAULT_PRIORITY];
 const captureConstraints = (q) => ({ width: { max: q.width }, height: { max: q.height }, frameRate: { ideal: q.fps, max: q.fps } });
+// Une caméra (celle d'OBS surtout) choisit sinon une petite définition : on lui demande celle de la qualité.
+const cameraConstraints = (q) => ({ width: { ideal: q.width, max: q.width }, height: { ideal: q.height, max: q.height }, frameRate: { ideal: q.fps, max: q.fps } });
+const isCamera = (track) => !track.getSettings().displaySurface; // une capture d'écran indique sa surface, pas une caméra
 
 // Débits de la qualité ajoutés aux codecs vidéo de la réponse de l'overlay (paramètres x-google-*, lus par Chrome
 // pour l'envoi, ignorés par les autres navigateurs). Un codec sans ligne a=fmtp (VP8) en reçoit une.
@@ -191,7 +194,8 @@ class Broadcast {
     const [track] = this.stream.getVideoTracks();
     if (track) {
       track.contentHint = priority.hint;
-      try { await track.applyConstraints(captureConstraints(quality)); } catch (e) { console.warn("écrans :", e); }
+      const constraints = isCamera(track) ? cameraConstraints(quality) : captureConstraints(quality);
+      try { await track.applyConstraints(constraints); } catch (e) { console.warn("écrans :", e); }
     }
     if (renegotiate) {
       for (const id of [...this.peers.keys()]) await this.offer(id);
@@ -282,6 +286,49 @@ async function captureWindow(quality, priority) {
   return stream;
 }
 
+// Partage par une caméra : surtout la caméra virtuelle d'OBS, qui reprend une « Capture de jeu » et passe donc
+// là où le navigateur ne voit rien (jeux en plein écran exclusif). Sans caméra choisie, celle d'OBS est prise
+// si elle existe. Les noms des caméras ne sont connus qu'après la première autorisation.
+const isObsCamera = (device) => /obs/i.test(device.label);
+const listCameras = async () => (await navigator.mediaDevices.enumerateDevices()).filter((d) => d.kind === "videoinput");
+
+async function captureCamera(quality, priority, deviceId) {
+  const ask = (id) => navigator.mediaDevices.getUserMedia({
+    audio: false,
+    video: { ...cameraConstraints(quality), ...(id ? { deviceId: { exact: id } } : {}) },
+  });
+  let stream;
+  try {
+    stream = await ask(deviceId);
+  } catch (e) {
+    // Caméra mémorisée disparue (OBS fermé, autre ordinateur) : n'importe quelle caméra, puis celle d'OBS.
+    if (!deviceId || (e.name !== "OverconstrainedError" && e.name !== "NotFoundError")) throw e;
+    stream = await ask(null);
+    deviceId = null;
+  }
+  if (!deviceId) {
+    const obs = (await listCameras()).find(isObsCamera);
+    if (obs && stream.getVideoTracks()[0]?.getSettings().deviceId !== obs.deviceId) {
+      for (const track of stream.getTracks()) track.stop();
+      stream = await ask(obs.deviceId);
+    }
+  }
+  const [track] = stream.getVideoTracks();
+  if (track) track.contentHint = priority.hint;
+  return stream;
+}
+
+const CAMERA_ERRORS = {
+  NotAllowedError: "Accès à la caméra refusé : autorisez la caméra pour ce site (icône à gauche de l'adresse), puis réessayez.",
+  NotFoundError: "Aucune caméra trouvée : démarrez la caméra virtuelle dans OBS, puis réessayez.",
+  NotReadableError: "La caméra ne répond pas : elle est peut-être utilisée par une autre application, ou la caméra virtuelle d'OBS est arrêtée.",
+};
+
+const SOURCES = {
+  window: { label: "Fenêtre ou écran" },
+  camera: { label: "Caméra virtuelle d'OBS" },
+};
+
 const decimal = (n) => n.toLocaleString("fr-FR", { maximumFractionDigits: 1 });
 const LOSSY = 0.02; // au-delà de 2 % de paquets perdus, la limite vient vraiment du réseau
 
@@ -327,10 +374,16 @@ function ShareScreen({ room }) {
   const [busy, setBusy] = useState(false);
   const [qualityName, setQualityName] = useSetting("screenQuality", DEFAULT_QUALITY);
   const [priorityName, setPriorityName] = useSetting("screenPriority", DEFAULT_PRIORITY);
+  const [sourceName, setSourceName] = useSetting("screenSource", "window");
+  const [cameraId, setCameraId] = useSetting("screenCamera", "");
+  const [cameras, setCameras] = useState([]); // caméras dont le nom est connu (après une première autorisation)
   const [sent, setSent] = useState(null);
   const live = useRef(null);
   const preview = useRef(null);
-  const supported = !!navigator.mediaDevices?.getDisplayMedia;
+  const windowSupported = !!navigator.mediaDevices?.getDisplayMedia;
+  const cameraSupported = !!navigator.mediaDevices?.getUserMedia;
+  // Sur téléphone, pas de partage de fenêtre : seulement une caméra.
+  const source = windowSupported && sourceName in SOURCES ? sourceName : cameraSupported ? "camera" : "window";
   const quality = qualityOf(qualityName);
   const priority = priorityOf(priorityName);
 
@@ -344,6 +397,17 @@ function ShareScreen({ room }) {
     const stream = live.current?.stream || null;
     if (preview.current && preview.current.srcObject !== stream) preview.current.srcObject = stream;
   });
+
+  // Liste des caméras, tenue à jour quand on en branche ou qu'OBS démarre sa caméra virtuelle.
+  const refreshCameras = () => listCameras()
+    .then((list) => setCameras(list.filter((d) => d.label)))
+    .catch(() => {});
+  useEffect(() => {
+    if (!cameraSupported) return undefined;
+    refreshCameras();
+    navigator.mediaDevices.addEventListener?.("devicechange", refreshCameras);
+    return () => navigator.mediaDevices.removeEventListener?.("devicechange", refreshCameras);
+  }, []);
 
   // Mesure de ce qui part, tant qu'un overlay affiche le jeu.
   const watched = !!view?.viewers;
@@ -379,12 +443,19 @@ function ShareScreen({ room }) {
     live.current?.configure(qualityOf(nextQuality), priorityOf(nextPriority));
   };
 
-  const share = async () => {
+  // Démarre le partage, ou remplace l'image en cours (autre fenêtre, autre caméra, autre source).
+  const share = async (nextSource = source, nextCamera = cameraId) => {
     setError(null);
     setBusy(true);
     try {
-      const stream = await captureWindow(quality, priority);
-      // Partage arrêté depuis le bandeau du navigateur.
+      const stream = nextSource === "camera"
+        ? await captureCamera(quality, priority, nextCamera)
+        : await captureWindow(quality, priority);
+      if (nextSource === "camera") {
+        setCameraId(stream.getVideoTracks()[0]?.getSettings().deviceId || "");
+        refreshCameras();
+      }
+      // Partage arrêté depuis le bandeau du navigateur, ou caméra débranchée.
       stream.getVideoTracks()[0]?.addEventListener("ended", () => { if (live.current?.stream === stream) stop(); });
       if (live.current) live.current.replace(stream);
       else {
@@ -392,11 +463,21 @@ function ShareScreen({ room }) {
         update(live.current);
       }
     } catch (e) {
+      if (nextSource === "camera") setError(CAMERA_ERRORS[e?.name] || `Caméra impossible à ouvrir : ${e?.message || e}`);
       // Fenêtre de choix fermée sans rien choisir : pas une erreur.
-      if (e?.name !== "NotAllowedError" && e?.name !== "AbortError") setError(`Partage impossible : ${e?.message || e}`);
+      else if (e?.name !== "NotAllowedError" && e?.name !== "AbortError") setError(`Partage impossible : ${e?.message || e}`);
     } finally {
       setBusy(false);
     }
+  };
+
+  const pickSource = (next) => {
+    setSourceName(next);
+    if (live.current) share(next);
+  };
+  const pickCamera = (next) => {
+    setCameraId(next);
+    if (live.current) share("camera", next);
   };
 
   const status = !view ? null
@@ -404,17 +485,29 @@ function ShareScreen({ room }) {
     : view.state === "connecting" ? "Connexion au serveur des rooms…"
     : view.viewers ? `Affiché sur ${plural(view.viewers, "overlay")} de stream.`
     : "Votre jeu est prêt à être affiché : il apparaîtra dès que l'overlay de l'hôte sera ouvert.";
+  const camera = source === "camera";
+  const startLabel = busy ? (camera ? "Ouverture de la caméra…" : "Choix de la fenêtre…")
+    : camera ? "Partager la caméra" : "Partager la fenêtre de mon jeu";
 
   return html`<section class="card stack">
     <div class="row full">
       <h2 class="grow">Partager mon jeu</h2>
       ${view && html`<span class="badge ok">● Partage en cours</span>`}
     </div>
-    <p>L'hôte peut afficher votre jeu dans son stream (overlay OBS). Partagez la fenêtre du jeu ou de l'émulateur :
-      l'image va directement à l'overlay, sans son, et n'est pas enregistrée par le site.</p>
-    ${!supported && html`<div class="notice warn full">Ce navigateur ne permet pas de partager une fenêtre (c'est le cas sur téléphone).
-      Ouvrez la room dans Chrome, Edge ou Firefox sur l'ordinateur où vous jouez.</div>`}
-    ${supported && html`<div class="fields full">
+    <p>L'hôte peut afficher votre jeu dans son stream (overlay OBS). Partagez la fenêtre du jeu ou de l'émulateur,
+      ou la caméra virtuelle d'OBS : l'image va directement à l'overlay, sans son, et n'est pas enregistrée par le site.</p>
+    ${!windowSupported && !cameraSupported && html`<div class="notice warn full">Ce navigateur ne permet pas de partager une fenêtre
+      ni une caméra. Ouvrez la room dans Chrome, Edge ou Firefox sur l'ordinateur où vous jouez.</div>`}
+    ${(windowSupported || cameraSupported) && html`<div class="fields full">
+      ${windowSupported && cameraSupported && html`<label><span>Image à partager</span>
+        <select value=${source} disabled=${busy} onChange=${(e) => pickSource(e.target.value)}>
+          ${Object.entries(SOURCES).map(([name, s]) => html`<option value=${name}>${s.label}</option>`)}
+        </select></label>`}
+      ${camera && cameras.length > 0 && html`<label><span>Caméra</span>
+        <select value=${cameras.some((c) => c.deviceId === cameraId) ? cameraId : ""} disabled=${busy} onChange=${(e) => pickCamera(e.target.value)}>
+          <option value="">Automatique (OBS en priorité)</option>
+          ${cameras.map((c) => html`<option value=${c.deviceId}>${c.label}</option>`)}
+        </select></label>`}
       <label><span>Qualité de l'image</span>
         <select value=${qualityName in QUALITIES ? qualityName : DEFAULT_QUALITY} onChange=${(e) => choose(e.target.value, priorityName)}>
           ${Object.entries(QUALITIES).map(([name, q]) => html`<option value=${name}>${q.label} (${q.detail})</option>`)}
@@ -425,19 +518,27 @@ function ShareScreen({ room }) {
         </select>
         <span class="hint">${priority.detail}</span></label>
     </div>
+    ${camera && html`<ol class="steps">
+      <li>Dans OBS, ajoutez une source <strong>Capture de jeu</strong> (elle voit aussi les jeux en plein écran) et cadrez-la
+        dans la scène. La caméra virtuelle reprend la scène d'OBS, à sa définition et à ses images par seconde
+        (Paramètres → Vidéo).</li>
+      <li>Cliquez sur <strong>Démarrer la caméra virtuelle</strong> (panneau Commandes, en bas à droite).</li>
+      <li>Ici, cliquez sur « Partager la caméra » et autorisez la caméra : celle d'OBS est choisie d'elle-même.</li>
+    </ol>`}
     <div class="row">
       ${view
-        ? html`<button type="button" class="ghost" disabled=${busy} onClick=${share}>Changer de fenêtre</button>
+        ? html`${!camera && html`<button type="button" class="ghost" disabled=${busy} onClick=${() => share()}>Changer de fenêtre</button>`}
           <button type="button" class="ghost" onClick=${stop}>Arrêter le partage</button>`
-        : html`<button type="button" disabled=${busy} onClick=${share}>${busy ? "Choix de la fenêtre…" : "Partager la fenêtre de mon jeu"}</button>`}
+        : html`<button type="button" disabled=${busy} onClick=${() => share()}>${startLabel}</button>`}
     </div>`}
     ${status && html`<p role="status">${status}</p>`}
     <${SentInfo} sent=${sent} quality=${quality} />
     ${view && html`<video class="screen-preview" ref=${preview} autoplay muted playsinline aria-label="Aperçu de votre partage"></video>`}
     ${error && html`<div class="notice error full">${error}</div>`}
     <ul class="hint tips">
-      <li>Choisissez une <strong>fenêtre</strong> plutôt que l'écran entier : rien d'autre que le jeu ne sera visible.</li>
-      <li>Écran noir dans l'aperçu ? Passez le jeu en mode fenêtré, ou en plein écran fenêtré (sans bordure).</li>
+      ${!camera && html`<li>Choisissez une <strong>fenêtre</strong> plutôt que l'écran entier : rien d'autre que le jeu ne sera visible.</li>
+        <li>Image noire ou figée ? Le jeu est en plein écran exclusif, que le navigateur ne voit pas. Passez-le en fenêtré
+          (certains jeux, comme Jak avec OpenGOAL, restent figés même sans bordure), ou partagez la caméra virtuelle d'OBS.</li>`}
       <li>Jugez la qualité avec le jeu en mouvement : une image immobile n'envoie presque rien.</li>
       <li>La qualité se change pendant le partage. Chaque overlay qui affiche votre jeu reçoit son propre envoi :
         le débit choisi compte une fois par overlay. Le 1080p ne se voit que si l'overlay affiche peu d'écrans
