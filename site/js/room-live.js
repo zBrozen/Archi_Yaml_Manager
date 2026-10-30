@@ -26,6 +26,28 @@ const bySlot = (list, key) => new Map((list || []).filter((e) => e.team === 0).m
 
 // --- Progression -------------------------------------------------------------------
 
+// Une ligne par joueur, à partir des API tracker (`live`) et static_tracker (`fixed`) d'archipelago.gg.
+export function progressRows(status, live, fixed) {
+  const done = bySlot(live.player_checks_done, "locations");
+  const states = bySlot(live.player_status, "status");
+  const activity = bySlot(live.activity_timers, "time");
+  const connection = bySlot(live.connection_timers, "time");
+  const hints = bySlot(live.hints, "hints");
+  const totals = bySlot(fixed.player_locations_total, "total_locations");
+  return status.slots.filter((s) => totals.has(s.slot)).map((s) => {
+    const last = activity.get(s.slot) || connection.get(s.slot);
+    return {
+      ...s,
+      checks: done.get(s.slot)?.length || 0,
+      total: totals.get(s.slot) || 0,
+      state: STATUS[states.get(s.slot)] || STATUS[0],
+      finished: states.get(s.slot) === 30,
+      last: last ? Date.parse(last) : null,
+      hints: hints.get(s.slot)?.length || 0,
+    };
+  });
+}
+
 // `compact` : total et lignes de vos joueurs seulement, avec un lien vers la vue détaillée (`onDetails`).
 export function ProgressPanel({ status, mode, mine, compact = false, onDetails }) {
   const [data, setData] = useState(null);
@@ -54,26 +76,8 @@ export function ProgressPanel({ status, mode, mine, compact = false, onDetails }
   if (error && !data) return html`<p class="hint">${error}</p>`;
   if (!data) return html`<p class="hint">Chargement de la progression…</p>`;
 
-  const done = bySlot(data.live.player_checks_done, "locations");
-  const states = bySlot(data.live.player_status, "status");
-  const activity = bySlot(data.live.activity_timers, "time");
-  const connection = bySlot(data.live.connection_timers, "time");
-  const hints = bySlot(data.live.hints, "hints");
-  const totals = bySlot(data.fixed.player_locations_total, "total_locations");
   const names = new Set(mine.map((s) => s.name.toLowerCase()));
-  const rows = status.slots.filter((s) => totals.has(s.slot)).map((s) => {
-    const last = activity.get(s.slot) || connection.get(s.slot);
-    return {
-      ...s,
-      checks: done.get(s.slot)?.length || 0,
-      total: totals.get(s.slot) || 0,
-      state: STATUS[states.get(s.slot)] || STATUS[0],
-      finished: states.get(s.slot) === 30,
-      last: last ? Date.parse(last) : null,
-      hints: hints.get(s.slot)?.length || 0,
-      mine: names.has(s.name.toLowerCase()),
-    };
-  });
+  const rows = progressRows(status, data.live, data.fixed).map((r) => ({ ...r, mine: names.has(r.name.toLowerCase()) }));
   const sum = rows.reduce((n, r) => n + r.checks, 0);
   const all = rows.reduce((n, r) => n + r.total, 0);
   const finished = rows.filter((r) => r.finished).length;

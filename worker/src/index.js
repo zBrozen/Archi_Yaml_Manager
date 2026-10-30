@@ -257,6 +257,7 @@ async function getRoom(request, env, room) {
     admin,
     online_generation: generatorConfigured(env),
     screens: !!env.SCREENS,
+    ...(admin ? { overlay_layouts: JSON.parse(room.overlay_layouts || "[]") } : {}),
     me: me ? { id: me.id, pseudo: me.pseudo } : null,
     players: players.results.map((p) => ({
       ...p,
@@ -565,7 +566,9 @@ async function generatorReport(request, env, room) {
 // --- Écrans des joueurs (overlay OBS) -------------------------------------------------
 
 const SCREEN_LIMITS = {
-  overlays: 3, // chaque overlay reçoit un flux de chaque joueur affiché : au-delà, trop d'envoi pour les joueurs
+  // Overlays ouverts en même temps (sources OBS). Chaque joueur n'envoie son image qu'à 3 d'entre eux au plus
+  // (MAX_VIEWERS dans site/js/screens.js) : les autres affichent messages, progression ou texte.
+  overlays: 6,
   sockets: 120,
   message: 64 * 1024,
   hello: 15 * 1000, // délai pour se présenter après l'ouverture de la connexion
@@ -591,6 +594,69 @@ async function overlayKey(request, env, room) {
   return json({ key }, 201);
 }
 
+// Dispositions de l'overlay (éditeur de l'hôte, voir site/js/overlay-layout.js) : positions en pourcentage
+// de la page, quatre types d'éléments. Tout ce qui n'est pas reconnu est retiré ou remplacé par sa valeur par défaut.
+const LAYOUT_LIMITS = { layouts: 12, items: 40, name: 40, text: 200, size: 64 * 1024 };
+const LAYOUT_ITEMS = ["screen", "feed", "progress", "text"];
+const choice = (value, list, fallback) => (list.includes(value) ? value : fallback);
+
+function layoutId(value) {
+  if (typeof value !== "string" || !/^[a-z0-9]{1,16}$/.test(value)) throw new HttpError(400, "Identifiant invalide dans la disposition.");
+  return value;
+}
+
+function percent(value, min) {
+  const n = Number(value);
+  if (!Number.isFinite(n)) throw new HttpError(400, "Position invalide dans la disposition.");
+  return Math.round(Math.min(100, Math.max(min, n)) * 100) / 100;
+}
+
+function layoutItem(item) {
+  const type = choice(item?.type, LAYOUT_ITEMS, null);
+  if (!type) throw new HttpError(400, "Élément inconnu dans la disposition.");
+  const result = {
+    id: layoutId(item.id), type,
+    x: percent(item.x, 0), y: percent(item.y, 0), w: percent(item.w, 1), h: percent(item.h, 1),
+    size: choice(item.size, ["s", "m", "l", "xl"], "m"),
+    background: !!item.background,
+  };
+  if (type === "screen") {
+    result.source = item.source == null || item.source === "auto" ? "auto" : layoutId(item.source);
+    result.slot = Math.round(percent(item.slot ?? 1, 1));
+    result.label = item.label !== false;
+  } else if (type === "feed") {
+    result.objets = choice(item.objets, ["tous", "importants"], "tous");
+  } else if (type === "text") {
+    result.text = text(item.text, "texte", LAYOUT_LIMITS.text, { required: false });
+    result.align = choice(item.align, ["left", "center", "right"], "center");
+  }
+  return result;
+}
+
+function overlayLayouts(value) {
+  if (!Array.isArray(value) || value.length > LAYOUT_LIMITS.layouts) {
+    throw new HttpError(400, `${LAYOUT_LIMITS.layouts} dispositions au maximum.`);
+  }
+  const layouts = value.map((layout) => {
+    if (!Array.isArray(layout?.items) || layout.items.length > LAYOUT_LIMITS.items) {
+      throw new HttpError(400, `${LAYOUT_LIMITS.items} éléments au maximum par disposition.`);
+    }
+    return { id: layoutId(layout.id), name: text(layout.name, "nom de la disposition", LAYOUT_LIMITS.name), items: layout.items.map(layoutItem) };
+  });
+  const saved = JSON.stringify(layouts);
+  if (saved.length > LAYOUT_LIMITS.size) throw new HttpError(413, "Dispositions trop grandes.");
+  return saved;
+}
+
+// Les overlays ouverts reçoivent tout de suite les nouvelles dispositions.
+async function saveLayouts(request, env, room) {
+  await requireAdmin(request, room);
+  const saved = overlayLayouts((await readJson(request)).layouts);
+  await env.DB.prepare("UPDATE rooms SET overlay_layouts = ? WHERE code = ?").bind(saved, room.code).run();
+  if (env.SCREENS) await screens(env, room).fetch("https://screens/layouts", { method: "POST", body: saved });
+  return json({ layouts: JSON.parse(saved) });
+}
+
 const sendTo = (ws, message) => {
   try { ws.send(JSON.stringify(message)); } catch { /* connexion déjà fermée */ }
 };
@@ -611,6 +677,11 @@ export class ScreenRoom extends DurableObject {
   async fetch(request) {
     if (request.method === "DELETE") {
       for (const ws of this.sockets("overlay")) this.refuse(ws, "Le lien de cet overlay a été remplacé : copiez le nouveau depuis la room.");
+      return new Response(null, { status: 204 });
+    }
+    if (request.method === "POST") {
+      const layouts = JSON.parse(await request.text());
+      for (const ws of this.sockets("overlay")) sendTo(ws, { type: "layouts", layouts });
       return new Response(null, { status: 204 });
     }
     if (this.ctx.getWebSockets().length >= SCREEN_LIMITS.sockets) return json({ error: "Trop de connexions pour cette room." }, 429);
@@ -668,7 +739,7 @@ export class ScreenRoom extends DurableObject {
   async hello(ws, me, msg) {
     try {
       if (msg.type !== "hello") throw new HttpError(400, "Message inattendu.");
-      const room = await this.env.DB.prepare("SELECT code, overlay_hash FROM rooms WHERE code = ?").bind(me.code).first();
+      const room = await this.env.DB.prepare("SELECT code, overlay_hash, overlay_layouts FROM rooms WHERE code = ?").bind(me.code).first();
       if (!room) throw new HttpError(404, "Aucune room avec ce code.");
       if (msg.role === "overlay") {
         if (!room.overlay_hash || typeof msg.key !== "string" || (await sha256(msg.key)) !== room.overlay_hash) {
@@ -693,7 +764,9 @@ export class ScreenRoom extends DurableObject {
         throw new HttpError(400, "Rôle inconnu.");
       }
       ws.serializeAttachment(me);
-      sendTo(ws, { type: "welcome", id: me.id });
+      sendTo(ws, me.role === "overlay"
+        ? { type: "welcome", id: me.id, layouts: JSON.parse(room.overlay_layouts || "[]") }
+        : { type: "welcome", id: me.id });
       if (me.role === "overlay") this.publish(null, ws);
       else this.publish();
     } catch (error) {
@@ -747,6 +820,7 @@ async function route(request, env) {
   } else if (sub === "screens") {
     if (!id && method === "GET") return screensSocket(request, env, room);
     if (id === "key" && method === "POST") return overlayKey(request, env, room);
+    if (id === "layouts" && method === "PUT") return saveLayouts(request, env, room);
   } else if (sub === "generator") {
     await requireGenerator(request, env);
     const kind = parts[5];

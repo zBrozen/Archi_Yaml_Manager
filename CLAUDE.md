@@ -25,8 +25,10 @@
   le service lance `generate-room.yml` (`tools/room_generate.py`), qui lit les YAML et renvoie la partie avec le
   secret partagé `GENERATOR_SECRET` ; fichiers dans le KV `FILES`. Le spoiler est toujours séparé de la partie.
   Toute nouvelle table ou colonne passe par une migration dans `worker/migrations/`.
-  Écrans des joueurs (overlay OBS, `site/js/screens.js`, page `#/overlay/CODE/CLÉ`) : WebRTC entre navigateurs,
-  mise en relation par le Durable Object `ScreenRoom` du Worker (une instance par room).
+  Écrans des joueurs (overlay OBS, page `#/overlay/CODE/CLÉ`) : WebRTC entre navigateurs, mise en relation par le
+  Durable Object `ScreenRoom` du Worker (une instance par room). `screens.js` : partage du joueur et lien de l'hôte ;
+  `overlay.js` : la page de l'overlay ; `overlay-layout.js` : modèle des dispositions (mêmes limites que le Worker) ;
+  `overlay-editor.js` : éditeur ; `screens-net.js` : WebSocket commun.
 - Lisibilité, y compris en stream : le site (pages des rooms surtout) doit rester lisible quand il est filmé
   ou intégré comme overlay dans un stream (source navigateur OBS) : textes assez grands et aérés, contrastes
   élevés en clair comme en sombre (pas de noir pur sous du blanc pur), information jamais portée par la

@@ -7,7 +7,7 @@ import { OptionRow, RawEditor } from "./editors.js";
 import { useSetting, download, plural, SheetBadges, GamePicker, loadCredits } from "./ui.js";
 import { versionProblem, checkText, nameProblem } from "./check.js";
 import { RoomsHome, RoomPage } from "./rooms.js";
-import { ScreensOverlay } from "./screens.js";
+import { ScreensOverlay } from "./overlay.js";
 import { api as roomsApi, normalizeCode, roomsEnabled, saveAccess } from "./rooms-api.js";
 
 const formatDate = (iso) => new Date(iso).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" });

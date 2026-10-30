@@ -207,6 +207,22 @@ Les messages viennent du serveur de la partie sur archipelago.gg, une fois son l
 s'y connecte comme client texte du premier joueur (comme le client texte de la room, avec
 [archipelago.js](https://github.com/ThePhar/archipelago.js)), qui apparaît donc connecté une fois de plus.
 
+**Dispositions.** Pour placer chaque élément soi-même, l'hôte crée des dispositions dans l'éditeur de l'onglet
+« Écrans » (jusqu'à 12 par room, 40 éléments chacune), en partant d'un modèle (grille, écrans avec messages et
+progression, un grand écran et trois petits, deux équipes). Sur une page 16/9 qui représente la source OBS, il
+ajoute, déplace et redimensionne à la souris ou au clavier :
+
+- des **écrans** : automatiques (remplis dans l'ordre des partages, par numéro) ou réservés à un joueur, avec ou
+  sans son nom et son jeu ; un écran sans joueur qui partage reste transparent ;
+- les **messages de la partie** (tous les objets ou les importants) ;
+- la **progression** des joueurs (checks faits et totaux, joueurs qui ont fini ; API du tracker d'archipelago.gg) ;
+- des **textes** (noms d'équipes, titre…).
+
+Taille du texte, fond sombre ou texte ombré directement sur la scène, et ordre de superposition se règlent pour
+chaque élément. Chaque disposition a son propre lien (`?disposition=ID`, avec la même clé que la grille) ;
+l'enregistrer met à jour tout de suite les overlays ouverts, sans toucher à OBS. Les dispositions sont gardées
+par le service (colonne `overlay_layouts`, validée par `overlayLayouts` dans [`worker/src/index.js`](worker/src/index.js)).
+
 Fonctionnement : les navigateurs se transmettent l'image en pair à pair (WebRTC). Le service ne fait que les
 mettre en relation, par WebSocket, avec un Durable Object par room (`ScreenRoom` dans
 [`worker/src/index.js`](worker/src/index.js)), inclus dans l'offre gratuite de Cloudflare et publié par le même
