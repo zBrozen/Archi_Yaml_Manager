@@ -554,18 +554,19 @@ function App() {
     if (parsed.errors.length || !parsed.docs.length) throw new Error(parsed.errors[0] || "Ce YAML est vide.");
     setFile({ name: filename, original: content, docs: parsed.docs, room: { code, slotId: id } });
   };
-  const createForRoom = (code, game, name) => setFile({
-    name: null, original: null, room: { code, slotId: null },
+  // `playerId` : YAML créé par l'hôte pour un autre joueur de la room.
+  const createForRoom = (code, game, name, playerId) => setFile({
+    name: null, original: null, room: { code, slotId: null, playerId },
     docs: [{ source: 0, js: newDocument(index, game, name), original: {}, dirty: [] }],
   });
   const sendToRoom = async (text, filename) => {
-    const { code, slotId } = file.room;
+    const { code, slotId, playerId } = file.room;
     const check = await checkText(text);
     if (check.errors.length) throw new Error(check.errors[0]);
     const [doc] = check.docs;
     const slot = { name: doc.name, game: doc.game, filename, content: text, issues: [...doc.problems, ...doc.warnings] };
     if (slotId) await roomsApi.replaceSlot(code, slotId, slot);
-    else await roomsApi.addSlot(code, slot);
+    else await roomsApi.addSlot(code, playerId ? { ...slot, player_id: playerId } : slot);
     setFile(null);
   };
   useEffect(() => {
@@ -582,7 +583,7 @@ function App() {
     body = html`<${RoomsHome} />`;
   } else if (route.page === "room") {
     body = html`<${RoomPage} key=${route.code} index=${index} code=${route.code}
-      onCreate=${(game, name) => createForRoom(route.code, game, name)} onEdit=${(slot) => openFromRoom(route.code, slot)} />`;
+      onCreate=${(game, name, playerId) => createForRoom(route.code, game, name, playerId)} onEdit=${(slot) => openFromRoom(route.code, slot)} />`;
   } else {
     body = html`<${Home} index=${index} onOpen=${setFile}
       onCreate=${(game) => setFile({ name: null, original: null, docs: [{ source: 0, js: newDocument(index, game), original: {}, dirty: [] }] })} />`;

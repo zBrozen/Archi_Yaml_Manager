@@ -84,6 +84,7 @@ export const api = {
   remove: (code) => call("DELETE", at(code), { code }),
   join: (code, pseudo) => call("POST", at(code, "/players"), { code, body: { pseudo } }),
   removePlayer: (code, id) => call("DELETE", at(code, `/players/${id}`), { code }),
+  resetPlayerLink: (code, id) => call("POST", at(code, `/players/${id}/token`), { code }),
   addSlot: (code, slot) => call("POST", at(code, "/slots"), { code, body: slot }),
   getSlot: (code, id) => call("GET", at(code, `/slots/${id}`), { code }),
   replaceSlot: (code, id, slot) => call("PUT", at(code, `/slots/${id}`), { code, body: slot }),

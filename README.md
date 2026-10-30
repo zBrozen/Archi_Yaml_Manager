@@ -140,6 +140,9 @@ leur nom dans la partie, qui sert à retrouver leurs fichiers.
    YAML est un joueur de la partie, avec un nom fixe (sans `{number}`), unique dans la room et d'au plus
    16 caractères. Un fichier à plusieurs documents (`---`) est découpé en un YAML par document.
    Un lien personnel permet de reprendre depuis un autre appareil.
+   L'hôte peut aussi ajouter des joueurs lui-même (onglet « Joueurs ») et déposer des YAML pour n'importe quel
+   joueur de la room (« Déposer pour » dans « Mes YAML », ou « Déposer un YAML » sur la ligne du joueur) ; il
+   obtient le lien personnel du joueur à lui transmettre (un nouveau lien remplace l'ancien).
 3. L'hôte ferme les dépôts (à la date prévue ou à la main) et clique sur « Vérifier la room ». Chaque YAML est
    contrôlé dans son navigateur avec les règles de l'éditeur. Sont aussi signalés : les joueurs sans YAML, le
    DeathLink en async, les jeux instables ou cassés, et les apworlds non officiels à installer (avec leur dépôt).

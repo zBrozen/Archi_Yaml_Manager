@@ -480,14 +480,24 @@ input[type="url"], input[type="datetime-local"] {
 .steps { margin: 0; padding-left: 1.3rem; display: grid; gap: .6rem; }
 .host { border-color: var(--accent); }
 .host > .stack + .stack { border-top: 1px solid var(--border); padding-top: .9rem; }
-a.button {
+a.button, label.button {
   display: inline-block; text-decoration: none; background: var(--accent); color: var(--on-accent);
   border: 1px solid var(--accent); border-radius: 8px; padding: .45rem 1rem; font-weight: 600;
 }
-a.button:hover { background: var(--accent-hover); }
-a.button.ghost { background: var(--surface); color: var(--text); border-color: var(--border); font-weight: 500; }
-a.button.ghost:hover { background: var(--surface-2); }
-a.button.small { padding: .25rem .7rem; font-size: .875rem; }
+label.button { cursor: pointer; white-space: nowrap; }
+a.button:hover, label.button:hover { background: var(--accent-hover); }
+a.button.ghost, label.button.ghost { background: var(--surface); color: var(--text); border-color: var(--border); font-weight: 500; }
+a.button.ghost:hover, label.button.ghost:hover { background: var(--surface-2); }
+a.button.small, label.button.small { padding: .25rem .7rem; font-size: .875rem; }
+/* Hôte : dépôt pour un autre joueur, actions sur chaque joueur, lien personnel à transmettre */
+.deposit-for { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem .75rem; font-weight: 600; }
+.deposit-for select { max-width: 100%; }
+.deposit-for .hint { flex-basis: 100%; font-weight: 400; }
+.room-table td.actions .player-actions {
+  display: inline-flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: .4rem .6rem; white-space: normal;
+}
+.player-link p { margin: 0 0 .5rem; }
+.player-link code { overflow-wrap: anywhere; font-size: .85rem; }
 .danger-link { color: var(--error); justify-self: start; }
 .fields label.check { display: flex; align-items: center; gap: .5rem; font-size: .92rem; }
 

@@ -336,6 +336,16 @@ async function joinRoom(request, env, room) {
   return json({ player: { id, pseudo }, token }, 201);
 }
 
+// Nouveau lien personnel d'un joueur, par l'hôte (joueur ajouté par lui, ou lien perdu) : l'ancien cesse de marcher.
+async function resetPlayerToken(request, env, room, playerId) {
+  await requireAdmin(request, room);
+  const player = await env.DB.prepare("SELECT id, pseudo FROM players WHERE room_code = ? AND id = ?").bind(room.code, playerId).first();
+  if (!player) throw new HttpError(404, "Ce joueur n'est plus dans la room.");
+  const token = newToken();
+  await env.DB.prepare("UPDATE players SET token_hash = ? WHERE id = ?").bind(await sha256(token), player.id).run();
+  return json({ player, token });
+}
+
 async function removePlayer(request, env, room, playerId) {
   const me = await currentPlayer(request, env, room);
   if (me?.id !== playerId) await requireAdmin(request, room);
@@ -367,13 +377,27 @@ async function nameTaken(env, room, name, exceptId) {
   if (row) throw new HttpError(409, `Le nom « ${name} » est déjà utilisé par un autre YAML de la room : chaque slot doit avoir son propre nom.`);
 }
 
+// Joueur à qui revient un YAML déposé : soi-même, ou (pour l'hôte seulement) un autre joueur de la room.
+async function slotOwner(request, env, room, playerId) {
+  const me = await currentPlayer(request, env, room);
+  if (!playerId || playerId === me?.id) {
+    if (!me) throw new HttpError(403, "Rejoignez d'abord la room avec votre pseudo.");
+    return me;
+  }
+  await requireAdmin(request, room);
+  const player = await env.DB.prepare("SELECT * FROM players WHERE room_code = ? AND id = ?").bind(room.code, String(playerId)).first();
+  if (!player) throw new HttpError(404, "Ce joueur n'est plus dans la room.");
+  return player;
+}
+
 async function addSlot(request, env, room) {
-  const player = await requirePlayer(request, env, room);
   requireYamlRoom(room);
   requireOpen(room);
-  const fields = slotFields(await readJson(request));
+  const body = await readJson(request);
+  const player = await slotOwner(request, env, room, body.player_id);
+  const fields = slotFields(body);
   const { count } = await env.DB.prepare("SELECT COUNT(*) AS count FROM slots WHERE player_id = ?").bind(player.id).first();
-  if (count >= room.max_slots) throw new HttpError(409, `Limite atteinte : ${room.max_slots} YAML par joueur dans cette room.`);
+  if (count >= room.max_slots) throw new HttpError(409, `Limite atteinte pour ${player.pseudo} : ${room.max_slots} YAML par joueur dans cette room.`);
   await nameTaken(env, room, fields.name);
   const id = newId();
   const now = Date.now();
@@ -895,7 +919,8 @@ async function route(request, env) {
     if (method === "DELETE") return deleteRoom(request, env, room);
   } else if (sub === "players") {
     if (!id && method === "POST") return joinRoom(request, env, room);
-    if (id && method === "DELETE") return removePlayer(request, env, room, id);
+    if (id && !parts[5] && method === "DELETE") return removePlayer(request, env, room, id);
+    if (id && parts[5] === "token" && method === "POST") return resetPlayerToken(request, env, room, id);
   } else if (sub === "slots") {
     if (!id && method === "POST") return addSlot(request, env, room);
     if (id && method === "GET") return getSlot(request, env, room, id);

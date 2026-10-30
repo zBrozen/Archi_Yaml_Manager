@@ -213,7 +213,8 @@ export function RoomPage({ index, code, onCreate, onEdit }) {
     wishlists: { ...Object.fromEntries(Object.entries(d.wishlists || {}).filter(([k]) => k.toLowerCase() !== slot.toLowerCase())), [slot]: items },
   }));
   const yaml = me
-    ? html`<${MySlots} index=${index} room=${room} me=${me} slots=${mine} allSlots=${allSlots} refresh=${refresh} onCreate=${onCreate} onEdit=${onEdit} />`
+    ? html`<${MySlots} index=${index} room=${room} me=${me} admin=${admin} players=${players} slots=${mine} allSlots=${allSlots}
+        refresh=${refresh} onCreate=${onCreate} onEdit=${onEdit} />`
     : html`<${JoinForm} room=${room} admin=${admin} refresh=${refresh} />`;
 
   return html`<main class="room">
@@ -336,42 +337,55 @@ function freeName(pseudo, slots) {
   }
 }
 
-function MySlots({ index, room, me, slots, allSlots, refresh, onCreate, onEdit }) {
+// Dépôt de fichiers YAML : chaque document devient un slot à part (un YAML par jeu, comme le veut Archipelago).
+// `player` : joueur à qui reviennent les YAML ({ id, pseudo }), soi-même ou, pour l'hôte, un autre joueur.
+async function uploadYaml(room, files, player, own) {
+  const list = [...files].filter((f) => !/\.apworld$/i.test(f.name));
+  const messages = [];
+  let added = 0;
+  for (const file of list) {
+    const parts = splitFile(await file.text());
+    for (const text of parts) {
+      const check = await checkText(text);
+      if (check.errors.length) { messages.push(`${file.name} : ${check.errors[0]}`); continue; }
+      const doc = check.docs[0];
+      const naming = nameProblem(doc.name);
+      if (naming) { messages.push(`${file.name} : ${naming}`); continue; }
+      try {
+        await api.addSlot(room.code, {
+          ...(own ? {} : { player_id: player.id }),
+          name: doc.name.trim(),
+          game: doc.game,
+          filename: parts.length > 1 ? `${doc.name.trim()}.yaml` : file.name,
+          content: text,
+          issues: [...doc.problems, ...doc.warnings],
+        });
+        added++;
+      } catch (e) { messages.push(`${file.name} : ${e.message}`); }
+    }
+  }
+  const forWhom = own ? "" : ` pour ${player.pseudo}`;
+  if (messages.length) throw new Error(`${added ? `${added} ajouté${added > 1 ? "s" : ""}${forWhom}, ` : ""}${plural(messages.length, "refusé")} : ${messages.join(" — ")}`);
+  return added ? `${plural(added, "YAML")} ajouté${added > 1 ? "s" : ""}${forWhom}.` : null;
+}
+
+function MySlots({ index, room, me, admin, players, slots, allSlots, refresh, onCreate, onEdit }) {
   const action = useAction();
   const [hover, setHover] = useState(false);
   const [picking, setPicking] = useState(false);
   const [game, setGame] = useState("");
+  const [done, setDone] = useState(null);
+  // L'hôte peut déposer pour un autre joueur de la room ; chacun garde ensuite la main sur ses YAML.
+  const [targetId, setTargetId] = useState(me.id);
+  const target = (admin && players.find((p) => p.id === targetId)) || players.find((p) => p.id === me.id) || { id: me.id, pseudo: me.pseudo, slots };
+  const own = target.id === me.id;
   const access = savedAccess(room.code);
-  const full = slots.length >= room.max_slots;
+  const full = target.slots.length >= room.max_slots;
   const canEdit = room.open; // dépôts fermés : YAML figés, hôte compris
 
-  // Chaque document du fichier devient un slot à part (un YAML par jeu, comme le veut Archipelago).
   const upload = (files) => action.run(async () => {
-    const list = [...files].filter((f) => !/\.apworld$/i.test(f.name));
-    const messages = [];
-    let added = 0;
-    for (const file of list) {
-      const parts = splitFile(await file.text());
-      for (const text of parts) {
-        const check = await checkText(text);
-        if (check.errors.length) { messages.push(`${file.name} : ${check.errors[0]}`); continue; }
-        const doc = check.docs[0];
-        const naming = nameProblem(doc.name);
-        if (naming) { messages.push(`${file.name} : ${naming}`); continue; }
-        try {
-          await api.addSlot(room.code, {
-            name: doc.name.trim(),
-            game: doc.game,
-            filename: parts.length > 1 ? `${doc.name.trim()}.yaml` : file.name,
-            content: text,
-            issues: [...doc.problems, ...doc.warnings],
-          });
-          added++;
-        } catch (e) { messages.push(`${file.name} : ${e.message}`); }
-      }
-    }
-    refresh();
-    if (messages.length) throw new Error(`${added ? `${added} ajouté${added > 1 ? "s" : ""}, ` : ""}${plural(messages.length, "refusé")} : ${messages.join(" — ")}`);
+    setDone(null);
+    try { setDone(await uploadYaml(room, files, target, own)); } finally { refresh(); }
   });
 
   const remove = (slot) => confirm(`Retirer le YAML « ${slot.name} » de la room ?`)
@@ -403,23 +417,34 @@ function MySlots({ index, room, me, slots, allSlots, refresh, onCreate, onEdit }
       <button type="button" class="ghost small" disabled=${action.busy} onClick=${() => save(slot)}>Télécharger</button>
       ${canEdit && html`<button type="button" class="ghost small" disabled=${action.busy} onClick=${() => remove(slot)}>Retirer</button>`}
     </li>`)}</ul>`}
+    ${canEdit && admin && players.length > 1 && html`<label class="deposit-for full">
+      <span>Déposer pour</span>
+      <select value=${target.id} onChange=${(e) => { setTargetId(e.target.value); setDone(null); }}>
+        <option value=${me.id}>Moi (${me.pseudo})</option>
+        ${players.filter((p) => p.id !== me.id).map((p) => html`<option value=${p.id}>${p.pseudo} (${p.slots.length}/${room.max_slots})</option>`)}
+      </select>
+      ${!own && html`<span class="hint">Les YAML iront dans la liste de ${target.pseudo}, qui pourra les modifier ou les retirer.</span>`}
+    </label>`}
     ${canEdit && !full && html`<label class=${`drop compact full ${hover ? "hover" : ""} ${action.busy ? "busy" : ""}`}
       onDragOver=${(e) => { e.preventDefault(); setHover(true); }}
       onDragLeave=${() => setHover(false)}
       onDrop=${(e) => { e.preventDefault(); setHover(false); upload(e.dataTransfer.files); }}>
       <input type="file" accept=".yaml,.yml,.txt" multiple hidden onChange=${(e) => { upload(e.target.files); e.target.value = ""; }} />
-      <strong>${action.busy ? "Envoi…" : "Déposez un ou plusieurs YAML"}</strong>
+      <strong>${action.busy ? "Envoi…" : own ? "Déposez un ou plusieurs YAML" : `Déposez les YAML de ${target.pseudo}`}</strong>
       <span>ou cliquez pour les choisir</span>
     </label>`}
-    ${canEdit && !full && html`<button type="button" class="ghost" onClick=${() => setPicking(true)}>Créer un YAML pour cette room</button>`}
-    ${full && canEdit && html`<p class="hint">Limite atteinte : retirez un YAML pour en ajouter un autre.</p>`}
+    ${canEdit && !full && html`<button type="button" class="ghost" onClick=${() => setPicking(true)}>
+      ${own ? "Créer un YAML pour cette room" : `Créer un YAML pour ${target.pseudo}`}</button>`}
+    ${full && canEdit && html`<p class="hint">${own ? "Limite atteinte : retirez un YAML pour en ajouter un autre."
+      : `${target.pseudo} a déjà ${room.max_slots} YAML : c'est la limite de la room.`}</p>`}
+    ${done && html`<div class="notice ok full" role="status">${done}</div>`}
     ${!canEdit && html`<p class="hint">Les dépôts sont fermés : vos YAML sont figés tels qu'ils seront générés.
       Ils redeviendront modifiables si l'hôte rouvre les dépôts.</p>`}
     ${action.error && html`<div class="notice error full">${action.error}</div>`}
     ${canEdit && html`<button type="button" class="link" onClick=${leave}>Quitter la room</button>`}
 
     ${picking && html`<${PickerModal} index=${index} value=${game} onChange=${setGame} onClose=${() => setPicking(false)}
-      onCreate=${(g) => onCreate(g, freeName(me.pseudo, allSlots))} />`}
+      onCreate=${(g) => onCreate(g, freeName(target.pseudo, allSlots), own ? null : target.id)} />`}
   </section>`;
 }
 
@@ -443,14 +468,39 @@ function IssueList({ issues }) {
 
 function PlayersList({ room, players, me, admin, refresh }) {
   const action = useAction();
+  const [link, setLink] = useState(null); // lien personnel à transmettre : { pseudo, url, added }
+  const [done, setDone] = useState(null);
   const kick = (player) => confirm(`Retirer ${player.pseudo} et ses YAML de la room ?`)
-    && action.run(async () => { await api.removePlayer(room.code, player.id); refresh(); });
+    && action.run(async () => { await api.removePlayer(room.code, player.id); setLink(null); refresh(); });
   const removeSlot = (slot) => confirm(`Retirer le YAML « ${slot.name} » ?`)
     && action.run(async () => { await api.deleteSlot(room.code, slot.id); refresh(); });
-  const manage = admin && room.open; // dépôts fermés : plus aucun retrait
+  const newLink = (player) => confirm(`Créer un nouveau lien personnel pour ${player.pseudo} ? L'ancien ne marchera plus.`)
+    && action.run(async () => {
+      const result = await api.resetPlayerLink(room.code, player.id);
+      setLink({ pseudo: player.pseudo, url: playerLink(room.code, result.token) });
+    });
+  const depositFor = (player, files) => action.run(async () => {
+    setDone(null);
+    try { setDone(await uploadYaml(room, files, player, player.id === me?.id)); } finally { refresh(); }
+  });
+  const manage = admin && room.open; // dépôts fermés : plus aucun retrait ni ajout
 
-  return html`<section class="card stack">
+  return html`
+  ${manage && html`<${AddPlayer} room=${room} onAdded=${(player, token) => {
+    setLink({ pseudo: player.pseudo, url: playerLink(room.code, token), added: true });
+    refresh();
+  }} />`}
+  <section class="card stack">
     <h2>Joueurs et jeux</h2>
+    ${link && html`<div class="notice player-link full" role="status">
+      <p><strong>Lien personnel de ${link.pseudo}</strong> : envoyez-le-lui, il y retrouvera ses YAML et pourra les modifier.
+        ${link.added ? " Vous pouvez aussi déposer ses YAML vous-même (« Déposer un YAML » sur sa ligne)." : ""}</p>
+      <div class="row full">
+        <code class="grow">${link.url}</code>
+        <${CopyButton} text=${link.url} label="Copier le lien" className="small" />
+        <button type="button" class="ghost small" onClick=${() => setLink(null)}>Fermer</button>
+      </div>
+    </div>`}
     ${players.length === 0 && html`<p class="hint">Personne n'a encore rejoint la room. Partagez le code !</p>`}
     ${players.length > 0 && html`<div class="table-wrap full"><table class="room-table">
       <thead><tr><th>Joueur</th><th>Nom dans la partie</th><th>Jeu</th>${manage && html`<th></th>`}</tr></thead>
@@ -460,12 +510,43 @@ function PlayersList({ room, players, me, admin, refresh }) {
         <td>${slot && html`${slot.game} <${GameBadges} game=${slot.game} />`}</td>
         ${manage && html`<td class="actions">
           ${slot && html`<button type="button" class="icon" title="Retirer ce YAML" onClick=${() => removeSlot(slot)}>✕</button>`}
-          ${i === 0 && html`<button type="button" class="link" onClick=${() => kick(p)}>Retirer le joueur</button>`}
+          ${i === 0 && html`<span class="player-actions">
+            ${p.slots.length < room.max_slots && html`<label class="button ghost small" title=${`Déposer des YAML pour ${p.pseudo}`}>
+              <input type="file" accept=".yaml,.yml,.txt" multiple hidden disabled=${action.busy}
+                onChange=${(e) => { depositFor(p, e.target.files); e.target.value = ""; }} />Déposer un YAML</label>`}
+            ${me?.id !== p.id && html`<button type="button" class="ghost small" onClick=${() => newLink(p)}>Lien personnel</button>`}
+            <button type="button" class="link" onClick=${() => kick(p)}>Retirer le joueur</button>
+          </span>`}
         </td>`}
       </tr>`))}</tbody>
     </table></div>`}
+    ${done && html`<div class="notice ok full" role="status">${done}</div>`}
     ${action.error && html`<div class="notice error full">${action.error}</div>`}
   </section>`;
+}
+
+// Ajout d'un joueur par l'hôte (quelqu'un qui n'a pas le site sous la main, ou dont il dépose les YAML).
+function AddPlayer({ room, onAdded }) {
+  const [pseudo, setPseudo] = useState("");
+  const add = useAction();
+  const submit = (e) => {
+    e.preventDefault();
+    add.run(async () => {
+      const result = await api.join(room.code, pseudo.trim());
+      setPseudo("");
+      onAdded(result.player, result.token);
+    });
+  };
+  return html`<form class="card stack" onSubmit=${submit}>
+    <h2>Ajouter un joueur</h2>
+    <div class="row full">
+      <input type="text" class="grow" required maxLength="32" placeholder="Pseudo du joueur" value=${pseudo}
+        onInput=${(e) => setPseudo(e.target.value)} />
+      <button type="submit" disabled=${add.busy || !pseudo.trim()}>Ajouter</button>
+    </div>
+    ${add.error && html`<div class="notice error full">${add.error}</div>`}
+    <p class="hint">Vous recevez son lien personnel à lui transmettre, et vous pouvez déposer ses YAML vous-même.</p>
+  </form>`;
 }
 
 // --- Hôte --------------------------------------------------------------------------
