@@ -1,4 +1,4 @@
-import { html, render, useState, useEffect } from "../vendor/preact-htm.js";
+import { html, render, useState, useEffect, useRef } from "../vendor/preact-htm.js";
 import { loadIndex, loadGame, cachedGame, gameEntry, compareVersions, localGames, forgetLocalGame } from "./data.js";
 import { parseFile, exportFile, gamesOf, setIn, getIn, markDirty, isPlainObject, RESERVED_KEYS } from "./yaml-model.js";
 import { checkValue, sameAsDefault, yamlDefault, yamlComment, setDocLanguage, GROUP_NAMES } from "./options.js";
@@ -499,7 +499,23 @@ function newDocument(index, game, name = "Joueur{number}") {
 }
 
 function Header({ page, advanced, setAdvanced, docLanguage, setDocLanguage, theme, setTheme }) {
-  return html`<header class="site-header">
+  // L'en-tête reste visible, et sa hauteur (qui change quand il passe sur plusieurs lignes) place
+  // en dessous les barres collantes (--header-h). En fenêtre étroite, les réglages passent au-dessus
+  // du titre et défilent avec la page (--header-hidden) : seuls le titre et la navigation restent.
+  const ref = useRef(null);
+  useEffect(() => {
+    const header = ref.current, root = document.documentElement.style;
+    const tools = header.querySelector(".header-tools"), brand = header.querySelector(".brand");
+    const observer = new ResizeObserver(() => {
+      const above = brand.offsetTop >= tools.offsetTop + tools.offsetHeight;
+      const hidden = above ? brand.offsetTop - tools.offsetTop : 0;
+      root.setProperty("--header-hidden", `${hidden}px`);
+      root.setProperty("--header-h", `${header.offsetHeight - hidden}px`);
+    });
+    observer.observe(header);
+    return () => { observer.disconnect(); root.removeProperty("--header-h"); root.removeProperty("--header-hidden"); };
+  }, []);
+  return html`<header class="site-header" ref=${ref}>
     <a class="brand" href="#/"><span class="logo" aria-hidden="true">◆</span> Archipelago YAML Manager</a>
     ${roomsEnabled() && html`<nav class="site-nav">
       <a href="#/" class=${page === "home" ? "active" : ""}>Éditeur</a>
