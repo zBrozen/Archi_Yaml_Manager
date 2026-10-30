@@ -175,81 +175,117 @@ const GROUPS = [
 ];
 const RECENT = 12;
 
-// Objets reçus par un joueur : regroupés par importance (avec le nombre d'exemplaires), puis les derniers arrivés.
-export function ItemsPanel({ status, tracker, mine, slot, onSlot }) {
-  const [all, setAll] = useState(false);
+// Joueurs affichés par défaut : les vôtres, sinon le premier de la partie.
+export function defaultItemSlots(status, mine) {
+  const own = status.slots.filter((s) => mine.some((m) => m.name.toLowerCase() === s.name.toLowerCase())).map((s) => s.slot);
+  return own.length ? own : status.slots.slice(0, 1).map((s) => s.slot);
+}
+
+// Objets reçus par les joueurs cochés (`selected` : numéros de slot), avec une recherche commune à tous.
+export function ItemsPanel({ status, tracker, mine, selected, onSelected }) {
+  const [search, setSearch] = useState("");
   const names = new Set(mine.map((s) => s.name.toLowerCase()));
   const own = status.slots.filter((s) => names.has(s.name.toLowerCase()));
   const slots = [...own, ...status.slots.filter((s) => !names.has(s.name.toLowerCase()))];
-  const current = slots.find((s) => s.slot === slot) || slots[0];
   const live = tracker.data?.live;
-  const received = receivedItems(live, current?.slot);
+  const shown = slots.filter((s) => selected.includes(s.slot));
+  const needle = search.trim().toLowerCase();
+  const toggle = (slot, on) => onSelected(on ? [...selected, slot] : selected.filter((n) => n !== slot));
+
+  return html`<div class="row full">
+      <h2 class="grow">Objets reçus</h2>
+      <input type="search" class="items-search" placeholder="Rechercher un objet reçu…" value=${search}
+        onInput=${(e) => setSearch(e.target.value)} aria-label="Rechercher un objet reçu" />
+    </div>
+    <fieldset class="items-players full">
+      <legend>Joueurs affichés</legend>
+      <div class="items-players-list">${slots.map((s) => {
+        const n = receivedItems(live, s.slot).length;
+        return html`<label class=${`player-check ${selected.includes(s.slot) ? "on" : ""}`}>
+          <input type="checkbox" checked=${selected.includes(s.slot)} onChange=${(e) => toggle(s.slot, e.target.checked)} />
+          <span><strong>${s.name}</strong> <span class="hint">${s.game}${live ? ` · ${plural(n, "objet")}` : ""}</span></span>
+        </label>`;
+      })}</div>
+      <div class="row">
+        <button type="button" class="link" onClick=${() => onSelected(slots.map((s) => s.slot))}>Tout cocher</button>
+        ${own.length > 0 && html`<button type="button" class="link" onClick=${() => onSelected(own.map((s) => s.slot))}>Mes joueurs</button>`}
+        <button type="button" class="link" onClick=${() => onSelected([])}>Tout décocher</button>
+      </div>
+    </fieldset>
+    ${!live ? html`<p class="hint">${tracker.error || "Chargement des objets…"}</p>`
+      : !shown.length ? html`<p class="hint">Cochez un ou plusieurs joueurs pour voir leurs objets.</p>`
+      : html`<div class="items-players-view full">${shown.map((s) => html`<${PlayerItems} key=${s.slot} slot=${s} status=${status}
+          tracker=${tracker} needle=${needle} search=${search.trim()} titled=${shown.length > 1} />`)}</div>`}`;
+}
+
+// Objets d'un joueur : regroupés par importance (avec le nombre d'exemplaires), puis les derniers arrivés.
+// Avec une recherche, seuls les objets dont le nom la contient restent, et tous ceux arrivés sont listés.
+function PlayerItems({ slot, status, tracker, needle, search, titled }) {
+  const [all, setAll] = useState(false);
+  const received = receivedItems(tracker.data.live, slot.slot);
   const gameOf = (player) => (player === 0 ? "Archipelago" : status.slots.find((s) => s.slot === player)?.game);
   const nameOf = (player) => status.slots.find((s) => s.slot === player)?.name || `Joueur ${player}`;
-  const games = [...new Set([current?.game, ...received.map((i) => gameOf(i.player))].filter(Boolean))].sort();
-  const { loaded, error } = usePackages(status.origin, tracker.data?.fixed, games);
+  const games = [...new Set([slot.game, ...received.map((i) => gameOf(i.player))].filter(Boolean))].sort();
+  const { loaded, error } = usePackages(status.origin, tracker.data.fixed, games);
 
-  useEffect(() => setAll(false), [current?.slot]);
-
-  if (!current) return null;
-  const header = html`<div class="row full">
-    <h2 class="grow">Objets reçus</h2>
-    <label class="items-player">Joueur
-      <select value=${current.slot} onChange=${(e) => onSlot(Number(e.target.value))}>
-        ${slots.map((s) => html`<option value=${s.slot}>${s.name} (${s.game})</option>`)}
-      </select>
-    </label>
-  </div>`;
-  if (!live) return html`${header}<p class="hint">${tracker.error || "Chargement des objets…"}</p>`;
-
-  const pkg = loaded[current.game];
-  const waiting = !pkg && !error && tracker.data.fixed?.datapackage?.[current.game];
+  const pkg = loaded[slot.game];
+  const waiting = !pkg && !error && tracker.data.fixed?.datapackage?.[slot.game];
   const itemName = (id) => pkg?.items.get(id) || `Objet n° ${id}`;
   const origin = (i) => {
     if (i.player === 0) return i.location === -2 ? "inventaire de départ" : "donné par le serveur";
     const place = loaded[gameOf(i.player)]?.locations.get(i.location);
-    const from = i.player === current.slot ? "trouvé dans son propre monde" : `envoyé par ${nameOf(i.player)}`;
+    const from = i.player === slot.slot ? "trouvé dans son propre monde" : `envoyé par ${nameOf(i.player)}`;
     return place ? `${from} · ${place}` : from;
   };
+  const matching = received.map((i, index) => ({ ...i, index, name: itemName(i.item) }))
+    .filter((i) => !needle || i.name.toLowerCase().includes(needle));
 
   const groups = Object.fromEntries(GROUPS.map(([kind]) => [kind, new Map()]));
-  for (const i of received) {
+  for (const i of matching) {
     const group = groups[kindOf(i.flags)];
-    const name = itemName(i.item);
-    group.set(name, (group.get(name) || 0) + 1);
+    group.set(i.name, (group.get(i.name) || 0) + 1);
   }
   const counts = GROUPS.map(([kind, label, word]) => ({ kind, label, word, n: [...groups[kind].values()].reduce((a, b) => a + b, 0) }))
     .filter((g) => g.n);
-  const recent = received.map((i, index) => ({ ...i, index })).reverse().slice(0, all ? undefined : RECENT);
+  const recent = [...matching].reverse().slice(0, all || needle ? undefined : RECENT);
 
   const tags = (kind) => html`<ul class="item-tags">${[...groups[kind]].sort((a, b) => a[0].localeCompare(b[0]))
     .map(([name, n]) => html`<li><span class=${ITEM_KINDS[kind].cls}>${name}</span>${n > 1 && html`<span class="item-count">×${n}</span>`}</li>`)}</ul>`;
-  const title = ({ kind, label, n }) => html`<h3><span class=${ITEM_KINDS[kind].cls}>${ITEM_KINDS[kind].mark}${label}</span> <span class="hint">${n}</span></h3>`;
-  const summary = counts.filter((g) => g.word).map((g) => ` · ${g.n} ${g.kind === "progression" || g.n < 2 ? g.word : `${g.word}s`}`);
+  const title = ({ kind, label, n }) => html`<h4><span class=${ITEM_KINDS[kind].cls}>${ITEM_KINDS[kind].mark}${label}</span> <span class="hint">${n}</span></h4>`;
+  const summary = needle
+    ? `${plural(matching.length, "objet")} sur ${received.length} pour « ${search} »`
+    : `${plural(received.length, "objet")} reçu${received.length > 1 ? "s" : ""}${counts.filter((g) => g.word)
+      .map((g) => ` · ${g.n} ${g.kind === "progression" || g.n < 2 ? g.word : `${g.word}s`}`).join("")}`;
 
-  return html`${header}
-    <p class="hint">${plural(received.length, "objet")} reçu${received.length > 1 ? "s" : ""}${summary}</p>
+  // Recherche sans résultat chez ce joueur : une seule ligne, pour ne pas encombrer quand plusieurs sont cochés.
+  if (needle && pkg && !matching.length) {
+    return html`<p class="items-player-block items-none hint">${titled && html`<strong>${slot.name}</strong> : `}aucun objet reçu ne contient « ${search} » (${plural(received.length, "objet")} au total).</p>`;
+  }
+  return html`<section class="items-player-block">
+    ${titled && html`<h3>${slot.name} <span class="hint">${slot.game}</span></h3>`}
+    <p class="hint">${summary}</p>
     ${error && html`<p class="hint">${error} Les objets sont affichés par numéro.</p>`}
     ${received.length === 0 ? html`<p class="hint">Aucun objet reçu pour l'instant.</p>`
       : waiting ? html`<p class="hint">Chargement des noms d'objets…</p>`
-      : html`<div class="items-panel full">
+      : html`<div class="items-panel">
         ${counts.map((g) => (g.kind === "filler"
-          ? html`<details class="items-group"><summary>${title(g)}</summary>${tags(g.kind)}</details>`
+          ? html`<details class="items-group" open=${!!needle}><summary>${title(g)}</summary>${tags(g.kind)}</details>`
           : html`<div class="items-group">${title(g)}${tags(g.kind)}</div>`))}
         <div class="items-group">
-          <h3>Derniers objets reçus</h3>
+          <h4>${needle ? "Arrivées correspondantes" : "Derniers objets reçus"}</h4>
           <ol class="item-feed">${recent.map((i) => {
             const kind = ITEM_KINDS[kindOf(i.flags)];
             return html`<li key=${i.index}>
               <span class="hint item-index">${i.index + 1}</span>
-              <span class=${kind.cls} title=${kind.title}>${kind.mark}${itemName(i.item)}</span>
+              <span class=${kind.cls} title=${kind.title}>${kind.mark}${i.name}</span>
               <span class="hint item-origin">${origin(i)}</span>
             </li>`;
           })}</ol>
-          ${received.length > RECENT && html`<button type="button" class="link" onClick=${() => setAll(!all)}>
+          ${!needle && received.length > RECENT && html`<button type="button" class="link" onClick=${() => setAll(!all)}>
             ${all ? "Afficher seulement les derniers" : `Afficher les ${received.length} objets`}</button>`}
         </div>
-      </div>`}`;
+      </div>`}
+  </section>`;
 }
 
 // --- Client texte ------------------------------------------------------------------
@@ -277,7 +313,11 @@ export const itemKind = (item) => ITEM_KINDS[item.progression ? "progression" : 
 
 // Wishlists de la room ({ joueur: [objets] }) : un objet de la wishlist de celui qui le reçoit est mis en avant
 // (♥, et la ligne entière quand il vient d'être envoyé : pas pour un indice, l'objet n'est alors pas encore reçu).
-export const wishIndex = (wishlists = {}) => new Map(Object.entries(wishlists).map(([slot, items]) => [slot.toLowerCase(), new Set(items)]));
+// Objet de wishlist : un nom, ou { name, after } quand le joueur attend un exemplaire de plus d'un objet déjà reçu
+// `after` fois (progressif, cumulable…).
+export const wishEntry = (w) => (w && typeof w === "object" ? { name: String(w.name), after: Number(w.after) || 0 } : { name: String(w), after: 0 });
+export const wishIndex = (wishlists = {}) => new Map(Object.entries(wishlists)
+  .map(([slot, items]) => [slot.toLowerCase(), new Set(items.map((i) => wishEntry(i).name))]));
 const isWished = (wishes, node) => node.type === "item" && !!wishes?.get(String(node.item.receiver?.name).toLowerCase())?.has(node.item.name);
 export const wishHit = (wishes, nodes) => !!wishes?.size && !String(nodes[0]?.text || "").startsWith("[Hint]")
   && nodes.some((node) => isWished(wishes, node));

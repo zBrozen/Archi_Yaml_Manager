@@ -7,7 +7,7 @@ import { splitFile } from "./yaml-model.js";
 import { checkText, nameProblem, MAX_NAME } from "./check.js";
 import { CopyButton, GamePicker, SheetBadges, download, loadCredits, plural, useAction, useSetting } from "./ui.js";
 import { makeZip } from "./zip.js";
-import { ItemsPanel, ProgressPanel, TextClient, useTracker } from "./room-live.js";
+import { ItemsPanel, ProgressPanel, TextClient, defaultItemSlots, useTracker } from "./room-live.js";
 import { ScreensTab } from "./screens.js";
 import { WishNotice, WishlistView, useWishNotices, useWishState } from "./wishlist.js";
 import {
@@ -1147,18 +1147,20 @@ function OnlineSummary({ room, online, tracker, mine, go }) {
 
 function GameView({ room, online, tracker, mine }) {
   const { status, error } = online;
-  const [itemsSlot, setItemsSlot] = useState(null);
+  // Joueurs cochés dans « Objets reçus », mémorisés par room dans ce navigateur.
+  const [itemSlots, setItemSlots] = useSetting(`itemPlayers:${room.code}`, null);
   const itemsCard = useRef(null);
   if (!status) return html`<section class="card"><p class="hint">${error || "Chargement de la partie…"}</p></section>`;
+  const selected = (itemSlots || defaultItemSlots(status, mine)).filter((n) => status.slots.some((s) => s.slot === n));
   const showItems = (slot) => {
-    setItemsSlot(slot);
+    if (!selected.includes(slot)) setItemSlots([...selected, slot]);
     itemsCard.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
   return html`<section class="card stack">
     <${ProgressPanel} status=${status} tracker=${tracker} mode=${room.mode} mine=${mine} onItems=${showItems} />
   </section>
   ${tracker.trackerId && html`<section class="card stack items-card" ref=${itemsCard}>
-    <${ItemsPanel} status=${status} tracker=${tracker} mine=${mine} slot=${itemsSlot} onSlot=${setItemsSlot} />
+    <${ItemsPanel} status=${status} tracker=${tracker} mine=${mine} selected=${selected} onSelected=${setItemSlots} />
   </section>`}
   <section class="card stack">
     <h2>Fichiers de tous les joueurs</h2>

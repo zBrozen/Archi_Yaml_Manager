@@ -1039,9 +1039,20 @@ async function saveWishlist(request, env, room, slot) {
   }
   const body = await readJson(request);
   if (!Array.isArray(body.items)) throw new HttpError(400, "Liste d'objets attendue.");
-  const items = [...new Set(body.items.map((i) => String(i).trim()).filter(Boolean))];
+  // Un objet est un nom, ou { name, after } : un exemplaire de plus d'un objet déjà reçu `after` fois
+  // (progressif, cumulable…).
+  const items = [];
+  const seen = new Set();
+  for (const raw of body.items) {
+    const entry = raw && typeof raw === "object";
+    const name = String(entry ? raw.name : raw).trim();
+    if (!name || seen.has(name)) continue;
+    if (name.length > LIMITS.wishName) throw new HttpError(400, "Nom d'objet trop long.");
+    seen.add(name);
+    const after = entry ? Math.min(9999, Math.max(0, Math.floor(Number(raw.after) || 0))) : 0;
+    items.push(after ? { name, after } : name);
+  }
   if (items.length > LIMITS.wishes) throw new HttpError(400, `Au plus ${LIMITS.wishes} objets par wishlist.`);
-  if (items.some((i) => i.length > LIMITS.wishName)) throw new HttpError(400, "Nom d'objet trop long.");
   const now = Date.now();
   await env.DB.batch([
     items.length

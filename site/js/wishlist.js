@@ -1,30 +1,43 @@
 // Wishlists des joueurs : objets qu'ils attendent dans la partie hébergée. Chacun remplit la sienne (onglet
-// « Wishlist ») parmi les objets de son jeu pas encore reçus ; un objet attendu est en rouge, puis passe au vert
-// quand il arrive (d'après le tracker d'archipelago.gg), et la room prévient le joueur par un bandeau.
+// « Wishlist ») parmi les objets de son jeu ; un objet attendu est en rouge, puis passe au vert quand il arrive
+// (d'après le tracker d'archipelago.gg), et la room prévient le joueur par un bandeau. Un objet déjà reçu
+// (progressif, cumulable…) peut être attendu une fois de plus : il passe au vert quand son nombre augmente.
 // Le client texte et l'overlay mettent aussi en avant ces objets quand ils sont envoyés (voir wishHit).
 import { html, useState, useEffect } from "../vendor/preact-htm.js";
 import { api } from "./rooms-api.js";
-import { receivedItems, usePackages } from "./room-live.js";
-import { plural, useAction } from "./ui.js";
+import { receivedItems, usePackages, wishEntry } from "./room-live.js";
+import { plural, useAction, useSetting } from "./ui.js";
 
 const RESULTS = 40; // objets proposés à la fois dans la recherche
 const MAX_ITEMS = 100; // comme le service
 const same = (a, b) => a.toLowerCase() === b.toLowerCase();
-export const wishesOf = (wishlists, name) => Object.entries(wishlists || {}).find(([slot]) => same(slot, name))?.[1] || [];
+export const wishesOf = (wishlists, name) => (Object.entries(wishlists || {}).find(([slot]) => same(slot, name))?.[1] || []).map(wishEntry);
+const saved = (w) => (w.after ? { name: w.name, after: w.after } : w.name);
 
-// Noms des objets reçus par un joueur de la partie (null tant que le tracker ou les noms ne sont pas chargés).
-function receivedNames(live, slot, pkg) {
+// Nombre d'exemplaires reçus de chaque objet par un joueur (null tant que le tracker ou les noms ne sont pas chargés).
+function receivedCounts(live, slot, pkg) {
   if (!live || !pkg) return null;
-  return new Set(receivedItems(live, slot.slot).map((i) => pkg.items.get(i.item)).filter(Boolean));
+  const counts = new Map();
+  for (const i of receivedItems(live, slot.slot)) {
+    const name = pkg.items.get(i.item);
+    if (name) counts.set(name, (counts.get(name) || 0) + 1);
+  }
+  return counts;
 }
+
+// Objets d'une wishlist avec leur état : reçu dès que le nombre d'exemplaires dépasse celui de l'ajout.
+const withState = (entries, counts) => entries.map((w) => {
+  const count = counts?.get(w.name) || 0;
+  return { ...w, count, received: count > w.after };
+});
 
 // Wishlists de la partie : pour chaque joueur qui en a une, ses objets, reçus ou non.
 export function useWishState(status, tracker, wishlists) {
   const slots = status ? status.slots.filter((s) => wishesOf(wishlists, s.name).length) : [];
   const { loaded } = usePackages(status?.origin, tracker.data?.fixed, [...new Set(slots.map((s) => s.game))].sort());
   return slots.map((s) => {
-    const got = receivedNames(tracker.data?.live, s, loaded[s.game]);
-    return { ...s, known: !!got, items: wishesOf(wishlists, s.name).map((name) => ({ name, received: !!got?.has(name) })) };
+    const counts = receivedCounts(tracker.data?.live, s, loaded[s.game]);
+    return { ...s, known: !!counts, items: withState(wishesOf(wishlists, s.name), counts) };
   });
 }
 
@@ -34,12 +47,13 @@ export function useWishNotices(code, lists, mine) {
   const read = () => { try { return new Set(JSON.parse(localStorage.getItem(key)) || []); } catch { return new Set(); } };
   const [seen, setSeen] = useState(read);
   useEffect(() => setSeen(read()), [code]);
-  const id = (slot, item) => `${slot.toLowerCase()}\n${item}`;
+  // `after` compte : un objet attendu à nouveau (un exemplaire de plus) est signalé une nouvelle fois.
+  const id = (slot, item) => `${slot.toLowerCase()}\n${item.name}\n${item.after}`;
   const own = lists.filter((l) => l.known && mine.some((m) => same(m.name, l.name)));
-  const fresh = own.flatMap((l) => l.items.filter((i) => i.received && !seen.has(id(l.name, i.name))).map((i) => ({ slot: l.name, item: i.name })));
+  const fresh = own.flatMap((l) => l.items.filter((i) => i.received && !seen.has(id(l.name, i))).map((i) => ({ slot: l.name, item: i.name })));
   const dismiss = () => {
     // Seuls les objets encore dans une wishlist sont gardés : la liste ne grossit pas indéfiniment.
-    const next = new Set(own.flatMap((l) => l.items.filter((i) => i.received).map((i) => id(l.name, i.name))));
+    const next = new Set(own.flatMap((l) => l.items.filter((i) => i.received).map((i) => id(l.name, i))));
     setSeen(next);
     try { localStorage.setItem(key, JSON.stringify([...next])); } catch { /* stockage indisponible */ }
   };
@@ -62,8 +76,11 @@ export function WishNotice({ notices, onShow }) {
 
 function WishItem({ item, known, onRemove, busy }) {
   const state = !known ? "unknown" : item.received ? "got" : "missing";
+  const text = state === "unknown" ? "…"
+    : !item.after ? (state === "got" ? `✓ Reçu${item.count > 1 ? ` (×${item.count})` : ""}` : "✗ Pas encore reçu")
+    : state === "got" ? `✓ Un de plus reçu (×${item.count})` : `✗ Un de plus attendu (déjà ×${item.after})`;
   return html`<li class=${`wish ${state}`}>
-    <span class="wish-state">${state === "got" ? "✓ Reçu" : state === "missing" ? "✗ Pas encore reçu" : "…"}</span>
+    <span class="wish-state">${text}</span>
     <strong class="wish-name">${item.name}</strong>
     ${onRemove && html`<button type="button" class="ghost small" disabled=${busy} onClick=${() => onRemove(item.name)}
       aria-label=${`Retirer ${item.name} de la wishlist`}>Retirer</button>`}
@@ -79,27 +96,30 @@ export function WishlistView({ room, status, tracker, lists, mine, admin, wishli
   const choices = [...own, ...editable.filter((s) => !own.includes(s))];
   const [selected, setSelected] = useState(null);
   const [search, setSearch] = useState("");
+  const [showReceived, setShowReceived] = useSetting("wishShowReceived", false);
   const save = useAction();
   const current = choices.find((s) => s.name === selected) || choices[0];
   const { loaded, error } = usePackages(status.origin, tracker.data?.fixed, current ? [current.game] : []);
   const pkg = current && loaded[current.game];
-  const got = current && receivedNames(tracker.data?.live, current, pkg);
+  const counts = current && receivedCounts(tracker.data?.live, current, pkg);
 
   // Ouvrir la wishlist vaut lecture des nouveaux objets reçus.
   useEffect(() => { if (notices.fresh.length) notices.dismiss(); }, [notices.fresh.length]);
 
-  const names = current ? wishesOf(wishlists, current.name) : [];
-  const items = names.map((name) => ({ name, received: !!got?.has(name) }));
+  const entries = current ? wishesOf(wishlists, current.name) : [];
+  const items = withState(entries, counts);
   const done = items.filter((i) => i.received);
   const update = (next) => save.run(async () => {
-    const result = await api.saveWishlist(room.code, current.name, next);
+    const result = await api.saveWishlist(room.code, current.name, next.map(saved));
     onSaved(current.name, result.items);
   });
+  // Un objet déjà reçu est attendu « une fois de plus » : on retient combien il y en avait à l'ajout.
+  const add = (name) => update([...entries, { name, after: counts?.get(name) || 0 }]);
 
   const needle = search.trim().toLowerCase();
-  const wanted = new Set(names);
+  const wanted = new Set(entries.map((w) => w.name));
   const matches = pkg ? [...new Set(pkg.items.values())]
-    .filter((n) => !wanted.has(n) && !got?.has(n) && (!needle || n.toLowerCase().includes(needle)))
+    .filter((n) => !wanted.has(n) && (showReceived || !counts?.get(n)) && (!needle || n.toLowerCase().includes(needle)))
     .sort((a, b) => a.localeCompare(b)) : [];
   // Beaucoup d'objets (certains jeux en ont des milliers) : la liste attend une recherche.
   const browse = !needle && matches.length > RESULTS;
@@ -127,27 +147,34 @@ export function WishlistView({ room, status, tracker, lists, mine, admin, wishli
             <h3 class="grow">${current.name} <span class="hint">${current.game}</span></h3>
             ${items.length > 0 && html`<span class="hint">${done.length} / ${items.length} reçu${done.length > 1 ? "s" : ""}</span>`}
             ${done.length > 0 && html`<button type="button" class="ghost small" disabled=${save.busy}
-              onClick=${() => update(names.filter((n) => !got.has(n)))}>Retirer les objets reçus (${done.length})</button>`}
+              onClick=${() => update(items.filter((i) => !i.received))}>Retirer les objets reçus (${done.length})</button>`}
           </div>
           ${items.length
-            ? html`<ul class="wish-list full">${ordered(items).map((item) => html`<${WishItem} key=${item.name} item=${item} known=${!!got}
-                busy=${save.busy} onRemove=${(name) => update(names.filter((n) => n !== name))} />`)}</ul>`
+            ? html`<ul class="wish-list full">${ordered(items).map((item) => html`<${WishItem} key=${item.name} item=${item} known=${!!counts}
+                busy=${save.busy} onRemove=${(name) => update(entries.filter((w) => w.name !== name))} />`)}</ul>`
             : html`<p class="hint">Votre wishlist est vide : ajoutez-y les objets que vous attendez.</p>`}
         </div>
         <div class="stack full">
           <h3>Ajouter un objet</h3>
           ${!pkg ? html`<p class="hint">Chargement des objets du jeu…</p>`
-            : names.length >= MAX_ITEMS ? html`<p class="hint">${MAX_ITEMS} objets au plus : retirez-en avant d'en ajouter.</p>`
+            : entries.length >= MAX_ITEMS ? html`<p class="hint">${MAX_ITEMS} objets au plus : retirez-en avant d'en ajouter.</p>`
             : html`
               <input type="search" class="full" placeholder=${`Rechercher parmi les objets de ${current.game}…`} value=${search}
                 onInput=${(e) => setSearch(e.target.value)} />
-              <p class="hint">${browse ? `${plural(matches.length, "objet")} pas encore reçus : tapez une partie du nom pour les trouver.`
+              <label class="wish-show full"><input type="checkbox" checked=${showReceived} onChange=${(e) => setShowReceived(e.target.checked)} />
+                Afficher aussi les objets déjà reçus (progressifs, cumulables…) : vous attendrez alors un exemplaire de plus.</label>
+              <p class="hint">${browse ? `${plural(matches.length, "objet")}${showReceived ? "" : " pas encore reçus"} : tapez une partie du nom pour les trouver.`
                 : matches.length
                   ? `${plural(matches.length, "objet")}${matches.length > RESULTS ? ` : les ${RESULTS} premiers, précisez la recherche pour les autres` : ""}.`
-                  : "Aucun objet ne correspond (les objets déjà reçus ne sont pas proposés)."}</p>
-              <ul class="wish-choices full">${(browse ? [] : matches.slice(0, RESULTS)).map((name) => html`<li>
-                <button type="button" class="ghost" disabled=${save.busy} onClick=${() => update([...names, name])}>+ ${name}</button>
-              </li>`)}</ul>`}
+                  : `Aucun objet ne correspond${showReceived ? "" : " (les objets déjà reçus sont masqués)"}.`}</p>
+              <ul class="wish-choices full">${(browse ? [] : matches.slice(0, RESULTS)).map((name) => {
+                const had = counts?.get(name) || 0;
+                return html`<li>
+                  <button type="button" class="ghost" disabled=${save.busy} onClick=${() => add(name)}
+                    title=${had ? `Déjà reçu ${had} fois : vous attendrez un exemplaire de plus` : ""}>
+                    + ${name}${had > 0 && html` <span class="hint wish-had">déjà ×${had}</span>`}</button>
+                </li>`;
+              })}</ul>`}
         </div>`}
   </section>
   ${others.length > 0 && html`<section class="card stack">

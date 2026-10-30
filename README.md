@@ -161,12 +161,14 @@ leur nom dans la partie, qui sert à retrouver leurs fichiers.
    et sur la page de la room (lue par le service : les liens de l'API ne marchent pas pour les jeux non officiels).
 6. Pendant la partie, la page de la room montre la progression de chaque joueur (checks, état, dernière
    activité, signalée en async au-delà de 2 jours ; API publique du tracker d'archipelago.gg) et les **objets
-   reçus** par chacun (regroupés par importance, puis les derniers arrivés avec qui les a envoyés et d'où ; noms
+   reçus** par les joueurs cochés, avec une recherche commune (regroupés par importance, puis les derniers
+   arrivés avec qui les a envoyés et d'où ; noms
    lus dans le « datapackage » de chaque jeu, `/api/datapackage/<checksum>`), et propose un
    **client texte** : chat et commandes (`!hint`, `!remaining`…) depuis le navigateur, avec
    [archipelago.js](https://github.com/ThePhar/archipelago.js) (`site/vendor/archipelago.js`).
-   Chaque joueur remplit aussi sa **wishlist** (onglet « Wishlist ») parmi les objets de son jeu pas encore
-   reçus : en rouge tant qu'ils manquent, en vert une fois reçus (un bouton retire les objets reçus). Quand l'un
+   Chaque joueur remplit aussi sa **wishlist** (onglet « Wishlist ») parmi les objets de son jeu : en rouge tant
+   qu'ils manquent, en vert une fois reçus (un bouton retire les objets reçus). Un objet déjà reçu (progressif,
+   cumulable…) peut être attendu une fois de plus : il passe au vert quand son nombre augmente. Quand l'un
    d'eux arrive, la room le prévient par un bandeau, et le client texte comme l'overlay mettent la ligne en avant
    (♥ Wishlist). Les wishlists sont gardées par le service (table `wishlists`), par nom de joueur dans la partie.
 7. Pour un stream, les joueurs peuvent partager la fenêtre de leur jeu, et l'hôte l'afficher dans OBS

@@ -513,13 +513,31 @@ a.button.small, label.button.small { padding: .25rem .7rem; font-size: .875rem; 
 .progress-table tr.mine td { background: var(--accent-soft); }
 /* Objets reçus : groupes aérés, un objet par étiquette, puis la liste des derniers arrivés */
 .items-card { scroll-margin-top: 4rem; }
+/* Objets reçus : joueurs cochés (case + nom, pas la couleur seule) et recherche commune */
+.items-search { flex: 1 1 16rem; max-width: 24rem; }
+.items-players { border: 1px solid var(--border); border-radius: 10px; margin: 0; padding: .7rem 1rem .8rem; display: grid; gap: .6rem; }
+.items-players legend { padding: 0 .4rem; font-weight: 600; }
+.items-players-list { display: flex; flex-wrap: wrap; gap: .5rem; }
+.player-check {
+  display: inline-flex; align-items: center; gap: .5rem; padding: .4rem .8rem; cursor: pointer;
+  border: 1px solid var(--border); border-radius: 99px; background: var(--surface);
+}
+.player-check:hover { border-color: var(--accent); }
+.player-check.on { border-color: var(--accent); background: var(--accent-soft); }
+.player-check input { accent-color: var(--accent); width: 1.05rem; height: 1.05rem; margin: 0; }
+.items-players-view { display: grid; gap: 1.6rem; }
+.items-player-block { display: grid; gap: .8rem; }
+.items-player-block + .items-player-block { border-top: 2px solid var(--border); padding-top: 1.4rem; }
+.items-player-block > h3 { margin: 0; font-size: 1.15rem; }
+.items-player-block > p, p.items-none { margin: 0; }
+.items-player-block + .items-none, .items-none + .items-player-block { border-top-width: 1px; padding-top: 1rem; }
 .items-player { display: flex; align-items: center; gap: .5rem; font-weight: 600; }
 .items-player select { max-width: 20rem; }
 .items-panel { display: grid; gap: 1.4rem; }
 .items-group { display: grid; gap: .6rem; }
-.items-group h3 { margin: 0; font-size: 1rem; }
+.items-group h3, .items-group h4 { margin: 0; font-size: 1rem; }
 details.items-group > summary { cursor: pointer; list-style-position: outside; margin-left: 1rem; }
-details.items-group > summary h3 { display: inline; }
+details.items-group > summary h3, details.items-group > summary h4 { display: inline; }
 .item-tags { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: .5rem; }
 .item-tags li {
   display: inline-flex; align-items: baseline; gap: .4rem; padding: .35rem .75rem;
@@ -549,7 +567,10 @@ details.items-group > summary h3 { display: inline; }
 .wish-list.compact { display: flex; flex-wrap: wrap; }
 .wish-list.compact .wish { grid-template-columns: auto auto; padding: .4rem .75rem; }
 .wish-choices { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr)); gap: .5rem; }
-.wish-choices button { width: 100%; text-align: left; font-weight: 500; overflow-wrap: anywhere; }
+.wish-choices button { width: 100%; text-align: left; font-weight: 500; overflow-wrap: anywhere; white-space: normal; }
+.wish-had { font-size: .85rem; white-space: nowrap; }
+.wish-show { display: flex; align-items: flex-start; gap: .55rem; cursor: pointer; }
+.wish-show input { margin-top: .3rem; accent-color: var(--accent); width: 1.05rem; height: 1.05rem; flex: none; }
 .notice.wish-notice {
   display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .5rem 1rem;
   background: color-mix(in srgb, var(--ok) 16%, var(--surface)); border-left: 5px solid var(--ok); color: var(--text); font-size: 1rem;
