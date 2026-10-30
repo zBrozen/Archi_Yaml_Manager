@@ -1,6 +1,6 @@
 {
  "ap_version": "0.6.8",
- "generated_at": "2026-10-29T21:44:55+00:00",
+ "generated_at": "2026-10-30T00:01:40+00:00",
  "games": [
   {
    "game": "2048",
@@ -3970,7 +3970,7 @@
    "file": "games/monster-hunter-rise.json",
    "source": "custom",
    "apworld": "mhrise.apworld",
-   "world_version": "0.5.2",
+   "world_version": "0.5.3",
    "sheet": {
     "game": "Monster Hunter Rise",
     "stability": "Stable"
