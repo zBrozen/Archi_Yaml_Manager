@@ -8,6 +8,7 @@ import { CopyButton, GamePicker, SheetBadges, download, loadCredits, plural, use
 import { makeZip } from "./zip.js";
 import { ItemsPanel, ProgressPanel, TextClient, useTracker } from "./room-live.js";
 import { ScreensTab } from "./screens.js";
+import { WishNotice, WishlistView, useWishNotices, useWishState } from "./wishlist.js";
 import {
   api, apRoomStatus, forgetAccess, hostLink, inviteLink, knownRooms, normalizeCode, playerLink,
   roomsEnabled, saveAccess, savedAccess,
@@ -172,6 +173,11 @@ export function RoomPage({ index, code, onCreate, onEdit }) {
   }, []);
 
   const online = useApStatus(data?.room);
+  // Tracker lu ici une fois pour tous les onglets : progression, wishlists et leur bandeau.
+  const tracker = useTracker(online.status);
+  const mine = mineOf(data);
+  const wishes = useWishState(online.status, tracker, data?.wishlists);
+  const notices = useWishNotices(code, wishes, mine);
 
   if (error && !data) {
     return html`<main class="home">
@@ -184,14 +190,13 @@ export function RoomPage({ index, code, onCreate, onEdit }) {
   if (!data) return html`<main class="home"><p class="hint center">Chargement de la room…</p></main>`;
 
   const { room, me, admin, players } = data;
-  // Room d'une partie déjà hébergée : pas de YAML, le pseudo sert de nom dans la partie.
-  const mine = !me ? [] : room.direct ? [{ name: me.pseudo }] : players.find((p) => p.id === me.id)?.slots || [];
   const allSlots = players.flatMap((p) => p.slots);
   const tabs = [
     ["apercu", "Aperçu"],
     ...(!room.direct ? [["yaml", me ? `Mes YAML (${mine.length})` : "Rejoindre"], ["joueurs", `Joueurs (${players.length})`]]
       : me ? [] : [["yaml", "Rejoindre"]]),
-    ...(room.ap_room_url ? [["partie", "Progression"], ["client", "Client texte"]] : []),
+    ...(room.ap_room_url ? [["partie", "Progression"], ["wishlist", notices.fresh.length ? `Wishlist (♥ ${notices.fresh.length})` : "Wishlist"],
+      ["client", "Client texte"]] : []),
     ...(data.screens && (me || admin) ? [["ecrans", "Écrans"]] : []),
     ...(admin ? [["hote", "Hôte"]] : []),
   ];
@@ -203,6 +208,10 @@ export function RoomPage({ index, code, onCreate, onEdit }) {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
   const screens = data.screens && (me || admin);
+  const savedWishlist = (slot, items) => setData((d) => ({
+    ...d,
+    wishlists: { ...Object.fromEntries(Object.entries(d.wishlists || {}).filter(([k]) => k.toLowerCase() !== slot.toLowerCase())), [slot]: items },
+  }));
   const yaml = me
     ? html`<${MySlots} index=${index} room=${room} me=${me} slots=${mine} allSlots=${allSlots} refresh=${refresh} onCreate=${onCreate} onEdit=${onEdit} />`
     : html`<${JoinForm} room=${room} admin=${admin} refresh=${refresh} />`;
@@ -212,17 +221,29 @@ export function RoomPage({ index, code, onCreate, onEdit }) {
     <nav class="room-tabs" role="tablist" aria-label="Vues de la room">${tabs.map(([id, label]) => html`<button type="button"
       role="tab" aria-selected=${active === id} class=${active === id ? "active" : ""} onClick=${() => go(id)}>${label}</button>`)}
     </nav>
+    ${active !== "wishlist" && html`<${WishNotice} notices=${notices} onShow=${() => go("wishlist")} />`}
     ${active === "apercu" && html`<${Overview} room=${room} me=${me} admin=${admin} mine=${mine} players=${players}
-      online=${online} join=${!me && yaml} go=${go} />`}
+      online=${online} tracker=${tracker} join=${!me && yaml} go=${go} />`}
     ${active === "yaml" && yaml}
     ${active === "joueurs" && html`<${PlayersList} room=${room} players=${players} me=${me} admin=${admin} refresh=${refresh} />`}
-    ${active === "partie" && html`<${GameView} room=${room} online=${online} mine=${mine} />`}
+    ${active === "partie" && html`<${GameView} room=${room} online=${online} tracker=${tracker} mine=${mine} />`}
+    ${active === "wishlist" && (online.status
+      ? html`<${WishlistView} room=${room} status=${online.status} tracker=${tracker} lists=${wishes} mine=${mine} admin=${admin}
+          wishlists=${data.wishlists} onSaved=${savedWishlist} notices=${notices} />`
+      : html`<section class="card"><p class="hint">${online.error || "Chargement de la partie…"}</p></section>`)}
     ${room.ap_room_url && (clientSeen || active === "client") && html`<div hidden=${active !== "client"}>
-      <${ClientView} room=${room} online=${online} mine=${mine} /></div>`}
+      <${ClientView} room=${room} online=${online} mine=${mine} wishlists=${data.wishlists} /></div>`}
     ${screens && (screensSeen || active === "ecrans") && html`<div class="room-panel" hidden=${active !== "ecrans"}>
       <${ScreensTab} room=${room} me=${me} admin=${admin} data=${data} setData=${setData} /></div>`}
     ${active === "hote" && html`<${HostPanel} room=${room} setData=${setData} data=${data} />`}
   </main>`;
+}
+
+// Vos joueurs dans la partie : vos YAML, ou votre pseudo dans une room de partie déjà hébergée.
+function mineOf(data) {
+  const me = data?.me;
+  if (!me) return [];
+  return data.room.direct ? [{ name: me.pseudo }] : data.players.find((p) => p.id === me.id)?.slots || [];
 }
 
 // Onglet affiché, mémorisé par room dans ce navigateur.
@@ -782,12 +803,12 @@ function hostStep(room) {
   return "Dépôts fermés : vérifiez la room, puis générez la partie.";
 }
 
-function Overview({ room, me, admin, mine, players, online, join, go }) {
+function Overview({ room, me, admin, mine, players, online, tracker, join, go }) {
   const slots = players.reduce((n, p) => n + p.slots.length, 0);
   const empty = players.filter((p) => !p.slots.length).length;
   const games = [...new Set(players.flatMap((p) => p.slots.map((s) => s.game)))].sort();
   return html`
-    ${room.ap_room_url && html`<${OnlineSummary} room=${room} online=${online} mine=${mine} go=${go} />`}
+    ${room.ap_room_url && html`<${OnlineSummary} room=${room} online=${online} tracker=${tracker} mine=${mine} go=${go} />`}
     ${join}
     ${me && !room.direct && html`<section class="card stack">
       <div class="row full"><h2 class="grow">Vos YAML</h2>
@@ -820,9 +841,8 @@ function useGameHelp(origin) {
   };
 }
 
-function OnlineSummary({ room, online, mine, go }) {
+function OnlineSummary({ room, online, tracker, mine, go }) {
   const { status, error } = online;
-  const tracker = useTracker(status);
   const help = useGameHelp(status?.origin || "https://archipelago.gg");
   const names = new Set(mine.map((s) => s.name.toLowerCase()));
   const own = status ? status.slots.filter((s) => names.has(s.name.toLowerCase())) : [];
@@ -867,9 +887,8 @@ function OnlineSummary({ room, online, mine, go }) {
   </section>`;
 }
 
-function GameView({ room, online, mine }) {
+function GameView({ room, online, tracker, mine }) {
   const { status, error } = online;
-  const tracker = useTracker(status);
   const [itemsSlot, setItemsSlot] = useState(null);
   const itemsCard = useRef(null);
   if (!status) return html`<section class="card"><p class="hint">${error || "Chargement de la partie…"}</p></section>`;
@@ -896,10 +915,10 @@ function GameView({ room, online, mine }) {
   </section>`;
 }
 
-function ClientView({ room, online, mine }) {
+function ClientView({ room, online, mine, wishlists }) {
   const { status, error } = online;
   return html`<section class="card stack">
     <h2>Client texte</h2>
-    ${status ? html`<${TextClient} room=${room} status=${status} mine=${mine} />` : html`<p class="hint">${error || "Chargement de la partie…"}</p>`}
+    ${status ? html`<${TextClient} room=${room} status=${status} mine=${mine} wishlists=${wishlists} />` : html`<p class="hint">${error || "Chargement de la partie…"}</p>`}
   </section>`;
 }

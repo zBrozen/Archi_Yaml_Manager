@@ -94,6 +94,7 @@ export const api = {
   file: (code, kind) => call("GET", at(code, `/files/${kind}`), { code, file: true }),
   overlayKey: (code) => call("POST", at(code, "/screens/key"), { code }),
   saveLayouts: (code, layouts) => call("PUT", at(code, "/screens/layouts"), { code, body: { layouts } }),
+  saveWishlist: (code, slot, items) => call("PUT", at(code, `/wishlists/${encodeURIComponent(slot)}`), { code, body: { items } }),
 };
 
 // --- Partie hébergée sur archipelago.gg (ou un autre site Archipelago) ---------------

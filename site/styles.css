@@ -521,6 +521,34 @@ details.items-group > summary h3 { display: inline; }
 .item-feed li:first-child { border-top: none; }
 .item-index { text-align: right; font-variant-numeric: tabular-nums; }
 .item-origin { overflow-wrap: anywhere; }
+/* Wishlist : rouge tant que l'objet n'est pas reçu, vert une fois reçu (avec ✗ / ✓ : pas la couleur seule) */
+.wish-list { list-style: none; margin: 0; padding: 0; display: grid; gap: .5rem; }
+.wish {
+  display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: .3rem 1rem;
+  padding: .6rem .9rem; border: 1px solid var(--border); border-left-width: 5px; border-radius: 8px; background: var(--surface-2);
+}
+.wish.missing { background: var(--error-soft); border-color: var(--error); }
+.wish.got { background: color-mix(in srgb, var(--ok) 16%, var(--surface)); border-color: var(--ok); }
+.wish-state { font-size: .85rem; font-weight: 700; white-space: nowrap; color: var(--muted); }
+.wish.missing .wish-state { color: var(--error); }
+.wish.got .wish-state { color: var(--ok); }
+.wish-name { overflow-wrap: anywhere; }
+.wish-list.compact { display: flex; flex-wrap: wrap; }
+.wish-list.compact .wish { grid-template-columns: auto auto; padding: .4rem .75rem; }
+.wish-choices { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr)); gap: .5rem; }
+.wish-choices button { width: 100%; text-align: left; font-weight: 500; overflow-wrap: anywhere; }
+.notice.wish-notice {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .5rem 1rem;
+  background: color-mix(in srgb, var(--ok) 16%, var(--surface)); border-left: 5px solid var(--ok); color: var(--text); font-size: 1rem;
+}
+.wish-notice p { margin: 0; }
+.wish-notice .row button { margin-left: 0; }
+/* Objet d'une wishlist dans le client texte et l'overlay (♥), et ligne où il vient d'être envoyé */
+.wish-item { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 3px; }
+.client-log .wish-hit {
+  background: color-mix(in srgb, var(--ok) 20%, transparent); border-left: 4px solid var(--ok); border-radius: 4px; padding: .25rem .6rem;
+}
+.wish-label { font-weight: 700; color: var(--ok); margin-right: .5em; white-space: nowrap; }
 .client-log {
   height: 26rem; overflow-y: auto; background: var(--surface-2); border: 1px solid var(--border); border-radius: 10px;
   padding: .8rem 1rem; font-family: ui-monospace, "Cascadia Code", Consolas, monospace; font-size: .9rem; line-height: 1.6;
@@ -591,6 +619,9 @@ details.items-group > summary h3 { display: inline; }
   .item-feed li { grid-template-columns: 2rem minmax(0, 1fr); }
   .item-feed .item-origin { grid-column: 2; }
   .items-player select { max-width: 100%; }
+  .wish { grid-template-columns: minmax(0, 1fr) auto; }
+  .wish .wish-state { grid-column: 1 / -1; }
+  .wish-list.compact .wish .wish-state { grid-column: auto; }
   .slot-list li.slot-row { grid-template-columns: minmax(0, 1fr); }
   .slot-actions { justify-content: flex-start; }
 }
@@ -653,6 +684,8 @@ html.overlay-page body { background: transparent; overflow: hidden; }
 .overlay-plein .game-feed { flex: 1; }
 .game-feed > div { overflow-wrap: anywhere; }
 .game-feed .feed-status { color: #c9ced6; font-size: .85em; }
+.game-feed .wish-hit { background: rgb(99 229 155 / 22%); border-left: .25em solid #63e59b; border-radius: 4px; padding: .15em .45em; }
+.game-feed .wish-label { color: #63e59b; }
 
 /* Overlay OBS : disposition libre (positions en % de la page) */
 .overlay-canvas { position: fixed; inset: 0; }

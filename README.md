@@ -156,6 +156,10 @@ leur nom dans la partie, qui sert à retrouver leurs fichiers.
    lus dans le « datapackage » de chaque jeu, `/api/datapackage/<checksum>`), et propose un
    **client texte** : chat et commandes (`!hint`, `!remaining`…) depuis le navigateur, avec
    [archipelago.js](https://github.com/ThePhar/archipelago.js) (`site/vendor/archipelago.js`).
+   Chaque joueur remplit aussi sa **wishlist** (onglet « Wishlist ») parmi les objets de son jeu pas encore
+   reçus : en rouge tant qu'ils manquent, en vert une fois reçus (un bouton retire les objets reçus). Quand l'un
+   d'eux arrive, la room le prévient par un bandeau, et le client texte comme l'overlay mettent la ligne en avant
+   (♥ Wishlist). Les wishlists sont gardées par le service (table `wishlists`), par nom de joueur dans la partie.
 7. Pour un stream, les joueurs peuvent partager la fenêtre de leur jeu, et l'hôte l'afficher dans OBS
    (voir « Écrans des joueurs » ci-dessous).
 
@@ -343,6 +347,7 @@ npx wrangler dev
 | `site/js/editors.js` | Champs d'édition de chaque type d'option |
 | `site/js/rooms.js`, `site/js/rooms-api.js` | Pages des rooms et appels au service des rooms |
 | `site/js/room-live.js` | Partie en cours : progression des joueurs et client texte |
+| `site/js/wishlist.js` | Wishlists des joueurs et bandeau des objets attendus reçus |
 | `site/js/check.js` | Vérification d'un YAML hors de l'éditeur (dépôt dans une room, contrôle par l'hôte) |
 | `site/js/config.js` | Adresse du service des rooms |
 | `worker/` | Service des rooms (Cloudflare Worker, base D1 : `migrations/`) |

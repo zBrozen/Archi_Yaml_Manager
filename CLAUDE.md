@@ -29,6 +29,8 @@
   Durable Object `ScreenRoom` du Worker (une instance par room). `screens.js` : partage du joueur et lien de l'hôte ;
   `overlay.js` : la page de l'overlay ; `overlay-layout.js` : modèle des dispositions (mêmes limites que le Worker) ;
   `overlay-editor.js` : éditeur ; `screens-net.js` : WebSocket commun.
+  Wishlists (`wishlist.js`, table `wishlists`, par nom de joueur dans la partie) : objets reçus d'après le tracker
+  d'archipelago.gg, noms lus dans les datapackages ; le tracker est lu une fois par `RoomPage` pour tous les onglets.
 - Lisibilité, y compris en stream : le site (pages des rooms surtout) doit rester lisible quand il est filmé
   ou intégré comme overlay dans un stream (source navigateur OBS) : textes assez grands et aérés, contrastes
   élevés en clair comme en sombre (pas de noir pur sous du blanc pur), information jamais portée par la

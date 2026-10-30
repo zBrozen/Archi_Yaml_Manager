@@ -143,7 +143,7 @@ function loadPackage(origin, checksum) {
   return packages.get(key);
 }
 
-function usePackages(origin, fixed, games) {
+export function usePackages(origin, fixed, games) {
   const [loaded, setLoaded] = useState({});
   const [error, setError] = useState(null);
   const key = games.join("\n");
@@ -163,6 +163,9 @@ function usePackages(origin, fixed, games) {
 }
 
 const asItem = (i) => (Array.isArray(i) ? { item: i[0], location: i[1], player: i[2], flags: i[3] } : i);
+// Objets reçus par un joueur (numéro de slot), d'après le tracker.
+export const receivedItems = (live, slot) => (live?.player_items_received || [])
+  .find((e) => e.team === 0 && e.player === slot)?.items.map(asItem) || [];
 const kindOf = (flags) => (flags & 1 ? "progression" : flags & 4 ? "trap" : flags & 2 ? "useful" : "filler");
 const GROUPS = [
   ["progression", "Progression", "de progression"],
@@ -180,8 +183,7 @@ export function ItemsPanel({ status, tracker, mine, slot, onSlot }) {
   const slots = [...own, ...status.slots.filter((s) => !names.has(s.name.toLowerCase()))];
   const current = slots.find((s) => s.slot === slot) || slots[0];
   const live = tracker.data?.live;
-  const received = (live?.player_items_received || [])
-    .find((e) => e.team === 0 && e.player === current?.slot)?.items.map(asItem) || [];
+  const received = receivedItems(live, current?.slot);
   const gameOf = (player) => (player === 0 ? "Archipelago" : status.slots.find((s) => s.slot === player)?.game);
   const nameOf = (player) => status.slots.find((s) => s.slot === player)?.name || `Joueur ${player}`;
   const games = [...new Set([current?.game, ...received.map((i) => gameOf(i.player))].filter(Boolean))].sort();
@@ -273,13 +275,22 @@ const ITEM_KINDS = {
 };
 export const itemKind = (item) => ITEM_KINDS[item.progression ? "progression" : item.trap ? "trap" : item.useful ? "useful" : "filler"];
 
-export function MessagePart({ node, self, marks = false }) {
+// Wishlists de la room ({ joueur: [objets] }) : un objet de la wishlist de celui qui le reçoit est mis en avant
+// (♥, et la ligne entière quand il vient d'être envoyé : pas pour un indice, l'objet n'est alors pas encore reçu).
+export const wishIndex = (wishlists = {}) => new Map(Object.entries(wishlists).map(([slot, items]) => [slot.toLowerCase(), new Set(items)]));
+const isWished = (wishes, node) => node.type === "item" && !!wishes?.get(String(node.item.receiver?.name).toLowerCase())?.has(node.item.name);
+export const wishHit = (wishes, nodes) => !!wishes?.size && !String(nodes[0]?.text || "").startsWith("[Hint]")
+  && nodes.some((node) => isWished(wishes, node));
+
+export function MessagePart({ node, self, marks = false, wishes }) {
   switch (node.type) {
     case "player":
       return html`<span class=${node.player?.name === self || node.text === self ? "ap-self" : "ap-player"}>${node.text}</span>`;
     case "item": {
       const kind = itemKind(node.item);
-      return html`<span class=${kind.cls} title=${kind.title}>${marks && kind.mark}${node.text}</span>`;
+      const wished = isWished(wishes, node);
+      return html`<span class=${`${kind.cls} ${wished ? "wish-item" : ""}`} title=${wished ? `${kind.title}, dans la wishlist de ${node.item.receiver?.name}` : kind.title}>${
+        wished && "♥ "}${marks && kind.mark}${node.text}</span>`;
     }
     case "location":
       return html`<span class="ap-location">${node.text}</span>`;
@@ -292,7 +303,7 @@ export function MessagePart({ node, self, marks = false }) {
   }
 }
 
-export function TextClient({ room, status, mine }) {
+export function TextClient({ room, status, mine, wishlists }) {
   const own = status.slots.filter((s) => mine.some((m) => m.name.toLowerCase() === s.name.toLowerCase()));
   const [slot, setSlot] = useState((own[0] || status.slots[0])?.name || "");
   const [password, setPassword] = useState("");
@@ -304,6 +315,7 @@ export function TextClient({ room, status, mine }) {
   const log = useRef(null);
   const nextId = useRef(0);
 
+  const wishes = wishIndex(wishlists);
   const push = (line) => setLines((all) => [...all.slice(-499), { id: nextId.current++, ...line }]);
   useEffect(() => () => client.current?.socket.disconnect(), []);
   useEffect(() => { if (log.current) log.current.scrollTop = log.current.scrollHeight; }, [lines]);
@@ -361,8 +373,12 @@ export function TextClient({ room, status, mine }) {
     </div>`}
     ${error && html`<div class="notice error full">${error}</div>`}
     ${lines.length > 0 && html`<div class="client-log full" ref=${log} role="log" aria-live="polite">
-      ${lines.map((line) => html`<div key=${line.id} class=${line.info ? "hint" : ""}>
-        ${line.info || line.nodes.map((node) => html`<${MessagePart} node=${node} self=${slot} />`)}</div>`)}
+      ${lines.map((line) => {
+        const hit = !line.info && wishHit(wishes, line.nodes);
+        return html`<div key=${line.id} class=${line.info ? "hint" : hit ? "wish-hit" : ""}>
+          ${hit && html`<span class="wish-label">♥ Wishlist</span>`}
+          ${line.info || line.nodes.map((node) => html`<${MessagePart} node=${node} self=${slot} wishes=${wishes} />`)}</div>`;
+      })}
     </div>`}
     ${connected && html`<form class="row full" onSubmit=${(e) => { e.preventDefault(); send(input); }}>
       <input type="text" class="grow" placeholder="Message ou commande (!hint objet…)" value=${input}

@@ -26,6 +26,8 @@ const LIMITS = {
   issues: 50,
   playersPerRoom: 100,
   maxSlots: 20,
+  wishes: 100, // objets par wishlist
+  wishName: 120,
 };
 const ROOM_LIFETIME_DAYS = 90; // rooms sans activité supprimées par la tâche planifiée
 
@@ -255,12 +257,13 @@ function publicRoom(room) {
 }
 
 async function getRoom(request, env, room) {
-  const [admin, me, players, slots] = await Promise.all([
+  const [admin, me, players, slots, wishes] = await Promise.all([
     isAdmin(request, room),
     currentPlayer(request, env, room),
     env.DB.prepare("SELECT id, pseudo, created_at FROM players WHERE room_code = ? ORDER BY created_at").bind(room.code).all(),
     env.DB.prepare("SELECT id, player_id, name, game, filename, issues, updated_at FROM slots WHERE room_code = ? ORDER BY created_at")
       .bind(room.code).all(),
+    env.DB.prepare("SELECT slot, items FROM wishlists WHERE room_code = ?").bind(room.code).all(),
   ]);
   return json({
     room: publicRoom(room),
@@ -269,6 +272,7 @@ async function getRoom(request, env, room) {
     screens: !!env.SCREENS,
     ...(admin ? { overlay_layouts: JSON.parse(room.overlay_layouts || "[]") } : {}),
     me: me ? { id: me.id, pseudo: me.pseudo } : null,
+    wishlists: Object.fromEntries(wishes.results.map((w) => [w.slot, JSON.parse(w.items)])),
     players: players.results.map((p) => ({
       ...p,
       slots: slots.results.filter((s) => s.player_id === p.id).map(({ player_id, issues: list, ...s }) => ({ ...s, issues: JSON.parse(list) })),
@@ -306,6 +310,7 @@ async function deleteRoom(request, env, room) {
   await env.DB.batch([
     env.DB.prepare("DELETE FROM slots WHERE room_code = ?").bind(room.code),
     env.DB.prepare("DELETE FROM players WHERE room_code = ?").bind(room.code),
+    env.DB.prepare("DELETE FROM wishlists WHERE room_code = ?").bind(room.code),
     env.DB.prepare("DELETE FROM rooms WHERE code = ?").bind(room.code),
   ]);
   return json({ ok: true });
@@ -800,6 +805,37 @@ export class ScreenRoom extends DurableObject {
   }
 }
 
+// --- Wishlists -------------------------------------------------------------------
+// Objets qu'un joueur attend, par nom de joueur dans la partie (slot). Seul ce joueur (ou l'hôte) la modifie :
+// le slot doit être l'un de ses YAML, ou, dans une room de partie déjà hébergée, son pseudo.
+async function saveWishlist(request, env, room, slot) {
+  const name = decodeURIComponent(slot).trim();
+  if (!name || name.length > LIMITS.slotName * 4) throw new HttpError(400, "Nom de joueur invalide.");
+  if (!(await isAdmin(request, room))) {
+    const player = await requirePlayer(request, env, room);
+    const owns = room.direct
+      ? player.pseudo.toLowerCase() === name.toLowerCase()
+      : !!(await env.DB.prepare("SELECT 1 FROM slots WHERE player_id = ? AND name = ? COLLATE NOCASE").bind(player.id, name).first());
+    if (!owns) throw new HttpError(403, `La wishlist de « ${name} » ne peut être modifiée que par ce joueur.`);
+  }
+  const body = await readJson(request);
+  if (!Array.isArray(body.items)) throw new HttpError(400, "Liste d'objets attendue.");
+  const items = [...new Set(body.items.map((i) => String(i).trim()).filter(Boolean))];
+  if (items.length > LIMITS.wishes) throw new HttpError(400, `Au plus ${LIMITS.wishes} objets par wishlist.`);
+  if (items.some((i) => i.length > LIMITS.wishName)) throw new HttpError(400, "Nom d'objet trop long.");
+  const now = Date.now();
+  await env.DB.batch([
+    items.length
+      ? env.DB.prepare(
+        `INSERT INTO wishlists (room_code, slot, items, updated_at) VALUES (?, ?, ?, ?)
+         ON CONFLICT (room_code, slot) DO UPDATE SET items = excluded.items, updated_at = excluded.updated_at`,
+      ).bind(room.code, name, JSON.stringify(items), now)
+      : env.DB.prepare("DELETE FROM wishlists WHERE room_code = ? AND slot = ?").bind(room.code, name),
+    touch(env, room),
+  ]);
+  return json({ slot: name, items });
+}
+
 async function route(request, env) {
   const url = new URL(request.url);
   const parts = url.pathname.split("/").filter(Boolean);
@@ -822,6 +858,8 @@ async function route(request, env) {
     if (id && method === "GET") return getSlot(request, env, room, id);
     if (id && method === "PUT") return replaceSlot(request, env, room, id);
     if (id && method === "DELETE") return deleteSlot(request, env, room, id);
+  } else if (sub === "wishlists" && id && method === "PUT") {
+    return saveWishlist(request, env, room, id);
   } else if (sub === "export" && method === "GET") {
     return exportSlots(request, env, room);
   } else if (sub === "ap-links" && !id && method === "GET") {
@@ -865,6 +903,7 @@ export default {
       await env.DB.batch([
         env.DB.prepare("DELETE FROM slots WHERE room_code = ?").bind(code),
         env.DB.prepare("DELETE FROM players WHERE room_code = ?").bind(code),
+        env.DB.prepare("DELETE FROM wishlists WHERE room_code = ?").bind(code),
         env.DB.prepare("DELETE FROM rooms WHERE code = ?").bind(code),
       ]);
     }

@@ -8,7 +8,7 @@
 // viennent du serveur de la partie sur archipelago.gg (client texte du premier joueur, API du tracker).
 import { html, useState, useEffect, useRef } from "../vendor/preact-htm.js";
 import { Client } from "../vendor/archipelago.js";
-import { MessagePart, progressRows } from "./room-live.js";
+import { MessagePart, progressRows, wishHit, wishIndex } from "./room-live.js";
 import { api, apRoomStatus } from "./rooms-api.js";
 import { ICE_SERVERS, serial, signaling } from "./screens-net.js";
 import { TEXT_SIZES, assignScreens, overlayOptions } from "./overlay-layout.js";
@@ -269,6 +269,23 @@ function useGameFeed(code, enabled) {
   return feed;
 }
 
+// Wishlists des joueurs, relues de temps en temps : leurs objets sont mis en avant quand ils sont envoyés.
+function useWishlists(code, enabled) {
+  const [wishes, setWishes] = useState(null);
+  useEffect(() => {
+    if (!enabled) return undefined;
+    let alive = true;
+    let timer = null;
+    const load = () => api.get(code)
+      .then((data) => alive && setWishes(wishIndex(data.wishlists)))
+      .catch(() => {})
+      .finally(() => { if (alive) timer = setTimeout(load, GAME_WAIT); });
+    load();
+    return () => { alive = false; clearTimeout(timer); };
+  }, [code, enabled]);
+  return wishes;
+}
+
 const FEED_STATES = {
   loading: "Connexion à la partie…",
   waiting: "La partie n'est pas encore en ligne : les objets envoyés s'afficheront ici.",
@@ -276,14 +293,17 @@ const FEED_STATES = {
   live: "Connecté à la partie : les objets envoyés s'afficheront ici.",
 };
 
-// `important` : seulement les objets de progression, utiles et les pièges (et les événements des joueurs).
-function GameFeed({ feed, important = false, style, plain = false }) {
-  const lines = important ? feed.lines.filter((l) => l.important) : feed.lines;
+// `important` : seulement les objets de progression, utiles et les pièges (et les événements des joueurs),
+// plus ceux des wishlists.
+function GameFeed({ feed, wishes, important = false, style, plain = false }) {
+  const lines = feed.lines.map((l) => ({ ...l, wish: wishHit(wishes, l.nodes) })).filter((l) => !important || l.important || l.wish);
   const status = feed.state === "error" ? `${feed.message} Nouvelle tentative dans ${FEED_RETRY / 1000} s.`
     : feed.state === "live" && lines.length ? null
     : FEED_STATES[feed.state];
   return html`<div class=${`game-feed ${plain ? "plain" : ""}`} style=${style} role="log" aria-live="polite">
-    ${lines.map((line) => html`<div key=${line.id}>${line.nodes.map((node) => html`<${MessagePart} node=${node} marks />`)}</div>`)}
+    ${lines.map((line) => html`<div key=${line.id} class=${line.wish ? "wish-hit" : ""}>
+      ${line.wish && html`<span class="wish-label">♥ Wishlist</span>`}
+      ${line.nodes.map((node) => html`<${MessagePart} node=${node} marks wishes=${wishes} />`)}</div>`)}
     ${status && html`<div class="feed-status">${status}</div>`}
   </div>`;
 }
@@ -342,7 +362,7 @@ function ProgressBox({ progress, style, plain }) {
 
 const boxStyle = (item) => ({ left: `${item.x}%`, top: `${item.y}%`, width: `${item.w}%`, height: `${item.h}%` });
 
-function LayoutView({ layout, view, feed, progress }) {
+function LayoutView({ layout, view, feed, wishes, progress }) {
   const [ref, size] = useElementSize();
   const unit = size.height / 100; // 1 % de la hauteur de la page
   const assigned = assignScreens(layout.items, view.streams);
@@ -354,7 +374,7 @@ function LayoutView({ layout, view, feed, progress }) {
       return stream && html`<${Tile} tile=${tileOf(stream, view)} label=${item.label} font=${Math.round(unit * TEXT_SIZES[item.size].unit)}
         style=${{ width: "100%", height: "100%" }} />`;
     }
-    if (item.type === "feed") return html`<${GameFeed} feed=${feed} important=${item.objets === "importants"} style=${font} plain=${plain} />`;
+    if (item.type === "feed") return html`<${GameFeed} feed=${feed} wishes=${wishes} important=${item.objets === "importants"} style=${font} plain=${plain} />`;
     if (item.type === "progress") return html`<${ProgressBox} progress=${progress} style=${font} plain=${plain} />`;
     return html`<div class=${`overlay-box overlay-text ${plain ? "plain" : ""}`} style=${{ ...font, textAlign: item.align }}>${item.text}</div>`;
   };
@@ -376,6 +396,7 @@ export function ScreensOverlay({ code, overlayKey, params }) {
   const refused = view?.state === "refused";
   const uses = (type) => !refused && (layoutId ? !!layout?.items.some((i) => i.type === type) : type === "feed" && place !== "non");
   const feed = useGameFeed(code, uses("feed"));
+  const wishes = useWishlists(code, uses("feed"));
   const progress = useProgress(code, uses("progress"));
 
   useEffect(() => {
@@ -398,10 +419,10 @@ export function ScreensOverlay({ code, overlayKey, params }) {
   if (layoutId) {
     if (!view?.layouts) return view?.state === "retrying" ? message("Connexion au serveur des rooms perdue, nouvelle tentative…") : null;
     if (!layout) return message("Cette disposition n'existe plus : copiez à nouveau son lien depuis la room (onglet « Écrans »).");
-    return html`<${LayoutView} layout=${layout} view=${view} feed=${feed} progress=${progress} />`;
+    return html`<${LayoutView} layout=${layout} view=${view} feed=${feed} wishes=${wishes} progress=${progress} />`;
   }
   return html`<div class=${`overlay overlay-${place}`}>
     ${options.max > 0 && html`<div class="overlay-screens" ref=${area}><${Screens} view=${view} code=${code} size=${size} max=${options.max} /></div>`}
-    ${place !== "non" && html`<${GameFeed} feed=${feed} important=${options.objets === "importants"} />`}
+    ${place !== "non" && html`<${GameFeed} feed=${feed} wishes=${wishes} important=${options.objets === "importants"} />`}
   </div>`;
 }
