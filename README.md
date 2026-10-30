@@ -208,14 +208,17 @@ Onglet « Écrans » de la room :
   réellement (définition, images par seconde, débit, codec et encodeur), le débit que le navigateur
   s'autorise, la latence et les pertes, et explique ce qui réduit l'image : débit de la qualité choisie,
   estimation encore en train de monter, réseau qui perd des paquets ou encodage trop lourd.
-- **Hôte** : « Créer le lien de l'overlay » donne une adresse secrète (`#/overlay/CODE/CLÉ`) à mettre dans OBS
-  en source **Navigateur** (1920 × 1080, fond transparent). Les écrans partagés s'y placent seuls en grille,
+- **Hôte** : « Créer un lien » donne une adresse secrète (`#/overlay/CODE/CLÉ`) à mettre dans OBS en source
+  **Navigateur** (1920 × 1080, fond transparent). L'hôte peut en créer plusieurs (10 au maximum), nommés, par
+  exemple un par streamer ou par ordinateur : ils restent dans la liste de l'onglet « Écrans », à recopier depuis
+  tout appareil où il est hôte, sans en recréer (table `overlay_links`, migration 0007). Supprimer un lien ne coupe
+  que les overlays ouverts avec lui. Un lien créé avant cette liste (une seule clé par room) la rejoint quand
+  l'hôte rouvre la room dans le navigateur qui l'avait créé. Les écrans partagés s'y placent seuls en grille,
   aussi grands que possible, et les **messages de la partie** (objets envoyés, objectifs atteints, release et
   collect) défilent à côté. Les réglages choisis sur la page sont ajoutés au lien copié : nombre d'écrans
   (`max`, 4 par défaut, de 0 = messages seuls à 6), place des messages (`console=droite|bas|non`) et objets
   montrés (`objets=tous|importants` : progression, utiles et pièges). Les objets de progression et les pièges
-  sont marqués ★ et ⚠, en plus de leur couleur. Remplacer le lien coupe les overlays ouverts avec l'ancien.
-  3 overlays affichant des écrans au maximum par room, car chaque joueur envoie son image à chacun.
+  sont marqués ★ et ⚠, en plus de leur couleur. 3 overlays affichant des écrans au maximum par room, car chaque joueur envoie son image à chacun.
 
 Les messages viennent du serveur de la partie sur archipelago.gg, une fois son lien collé dans la room : l'overlay
 s'y connecte comme client texte du premier joueur (comme le client texte de la room, avec
@@ -233,7 +236,7 @@ ajoute, déplace et redimensionne à la souris ou au clavier :
 - des **textes** (noms d'équipes, titre…).
 
 Taille du texte, fond sombre ou texte ombré directement sur la scène, et ordre de superposition se règlent pour
-chaque élément. Chaque disposition a son propre lien (`?disposition=ID`, avec la même clé que la grille) ;
+chaque élément. Chaque disposition a son propre lien (`?disposition=ID`, avec l'un des liens de la liste) ;
 l'enregistrer met à jour tout de suite les overlays ouverts, sans toucher à OBS. Les dispositions sont gardées
 par le service (colonne `overlay_layouts`, validée par `overlayLayouts` dans [`worker/src/index.js`](worker/src/index.js)).
 

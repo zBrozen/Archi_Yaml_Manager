@@ -10,8 +10,9 @@
 // les fichiers produits sont gardés dans le stockage KV (binding FILES).
 //
 // Écrans des joueurs (overlay OBS) : le Durable Object ScreenRoom (binding SCREENS), un par room, met en
-// relation par WebSocket les joueurs qui partagent la fenêtre de leur jeu et les overlays ouverts avec la clé
-// créée par l'hôte. Il ne fait que relayer les messages WebRTC : les images vont directement d'un navigateur à l'autre.
+// relation par WebSocket les joueurs qui partagent la fenêtre de leur jeu et les overlays ouverts avec l'un des
+// liens créés par l'hôte (table overlay_links). Il ne fait que relayer les messages WebRTC : les images vont
+// directement d'un navigateur à l'autre.
 import { DurableObject } from "cloudflare:workers";
 
 const CODE_ALPHABET = "ABCDEFGHJKMNPQRSTUVWXYZ23456789"; // sans 0/O, 1/I/L
@@ -249,7 +250,7 @@ function publicRoom(room) {
     notes: room.notes,
     ap_room_url: room.ap_room_url,
     direct: !!room.direct,
-    overlay: !!room.overlay_hash,
+    overlay: !!room.overlay_hash, // ancienne clé unique, pas encore reprise dans la liste des liens
     generation: generation(room),
     created_at: room.created_at,
     updated_at: room.updated_at,
@@ -270,7 +271,7 @@ async function getRoom(request, env, room) {
     admin,
     online_generation: generatorConfigured(env),
     screens: !!env.SCREENS,
-    ...(admin ? { overlay_layouts: JSON.parse(room.overlay_layouts || "[]") } : {}),
+    ...(admin ? { overlay_layouts: JSON.parse(room.overlay_layouts || "[]"), overlay_links: await overlayLinks(env, room) } : {}),
     me: me ? { id: me.id, pseudo: me.pseudo } : null,
     wishlists: Object.fromEntries(wishes.results.map((w) => [w.slot, JSON.parse(w.items)])),
     players: players.results.map((p) => ({
@@ -311,6 +312,7 @@ async function deleteRoom(request, env, room) {
     env.DB.prepare("DELETE FROM slots WHERE room_code = ?").bind(room.code),
     env.DB.prepare("DELETE FROM players WHERE room_code = ?").bind(room.code),
     env.DB.prepare("DELETE FROM wishlists WHERE room_code = ?").bind(room.code),
+    env.DB.prepare("DELETE FROM overlay_links WHERE room_code = ?").bind(room.code),
     env.DB.prepare("DELETE FROM rooms WHERE code = ?").bind(room.code),
   ]);
   return json({ ok: true });
@@ -602,14 +604,47 @@ function screensSocket(request, env, room) {
   return screens(env, room).fetch(forward);
 }
 
-// Nouvelle clé de l'overlay : l'ancien lien cesse de marcher, et les overlays ouverts avec lui sont fermés.
-async function overlayKey(request, env, room) {
+// Liens de l'overlay (table overlay_links) : chacun a sa clé, et le supprimer ne coupe que les overlays ouverts
+// avec lui. Ils restent dans la liste pour être recopiés plus tard, depuis n'importe quel appareil de l'hôte.
+const OVERLAY_LINKS = { count: 10, name: 40 };
+
+const overlayLinks = async (env, room) => (await env.DB.prepare(
+  "SELECT id, name, key, created_at FROM overlay_links WHERE room_code = ? ORDER BY created_at",
+).bind(room.code).all()).results;
+
+// `key` : ancienne clé unique, gardée par le navigateur de l'hôte (rooms.overlay_hash) ; elle rejoint la liste
+// telle quelle, pour que les sources OBS qui l'utilisent continuent de marcher.
+async function createOverlayLink(request, env, room) {
   await requireAdmin(request, room);
   if (!env.SCREENS) throw new HttpError(501, "Le partage des écrans n'est pas configuré sur ce serveur.");
-  const key = newToken();
-  await env.DB.prepare("UPDATE rooms SET overlay_hash = ? WHERE code = ?").bind(await sha256(key), room.code).run();
-  await screens(env, room).fetch("https://screens/overlays", { method: "DELETE" });
-  return json({ key }, 201);
+  const body = await readJson(request);
+  const { count } = await env.DB.prepare("SELECT COUNT(*) AS count FROM overlay_links WHERE room_code = ?").bind(room.code).first();
+  if (count >= OVERLAY_LINKS.count) throw new HttpError(409, `${OVERLAY_LINKS.count} liens d'overlay au maximum : supprimez-en un.`);
+  const name = text(body.name, "nom du lien", OVERLAY_LINKS.name, { required: false }) || `Lien ${count + 1}`;
+  const legacy = typeof body.key === "string" && !!room.overlay_hash && (await sha256(body.key)) === room.overlay_hash;
+  if (body.key != null && !legacy) throw new HttpError(409, "Cet ancien lien n'est plus valable.");
+  await env.DB.batch([
+    env.DB.prepare("INSERT INTO overlay_links (id, room_code, name, key, created_at) VALUES (?, ?, ?, ?, ?)")
+      .bind(newId(), room.code, name, legacy ? body.key : newToken(), Date.now()),
+    ...(legacy ? [env.DB.prepare("UPDATE rooms SET overlay_hash = NULL WHERE code = ?").bind(room.code)] : []),
+  ]);
+  return json({ links: await overlayLinks(env, room) }, 201);
+}
+
+async function renameOverlayLink(request, env, room, linkId) {
+  await requireAdmin(request, room);
+  const name = text((await readJson(request)).name, "nom du lien", OVERLAY_LINKS.name);
+  const result = await env.DB.prepare("UPDATE overlay_links SET name = ? WHERE room_code = ? AND id = ?").bind(name, room.code, linkId).run();
+  if (!result.meta.changes) throw new HttpError(404, "Ce lien n'existe plus.");
+  return json({ links: await overlayLinks(env, room) });
+}
+
+// Les overlays ouverts avec ce lien sont fermés tout de suite.
+async function deleteOverlayLink(request, env, room, linkId) {
+  await requireAdmin(request, room);
+  await env.DB.prepare("DELETE FROM overlay_links WHERE room_code = ? AND id = ?").bind(room.code, linkId).run();
+  if (env.SCREENS) await screens(env, room).fetch(`https://screens/overlays?link=${encodeURIComponent(linkId)}`, { method: "DELETE" });
+  return json({ links: await overlayLinks(env, room) });
 }
 
 // Dispositions de l'overlay (éditeur de l'hôte, voir site/js/overlay-layout.js) : positions en pourcentage
@@ -694,7 +729,10 @@ export class ScreenRoom extends DurableObject {
 
   async fetch(request) {
     if (request.method === "DELETE") {
-      for (const ws of this.sockets("overlay")) this.refuse(ws, "Le lien de cet overlay a été remplacé : copiez le nouveau depuis la room.");
+      const link = new URL(request.url).searchParams.get("link");
+      for (const ws of this.sockets("overlay")) {
+        if (ws.deserializeAttachment().link === link) this.refuse(ws, "Ce lien d'overlay a été supprimé par l'hôte : copiez-en un autre depuis la room.");
+      }
       return new Response(null, { status: 204 });
     }
     if (request.method === "POST") {
@@ -760,13 +798,18 @@ export class ScreenRoom extends DurableObject {
       const room = await this.env.DB.prepare("SELECT code, overlay_hash, overlay_layouts FROM rooms WHERE code = ?").bind(me.code).first();
       if (!room) throw new HttpError(404, "Aucune room avec ce code.");
       if (msg.role === "overlay") {
-        if (!room.overlay_hash || typeof msg.key !== "string" || (await sha256(msg.key)) !== room.overlay_hash) {
-          throw new HttpError(403, "Lien d'overlay invalide ou remplacé : copiez le lien actuel depuis la room (onglet « Écrans »).");
+        // Un lien de la liste, ou l'ancienne clé unique tant qu'elle n'y a pas été reprise.
+        const link = typeof msg.key === "string"
+          ? await this.env.DB.prepare("SELECT id FROM overlay_links WHERE room_code = ? AND key = ?").bind(room.code, msg.key).first()
+          : null;
+        const legacy = !link && typeof msg.key === "string" && !!room.overlay_hash && (await sha256(msg.key)) === room.overlay_hash;
+        if (!link && !legacy) {
+          throw new HttpError(403, "Lien d'overlay invalide ou supprimé : copiez un lien depuis la room (onglet « Écrans »).");
         }
         if (this.sockets("overlay").length >= SCREEN_LIMITS.overlays) {
           throw new HttpError(409, `Déjà ${SCREEN_LIMITS.overlays} overlays ouverts pour cette room : fermez-en un.`);
         }
-        Object.assign(me, { role: "overlay" });
+        Object.assign(me, { role: "overlay", link: link?.id || "ancien" });
       } else if (msg.role === "player") {
         const player = typeof msg.token === "string"
           ? await this.env.DB.prepare("SELECT id, pseudo FROM players WHERE room_code = ? AND token_hash = ?").bind(room.code, await sha256(msg.token)).first()
@@ -870,7 +913,10 @@ async function route(request, env) {
     return downloadFile(request, env, room, id);
   } else if (sub === "screens") {
     if (!id && method === "GET") return screensSocket(request, env, room);
-    if (id === "key" && method === "POST") return overlayKey(request, env, room);
+    const linkId = parts[5];
+    if (id === "links" && !linkId && method === "POST") return createOverlayLink(request, env, room);
+    if (id === "links" && linkId && method === "PATCH") return renameOverlayLink(request, env, room, linkId);
+    if (id === "links" && linkId && method === "DELETE") return deleteOverlayLink(request, env, room, linkId);
     if (id === "layouts" && method === "PUT") return saveLayouts(request, env, room);
   } else if (sub === "generator") {
     await requireGenerator(request, env);
@@ -904,6 +950,7 @@ export default {
         env.DB.prepare("DELETE FROM slots WHERE room_code = ?").bind(code),
         env.DB.prepare("DELETE FROM players WHERE room_code = ?").bind(code),
         env.DB.prepare("DELETE FROM wishlists WHERE room_code = ?").bind(code),
+        env.DB.prepare("DELETE FROM overlay_links WHERE room_code = ?").bind(code),
         env.DB.prepare("DELETE FROM rooms WHERE code = ?").bind(code),
       ]);
     }

@@ -3,7 +3,7 @@
 // ou au clavier. Chaque disposition a son propre lien ; l'enregistrer met à jour les overlays déjà ouverts.
 import { html, useState, useEffect, useRef } from "../vendor/preact-htm.js";
 import { CopyButton, useAction } from "./ui.js";
-import { api, overlayLink, savedAccess } from "./rooms-api.js";
+import { api, overlayLink } from "./rooms-api.js";
 import {
   ALIGNS, ITEM_FILTERS, ITEM_TYPES, LAYOUT_LIMITS, PRESETS, TEXT_SIZES, newId, newItem, nextSlot, presetItems,
 } from "./overlay-layout.js";
@@ -160,6 +160,7 @@ export function LayoutEditor({ room, data, setData }) {
   const [currentId, setCurrentId] = useState(saved[0]?.id || null);
   const [selected, setSelected] = useState(null);
   const [preset, setPreset] = useState("complet");
+  const [linkId, setLinkId] = useState(null);
   const action = useAction();
   const players = data.players || [];
 
@@ -221,9 +222,11 @@ export function LayoutEditor({ room, data, setData }) {
     setDirty(false);
   });
 
-  const key = savedAccess(room.code).overlay;
+  // Lien d'accès utilisé pour copier l'adresse de la disposition (le premier de la liste, sauf choix).
+  const links = data.overlay_links || [];
+  const access = links.find((l) => l.id === linkId) || links[0] || null;
   const isSaved = layout && saved.some((l) => l.id === layout.id);
-  const link = room.overlay && key && isSaved ? `${overlayLink(room.code, key)}?disposition=${layout.id}` : null;
+  const link = access && isSaved ? `${overlayLink(room.code, access.key)}?disposition=${layout.id}` : null;
 
   return html`<section class="card stack">
     <div class="row full">
@@ -276,11 +279,15 @@ export function LayoutEditor({ room, data, setData }) {
     </div>
     ${layout && (link
       ? html`<div class="row">
+          ${links.length > 1 && html`<label class="inline-field"><span>Avec le lien</span>
+            <select value=${access.id} onChange=${(e) => setLinkId(e.target.value)}>
+              ${links.map((l) => html`<option value=${l.id}>${l.name}</option>`)}
+            </select></label>`}
           <${CopyButton} text=${link} label="Copier le lien de cette disposition" className="small" />
           <a class="button ghost small" href=${link} target="_blank" rel="noopener">Ouvrir</a>
         </div>`
-      : html`<p class="hint">${!room.overlay || !key
-        ? "Créez d'abord le lien de l'overlay (ci-dessus) pour obtenir le lien de cette disposition."
+      : html`<p class="hint">${!access
+        ? "Créez d'abord un lien d'overlay (ci-dessus) pour obtenir le lien de cette disposition."
         : "Enregistrez la disposition pour obtenir son lien."}</p>`)}
   </section>`;
 }

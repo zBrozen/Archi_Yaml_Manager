@@ -736,3 +736,12 @@ html.overlay-page body { background: transparent; overflow: hidden; }
 .layout-settings { background: var(--surface-2); border-radius: 10px; padding: .9rem 1rem; }
 .layout-settings h4 { margin: 0; font-size: 1rem; }
 .position-fields { grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); }
+
+/* Liens de l'overlay (espace de l'hôte) */
+.link-list { list-style: none; margin: 0; padding: 0; display: grid; gap: .6rem; }
+.link-list li {
+  display: flex; flex-wrap: wrap; align-items: center; gap: .5rem .75rem;
+  background: var(--surface-2); border-radius: 8px; padding: .6rem .8rem;
+}
+.link-list li .grow { min-width: 12rem; }
+.inline-field { display: inline-flex; align-items: center; gap: .5rem; font-size: .9rem; font-weight: 600; }

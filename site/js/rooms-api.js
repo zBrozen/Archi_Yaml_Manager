@@ -92,7 +92,9 @@ export const api = {
   apLinks: (code) => call("GET", at(code, "/ap-links"), { code }),
   generate: (code, options) => call("POST", at(code, "/generate"), { code, body: { options } }),
   file: (code, kind) => call("GET", at(code, `/files/${kind}`), { code, file: true }),
-  overlayKey: (code) => call("POST", at(code, "/screens/key"), { code }),
+  createOverlayLink: (code, body) => call("POST", at(code, "/screens/links"), { code, body }),
+  renameOverlayLink: (code, id, name) => call("PATCH", at(code, `/screens/links/${id}`), { code, body: { name } }),
+  deleteOverlayLink: (code, id) => call("DELETE", at(code, `/screens/links/${id}`), { code }),
   saveLayouts: (code, layouts) => call("PUT", at(code, "/screens/layouts"), { code, body: { layouts } }),
   saveWishlist: (code, slot, items) => call("PUT", at(code, `/wishlists/${encodeURIComponent(slot)}`), { code, body: { items } }),
 };

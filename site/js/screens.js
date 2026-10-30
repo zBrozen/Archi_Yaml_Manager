@@ -587,27 +587,70 @@ function ShareScreen({ room }) {
   </section>`;
 }
 
-// --- Hôte : lien de l'overlay ----------------------------------------------------------
+// --- Hôte : liens de l'overlay ----------------------------------------------------------
+
+const formatDay = (ms) => new Date(ms).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" });
+
+// Un lien de la liste : copier (avec les réglages de la grille), ouvrir, renommer, supprimer.
+function OverlayLinkRow({ room, link, url, action, onLinks }) {
+  const [name, setName] = useState(null); // nom en cours de modification
+  const rename = (e) => {
+    e.preventDefault();
+    action.run(async () => {
+      onLinks((await api.renameOverlayLink(room.code, link.id, name)).links);
+      setName(null);
+    });
+  };
+  const remove = () => confirm(`Supprimer le lien « ${link.name} » ? Les sources OBS qui l'utilisent s'arrêteront.`)
+    && action.run(async () => onLinks((await api.deleteOverlayLink(room.code, link.id)).links));
+
+  return html`<li>
+    ${name === null
+      ? html`<div class="grow"><strong>${link.name}</strong> <span class="hint">créé le ${formatDay(link.created_at)}</span></div>
+        <${CopyButton} text=${url} label="Copier" className="small" />
+        <a class="button ghost small" href=${url} target="_blank" rel="noopener">Ouvrir</a>
+        <button type="button" class="ghost small" disabled=${action.busy} onClick=${() => setName(link.name)}>Renommer</button>
+        <button type="button" class="ghost small" disabled=${action.busy} onClick=${remove}>Supprimer</button>`
+      : html`<form class="row grow" onSubmit=${rename}>
+        <input type="text" class="grow" required maxLength="40" value=${name} aria-label="Nouveau nom du lien"
+          onInput=${(e) => setName(e.target.value)} />
+        <button type="submit" class="small" disabled=${action.busy || !name.trim()}>Enregistrer</button>
+        <button type="button" class="ghost small" onClick=${() => setName(null)}>Annuler</button>
+      </form>`}
+  </li>`;
+}
 
 function OverlayPanel({ room, data, setData }) {
   const action = useAction();
   const access = savedAccess(room.code);
-  const key = access.overlay;
+  const links = data.overlay_links || [];
+  const [name, setName] = useState("");
   const [options, setOptions] = useState(() => overlayOptions(access.overlayOptions));
-  const set = (name, value) => {
-    const next = { ...options, [name]: value };
+  const set = (key, value) => {
+    const next = { ...options, [key]: value };
     setOptions(next);
     saveAccess(room.code, { overlayOptions: next });
   };
-  const link = room.overlay && key ? overlayUrl(room.code, key, options) : null;
-  const create = () => {
-    if (room.overlay && !confirm(link
-      ? "Remplacer le lien ? L'ancien cessera de marcher, y compris dans OBS."
-      : "Un lien d'overlay existe déjà (créé depuis un autre navigateur). En créer un nouveau rend l'ancien inutilisable. Continuer ?")) return;
+  const onLinks = (next) => setData((d) => ({ ...d, overlay_links: next, room: { ...d.room, overlay: false } }));
+
+  // Lien unique d'avant la liste, gardé par ce navigateur : il rejoint la liste, et les sources OBS qui
+  // l'utilisent continuent de marcher.
+  useEffect(() => {
+    const old = access.overlay;
+    if (!old) return;
+    if (links.some((l) => l.key === old)) { saveAccess(room.code, { overlay: null }); return; }
+    if (!room.overlay) return;
+    api.createOverlayLink(room.code, { name: "Lien d'origine", key: old })
+      .then((result) => onLinks(result.links))
+      .catch(() => {})
+      .finally(() => saveAccess(room.code, { overlay: null }));
+  }, [room.overlay]);
+
+  const create = (e) => {
+    e.preventDefault();
     action.run(async () => {
-      const result = await api.overlayKey(room.code);
-      saveAccess(room.code, { overlay: result.key });
-      setData({ ...data, room: { ...room, overlay: true } });
+      onLinks((await api.createOverlayLink(room.code, { name })).links);
+      setName("");
     });
   };
 
@@ -615,7 +658,23 @@ function OverlayPanel({ room, data, setData }) {
     <h2>Overlay pour OBS</h2>
     <p>Une page à ajouter dans OBS : elle affiche en grille le jeu des joueurs qui le partagent (onglet « Écrans »
       de la room), et à côté les messages de la partie (objets envoyés, objectifs atteints…). Pour placer vous-même
-      chaque élément, créez une disposition plus bas : elle utilise la même clé, avec son propre lien.</p>
+      chaque élément, créez une disposition plus bas : elle s'ouvre avec les mêmes liens.</p>
+
+    <h3>Liens</h3>
+    <p class="hint">Chaque lien donne accès à l'overlay : un par streamer ou par ordinateur, par exemple. Ils restent ici,
+      à recopier quand vous voulez, depuis tout appareil où vous êtes hôte. Le lien lui-même n'est jamais affiché, pour ne pas
+      apparaître dans votre stream ; supprimer un lien coupe les sources OBS qui l'utilisent.</p>
+    ${links.length > 0 && html`<ul class="link-list full">${links.map((link) => html`<${OverlayLinkRow} key=${link.id}
+      room=${room} link=${link} url=${overlayUrl(room.code, link.key, options)} action=${action} onLinks=${onLinks} />`)}</ul>`}
+    <form class="row full" onSubmit=${create}>
+      <input type="text" class="grow" maxLength="40" value=${name} placeholder=${`Nom du lien (ex. OBS de ${data.me?.pseudo || "l'hôte"})`}
+        aria-label="Nom du nouveau lien" onInput=${(e) => setName(e.target.value)} />
+      <button type="submit" class=${links.length ? "ghost" : ""} disabled=${action.busy}>${links.length ? "Créer un autre lien" : "Créer un lien"}</button>
+    </form>
+    ${action.error && html`<div class="notice error full">${action.error}</div>`}
+
+    <h3>Grille automatique</h3>
+    <p class="hint">Réglages compris dans les liens copiés ci-dessus : après un changement, recopiez le lien dans OBS.</p>
     <div class="fields full">
       <label><span>Écrans affichés</span>
         <select value=${options.max} onChange=${(e) => set("max", Number(e.target.value))}>
@@ -631,25 +690,12 @@ function OverlayPanel({ room, data, setData }) {
           ${Object.entries(ITEM_FILTERS).map(([value, label]) => html`<option value=${value}>${label}</option>`)}
         </select></label>`}
     </div>
-    ${link
-      ? html`<div class="row">
-          <${CopyButton} text=${link} label="Copier le lien de l'overlay" className="small" />
-          <a class="button ghost small" href=${link} target="_blank" rel="noopener">Ouvrir l'overlay</a>
-          <button type="button" class="ghost small" disabled=${action.busy} onClick=${create}>Remplacer le lien</button>
-        </div>
-        <p class="hint">Le lien n'est pas affiché pour ne pas apparaître dans votre stream : quiconque l'a voit les écrans partagés.
-          S'il a fuité, remplacez-le.</p>`
-      : html`<div class="row"><button type="button" disabled=${action.busy} onClick=${create}>
-          ${room.overlay ? "Créer un nouveau lien d'overlay" : "Créer le lien de l'overlay"}</button></div>
-        ${room.overlay && html`<p class="hint">Un lien existe déjà, créé depuis un autre navigateur : copiez-le là-bas, ou créez-en un nouveau ici.</p>`}`}
-    ${action.error && html`<div class="notice error full">${action.error}</div>`}
     <ol class="steps">
       <li>Dans OBS : <strong>Sources → + → Navigateur</strong>, collez le lien, avec une largeur de 1920 et une hauteur de 1080
         (ou la taille de la zone de votre scène réservée aux écrans).</li>
       <li>Les écrans se placent seuls en grille, dans l'ordre où les joueurs ont commencé à partager.
         Au-delà de ${DEFAULT_SHOWN}, ils deviennent difficiles à suivre sur Twitch.</li>
-      <li>Les réglages ci-dessus sont dans le lien copié : après un changement, recopiez-le dans OBS. Pour placer les
-        messages ailleurs dans la scène, ajoutez une deuxième source avec « Écrans affichés : aucun ».</li>
+      <li>Pour placer les messages ailleurs dans la scène, ajoutez une deuxième source avec « Écrans affichés : aucun ».</li>
       <li>Les messages arrivent une fois la partie en ligne : l'overlay s'y connecte comme client texte du premier joueur,
         qui apparaît donc connecté une fois de plus.</li>
       <li>Chaque joueur envoie son image à chaque overlay qui affiche son écran : ${MAX_VIEWERS} au maximum.</li>
