@@ -1,6 +1,6 @@
 {
  "ap_version": "0.6.8",
- "generated_at": "2026-10-30T11:16:48+00:00",
+ "generated_at": "2026-10-30T18:04:46+00:00",
  "games": [
   {
    "game": "2048",
@@ -796,7 +796,7 @@
    "file": "games/c-c-reloaded.json",
    "source": "custom",
    "apworld": "cnc_reloaded.apworld",
-   "world_version": "1.9.0",
+   "world_version": "2.0.0",
    "sheet": {
     "game": "C&C Reloaded",
     "stability": "Unstable",
@@ -976,6 +976,17 @@
    "sheet": {
     "game": "Chained Echoes",
     "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Chants of Sennaar",
+   "file": "games/chants-of-sennaar.json",
+   "source": "custom",
+   "apworld": "chants_of_sennaar.apworld",
+   "world_version": "0.2.0",
+   "sheet": {
+    "game": "Chants of Sennaar",
+    "stability": null
    }
   },
   {
@@ -1185,7 +1196,7 @@
    "file": "games/cooking-mama-3.json",
    "source": "custom",
    "apworld": "cookingmama3.apworld",
-   "world_version": "1.0.0",
+   "world_version": "1.1.1",
    "sheet": {
     "game": "Cooking Mama 3",
     "stability": "Unstable"
@@ -3168,7 +3179,7 @@
    "file": "games/kirby-super-star-ultra.json",
    "source": "custom",
    "apworld": "kssu.apworld",
-   "world_version": null,
+   "world_version": "0.2.21",
    "sheet": {
     "game": "Kirby Super Star Ultra",
     "stability": "Unstable"
@@ -3737,7 +3748,7 @@
    "file": "games/mental-omega.json",
    "source": "custom",
    "apworld": "mental_omega.apworld",
-   "world_version": "0.6.9",
+   "world_version": "0.6.10",
    "sheet": {
     "game": "Command & Conquer: Mental Omega",
     "stability": "Unstable",
@@ -5302,7 +5313,7 @@
    "world_version": "0.1.0",
    "sheet": {
     "game": "Rogue Legacy 2",
-    "stability": "Unstable"
+    "stability": "Stable"
    }
   },
   {

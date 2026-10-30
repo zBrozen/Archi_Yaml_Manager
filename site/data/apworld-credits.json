@@ -1412,7 +1412,7 @@
  },
  {
   "game": "C&C Reloaded",
-  "version": "1.9.0",
+  "version": "2.0.0",
   "authors": [
    "C&C Reloaded Randomizer contributors"
   ],
@@ -1460,6 +1460,24 @@
   "sheet": {
    "game": "Chained Echoes",
    "stability": "Unstable"
+  }
+ },
+ {
+  "game": "Chants of Sennaar",
+  "version": "0.2.0",
+  "authors": [
+   "synaesthesis"
+  ],
+  "file": "chants_of_sennaar.apworld",
+  "source": "https://github.com/syn-aesthesis/ChantsOfSennaarAP",
+  "license": "MIT",
+  "license_url": "https://github.com/syn-aesthesis/ChantsOfSennaarAP/blob/HEAD/LICENSE.txt",
+  "copyright": [
+   "Copyright (c) 2026 synaesthesis and contributors"
+  ],
+  "sheet": {
+   "game": "Chants of Sennaar",
+   "stability": null
   }
  },
  {
@@ -1729,7 +1747,7 @@
  },
  {
   "game": "Cooking Mama 3",
-  "version": "1.0.0",
+  "version": "1.1.1",
   "authors": [
    "laxbby"
   ],
@@ -4798,7 +4816,7 @@
  },
  {
   "game": "Kirby Super Star Ultra",
-  "version": "0.2.2",
+  "version": "0.2.21",
   "authors": [
    "GhostCappy"
   ],
@@ -5642,7 +5660,7 @@
  },
  {
   "game": "Mental Omega",
-  "version": "0.6.9",
+  "version": "0.6.10",
   "authors": [
    "Mental Omega Randomizer contributors"
   ],
@@ -8202,7 +8220,7 @@
   ],
   "sheet": {
    "game": "Rogue Legacy 2",
-   "stability": "Unstable"
+   "stability": "Stable"
   }
  },
  {
