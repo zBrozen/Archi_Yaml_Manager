@@ -1,6 +1,6 @@
 {
  "ap_version": "0.6.8",
- "generated_at": "2026-10-30T18:04:46+00:00",
+ "generated_at": "2026-10-30T22:34:49+00:00",
  "games": [
   {
    "game": "2048",
@@ -6376,7 +6376,7 @@
    "file": "games/supermarket-simulator.json",
    "source": "custom",
    "apworld": "supermarket_simulator.apworld",
-   "world_version": "0.3.5",
+   "world_version": "0.3.6",
    "sheet": {
     "game": "Supermarket Simulator",
     "stability": "Unstable"
@@ -6432,7 +6432,7 @@
    "file": "games/team-fortress-2-mann-vs-machine.json",
    "source": "custom",
    "apworld": "tf2_mvm.apworld",
-   "world_version": "1.18.4",
+   "world_version": "1.18.5",
    "sheet": {
     "game": "Team Fortress 2 (Mann vs Machine)",
     "stability": "Unstable"
