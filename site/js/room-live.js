@@ -121,20 +121,23 @@ const QUICK = [
 // Couleurs du client texte d'Archipelago : vous en magenta, les autres joueurs en jaune, objets selon leur
 // importance (progression, utile, piège, sans importance), lieux en vert, entrées en bleu. Les couleurs et
 // mises en forme envoyées par le serveur (hints trouvés, erreurs…) sont reprises telles quelles.
+// `mark` : symbole affiché devant l'objet quand il ne faut pas compter sur la couleur seule (overlay de stream).
 const ITEM_KINDS = {
-  progression: { cls: "ap-progression", title: "Objet de progression" },
-  trap: { cls: "ap-trap", title: "Piège" },
-  useful: { cls: "ap-useful", title: "Objet utile" },
-  filler: { cls: "ap-filler", title: "Objet sans importance" },
+  progression: { cls: "ap-progression", title: "Objet de progression", mark: "★ " },
+  trap: { cls: "ap-trap", title: "Piège", mark: "⚠ " },
+  useful: { cls: "ap-useful", title: "Objet utile", mark: "" },
+  filler: { cls: "ap-filler", title: "Objet sans importance", mark: "" },
 };
-const itemKind = (item) => ITEM_KINDS[item.progression ? "progression" : item.trap ? "trap" : item.useful ? "useful" : "filler"];
+export const itemKind = (item) => ITEM_KINDS[item.progression ? "progression" : item.trap ? "trap" : item.useful ? "useful" : "filler"];
 
-function MessagePart({ node, self }) {
+export function MessagePart({ node, self, marks = false }) {
   switch (node.type) {
     case "player":
       return html`<span class=${node.player?.name === self || node.text === self ? "ap-self" : "ap-player"}>${node.text}</span>`;
-    case "item":
-      return html`<span class=${itemKind(node.item).cls} title=${itemKind(node.item).title}>${node.text}</span>`;
+    case "item": {
+      const kind = itemKind(node.item);
+      return html`<span class=${kind.cls} title=${kind.title}>${marks && kind.mark}${node.text}</span>`;
+    }
     case "location":
       return html`<span class="ap-location">${node.text}</span>`;
     case "entrance":

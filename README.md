@@ -181,9 +181,16 @@ Onglet « Écrans » de la room :
   peut donner un écran noir : le passer en fenêtré ou en plein écran fenêtré.
 - **Hôte** : « Créer le lien de l'overlay » donne une adresse secrète (`#/overlay/CODE/CLÉ`) à mettre dans OBS
   en source **Navigateur** (1920 × 1080, fond transparent). Les écrans partagés s'y placent seuls en grille,
-  aussi grands que possible : 4 au maximum (`?max=6` à la fin du lien pour 6, `?max=2` pour 2). Remplacer le
-  lien coupe les overlays ouverts avec l'ancien. 3 overlays au maximum par room, car chaque joueur envoie son
-  image à chacun.
+  aussi grands que possible, et les **messages de la partie** (objets envoyés, objectifs atteints, release et
+  collect) défilent à côté. Les réglages choisis sur la page sont ajoutés au lien copié : nombre d'écrans
+  (`max`, 4 par défaut, de 0 = messages seuls à 6), place des messages (`console=droite|bas|non`) et objets
+  montrés (`objets=tous|importants` : progression, utiles et pièges). Les objets de progression et les pièges
+  sont marqués ★ et ⚠, en plus de leur couleur. Remplacer le lien coupe les overlays ouverts avec l'ancien.
+  3 overlays affichant des écrans au maximum par room, car chaque joueur envoie son image à chacun.
+
+Les messages viennent du serveur de la partie sur archipelago.gg, une fois son lien collé dans la room : l'overlay
+s'y connecte comme client texte du premier joueur (comme le client texte de la room, avec
+[archipelago.js](https://github.com/ThePhar/archipelago.js)), qui apparaît donc connecté une fois de plus.
 
 Fonctionnement : les navigateurs se transmettent l'image en pair à pair (WebRTC). Le service ne fait que les
 mettre en relation, par WebSocket, avec un Durable Object par room (`ScreenRoom` dans

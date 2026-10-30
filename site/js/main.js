@@ -511,13 +511,14 @@ function Header({ page, advanced, setAdvanced, docLanguage, setDocLanguage, them
 
 // Adresse de la page : #/ (éditeur), #/rooms, #/room/CODE. Les liens personnels
 // (#/room/CODE/p/JETON, #/room/CODE/h/JETON) sont mémorisés puis retirés de l'adresse.
-// #/overlay/CODE/CLÉ?max=N : écrans des joueurs pour OBS, page à part (ni en-tête ni pied de page).
+// #/overlay/CODE/CLÉ?max=…&console=…&objets=… : écrans des joueurs et messages de la partie pour OBS,
+// page à part (ni en-tête ni pied de page).
 function readRoute() {
   const [path, query = ""] = location.hash.replace(/^#\/?/, "").split("?");
   const parts = path.split("/").filter(Boolean);
   if (parts[0] === "rooms") return { page: "rooms" };
   if (parts[0] === "overlay" && parts[1] && parts[2]) {
-    return { page: "overlay", code: normalizeCode(parts[1]), key: parts[2], max: Number(new URLSearchParams(query).get("max")) };
+    return { page: "overlay", code: normalizeCode(parts[1]), key: parts[2], params: Object.fromEntries(new URLSearchParams(query)) };
   }
   if (parts[0] === "room" && parts[1]) {
     const code = normalizeCode(parts[1]);
@@ -627,5 +628,5 @@ function Footer() {
 // L'overlay n'a pas besoin de la liste des jeux : il ne charge que lui-même.
 const start = readRoute();
 render(start.page === "overlay"
-  ? html`<${ScreensOverlay} code=${start.code} overlayKey=${start.key} max=${start.max} />`
+  ? html`<${ScreensOverlay} code=${start.code} overlayKey=${start.key} params=${start.params} />`
   : html`<${App} />`, document.getElementById("app"));

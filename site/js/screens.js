@@ -4,9 +4,14 @@
 // Les images vont directement du navigateur du joueur à l'overlay (WebRTC). Le service des rooms ne fait que
 // les mettre en relation (WebSocket, Durable Object ScreenRoom du dossier worker/) : le joueur envoie une offre
 // à chaque overlay qui lui demande son flux, l'overlay répond.
+//
+// L'overlay peut aussi montrer les messages de la partie (objets envoyés, objectifs atteints…) : il se connecte au
+// serveur de la partie sur archipelago.gg comme client texte du premier joueur, comme le client texte de la room.
 import { html, useState, useEffect, useRef } from "../vendor/preact-htm.js";
+import { Client } from "../vendor/archipelago.js";
 import { CopyButton, plural, useAction } from "./ui.js";
-import { api, overlayLink, saveAccess, savedAccess, screensSocketUrl } from "./rooms-api.js";
+import { MessagePart } from "./room-live.js";
+import { api, apRoomStatus, overlayLink, saveAccess, savedAccess, screensSocketUrl } from "./rooms-api.js";
 
 // Serveurs STUN publics : suffisent pour la plupart des connexions. Sans relais TURN, certains réseaux
 // (NAT strict, 4G, réseaux d'entreprise) ne passent pas : l'overlay l'indique sur l'écran du joueur.
@@ -18,6 +23,29 @@ const DEFAULT_SHOWN = 4;
 const MAX_SHOWN = 6; // au-delà, les écrans deviennent trop petits pour être suivis sur Twitch
 const RETRY = 8000;
 const OFFER_TIMEOUT = 20000;
+const FEED_LINES = 40; // messages gardés ; ceux qui ne tiennent pas dans la hauteur sont coupés en haut
+const FEED_RETRY = 30000;
+const FEED_WAIT = 60000; // partie pas encore hébergée : la room est relue de temps en temps
+
+// Réglages de l'overlay, dans son adresse (#/overlay/CODE/CLÉ?max=4&console=droite&objets=tous).
+const CONSOLE_PLACES = { droite: "À droite des écrans", bas: "Sous les écrans", non: "Masqués" };
+const ITEM_FILTERS = { tous: "Tous les objets", importants: "Objets importants seulement (progression, utiles, pièges)" };
+
+export function overlayOptions(params = {}) {
+  const max = params.max == null || params.max === "" ? DEFAULT_SHOWN : Math.round(Number(params.max));
+  return {
+    max: Number.isFinite(max) ? Math.min(MAX_SHOWN, Math.max(0, max)) : DEFAULT_SHOWN,
+    console: params.console in CONSOLE_PLACES ? params.console : "droite",
+    objets: params.objets in ITEM_FILTERS ? params.objets : "tous",
+  };
+}
+
+// Adresse de l'overlay avec les réglages qui diffèrent de ceux par défaut.
+function overlayUrl(code, key, options) {
+  const defaults = overlayOptions();
+  const query = new URLSearchParams(Object.entries(options).filter(([k, v]) => v !== defaults[k]).map(([k, v]) => [k, String(v)]));
+  return overlayLink(code, key) + (query.size ? `?${query}` : "");
+}
 
 // Connexion au service, reprise seule après une coupure. `onState(state, message)` : connecting, ready,
 // retrying, ou refused (accès refusé par le service : pas de nouvelle tentative).
@@ -248,8 +276,15 @@ function ShareScreen({ room }) {
 
 function OverlayPanel({ room, data, setData }) {
   const action = useAction();
-  const key = savedAccess(room.code).overlay;
-  const link = room.overlay && key ? overlayLink(room.code, key) : null;
+  const access = savedAccess(room.code);
+  const key = access.overlay;
+  const [options, setOptions] = useState(() => overlayOptions(access.overlayOptions));
+  const set = (name, value) => {
+    const next = { ...options, [name]: value };
+    setOptions(next);
+    saveAccess(room.code, { overlayOptions: next });
+  };
+  const link = room.overlay && key ? overlayUrl(room.code, key, options) : null;
   const create = () => {
     if (room.overlay && !confirm(link
       ? "Remplacer le lien ? L'ancien cessera de marcher, y compris dans OBS."
@@ -264,7 +299,22 @@ function OverlayPanel({ room, data, setData }) {
   return html`<section class="card stack">
     <h2>Overlay pour OBS</h2>
     <p>Une page à ajouter dans OBS : elle affiche en grille le jeu des joueurs qui le partagent (onglet « Écrans »
-      de la room), ${DEFAULT_SHOWN} à la fois.</p>
+      de la room), et à côté les messages de la partie (objets envoyés, objectifs atteints…).</p>
+    <div class="fields full">
+      <label><span>Écrans affichés</span>
+        <select value=${options.max} onChange=${(e) => set("max", Number(e.target.value))}>
+          <option value="0">Aucun (messages seulement)</option>
+          ${[1, 2, 3, 4, 5, 6].map((n) => html`<option value=${n}>${n === DEFAULT_SHOWN ? `${n} (conseillé)` : n}</option>`)}
+        </select></label>
+      ${options.max > 0 && html`<label><span>Messages de la partie</span>
+        <select value=${options.console} onChange=${(e) => set("console", e.target.value)}>
+          ${Object.entries(CONSOLE_PLACES).map(([value, label]) => html`<option value=${value}>${label}</option>`)}
+        </select></label>`}
+      ${(options.max === 0 || options.console !== "non") && html`<label class="span-all"><span>Objets montrés</span>
+        <select value=${options.objets} onChange=${(e) => set("objets", e.target.value)}>
+          ${Object.entries(ITEM_FILTERS).map(([value, label]) => html`<option value=${value}>${label}</option>`)}
+        </select></label>`}
+    </div>
     ${link
       ? html`<div class="row">
           <${CopyButton} text=${link} label="Copier le lien de l'overlay" className="small" />
@@ -280,10 +330,13 @@ function OverlayPanel({ room, data, setData }) {
     <ol class="steps">
       <li>Dans OBS : <strong>Sources → + → Navigateur</strong>, collez le lien, avec une largeur de 1920 et une hauteur de 1080
         (ou la taille de la zone de votre scène réservée aux écrans).</li>
-      <li>Les écrans se placent seuls en grille, dans l'ordre où les joueurs ont commencé à partager : ${DEFAULT_SHOWN} au maximum,
-        pour rester lisibles sur Twitch. Ajoutez <code>?max=6</code> à la fin du lien pour en afficher jusqu'à 6,
-        ou <code>?max=2</code> pour moins.</li>
-      <li>Chaque joueur envoie son image à chaque overlay ouvert : ${MAX_VIEWERS} overlays au maximum par room.</li>
+      <li>Les écrans se placent seuls en grille, dans l'ordre où les joueurs ont commencé à partager.
+        Au-delà de ${DEFAULT_SHOWN}, ils deviennent difficiles à suivre sur Twitch.</li>
+      <li>Les réglages ci-dessus sont dans le lien copié : après un changement, recopiez-le dans OBS. Pour placer les
+        messages ailleurs dans la scène, ajoutez une deuxième source avec « Écrans affichés : aucun ».</li>
+      <li>Les messages arrivent une fois la partie en ligne : l'overlay s'y connecte comme client texte du premier joueur,
+        qui apparaît donc connecté une fois de plus.</li>
+      <li>Chaque joueur envoie son image à chaque overlay qui affiche des écrans : ${MAX_VIEWERS} au maximum par room.</li>
     </ol>
   </section>`;
 }
@@ -414,15 +467,17 @@ export function gridLayout(count, width, height, gap) {
   return { columns: best.columns, width: tile, height: Math.floor(tile * 9 / 16) };
 }
 
-function useWindowSize() {
-  const read = () => ({ width: window.innerWidth, height: window.innerHeight });
-  const [size, setSize] = useState(read);
+// Taille d'un élément (la zone des écrans, qui partage la page avec les messages de la partie).
+function useElementSize() {
+  const ref = useRef(null);
+  const [size, setSize] = useState({ width: 0, height: 0 });
   useEffect(() => {
-    const change = () => setSize(read());
-    window.addEventListener("resize", change);
-    return () => window.removeEventListener("resize", change);
+    if (!ref.current) return;
+    const observer = new ResizeObserver(([entry]) => setSize({ width: entry.contentRect.width, height: entry.contentRect.height }));
+    observer.observe(ref.current);
+    return () => observer.disconnect();
   }, []);
-  return size;
+  return [ref, size];
 }
 
 const TILE_STATES = {
@@ -451,29 +506,119 @@ function Tile({ tile, width, height }) {
 
 const GAP = 8;
 
-export function ScreensOverlay({ code, overlayKey, max }) {
+function Screens({ view, code, size }) {
+  if (!view) return null;
+  if (!view.tiles.length) {
+    return html`<p class="overlay-message">
+      ${view.state === "ready" ? `Room ${code} : aucun joueur ne partage son écran pour l'instant.` : "Connexion au serveur des rooms…"}
+    </p>`;
+  }
+  const grid = gridLayout(view.tiles.length, size.width, size.height, GAP);
+  if (!grid.width) return null;
+  return html`<div class="overlay-grid" style=${{ width: `${grid.columns * grid.width + (grid.columns - 1) * GAP}px`, gap: `${GAP}px` }}>
+    ${view.tiles.map((tile) => html`<${Tile} key=${tile.id} tile=${tile} width=${grid.width} height=${grid.height} />`)}
+  </div>`;
+}
+
+// --- Overlay : messages de la partie -----------------------------------------------------
+
+// Objets envoyés, objectifs atteints, release et collect, reçus en client texte du premier joueur.
+// `important` : seulement les objets de progression, utiles et les pièges.
+function useGameFeed(code, enabled, important) {
+  const [feed, setFeed] = useState({ state: "loading", message: null, lines: [] });
+  useEffect(() => {
+    if (!enabled) return undefined;
+    let alive = true;
+    let client = null;
+    let timer = null;
+    let nextId = 0;
+    const update = (patch) => alive && setFeed((f) => ({ ...f, ...patch }));
+    const push = (nodes) => alive && setFeed((f) => ({ ...f, lines: [...f.lines.slice(1 - FEED_LINES), { id: nextId++, nodes }] }));
+    const later = (delay) => { clearTimeout(timer); timer = setTimeout(connect, delay); };
+    const shown = (item) => !important || item.progression || item.useful || item.trap;
+
+    const connect = async () => {
+      try {
+        const { room } = await api.get(code);
+        if (!room.ap_room_url) { update({ state: "waiting", message: null }); later(FEED_WAIT); return; }
+        // Lire la page de la room (par le service) réveille le serveur s'il est en veille ; le port peut alors changer.
+        await api.apLinks(code).catch(() => {});
+        const status = await apRoomStatus(code, room.ap_room_url);
+        if (!status.port || !status.slots.length) throw new Error("Le serveur de la partie ne répond pas encore.");
+        const next = new Client();
+        next.messages.on("itemSent", (text, item, nodes) => shown(item) && push(nodes));
+        next.messages.on("itemCheated", (text, item, nodes) => shown(item) && push(nodes));
+        for (const event of ["goaled", "released", "collected"]) next.messages.on(event, (text, player, nodes) => push(nodes));
+        next.socket.on("disconnected", () => {
+          if (client !== next || !alive) return;
+          client = null;
+          update({ state: "retrying" });
+          later(RETRY);
+        });
+        client = next;
+        await next.login(`wss://${status.host}:${status.port}`, status.slots[0].name, undefined, { slotData: false, tags: ["TextOnly"] });
+        update({ state: "live", message: null });
+      } catch (e) {
+        if (!alive) return;
+        const failed = client;
+        client = null;
+        failed?.socket.disconnect();
+        update({ state: "error", message: e?.message || String(e) });
+        later(FEED_RETRY);
+      }
+    };
+    connect();
+    return () => {
+      alive = false;
+      clearTimeout(timer);
+      const current = client;
+      client = null;
+      current?.socket.disconnect();
+    };
+  }, [code, enabled, important]);
+  return feed;
+}
+
+const FEED_STATES = {
+  loading: "Connexion à la partie…",
+  waiting: "La partie n'est pas encore en ligne : les objets envoyés s'afficheront ici.",
+  retrying: "Connexion à la partie perdue, nouvelle tentative…",
+  live: "Connecté à la partie : les objets envoyés s'afficheront ici.",
+};
+
+function GameFeed({ feed }) {
+  const status = feed.state === "error" ? `${feed.message} Nouvelle tentative dans ${FEED_RETRY / 1000} s.`
+    : feed.state === "live" && feed.lines.length ? null
+    : FEED_STATES[feed.state];
+  return html`<div class="game-feed" role="log" aria-live="polite">
+    ${feed.lines.map((line) => html`<div key=${line.id}>${line.nodes.map((node) => html`<${MessagePart} node=${node} marks />`)}</div>`)}
+    ${status && html`<div class="feed-status">${status}</div>`}
+  </div>`;
+}
+
+// --- Overlay : la page ---------------------------------------------------------------
+
+// `params` : réglages lus dans l'adresse (voir overlayOptions). Sans écran (max=0), la page ne montre que les messages.
+export function ScreensOverlay({ code, overlayKey, params }) {
+  const options = overlayOptions(params);
+  const place = options.max === 0 ? "plein" : options.console;
   const [view, setView] = useState(null);
-  const size = useWindowSize();
-  const shown = Math.min(MAX_SHOWN, Math.max(1, Math.round(max) || DEFAULT_SHOWN));
+  const [area, size] = useElementSize();
+  const feed = useGameFeed(code, place !== "non" && view?.state !== "refused", options.objets === "importants");
 
   useEffect(() => {
     document.documentElement.classList.add("overlay-page");
     document.title = `Écrans · room ${code}`;
-    const viewer = new Viewer(code, overlayKey, shown, setView);
+    if (!options.max) return undefined;
+    const viewer = new Viewer(code, overlayKey, options.max, setView);
     return () => viewer.close();
   }, []);
 
-  if (!view) return null;
-  if (view.state === "refused") return html`<div class="overlay"><p class="overlay-message">${view.message}</p></div>`;
-  if (!view.tiles.length) {
-    return html`<div class="overlay"><p class="overlay-message">
-      ${view.state === "ready" ? `Room ${code} : aucun joueur ne partage son écran pour l'instant.` : "Connexion au serveur des rooms…"}
-    </p></div>`;
+  if (view?.state === "refused") {
+    return html`<div class="overlay"><div class="overlay-screens"><p class="overlay-message">${view.message}</p></div></div>`;
   }
-  const grid = gridLayout(view.tiles.length, size.width, size.height, GAP);
-  return html`<div class="overlay">
-    <div class="overlay-grid" style=${{ width: `${grid.columns * grid.width + (grid.columns - 1) * GAP}px`, gap: `${GAP}px` }}>
-      ${view.tiles.map((tile) => html`<${Tile} key=${tile.id} tile=${tile} width=${grid.width} height=${grid.height} />`)}
-    </div>
+  return html`<div class=${`overlay overlay-${place}`}>
+    ${options.max > 0 && html`<div class="overlay-screens" ref=${area}><${Screens} view=${view} code=${code} size=${size} /></div>`}
+    ${place !== "non" && html`<${GameFeed} feed=${feed} />`}
   </div>`;
 }
