@@ -32,6 +32,7 @@ jobs:
       contents: write
     outputs:
       sha: ${{ steps.save.outputs.sha }}
+      changed: ${{ steps.save.outputs.changed }}
     steps:
       - uses: actions/checkout@v4
 
@@ -59,6 +60,7 @@ jobs:
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git commit -m "Jeux non officiels : liste du tableur"
             git push
+            echo "changed=true" >> "$GITHUB_OUTPUT"
           fi
           echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
 
@@ -227,10 +229,11 @@ jobs:
           git push
           echo "changed=true" >> "$GITHUB_OUTPUT"
 
-  # Un push fait par le workflow ne relance pas les autres workflows : on publie ici.
+  # Un push fait par le workflow ne relance pas les autres workflows : on publie ici, si la liste des jeux et
+  # des packs PopTracker (job sync) ou les options (job commit) ont changé.
   deploy:
-    needs: commit
-    if: needs.commit.outputs.changed == 'true'
+    needs: [sync, commit]
+    if: always() && (needs.sync.outputs.changed == 'true' || needs.commit.outputs.changed == 'true')
     uses: ./.github/workflows/deploy.yml
     permissions:
       contents: read
