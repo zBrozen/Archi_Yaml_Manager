@@ -699,7 +699,7 @@ function PlayPanel({ room, mine }) {
   useEffect(() => {
     let alive = true;
     setError(null);
-    apRoomStatus(room.ap_room_url).then((s) => alive && setStatus(s)).catch((e) => alive && setError(e.message));
+    apRoomStatus(room.code, room.ap_room_url).then((s) => alive && setStatus(s)).catch((e) => alive && setError(e.message));
     loadCredits().then((c) => alive && setCredits(c));
     return () => { alive = false; };
   }, [room.ap_room_url]);
@@ -730,9 +730,13 @@ function PlayPanel({ room, mine }) {
         return html`<li>
           <div class="grow"><strong>${s.name}</strong> <span class="hint">${s.game}</span></div>
           ${link && html`<a href=${link.href} target="_blank" rel="noopener" class="small">${link.label}</a>`}
+          ${s.tracker && html`<a href=${s.tracker} target="_blank" rel="noopener" class="small">Mon tracker</a>`}
+          ${s.connect && html`<a class="button ghost small" href=${s.connect} title="Ouvre le client Archipelago, déjà rempli">Ouvrir le client</a>`}
           ${s.download
             ? html`<a class="button small" href=${s.download}>Télécharger le patch</a>`
-            : html`<span class="hint small">Pas de fichier : connectez-vous avec le client du jeu.</span>`}
+            : s.onRoomPage
+              ? html`<a class="button small" href=${room.ap_room_url} target="_blank" rel="noopener">Fichier sur la page de la room</a>`
+              : html`<span class="hint small">Pas de fichier : connectez-vous avec le client du jeu.</span>`}
         </li>`;
       })}</ul>
     </div>`}
@@ -740,6 +744,7 @@ function PlayPanel({ room, mine }) {
       <summary>Tous les joueurs (${status.slots.length})</summary>
       <div class="group-body"><table class="room-table"><tbody>${status.slots.map((s) => html`<tr>
         <td>${s.slot}</td><td><strong>${s.name}</strong></td><td>${s.game}</td>
+        <td>${s.tracker && html`<a href=${s.tracker} target="_blank" rel="noopener">Tracker</a>`}</td>
         <td>${s.download && html`<a href=${s.download}>Fichier</a>`}</td>
       </tr>`)}</tbody></table></div>
     </details>`}

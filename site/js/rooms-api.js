@@ -87,28 +87,48 @@ export const api = {
   replaceSlot: (code, id, slot) => call("PUT", at(code, `/slots/${id}`), { code, body: slot }),
   deleteSlot: (code, id) => call("DELETE", at(code, `/slots/${id}`), { code }),
   exportSlots: (code) => call("GET", at(code, "/export"), { code }),
+  apLinks: (code) => call("GET", at(code, "/ap-links"), { code }),
   generate: (code, options) => call("POST", at(code, "/generate"), { code, body: { options } }),
   file: (code, kind) => call("GET", at(code, `/files/${kind}`), { code, file: true }),
 };
 
 // --- Partie hébergée sur archipelago.gg (ou un autre site Archipelago) ---------------
 
-// État public de la room (l'API room_status accepte les appels d'autres sites).
-export async function apRoomStatus(roomUrl) {
+// État public de la room (l'API room_status accepte les appels d'autres sites), complété par les liens
+// de la page de la room, lus par le service : pour les jeux non officiels, le lien de téléchargement
+// de l'API (/slot_file/) ne marche pas, celui de la page (/dl_patch/) oui.
+export async function apRoomStatus(code, roomUrl) {
   const url = new URL(roomUrl);
   const id = url.pathname.split("/").filter(Boolean)[1];
-  const response = await fetch(`${url.origin}/api/room_status/${id}`);
+  const [response, links] = await Promise.all([
+    fetch(`${url.origin}/api/room_status/${id}`),
+    api.apLinks(code).then((r) => r.slots).catch(() => []),
+  ]);
   if (!response.ok) throw new Error(`La room Archipelago ne répond pas (${response.status}).`);
   const data = await response.json();
+  const port = data.last_port || null;
   return {
     origin: url.origin,
     host: url.hostname,
-    port: data.last_port || null,
+    port,
     tracker: data.tracker ? `${url.origin}/tracker/${data.tracker}` : null,
     // players : [[nom, jeu], …] dans l'ordre des slots (slot = position + 1).
     slots: (data.players || []).map(([name, game], i) => {
-      const file = (data.downloads || []).find((d) => d.slot === i + 1);
-      return { slot: i + 1, name, game, download: file ? new URL(file.download, url.origin).href : null };
+      const slot = i + 1;
+      const page = links.find((l) => l.slot === slot);
+      const file = (data.downloads || []).find((d) => d.slot === slot);
+      const fromApi = file && !file.download.includes("/slot_file/") ? new URL(file.download, url.origin).href : null;
+      return {
+        slot,
+        name,
+        game,
+        download: page ? page.download : fromApi,
+        // Sans les liens de la page, un fichier de l'API en /slot_file/ se télécharge depuis la page de la room.
+        onRoomPage: !page && !!file && !fromApi,
+        tracker: page?.tracker || null,
+        // Lien qui ouvre le client Archipelago déjà rempli, comme sur la page de la room.
+        connect: port ? `archipelago://${encodeURIComponent(name)}:None@${url.hostname}:${port}?game=${encodeURIComponent(game)}&room=${id}` : null,
+      };
     }),
   };
 }

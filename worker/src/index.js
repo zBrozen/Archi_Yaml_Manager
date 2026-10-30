@@ -402,6 +402,37 @@ async function exportSlots(request, env, room) {
   return json({ slots: results.map((s) => ({ ...s, issues: JSON.parse(s.issues) })) });
 }
 
+// --- Partie hébergée -----------------------------------------------------------------
+
+const AP_PAGE_HOSTS = ["archipelago.gg"];
+
+// Liens de chaque slot lus sur la page de la room archipelago.gg. L'API room_status renvoie pour les jeux
+// qu'archipelago.gg n'a pas installés (non officiels) un lien /slot_file/ qui ne marche pas, alors que sa page
+// propose le bon (/dl_patch/). Le navigateur ne peut pas lire cette page (pas de CORS) : le service le fait.
+async function apRoomLinks(env, room) {
+  if (!room.ap_room_url) throw new HttpError(404, "Aucune room archipelago.gg pour cette room.");
+  const url = new URL(room.ap_room_url);
+  if (!AP_PAGE_HOSTS.includes(url.hostname)) return json({ slots: [] });
+  const response = await fetch(url.href, { cf: { cacheTtl: 60, cacheEverything: true } });
+  if (!response.ok) throw new HttpError(502, `La page de la room archipelago.gg ne répond pas (${response.status}).`);
+  const page = await response.text();
+  const slots = [];
+  for (const row of page.split(/<tr[\s>]/i).slice(1)) {
+    const slot = /<td>\s*(\d+)\s*<\/td>/.exec(row)?.[1];
+    if (!slot) continue;
+    const link = (pattern) => {
+      const path = pattern.exec(row)?.[1];
+      return path ? new URL(path.replace(/&amp;/g, "&"), url.origin).href : null;
+    };
+    slots.push({
+      slot: Number(slot),
+      download: link(/href="(\/(?:dl_patch|slot_file)\/[^"]+)"/),
+      tracker: link(/href="(\/tracker\/[^"]+)"/),
+    });
+  }
+  return json({ slots });
+}
+
 // --- Génération en ligne -------------------------------------------------------------
 
 function genOptions(body) {
@@ -545,6 +576,8 @@ async function route(request, env) {
     if (id && method === "DELETE") return deleteSlot(request, env, room, id);
   } else if (sub === "export" && method === "GET") {
     return exportSlots(request, env, room);
+  } else if (sub === "ap-links" && !id && method === "GET") {
+    return apRoomLinks(env, room);
   } else if (sub === "generate" && !id && method === "POST") {
     return startGeneration(request, env, room);
   } else if (sub === "files" && id && method === "GET") {
