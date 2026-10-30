@@ -1,12 +1,12 @@
 // Pages des rooms : créer ou rejoindre une room, déposer ses YAML, vérifier et préparer la génération (hôte),
 // puis retrouver la partie hébergée sur archipelago.gg (adresse, tracker, fichiers de chaque joueur).
-import { html, useState, useEffect } from "../vendor/preact-htm.js";
+import { html, useState, useEffect, useRef } from "../vendor/preact-htm.js";
 import { apVersion, gameEntry, localGames } from "./data.js";
 import { splitFile } from "./yaml-model.js";
 import { checkText, nameProblem, MAX_NAME } from "./check.js";
 import { CopyButton, GamePicker, SheetBadges, download, loadCredits, plural, useAction } from "./ui.js";
 import { makeZip } from "./zip.js";
-import { ProgressPanel, TextClient } from "./room-live.js";
+import { ItemsPanel, ProgressPanel, TextClient, useTracker } from "./room-live.js";
 import { ScreensTab } from "./screens.js";
 import {
   api, apRoomStatus, forgetAccess, hostLink, inviteLink, knownRooms, normalizeCode, playerLink,
@@ -786,6 +786,7 @@ function useGameHelp(origin) {
 
 function OnlineSummary({ room, online, mine, go }) {
   const { status, error } = online;
+  const tracker = useTracker(status);
   const help = useGameHelp(status?.origin || "https://archipelago.gg");
   const names = new Set(mine.map((s) => s.name.toLowerCase()));
   const own = status ? status.slots.filter((s) => names.has(s.name.toLowerCase())) : [];
@@ -826,16 +827,26 @@ function OnlineSummary({ room, online, mine, go }) {
         </li>`;
       })}</ul>
     </div>`}
-    ${status && html`<${ProgressPanel} status=${status} mode=${room.mode} mine=${mine} compact onDetails=${() => go("partie")} />`}
+    ${status && html`<${ProgressPanel} status=${status} tracker=${tracker} mode=${room.mode} mine=${mine} compact onDetails=${() => go("partie")} />`}
   </section>`;
 }
 
 function GameView({ room, online, mine }) {
   const { status, error } = online;
+  const tracker = useTracker(status);
+  const [itemsSlot, setItemsSlot] = useState(null);
+  const itemsCard = useRef(null);
   if (!status) return html`<section class="card"><p class="hint">${error || "Chargement de la partie…"}</p></section>`;
+  const showItems = (slot) => {
+    setItemsSlot(slot);
+    itemsCard.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
   return html`<section class="card stack">
-    <${ProgressPanel} status=${status} mode=${room.mode} mine=${mine} />
+    <${ProgressPanel} status=${status} tracker=${tracker} mode=${room.mode} mine=${mine} onItems=${showItems} />
   </section>
+  ${tracker.trackerId && html`<section class="card stack items-card" ref=${itemsCard}>
+    <${ItemsPanel} status=${status} tracker=${tracker} mine=${mine} slot=${itemsSlot} onSlot=${setItemsSlot} />
+  </section>`}
   <section class="card stack">
     <h2>Fichiers de tous les joueurs</h2>
     <div class="table-wrap full"><table class="room-table">

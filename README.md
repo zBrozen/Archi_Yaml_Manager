@@ -146,7 +146,9 @@ base D1), toujours disponible sans laisser de PC allumé.
    du serveur, le tracker et ses propres fichiers (patchs), lus avec l'API publique `room_status` d'archipelago.gg
    et sur la page de la room (lue par le service : les liens de l'API ne marchent pas pour les jeux non officiels).
 6. Pendant la partie, la page de la room montre la progression de chaque joueur (checks, état, dernière
-   activité, signalée en async au-delà de 2 jours ; API publique du tracker d'archipelago.gg), et propose un
+   activité, signalée en async au-delà de 2 jours ; API publique du tracker d'archipelago.gg) et les **objets
+   reçus** par chacun (regroupés par importance, puis les derniers arrivés avec qui les a envoyés et d'où ; noms
+   lus dans le « datapackage » de chaque jeu, `/api/datapackage/<checksum>`), et propose un
    **client texte** : chat et commandes (`!hint`, `!remaining`…) depuis le navigateur, avec
    [archipelago.js](https://github.com/ThePhar/archipelago.js) (`site/vendor/archipelago.js`).
 7. Pour un stream, les joueurs peuvent partager la fenêtre de leur jeu, et l'hôte l'afficher dans OBS
