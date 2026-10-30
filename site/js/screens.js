@@ -20,11 +20,13 @@ const ICE_SERVERS = [{ urls: ["stun:stun.cloudflare.com:3478", "stun:stun.l.goog
 // Qualité du partage, choisie par chaque joueur. `bitrate` : débit maximum envoyé à chaque overlay, en bit/s.
 // La connexion du joueur (envoi), son processeur (encodage) et la connexion du streamer (réception de tous les
 // écrans) limitent ce qui passe réellement : le navigateur baisse la qualité de lui-même s'il le faut.
+// `start` et `floor` (kbit/s) : débit de départ et minimum imposés à Chrome. Sans eux, il démarre vers 0,3 Mb/s
+// et met des dizaines de secondes à monter ; le minimum n'est imposé qu'aux qualités choisies pour une bonne connexion.
 const QUALITIES = {
-  legere: { label: "Légère", detail: "720p, 30 images/s, 1,5 Mb/s", width: 1280, height: 720, fps: 30, bitrate: 1_500_000 },
-  normale: { label: "Normale", detail: "720p, 30 images/s, 3 Mb/s", width: 1280, height: 720, fps: 30, bitrate: 3_000_000 },
-  haute: { label: "Haute", detail: "1080p, 30 images/s, 6 Mb/s", width: 1920, height: 1080, fps: 30, bitrate: 6_000_000 },
-  max: { label: "Maximale", detail: "1080p, 60 images/s, 12 Mb/s", width: 1920, height: 1080, fps: 60, bitrate: 12_000_000 },
+  legere: { label: "Légère", detail: "720p, 30 images/s, 1,5 Mb/s", width: 1280, height: 720, fps: 30, bitrate: 1_500_000, start: 800, floor: 0 },
+  normale: { label: "Normale", detail: "720p, 30 images/s, 3 Mb/s", width: 1280, height: 720, fps: 30, bitrate: 3_000_000, start: 1500, floor: 0 },
+  haute: { label: "Haute", detail: "1080p, 30 images/s, 6 Mb/s", width: 1920, height: 1080, fps: 30, bitrate: 6_000_000, start: 4000, floor: 1500 },
+  max: { label: "Maximale", detail: "1080p, 60 images/s, 12 Mb/s", width: 1920, height: 1080, fps: 60, bitrate: 12_000_000, start: 8000, floor: 3000 },
 };
 // Ce que le navigateur sacrifie quand le débit manque. `hint` : nature de l'image, pour l'encodeur.
 const PRIORITIES = {
@@ -37,6 +39,69 @@ const DEFAULT_PRIORITY = "equilibre";
 const qualityOf = (name) => QUALITIES[name] || QUALITIES[DEFAULT_QUALITY];
 const priorityOf = (name) => PRIORITIES[name] || PRIORITIES[DEFAULT_PRIORITY];
 const captureConstraints = (q) => ({ width: { max: q.width }, height: { max: q.height }, frameRate: { ideal: q.fps, max: q.fps } });
+
+// Débits de la qualité ajoutés aux codecs vidéo de la réponse de l'overlay (paramètres x-google-*, lus par Chrome
+// pour l'envoi, ignorés par les autres navigateurs). Un codec sans ligne a=fmtp (VP8) en reçoit une.
+function withBitrates(sdp, quality) {
+  const extra = [`x-google-start-bitrate=${quality.start}`, `x-google-max-bitrate=${quality.bitrate / 1000}`]
+    .concat(quality.floor ? [`x-google-min-bitrate=${quality.floor}`] : []).join(";");
+  const lines = sdp.split("\r\n");
+  const codecs = new Set();
+  let video = false;
+  for (const line of lines) {
+    if (line.startsWith("m=")) video = line.startsWith("m=video");
+    const rtpmap = video && /^a=rtpmap:(\d+) ([\w-]+)\//.exec(line);
+    if (rtpmap && !/^(rtx|red|ulpfec|flexfec)/i.test(rtpmap[2])) codecs.add(rtpmap[1]);
+  }
+  const hasFmtp = new Set(lines.map((line) => /^a=fmtp:(\d+) /.exec(line)?.[1]).filter((pt) => codecs.has(pt)));
+  return lines.flatMap((line) => {
+    const fmtp = /^a=fmtp:(\d+) /.exec(line);
+    if (fmtp && codecs.has(fmtp[1])) return [`${line};${extra}`];
+    const rtpmap = /^a=rtpmap:(\d+) /.exec(line);
+    if (rtpmap && codecs.has(rtpmap[1]) && !hasFmtp.has(rtpmap[1])) return [line, `a=fmtp:${rtpmap[1]} ${extra}`];
+    return [line];
+  }).join("\r\n");
+}
+
+// Codec encodé par la carte graphique, s'il y en a un pour cette qualité : meilleure image à débit égal, et le
+// processeur reste libre pour le jeu. Proposé en premier ; l'overlay en prend un autre s'il ne sait pas le lire.
+const HARDWARE_CODECS = [
+  ["video/AV1", "video/AV1"],
+  ["video/VP9", "video/VP9"],
+  ["video/H264", "video/H264;level-asymmetry-allowed=1;packetization-mode=1;profile-level-id=42e01f"],
+];
+const hardwareChoices = new Map();
+
+function hardwareCodec(quality) {
+  if (!hardwareChoices.has(quality)) {
+    hardwareChoices.set(quality, (async () => {
+      if (!navigator.mediaCapabilities?.encodingInfo) return null;
+      for (const [mime, contentType] of HARDWARE_CODECS) {
+        try {
+          const info = await navigator.mediaCapabilities.encodingInfo({
+            type: "webrtc",
+            video: { contentType, width: quality.width, height: quality.height, bitrate: quality.bitrate, framerate: quality.fps },
+          });
+          if (info.supported && info.powerEfficient) return mime;
+        } catch { /* codec inconnu de ce navigateur */ }
+      }
+      return null;
+    })());
+  }
+  return hardwareChoices.get(quality);
+}
+
+function preferCodec(transceiver, mime) {
+  if (!mime || !transceiver.setCodecPreferences) return;
+  for (const source of [RTCRtpSender, RTCRtpReceiver]) {
+    const codecs = source.getCapabilities?.("video")?.codecs || [];
+    if (!codecs.some((c) => c.mimeType === mime)) continue;
+    try {
+      transceiver.setCodecPreferences([...codecs.filter((c) => c.mimeType === mime), ...codecs.filter((c) => c.mimeType !== mime)]);
+      return;
+    } catch { /* liste refusée : essai avec l'autre */ }
+  }
+}
 
 const MAX_VIEWERS = 3; // overlays servis par un joueur (le service en refuse un quatrième)
 const DEFAULT_SHOWN = 4;
@@ -142,12 +207,13 @@ class Broadcast {
     if (data.type === "request") return this.offer(from);
     const pc = this.peers.get(from);
     if (!pc) return;
-    if (data.type === "answer") await pc.setRemoteDescription({ type: "answer", sdp: data.sdp });
+    if (data.type === "answer") await pc.setRemoteDescription({ type: "answer", sdp: withBitrates(data.sdp, this.quality) });
     else if (data.type === "ice") await pc.addIceCandidate(data.candidate);
     else if (data.type === "bye") this.drop(from);
   }
 
   async offer(to) {
+    const codec = await hardwareCodec(this.quality);
     this.drop(to);
     if (this.peers.size >= MAX_VIEWERS) return this.signal.send({ type: "signal", to, data: { type: "busy" } });
     const pc = new RTCPeerConnection({ iceServers: ICE_SERVERS });
@@ -157,14 +223,15 @@ class Broadcast {
       if (pc.connectionState === "failed") this.drop(to);
       this.changed();
     };
-    const senders = this.stream.getVideoTracks().map((track) => pc.addTransceiver(track, {
+    const transceivers = this.stream.getVideoTracks().map((track) => pc.addTransceiver(track, {
       direction: "sendonly",
       streams: [this.stream],
       sendEncodings: [{ maxBitrate: this.quality.bitrate, maxFramerate: this.quality.fps }],
-    }).sender);
+    }));
+    for (const transceiver of transceivers) preferCodec(transceiver, codec);
     const offer = await pc.createOffer();
     await pc.setLocalDescription(offer);
-    await Promise.all(senders.map((sender) => this.tune(sender)));
+    await Promise.all(transceivers.map((transceiver) => this.tune(transceiver.sender)));
     this.signal.send({ type: "signal", to, data: { type: "offer", sdp: offer.sdp } });
   }
 
@@ -183,8 +250,10 @@ class Broadcast {
     }
   }
 
-  // Nouvelle qualité, appliquée tout de suite à la capture et à chaque overlay, sans couper le partage.
+  // Nouvelle qualité, appliquée tout de suite à la capture et à chaque overlay. Les débits de départ et le codec
+  // se négocient à la connexion : chaque overlay reçoit alors une nouvelle offre (l'image se fige un instant).
   async configure(quality, priority) {
+    const renegotiate = quality !== this.quality;
     this.quality = quality;
     this.priority = priority;
     const [track] = this.stream.getVideoTracks();
@@ -192,28 +261,47 @@ class Broadcast {
       track.contentHint = priority.hint;
       try { await track.applyConstraints(captureConstraints(quality)); } catch (e) { console.warn("écrans :", e); }
     }
+    if (renegotiate) {
+      for (const id of [...this.peers.keys()]) await this.offer(id);
+      return;
+    }
     const senders = [...this.peers.values()].flatMap((pc) => pc.getSenders().filter((s) => s.track?.kind === "video"));
     await Promise.all(senders.map((sender) => this.tune(sender)));
   }
 
-  // Ce qui part réellement vers le premier overlay connecté, et ce qui le limite (connexion, processeur).
+  // Ce qui part réellement vers le premier overlay connecté, et ce qui le limite : débit que le navigateur
+  // s'autorise vers l'overlay, latence et pertes (réseau), encodeur (processeur ou carte graphique).
   async sending(previous) {
     const pc = [...this.peers.values()].find((p) => p.connectionState === "connected");
     if (!pc) return null;
-    for (const s of (await pc.getStats()).values()) {
-      if (s.type !== "outbound-rtp" || s.kind !== "video") continue;
-      const elapsed = previous ? s.timestamp - previous.at : 0;
-      return {
-        width: s.frameWidth,
-        height: s.frameHeight,
-        fps: s.framesPerSecond,
-        bytes: s.bytesSent,
-        at: s.timestamp,
-        bitrate: elapsed > 0 && s.bytesSent >= previous.bytes ? ((s.bytesSent - previous.bytes) * 8000) / elapsed : null,
-        limit: s.qualityLimitationReason,
-      };
+    const stats = await pc.getStats();
+    let out = null;
+    let remote = null;
+    let pair = null;
+    for (const s of stats.values()) {
+      if (s.type === "outbound-rtp" && s.kind === "video") out = s;
+      else if (s.type === "remote-inbound-rtp" && s.kind === "video") remote = s;
+      else if (s.type === "transport" && s.selectedCandidatePairId) pair = stats.get(s.selectedCandidatePairId);
+      else if (!pair && s.type === "candidate-pair" && s.nominated && s.state === "succeeded") pair = s;
     }
-    return null;
+    if (!out) return null;
+    const same = previous?.id === out.id;
+    const elapsed = same ? out.timestamp - previous.at : 0;
+    return {
+      id: out.id,
+      width: out.frameWidth,
+      height: out.frameHeight,
+      fps: out.framesPerSecond,
+      bytes: out.bytesSent,
+      at: out.timestamp,
+      bitrate: elapsed > 0 && out.bytesSent >= previous.bytes ? ((out.bytesSent - previous.bytes) * 8000) / elapsed : null,
+      limit: out.qualityLimitationReason,
+      codec: stats.get(out.codecId)?.mimeType?.replace(/^video\//, "") || null,
+      hardware: out.powerEfficientEncoder ?? null,
+      available: pair?.availableOutgoingBitrate ?? null,
+      rtt: pair?.currentRoundTripTime ?? null,
+      lost: remote?.fractionLost ?? null,
+    };
   }
 
   // Autre fenêtre : la nouvelle image remplace l'ancienne sans refaire les connexions.
@@ -262,17 +350,42 @@ async function captureWindow(quality, priority) {
   return stream;
 }
 
-const LIMITS = {
-  bandwidth: "Image réduite par votre connexion (envoi trop lent) : c'est normal les premières secondes ; si ça dure, choisissez une qualité plus basse.",
-  cpu: "Image réduite par votre ordinateur (encodage trop lourd) : choisissez une qualité plus basse, ou moins d'images par seconde.",
-};
 const decimal = (n) => n.toLocaleString("fr-FR", { maximumFractionDigits: 1 });
+const LOSSY = 0.02; // au-delà de 2 % de paquets perdus, la limite vient vraiment du réseau
 
-function SentInfo({ sent }) {
+// Pourquoi l'image est réduite. Le débit « autorisé » est l'estimation du navigateur vers l'overlay, pas la
+// capacité de la connexion : il la monte tant que rien ne se perd, et une image immobile la fait peu monter.
+function limitText(sent, quality) {
+  if (sent.limit === "cpu") {
+    return `Image réduite : l'encodage est trop lourd pour l'ordinateur.${sent.hardware === false ? " Il se fait par le processeur (aucun codec de la carte graphique n'a été trouvé pour cette qualité)." : ""}
+      Choisissez une qualité plus basse, ou moins d'images par seconde.`;
+  }
+  if (sent.limit !== "bandwidth") return null;
+  if (sent.available && sent.available >= quality.bitrate * 0.95) {
+    return `Image réduite pour tenir dans le débit de la qualité choisie (${decimal(quality.bitrate / 1e6)} Mb/s) :
+      choisissez une qualité plus haute si votre connexion et celle du streamer le permettent.`;
+  }
+  const allowed = sent.available ? ` (${decimal(sent.available / 1e6)} Mb/s pour l'instant)` : "";
+  return sent.lost != null && sent.lost > LOSSY
+    ? `Image réduite au débit que le navigateur s'autorise vers l'overlay${allowed}, et des paquets se perdent :
+      la limite vient du réseau entre vous et le streamer. Choisissez une qualité plus basse.`
+    : `Image réduite au débit que le navigateur s'autorise vers l'overlay${allowed}. Il l'augmente tant que rien
+      ne se perd ; une image presque immobile (menu, pause, autre fenêtre) le fait monter moins vite.`;
+}
+
+function SentInfo({ sent, quality }) {
   if (!sent?.width) return null;
+  const encoder = sent.codec && `${sent.codec}${sent.hardware === true ? " (carte graphique)" : sent.hardware === false ? " (processeur)" : ""}`;
+  const network = [
+    sent.available != null && `le navigateur s'autorise ${decimal(sent.available / 1e6)} Mb/s`,
+    sent.rtt != null && `latence ${Math.round(sent.rtt * 1000)} ms`,
+    sent.lost != null && `pertes ${decimal(sent.lost * 100)} %`,
+  ].filter(Boolean);
+  const limit = limitText(sent, quality);
   return html`<div class="stack full">
-    <p class="hint" role="status">Envoyé à l'overlay : ${sent.width} × ${sent.height}${sent.fps ? `, ${Math.round(sent.fps)} images/s` : ""}${sent.bitrate != null ? `, ${decimal(sent.bitrate / 1e6)} Mb/s` : ""}.</p>
-    ${LIMITS[sent.limit] && html`<div class="notice warn full">${LIMITS[sent.limit]}</div>`}
+    <p class="hint" role="status">Envoyé à l'overlay : ${sent.width} × ${sent.height}${sent.fps ? `, ${Math.round(sent.fps)} images/s` : ""}${sent.bitrate != null ? `, ${decimal(sent.bitrate / 1e6)} Mb/s` : ""}${encoder ? `, encodé en ${encoder}` : ""}.</p>
+    ${network.length > 0 && html`<p class="hint">Réseau : ${network.join(" · ")}.</p>`}
+    ${limit && html`<div class="notice warn full">${limit}</div>`}
   </div>`;
 }
 
@@ -387,12 +500,13 @@ function ShareScreen({ room }) {
         : html`<button type="button" disabled=${busy} onClick=${share}>${busy ? "Choix de la fenêtre…" : "Partager la fenêtre de mon jeu"}</button>`}
     </div>`}
     ${status && html`<p role="status">${status}</p>`}
-    <${SentInfo} sent=${sent} />
+    <${SentInfo} sent=${sent} quality=${quality} />
     ${view && html`<video class="screen-preview" ref=${preview} autoplay muted playsinline aria-label="Aperçu de votre partage"></video>`}
     ${error && html`<div class="notice error full">${error}</div>`}
     <ul class="hint tips">
       <li>Choisissez une <strong>fenêtre</strong> plutôt que l'écran entier : rien d'autre que le jeu ne sera visible.</li>
       <li>Écran noir dans l'aperçu ? Passez le jeu en mode fenêtré, ou en plein écran fenêtré (sans bordure).</li>
+      <li>Jugez la qualité avec le jeu en mouvement : une image immobile n'envoie presque rien.</li>
       <li>La qualité se change pendant le partage. Chaque overlay qui affiche votre jeu reçoit son propre envoi :
         le débit choisi compte une fois par overlay. Le 1080p ne se voit que si l'overlay affiche peu d'écrans
         (avec 4 écrans, chacun fait environ 960 × 540 dans un stream en 1080p).</li>

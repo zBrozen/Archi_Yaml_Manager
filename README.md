@@ -183,9 +183,17 @@ Onglet « Écrans » de la room :
   Chaque joueur règle sa **qualité**, y compris pendant le partage : légère (720p, 30 images/s, 1,5 Mb/s),
   normale (720p, 3 Mb/s, par défaut), haute (1080p, 6 Mb/s) ou maximale (1080p, 60 images/s, 12 Mb/s), et ce
   qu'il faut garder si le débit manque (netteté, fluidité ou un équilibre des deux). Le débit est envoyé à
-  chaque overlay qui affiche le jeu, et le streamer reçoit celui de tous les écrans affichés. La page montre ce
-  qui part réellement (définition, images par seconde, débit) et prévient quand la connexion ou le processeur
-  du joueur obligent le navigateur à réduire l'image. Le 1080p ne sert que si l'overlay affiche peu d'écrans.
+  chaque overlay qui affiche le jeu, et le streamer reçoit celui de tous les écrans affichés. Le 1080p ne sert
+  que si l'overlay affiche peu d'écrans.
+
+  Le navigateur estime lui-même le débit qu'il peut envoyer vers l'overlay : sans aide, Chrome part de
+  0,3 Mb/s et met des dizaines de secondes à monter. Le site lui impose donc un débit de départ (et, en qualité
+  haute ou maximale, un minimum), avec les paramètres `x-google-*` ajoutés à la réponse de l'overlay. Il
+  propose aussi en premier le codec que la carte graphique sait encoder (AV1, VP9 ou H.264, détecté avec
+  `navigator.mediaCapabilities`), plutôt que le VP8 encodé par le processeur. La page montre ce qui part
+  réellement (définition, images par seconde, débit, codec et encodeur), le débit que le navigateur
+  s'autorise, la latence et les pertes, et explique ce qui réduit l'image : débit de la qualité choisie,
+  estimation encore en train de monter, réseau qui perd des paquets ou encodage trop lourd.
 - **Hôte** : « Créer le lien de l'overlay » donne une adresse secrète (`#/overlay/CODE/CLÉ`) à mettre dans OBS
   en source **Navigateur** (1920 × 1080, fond transparent). Les écrans partagés s'y placent seuls en grille,
   aussi grands que possible, et les **messages de la partie** (objets envoyés, objectifs atteints, release et
