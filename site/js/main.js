@@ -118,8 +118,50 @@ function SheetBadges({ sheet }) {
     ${sheet.adult && html`<span class="badge danger" title="Contenu pour adultes ou non classé">18+</span>`}`;
 }
 
-function gameLabel(g) {
-  return g.sheet?.adult ? `${g.game} (18+)` : g.game;
+// Liste des jeux avec recherche et filtres : le tableur en compte des centaines, trop pour un menu déroulant.
+function GamePicker({ core, custom, imported, value, onChange, onCreate }) {
+  const [search, setSearch] = useState("");
+  const [kind, setKind] = useSetting("pickerKind", "all");
+  const [showAdult, setShowAdult] = useSetting("pickerAdult", false);
+  const [showBroken, setShowBroken] = useSetting("pickerBroken", false);
+  const needle = search.trim().toLowerCase();
+  const keep = (g) => (!needle || g.game.toLowerCase().includes(needle))
+    && (showAdult || !g.sheet?.adult)
+    && (showBroken || g.sheet?.stability !== "Broken on Main");
+  const sections = [
+    ["imported", "Ajoutés avec un apworld", imported],
+    ["core", "Jeux officiels", core],
+    ...customGroups(custom).map(([label, games]) => ["custom", label, games]),
+  ].filter(([k]) => kind === "all" || kind === k)
+    .map(([k, label, games]) => [label, games.filter(keep)])
+    .filter(([, games]) => games.length);
+  const total = sections.reduce((n, [, games]) => n + games.length, 0);
+  const kinds = [["all", "Tous"], ["core", `Officiels (${core.length})`], ["custom", `Non officiels (${custom.length})`],
+    ...(imported.length ? [["imported", `Ajoutés (${imported.length})`]] : [])];
+
+  return html`<div class="picker">
+    <div class="row full">
+      <input type="search" class="search" placeholder="Rechercher un jeu…" value=${search} onInput=${(e) => setSearch(e.target.value)} />
+      <button type="button" disabled=${!value} onClick=${() => onCreate(value)}>${value ? `Créer un YAML pour ${value}` : "Créer un YAML"}</button>
+    </div>
+    <div class="row picker-filters">
+      <div class="chips-row">${kinds.map(([k, label]) => html`<button type="button" class=${`chip-btn ${kind === k ? "active" : ""}`} onClick=${() => setKind(k)}>${label}</button>`)}</div>
+      <label class="check"><input type="checkbox" checked=${showBroken} onChange=${(e) => setShowBroken(e.target.checked)} /> Jeux cassés</label>
+      <label class="check"><input type="checkbox" checked=${showAdult} onChange=${(e) => setShowAdult(e.target.checked)} /> Jeux 18+</label>
+    </div>
+    <div class="game-list" role="listbox" aria-label="Jeux">
+      ${total === 0 && html`<p class="hint">Aucun jeu ne correspond.</p>`}
+      ${sections.map(([label, games]) => html`<div class="game-section">
+        <h3>${label} <span class="hint">${games.length}</span></h3>
+        <div class="game-grid">${games.map((g) => html`<button type="button" role="option" aria-selected=${value === g.game}
+          class=${`game-tile ${value === g.game ? "selected" : ""}`} title=${g.game}
+          onClick=${() => onChange(g.game)} onDblClick=${() => onCreate(g.game)}>
+          <span class="game-name">${g.game}</span>
+          ${g.sheet && html`<span class="game-badges"><${SheetBadges} sheet=${g.sheet} /></span>`}
+        </button>`)}</div>
+      </div>`)}
+    </div>
+  </div>`;
 }
 
 function customGroups(custom) {
@@ -191,15 +233,7 @@ function Home({ index, onOpen, onCreate }) {
 
     <section class="card stack">
       <h2>Pas encore de YAML ?</h2>
-      <div class="row full">
-        <select class="grow" value=${game} onChange=${(e) => setGame(e.target.value)}>
-          <option value="">Choisir un jeu…</option>
-          ${imported.length > 0 && html`<optgroup label="Ajoutés avec un apworld">${imported.map((g) => html`<option value=${g.game}>${g.game}</option>`)}</optgroup>`}
-          ${customGroups(custom).map(([label, games]) => html`<optgroup label=${label}>${games.map((g) => html`<option value=${g.game}>${gameLabel(g)}</option>`)}</optgroup>`)}
-          <optgroup label="Jeux officiels">${core.map((g) => html`<option value=${g.game}>${g.game}</option>`)}</optgroup>
-        </select>
-        <button type="button" disabled=${!game} onClick=${() => onCreate(game)}>Créer un YAML</button>
-      </div>
+      <${GamePicker} core=${core} custom=${custom} imported=${imported} value=${game} onChange=${setGame} onCreate=${onCreate} />
       <p class="hint">Jeu absent de la liste ? Déposez son .apworld ci-dessous pour l'ajouter.</p>
       <${ApworldDrop} onLoaded=${added} />
       ${imported.length > 0 && html`<div class="remembered">

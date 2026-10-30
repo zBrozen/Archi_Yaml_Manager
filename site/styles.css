@@ -397,3 +397,23 @@ table.compact td { padding: .15rem .6rem .15rem 0; }
 .credit { background: var(--surface-2); border-radius: 8px; padding: .6rem .75rem; display: grid; gap: .15rem; font-size: .9rem; }
 .credit a { overflow-wrap: anywhere; }
 .badge.danger { background: var(--error-soft); color: var(--error); }
+
+/* Choix du jeu à l'accueil */
+.picker { display: grid; gap: .6rem; }
+.picker-filters { flex-wrap: wrap; gap: .5rem 1rem; align-items: center; }
+.picker .check { display: inline-flex; align-items: center; gap: .35rem; font-size: .85rem; color: var(--muted); }
+.game-list { max-height: 26rem; overflow-y: auto; border: 1px solid var(--border); border-radius: var(--radius); padding: .6rem; background: var(--bg); }
+.game-section + .game-section { margin-top: .9rem; }
+.game-section h3 { font-size: .85rem; margin: 0 0 .4rem; position: sticky; top: -.6rem; background: var(--bg); padding: .2rem 0; z-index: 1; }
+.game-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr)); gap: .4rem; }
+.game-tile {
+  display: flex; flex-direction: column; align-items: flex-start; gap: .25rem; text-align: left;
+  background: var(--surface); color: var(--text); border: 1px solid var(--border); border-radius: 8px;
+  padding: .45rem .6rem; font-weight: 500; min-width: 0;
+}
+.game-tile:hover:not(:disabled) { background: var(--surface-2); border-color: var(--accent); }
+.game-tile.selected { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
+.game-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%; }
+.game-badges { display: flex; flex-wrap: wrap; gap: .25rem; }
+.game-badges .badge { font-size: .68rem; }
+@media (max-width: 600px) { .game-grid { grid-template-columns: 1fr 1fr; } }
