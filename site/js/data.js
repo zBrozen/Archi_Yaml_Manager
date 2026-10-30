@@ -22,6 +22,11 @@ export function gameEntry(name) {
   return index?.games.find((g) => g.game === name) || local.get(name) || null;
 }
 
+// Noms de tous les jeux connus : ceux de la base et ceux ajoutés avec un apworld.
+export function knownGames() {
+  return new Set([...(index?.games || []), ...local.values()].map((g) => g.game));
+}
+
 export function cachedGame(name) {
   return games.get(name) || null;
 }

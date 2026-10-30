@@ -417,3 +417,60 @@ table.compact td { padding: .15rem .6rem .15rem 0; }
 .game-badges { display: flex; flex-wrap: wrap; gap: .25rem; }
 .game-badges .badge { font-size: .68rem; }
 @media (max-width: 600px) { .game-grid { grid-template-columns: 1fr 1fr; } }
+
+/* Navigation */
+a.brand { color: inherit; text-decoration: none; }
+.site-nav { display: flex; gap: .25rem; margin-right: auto; }
+.site-nav a { color: var(--muted); text-decoration: none; font-weight: 600; font-size: .92rem; padding: .3rem .7rem; border-radius: 8px; }
+.site-nav a:hover { background: var(--surface-2); color: var(--text); }
+.site-nav a.active { background: var(--accent-soft); color: var(--accent); }
+
+/* Rooms */
+.room { max-width: 860px; margin: 2rem auto; padding: 0 16px; display: grid; gap: 1.25rem; }
+.room h3 { font-size: 1.05rem; margin: 0; }
+input[type="url"], input[type="datetime-local"] {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: .45rem .65rem; min-width: 0; width: 100%;
+}
+.fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: .9rem 1.25rem; }
+.fields .span-all { grid-column: 1 / -1; }
+.fields label { display: grid; gap: .3rem; align-content: start; }
+.fields label > span:first-child { font-size: .875rem; font-weight: 600; }
+.code-input { text-transform: uppercase; letter-spacing: .15em; font-weight: 700; }
+.room-head { display: grid; gap: .6rem; }
+.room-head h1 { margin: 0; }
+.room-code { font-family: ui-monospace, "Cascadia Code", Consolas, monospace; font-size: 1.15rem; letter-spacing: .08em; }
+.room-notes { white-space: pre-line; background: var(--surface-2); border-radius: 8px; padding: .6rem .8rem; }
+.badge.ok { background: color-mix(in srgb, var(--ok) 16%, transparent); color: var(--ok); }
+.notice.ok { background: color-mix(in srgb, var(--ok) 14%, transparent); color: var(--ok); }
+.room-list, .slot-list { list-style: none; margin: 0; padding: 0; display: grid; gap: .4rem; }
+.room-list li { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; }
+.slot-list li {
+  display: flex; flex-wrap: wrap; align-items: center; gap: .5rem;
+  background: var(--surface-2); border-radius: 8px; padding: .5rem .75rem;
+}
+.slot-list li .grow { min-width: 10rem; }
+.table-wrap { overflow-x: auto; }
+.room-table { width: 100%; border-collapse: collapse; font-size: .92rem; }
+.room-table th { text-align: left; font-size: .8rem; color: var(--muted); font-weight: 600; padding: .3rem .5rem; border-bottom: 1px solid var(--border); }
+.room-table td { padding: .4rem .5rem; vertical-align: top; }
+.room-table tr.first td { border-top: 1px solid var(--border); }
+.room-table tbody tr:first-child td { border-top: none; }
+.room-table td.actions { text-align: right; white-space: nowrap; }
+.room-table .badge { margin-left: .2rem; }
+.issues summary { cursor: pointer; }
+.issues ul { margin: .3rem 0 0; padding-left: 1.2rem; font-size: .85rem; }
+.check-notes { margin: 0; padding-left: 1.2rem; display: grid; gap: .3rem; font-size: .92rem; }
+.check-notes li.error { color: var(--error); }
+.check-notes li.warn { color: var(--warn); }
+.steps { margin: 0; padding-left: 1.3rem; display: grid; gap: .35rem; font-size: .92rem; }
+.host { border-color: var(--accent); }
+.host > .stack + .stack { border-top: 1px solid var(--border); padding-top: .9rem; }
+a.button {
+  display: inline-block; text-decoration: none; background: var(--accent); color: var(--on-accent);
+  border: 1px solid var(--accent); border-radius: 8px; padding: .45rem 1rem; font-weight: 600;
+}
+a.button:hover { background: var(--accent-hover); }
+a.button.ghost { background: var(--surface); color: var(--text); border-color: var(--border); font-weight: 500; }
+a.button.ghost:hover { background: var(--surface-2); }
+a.button.small { padding: .25rem .7rem; font-size: .875rem; }
+.danger-link { color: var(--error); justify-self: start; }

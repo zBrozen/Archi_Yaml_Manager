@@ -4,21 +4,12 @@ import { parseFile, exportFile, gamesOf, setIn, getIn, markDirty, isPlainObject,
 import { checkValue, sameAsDefault, yamlDefault, yamlComment, setDocLanguage, GROUP_NAMES } from "./options.js";
 import { useApworldLoader } from "./apworld.js";
 import { OptionRow, RawEditor } from "./editors.js";
+import { useSetting, download, plural, SheetBadges, GamePicker, loadCredits } from "./ui.js";
+import { versionProblem, checkText, nameProblem } from "./check.js";
+import { RoomsHome, RoomPage } from "./rooms.js";
+import { api as roomsApi, normalizeCode, roomsEnabled, saveAccess } from "./rooms-api.js";
 
 const formatDate = (iso) => new Date(iso).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" });
-const plural = (n, word) => `${n} ${word}${n > 1 ? "s" : ""}`;
-
-// Préférence mémorisée dans le navigateur (si le stockage est disponible).
-function useSetting(name, initial) {
-  const [value, setValue] = useState(() => {
-    try { return JSON.parse(localStorage.getItem(name)) ?? initial; } catch { return initial; }
-  });
-  const update = (next) => {
-    setValue(next);
-    try { localStorage.setItem(name, JSON.stringify(next)); } catch { /* stockage indisponible */ }
-  };
-  return [value, update];
-}
 
 function useGame(name) {
   const [state, setState] = useState(() => ({ data: cachedGame(name), loading: !cachedGame(name) && !!gameEntry(name) }));
@@ -105,89 +96,7 @@ function ApworldDrop({ game, onLoaded }) {
   </div>`;
 }
 
-function download(name, text) {
-  const url = URL.createObjectURL(new Blob([text], { type: "text/yaml;charset=utf-8" }));
-  const a = Object.assign(document.createElement("a"), { href: url, download: name });
-  document.body.append(a);
-  a.click();
-  a.remove();
-  setTimeout(() => URL.revokeObjectURL(url), 1000);
-}
-
 // --- Accueil -------------------------------------------------------------------
-
-// Infos du tableur des jeux du Discord d'Archipelago, pour les jeux non officiels.
-const STABILITY = {
-  Stable: { label: "Stable", group: "stables", cls: "" },
-  Unstable: { label: "Instable", group: "instables", cls: "warn" },
-  "Broken on Main": { label: "Cassé sur la version actuelle", group: "cassés sur la version actuelle", cls: "danger" },
-};
-
-function SheetBadges({ sheet }) {
-  if (!sheet) return null;
-  const stability = STABILITY[sheet.stability];
-  return html`${stability && html`<span class=${`badge ${stability.cls}`} title="Stabilité indiquée dans la liste des jeux du Discord d'Archipelago">${stability.label}</span>`}
-    ${sheet.pr_status === "In Review" && html`<span class="badge" title="En cours d'intégration aux jeux officiels">Bientôt officiel</span>`}
-    ${sheet.adult && html`<span class="badge danger" title="Contenu pour adultes ou non classé">18+</span>`}`;
-}
-
-// Liste des jeux avec recherche et filtres : le tableur en compte des centaines, trop pour un menu déroulant.
-function GamePicker({ core, custom, imported, value, onChange, onCreate }) {
-  const [search, setSearch] = useState("");
-  const [kind, setKind] = useSetting("pickerKind", "all");
-  const [showAdult, setShowAdult] = useSetting("pickerAdult", false);
-  const [showBroken, setShowBroken] = useSetting("pickerBroken", false);
-  const needle = search.trim().toLowerCase();
-  const keep = (g) => (!needle || g.game.toLowerCase().includes(needle))
-    && (showAdult || !g.sheet?.adult)
-    && (showBroken || g.sheet?.stability !== "Broken on Main");
-  const sections = [
-    ["imported", "Ajoutés avec un apworld", imported],
-    ["core", "Jeux officiels", core],
-    ...customGroups(custom).map(([label, games]) => ["custom", label, games]),
-  ].filter(([k]) => kind === "all" || kind === k)
-    .map(([k, label, games]) => [label, games.filter(keep)])
-    .filter(([, games]) => games.length);
-  const total = sections.reduce((n, [, games]) => n + games.length, 0);
-  const kinds = [["all", "Tous"], ["core", `Officiels (${core.length})`], ["custom", `Non officiels (${custom.length})`],
-    ...(imported.length ? [["imported", `Ajoutés (${imported.length})`]] : [])];
-
-  return html`<div class="picker">
-    <div class="row full">
-      <input type="search" class="search" placeholder="Rechercher un jeu…" value=${search} onInput=${(e) => setSearch(e.target.value)} />
-      <button type="button" disabled=${!value} onClick=${() => onCreate(value)}>${value ? `Créer un YAML pour ${value}` : "Créer un YAML"}</button>
-    </div>
-    <div class="row picker-filters">
-      <div class="chips-row">${kinds.map(([k, label]) => html`<button type="button" class=${`chip-btn ${kind === k ? "active" : ""}`} onClick=${() => setKind(k)}>${label}</button>`)}</div>
-      <label class="check"><input type="checkbox" checked=${showBroken} onChange=${(e) => setShowBroken(e.target.checked)} /> Jeux cassés</label>
-      <label class="check"><input type="checkbox" checked=${showAdult} onChange=${(e) => setShowAdult(e.target.checked)} /> Jeux 18+</label>
-    </div>
-    <div class="game-list" role="listbox" aria-label="Jeux">
-      ${total === 0 && html`<p class="hint">Aucun jeu ne correspond.</p>`}
-      ${sections.map(([label, games]) => html`<div class="game-section">
-        <h3>${label} <span class="hint">${games.length}</span></h3>
-        <div class="game-grid">${games.map((g) => html`<button type="button" role="option" aria-selected=${value === g.game}
-          class=${`game-tile ${value === g.game ? "selected" : ""}`} title=${g.game}
-          onClick=${() => onChange(g.game)} onDblClick=${() => onCreate(g.game)}>
-          <span class="game-name">${g.game}</span>
-          ${g.sheet && html`<span class="game-badges"><${SheetBadges} sheet=${g.sheet} /></span>`}
-        </button>`)}</div>
-      </div>`)}
-    </div>
-  </div>`;
-}
-
-function customGroups(custom) {
-  const groups = new Map();
-  for (const g of custom) {
-    const stability = STABILITY[g.sheet?.stability];
-    const label = stability ? `Jeux non officiels ${stability.group}` : "Jeux du serveur";
-    if (!groups.has(label)) groups.set(label, []);
-    groups.get(label).push(g);
-  }
-  const order = ["Jeux du serveur", ...Object.values(STABILITY).map((s) => `Jeux non officiels ${s.group}`)];
-  return [...groups].sort((a, b) => order.indexOf(a[0]) - order.indexOf(b[0]));
-}
 
 function Home({ index, onOpen, onCreate }) {
   const [errors, setErrors] = useState([]);
@@ -356,18 +265,6 @@ function isVisible(option, value, { filter, search, advanced }) {
 
 const unknownOption = (key) => ({ key, name: key, kind: "unknown", weighted: false, doc: "" });
 
-// Version du jeu demandée par le fichier (`requires.game` : version minimale, ou { min, max }),
-// vérifiée comme le fait Archipelago avant de générer.
-function versionProblem(js, game) {
-  const version = cachedGame(game)?.world_version;
-  const required = getIn(js, ["requires", "game", game]);
-  if (!version || required == null) return null;
-  const { min, max } = isPlainObject(required) ? required : { min: required };
-  if (min && compareVersions(min, version) > 0) return { need: `${min} ou plus récente`, have: version };
-  if (max && compareVersions(max, version) < 0) return { need: `${max} ou plus ancienne`, have: version };
-  return null;
-}
-
 function GameSection({ name, entry, index, update, view, onApworld }) {
   const { data, loading, error, refresh } = useGame(name);
   const schema = data;
@@ -465,8 +362,10 @@ function AdvancedSection({ js, games, update }) {
   </details>`;
 }
 
-function Editor({ index, file, setFile, onClose, advanced }) {
+function Editor({ index, file, setFile, onClose, advanced, onSend }) {
   const [active, setActive] = useState(0);
+  const [sending, setSending] = useState(false);
+  const [sendError, setSendError] = useState(null);
   const [filter, setFilter] = useState("all");
   const [search, setSearch] = useState("");
   const [preview, setPreview] = useState(null);
@@ -515,18 +414,32 @@ function Editor({ index, file, setFile, onClose, advanced }) {
     setTimeout(() => setCopied(false), 1500);
   };
   const view = { filter, search, advanced };
+  const room = file.room;
+  const roomBlocked = room && (file.docs.length > 1
+    ? "Dans une room, un fichier = un joueur : envoyez chaque joueur séparément."
+    : nameProblem(entry.js.name));
+  const send = async () => {
+    setSending(true);
+    setSendError(null);
+    try { await onSend(exported(), fileName()); } catch (e) { setSendError(e.message); } finally { setSending(false); }
+  };
 
   return html`<div class="editor">
     <div class="toolbar">
       <div class="toolbar-row">
-        <button type="button" class="ghost" title="Ouvrir un autre fichier"
-          onClick=${() => (!dirty || confirm("Fermer ce fichier ? Les modifications non téléchargées seront perdues.")) && onClose()}>←</button>
+        <button type="button" class="ghost" title=${room ? "Retour à la room" : "Ouvrir un autre fichier"}
+          onClick=${() => (!dirty || confirm(room ? "Revenir à la room ? Les modifications non envoyées seront perdues."
+            : "Fermer ce fichier ? Les modifications non téléchargées seront perdues.")) && onClose()}>←</button>
         <strong class="file-name">${file.name || "Nouveau YAML"}</strong>
+        ${room && html`<span class="badge accent">Room ${room.code}</span>`}
         <span class="spacer"></span>
         ${advanced && html`<button type="button" class="ghost" onClick=${() => setPreview(exported())}>Aperçu</button>`}
         <button type="button" class="ghost" disabled=${!!blocked} title=${blocked || ""} onClick=${copy}>${copied ? "Copié ✓" : "Copier"}</button>
-        <button type="button" disabled=${!!blocked} title=${blocked || ""} onClick=${() => download(fileName(), exported())}>Télécharger</button>
+        <button type="button" class=${room ? "ghost" : ""} disabled=${!!blocked} title=${blocked || ""} onClick=${() => download(fileName(), exported())}>Télécharger</button>
+        ${room && html`<button type="button" disabled=${!!(blocked || roomBlocked) || sending} title=${blocked || roomBlocked || ""}
+          onClick=${send}>${sending ? "Envoi…" : room.slotId ? "Mettre à jour dans la room" : "Envoyer dans la room"}</button>`}
       </div>
+      ${room && (sendError || roomBlocked) && html`<div class="notice error">${sendError || roomBlocked}</div>`}
       <div class="toolbar-row">
         <input type="search" class="search" placeholder="Rechercher une option…" value=${search} onInput=${(e) => setSearch(e.target.value)} />
         <div class="segmented">
@@ -558,10 +471,10 @@ function Editor({ index, file, setFile, onClose, advanced }) {
 
 // --- Application -------------------------------------------------------------------
 
-function newDocument(index, game) {
+function newDocument(index, game, name = "Joueur{number}") {
   const version = gameEntry(game)?.world_version;
   return {
-    name: "Joueur{number}",
+    name,
     description: `YAML ${game}`,
     game,
     requires: { version: index.ap_version, ...(version ? { game: { [game]: version } } : {}) },
@@ -569,9 +482,13 @@ function newDocument(index, game) {
   };
 }
 
-function Header({ index, advanced, setAdvanced, docLanguage, setDocLanguage, theme, setTheme }) {
+function Header({ page, advanced, setAdvanced, docLanguage, setDocLanguage, theme, setTheme }) {
   return html`<header class="site-header">
-    <div class="brand"><span class="logo" aria-hidden="true">◆</span> Archipelago YAML Manager</div>
+    <a class="brand" href="#/"><span class="logo" aria-hidden="true">◆</span> Archipelago YAML Manager</a>
+    ${roomsEnabled() && html`<nav class="site-nav">
+      <a href="#/" class=${page === "home" ? "active" : ""}>Éditeur</a>
+      <a href="#/rooms" class=${page !== "home" ? "active" : ""}>Rooms</a>
+    </nav>`}
     <div class="header-tools">
       <label class="switch" title="Affiche les tirages au sort, les poids et le YAML brut">
         <input type="checkbox" checked=${advanced} onChange=${(e) => setAdvanced(e.target.checked)} />
@@ -591,16 +508,59 @@ function Header({ index, advanced, setAdvanced, docLanguage, setDocLanguage, the
   </header>`;
 }
 
+// Adresse de la page : #/ (éditeur), #/rooms, #/room/CODE. Les liens personnels
+// (#/room/CODE/p/JETON, #/room/CODE/h/JETON) sont mémorisés puis retirés de l'adresse.
+function readRoute() {
+  const parts = location.hash.replace(/^#\/?/, "").split("/").filter(Boolean);
+  if (parts[0] === "rooms") return { page: "rooms" };
+  if (parts[0] === "room" && parts[1]) {
+    const code = normalizeCode(parts[1]);
+    if (parts[3] && (parts[2] === "p" || parts[2] === "h")) {
+      saveAccess(code, parts[2] === "h" ? { admin: parts[3] } : { player: parts[3] });
+      history.replaceState(null, "", `#/room/${code}`);
+    }
+    return { page: "room", code };
+  }
+  return { page: "home" };
+}
+
 function App() {
   const [index, setIndex] = useState(null);
   const [error, setError] = useState(null);
   const [file, setFile] = useState(null);
+  const [route, setRoute] = useState(readRoute);
   const [advanced, setAdvanced] = useSetting("advanced", false);
   const [theme, setTheme] = useSetting("theme", "auto");
   const [docLanguage, setDocLanguageSetting] = useSetting("docLanguage", "en");
   setDocLanguage(docLanguage); // lu par les éditeurs pendant ce rendu
 
   useEffect(() => { loadIndex().then(setIndex).catch((e) => setError(e.message)); }, []);
+  useEffect(() => {
+    const change = () => { setRoute(readRoute()); setFile(null); window.scrollTo(0, 0); };
+    window.addEventListener("hashchange", change);
+    return () => window.removeEventListener("hashchange", change);
+  }, []);
+
+  // YAML ouvert depuis une room : l'éditeur l'y renvoie (un fichier = un joueur, avec un nom fixe).
+  const openFromRoom = (code, { content, filename, id }) => {
+    const parsed = parseFile(content);
+    if (parsed.errors.length || !parsed.docs.length) throw new Error(parsed.errors[0] || "Ce YAML est vide.");
+    setFile({ name: filename, original: content, docs: parsed.docs, room: { code, slotId: id } });
+  };
+  const createForRoom = (code, game, name) => setFile({
+    name: null, original: null, room: { code, slotId: null },
+    docs: [{ source: 0, js: newDocument(index, game, name), original: {}, dirty: [] }],
+  });
+  const sendToRoom = async (text, filename) => {
+    const { code, slotId } = file.room;
+    const check = await checkText(text);
+    if (check.errors.length) throw new Error(check.errors[0]);
+    const [doc] = check.docs;
+    const slot = { name: doc.name, game: doc.game, filename, content: text, issues: [...doc.problems, ...doc.warnings] };
+    if (slotId) await roomsApi.replaceSlot(code, slotId, slot);
+    else await roomsApi.addSlot(code, slot);
+    setFile(null);
+  };
   useEffect(() => {
     if (theme === "auto") delete document.documentElement.dataset.theme;
     else document.documentElement.dataset.theme = theme;
@@ -609,14 +569,19 @@ function App() {
   let body;
   if (error) body = html`<main class="home"><div class="notice error">Impossible de charger la liste des jeux : ${error}</div></main>`;
   else if (!index) body = html`<main class="home"><p class="hint center">Chargement…</p></main>`;
-  else if (!file) {
+  else if (file) {
+    body = html`<${Editor} index=${index} file=${file} setFile=${setFile} advanced=${advanced} onClose=${() => setFile(null)} onSend=${sendToRoom} />`;
+  } else if (route.page === "rooms") {
+    body = html`<${RoomsHome} />`;
+  } else if (route.page === "room") {
+    body = html`<${RoomPage} key=${route.code} index=${index} code=${route.code}
+      onCreate=${(game, name) => createForRoom(route.code, game, name)} onEdit=${(slot) => openFromRoom(route.code, slot)} />`;
+  } else {
     body = html`<${Home} index=${index} onOpen=${setFile}
       onCreate=${(game) => setFile({ name: null, original: null, docs: [{ source: 0, js: newDocument(index, game), original: {}, dirty: [] }] })} />`;
-  } else {
-    body = html`<${Editor} index=${index} file=${file} setFile=${setFile} advanced=${advanced} onClose=${() => setFile(null)} />`;
   }
 
-  return html`<${Header} index=${index} advanced=${advanced} setAdvanced=${setAdvanced}
+  return html`<${Header} page=${route.page} advanced=${advanced} setAdvanced=${setAdvanced}
     docLanguage=${docLanguage} setDocLanguage=${setDocLanguageSetting} theme=${theme} setTheme=${setTheme} />${body}<${Footer} />`;
 }
 
@@ -625,10 +590,7 @@ function Footer() {
   const [credits, setCredits] = useState(null);
   const openCredits = (e) => {
     e.preventDefault();
-    fetch("data/apworld-credits.json", { cache: "no-cache" })
-      .then((r) => (r.ok ? r.json() : []))
-      .catch(() => [])
-      .then(setCredits);
+    loadCredits().then(setCredits);
   };
   return html`<footer class="site-footer hint">
     <p>Outil non officiel, non affilié à <a href="https://archipelago.gg">Archipelago</a> ni aux éditeurs des jeux cités,
@@ -643,7 +605,7 @@ function Footer() {
           ${credits.length === 0 && html`<p>Aucun jeu non officiel dans la base.</p>`}
           ${credits.map((c) => html`<div class="credit" key=${c.file}>
             <div><strong>${c.game}</strong>${c.version && html` <span class="hint">v${c.version}</span>`} <${SheetBadges} sheet=${c.sheet} /></div>
-            ${c.authors.length > 0 && html`<div>Auteurs : ${c.authors.join(", ")}</div>`}
+            ${c.authors?.length > 0 && html`<div>Auteurs : ${[].concat(c.authors).join(", ")}</div>`}
             ${c.source && html`<div>Source : <a href=${c.source}>${c.source.replace(/^https:\/\//, "")}</a></div>`}
             <div>Licence : ${c.license
               ? (c.license_url ? html`<a href=${c.license_url}>${c.license}</a>` : c.license)

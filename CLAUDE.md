@@ -19,3 +19,7 @@
   mémoire limités) ; un lot qui plante est coupé en deux jusqu'à isoler le fautif, signalé dans
   `index.json` (`errors`). `fetch_apworlds.py` écarte en amont les apworlds dont le manifeste ferait
   planter Archipelago pour tous les mondes (version mal formée, zip invalide).
+- Rooms : le site appelle le service `worker/` (Cloudflare Worker + D1, publié par `deploy-worker.yml`),
+  dont l'adresse est dans `site/js/config.js` (en local : `http://localhost:8787`, `npx wrangler dev`).
+  La génération et l'hébergement ne passent pas par ce service : l'hôte génère avec son Archipelago et
+  héberge sur archipelago.gg. Toute nouvelle table ou colonne passe par une migration dans `worker/migrations/`.

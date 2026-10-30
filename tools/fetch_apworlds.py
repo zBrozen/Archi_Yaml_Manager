@@ -330,10 +330,13 @@ def credits_of(http: Http, path: Path, page: str | None) -> dict:
         license_file = next((n for n in names if n.count("/") == 1
                              and re.match(r"(LICEN[CS]E|COPYING)(\.\w+)?$", n.split("/")[1], re.I)), None)
         text = archive.read(license_file).decode("utf-8", "replace") if license_file else None
+    authors = meta.get("authors") or []
+    if isinstance(authors, str):  # certains manifestes donnent une chaîne au lieu d'une liste
+        authors = [a.strip() for a in authors.split(",") if a.strip()]
     entry = {
         "game": meta.get("game") or path.stem,
         "version": meta.get("world_version"),
-        "authors": meta.get("authors", []),
+        "authors": authors,
         "file": path.name,
         "source": page,
     }

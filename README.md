@@ -25,7 +25,12 @@ sans éditer le code à la main.
   ceux du jeu. Tant que l'apworld manque, le téléchargement est bloqué. L'apworld est ensuite mémorisé
   dans le navigateur du joueur (on peut l'oublier depuis l'accueil).
 
-Tout se passe dans le navigateur : les fichiers des joueurs ne sont envoyés nulle part.
+- **Rooms** : un hôte crée une room, les joueurs la rejoignent avec un code court et leur pseudo, et y déposent
+  leurs YAML (un fichier par jeu). L'hôte vérifie la room, télécharge tous les YAML pour générer la partie avec
+  son Archipelago, puis l'héberge sur archipelago.gg : chaque joueur retrouve l'adresse, le tracker et ses fichiers
+  sur la page de la room. Voir la section « Rooms ».
+
+Hors rooms, tout se passe dans le navigateur : les fichiers des joueurs ne sont envoyés nulle part.
 
 ## Comment le site reste à jour
 
@@ -116,6 +121,48 @@ la mise à jour des autres jeux. Il apparaît sur la page d'accueil du site et d
 > l'extraction. Ce job n'a qu'un accès en lecture au dépôt et ne reçoit pas de jeton d'écriture ;
 > `exclude` permet d'écarter un jeu douteux.
 
+## Rooms
+
+Une room rassemble les YAML de tous les joueurs d'une partie, en ligne. Le site reste statique : les rooms
+sont gardées par un petit service gratuit sur Cloudflare (dossier [`worker/`](worker/) : un Worker et une
+base D1), toujours disponible sans laisser de PC allumé.
+
+**Déroulement**
+
+1. L'hôte crée la room (onglet « Rooms ») : nom, type de partie (sync ou async), nombre de YAML par joueur,
+   date de fin des dépôts. Il reçoit un code de 6 caractères et un lien d'hôte, à garder pour lui.
+2. Les joueurs entrent le code et leur pseudo, puis déposent leurs YAML ou les créent avec l'éditeur. Chaque
+   YAML est un joueur de la partie, avec un nom fixe (sans `{number}`), unique dans la room et d'au plus
+   16 caractères. Un fichier à plusieurs documents (`---`) est découpé en un YAML par document.
+   Un lien personnel permet de reprendre depuis un autre appareil.
+3. L'hôte ferme les dépôts (à la date prévue ou à la main) et clique sur « Vérifier la room ». Chaque YAML est
+   contrôlé dans son navigateur avec les règles de l'éditeur. Sont aussi signalés : les joueurs sans YAML, le
+   DeathLink en async, les jeux instables ou cassés, et les apworlds non officiels à installer (avec leur dépôt).
+4. L'hôte télécharge le zip des YAML, le décompresse dans le dossier `Players` de son Archipelago et lance
+   **Generate**. Il envoie le résultat sur [archipelago.gg/uploads](https://archipelago.gg/uploads) lui-même :
+   seul celui qui envoie la partie a accès à la console de la room.
+5. L'hôte colle le lien de la room archipelago.gg sur la page de la room. Tout le monde y voit alors l'adresse
+   du serveur, le tracker et ses propres fichiers (patchs), lus avec l'API publique `room_status` d'archipelago.gg.
+
+Les YAML déposés dans une room sont visibles par leur auteur et par l'hôte. Une room sans activité depuis
+90 jours est supprimée automatiquement.
+
+**Mise en place (une seule fois)**
+
+1. Créer un compte gratuit sur [Cloudflare](https://dash.cloudflare.com). Ouvrir une fois **Workers & Pages**
+   pour choisir le sous-domaine `workers.dev` du compte.
+2. **Storage & Databases → D1 → Create** : base nommée `archi-rooms`. Noter son identifiant (Database ID).
+3. **My Profile → API Tokens → Create Token**, modèle « Edit Cloudflare Workers », en ajoutant la permission
+   *Account → D1 → Edit*. Noter le jeton, ainsi que l'identifiant du compte (Account ID, visible sur la page
+   d'accueil de Workers & Pages).
+4. Dans le dépôt GitHub, **Settings → Secrets and variables → Actions** :
+   secrets `CLOUDFLARE_API_TOKEN` et `CLOUDFLARE_ACCOUNT_ID`, variable `D1_DATABASE_ID`.
+5. Lancer le workflow « Publier le service des rooms » (onglet **Actions**). Il crée les tables et publie le
+   service ; son adresse (`https://archi-rooms.<sous-domaine>.workers.dev`) apparaît dans le journal.
+   Il se relance seul à chaque modification de `worker/`.
+6. Indiquer cette adresse dans `DEPLOYED` de [`site/js/config.js`](site/js/config.js) et pousser sur `main`.
+   Tant qu'elle est vide, l'onglet « Rooms » n'apparaît pas sur le site en ligne.
+
 ## Mise en ligne (GitHub Pages)
 
 1. Dans le dépôt GitHub : **Settings → Pages → Build and deployment → Source : GitHub Actions**.
@@ -154,6 +201,15 @@ python tools/build_ap_core.py --ap ../Archipelago --out site/data/ap-core.zip
 Les apworlds à tester localement se copient dans `../Archipelago/custom_worlds/`, ou avec
 `python tools/fetch_apworlds.py --dest ../Archipelago/custom_worlds`.
 
+Pour les rooms, le site ouvert sur `localhost` utilise le service lancé en local sur le port 8787
+(avec [Node.js](https://nodejs.org), sans compte Cloudflare, base D1 simulée sur le disque) :
+
+```bash
+cd worker
+npx wrangler d1 migrations apply archi-rooms --local
+npx wrangler dev
+```
+
 ## Organisation
 
 | Chemin | Rôle |
@@ -164,6 +220,10 @@ Les apworlds à tester localement se copient dans `../Archipelago/custom_worlds/
 | `site/js/apworld.js`, `site/js/apworld-worker.js` | Lecture d'un apworld déposé, avec Pyodide |
 | `site/py/` | Code Python exécuté dans le navigateur (`ap_extract.py` est aussi utilisé par la mise à jour) |
 | `site/js/editors.js` | Champs d'édition de chaque type d'option |
+| `site/js/rooms.js`, `site/js/rooms-api.js` | Pages des rooms et appels au service des rooms |
+| `site/js/check.js` | Vérification d'un YAML hors de l'éditeur (dépôt dans une room, contrôle par l'hôte) |
+| `site/js/config.js` | Adresse du service des rooms |
+| `worker/` | Service des rooms (Cloudflare Worker, base D1 : `migrations/`) |
 | `site/data/` | Options des jeux, générées automatiquement |
 | `site/vendor/` | Bibliothèques [Preact/htm](https://github.com/developit/htm) et [yaml](https://github.com/eemeli/yaml) |
 | `tools/` | Scripts d'extraction et de traduction des options, et de récupération des apworlds |

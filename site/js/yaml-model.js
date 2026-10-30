@@ -38,6 +38,14 @@ export function parseFile(text) {
   return { docs, errors };
 }
 
+// Texte de chaque document d'un fichier (`---`) : dans une room, un fichier = un joueur.
+// Un fichier d'un seul document est rendu tel quel.
+export function splitFile(text) {
+  const docs = YAML.parseAllDocuments(cleanText(text), PARSE_OPTIONS).filter((doc) => doc.contents != null);
+  if (docs.length <= 1) return [text];
+  return docs.map((doc) => fixFloats(doc.toString(STRINGIFY_OPTIONS)).replace(/^---\n/, ""));
+}
+
 // Liste des jeux du document : ceux du champ `game` puis les sections qui portent le nom d'un jeu connu.
 export function gamesOf(js, knownGames) {
   const games = [];
