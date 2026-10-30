@@ -8,6 +8,11 @@
 // demande une génération en ligne, faite par le workflow GitHub generate-room.yml. Ce workflow lit les YAML
 // et renvoie ses résultats avec le secret partagé GENERATOR_SECRET (en-tête X-Generator-Secret) ;
 // les fichiers produits sont gardés dans le stockage KV (binding FILES).
+//
+// Écrans des joueurs (overlay OBS) : le Durable Object ScreenRoom (binding SCREENS), un par room, met en
+// relation par WebSocket les joueurs qui partagent la fenêtre de leur jeu et les overlays ouverts avec la clé
+// créée par l'hôte. Il ne fait que relayer les messages WebRTC : les images vont directement d'un navigateur à l'autre.
+import { DurableObject } from "cloudflare:workers";
 
 const CODE_ALPHABET = "ABCDEFGHJKMNPQRSTUVWXYZ23456789"; // sans 0/O, 1/I/L
 const LIMITS = {
@@ -232,6 +237,7 @@ function publicRoom(room) {
     max_slots: room.max_slots,
     notes: room.notes,
     ap_room_url: room.ap_room_url,
+    overlay: !!room.overlay_hash,
     generation: generation(room),
     created_at: room.created_at,
     updated_at: room.updated_at,
@@ -250,6 +256,7 @@ async function getRoom(request, env, room) {
     room: publicRoom(room),
     admin,
     online_generation: generatorConfigured(env),
+    screens: !!env.SCREENS,
     me: me ? { id: me.id, pseudo: me.pseudo } : null,
     players: players.results.map((p) => ({
       ...p,
@@ -555,6 +562,158 @@ async function generatorReport(request, env, room) {
   return json({ ok: true });
 }
 
+// --- Écrans des joueurs (overlay OBS) -------------------------------------------------
+
+const SCREEN_LIMITS = {
+  overlays: 3, // chaque overlay reçoit un flux de chaque joueur affiché : au-delà, trop d'envoi pour les joueurs
+  sockets: 120,
+  message: 64 * 1024,
+  hello: 15 * 1000, // délai pour se présenter après l'ouverture de la connexion
+};
+
+const screens = (env, room) => env.SCREENS.get(env.SCREENS.idFromName(room.code));
+
+function screensSocket(request, env, room) {
+  if (!env.SCREENS) throw new HttpError(501, "Le partage des écrans n'est pas configuré sur ce serveur.");
+  if (request.headers.get("Upgrade") !== "websocket") throw new HttpError(426, "Connexion WebSocket attendue.");
+  const forward = new Request(request);
+  forward.headers.set("X-Room-Code", room.code);
+  return screens(env, room).fetch(forward);
+}
+
+// Nouvelle clé de l'overlay : l'ancien lien cesse de marcher, et les overlays ouverts avec lui sont fermés.
+async function overlayKey(request, env, room) {
+  await requireAdmin(request, room);
+  if (!env.SCREENS) throw new HttpError(501, "Le partage des écrans n'est pas configuré sur ce serveur.");
+  const key = newToken();
+  await env.DB.prepare("UPDATE rooms SET overlay_hash = ? WHERE code = ?").bind(await sha256(key), room.code).run();
+  await screens(env, room).fetch("https://screens/overlays", { method: "DELETE" });
+  return json({ key }, 201);
+}
+
+const sendTo = (ws, message) => {
+  try { ws.send(JSON.stringify(message)); } catch { /* connexion déjà fermée */ }
+};
+
+// Protocole (messages JSON) :
+//   client → service : { type: "hello", role: "player", token } ou { type: "hello", role: "overlay", key },
+//                      puis { type: "signal", to, data } (relayé à un joueur s'il vient d'un overlay, et inversement).
+//   service → client : { type: "welcome", id }, { type: "error", message } (puis fermeture),
+//                      { type: "signal", from, data }, { type: "left", id } (aux joueurs : un overlay est parti),
+//                      { type: "streams", list: [{ id, player, label, games }] } (aux overlays : joueurs qui partagent).
+// Un joueur connecté est un joueur qui partage son écran : arrêter le partage ferme la connexion.
+export class ScreenRoom extends DurableObject {
+  constructor(ctx, env) {
+    super(ctx, env);
+    ctx.setWebSocketAutoResponse(new WebSocketRequestResponsePair("ping", "pong"));
+  }
+
+  async fetch(request) {
+    if (request.method === "DELETE") {
+      for (const ws of this.sockets("overlay")) this.refuse(ws, "Le lien de cet overlay a été remplacé : copiez le nouveau depuis la room.");
+      return new Response(null, { status: 204 });
+    }
+    if (this.ctx.getWebSockets().length >= SCREEN_LIMITS.sockets) return json({ error: "Trop de connexions pour cette room." }, 429);
+    const [client, server] = Object.values(new WebSocketPair());
+    this.ctx.acceptWebSocket(server);
+    server.serializeAttachment({ id: newId(), code: request.headers.get("X-Room-Code"), role: null, at: Date.now() });
+    if (!(await this.ctx.storage.getAlarm())) await this.ctx.storage.setAlarm(Date.now() + SCREEN_LIMITS.hello);
+    return new Response(null, { status: 101, webSocket: client });
+  }
+
+  // Connexions qui ne se sont pas présentées à temps.
+  async alarm() {
+    const limit = Date.now() - SCREEN_LIMITS.hello;
+    let waiting = false;
+    for (const ws of this.ctx.getWebSockets()) {
+      const me = ws.deserializeAttachment();
+      if (me.role) continue;
+      if (me.at <= limit) this.refuse(ws, "Connexion sans présentation.");
+      else waiting = true;
+    }
+    if (waiting) await this.ctx.storage.setAlarm(Date.now() + SCREEN_LIMITS.hello);
+  }
+
+  sockets(role, except = null) {
+    return this.ctx.getWebSockets().filter((ws) => ws !== except && ws.deserializeAttachment()?.role === role);
+  }
+
+  refuse(ws, message) {
+    sendTo(ws, { type: "error", message });
+    try { ws.close(4003, "refused"); } catch { /* déjà fermée */ }
+  }
+
+  // Liste des joueurs qui partagent, envoyée à tous les overlays (ou à un seul, qui vient d'arriver).
+  publish(except = null, only = null) {
+    const list = this.sockets("player", except).map((ws) => {
+      const { id, player, label, games } = ws.deserializeAttachment();
+      return { id, player, label, games };
+    });
+    for (const ws of only ? [only] : this.sockets("overlay", except)) sendTo(ws, { type: "streams", list });
+  }
+
+  async webSocketMessage(ws, message) {
+    if (typeof message !== "string" || message.length > SCREEN_LIMITS.message) return;
+    let msg;
+    try { msg = JSON.parse(message); } catch { return; }
+    if (!msg || typeof msg !== "object") return;
+    const me = ws.deserializeAttachment();
+    if (!me.role) return this.hello(ws, me, msg);
+    if (msg.type !== "signal" || typeof msg.to !== "string") return;
+    const target = this.ctx.getWebSockets().find((other) => other.deserializeAttachment()?.id === msg.to);
+    const them = target?.deserializeAttachment();
+    if (them?.role && them.role !== me.role) sendTo(target, { type: "signal", from: me.id, data: msg.data });
+  }
+
+  async hello(ws, me, msg) {
+    try {
+      if (msg.type !== "hello") throw new HttpError(400, "Message inattendu.");
+      const room = await this.env.DB.prepare("SELECT code, overlay_hash FROM rooms WHERE code = ?").bind(me.code).first();
+      if (!room) throw new HttpError(404, "Aucune room avec ce code.");
+      if (msg.role === "overlay") {
+        if (!room.overlay_hash || typeof msg.key !== "string" || (await sha256(msg.key)) !== room.overlay_hash) {
+          throw new HttpError(403, "Lien d'overlay invalide ou remplacé : copiez le lien actuel depuis la room (onglet « Écrans »).");
+        }
+        if (this.sockets("overlay").length >= SCREEN_LIMITS.overlays) {
+          throw new HttpError(409, `Déjà ${SCREEN_LIMITS.overlays} overlays ouverts pour cette room : fermez-en un.`);
+        }
+        Object.assign(me, { role: "overlay" });
+      } else if (msg.role === "player") {
+        const player = typeof msg.token === "string"
+          ? await this.env.DB.prepare("SELECT id, pseudo FROM players WHERE room_code = ? AND token_hash = ?").bind(room.code, await sha256(msg.token)).first()
+          : null;
+        if (!player) throw new HttpError(403, "Rejoignez d'abord la room avec votre pseudo.");
+        const { results } = await this.env.DB.prepare("SELECT game FROM slots WHERE player_id = ? ORDER BY created_at").bind(player.id).all();
+        // Un seul partage par joueur : le dernier ouvert remplace les autres.
+        for (const other of this.sockets("player")) {
+          if (other.deserializeAttachment().player === player.id) this.refuse(other, "Partage repris depuis une autre page.");
+        }
+        Object.assign(me, { role: "player", player: player.id, label: player.pseudo, games: [...new Set(results.map((r) => r.game))] });
+      } else {
+        throw new HttpError(400, "Rôle inconnu.");
+      }
+      ws.serializeAttachment(me);
+      sendTo(ws, { type: "welcome", id: me.id });
+      if (me.role === "overlay") this.publish(null, ws);
+      else this.publish();
+    } catch (error) {
+      if (!(error instanceof HttpError)) console.error(error);
+      this.refuse(ws, error instanceof HttpError ? error.message : "Erreur du serveur des rooms.");
+    }
+  }
+
+  async webSocketClose(ws, code) {
+    const me = ws.deserializeAttachment();
+    if (me?.role === "overlay") for (const player of this.sockets("player", ws)) sendTo(player, { type: "left", id: me.id });
+    if (me?.role === "player") this.publish(ws);
+    try { ws.close(code >= 3000 && code < 5000 ? code : 1000, "bye"); } catch { /* déjà fermée */ }
+  }
+
+  async webSocketError(ws) {
+    await this.webSocketClose(ws, 1011);
+  }
+}
+
 async function route(request, env) {
   const url = new URL(request.url);
   const parts = url.pathname.split("/").filter(Boolean);
@@ -585,6 +744,9 @@ async function route(request, env) {
     return startGeneration(request, env, room);
   } else if (sub === "files" && id && method === "GET") {
     return downloadFile(request, env, room, id);
+  } else if (sub === "screens") {
+    if (!id && method === "GET") return screensSocket(request, env, room);
+    if (id === "key" && method === "POST") return overlayKey(request, env, room);
   } else if (sub === "generator") {
     await requireGenerator(request, env);
     const kind = parts[5];

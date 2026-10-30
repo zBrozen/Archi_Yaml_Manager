@@ -7,6 +7,7 @@ import { OptionRow, RawEditor } from "./editors.js";
 import { useSetting, download, plural, SheetBadges, GamePicker, loadCredits } from "./ui.js";
 import { versionProblem, checkText, nameProblem } from "./check.js";
 import { RoomsHome, RoomPage } from "./rooms.js";
+import { ScreensOverlay } from "./screens.js";
 import { api as roomsApi, normalizeCode, roomsEnabled, saveAccess } from "./rooms-api.js";
 
 const formatDate = (iso) => new Date(iso).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" });
@@ -510,9 +511,14 @@ function Header({ page, advanced, setAdvanced, docLanguage, setDocLanguage, them
 
 // Adresse de la page : #/ (éditeur), #/rooms, #/room/CODE. Les liens personnels
 // (#/room/CODE/p/JETON, #/room/CODE/h/JETON) sont mémorisés puis retirés de l'adresse.
+// #/overlay/CODE/CLÉ?max=N : écrans des joueurs pour OBS, page à part (ni en-tête ni pied de page).
 function readRoute() {
-  const parts = location.hash.replace(/^#\/?/, "").split("/").filter(Boolean);
+  const [path, query = ""] = location.hash.replace(/^#\/?/, "").split("?");
+  const parts = path.split("/").filter(Boolean);
   if (parts[0] === "rooms") return { page: "rooms" };
+  if (parts[0] === "overlay" && parts[1] && parts[2]) {
+    return { page: "overlay", code: normalizeCode(parts[1]), key: parts[2], max: Number(new URLSearchParams(query).get("max")) };
+  }
   if (parts[0] === "room" && parts[1]) {
     const code = normalizeCode(parts[1]);
     if (parts[3] && (parts[2] === "p" || parts[2] === "h")) {
@@ -618,4 +624,8 @@ function Footer() {
   </footer>`;
 }
 
-render(html`<${App} />`, document.getElementById("app"));
+// L'overlay n'a pas besoin de la liste des jeux : il ne charge que lui-même.
+const start = readRoute();
+render(start.page === "overlay"
+  ? html`<${ScreensOverlay} code=${start.code} overlayKey=${start.key} max=${start.max} />`
+  : html`<${App} />`, document.getElementById("app"));

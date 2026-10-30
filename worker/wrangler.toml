@@ -22,6 +22,16 @@ id = "00000000000000000000000000000000"
 GITHUB_REPO = "zBrozen/Archi_Yaml_Manager"
 GENERATE_WORKFLOW = "generate-room.yml"
 
+# Écrans des joueurs pour l'overlay OBS : un Durable Object par room met en relation (WebSocket) les joueurs
+# qui partagent leur jeu et les overlays ; les images passent directement entre navigateurs (WebRTC).
+[[durable_objects.bindings]]
+name = "SCREENS"
+class_name = "ScreenRoom"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["ScreenRoom"]
+
 # Nettoyage quotidien des rooms sans activité.
 [triggers]
 crons = ["17 4 * * *"]

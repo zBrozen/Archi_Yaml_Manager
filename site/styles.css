@@ -568,3 +568,34 @@ a.button.small { padding: .25rem .7rem; font-size: .875rem; }
   --ap-self: #ff7ee2; --ap-player: #fad25a; --ap-progression: #c3a8ff; --ap-useful: #8fa8ff; --ap-trap: #ff8f80;
   --ap-filler: #5fe3e8; --ap-location: #63e59b; --ap-entrance: #8ab4ff;
 }
+
+/* Écrans des joueurs : partage (onglet « Écrans » de la room) */
+.room-panel { display: grid; gap: 1.5rem; }
+.room-panel[hidden] { display: none; }
+.screen-preview {
+  width: min(100%, 32rem); aspect-ratio: 16 / 9; background: #1c1f25; border: 1px solid var(--border); border-radius: 10px;
+  object-fit: contain;
+}
+.tips { margin: 0; padding-left: 1.2rem; display: grid; gap: .35rem; }
+
+/* Overlay OBS : fond transparent, écrans en grille. Couleurs fixes (pas de thème) : anthracite et blanc cassé,
+   texte grand et contrasté pour rester lisible une fois le stream compressé. */
+html.overlay-page { scrollbar-gutter: auto; }
+html.overlay-page body { background: transparent; overflow: hidden; }
+.overlay { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; }
+.overlay-grid { display: flex; flex-wrap: wrap; justify-content: center; }
+.screen-tile { margin: 0; position: relative; overflow: hidden; background: #1c1f25; border-radius: 6px; color: #eef0f3; }
+.screen-tile video { display: block; width: 100%; height: 100%; object-fit: contain; }
+.screen-tile figcaption {
+  position: absolute; left: 0; bottom: 0; max-width: 100%; padding: .2em .65em .25em;
+  background: rgb(28 31 37 / 90%); border-top-right-radius: 6px; line-height: 1.3;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.screen-tile figcaption strong { font-weight: 700; }
+.screen-game { font-size: .8em; color: #c9ced6; }
+.screen-flag { margin-left: .6em; font-size: .65em; padding: .1em .45em; border-radius: 4px; background: #ffc864; color: #1c1f25; font-weight: 700; }
+.screen-wait { position: absolute; inset: 0 0 2em; display: grid; place-items: center; padding: 1em; text-align: center; font-size: .75em; color: #c9ced6; }
+.overlay-message {
+  max-width: min(36rem, calc(100vw - 32px)); padding: 1rem 1.4rem; border-radius: 10px;
+  background: rgb(28 31 37 / 92%); color: #eef0f3; font-size: 1.4rem; line-height: 1.4; text-align: center;
+}

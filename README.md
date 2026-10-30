@@ -149,6 +149,8 @@ base D1), toujours disponible sans laisser de PC allumé.
    activité, signalée en async au-delà de 2 jours ; API publique du tracker d'archipelago.gg), et propose un
    **client texte** : chat et commandes (`!hint`, `!remaining`…) depuis le navigateur, avec
    [archipelago.js](https://github.com/ThePhar/archipelago.js) (`site/vendor/archipelago.js`).
+7. Pour un stream, les joueurs peuvent partager la fenêtre de leur jeu, et l'hôte l'afficher dans OBS
+   (voir « Écrans des joueurs » ci-dessous).
 
 Les YAML déposés dans une room sont visibles par leur auteur et par l'hôte. Une room sans activité depuis
 90 jours est supprimée automatiquement.
@@ -168,6 +170,27 @@ Les YAML déposés dans une room sont visibles par leur auteur et par l'hôte. U
    Il se relance seul à chaque modification de `worker/`.
 6. Indiquer cette adresse dans `DEPLOYED` de [`site/js/config.js`](site/js/config.js) et pousser sur `main`.
    Tant qu'elle est vide, l'onglet « Rooms » n'apparaît pas sur le site en ligne.
+
+### Écrans des joueurs (overlay OBS)
+
+Onglet « Écrans » de la room :
+
+- **Joueurs** : « Partager la fenêtre de mon jeu » ouvre le choix de fenêtre du navigateur (Chrome, Edge ou
+  Firefox sur ordinateur, rien à installer). L'image part directement vers l'overlay, sans son, en 720p
+  (environ 2,5 Mb/s d'envoi par overlay), et n'est enregistrée nulle part. Un jeu en plein écran exclusif
+  peut donner un écran noir : le passer en fenêtré ou en plein écran fenêtré.
+- **Hôte** : « Créer le lien de l'overlay » donne une adresse secrète (`#/overlay/CODE/CLÉ`) à mettre dans OBS
+  en source **Navigateur** (1920 × 1080, fond transparent). Les écrans partagés s'y placent seuls en grille,
+  aussi grands que possible : 4 au maximum (`?max=6` à la fin du lien pour 6, `?max=2` pour 2). Remplacer le
+  lien coupe les overlays ouverts avec l'ancien. 3 overlays au maximum par room, car chaque joueur envoie son
+  image à chacun.
+
+Fonctionnement : les navigateurs se transmettent l'image en pair à pair (WebRTC). Le service ne fait que les
+mettre en relation, par WebSocket, avec un Durable Object par room (`ScreenRoom` dans
+[`worker/src/index.js`](worker/src/index.js)), inclus dans l'offre gratuite de Cloudflare et publié par le même
+workflow, sans réglage de plus. Les connexions passent par des serveurs STUN publics, sans relais TURN :
+certains réseaux (NAT strict, 4G, réseaux d'entreprise) peuvent ne pas passer, et l'overlay l'indique sur
+l'écran du joueur concerné.
 
 ### Génération en ligne
 

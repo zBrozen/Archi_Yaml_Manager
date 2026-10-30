@@ -4,9 +4,10 @@ import { html, useState, useEffect } from "../vendor/preact-htm.js";
 import { apVersion, gameEntry, localGames } from "./data.js";
 import { splitFile } from "./yaml-model.js";
 import { checkText, nameProblem, MAX_NAME } from "./check.js";
-import { GamePicker, SheetBadges, download, loadCredits, plural } from "./ui.js";
+import { CopyButton, GamePicker, SheetBadges, download, loadCredits, plural, useAction } from "./ui.js";
 import { makeZip } from "./zip.js";
 import { ProgressPanel, TextClient } from "./room-live.js";
+import { ScreensTab } from "./screens.js";
 import {
   api, apRoomStatus, forgetAccess, hostLink, inviteLink, knownRooms, normalizeCode, playerLink,
   roomsEnabled, saveAccess, savedAccess,
@@ -34,32 +35,11 @@ function timeLeft(ms) {
   return `dans ${Math.floor(hours / 24)} j ${hours % 24} h`;
 }
 
-function CopyButton({ text, label = "Copier", className = "ghost small" }) {
-  const [done, setDone] = useState(false);
-  const copy = async () => {
-    try { await navigator.clipboard.writeText(text); } catch { prompt("Copiez ce texte :", text); return; }
-    setDone(true);
-    setTimeout(() => setDone(false), 1500);
-  };
-  return html`<button type="button" class=${className} onClick=${copy}>${done ? "Copié ✓" : label}</button>`;
-}
-
 // Badges d'un jeu dans les listes de la room.
 function GameBadges({ game }) {
   const entry = gameEntry(game);
   if (!entry) return game.startsWith("Au hasard") ? null : html`<span class="badge warn" title="Jeu absent de la base du site">Hors base</span>`;
   return html`${entry.source !== "core" && html`<span class="badge accent">Non officiel</span>`}<${SheetBadges} sheet=${entry.sheet} />`;
-}
-
-function useAction() {
-  const [busy, setBusy] = useState(false);
-  const [error, setError] = useState(null);
-  const run = async (fn) => {
-    setBusy(true);
-    setError(null);
-    try { return await fn(); } catch (e) { setError(e.message); return undefined; } finally { setBusy(false); }
-  };
-  return { busy, error, setError, run };
 }
 
 // --- Accueil des rooms -------------------------------------------------------------
@@ -142,7 +122,9 @@ export function RoomPage({ index, code, onCreate, onEdit }) {
   const [error, setError] = useState(null);
   const [tick, setTick] = useState(0);
   const [tab, setTab] = useRoomTab(code);
-  const [clientSeen, setClientSeen] = useState(false); // le client texte reste connecté d'un onglet à l'autre
+  // Le client texte et le partage d'écran restent actifs d'un onglet à l'autre.
+  const [clientSeen, setClientSeen] = useState(() => tab === "client");
+  const [screensSeen, setScreensSeen] = useState(() => tab === "ecrans");
   const refresh = () => setTick((n) => n + 1);
 
   useEffect(() => {
@@ -191,10 +173,17 @@ export function RoomPage({ index, code, onCreate, onEdit }) {
     ["yaml", me ? `Mes YAML (${mine.length})` : "Rejoindre"],
     ["joueurs", `Joueurs (${players.length})`],
     ...(room.ap_room_url ? [["partie", "Progression"], ["client", "Client texte"]] : []),
+    ...(data.screens && (me || admin) ? [["ecrans", "Écrans"]] : []),
     ...(admin ? [["hote", "Hôte"]] : []),
   ];
   const active = tabs.some(([id]) => id === tab) ? tab : "apercu";
-  const go = (id) => { setTab(id); if (id === "client") setClientSeen(true); window.scrollTo({ top: 0, behavior: "smooth" }); };
+  const go = (id) => {
+    setTab(id);
+    if (id === "client") setClientSeen(true);
+    if (id === "ecrans") setScreensSeen(true);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+  const screens = data.screens && (me || admin);
   const yaml = me
     ? html`<${MySlots} index=${index} room=${room} me=${me} slots=${mine} allSlots=${allSlots} refresh=${refresh} onCreate=${onCreate} onEdit=${onEdit} />`
     : html`<${JoinForm} room=${room} admin=${admin} refresh=${refresh} />`;
@@ -211,6 +200,8 @@ export function RoomPage({ index, code, onCreate, onEdit }) {
     ${active === "partie" && html`<${GameView} room=${room} online=${online} mine=${mine} />`}
     ${room.ap_room_url && (clientSeen || active === "client") && html`<div hidden=${active !== "client"}>
       <${ClientView} room=${room} online=${online} mine=${mine} /></div>`}
+    ${screens && (screensSeen || active === "ecrans") && html`<div class="room-panel" hidden=${active !== "ecrans"}>
+      <${ScreensTab} room=${room} me=${me} admin=${admin} data=${data} setData=${setData} /></div>`}
     ${active === "hote" && html`<${HostPanel} room=${room} setData=${setData} data=${data} />`}
   </main>`;
 }

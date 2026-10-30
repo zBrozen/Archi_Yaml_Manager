@@ -42,6 +42,8 @@ const pageUrl = () => location.href.replace(/#.*$/, "");
 export const inviteLink = (code) => `${pageUrl()}#/room/${code}`;
 export const playerLink = (code, token) => `${pageUrl()}#/room/${code}/p/${token}`;
 export const hostLink = (code, token) => `${pageUrl()}#/room/${code}/h/${token}`;
+export const overlayLink = (code, key) => `${pageUrl()}#/overlay/${code}/${key}`;
+export const screensSocketUrl = (code) => `${ROOMS_API.replace(/^http/, "ws")}/api/rooms${at(code, "/screens")}`;
 
 // `file: true` : la réponse est un fichier, rendu en { blob, name }.
 async function call(method, path, { code, body, file = false } = {}) {
@@ -90,6 +92,7 @@ export const api = {
   apLinks: (code) => call("GET", at(code, "/ap-links"), { code }),
   generate: (code, options) => call("POST", at(code, "/generate"), { code, body: { options } }),
   file: (code, kind) => call("GET", at(code, `/files/${kind}`), { code, file: true }),
+  overlayKey: (code) => call("POST", at(code, "/screens/key"), { code }),
 };
 
 // --- Partie hébergée sur archipelago.gg (ou un autre site Archipelago) ---------------

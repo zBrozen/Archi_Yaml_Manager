@@ -15,6 +15,28 @@ export function useSetting(name, initial) {
   return [value, update];
 }
 
+// Action asynchrone d'un bouton : état « en cours » et message d'erreur.
+export function useAction() {
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState(null);
+  const run = async (fn) => {
+    setBusy(true);
+    setError(null);
+    try { return await fn(); } catch (e) { setError(e.message); return undefined; } finally { setBusy(false); }
+  };
+  return { busy, error, setError, run };
+}
+
+export function CopyButton({ text, label = "Copier", className = "ghost small" }) {
+  const [done, setDone] = useState(false);
+  const copy = async () => {
+    try { await navigator.clipboard.writeText(text); } catch { prompt("Copiez ce texte :", text); return; }
+    setDone(true);
+    setTimeout(() => setDone(false), 1500);
+  };
+  return html`<button type="button" class=${className} onClick=${copy}>${done ? "Copié ✓" : label}</button>`;
+}
+
 export function download(name, content, type = "text/yaml;charset=utf-8") {
   const url = URL.createObjectURL(content instanceof Blob ? content : new Blob([content], { type }));
   const a = Object.assign(document.createElement("a"), { href: url, download: name });
