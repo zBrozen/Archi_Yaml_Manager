@@ -1,6 +1,6 @@
 {
  "ap_version": "0.6.8",
- "generated_at": "2026-10-30T22:54:51+00:00",
+ "generated_at": "2026-10-31T09:06:17+00:00",
  "games": [
   {
    "game": "2048",
@@ -71,7 +71,13 @@
    "file": "games/a-link-to-the-past.json",
    "source": "core",
    "apworld": null,
-   "world_version": "5.1.0"
+   "world_version": "5.1.0",
+   "rom": {
+    "section": "lttp_options",
+    "setting": "rom_file",
+    "file": "Zelda no Densetsu - Kamigami no Triforce (Japan).sfc",
+    "description": "ALTTP v1.0 J ROM File"
+   }
   },
   {
    "game": "A Short Hike",
@@ -3255,7 +3261,7 @@
    }
   },
   {
-   "game": "Lego Batman: The Video Game",
+   "game": "Lego Batman The Video Game",
    "file": "games/lego-batman-the-video-game.json",
    "source": "custom",
    "apworld": "lego_batman_1.apworld",
@@ -3421,7 +3427,13 @@
    "file": "games/lufia-ii-ancient-cave.json",
    "source": "core",
    "apworld": null,
-   "world_version": null
+   "world_version": null,
+   "rom": {
+    "section": "lufia2ac_options",
+    "setting": "rom_file",
+    "file": "Lufia II - Rise of the Sinistrals (USA).sfc",
+    "description": "Lufia II ROM File"
+   }
   },
   {
    "game": "Luigi's Mansion",
@@ -3537,6 +3549,12 @@
    "source": "custom",
    "apworld": "mariomissing.apworld",
    "world_version": null,
+   "rom": {
+    "section": "mariomissing_options",
+    "setting": "rom_file",
+    "file": "Mario Is Missing! (USA).sfc",
+    "description": "Mario is Missing ROM File"
+   },
    "sheet": {
     "game": "Mario is Missing (SNES)",
     "stability": "Stable"
@@ -3548,6 +3566,12 @@
    "source": "custom",
    "apworld": "mk64.apworld",
    "world_version": null,
+   "rom": {
+    "section": "mk64_options",
+    "setting": "rom_file",
+    "file": "Mario Kart 64 (U) [!].z64",
+    "description": "Mario Kart 64 ROM File"
+   },
    "sheet": {
     "game": "Mario Kart 64",
     "stability": "Unstable"
@@ -3708,7 +3732,13 @@
    "file": "games/megaman-battle-network-3.json",
    "source": "core",
    "apworld": null,
-   "world_version": null
+   "world_version": null,
+   "rom": {
+    "section": "mmbn3_options",
+    "setting": "rom_file",
+    "file": "Mega Man Battle Network 3 - Blue Version (USA).gba",
+    "description": "MMBN3 ROM File"
+   }
   },
   {
    "game": "MegaMan Battle Network 6",
@@ -4242,7 +4272,13 @@
    "file": "games/ocarina-of-time.json",
    "source": "core",
    "apworld": null,
-   "world_version": "7.0.0"
+   "world_version": "7.0.0",
+   "rom": {
+    "section": "oot_options",
+    "setting": "rom_file",
+    "file": "The Legend of Zelda - Ocarina of Time.z64",
+    "description": "Ocarina of Time ROM File"
+   }
   },
   {
    "game": "Oh So Hero!",
@@ -5365,7 +5401,7 @@
    "file": "games/saints-row-2.json",
    "source": "custom",
    "apworld": "saints_row_2.apworld",
-   "world_version": "0.3.2",
+   "world_version": "0.4.0",
    "sheet": {
     "game": "Saints Row 2",
     "stability": "Unstable",
@@ -5450,7 +5486,13 @@
    "file": "games/secret-of-evermore.json",
    "source": "core",
    "apworld": null,
-   "world_version": "0.50.1"
+   "world_version": "0.50.1",
+   "rom": {
+    "section": "soe_options",
+    "setting": "rom_file",
+    "file": "Secret of Evermore (USA).sfc",
+    "description": "Secret of Evermore (USA) ROM"
+   }
   },
   {
    "game": "Seedling",
@@ -5590,6 +5632,12 @@
    "source": "custom",
    "apworld": "shining_itd.apworld",
    "world_version": "0.0.4",
+   "rom": {
+    "section": "shining_itd_options",
+    "setting": "rom_file",
+    "file": "Shining in the Darkness (UE) [!].gen",
+    "description": "Shining in the Darkness ROM File"
+   },
    "sheet": {
     "game": "Shining in the Darkness",
     "stability": "Unstable"
@@ -6329,7 +6377,13 @@
    "file": "games/super-mario-world.json",
    "source": "core",
    "apworld": null,
-   "world_version": "2.1.1"
+   "world_version": "2.1.1",
+   "rom": {
+    "section": "smw_options",
+    "setting": "rom_file",
+    "file": "Super Mario World (USA).sfc",
+    "description": "Super Mario World (USA) ROM File"
+   }
   },
   {
    "game": "Super Meat Boy",
@@ -6574,7 +6628,13 @@
    "file": "games/the-legend-of-zelda.json",
    "source": "core",
    "apworld": null,
-   "world_version": "1.0.0"
+   "world_version": "1.0.0",
+   "rom": {
+    "section": "tloz_options",
+    "setting": "rom_file",
+    "file": "Legend of Zelda, The (U) (PRG0) [!].nes",
+    "description": "The Legend of Zelda (U) ROM File"
+   }
   },
   {
    "game": "The Legend of Zelda - Oracle of Ages",
@@ -6963,6 +7023,17 @@
    }
   },
   {
+   "game": "Twilight Princess",
+   "file": "games/twilight-princess.json",
+   "source": "custom",
+   "apworld": "twilight_princess.apworld",
+   "world_version": "0.4.0",
+   "sheet": {
+    "game": "The Legend of Zelda: Twilight Princess",
+    "stability": "Stable"
+   }
+  },
+  {
    "game": "Twisty Cube",
    "file": "games/twisty-cube.json",
    "source": "custom",
@@ -7340,6 +7411,12 @@
    "source": "custom",
    "apworld": "wl.apworld",
    "world_version": null,
+   "rom": {
+    "section": "wl_options",
+    "setting": "rom_file",
+    "file": "Wario Land - Super Mario Land 3 (World).gb",
+    "description": "Wario Land ROM File"
+   },
    "sheet": {
     "game": "Wario Land 1",
     "stability": "Stable"
@@ -7638,7 +7715,13 @@
    "file": "games/yoshi-s-island.json",
    "source": "core",
    "apworld": null,
-   "world_version": "1.0.0"
+   "world_version": "1.0.0",
+   "rom": {
+    "section": "yoshisisland_options",
+    "setting": "rom_file",
+    "file": "Super Mario World 2 - Yoshi's Island (U).sfc",
+    "description": "Yoshi's Island ROM File"
+   }
   },
   {
    "game": "You Have to Win the Game",

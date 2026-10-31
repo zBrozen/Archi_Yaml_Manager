@@ -4942,7 +4942,7 @@
   }
  },
  {
-  "game": "Lego Batman: The Video Game",
+  "game": "Lego Batman The Video Game",
   "version": null,
   "authors": [],
   "file": "lego_batman_1.apworld",
@@ -8310,7 +8310,7 @@
  },
  {
   "game": "Saints Row 2",
-  "version": "0.3.2",
+  "version": "0.4.0",
   "authors": [
    "hoxi"
   ],
@@ -10810,6 +10810,25 @@
   "sheet": {
    "game": "Turok 2",
    "stability": "Unstable"
+  }
+ },
+ {
+  "game": "Twilight Princess",
+  "version": "0.4.0",
+  "authors": [
+   "Hash"
+  ],
+  "file": "twilight_princess.apworld",
+  "source": "https://github.com/WritingHusky/Twilight_Princess_apworld",
+  "license": "MIT",
+  "license_url": null,
+  "copyright": [
+   "Copyright © 2024 tanjo3"
+  ],
+  "license_file": "twilight_princess/LICENSE.md",
+  "sheet": {
+   "game": "The Legend of Zelda: Twilight Princess",
+   "stability": "Stable"
   }
  },
  {
