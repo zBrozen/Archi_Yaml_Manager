@@ -596,6 +596,18 @@ details.items-group > summary h3, details.items-group > summary h4 { display: in
 .item-feed li:first-child { border-top: none; }
 .item-index { text-align: right; font-variant-numeric: tabular-nums; }
 .item-origin { overflow-wrap: anywhere; }
+/* Indices : état en toutes lettres (pas la couleur seule), ceux trouvés estompés en fin de liste */
+.hint-list { list-style: none; margin: 0; padding: 0; display: grid; }
+.hint-list li {
+  display: grid; grid-template-columns: 6.5rem minmax(0, 1fr); align-items: baseline; gap: .25rem .8rem;
+  padding: .5rem .25rem; border-top: 1px solid var(--border); overflow-wrap: anywhere;
+}
+.hint-list li:first-child { border-top: none; }
+.hint-list li.found { opacity: .7; }
+.hint-state { font-size: .85rem; font-weight: 700; color: var(--warn); white-space: nowrap; }
+.hint-list li.found .hint-state { color: var(--ok); }
+.inventory-compact .hint-list li { grid-template-columns: minmax(0, 1fr); }
+.inventory-compact .hint-state { display: none; }
 /* Wishlist : rouge tant que l'objet n'est pas reçu, vert une fois reçu (avec ✗ / ✓ : pas la couleur seule) */
 .wish-list { list-style: none; margin: 0; padding: 0; display: grid; gap: .5rem; }
 .wish {

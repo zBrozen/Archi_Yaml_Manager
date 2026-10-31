@@ -201,7 +201,9 @@ leur nom dans la partie, qui sert à retrouver leurs fichiers.
    **client texte** : chat et commandes (`!hint`, `!remaining`…) depuis le navigateur, avec
    [archipelago.js](https://github.com/ThePhar/archipelago.js) (`site/vendor/archipelago.js`). Les objets reçus ou
    envoyés par vos joueurs (et le joueur connecté) y sont surlignés, sauf les objets sans importance, et un aperçu
-   épuré de l'inventaire du joueur choisi (progression, utiles, pièges, inventaire de départ replié) s'affiche à côté.
+   épuré de l'inventaire du joueur choisi (progression, utiles, pièges, indices à trouver, inventaire de départ
+   replié) s'affiche à côté. Les **indices** de chaque joueur (API du tracker : objet, lieu, monde où il se trouve,
+   pour qui, trouvé ou non, priorité choisie) sont aussi listés avec ses objets reçus dans « Progression ».
    Chaque joueur remplit aussi sa **wishlist** (onglet « Wishlist ») parmi les objets de son jeu : en rouge tant
    qu'ils manquent, en vert une fois reçus (un bouton retire les objets reçus). Un objet déjà reçu (progressif,
    cumulable…) peut être attendu une fois de plus : il passe au vert quand son nombre augmente. Quand l'un

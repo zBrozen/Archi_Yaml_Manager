@@ -186,6 +186,24 @@ const GROUPS = [
 ];
 const RECENT = 12;
 
+// Indices d'un joueur (API du tracker : ceux qu'il a demandés et ceux qui le concernent, comme receveur ou comme
+// monde où l'objet se trouve). Un indice est un Hint d'Archipelago (NetUtils.py), en liste ou en objet selon le
+// sérialiseur : [joueur qui reçoit, joueur qui trouve, lieu, objet, trouvé, entrée, drapeaux de l'objet, statut].
+const HINT_FIELDS = ["receiving_player", "finding_player", "location", "item", "found", "entrance", "item_flags", "status"];
+const asHint = (h) => (Array.isArray(h) ? Object.fromEntries(HINT_FIELDS.map((key, i) => [key, h[i]])) : h);
+export function playerHints(live, slot) {
+  const list = (live?.hints || []).find((e) => e.team === 0 && e.player === slot)?.hints.map(asHint) || [];
+  const seen = new Set();
+  return list.filter((h) => {
+    const key = `${h.finding_player}:${h.location}`;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+// Statut choisi par le joueur qui reçoit (HintStatus) ; 0 : non précisé, 40 : trouvé.
+const HINT_STATUS = { 10: "sans priorité", 20: "à éviter", 30: "prioritaire" };
+
 // --- Inventaire de départ ----------------------------------------------------------
 // Sphère 0 : objets avec lesquels un joueur commence (start_inventory de son YAML, ou donnés par son monde). L'API du
 // tracker ne les donne pas : le service lit l'inventaire du tracker générique du joueur, qui les compte avec les objets
@@ -245,9 +263,9 @@ export function ItemsPanel({ status, tracker, mine, selected, onSelected, code }
   const toggle = (slot, on) => onSelected(on ? [...selected, slot] : selected.filter((n) => n !== slot));
 
   return html`<div class="row full">
-      <h2 class="grow">Objets reçus</h2>
-      <input type="search" class="items-search" placeholder="Rechercher un objet reçu…" value=${search}
-        onInput=${(e) => setSearch(e.target.value)} aria-label="Rechercher un objet reçu" />
+      <h2 class="grow">Objets reçus et indices</h2>
+      <input type="search" class="items-search" placeholder="Rechercher un objet ou un lieu…" value=${search}
+        onInput=${(e) => setSearch(e.target.value)} aria-label="Rechercher un objet reçu ou un indice" />
     </div>
     <fieldset class="items-players full">
       <legend>Joueurs affichés</legend>
@@ -278,7 +296,9 @@ function PlayerItems({ slot, status, tracker, needle = "", search = "", titled, 
   const received = receivedItems(tracker.data.live, slot.slot);
   const gameOf = (player) => (player === 0 ? "Archipelago" : status.slots.find((s) => s.slot === player)?.game);
   const nameOf = (player) => status.slots.find((s) => s.slot === player)?.name || `Joueur ${player}`;
-  const games = [...new Set([slot.game, ...received.map((i) => gameOf(i.player))].filter(Boolean))].sort();
+  const hints = playerHints(tracker.data.live, slot.slot);
+  const games = [...new Set([slot.game, ...received.map((i) => gameOf(i.player)),
+    ...hints.flatMap((h) => [gameOf(h.receiving_player), gameOf(h.finding_player)])].filter(Boolean))].sort();
   const { loaded, error } = usePackages(status.origin, tracker.data.fixed, games);
 
   const pkg = loaded[slot.game];
@@ -296,6 +316,26 @@ function PlayerItems({ slot, status, tracker, needle = "", search = "", titled, 
   const startShown = [...(start || [])].filter(([name]) => !needle || name.toLowerCase().includes(needle))
     .sort((a, b) => a[0].localeCompare(b[0]));
   const startCount = startShown.reduce((n, [, k]) => n + k, 0);
+  // Indices : d'abord ceux qui restent à trouver ; l'aperçu épuré n'en garde que ceux-là.
+  const hintItem = (h) => loaded[gameOf(h.receiving_player)]?.items.get(h.item) || `Objet n° ${h.item}`;
+  const hintPlace = (h) => loaded[gameOf(h.finding_player)]?.locations.get(h.location) || `Lieu n° ${h.location}`;
+  const hintsShown = hints.filter((h) => !(compact && h.found))
+    .filter((h) => !needle || hintItem(h).toLowerCase().includes(needle) || hintPlace(h).toLowerCase().includes(needle))
+    .sort((a, b) => Number(a.found) - Number(b.found));
+  const hintList = hintsShown.length > 0 && html`<div class="items-group">
+    <h4>Indices <span class="hint">${hintsShown.filter((h) => !h.found).length} à trouver${compact ? "" : ` sur ${hintsShown.length}`}</span></h4>
+    <ul class="hint-list">${hintsShown.map((h) => {
+      const kind = ITEM_KINDS[kindOf(h.item_flags || 0)];
+      const forMe = h.receiving_player === slot.slot;
+      const where = h.finding_player === slot.slot ? (forMe ? "dans son propre monde" : "dans son monde") : `chez ${nameOf(h.finding_player)}`;
+      return html`<li key=${`${h.finding_player}:${h.location}`} class=${h.found ? "found" : ""}>
+        <span class="hint-state">${h.found ? "✓ Trouvé" : "À trouver"}</span>
+        <span><span class=${kind.cls} title=${kind.title}>${kind.mark}${hintItem(h)}</span>${forMe ? "" : html` pour <strong>${nameOf(h.receiving_player)}</strong>`}
+          ${" "}<span class="hint">à</span> <span class="ap-location">${hintPlace(h)}</span> <span class="hint">${where}${h.entrance ? ` (${h.entrance})` : ""}</span>
+          ${!h.found && HINT_STATUS[h.status] && html` <span class=${`badge ${h.status === 30 ? "accent" : h.status === 20 ? "warn" : ""}`}>${HINT_STATUS[h.status]}</span>`}</span>
+      </li>`;
+    })}</ul>
+  </div>`;
 
   const groups = Object.fromEntries(GROUPS.map(([kind]) => [kind, new Map()]));
   for (const i of matching) {
@@ -316,27 +356,28 @@ function PlayerItems({ slot, status, tracker, needle = "", search = "", titled, 
       startCount ? ` · ${startCount} au départ` : ""}`;
 
   // Recherche sans résultat chez ce joueur : une seule ligne, pour ne pas encombrer quand plusieurs sont cochés.
-  if (needle && pkg && !matching.length && !startCount) {
+  if (needle && pkg && !matching.length && !startCount && !hintsShown.length) {
     return html`<p class="items-player-block items-none hint">${titled && html`<strong>${slot.name}</strong> : `}aucun objet reçu ne contient « ${search} » (${plural(received.length, "objet")} au total).</p>`;
   }
   if (compact) {
     return html`<section class="items-player-block inventory-compact">
       <h3>Inventaire de ${slot.name} <span class="hint">${plural(received.length, "objet")}</span></h3>
-      ${received.length === 0 && !startCount ? html`<p class="hint">Aucun objet reçu pour l'instant.</p>`
+      ${received.length === 0 && !startCount && !hintsShown.length ? html`<p class="hint">Aucun objet reçu pour l'instant.</p>`
         : waiting ? html`<p class="hint">Chargement des noms d'objets…</p>`
         : html`${counts.map((g) => html`<div class="items-group">${title(g)}${tags(g.kind)}</div>`)}
           ${!counts.length && html`<p class="hint">Que des objets sans importance pour l'instant.</p>`}
+          ${hintList}
           ${startCount > 0 && html`<details class="items-group"><summary><h4>Inventaire de départ <span class="hint">${startCount}</span></h4></summary>
             <ul class="item-tags">${startShown.map(([name, n]) => html`<li><span>${name}</span>${n > 1 && html`<span class="item-count">×${n}</span>`}</li>`)}</ul>
           </details>`}`}
-      <p class="hint">Tout le détail (objets sans importance, derniers arrivés) : onglet « Progression ».</p>
+      <p class="hint">Tout le détail (objets sans importance, derniers arrivés, indices trouvés) : onglet « Progression ».</p>
     </section>`;
   }
   return html`<section class="items-player-block">
     ${titled && html`<h3>${slot.name} <span class="hint">${slot.game}</span></h3>`}
     <p class="hint">${summary}</p>
     ${error && html`<p class="hint">${error} Les objets sont affichés par numéro.</p>`}
-    ${received.length === 0 && !startCount ? html`<p class="hint">Aucun objet reçu pour l'instant.</p>`
+    ${received.length === 0 && !startCount && !hintsShown.length ? html`<p class="hint">Aucun objet reçu pour l'instant.</p>`
       : waiting ? html`<p class="hint">Chargement des noms d'objets…</p>`
       : html`<div class="items-panel">
         ${startCount > 0 && html`<div class="items-group">
@@ -346,6 +387,7 @@ function PlayerItems({ slot, status, tracker, needle = "", search = "", titled, 
         ${counts.map((g) => (g.kind === "filler"
           ? html`<details class="items-group" open=${!!needle}><summary>${title(g)}</summary>${tags(g.kind)}</details>`
           : html`<div class="items-group">${title(g)}${tags(g.kind)}</div>`))}
+        ${hintList}
         ${matching.length > 0 && html`<div class="items-group">
           <h4>${needle ? "Arrivées correspondantes" : "Derniers objets reçus"}</h4>
           <ol class="item-feed">${recent.map((i) => {
