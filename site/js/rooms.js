@@ -1,9 +1,9 @@
 // Pages des rooms : créer ou rejoindre une room, déposer ses YAML, vérifier et préparer la génération (hôte),
 // puis retrouver la partie hébergée sur archipelago.gg (adresse, tracker, fichiers de chaque joueur).
 import { html, useState, useEffect, useRef } from "../vendor/preact-htm.js";
-import { apVersion, apworldFileOf, gameEntry, localGameData, localGames, setRoomGames } from "./data.js";
+import { apVersion, apworldFileOf, gameEntry, knownGames, localGameData, localGames, setRoomGames } from "./data.js";
 import { useApworldLoader } from "./apworld.js";
-import { splitFile } from "./yaml-model.js";
+import { gamesOf, parseFile, splitFile } from "./yaml-model.js";
 import { checkText, nameProblem, MAX_NAME } from "./check.js";
 import { CopyButton, GamePicker, SheetBadges, download, loadCredits, plural, useAction, useSetting } from "./ui.js";
 import { makeZip } from "./zip.js";
@@ -66,16 +66,51 @@ async function sendApworld(code, game, file, data) {
   return api.saveApworldData(code, name, data);
 }
 
+// Jeux d'un slot d'après son champ `game` (voir gameLabel : « Au hasard : A, B » pour un tirage au sort).
+const RANDOM_LABEL = "Au hasard : ";
+function slotGames(game) {
+  return game.startsWith(RANDOM_LABEL) ? game.slice(RANDOM_LABEL.length).split(", ") : [game];
+}
+
+// Jeu que la génération en ligne ne trouve que dans la room : absent de la base du site (un apworld gardé
+// dans ce navigateur seulement ne va pas au générateur).
+function needsRoomApworld(game) {
+  const entry = gameEntry(game);
+  return !entry || ((entry.source === "apworld" || entry.source === "room") && !entry.server);
+}
+
+// Jeux des YAML de la room que la génération en ligne n'aurait pas : [{ game, pseudos }].
+async function missingOnline(code) {
+  const [{ slots }, fresh] = await Promise.all([api.exportSlots(code), api.get(code)]);
+  const inRoom = new Set((fresh.apworlds || []).map((a) => a.game));
+  const known = knownGames();
+  const missing = new Map();
+  for (const slot of slots) {
+    for (const { js } of parseFile(slot.content).docs) {
+      for (const game of gamesOf(js, known)) {
+        if (inRoom.has(game) || !needsRoomApworld(game)) continue;
+        if (!missing.has(game)) missing.set(game, new Set());
+        missing.get(game).add(slot.pseudo);
+      }
+    }
+  }
+  return [...missing].sort(([a], [b]) => a.localeCompare(b)).map(([game, pseudos]) => ({ game, pseudos: [...pseudos] }));
+}
+
 const tried = new Set(); // envois refusés, pour ne pas les retenter à chaque rafraîchissement
 
 // Envoie les apworlds mémorisés pour `games` qui manquent dans la room (ou y sont dans une autre version).
-// Renvoie { sent, missing, errors } : `missing`, jeux dont ce navigateur n'a que les options, pas le fichier.
+// Renvoie { sent, missing, unknown, errors } : `missing`, jeux dont ce navigateur n'a que les options, pas le
+// fichier ; `unknown`, jeux absents de la base du site dont la room n'a pas l'apworld (à déposer par le joueur).
 export async function shareApworlds(code, games, roomApworlds, { retry = false } = {}) {
-  const result = { sent: [], missing: [], errors: [] };
-  for (const game of new Set(games)) {
+  const result = { sent: [], missing: [], unknown: [], errors: [] };
+  for (const game of new Set(games.flatMap(slotGames))) {
     const data = localGameData(game);
-    if (!data) continue;
     const existing = roomApworlds.find((a) => a.game === game);
+    if (!data) {
+      if (!existing && !gameEntry(game)) result.unknown.push(game);
+      continue;
+    }
     const file = await apworldFileOf(game);
     if (!file) {
       if (!existing) result.missing.push(game);
@@ -445,7 +480,7 @@ function MySlots({ index, room, me, admin, players, slots, allSlots, apworlds, r
   const [picking, setPicking] = useState(false);
   const [game, setGame] = useState("");
   const [done, setDone] = useState(null);
-  const [shared, setShared] = useState({ sent: [], missing: [], errors: [] });
+  const [shared, setShared] = useState({ sent: [], missing: [], unknown: [], errors: [] });
   // L'hôte peut déposer pour un autre joueur de la room ; chacun garde ensuite la main sur ses YAML.
   const [targetId, setTargetId] = useState(me.id);
   const target = (admin && players.find((p) => p.id === targetId)) || players.find((p) => p.id === me.id) || { id: me.id, pseudo: me.pseudo, slots };
@@ -460,7 +495,8 @@ function MySlots({ index, room, me, admin, players, slots, allSlots, apworlds, r
     const fresh = await api.get(room.code);
     const result = await shareApworlds(room.code, games, fresh.apworlds || [], options);
     // Un passage sans rien à envoyer garde l'annonce du dernier envoi.
-    setShared((prev) => (result.sent.length || result.missing.length || result.errors.length ? result : { ...result, sent: prev.sent }));
+    setShared((prev) => (result.sent.length || result.missing.length || result.unknown.length || result.errors.length
+      ? result : { ...result, sent: prev.sent }));
     if (result.sent.length) refresh();
     return result;
   };
@@ -474,7 +510,8 @@ function MySlots({ index, room, me, admin, players, slots, allSlots, apworlds, r
   const upload = (files) => action.run(async () => {
     setDone(null);
     const list = [...files];
-    for (const file of list.filter((f) => /\.apworld$/i.test(f.name))) await loader.load(file);
+    const loaded = [];
+    for (const file of list.filter((f) => /\.apworld$/i.test(f.name))) loaded.push(...await loader.load(file));
     const yamls = list.filter((f) => !/\.apworld$/i.test(f.name));
     try {
       if (yamls.length) setDone(await uploadYaml(room, yamls, target, own));
@@ -483,6 +520,12 @@ function MySlots({ index, room, me, admin, players, slots, allSlots, apworlds, r
       const games = fresh.players.find((p) => p.id === target.id)?.slots.map((s) => s.game) || [];
       const result = await shareApworlds(room.code, games, fresh.apworlds || [], { retry: true });
       setShared(result);
+      // Apworld sans YAML de son jeu : il partira avec le YAML quand il sera déposé.
+      const mine = new Set(games.flatMap(slotGames));
+      const waiting = loaded.filter((g) => !mine.has(g));
+      if (waiting.length && !yamls.length) {
+        setDone(`Apworld de ${waiting.join(", ")} gardé dans ce navigateur : il sera envoyé à la room avec ${own ? "votre" : "le"} YAML de ce jeu.`);
+      }
       refresh();
     }
   });
@@ -524,18 +567,23 @@ function MySlots({ index, room, me, admin, players, slots, allSlots, apworlds, r
       </select>
       ${!own && html`<span class="hint">Les YAML iront dans la liste de ${target.pseudo}, qui pourra les modifier ou les retirer.</span>`}
     </label>`}
-    ${canEdit && (!full || shared.missing.length > 0) && html`<label class=${`drop compact full ${hover ? "hover" : ""} ${action.busy || loader.status ? "busy" : ""}`}
+    ${canEdit && (!full || shared.missing.length > 0 || shared.unknown.length > 0) && html`<label class=${`drop compact full ${hover ? "hover" : ""} ${action.busy || loader.status ? "busy" : ""}`}
       onDragOver=${(e) => { e.preventDefault(); setHover(true); }}
       onDragLeave=${() => setHover(false)}
       onDrop=${(e) => { e.preventDefault(); setHover(false); upload(e.dataTransfer.files); }}>
-      <input type="file" accept=".yaml,.yml,.txt,.apworld" multiple hidden onChange=${(e) => { upload(e.target.files); e.target.value = ""; }} />
-      <strong>${loader.status || (action.busy ? "Envoi…" : own ? "Déposez un ou plusieurs YAML" : `Déposez les YAML de ${target.pseudo}`)}</strong>
-      <span>ou cliquez pour les choisir</span>
+      <input type="file" accept=${full ? ".apworld" : ".yaml,.yml,.txt,.apworld"} multiple hidden onChange=${(e) => { upload(e.target.files); e.target.value = ""; }} />
+      <strong>${loader.status || (action.busy ? "Envoi…" : full ? "Déposez le fichier .apworld"
+        : own ? "Déposez un ou plusieurs YAML" : `Déposez les YAML de ${target.pseudo}`)}</strong>
+      <span>ou cliquez pour ${full ? "le" : "les"} choisir</span>
       <span class="hint">Jeu non officiel, ou apworld plus récent que celui du site : déposez aussi son fichier .apworld,
         il sera utilisé pour vérifier et générer la partie.</span>
     </label>`}
     ${loader.error && html`<div class="notice error full">${loader.error}</div>`}
     ${shared.sent.length > 0 && html`<div class="notice ok full" role="status">Apworld envoyé à la room : ${shared.sent.join(", ")}.</div>`}
+    ${canEdit && shared.unknown.length > 0 && html`<div class="notice warn full" role="status">
+      <strong>Apworld à déposer :</strong> ${shared.unknown.join(", ")} ${shared.unknown.length > 1 ? "ne sont pas" : "n'est pas"} dans
+      la base du site. Déposez ${own ? "votre" : "son"} fichier <strong>.apworld</strong> ci-dessus : l'hôte en a besoin pour
+      vérifier ${own ? "votre" : "le"} YAML et générer la partie en ligne.</div>`}
     ${canEdit && shared.missing.length > 0 && html`<div class="notice warn full">
       Votre apworld de ${shared.missing.join(", ")} n'est pas dans la room : ce navigateur n'en a gardé que les options.
       Déposez son fichier <strong>.apworld</strong> ci-dessus pour que l'hôte vérifie et génère la partie avec.</div>`}
@@ -783,6 +831,12 @@ async function checkRoom(room, players, slots, roomApworlds = []) {
   if (sent.length) {
     notes.push({ level: "info", text: `Apworlds de la room, utilisés pour vérifier et générer : ${sent.map((g) => `${label(g)}, déposé par ${inRoom.get(g).by || "vous"}`).join(" ; ")}.` });
   }
+  // Jeu inconnu du site et de la room : seul le joueur a son apworld.
+  const absent = [...games].filter((g) => !gameEntry(g) && !inRoom.has(g)).sort();
+  if (absent.length) {
+    const owners = (g) => [...new Set(results.filter((r) => r.games?.includes(g)).map((r) => r.slot.pseudo))].join(", ");
+    notes.push({ level: "warn", text: `Apworld manquant : ${absent.map((g) => `${g} (YAML de ${owners(g)})`).join(" ; ")}. Ce jeu n'est pas dans la base du site : la génération en ligne en a besoin. Le joueur peut le déposer avec ses YAML (dépôts ouverts), ou vous dans « Générer en ligne ».` });
+  }
   // Apworld de ce navigateur seulement : la génération en ligne ne l'a pas.
   const notSent = [...games].filter((g) => gameEntry(g)?.source === "apworld" && !inRoom.has(g)).sort();
   if (notSent.length) {
@@ -932,6 +986,13 @@ function OnlineGeneration({ room, setData, data }) {
   }, [busy, room.code]);
 
   const start = () => action.run(async () => {
+    // Le générateur échouerait au bout de quelques minutes : autant le dire tout de suite.
+    const missing = await missingOnline(room.code);
+    if (missing.length) {
+      throw new Error(`Il manque l'apworld de ${missing.map((m) => `${m.game} (YAML de ${m.pseudos.join(", ")})`).join(" ; ")} : `
+        + "ce jeu n'est pas dans la base du site. Déposez son fichier .apworld ci-dessus (ou rouvrez les dépôts pour que le joueur le fasse), "
+        + "ou générez la partie sur votre ordinateur.");
+    }
     const result = await api.generate(room.code, { ...options, hint_cost: Number(options.hint_cost) });
     setData({ ...data, room: result.room });
   });
