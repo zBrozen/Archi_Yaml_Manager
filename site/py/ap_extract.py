@@ -152,6 +152,54 @@ def valid_groups(groups: dict[str, Any], names: Any) -> list[str]:
     return sorted(name for name, members in groups.items() if set(members) <= set(names))
 
 
+def required_file(group, settings) -> dict[str, str] | None:
+    """Premier fichier obligatoire d'une section de host.yaml (lu sans déclencher la demande du fichier)."""
+    for name in getattr(type(group), "__annotations__", {}):
+        try:
+            value = object.__getattribute__(group, name)
+        except AttributeError:
+            continue
+        if isinstance(value, settings.FilePath) and value.required:
+            return {"setting": name, "file": str(value), "description": value.description or ""}
+    return None
+
+
+def generation_file(world) -> dict[str, str] | None:
+    """Fichier que le monde exige pour générer (sa ROM, le plus souvent), ou None.
+
+    Archipelago appelle stage_assert_generate au début de chaque génération : les mondes qui ont besoin de leur
+    ROM y vérifient sa présence (les autres ne la lisent qu'au moment où le joueur applique son patch). On
+    l'appelle ici sans aucun fichier disponible : dossier utilisateur vide, host.yaml par défaut, pas de fenêtre
+    pour choisir le fichier. Un FileNotFoundError signale un fichier exigé, quelle que soit la machine."""
+    from worlds.AutoWorld import World
+    if getattr(world.stage_assert_generate, "__func__", None) is World.stage_assert_generate.__func__:
+        return None
+    import tempfile
+    import settings
+    import Utils
+    saved = (settings.no_gui, settings.skip_autosave, Utils.user_path, getattr(settings.get_settings, "_cache", None))
+    with tempfile.TemporaryDirectory() as empty:
+        settings.no_gui = settings.skip_autosave = True
+        Utils.user_path = lambda *parts: os.path.join(empty, *parts)
+        fresh = settings.Settings(None)
+        settings.get_settings._cache = fresh
+        try:
+            world.stage_assert_generate(None)
+            return None
+        except FileNotFoundError:
+            try:
+                found = required_file(fresh[world.settings_key], settings)
+            except Exception:
+                found = None
+            return {"section": world.settings_key, **(found or {})}
+        except Exception:  # autre vérification (options des joueurs…) : rien à voir avec un fichier
+            return None
+        finally:
+            settings.no_gui, settings.skip_autosave, Utils.user_path, settings.get_settings._cache = saved
+            if hasattr(world, "_AutoWorldRegister__settings"):
+                world._AutoWorldRegister__settings = None  # réglages lus pendant la vérification, à oublier
+
+
 def describe_world(Options, worlds_module, game: str, world) -> dict[str, Any]:
     collapsed = {"Game Options": False}
     for group in world.web.option_groups:
@@ -165,11 +213,17 @@ def describe_world(Options, worlds_module, game: str, world) -> dict[str, Any]:
 
     source, apworld = world_source(worlds_module, world)
     version = getattr(world, "world_version", None)
+    try:
+        rom = generation_file(world)
+    except Exception:  # détection seulement : elle ne doit jamais empêcher de lire les options
+        rom = None
     return {
         "game": game,
         "source": source,
         "apworld": apworld,
         "world_version": version.as_simple_string() if version and any(version) else None,
+        # Seulement pour les jeux concernés : les autres fichiers restent tels quels.
+        **({"rom": rom} if rom is not None else {}),
         "groups": groups,
         "extra_keys": EXTRA_SECTION_KEYS.get(game, []),
         "items": sorted(world.item_names),

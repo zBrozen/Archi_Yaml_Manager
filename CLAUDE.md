@@ -32,6 +32,9 @@
   ils passent avant ceux du site, pour la vérification (`setRoomGames`, page de la room seulement) et la génération. Comme n'importe quel hôte peut ainsi faire exécuter du code, Archipelago ne tourne que dans un conteneur
   Docker sans réseau (`--image`) : ne jamais lui passer le secret ni monter autre chose que AP, YAML et sortie.
   Toute nouvelle table ou colonne passe par une migration dans `worker/migrations/`.
+  Jeux qui exigent leur ROM pour générer (champ `rom`, relevé par `ap_extract.py` via `stage_assert_generate`) :
+  signalés par la vérification, génération en ligne refusée. Ne pas ajouter de dépôt de ROM (droits d'auteur, et
+  le code d'un apworld de l'hôte pourrait la recopier dans la partie).
   Écrans des joueurs (overlay OBS, page `#/overlay/CODE/CLÉ`) : WebRTC entre navigateurs, mise en relation par le
   Durable Object `ScreenRoom` du Worker (une instance par room). `screens.js` : partage du joueur et lien de l'hôte ;
   `overlay.js` : la page de l'overlay ; `overlay-layout.js` : modèle des dispositions (mêmes limites que le Worker) ;

@@ -219,6 +219,7 @@ def main() -> int:
             "source": data["source"],
             "apworld": data["apworld"],
             "world_version": data["world_version"],
+            **({"rom": data["rom"]} if "rom" in data else {}),  # fichier exigé pour générer (voir ap_extract)
         })
 
     # Infos du tableur des jeux (stabilité, 18+…), relevées par fetch_apworlds.py.

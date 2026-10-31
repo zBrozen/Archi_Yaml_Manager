@@ -75,7 +75,7 @@ function addLocal(data) {
   const server = serverEntry(data.game);
   data.source = "apworld";
   local.set(data.game, {
-    game: data.game, source: "apworld", world_version: data.world_version, apworld: data.apworld, sheet: server?.sheet,
+    game: data.game, source: "apworld", world_version: data.world_version, apworld: data.apworld, rom: data.rom, sheet: server?.sheet,
     server: server && { source: server.source, world_version: server.world_version || null },
   });
   games.set(data.game, prepare(data));
@@ -172,7 +172,7 @@ export function setRoomGames(list) {
     room.set(data.game, {
       data: prepare({ ...data, source: "room" }),
       entry: {
-        game: data.game, source: "room", world_version: data.world_version || null, apworld: data.apworld, by,
+        game: data.game, source: "room", world_version: data.world_version || null, apworld: data.apworld, rom: data.rom, by,
         sheet: server?.sheet, server: server && { source: server.source, world_version: server.world_version || null },
       },
     });

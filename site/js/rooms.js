@@ -79,22 +79,33 @@ function needsRoomApworld(game) {
   return !entry || ((entry.source === "apworld" || entry.source === "room") && !entry.server);
 }
 
-// Jeux des YAML de la room que la génération en ligne n'aurait pas : [{ game, pseudos }].
-async function missingOnline(code) {
+// Fichier qu'un jeu exige pour générer (sa ROM), relevé par site/py/ap_extract.py, et où l'indiquer.
+function romText(rom) {
+  const where = rom.setting ? html`, à indiquer dans <code>host.yaml</code> (section <code>${rom.section}</code>, <code>${rom.setting}</code>)` : "";
+  return html`${rom.description || "ROM du jeu"}${rom.file ? html` : <code>${rom.file}</code>` : ""}${where}`;
+}
+
+// Jeux des YAML de la room que la génération en ligne ne peut pas générer : `missing`, apworld absent ; `rom`, jeu
+// qui exige sa ROM (jamais envoyée au service). Chacun : [{ game, pseudos }].
+async function onlineProblems(code) {
   const [{ slots }, fresh] = await Promise.all([api.exportSlots(code), api.get(code)]);
   const inRoom = new Set((fresh.apworlds || []).map((a) => a.game));
   const known = knownGames();
-  const missing = new Map();
+  const found = { missing: new Map(), rom: new Map() };
+  const add = (kind, game, pseudo) => {
+    if (!found[kind].has(game)) found[kind].set(game, new Set());
+    found[kind].get(game).add(pseudo);
+  };
   for (const slot of slots) {
     for (const { js } of parseFile(slot.content).docs) {
       for (const game of gamesOf(js, known)) {
-        if (inRoom.has(game) || !needsRoomApworld(game)) continue;
-        if (!missing.has(game)) missing.set(game, new Set());
-        missing.get(game).add(slot.pseudo);
+        if (!inRoom.has(game) && needsRoomApworld(game)) add("missing", game, slot.pseudo);
+        else if (gameEntry(game)?.rom) add("rom", game, slot.pseudo);
       }
     }
   }
-  return [...missing].sort(([a], [b]) => a.localeCompare(b)).map(([game, pseudos]) => ({ game, pseudos: [...pseudos] }));
+  const list = (map) => [...map].sort(([a], [b]) => a.localeCompare(b)).map(([game, pseudos]) => ({ game, pseudos: [...pseudos] }));
+  return { missing: list(found.missing), rom: list(found.rom) };
 }
 
 const tried = new Set(); // envois refusés, pour ne pas les retenter à chaque rafraîchissement
@@ -844,6 +855,13 @@ async function checkRoom(room, players, slots, roomApworlds = []) {
   if (absent.length) {
     notes.push({ level: "warn", text: `Apworld manquant : ${absent.map((g) => `${g} (YAML de ${owners(g)})`).join(" ; ")}. Ce jeu n'est pas dans la base du site : la génération en ligne en a besoin. Le joueur peut le déposer avec ses YAML (dépôts ouverts), ou vous dans « Générer en ligne ».` });
   }
+  // Jeux qui exigent leur ROM pour générer : seulement sur l'ordinateur de l'hôte, qui a la ROM.
+  const rom = [...games].filter((g) => gameEntry(g)?.rom).sort();
+  if (rom.length) {
+    notes.push({ level: "warn", text: html`ROM nécessaire pour générer : ${rom.map((g, i) => html`${i ? " ; " : ""}<strong>${g}</strong>${" "}(YAML de ${owners(g)}) — ${romText(gameEntry(g).rom)}`)}. La génération en ligne ne peut pas s'en charger : générez la partie
+      sur votre ordinateur, avec la ROM de ${rom.length > 1 ? "chaque jeu" : "ce jeu"} (Archipelago la demande au premier lancement).
+      Elle reste chez vous : le site ne la demande jamais.` });
+  }
   // Apworld de ce navigateur seulement : la génération en ligne ne l'a pas.
   const notSent = [...games].filter((g) => gameEntry(g)?.source === "apworld" && !inRoom.has(g)).sort();
   if (notSent.length) {
@@ -994,11 +1012,16 @@ function OnlineGeneration({ room, setData, data }) {
 
   const start = () => action.run(async () => {
     // Le générateur échouerait au bout de quelques minutes : autant le dire tout de suite.
-    const missing = await missingOnline(room.code);
+    const { missing, rom } = await onlineProblems(room.code);
+    const who = (list) => list.map((m) => `${m.game} (YAML de ${m.pseudos.join(", ")})`).join(" ; ");
     if (missing.length) {
-      throw new Error(`Il manque l'apworld de ${missing.map((m) => `${m.game} (YAML de ${m.pseudos.join(", ")})`).join(" ; ")} : `
+      throw new Error(`Il manque l'apworld de ${who(missing)} : `
         + "ce jeu n'est pas dans la base du site. Déposez son fichier .apworld ci-dessus (ou rouvrez les dépôts pour que le joueur le fasse), "
         + "ou générez la partie sur votre ordinateur.");
+    }
+    if (rom.length) {
+      throw new Error(`${who(rom)} : ${rom.length > 1 ? "ces jeux ont" : "ce jeu a"} besoin de ${rom.length > 1 ? "leur" : "sa"} ROM pour générer, `
+        + "et la génération en ligne n'en a pas. Générez la partie sur votre ordinateur (« Ou générer sur votre ordinateur » ci-dessous).");
     }
     const result = await api.generate(room.code, { ...options, hint_cost: Number(options.hint_cost) });
     setData({ ...data, room: result.room });
@@ -1013,7 +1036,8 @@ function OnlineGeneration({ room, setData, data }) {
 
   return html`<div class="stack full">
     <p>Archipelago génère la partie sur GitHub, avec les apworlds du site ou les vôtres, en quelques minutes.
-      Les jeux qui demandent leur ROM pour générer (A Link to the Past, Ocarina of Time…) doivent être générés sur votre ordinateur.</p>
+      Les jeux qui demandent leur ROM pour générer (A Link to the Past, Ocarina of Time…) doivent être générés sur votre
+      ordinateur : la vérification les signale.</p>
     <${RoomApworlds} room=${room} data=${data} setData=${setData} busy=${busy} />
     <div class="fields full">
       <label><span>Release <span class="hint">(envoyer les objets restants d'un joueur)</span></span>${select("release_mode", RELEASE_CHOICES)}</label>

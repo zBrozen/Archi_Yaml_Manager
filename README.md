@@ -300,7 +300,15 @@ jeux, mais ni le contenu des YAML ni l'emplacement des objets. Les fichiers gén
 
 **Limites.** Les jeux qui ont besoin de leur ROM pour générer (A Link to the Past, Ocarina of Time…), les jeux
 absents de la base du site dont l'hôte n'a pas déposé l'apworld, ceux dont la génération a besoin du réseau, et les parties de plus de 25 minutes de génération se génèrent sur l'ordinateur
-de l'hôte ; la page de la room l'indique en cas d'échec.
+de l'hôte ; la page de la room l'indique en cas d'échec. Les deux premiers cas sont repérés avant : la vérification
+les signale et « Générer en ligne » refuse de démarrer. Le site ne reçoit jamais de ROM (ce serait faire circuler le
+jeu par le service et GitHub, et le code d'un apworld déposé par l'hôte pourrait la recopier dans la partie).
+
+**ROM exigée.** `site/py/ap_extract.py` appelle le `stage_assert_generate` de chaque monde, la vérification
+qu'Archipelago fait au début d'une génération, sans aucun fichier disponible (dossier utilisateur vide, `host.yaml`
+par défaut, pas de fenêtre). Un `FileNotFoundError` signale un fichier exigé : il est noté dans `rom` (section et
+réglage de `host.yaml`, nom du fichier) du JSON du jeu et d'`index.json`. Les mondes qui ne lisent leur ROM qu'au
+moment où le joueur applique son patch ne sont pas concernés.
 
 **Coût.** Rien : les GitHub Actions sont gratuites et sans limite de minutes pour un dépôt public, et une
 génération n'utilise que quelques requêtes et une ou deux écritures du stockage KV de Cloudflare (limite
