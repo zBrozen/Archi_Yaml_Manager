@@ -496,9 +496,22 @@ function Report({ report, spoiler, status, online, tracker, loading, packagesErr
 
   <section class="card stack">
     <h2>Sphères</h2>
-    <ol class="sphere-list full">${spheres.map((s) => html`<${Sphere} key=${s.n} s=${s} current=${frontier?.n === s.n}
-      future=${frontier && s.n > frontier.n} hide=${hide} nameOf=${nameOf} receiver=${receiver} />`)}</ol>
-    ${spoiler.start.length > 0 && html`<p class="hint">Inventaire de départ : ${plural(spoiler.start.length, "objet")} de progression.</p>`}
+    <ol class="sphere-list full">
+      ${spoiler.start.length > 0 && html`<li class="sphere"><details>
+        <summary>
+          <strong>Sphère 0</strong>
+          <span class="badge ok">Inventaire de départ</span>
+          <span class="hint">${plural(spoiler.start.length, "objet")} de progression du chemin, déjà en main au lancement</span>
+        </summary>
+        ${hide ? html`<p class="hint">Objets masqués.</p>`
+          : html`<ul class="adv-entries">${spoiler.start.map((e) => html`<li>
+            <span class="adv-mark" title="Au départ" aria-label="Au départ">✓</span>
+            <span><span class="adv-item">★ ${e.item}</span> <span class="hint">pour ${receiver(e)}</span></span>
+          </li>`)}</ul>`}
+      </details></li>`}
+      ${spheres.map((s) => html`<${Sphere} key=${s.n} s=${s} current=${frontier?.n === s.n}
+        future=${frontier && s.n > frontier.n} hide=${hide} nameOf=${nameOf} receiver=${receiver} />`)}
+    </ol>
     ${spoiler.unreachable.length > 0 && html`<p class="hint">${plural(spoiler.unreachable.length, "objet")} de progression
       inaccessible${spoiler.unreachable.length > 1 ? "s" : ""} (joueurs en accessibilité minimale) : inutile${spoiler.unreachable.length > 1 ? "s" : ""} pour finir.</p>`}
   </section>`;

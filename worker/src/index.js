@@ -557,6 +557,35 @@ async function apRoomLinks(env, room) {
   return json({ slots });
 }
 
+const decodeHtml = (s) => s.replace(/&(amp|lt|gt|quot|#39|#34|#x27);/g, (_, e) => (
+  { amp: "&", lt: "<", gt: ">", quot: "\"", "#39": "'", "#34": "\"", "#x27": "'" }[e]));
+
+// Inventaire d'un joueur lu sur son tracker générique d'archipelago.gg (/generic_tracker/…) : l'API du tracker ne
+// donne que les objets reçus, cette page compte aussi l'inventaire de départ. Le navigateur fait la différence.
+// Renvoie { items: [{ name, amount, order }] } (order : rang de la dernière arrivée, l'inventaire de départ d'abord).
+async function apInventory(env, room, slot) {
+  if (!room.ap_room_url) throw new HttpError(404, "Aucune room archipelago.gg pour cette room.");
+  const url = new URL(room.ap_room_url);
+  if (!AP_PAGE_HOSTS.includes(url.hostname)) return json({ items: null });
+  const n = Number(slot);
+  if (!Number.isInteger(n) || n < 1 || n > 1000) throw new HttpError(400, "Numéro de joueur invalide.");
+  const id = url.pathname.split("/").filter(Boolean)[1];
+  const status = await fetch(`${url.origin}/api/room_status/${id}`, { cf: { cacheTtl: 60, cacheEverything: true } });
+  const tracker = status.ok ? (await status.json()).tracker : null;
+  if (!tracker || !/^[\w-]+$/.test(tracker)) throw new HttpError(502, "Le tracker de la room archipelago.gg ne répond pas.");
+  const response = await fetch(`${url.origin}/generic_tracker/${tracker}/0/${n}`, { cf: { cacheTtl: 60, cacheEverything: true } });
+  if (!response.ok) throw new HttpError(502, `Le tracker du joueur ne répond pas (${response.status}).`);
+  const page = await response.text();
+  const table = /<table id="received-table"[\s\S]*?<tbody>([\s\S]*?)<\/tbody>/i.exec(page)?.[1] ?? "";
+  const items = [];
+  for (const row of table.split(/<tr[\s>]/i).slice(1)) {
+    const cells = [...row.matchAll(/<td[^>]*>([\s\S]*?)<\/td>/gi)].map((m) => decodeHtml(m[1].trim()));
+    const amount = Number(cells[1]);
+    if (cells.length >= 3 && cells[0] && Number.isInteger(amount)) items.push({ name: cells[0], amount, order: Number(cells[2]) });
+  }
+  return json({ items });
+}
+
 // --- Génération en ligne -------------------------------------------------------------
 
 function genOptions(body) {
@@ -1126,10 +1155,10 @@ async function saveWishlist(request, env, room, slot) {
 
 // --- Packs PopTracker ------------------------------------------------------------
 
-// Relais des archives des packs (releases GitHub, voir tools/fetch_trackers.py) : GitHub ne permet pas
-// au navigateur de les lire depuis une autre adresse. Rien n'est stocké : la réponse reste dans le
-// cache de Cloudflare une journée.
-const PACK_URL = /^https:\/\/github\.com\/[\w.-]+\/[\w.-]+\/releases\/download\/[^?#]+\.zip$/i;
+// Relais des packs PopTracker et des apworlds (releases GitHub, voir tools/fetch_trackers.py et les crédits
+// des jeux) pour les trackers du site : GitHub ne permet pas au navigateur de les lire depuis une autre
+// adresse. Rien n'est stocké : la réponse reste dans le cache de Cloudflare une journée.
+const PACK_URL = /^https:\/\/github\.com\/[\w.-]+\/[\w.-]+\/releases\/download\/[^?#]+\.(zip|apworld)$/i;
 const PACK_MAX_SIZE = 64 * 1024 * 1024;
 
 async function relayPack(url) {
@@ -1178,6 +1207,8 @@ async function route(request, env) {
     return exportSlots(request, env, room);
   } else if (sub === "ap-links" && !id && method === "GET") {
     return apRoomLinks(env, room);
+  } else if (sub === "ap-inventory" && id && method === "GET") {
+    return apInventory(env, room, id);
   } else if (sub === "generate" && !id && method === "POST") {
     return startGeneration(request, env, room);
   } else if (sub === "files" && id && method === "GET") {

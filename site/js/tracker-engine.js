@@ -520,12 +520,14 @@ export class Tracker {
   emit() {
     if (this.emitQueued) return;
     this.emitQueued = true;
-    requestAnimationFrame(() => {
+    // Pas de requestAnimationFrame : suspendu dans une page cachée, alors qu'elle doit rester à jour
+    // (source de stream, second écran).
+    setTimeout(() => {
       this.emitQueued = false;
       // Un numéro à chaque fois : une image chargée doit aussi redessiner, sans changer la logique.
       this.renders = (this.renders || 0) + 1;
       for (const listener of this.listeners) listener(this.renders);
-    });
+    }, 16);
   }
 
   // Tout changement d'état : la logique est recalculée à la prochaine lecture.

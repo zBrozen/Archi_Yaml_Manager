@@ -909,3 +909,8 @@ html.overlay-page body { background: transparent; overflow: hidden; }
 .markdown table { border-collapse: collapse; font-size: .95rem; }
 .markdown th, .markdown td { border: 1px solid var(--border); padding: .35rem .6rem; text-align: left; vertical-align: top; }
 .markdown th { background: var(--surface-2); }
+/* Logique du jeu (à la manière d'Universal Tracker) */
+.ut-title { margin: 0; font-size: 1.25rem; }
+.ut-region { display: grid; gap: .4rem; width: 100%; }
+.ut-region h3 { margin: .4rem 0 0; font-size: 1.05rem; }
+.ut-yaml input[type="file"] { width: auto; max-width: 100%; }

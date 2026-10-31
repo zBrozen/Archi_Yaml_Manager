@@ -9,7 +9,7 @@ Le code propre au projet est sous licence MIT (voir [`LICENSE`](LICENSE)). Il r�
 
 | Élément | Où | Licence |
 |---|---|---|
-| [Archipelago](https://github.com/ArchipelagoMW/Archipelago) | `site/data/ap-core.zip`, données extraites dans `site/data/games/` | MIT (texte ci-dessous) |
+| [Archipelago](https://github.com/ArchipelagoMW/Archipelago) | `site/data/ap-core.zip`, données extraites dans `site/data/games/`, jeux officiels publiés dans `site/data/worlds/` | MIT (texte ci-dessous) |
 | [Preact](https://github.com/preactjs/preact) + [htm](https://github.com/developit/htm) | `site/vendor/preact-htm.js` | MIT |
 | [yaml](https://github.com/eemeli/yaml) | `site/vendor/yaml.js` | ISC |
 | [archipelago.js](https://github.com/ThePhar/archipelago.js) | `site/vendor/archipelago.js` (client texte des rooms) | MIT |
@@ -43,6 +43,12 @@ auteurs, relevés dans le même tableur par [`tools/fetch_trackers.py`](tools/fe
 le navigateur télécharge la release de l'auteur, par un relais du service des rooms qui ne la stocke pas.
 Le site n'utilise pas le code de PopTracker (GPL-3.0) : il lit le format des packs décrit dans sa
 documentation.
+
+## Universal Tracker
+
+La logique des trackers suit la démarche d'[Universal Tracker](https://github.com/FarisTheAncient/Archipelago)
+(génération refaite sans remplir les objets, puis lieux atteignables) et l'interface que les apworlds lui
+exposent. Son code n'est pas repris : `site/py/ut_core.py` est écrit pour le site.
 
 ## Licence d'Archipelago
 

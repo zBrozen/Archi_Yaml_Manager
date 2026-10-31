@@ -108,8 +108,8 @@ export function ProgressPanel({ status, tracker, mode, mine, code, compact = fal
         const idle = mode === "async" && !r.finished && r.last && Date.now() - r.last > IDLE_WARNING;
         return html`<tr class=${r.mine ? "mine" : ""}>
           <td><strong>${r.name}</strong>${r.tracker && html` <a href=${r.tracker} target="_blank" rel="noopener" class="small">tracker</a>`}
-            ${packsFor(packs, r.game).some((p) => p.url) && html` <a href=${trackerLink({ game: r.game, server: status.port ? `${status.host}:${status.port}` : "", slot: r.name, room: code })}
-              class="small" title="Objets, cartes et lieux accessibles, d'après le pack PopTracker du jeu">tracker du pack</a>`}</td>
+            <a href=${trackerLink({ game: r.game, server: status.port ? `${status.host}:${status.port}` : "", slot: r.name, room: code })} class="small"
+              title=${packsFor(packs, r.game).some((p) => p.url) ? "Lieux en logique, et pack PopTracker du jeu (objets, cartes)" : "Lieux en logique d'après la logique du jeu"}>tracker détaillé</a></td>
           <td>${r.game}</td>
           <td class="checks">
             <div class="progress small" title=${`${pct(r.checks, r.total)} %`}><span class=${r.finished ? "ok" : ""} style=${`width: ${pct(r.checks, r.total)}%`}></span></div>
@@ -183,6 +183,47 @@ const GROUPS = [
 ];
 const RECENT = 12;
 
+// --- Inventaire de départ ----------------------------------------------------------
+// Sphère 0 : objets avec lesquels un joueur commence (start_inventory de son YAML, ou donnés par son monde). L'API du
+// tracker ne les donne pas : le service lit l'inventaire du tracker générique du joueur, qui les compte avec les objets
+// reçus ; la différence avec les objets reçus de l'API donne ceux de départ. Le résultat n'est gardé que si les deux
+// lectures sont du même moment : le dernier objet reçu selon l'API est aussi le dernier arrivé sur la page.
+// `rows` : [{ name, amount, order }] (order : rang de la dernière arrivée, l'inventaire de départ d'abord).
+// Renvoie Map(nom → nombre), ou null si les deux lectures ne concordent pas.
+export function startingFrom(rows, received, itemName) {
+  const total = rows.reduce((n, r) => n + r.amount, 0);
+  if (total < received.length) return null;
+  if (received.length) {
+    const last = itemName(received.at(-1).item);
+    if (!rows.some((r) => r.order === total - 1 && r.name === last)) return null;
+  }
+  const counts = new Map();
+  for (const i of received) counts.set(itemName(i.item), (counts.get(itemName(i.item)) || 0) + 1);
+  const start = new Map();
+  for (const r of rows) if (r.amount > (counts.get(r.name) || 0)) start.set(r.name, r.amount - (counts.get(r.name) || 0));
+  return start;
+}
+
+// Inventaire de départ d'un joueur, calculé une fois par visite (il ne change pas pendant la partie). Tant que le
+// tracker générique et l'API ne concordent pas, nouvel essai à chaque rafraîchissement du tracker.
+// `itemName` : null tant que les noms des objets du jeu ne sont pas chargés. Renvoie undefined tant qu'il n'est pas connu.
+const startingItems = new Map(); // `code|slot` → Map(nom → nombre), ou null (room hors d'archipelago.gg)
+function useStartingItems(code, slot, received, itemName) {
+  const key = `${code}|${slot}`;
+  const [, setFound] = useState(0);
+  useEffect(() => {
+    if (!code || !itemName || startingItems.has(key)) return undefined;
+    let alive = true;
+    api.apInventory(code, slot).then(({ items }) => {
+      const start = items ? startingFrom(items, received, itemName) : null;
+      if (start || !items) startingItems.set(key, start);
+      if (alive && startingItems.has(key)) setFound((n) => n + 1);
+    }).catch(() => { /* tracker indisponible : nouvel essai au prochain rafraîchissement */ });
+    return () => { alive = false; };
+  }, [key, !!itemName, received.length]);
+  return startingItems.get(key);
+}
+
 // Joueurs affichés par défaut : les vôtres, sinon le premier de la partie.
 export function defaultItemSlots(status, mine) {
   const own = status.slots.filter((s) => mine.some((m) => m.name.toLowerCase() === s.name.toLowerCase())).map((s) => s.slot);
@@ -190,7 +231,7 @@ export function defaultItemSlots(status, mine) {
 }
 
 // Objets reçus par les joueurs cochés (`selected` : numéros de slot), avec une recherche commune à tous.
-export function ItemsPanel({ status, tracker, mine, selected, onSelected }) {
+export function ItemsPanel({ status, tracker, mine, selected, onSelected, code }) {
   const [search, setSearch] = useState("");
   const names = new Set(mine.map((s) => s.name.toLowerCase()));
   const own = status.slots.filter((s) => names.has(s.name.toLowerCase()));
@@ -222,13 +263,13 @@ export function ItemsPanel({ status, tracker, mine, selected, onSelected }) {
     </fieldset>
     ${!live ? html`<p class="hint">${tracker.error || "Chargement des objets…"}</p>`
       : !shown.length ? html`<p class="hint">Cochez un ou plusieurs joueurs pour voir leurs objets.</p>`
-      : html`<div class="items-players-view full">${shown.map((s) => html`<${PlayerItems} key=${s.slot} slot=${s} status=${status}
+      : html`<div class="items-players-view full">${shown.map((s) => html`<${PlayerItems} key=${s.slot} slot=${s} status=${status} code=${code}
           tracker=${tracker} needle=${needle} search=${search.trim()} titled=${shown.length > 1} />`)}</div>`}`;
 }
 
 // Objets d'un joueur : regroupés par importance (avec le nombre d'exemplaires), puis les derniers arrivés.
 // Avec une recherche, seuls les objets dont le nom la contient restent, et tous ceux arrivés sont listés.
-function PlayerItems({ slot, status, tracker, needle, search, titled }) {
+function PlayerItems({ slot, status, tracker, needle, search, titled, code }) {
   const [all, setAll] = useState(false);
   const received = receivedItems(tracker.data.live, slot.slot);
   const gameOf = (player) => (player === 0 ? "Archipelago" : status.slots.find((s) => s.slot === player)?.game);
@@ -247,6 +288,10 @@ function PlayerItems({ slot, status, tracker, needle, search, titled }) {
   };
   const matching = received.map((i, index) => ({ ...i, index, name: itemName(i.item) }))
     .filter((i) => !needle || i.name.toLowerCase().includes(needle));
+  const start = useStartingItems(code, slot.slot, received, pkg ? itemName : null);
+  const startShown = [...(start || [])].filter(([name]) => !needle || name.toLowerCase().includes(needle))
+    .sort((a, b) => a[0].localeCompare(b[0]));
+  const startCount = startShown.reduce((n, [, k]) => n + k, 0);
 
   const groups = Object.fromEntries(GROUPS.map(([kind]) => [kind, new Map()]));
   for (const i of matching) {
@@ -261,25 +306,30 @@ function PlayerItems({ slot, status, tracker, needle, search, titled }) {
     .map(([name, n]) => html`<li><span class=${ITEM_KINDS[kind].cls}>${name}</span>${n > 1 && html`<span class="item-count">×${n}</span>`}</li>`)}</ul>`;
   const title = ({ kind, label, n }) => html`<h4><span class=${ITEM_KINDS[kind].cls}>${ITEM_KINDS[kind].mark}${label}</span> <span class="hint">${n}</span></h4>`;
   const summary = needle
-    ? `${plural(matching.length, "objet")} sur ${received.length} pour « ${search} »`
+    ? `${plural(matching.length, "objet")} sur ${received.length} pour « ${search} »${startCount ? ` · ${startCount} au départ` : ""}`
     : `${plural(received.length, "objet")} reçu${received.length > 1 ? "s" : ""}${counts.filter((g) => g.word)
-      .map((g) => ` · ${g.n} ${g.kind === "progression" || g.n < 2 ? g.word : `${g.word}s`}`).join("")}`;
+      .map((g) => ` · ${g.n} ${g.kind === "progression" || g.n < 2 ? g.word : `${g.word}s`}`).join("")}${
+      startCount ? ` · ${startCount} au départ` : ""}`;
 
   // Recherche sans résultat chez ce joueur : une seule ligne, pour ne pas encombrer quand plusieurs sont cochés.
-  if (needle && pkg && !matching.length) {
+  if (needle && pkg && !matching.length && !startCount) {
     return html`<p class="items-player-block items-none hint">${titled && html`<strong>${slot.name}</strong> : `}aucun objet reçu ne contient « ${search} » (${plural(received.length, "objet")} au total).</p>`;
   }
   return html`<section class="items-player-block">
     ${titled && html`<h3>${slot.name} <span class="hint">${slot.game}</span></h3>`}
     <p class="hint">${summary}</p>
     ${error && html`<p class="hint">${error} Les objets sont affichés par numéro.</p>`}
-    ${received.length === 0 ? html`<p class="hint">Aucun objet reçu pour l'instant.</p>`
+    ${received.length === 0 && !startCount ? html`<p class="hint">Aucun objet reçu pour l'instant.</p>`
       : waiting ? html`<p class="hint">Chargement des noms d'objets…</p>`
       : html`<div class="items-panel">
+        ${startCount > 0 && html`<div class="items-group">
+          <h4>Inventaire de départ <span class="hint">sphère 0 · ${startCount}</span></h4>
+          <ul class="item-tags">${startShown.map(([name, n]) => html`<li><span>${name}</span>${n > 1 && html`<span class="item-count">×${n}</span>`}</li>`)}</ul>
+        </div>`}
         ${counts.map((g) => (g.kind === "filler"
           ? html`<details class="items-group" open=${!!needle}><summary>${title(g)}</summary>${tags(g.kind)}</details>`
           : html`<div class="items-group">${title(g)}${tags(g.kind)}</div>`))}
-        <div class="items-group">
+        ${matching.length > 0 && html`<div class="items-group">
           <h4>${needle ? "Arrivées correspondantes" : "Derniers objets reçus"}</h4>
           <ol class="item-feed">${recent.map((i) => {
             const kind = ITEM_KINDS[kindOf(i.flags)];
@@ -291,7 +341,7 @@ function PlayerItems({ slot, status, tracker, needle, search, titled }) {
           })}</ol>
           ${!needle && received.length > RECENT && html`<button type="button" class="link" onClick=${() => setAll(!all)}>
             ${all ? "Afficher seulement les derniers" : `Afficher les ${received.length} objets`}</button>`}
-        </div>
+        </div>`}
       </div>`}
   </section>`;
 }

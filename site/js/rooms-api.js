@@ -92,6 +92,7 @@ export const api = {
   deleteSlot: (code, id) => call("DELETE", at(code, `/slots/${id}`), { code }),
   exportSlots: (code) => call("GET", at(code, "/export"), { code }),
   apLinks: (code) => call("GET", at(code, "/ap-links"), { code }),
+  apInventory: (code, slot) => call("GET", at(code, `/ap-inventory/${slot}`), { code }),
   generate: (code, options) => call("POST", at(code, "/generate"), { code, body: { options } }),
   file: (code, kind) => call("GET", at(code, `/files/${kind}`), { code, file: true }),
   uploadApworld: (code, game, name, file) => call("PUT", at(code, `/apworlds/${encodeURIComponent(name)}?game=${encodeURIComponent(game)}`), { code, body: file }),
