@@ -986,6 +986,15 @@ function percent(value, min) {
   return Math.round(Math.min(100, Math.max(min, n)) * 100) / 100;
 }
 
+// Messages de la partie : objets montrés (tous, objets sans importance résumés, importants seulement), lieu des
+// objets envoyés, heure des messages, chat des joueurs.
+const feedSettings = (v) => ({
+  objets: choice(v.objets, ["tous", "resumes", "importants"], "tous"),
+  lieux: v.lieux !== false,
+  heure: !!v.heure,
+  chat: !!v.chat,
+});
+
 function layoutItem(item) {
   const type = choice(item?.type, LAYOUT_ITEMS, null);
   if (!type) throw new HttpError(400, "Élément inconnu dans la disposition.");
@@ -1006,7 +1015,7 @@ function layoutItem(item) {
     result.slot = Math.round(percent(item.slot ?? 1, 1));
     result.label = item.label !== false;
   } else if (type === "feed") {
-    result.objets = choice(item.objets, ["tous", "importants"], "tous");
+    Object.assign(result, feedSettings(item));
   } else if (type === "progress") {
     result.goal = !!item.goal;
   } else if (type === "text") {
@@ -1060,7 +1069,7 @@ function spaceConfig(value) {
     ecrans: choice(v.ecrans, ["grille", "vedette", "aucun"], "grille"),
     joueurs: [...new Set((v.joueurs || []).slice(0, LIMITS.playersPerRoom).map(layoutId))],
     messages: choice(v.messages, ["droite", "bas", "non"], "droite"),
-    objets: choice(v.objets, ["tous", "importants"], "tous"),
+    ...feedSettings(v),
     progression: choice(v.progression, ["non", "oui", "goal"], "non"),
     rotation: SPACE_ROTATIONS.includes(Number(v.rotation)) ? Number(v.rotation) : 0,
     variants,

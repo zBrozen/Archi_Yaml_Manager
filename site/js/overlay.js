@@ -7,9 +7,9 @@
 //
 // Les images arrivent directement du navigateur de chaque joueur (WebRTC) ; les messages et la progression
 // viennent du serveur de la partie sur archipelago.gg (client texte du premier joueur, API du tracker).
-import { html, useState, useEffect, useRef } from "../vendor/preact-htm.js";
+import { html, useState, useEffect, useLayoutEffect, useRef } from "../vendor/preact-htm.js";
 import { Client, Hint } from "../vendor/archipelago.js";
-import { MessagePart, progressRows, wishHit, wishIndex } from "./room-live.js";
+import { MessageLine, displayLines, progressRows, wishHit, wishIndex } from "./room-live.js";
 import { api, apRoomStatus } from "./rooms-api.js";
 import { ICE_SERVERS, serial, signaling } from "./screens-net.js";
 import {
@@ -18,8 +18,9 @@ import {
 
 const RETRY = 8000;
 const OFFER_TIMEOUT = 20000;
-const FEED_LINES = 40; // messages gardés ; ceux qui ne tiennent pas dans la hauteur sont coupés en haut
+const FEED_LINES = 300; // messages gardés, pour remonter le fil
 const FEED_RETRY = 30000;
+const SCROLL_BACK = 20000; // fil remonté à la main : retour aux derniers messages après ce temps sans défiler
 const GAME_WAIT = 60000; // partie pas encore hébergée : la room est relue de temps en temps
 const GAP = 8;
 
@@ -232,7 +233,9 @@ function useGameFeed(code, enabled) {
     let timer = null;
     let nextId = 0;
     const update = (patch) => alive && setFeed((f) => ({ ...f, ...patch }));
-    const push = (nodes, important) => alive && setFeed((f) => ({ ...f, lines: [...f.lines.slice(1 - FEED_LINES), { id: nextId++, nodes, important }] }));
+    const push = (nodes, important, chat = false) => alive && setFeed((f) => ({
+      ...f, lines: [...f.lines.slice(1 - FEED_LINES), { id: nextId++, time: Date.now(), nodes, important, chat }],
+    }));
     const later = (delay) => { clearTimeout(timer); timer = setTimeout(connect, delay); };
     const important = (item) => !!(item.progression || item.useful || item.trap);
 
@@ -247,6 +250,11 @@ function useGameFeed(code, enabled) {
         next.messages.on("itemSent", (text, item, nodes) => push(nodes, important(item)));
         next.messages.on("itemCheated", (text, item, nodes) => push(nodes, important(item)));
         for (const event of ["goaled", "released", "collected"]) next.messages.on(event, (text, player, nodes) => push(nodes, true));
+        // Chat des joueurs (affiché si l'élément le demande). Le serveur répète aussi à tous les commandes (!hint…) : écartées.
+        next.messages.on("chat", (message, player, nodes) => {
+          if (String(message).trim().startsWith("!")) return;
+          push(player ? [{ type: "player", text: player.alias || player.name, player }, { type: "text", text: `: ${message}` }] : nodes, false, true);
+        });
         next.socket.on("disconnected", () => {
           if (client !== next || !alive) return;
           client = null;
@@ -320,18 +328,40 @@ const FEED_STATES = {
   live: "Connecté à la partie : les objets envoyés et les indices s'afficheront ici.",
 };
 
-// `important` : seulement les objets de progression, utiles et les pièges (et les événements des joueurs),
-// plus ceux des wishlists. `mine` : joueurs dont les objets sont surlignés.
-function GameFeed({ feed, wishes, mine, important = false, style, plain = false }) {
-  const lines = feed.lines.map((l) => ({ ...l, wish: wishHit(wishes, l.nodes) })).filter((l) => !important || l.important || l.wish);
+// Options d'un élément « messages » (disposition, ou réglages automatiques d'un espace) : `objets` (tous, résumés :
+// objets sans importance en une ligne cumulée, importants : progression, utiles, pièges, événements des joueurs et
+// objets des wishlists), `lieux`, `heure`, `chat` (messages écrits par les joueurs). Anciennes dispositions : lieux affichés.
+const feedOptions = (item) => ({
+  important: item.objets === "importants", chat: !!item.chat,
+  display: { lieux: item.lieux !== false, heure: !!item.heure, resumes: item.objets === "resumes" },
+});
+
+// `mine` : joueurs dont les objets sont surlignés. Les messages défilent : remonté plus haut, le fil reste en place
+// (bouton pour revenir aux derniers), puis y revient seul après SCROLL_BACK sans défiler.
+function GameFeed({ feed, wishes, mine, options, style, plain = false }) {
+  const box = useRef(null);
+  const timer = useRef(null);
+  const [away, setAway] = useState(false);
+  const kept = feed.lines.filter((l) => (l.chat ? options.chat : !options.important || l.important || wishHit(wishes, l.nodes)));
+  const lines = displayLines(kept, options.display, wishes);
   const status = feed.state === "error" ? `${feed.message} Nouvelle tentative dans ${FEED_RETRY / 1000} s.`
     : feed.state === "live" && lines.length ? null
     : FEED_STATES[feed.state];
-  return html`<div class=${`game-feed ${plain ? "plain" : ""}`} style=${style} role="log" aria-live="polite">
-    ${lines.map((line) => html`<div key=${line.id} class=${line.wish ? "wish-hit" : ""}>
-      ${line.wish && html`<span class="wish-label">♥ Wishlist</span>`}
-      ${line.nodes.map((node) => html`<${MessagePart} node=${node} marks wishes=${wishes} mine=${mine} />`)}</div>`)}
+  const toBottom = () => { if (box.current) box.current.scrollTop = box.current.scrollHeight; };
+  useLayoutEffect(() => { if (!away) toBottom(); });
+  useEffect(() => () => clearTimeout(timer.current), []);
+  const onScroll = () => {
+    const el = box.current;
+    const far = el.scrollHeight - el.scrollTop - el.clientHeight > 4;
+    setAway(far);
+    clearTimeout(timer.current);
+    if (far) timer.current = setTimeout(() => { setAway(false); toBottom(); }, SCROLL_BACK);
+  };
+  return html`<div class=${`game-feed ${plain ? "plain" : ""}`} style=${style} ref=${box} onScroll=${onScroll} role="log" aria-live="polite">
+    ${lines.map((line) => html`<div key=${line.id} class=${line.wish ? "wish-hit" : line.chat ? "feed-chat" : ""}>
+      <${MessageLine} line=${line} options=${options.display} marks wishes=${wishes} mine=${mine} /></div>`)}
     ${status && html`<div class="feed-status">${status}</div>`}
+    ${away && html`<button type="button" class="feed-latest" onClick=${() => { setAway(false); toBottom(); }}>↓ Derniers messages</button>`}
   </div>`;
 }
 
@@ -413,7 +443,7 @@ function LayoutView({ items, view, streams, featured, feed, wishes, mine, progre
         width=${(size.width * item.w) / 100} height=${(size.height * item.h) / 100}
         scale=${TEXT_SIZES[item.size].unit / TEXT_SIZES.m.unit} /></div>` : nobody;
     }
-    if (item.type === "feed") return html`<${GameFeed} feed=${feed} wishes=${wishes} mine=${mine} important=${item.objets === "importants"} style=${font} plain=${plain} />`;
+    if (item.type === "feed") return html`<${GameFeed} feed=${feed} wishes=${wishes} mine=${mine} options=${feedOptions(item)} style=${font} plain=${plain} />`;
     if (item.type === "progress") return html`<${ProgressBox} progress=${progress} style=${font} plain=${plain} goal=${item.goal} />`;
     return html`<div class=${`overlay-box overlay-text ${plain ? "plain" : ""}`} style=${{ ...font, textAlign: item.align }}>${item.text}</div>`;
   };

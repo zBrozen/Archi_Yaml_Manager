@@ -12,14 +12,21 @@ export const MAX_SHOWN = 6;
 export const DEFAULT_SHOWN = MAX_SHOWN;
 
 export const CONSOLE_PLACES = { droite: "À droite des écrans", bas: "Sous les écrans", non: "Masqués" };
-export const ITEM_FILTERS = { tous: "Tous les objets", importants: "Objets importants seulement (progression, utiles, pièges)" };
+export const ITEM_FILTERS = {
+  tous: "Tous les objets",
+  resumes: "Tous, objets sans importance résumés (une ligne cumulée)",
+  importants: "Objets importants seulement (progression, utiles, pièges)",
+};
+// Cases des messages de la partie (réglages automatiques d'un espace et éléments « messages » d'une disposition).
+export const FEED_CHECKS = { lieux: "Lieu des objets envoyés", heure: "Heure des messages", chat: "Messages écrits par les joueurs" };
 export const SCREEN_MODES = { grille: "En grille, tous de la même taille", vedette: "Un écran en grand, les autres en petit", aucun: "Pas d'écran (infos seulement)" };
 export const PROGRESS_MODES = { non: "Masquée", oui: "Affichée", goal: "Affichée, avec le goal de chacun" };
 export const ROTATIONS = { 0: "À la main seulement", 15: "Toutes les 15 s", 30: "Toutes les 30 s", 60: "Toutes les minutes", 120: "Toutes les 2 minutes" };
 
 // Réglages d'un espace (les mêmes que le service, voir spaceConfig dans worker/src/index.js).
 export const DEFAULT_SPACE = {
-  mode: "auto", ecrans: "grille", joueurs: [], messages: "droite", objets: "tous", progression: "non", rotation: 0, variants: [],
+  mode: "auto", ecrans: "grille", joueurs: [], messages: "droite", objets: "tous", lieux: true, heure: false, chat: false,
+  progression: "non", rotation: 0, variants: [],
 };
 export const spaceOf = (config) => ({ ...DEFAULT_SPACE, ...(config || {}) });
 
@@ -72,7 +79,7 @@ export const newId = () => Array.from(crypto.getRandomValues(new Uint8Array(8)),
 const DEFAULTS = {
   screens: { w: 60, h: 60, players: [], max: MAX_SHOWN, label: true, size: "m", background: false },
   screen: { w: 32, h: 32, source: "auto", label: true, size: "m", background: false },
-  feed: { w: 24, h: 60, objets: "tous", size: "m", background: true },
+  feed: { w: 24, h: 60, objets: "tous", lieux: true, heure: false, chat: false, size: "m", background: true },
   progress: { w: 30, h: 40, size: "m", background: true, goal: false },
   text: { w: 30, h: 8, text: "Titre", align: "center", size: "l", background: true },
 };
@@ -114,7 +121,10 @@ export function autoItems(config, count) {
       ? [box(side.x, side.y, side.w * share - 0.25, side.h), box(side.x + side.w * share + 0.25, side.y, side.w * (1 - share) - 0.25, side.h)]
       : [box(side.x, side.y, side.w, side.h * share - 0.25), box(side.x, side.y + side.h * share + 0.25, side.w, side.h * (1 - share) - 0.25)]);
     const [first, second] = feed && progress ? split(0.6) : [side, side];
-    if (feed) items.push({ id: "messages", type: "feed", objets: config.objets, size: "m", background: true, ...first });
+    if (feed) {
+      items.push({ id: "messages", type: "feed", objets: config.objets, lieux: config.lieux, heure: config.heure, chat: config.chat,
+        size: "m", background: true, ...first });
+    }
     if (progress) items.push({ id: "progression", type: "progress", goal: config.progression === "goal", size: "m", background: true, ...(feed ? second : first) });
   }
   return items;

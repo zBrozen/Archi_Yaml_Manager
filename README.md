@@ -202,7 +202,9 @@ leur nom dans la partie, qui sert à retrouver leurs fichiers.
    [archipelago.js](https://github.com/ThePhar/archipelago.js) (`site/vendor/archipelago.js`). Les objets reçus ou
    envoyés par vos joueurs (et le joueur connecté) y sont surlignés, sauf les objets sans importance, et un aperçu
    épuré de l'inventaire du joueur choisi (progression, utiles, pièges, indices à trouver, inventaire de départ
-   replié) s'affiche à côté. Les **indices** de chaque joueur (API du tracker : objet, lieu, monde où il se trouve,
+   replié) s'affiche à côté. Des cases (gardées dans le navigateur) masquent le lieu des objets envoyés, ajoutent
+   l'heure des messages, ou résument les objets sans importance en une ligne qui cumule ceux qui se suivent
+   (`displayLines`, commun avec l'overlay). Les **indices** de chaque joueur (API du tracker : objet, lieu, monde où il se trouve,
    pour qui, trouvé ou non, priorité choisie) sont aussi listés avec ses objets reçus dans « Progression ».
    Chaque joueur remplit aussi sa **wishlist** (onglet « Wishlist ») parmi les objets de son jeu : en rouge tant
    qu'ils manquent, en vert une fois reçus (un bouton retire les objets reçus). Un objet déjà reçu (progressif,
@@ -291,7 +293,9 @@ Streamlabs, XSplit…).
   - **Automatique** : écrans en grille (aussi grands que possible, 6 au plus, redécoupés à chaque partage qui
     commence ou s'arrête) ou **un écran en vedette** en grand avec les autres en petit à côté, ou pas d'écran ;
     **messages de la partie** (objets envoyés, indices obtenus, objectifs atteints, release et collect) à droite,
-    en bas ou masqués, tous les objets ou les importants ; **progression** masquée, affichée, ou affichée avec le
+    en bas ou masqués, tous les objets, les objets sans importance résumés en une ligne cumulée, ou les importants,
+    avec ou sans le lieu des objets envoyés, l'heure des messages et le chat des joueurs (sans les commandes `!…`) ;
+    le fil défile pour remonter les 300 derniers messages (retour seul aux derniers après 20 s) ; **progression** masquée, affichée, ou affichée avec le
     **goal** de chaque joueur en petit. Tout se place seul, sans qu'un écran en recouvre un autre.
   - **À la main** : une disposition par nombre d'écrans affichés (aucun à 6), faite avec l'éditeur ci-dessous ;
     l'overlay prend celle qui correspond au nombre de joueurs montrés qui partagent (sinon celle du nombre

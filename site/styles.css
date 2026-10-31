@@ -658,6 +658,11 @@ details.items-group > summary h3, details.items-group > summary h4 { display: in
 }
 .client-log > div + div { margin-top: .25rem; }
 .client-log > div { white-space: pre-wrap; overflow-wrap: anywhere; }
+/* Heure d'un message (client texte et overlay), et objet sans importance résumé en une ligne cumulée */
+.msg-time { color: var(--muted); font-variant-numeric: tabular-nums; margin-right: .6em; font-size: .9em; }
+.msg-filler { font-style: italic; }
+.message-options { display: flex; flex-wrap: wrap; gap: .3rem 1.2rem; }
+.message-options label.check { display: inline-flex; align-items: center; gap: .4rem; font-size: .92rem; }
 /* Palette du client texte d'Archipelago, assombrie en thème clair pour rester lisible. */
 .client-log, .items-panel, .inventory-compact {
   --ap-self: #b5179e; --ap-player: #8a6100; --ap-progression: #6d3fc0; --ap-useful: #3556c9; --ap-trap: #c2412d;
@@ -796,8 +801,11 @@ html.overlay-page body { background: transparent; overflow: hidden; }
 
 /* Overlay OBS : messages de la partie (objets envoyés…), palette sombre du client texte d'Archipelago.
    Les objets de progression et les pièges ont aussi un symbole (★, ⚠) : la couleur ne porte pas seule l'information. */
+/* Le fil défile (molette, ou « Interagir » dans OBS) ; sa barre n'apparaît qu'au survol pour ne pas se voir en stream.
+   Les messages restent collés en bas par la marge du premier (justify-content: flex-end empêcherait de remonter). */
 .game-feed {
-  display: flex; flex-direction: column; justify-content: flex-end; gap: .35em; overflow: hidden;
+  display: flex; flex-direction: column; gap: .35em; overflow-x: hidden; overflow-y: auto; position: relative;
+  scrollbar-width: none;
   padding: .6em .8em; border-radius: 6px; background: rgb(28 31 37 / 90%); color: #eef0f3;
   font-size: clamp(16px, 1.3vw, 30px); line-height: 1.35;
   --ap-self: #ff7ee2; --ap-player: #fad25a; --ap-progression: #c3a8ff; --ap-useful: #8fa8ff; --ap-trap: #ff8f80;
@@ -807,6 +815,17 @@ html.overlay-page body { background: transparent; overflow: hidden; }
 .overlay-bas .game-feed { height: clamp(120px, 24vh, 340px); flex: none; }
 .overlay-plein .game-feed { flex: 1; }
 .game-feed > div { overflow-wrap: anywhere; }
+.game-feed > :first-child { margin-top: auto; }
+.game-feed::-webkit-scrollbar { width: 0; }
+.game-feed:hover { scrollbar-width: thin; scrollbar-color: #8a919c transparent; }
+.game-feed:hover::-webkit-scrollbar { width: 8px; }
+.game-feed:hover::-webkit-scrollbar-thumb { background: #8a919c; border-radius: 4px; }
+.feed-latest {
+  position: sticky; bottom: 0; align-self: center; flex: none; margin-top: .2em; padding: .25em .9em; font-size: .8em;
+  background: #eef0f3; color: #1c1f25; border: none; border-radius: 999px; font-weight: 700; cursor: pointer; text-shadow: none;
+}
+.game-feed .feed-chat { border-left: .2em solid #c9ced6; padding-left: .45em; }
+.game-feed .msg-time, .game-feed .item-count { color: #c9ced6; font-size: .85em; }
 .game-feed .feed-status { color: #c9ced6; font-size: .85em; }
 .game-feed .wish-hit { background: rgb(99 229 155 / 22%); border-left: .25em solid #63e59b; border-radius: 4px; padding: .15em .45em; }
 .game-feed .wish-label { color: #63e59b; }

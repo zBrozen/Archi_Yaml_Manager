@@ -3,7 +3,7 @@
 // textes sur une page 16/9, à la souris ou au clavier, avec une disposition par nombre d'écrans affichés.
 import { html, useState, useRef } from "../vendor/preact-htm.js";
 import {
-  ALIGNS, ITEM_FILTERS, ITEM_TYPES, LAYOUT_LIMITS, PRESETS, SCREEN_TYPES, TEXT_SIZES, assignScreens, coversScreen, gridLayout,
+  ALIGNS, FEED_CHECKS, ITEM_FILTERS, ITEM_TYPES, LAYOUT_LIMITS, PRESETS, SCREEN_TYPES, TEXT_SIZES, assignScreens, coversScreen, gridLayout,
   newId, newItem, nextSlot, presetItems, variantFor,
 } from "./overlay-layout.js";
 
@@ -24,7 +24,10 @@ function describe(item, players) {
       ? `Écran auto ${item.slot}`
       : `Écran : ${players.find((p) => p.id === item.source)?.pseudo || "joueur retiré"}`;
   }
-  if (item.type === "feed") return item.objets === "importants" ? "Messages (objets importants)" : "Messages de la partie";
+  if (item.type === "feed") {
+    if (item.objets === "importants") return "Messages (objets importants)";
+    return item.objets === "resumes" ? "Messages (objets sans importance résumés)" : "Messages de la partie";
+  }
   if (item.type === "progress") return item.goal ? "Progression (avec les goals)" : "Progression";
   return `Texte : « ${item.text || "…"} »`;
 }
@@ -185,7 +188,9 @@ function ItemSettings({ item, layout, players, onChange, onRemove, onDuplicate, 
           Afficher le nom des joueurs et leur jeu</label>`}
       ${item.type === "progress" && html`<label class="check span-all"><input type="checkbox" checked=${!!item.goal}
         onChange=${(e) => set("goal")(e.target.checked)} /> Afficher le goal de chaque joueur en petit (lu dans son YAML)</label>`}
-      ${item.type === "feed" && html`<${Field} label="Objets montrés"><${Choice} value=${item.objets} choices=${ITEM_FILTERS} onChange=${set("objets")} /></${Field}>`}
+      ${item.type === "feed" && html`<${Field} label="Objets montrés"><${Choice} value=${item.objets} choices=${ITEM_FILTERS} onChange=${set("objets")} /></${Field}>
+        ${Object.entries(FEED_CHECKS).map(([key, label]) => html`<label class="check span-all"><input type="checkbox"
+          checked=${key === "lieux" ? item.lieux !== false : !!item[key]} onChange=${(e) => set(key)(e.target.checked)} /> ${label}</label>`)}`}
       ${item.type === "text" && html`
         <${Field} label="Texte" wide>
           <textarea rows="2" maxLength=${LAYOUT_LIMITS.text} value=${item.text} onInput=${(e) => set("text")(e.target.value)}></textarea></${Field}>

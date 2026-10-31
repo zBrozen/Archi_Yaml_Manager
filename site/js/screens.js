@@ -9,7 +9,7 @@ import { html, useState, useEffect, useRef } from "../vendor/preact-htm.js";
 import { CopyButton, plural, useAction, useSetting } from "./ui.js";
 import { api, overlayLink, saveAccess, savedAccess } from "./rooms-api.js";
 import { ICE_SERVERS, serial, signaling } from "./screens-net.js";
-import { CONSOLE_PLACES, ITEM_FILTERS, PROGRESS_MODES, ROTATIONS, SCREEN_MODES, spaceOf, spaceUses } from "./overlay-layout.js";
+import { CONSOLE_PLACES, FEED_CHECKS, ITEM_FILTERS, PROGRESS_MODES, ROTATIONS, SCREEN_MODES, spaceOf, spaceUses } from "./overlay-layout.js";
 import { SpaceLayouts } from "./overlay-editor.js";
 
 // Qualité du partage, choisie par chaque joueur. `bitrate` : débit maximum envoyé à chaque overlay, en bit/s.
@@ -783,7 +783,9 @@ function OverlayPanel({ room, data, setData, me, admin, linkId, onLink, onBack }
       ${auto && html`<div class="fields full">
         <label class="span-all"><span>Écrans de jeu</span>${select(config.ecrans, SCREEN_MODES, (v) => set({ ecrans: v }))}</label>
         <label><span>Messages de la partie</span>${select(config.messages, CONSOLE_PLACES, (v) => set({ messages: v }))}</label>
-        ${config.messages !== "non" && html`<label><span>Objets montrés</span>${select(config.objets, ITEM_FILTERS, (v) => set({ objets: v }))}</label>`}
+        ${config.messages !== "non" && html`<label><span>Objets montrés</span>${select(config.objets, ITEM_FILTERS, (v) => set({ objets: v }))}</label>
+          <div class="span-all message-options">${Object.entries(FEED_CHECKS).map(([key, label]) => html`<label class="check">
+            <input type="checkbox" checked=${config[key]} onChange=${(e) => set({ [key]: e.target.checked })} /> ${label}</label>`)}</div>`}
         <label class="span-all"><span>Progression des joueurs</span>${select(config.progression, PROGRESS_MODES, (v) => set({ progression: v }))}</label>
       </div>`}
       ${!auto && html`<${SpaceLayouts} variants=${config.variants} players=${players} onChange=${(variants) => set({ variants })} />`}

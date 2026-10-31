@@ -3,7 +3,7 @@
 import { html, useState, useEffect, useRef } from "../vendor/preact-htm.js";
 import { Client } from "../vendor/archipelago.js";
 import { api, apRoomStatus } from "./rooms-api.js";
-import { plural } from "./ui.js";
+import { plural, useSetting } from "./ui.js";
 import { useTrackers, packsFor, trackerLink } from "./trackers.js";
 
 const STATUS = {
@@ -468,6 +468,80 @@ export function MessagePart({ node, self, marks = false, wishes, mine }) {
   }
 }
 
+// --- Affichage des messages (client texte et overlay) ---------------------------------------
+// `lieux` : lieu où un objet envoyé a été trouvé ; `heure` : heure de chaque message ; `resumes` : un objet sans
+// importance envoyé tient en une ligne courte, et ceux qui arrivent à la suite s'y cumulent.
+export const MESSAGE_OPTIONS = { lieux: true, heure: false, resumes: false };
+
+const isHintLine = (nodes) => String(nodes[0]?.text || "").startsWith("[Hint]");
+
+// Message sans le lieu entre parenthèses de l'objet envoyé : « Alice sent Épée to Bob (Coffre) » → « Alice sent Épée
+// to Bob ». Le lieu d'un indice (« … is at Coffre in … ») n'est pas entre parenthèses : il reste.
+export function withoutLocation(nodes) {
+  const out = [];
+  for (let i = 0; i < nodes.length; i++) {
+    const node = nodes[i];
+    const before = out.at(-1);
+    const after = nodes[i + 1];
+    if (node.type === "location" && before?.type === "text" && /\s*\($/.test(before.text)
+      && after?.type === "text" && after.text.startsWith(")")) {
+      out[out.length - 1] = { type: "text", text: before.text.replace(/\s*\($/, "") };
+      const rest = after.text.slice(1);
+      if (rest) out.push({ type: "text", text: rest });
+      i++;
+    } else {
+      out.push(node);
+    }
+  }
+  return out;
+}
+
+// Objet envoyé sans importance (un seul objet, pas un indice).
+function fillerLine(nodes) {
+  const items = nodes.filter((node) => node.type === "item");
+  return items.length === 1 && !isHintLine(nodes) && itemKind(items[0].item) === ITEM_KINDS.filler;
+}
+
+// Lignes à afficher (`lines` : { id, time, nodes } ou { id, time, info }) selon les options. Une ligne résumée a
+// `filler` (nombre d'objets cumulés) et l'heure du dernier ; un objet de wishlist n'est jamais résumé.
+export function displayLines(lines, options, wishes) {
+  const out = [];
+  for (const line of lines) {
+    if (line.info) { out.push(line); continue; }
+    const wish = wishHit(wishes, line.nodes);
+    if (options.resumes && !wish && fillerLine(line.nodes)) {
+      const last = out.at(-1);
+      if (last?.filler) out[out.length - 1] = { ...last, filler: last.filler + 1, time: line.time };
+      else out.push({ ...line, filler: 1 });
+      continue;
+    }
+    out.push({ ...line, wish, nodes: options.lieux ? line.nodes : withoutLocation(line.nodes) });
+  }
+  return out;
+}
+
+const clock = (time) => new Date(time).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
+
+// Contenu d'une ligne de `displayLines` : heure, mention de wishlist, puis le message (ou son résumé).
+export function MessageLine({ line, options, self, marks = false, wishes, mine }) {
+  return html`${options.heure && line.time && html`<time class="msg-time" datetime=${new Date(line.time).toISOString()}>${clock(line.time)}</time>`}
+    ${line.wish && html`<span class="wish-label">♥ Wishlist</span>`}
+    ${line.filler
+      ? html`<span class="ap-filler msg-filler" title="Objet sans importance envoyé">Objet sans importance</span>${line.filler > 1 && html` <span class="item-count">×${line.filler}</span>`}`
+      : line.nodes.map((node) => html`<${MessagePart} node=${node} self=${self} marks=${marks} wishes=${wishes} mine=${mine} />`)}`;
+}
+
+// Cases des options d'affichage (client texte).
+function MessageOptions({ options, onChange }) {
+  const box = (key, label) => html`<label class="check"><input type="checkbox" checked=${options[key]}
+    onChange=${(e) => onChange({ ...options, [key]: e.target.checked })} /> ${label}</label>`;
+  return html`<div class="message-options">
+    ${box("lieux", "Lieu des objets envoyés")}
+    ${box("heure", "Heure des messages")}
+    ${box("resumes", "Résumer les objets sans importance")}
+  </div>`;
+}
+
 // `tracker` : tracker de la partie (lu par la page de la room), pour l'inventaire du joueur choisi.
 export function TextClient({ room, status, mine, wishlists, tracker }) {
   const own = status.slots.filter((s) => mine.some((m) => m.name.toLowerCase() === s.name.toLowerCase()));
@@ -477,6 +551,8 @@ export function TextClient({ room, status, mine, wishlists, tracker }) {
   const [error, setError] = useState(null);
   const [lines, setLines] = useState([]);
   const [input, setInput] = useState("");
+  const [stored, setOptions] = useSetting("clientMessages", MESSAGE_OPTIONS);
+  const options = { ...MESSAGE_OPTIONS, ...stored };
   const client = useRef(null);
   const log = useRef(null);
   const nextId = useRef(0);
@@ -485,9 +561,10 @@ export function TextClient({ room, status, mine, wishlists, tracker }) {
   // Objets surlignés : ceux de vos joueurs, et du joueur dont le client est connecté.
   const mineNames = new Set([...own.map((s) => s.name), slot].filter(Boolean).map((n) => n.toLowerCase()));
   const shownSlot = status.slots.find((s) => s.name === slot);
-  const push = (line) => setLines((all) => [...all.slice(-499), { id: nextId.current++, ...line }]);
+  const push = (line) => setLines((all) => [...all.slice(-499), { id: nextId.current++, time: Date.now(), ...line }]);
+  const shown = displayLines(lines, options, wishes);
   useEffect(() => () => client.current?.socket.disconnect(), []);
-  useEffect(() => { if (log.current) log.current.scrollTop = log.current.scrollHeight; }, [lines]);
+  useEffect(() => { if (log.current) log.current.scrollTop = log.current.scrollHeight; }, [lines, stored]);
 
   const connect = async () => {
     setState("connecting");
@@ -547,12 +624,9 @@ export function TextClient({ room, status, mine, wishlists, tracker }) {
     <div class=${`client-main full ${lines.length > 0 && inventory ? "with-inventory" : ""}`}>
     <div class="stack full">
     ${lines.length > 0 && html`<div class="client-log full" ref=${log} role="log" aria-live="polite">
-      ${lines.map((line) => {
-        const hit = !line.info && wishHit(wishes, line.nodes);
-        return html`<div key=${line.id} class=${line.info ? "hint" : hit ? "wish-hit" : ""}>
-          ${hit && html`<span class="wish-label">♥ Wishlist</span>`}
-          ${line.info || line.nodes.map((node) => html`<${MessagePart} node=${node} self=${slot} wishes=${wishes} mine=${mineNames} />`)}</div>`;
-      })}
+      ${shown.map((line) => html`<div key=${line.id} class=${line.info ? "hint" : line.wish ? "wish-hit" : ""}>
+        ${line.info ? html`${options.heure && html`<time class="msg-time">${clock(line.time)}</time>`}${line.info}`
+          : html`<${MessageLine} line=${line} options=${options} self=${slot} wishes=${wishes} mine=${mineNames} />`}</div>`)}
     </div>`}
     ${connected && html`<form class="row full" onSubmit=${(e) => { e.preventDefault(); send(input); }}>
       <input type="text" class="grow" placeholder="Message ou commande (!hint objet…)" value=${input}
@@ -562,6 +636,7 @@ export function TextClient({ room, status, mine, wishlists, tracker }) {
     </form>
     <div class="chips-row">${QUICK.map((q) => html`<button type="button" class="chip-btn" title=${q.title}
       onClick=${() => (q.fill ? setInput(q.text) : (!q.confirm || confirm(q.confirm)) && send(q.text))}>${q.label}</button>`)}</div>`}
+    <${MessageOptions} options=${options} onChange=${setOptions} />
     ${lines.length > 0 && html`<p class="hint">Surlignés : les objets reçus ou envoyés par ${[...new Set([...own.map((s) => s.name), slot])].join(", ")}
       (sauf les objets sans importance).</p>`}
     </div>
