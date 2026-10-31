@@ -14,6 +14,12 @@ sans éditer le code à la main.
   de chaque valeur, options de plando et YAML brut.
 - **Repérer les problèmes** : option inconnue ou supprimée, valeur hors limites, nom d'objet invalide,
   YAML écrit pour une ancienne version d'Archipelago.
+- **Prévision avant génération** : une estimation de la difficulté et de la durée de la partie par rapport aux
+  réglages par défaut du jeu (logique plus exigeante, glitchs, pièges, entrées mélangées, objectif plus long,
+  aides au départ…), recalculée à chaque changement, et les réglages qui risquent de bloquer : glitchs ou absence
+  de logique (les objets des autres joueurs peuvent devenir inaccessibles), trop de lieux exclus (la génération
+  échoue), objectif qui demande plus qu'il n'en existe, options contradictoires. Rien n'est simulé : l'estimation
+  se lit dans les noms et valeurs des options (`site/js/forecast.js`), seule la génération dit si la partie est possible.
 - **Exporter** : le fichier contient toutes les options du jeu, comme les modèles d'Archipelago ; celles qui
   manquaient sont ajoutées à leur valeur par défaut, avec leur description en commentaire. Le reste du fichier
   (commentaires, mise en forme) est conservé, et une table de poids garde sa forme (la valeur choisie prend
@@ -171,6 +177,9 @@ leur nom dans la partie, qui sert à retrouver leurs fichiers.
 3. L'hôte ferme les dépôts (à la date prévue ou à la main) et clique sur « Vérifier la room ». Chaque YAML est
    contrôlé dans son navigateur avec les règles de l'éditeur. Sont aussi signalés : les joueurs sans YAML, le
    DeathLink en async, les jeux instables ou cassés, et les apworlds non officiels à installer (avec leur dépôt).
+   La vérification donne aussi la prévision de chaque joueur (difficulté, durée, risques) et celle de la room :
+   réglages d'un joueur qui peuvent bloquer les autres ou faire échouer la génération, durées très inégales en
+   sync, équilibrage de la progression à 0, item links sans partenaire.
 4. L'hôte clique sur **Générer en ligne** (voir « Génération en ligne » ci-dessous), ou télécharge le zip des
    YAML, le décompresse dans le dossier `Players` de son Archipelago et lance **Generate**. Il envoie la partie
    générée sur [archipelago.gg/uploads](https://archipelago.gg/uploads) lui-même : seul celui qui envoie la
@@ -438,6 +447,7 @@ npx wrangler dev
 | `site/js/tracker-*.js`, `site/js/trackers.js`, `site/js/unzip.js` | Trackers des packs PopTracker (voir « Trackers ») |
 | `site/js/guides.js`, `site/js/markdown.js` | Page « Installer un jeu » et affichage des guides |
 | `site/js/check.js` | Vérification d'un YAML hors de l'éditeur (dépôt dans une room, contrôle par l'hôte) |
+| `site/js/forecast.js` | Prévision avant génération : difficulté, durée et risques d'un YAML ou d'une room |
 | `site/js/config.js` | Adresse du service des rooms |
 | `worker/` | Service des rooms (Cloudflare Worker, base D1 : `migrations/`) |
 | `tools/room_generate.py` | Génération en ligne d'une room (workflow `generate-room.yml`) |

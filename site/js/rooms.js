@@ -5,6 +5,7 @@ import { apVersion, apworldFileOf, gameEntry, knownGames, localGameData, localGa
 import { useApworldLoader } from "./apworld.js";
 import { gamesOf, parseFile, splitFile } from "./yaml-model.js";
 import { checkText, nameProblem, MAX_NAME } from "./check.js";
+import { ForecastSummary, forecastRoom } from "./forecast.js";
 import { CopyButton, GamePicker, SheetBadges, download, loadCredits, plural, useAction, useSetting } from "./ui.js";
 import { makeZip } from "./zip.js";
 import { guideLink } from "./guides.js";
@@ -809,6 +810,11 @@ async function checkRoom(room, players, slots, roomApworlds = []) {
     return { slot, problems: [...problems, ...doc.problems], warnings: doc.warnings, deathLink: doc.deathLink, games: doc.games, outdated: doc.outdated };
   }));
 
+  // Prévision (difficulté, risques) : après checkText, qui a chargé les options des jeux.
+  const readable = results.filter((r) => r.games).map((r) => ({ name: r.slot.name, pseudo: r.slot.pseudo, js: parseFile(r.slot.content).docs[0].js, result: r }));
+  const forecast = forecastRoom(readable, { mode: room.mode });
+  forecast.players.forEach((p) => { p.result.forecast = p.forecast; });
+
   const notes = []; // { level: "error" | "warn" | "info", text }
   if (!slots.length) notes.push({ level: "error", text: "Aucun YAML dans la room." });
   if (room.open) notes.push({ level: "warn", text: "Les dépôts sont encore ouverts : fermez-les avant de générer, pour que plus rien ne change." });
@@ -878,7 +884,7 @@ async function checkRoom(room, players, slots, roomApworlds = []) {
     room: inRoom.get(g) || null,
     mine: gameEntry(g)?.source === "apworld" ? gameEntry(g).world_version || "" : null,
   }));
-  return { results, notes, apworlds };
+  return { results, notes, apworlds, forecast: forecast.notes };
 }
 
 function RoomCheck({ room }) {
@@ -894,7 +900,8 @@ function RoomCheck({ room }) {
     download(name, blob);
   });
   const blocking = report ? report.results.filter((r) => r.problems.length).length + report.notes.filter((n) => n.level === "error").length : 0;
-  const warnings = report ? report.results.filter((r) => r.warnings.length).length + report.notes.filter((n) => n.level === "warn").length : 0;
+  const warnings = report ? report.results.filter((r) => r.warnings.length).length + report.notes.filter((n) => n.level === "warn").length
+    + report.forecast.filter((n) => n.level !== "info").length : 0;
 
   return html`<div class="stack full">
     <div class="row">
@@ -910,11 +917,12 @@ function RoomCheck({ room }) {
       </div>
       ${report.notes.length > 0 && html`<ul class="check-notes full">${report.notes.map((n) => html`<li class=${n.level}>${n.text}</li>`)}</ul>`}
       <div class="table-wrap full"><table class="room-table">
-        <thead><tr><th>Nom</th><th>Joueur</th><th>Jeu</th><th>État</th></tr></thead>
+        <thead><tr><th>Nom</th><th>Joueur</th><th>Jeu</th><th>Prévision</th><th>État</th></tr></thead>
         <tbody>${report.results.map((r) => html`<tr>
           <td><strong>${r.slot.name}</strong></td>
           <td>${r.slot.pseudo}</td>
           <td>${r.slot.game}</td>
+          <td><${ForecastSummary} forecast=${r.forecast} /></td>
           <td>${!r.problems.length && !r.warnings.length
             ? html`<span class="badge ok">OK</span>`
             : html`<details class="issues"><summary>
@@ -923,6 +931,10 @@ function RoomCheck({ room }) {
               </summary><ul>${[...r.problems, ...r.warnings].map((t) => html`<li>${t}</li>`)}</ul></details>`}</td>
         </tr>`)}</tbody>
       </table></div>
+      ${report.forecast.length > 0 && html`<div class="stack full">
+        <p><strong>Prévision avant génération</strong> <span class="hint">(estimation d'après les options, seule la génération dira si la partie est possible)</span></p>
+        <ul class="check-notes full">${report.forecast.map((n) => html`<li class=${n.level}>${n.text}</li>`)}</ul>
+      </div>`}
       ${report.apworlds.length > 0 && html`<div class="stack full">
         <p><strong>Apworlds à installer dans votre Archipelago</strong> (dossier <code>custom_worlds</code>) :</p>
         <ul class="small">${report.apworlds.map((a) => html`<li>${a.game}${" — "}${a.room

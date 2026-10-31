@@ -54,6 +54,10 @@
   documentation de PopTracker, sans reprendre son code (GPL-3.0). Lua (wasmoon) n'a accès à aucun objet JS :
   `enableProxy: false`, une seule passerelle `__js(op, …)` qui n'échange que des valeurs simples, l'interface
   PopTracker écrite en Lua (`tracker-lua.js`). Ne jamais exposer un objet JS à Lua (remontée jusqu'à `Function`).
+- Prévision avant génération (`forecast.js`, carte de l'éditeur et vérification de la room) : heuristiques sur les
+  noms et valeurs des options, notées par rapport à la valeur par défaut (un YAML aux réglages par défaut donne
+  toujours « Standard / Normale »). Après un changement des règles, relancer sur tous les jeux de `index.json` :
+  aucune erreur, aucun écart aux réglages par défaut, et relire les options classées par catégorie (faux positifs).
 - Lisibilité, y compris en stream : le site (pages des rooms surtout) doit rester lisible quand il est filmé
   ou intégré comme overlay dans un stream (source navigateur OBS) : textes assez grands et aérés, contrastes
   élevés en clair comme en sombre (pas de noir pur sous du blanc pur), information jamais portée par la

@@ -247,6 +247,18 @@ button.link:hover { background: none; text-decoration: underline; }
 .player .notice { margin-top: 1rem; }
 table.compact td { padding: .15rem .6rem .15rem 0; }
 
+/* Prévision avant génération (forecast.js) */
+.forecast .meters { display: grid; gap: .45rem; }
+.meter-row { display: flex; flex-wrap: wrap; align-items: center; gap: .3rem .8rem; }
+.meter-label { min-width: 5.5rem; font-weight: 600; font-size: .92rem; }
+.meter-value { min-width: 8.5rem; }
+.meter { display: inline-flex; gap: 3px; }
+.meter span { width: 1.35rem; height: .75rem; border-radius: 3px; background: var(--surface-2); border: 1px solid var(--border); }
+.meter span.on { background: var(--accent); border-color: var(--accent); }
+.risks li { line-height: 1.5; }
+.factors { margin: .4rem 0 0; padding-left: 1.2rem; display: grid; gap: .25rem; font-size: .92rem; }
+.forecast-summary { font-size: .9rem; }
+
 .game { display: grid; gap: .9rem; }
 .game-head { display: flex; align-items: center; gap: .6rem; flex-wrap: wrap; }
 .game-head h2 { margin: 0; }

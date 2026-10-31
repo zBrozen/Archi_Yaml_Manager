@@ -9,6 +9,7 @@ import { versionProblem, checkText, nameProblem } from "./check.js";
 import { RoomsHome, RoomPage, shareApworlds } from "./rooms.js";
 import { ScreensOverlay } from "./overlay.js";
 import { GuidesPage, guideLink } from "./guides.js";
+import { ForecastCard } from "./forecast.js";
 import { api as roomsApi, normalizeCode, roomsEnabled, saveAccess } from "./rooms-api.js";
 
 // Page du tracker chargée à la demande : elle embarque Lua (wasmoon), inutile ailleurs.
@@ -483,6 +484,7 @@ function Editor({ index, file, setFile, onClose, advanced, onSend }) {
 
     <div class="content">
       <${PlayerCard} js=${entry.js} index=${index} games=${games} update=${update} />
+      ${games.length > 0 && html`<${ForecastCard} js=${entry.js} />`}
       ${games.length === 0 && html`<div class="notice warn">Aucun jeu n'est indiqué dans le champ « game ».</div>`}
       ${games.map((g) => html`<${GameSection} key=${`${active}-${g}`} name=${g} entry=${entry} index=${index} update=${update} view=${view}
         onApworld=${() => setApworlds((n) => n + 1)} />`)}
