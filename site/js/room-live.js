@@ -79,6 +79,11 @@ export function useTracker(status) {
   return { trackerId, data, error };
 }
 
+// Tracker détaillé d'un joueur de la partie (`slot` : entrée de `status.slots`), qui s'y connecte en ouvrant la page.
+export const slotTracker = (status, slot, code) => trackerLink({
+  game: slot.game, server: status.port ? `${status.host}:${status.port}` : "", slot: slot.name, room: code, connect: status.port ? "1" : "",
+});
+
 // `compact` : total et lignes de vos joueurs seulement, avec un lien vers la vue détaillée (`onDetails`).
 // `onItems(slot)` : ouvre les objets reçus d'un joueur.
 export function ProgressPanel({ status, tracker, mode, mine, code, compact = false, onDetails, onItems }) {
@@ -99,32 +104,30 @@ export function ProgressPanel({ status, tracker, mode, mine, code, compact = fal
   return html`<div class="stack full">
     <div class="row full">
       <h3 class="grow">Progression</h3>
-      <span class="hint">${sum} / ${all} checks (${pct(sum, all)} %) · ${finished} / ${rows.length} terminé${finished > 1 ? "s" : ""}</span>
+      <span class="hint" title="archipelago.gg n'enregistre la progression qu'une fois par minute, et son tracker la garde en cache une minute de plus : mise à jour toutes les 1 à 3 minutes.">
+        ${sum} / ${all} checks (${pct(sum, all)} %) · ${finished} / ${rows.length} terminé${finished > 1 ? "s" : ""}</span>
     </div>
     <div class="progress full" title=${`${pct(sum, all)} %`}><span style=${`width: ${pct(sum, all)}%`}></span></div>
     ${shown.length > 0 && html`<div class="table-wrap full"><table class="room-table progress-table">
-      <thead><tr><th>Joueur</th><th>Jeu</th><th>Checks</th><th>Objets reçus</th><th>État</th><th>Dernière activité</th></tr></thead>
+      <thead><tr><th>Joueur</th><th>Checks</th><th>Objets reçus</th><th>État</th><th>Tracker</th></tr></thead>
       <tbody>${shown.map((r) => {
         const idle = mode === "async" && !r.finished && r.last && Date.now() - r.last > IDLE_WARNING;
         return html`<tr class=${r.mine ? "mine" : ""}>
-          <td><strong>${r.name}</strong>${r.tracker && html` <a href=${r.tracker} target="_blank" rel="noopener" class="small">tracker</a>`}
-            <a href=${trackerLink({ game: r.game, server: status.port ? `${status.host}:${status.port}` : "", slot: r.name, room: code })} class="small"
-              title=${packsFor(packs, r.game).some((p) => p.url) ? "Lieux en logique, et pack PopTracker du jeu (objets, cartes)" : "Lieux en logique d'après la logique du jeu"}>tracker détaillé</a></td>
-          <td>${r.game}</td>
-          <td class="checks">
+          <td><div class="progress-player"><strong>${r.name}</strong><span class="hint">${r.game}</span></div></td>
+          <td><div class="progress-cell">
             <div class="progress small" title=${`${pct(r.checks, r.total)} %`}><span class=${r.finished ? "ok" : ""} style=${`width: ${pct(r.checks, r.total)}%`}></span></div>
             <span class="hint">${r.checks} / ${r.total}${r.hints ? ` · ${r.hints} indice${r.hints > 1 ? "s" : ""}` : ""}</span>
-          </td>
+          </div></td>
           <td>${onItems && r.items
             ? html`<button type="button" class="link" onClick=${() => onItems(r.slot)} title="Voir les objets reçus">${plural(r.items, "objet")}</button>`
             : html`<span class="hint">${plural(r.items, "objet")}</span>`}</td>
-          <td><span class=${`badge ${r.state.cls}`}>${r.state.label}</span></td>
-          <td>${r.last ? html`<span class=${idle ? "badge warn" : "hint"}>${ago(r.last)}</span>` : html`<span class="hint">jamais</span>`}</td>
+          <td><div class="progress-state"><span class=${`badge ${r.state.cls}`}>${r.state.label}</span>
+            <span class=${idle ? "badge warn" : "hint"} title="Dernière activité">${r.last ? ago(r.last) : "jamais actif"}</span></div></td>
+          <td><a class="button ghost small" href=${slotTracker(status, r, code)}
+            title=${`Ouvre le tracker détaillé, connecté à la partie en tant que ${r.name} : lieux en logique${packsFor(packs, r.game).some((p) => p.url) ? ", objets et cartes du pack PopTracker" : ""}`}>Se connecter</a></td>
         </tr>`;
       })}</tbody>
     </table></div>`}
-    <p class="hint">Mise à jour toutes les 1 à 3 minutes : archipelago.gg n'enregistre la progression qu'une fois par minute,
-      et son tracker la garde en cache une minute de plus.</p>
     ${compact && onDetails && html`<button type="button" class="link" onClick=${onDetails}>Voir la progression de tous les joueurs →</button>`}
     ${error && html`<p class="hint">${error} Dernières données affichées.</p>`}
   </div>`;
@@ -456,8 +459,8 @@ export function TextClient({ room, status, mine, wishlists }) {
 
   const connected = state === "connected";
   return html`<div class="stack full text-client">
-    <p class="hint">Chat et commandes de la partie (<code>!hint</code>, <code>!remaining</code>…), sans lancer Archipelago.
-      Vous apparaissez dans la partie comme un client texte de ce joueur : les autres voient « a rejoint » et « est parti ».</p>
+    <p class="hint">Chat et commandes (<code>!hint</code>, <code>!remaining</code>…) sans lancer Archipelago. Les autres joueurs
+      voient ce client rejoindre la partie.</p>
     ${!connected && html`<div class="row full">
       <select class="grow" value=${slot} disabled=${state === "connecting"} onChange=${(e) => setSlot(e.target.value)}>
         ${own.length > 0 && html`<optgroup label="Vos joueurs">${own.map((s) => html`<option value=${s.name}>${s.name} (${s.game})</option>`)}</optgroup>`}

@@ -175,7 +175,7 @@ leur nom dans la partie, qui sert à retrouver leurs fichiers.
    16 caractères. Un fichier à plusieurs documents (`---`) est découpé en un YAML par document.
    Un lien personnel permet de reprendre depuis un autre appareil.
    L'hôte peut aussi ajouter des joueurs lui-même (onglet « Joueurs ») et déposer des YAML pour n'importe quel
-   joueur de la room (« Déposer pour » dans « Mes YAML », ou « Déposer un YAML » sur la ligne du joueur) ; il
+   joueur de la room (« Déposer pour » dans « Vos YAML », même onglet, ou « Déposer un YAML » sur la ligne du joueur) ; il
    obtient le lien personnel du joueur à lui transmettre (un nouveau lien remplace l'ancien).
 3. L'hôte ferme les dépôts (à la date prévue ou à la main) et clique sur « Vérifier la room ». Chaque YAML est
    contrôlé dans son navigateur avec les règles de l'éditeur. Sont aussi signalés : les joueurs sans YAML, le
@@ -188,7 +188,7 @@ leur nom dans la partie, qui sert à retrouver leurs fichiers.
    générée sur [archipelago.gg/uploads](https://archipelago.gg/uploads) lui-même : seul celui qui envoie la
    partie a accès à la console de la room.
 5. L'hôte colle le lien de la room archipelago.gg sur la page de la room. Tout le monde y voit alors l'adresse
-   du serveur, le tracker et ses propres fichiers (patchs), lus avec l'API publique `room_status` d'archipelago.gg
+   du serveur (dans l'en-tête, depuis tous les onglets) et ses propres fichiers (patchs), lus avec l'API publique `room_status` d'archipelago.gg
    et sur la page de la room (lue par le service : les liens de l'API ne marchent pas pour les jeux non officiels).
 6. Pendant la partie, la page de la room montre la progression de chaque joueur (checks, état, dernière
    activité, signalée en async au-delà de 2 jours ; API publique du tracker d'archipelago.gg) et les **objets
@@ -389,8 +389,8 @@ le secret, puis de relancer « Publier le service des rooms ».
 
 Page `#/tracker` : suivi en direct de la partie d'un joueur, avec deux outils qui partagent la même connexion
 (`site/js/tracker-ap.js`) : le pack PopTracker du jeu, lu par le navigateur sans installer PopTracker, et la
-logique du jeu, à la manière d'Universal Tracker. On y arrive par le lien « tracker détaillé » de chaque joueur
-dans la progression d'une room (jeu, serveur et nom du joueur déjà remplis), ou directement.
+logique du jeu, à la manière d'Universal Tracker. On y arrive par le bouton « Se connecter » de chaque joueur
+dans la progression d'une room (jeu, serveur et nom du joueur déjà remplis, connexion dès l'ouverture), ou directement.
 
 ### Packs PopTracker
 

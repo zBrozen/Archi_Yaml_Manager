@@ -524,7 +524,12 @@ a.button.small, label.button.small { padding: .25rem .7rem; font-size: .875rem; 
 .progress.small { height: .4rem; min-width: 6rem; }
 .progress span { display: block; height: 100%; background: var(--accent); border-radius: inherit; }
 .progress span.ok { background: var(--ok); }
-.progress-table td.checks { min-width: 8rem; display: grid; gap: .2rem; }
+/* Contenu des cellules dans un bloc à part : une cellule de tableau en grille sort de la ligne (bande sous la cellule). */
+.progress-cell { min-width: 8rem; display: grid; gap: .3rem; }
+.progress-player, .progress-state { display: grid; gap: .2rem; justify-items: start; }
+.progress-player { min-width: 9rem; }
+.progress-player strong { overflow-wrap: anywhere; }
+.progress-table td:last-child { white-space: nowrap; }
 .progress-table tr.mine td { background: var(--accent-soft); }
 
 /* Avancement (hôte) : chemin de victoire du spoiler, croisé avec le tracker */
@@ -660,13 +665,14 @@ details.items-group > summary h3, details.items-group > summary h4 { display: in
 .ap-black-bg, .ap-white-bg { background: var(--surface); }
 
 /* Onglets de la room */
+/* Les onglets passent à la ligne plutôt que de défiler : tous restent visibles, sans barre de défilement. */
 .room-tabs {
-  display: flex; gap: .25rem; overflow-x: auto; border-bottom: 1px solid var(--border);
+  display: flex; flex-wrap: wrap; column-gap: .1rem; border-bottom: 1px solid var(--border);
   position: sticky; top: var(--header-h, 0px); z-index: 5; background: var(--bg); margin: -.5rem 0 0; padding-top: .5rem;
 }
 .room-tabs button {
   background: none; color: var(--muted); border: none; border-bottom: 3px solid transparent; border-radius: 0;
-  padding: .6rem .9rem; font-weight: 600; flex: none;
+  padding: .6rem .8rem; font-weight: 600; flex: none; white-space: nowrap;
 }
 .room-tabs button:hover:not(:disabled) { background: none; color: var(--text); border-color: var(--border); }
 .room-tabs button.active { color: var(--accent); border-bottom-color: var(--accent); }
@@ -676,13 +682,18 @@ details.items-group > summary h3, details.items-group > summary h4 { display: in
   display: flex; flex-wrap: wrap; align-items: center; gap: .4rem 1rem;
   background: var(--surface-2); border-radius: 10px; padding: .8rem 1rem;
 }
-.server-address .room-code { font-size: 1.3rem; }
+.server-address .room-code { font-size: 1.3rem; overflow-wrap: anywhere; }
+.room-head .server-address { padding: .6rem .9rem; }
 .slot-list li.slot-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; }
 .slot-main { display: grid; gap: .2rem; }
 .slot-links { display: flex; flex-wrap: wrap; gap: .2rem 1rem; font-size: .9rem; }
 .slot-actions { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; justify-content: flex-end; }
 @media (max-width: 600px) {
   .room .card { padding: 1.1rem; }
+  /* Onglets sur plusieurs lignes : ils ne restent pas collés en haut, pour laisser la place au contenu. */
+  .room-tabs { position: static; }
+  .room-tabs button { padding: .5rem .55rem; }
+  .progress-state { display: flex; flex-wrap: wrap; align-items: center; gap: .3rem .6rem; }
   /* Progression : un bloc par joueur plutôt qu'un tableau trop large */
   .progress-table thead, .adv-table thead { display: none; }
   .progress-table, .progress-table tbody, .progress-table tr, .progress-table td,
@@ -690,7 +701,6 @@ details.items-group > summary h3, details.items-group > summary h4 { display: in
   .progress-table tr, .adv-table tr { padding: .6rem .25rem; border-top: 1px solid var(--border); }
   .progress-table td, .adv-table td { padding: .15rem .5rem; }
   .adv-table td[data-label]::before { content: attr(data-label) " : "; color: var(--muted); font-size: .85rem; }
-  .progress-table td.checks { display: grid; }
   .item-feed li { grid-template-columns: 2rem minmax(0, 1fr); }
   .item-feed .item-origin { grid-column: 2; }
   .items-player select { max-width: 100%; }

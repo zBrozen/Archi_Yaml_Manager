@@ -294,8 +294,11 @@ function Connection({ initial, session, onSession }) {
   useEffect(() => () => session?.disconnect(), [session]);
   useEffect(() => session?.subscribe((event) => event.type === "closed" && setState("closed")), [session]);
   const set = (key) => (e) => setForm({ ...form, [key]: e.target.value });
+  // Depuis la progression d'une room (?connect=1), connexion dès l'ouverture : le formulaire reste là si elle échoue
+  // (mot de passe, serveur en veille).
+  useEffect(() => { if (initial.connect && form.address && form.slot) connect(); }, []);
   const connect = async (e) => {
-    e.preventDefault();
+    e?.preventDefault();
     setError(null);
     setState("connecting");
     try {
@@ -328,7 +331,7 @@ function Connection({ initial, session, onSession }) {
     </div>
     ${state === "closed" && html`<div class="notice warn">La connexion au serveur a été coupée.</div>`}
     ${error && html`<div class="notice error">${error}</div>`}
-    <div class="row"><button type="submit" disabled=${state === "connecting"}>${state === "connecting" ? "Connexion…" : "Suivre"}</button></div>
+    <div class="row"><button type="submit" disabled=${state === "connecting"}>${state === "connecting" ? "Connexion…" : "Se connecter"}</button></div>
   </form>`;
 }
 

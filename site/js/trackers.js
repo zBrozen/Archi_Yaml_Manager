@@ -29,9 +29,9 @@ export function packsFor(data, game) {
   return [];
 }
 
-export function trackerLink({ game, server, slot, room } = {}) {
+export function trackerLink({ game, server, slot, room, connect } = {}) {
   const params = new URLSearchParams();
-  for (const [key, value] of Object.entries({ game, server, slot, room })) if (value) params.set(key, value);
+  for (const [key, value] of Object.entries({ game, server, slot, room, connect })) if (value) params.set(key, value);
   return `#/tracker?${params}`;
 }
 
