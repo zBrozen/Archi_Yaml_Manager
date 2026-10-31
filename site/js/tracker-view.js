@@ -353,7 +353,10 @@ function LogicPanel({ session, room }) {
   }, [session, enabled]);
   const yaml = file?.text ?? roomText ?? null;
   const yamlFrom = file ? `« ${file.name} »` : roomText ? "la room" : null;
-  const { status, error, result } = useLogic(session, yaml, enabled && connected && (!!file || roomText !== undefined));
+  const logic = useLogic(session, yaml, enabled && connected && (!!file || roomText !== undefined));
+  const { status, error } = logic;
+  // Sans session (suivi arrêté), pas de noms de lieux : le calcul précédent n'est plus affiché.
+  const result = connected ? logic.result : null;
   const readYaml = async (picked) => setFile({ name: picked.name, text: await picked.text() });
 
   if (!enabled) {
@@ -530,11 +533,8 @@ export function TrackerPage({ params }) {
   const variants = pack ? Object.entries(pack.variants) : [];
   return html`<main class="tracker-page">
     <div class="stack full">
-      <div class="row">
-        <h1 class="pt-title">Tracker${pack ? html` : ${pack.name}` : ""}</h1>
-        <span class="spacer"></span>
-        ${params.room && html`<a href=${`#/room/${params.room}`}>Retour à la room</a>`}
-      </div>
+      ${params.room && html`<a class="button ghost small back-link" href=${`#/room/${params.room}`}>← Retour à la room ${params.room}</a>`}
+      <h1 class="pt-title">Tracker${pack ? html` : ${pack.name}` : ""}</h1>
       <${Connection} initial=${params} session=${session} onSession=${setSession} />
       ${!pack && !status && !(params.pack && !error) && html`<div class="card stack full">
         <h2 class="ut-title">Pack PopTracker</h2>

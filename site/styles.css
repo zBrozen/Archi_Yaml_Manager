@@ -852,6 +852,8 @@ html.overlay-page body { background: transparent; overflow: hidden; }
    (symbole et texte), images en pixels nets (les icônes des packs sont souvent de petites images). */
 .tracker-page { max-width: 1280px; margin: 1.5rem auto; padding: 0 16px; }
 .pt-title { margin: 0; font-size: 1.5rem; }
+/* Retour à la room, au-dessus du titre (lien en forme de bouton, aligné à gauche) */
+.stack.full > .back-link { justify-self: start; }
 .pt-toolbar { max-width: none; }
 .pt-toolbar select { width: auto; }
 .pt-root { --pt-zoom: 1; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: .75rem; overflow-x: auto; }

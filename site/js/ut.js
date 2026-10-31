@@ -76,7 +76,12 @@ export function useLogic(session, yaml, enabled) {
   const [result, setResult] = useState(null);
   const regions = useRef({});
   useEffect(() => {
-    if (!enabled || !session?.connected) return undefined;
+    // Suivi arrêté ou logique désactivée : le dernier calcul ne vaut plus (ses noms viennent de la session).
+    if (!enabled || !session?.connected) {
+      setResult(null);
+      setStatus(null);
+      return undefined;
+    }
     let alive = true;
     let timer = null;
     let ready = false;
