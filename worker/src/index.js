@@ -1095,13 +1095,17 @@ async function saveLayouts(request, env, room) {
   return json({ layouts: JSON.parse(saved) });
 }
 
+// Jeu affiché à côté du nom d'un joueur qui partage : celui qu'il choisit parmi ses jeux, aucun ("aucun"), ou tous.
+const shownGames = (all, game) => (game === "aucun" ? [] : all.includes(game) ? [game] : all);
+
 const sendTo = (ws, message) => {
   try { ws.send(JSON.stringify(message)); } catch { /* connexion déjà fermée */ }
 };
 
 // Protocole (messages JSON) :
 //   client → service : { type: "hello", role: "player", token } ou { type: "hello", role: "overlay", key },
-//                      puis { type: "signal", to, data } (relayé à un joueur s'il vient d'un overlay, et inversement).
+//                      puis { type: "signal", to, data } (relayé à un joueur s'il vient d'un overlay, et inversement),
+//                      et pour un joueur { type: "game", game } (jeu affiché à côté de son nom, voir shownGames).
 //   service → client : { type: "welcome", id }, { type: "error", message } (puis fermeture),
 //                      { type: "signal", from, data }, { type: "left", id } (aux joueurs : un overlay est parti),
 //                      { type: "streams", list: [{ id, player, label, games }] } (aux overlays : joueurs qui partagent),
@@ -1178,6 +1182,11 @@ export class ScreenRoom extends DurableObject {
     if (!msg || typeof msg !== "object") return;
     const me = ws.deserializeAttachment();
     if (!me.role) return this.hello(ws, me, msg);
+    if (msg.type === "game" && me.role === "player") {
+      me.games = shownGames(me.allGames || [], msg.game);
+      ws.serializeAttachment(me);
+      return this.publish();
+    }
     if (msg.type !== "signal" || typeof msg.to !== "string") return;
     const target = this.ctx.getWebSockets().find((other) => other.deserializeAttachment()?.id === msg.to);
     const them = target?.deserializeAttachment();
@@ -1213,7 +1222,8 @@ export class ScreenRoom extends DurableObject {
         for (const other of this.sockets("player")) {
           if (other.deserializeAttachment().player === player.id) this.refuse(other, "Partage repris depuis une autre page.");
         }
-        Object.assign(me, { role: "player", player: player.id, label: player.pseudo, games: [...new Set(results.map((r) => r.game))] });
+        const allGames = [...new Set(results.map((r) => r.game))];
+        Object.assign(me, { role: "player", player: player.id, label: player.pseudo, allGames, games: shownGames(allGames, msg.game) });
       } else {
         throw new HttpError(400, "Rôle inconnu.");
       }

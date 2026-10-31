@@ -105,8 +105,9 @@ const MAX_VIEWERS = 3; // overlays auxquels un joueur envoie son image ; les sui
 
 // --- Joueur : partage de la fenêtre du jeu ---------------------------------------------
 
+// `game` : jeu affiché à côté du nom sur les overlays ("" : tous ses jeux, "aucun" : aucun).
 class Broadcast {
-  constructor(code, token, stream, quality, priority, onChange) {
+  constructor(code, token, stream, quality, priority, onChange, game = "") {
     this.stream = stream;
     this.quality = quality;
     this.priority = priority;
@@ -115,7 +116,9 @@ class Broadcast {
     this.message = null;
     this.onChange = onChange;
     const queue = serial();
-    this.signal = signaling(code, { type: "hello", role: "player", token }, (msg) => queue(() => this.receive(msg)), (state, message) => {
+    // Présentation renvoyée à chaque reconnexion : elle garde le dernier jeu choisi.
+    this.hello = { type: "hello", role: "player", token, game };
+    this.signal = signaling(code, this.hello, (msg) => queue(() => this.receive(msg)), (state, message) => {
       this.state = state;
       this.message = message || null;
       // Après une coupure, les overlays redemandent le flux : les anciennes connexions ne servent plus.
@@ -123,6 +126,11 @@ class Broadcast {
       if (state === "refused") this.stopTracks();
       this.changed();
     });
+  }
+
+  setGame(game) {
+    this.hello.game = game;
+    this.signal.send({ type: "game", game });
   }
 
   get viewers() { return [...this.peers.values()].filter((pc) => pc.connectionState === "connected").length; }
@@ -402,7 +410,8 @@ function SentInfo({ sent, quality }) {
   </div>`;
 }
 
-function ShareScreen({ room }) {
+// `games` : jeux des YAML du joueur, dont il choisit celui affiché à côté de son nom.
+function ShareScreen({ room, games = [] }) {
   const [view, setView] = useState(null); // { state, message, viewers } pendant le partage
   const [error, setError] = useState(null);
   const [busy, setBusy] = useState(false);
@@ -410,6 +419,9 @@ function ShareScreen({ room }) {
   const [priorityName, setPriorityName] = useSetting("screenPriority", DEFAULT_PRIORITY);
   const [sourceName, setSourceName] = useSetting("screenSource", "window");
   const [cameraId, setCameraId] = useSetting("screenCamera", "");
+  const [gameName, setGameName] = useSetting(`screenGame:${room.code}`, "");
+  const shownGame = gameName === "aucun" || games.includes(gameName) ? gameName : "";
+  const pickGame = (next) => { setGameName(next); live.current?.setGame(next); };
   const [cameras, setCameras] = useState([]); // caméras dont le nom est connu (après une première autorisation)
   const [sent, setSent] = useState(null);
   const live = useRef(null);
@@ -493,7 +505,7 @@ function ShareScreen({ room }) {
       stream.getVideoTracks()[0]?.addEventListener("ended", () => { if (live.current?.stream === stream) stop(); });
       if (live.current) live.current.replace(stream);
       else {
-        live.current = new Broadcast(room.code, savedAccess(room.code).player, stream, quality, priority, update);
+        live.current = new Broadcast(room.code, savedAccess(room.code).player, stream, quality, priority, update, shownGame);
         update(live.current);
       }
     } catch (e) {
@@ -555,6 +567,13 @@ function ShareScreen({ room }) {
         <option value="">Automatique (OBS en priorité)</option>
         ${cameras.map((c) => html`<option value=${c.deviceId}>${c.label}</option>`)}
       </select></label></div>`}
+    ${games.length > 0 && html`<div class="fields full"><label><span>Jeu affiché à côté de votre nom</span>
+      <select value=${shownGame} onChange=${(e) => pickGame(e.target.value)}>
+        ${games.length > 1 && html`<option value="">Tous mes jeux (${games.join(", ")})</option>`}
+        ${games.map((g) => html`<option value=${g}>${g}</option>`)}
+        <option value="aucun">Aucun (seulement mon nom)</option>
+      </select>
+      <span class="hint">Se change pendant le partage.</span></label></div>`}
     <div class="row">
       ${view
         ? html`${!camera && html`<button type="button" class="ghost" disabled=${busy} onClick=${() => share()}>Changer de fenêtre</button>`}
@@ -811,7 +830,8 @@ export function ScreensTab({ room, me, admin, data, setData }) {
   return html`
     <div class="segmented" role="tablist" aria-label="Écrans">${views.map(([id, label]) => html`<button type="button" role="tab"
       aria-selected=${current === id} class=${current === id ? "active" : ""} onClick=${() => setView(id)}>${label}</button>`)}</div>
-    ${me && html`<div class="room-panel" hidden=${current !== "share"}><${ShareScreen} room=${room} /></div>`}
+    ${me && html`<div class="room-panel" hidden=${current !== "share"}><${ShareScreen} room=${room}
+      games=${[...new Set((data.players || []).find((p) => p.id === me.id)?.slots.map((s) => s.game) || [])]} /></div>`}
     ${current === "spaces" && html`<${SpacesPanel} room=${room} data=${data} setData=${setData} me=${me} admin=${admin} onSettings=${openSettings} />`}
     ${current === "overlay" && html`<${OverlayPanel} room=${room} data=${data} setData=${setData} me=${me} admin=${admin}
       linkId=${linkId} onLink=${setLinkId} onBack=${() => setView("spaces")} />`}`;
