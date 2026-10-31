@@ -526,6 +526,29 @@ a.button.small, label.button.small { padding: .25rem .7rem; font-size: .875rem; 
 .progress span.ok { background: var(--ok); }
 .progress-table td.checks { min-width: 8rem; display: grid; gap: .2rem; }
 .progress-table tr.mine td { background: var(--accent-soft); }
+
+/* Avancement (hôte) : chemin de victoire du spoiler, croisé avec le tracker */
+.adv-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr)); gap: .75rem; }
+.adv-stats > div { display: grid; gap: .15rem; background: var(--surface-2); border-radius: 10px; padding: .75rem 1rem; }
+.adv-stats strong { font-size: 1.35rem; }
+.adv-stats span { color: var(--muted); font-size: .9rem; }
+.blockers, .sphere-list { list-style: none; margin: 0; padding: 0; display: grid; gap: .75rem; }
+.blocker { display: grid; gap: .5rem; border: 1px solid var(--border); border-radius: 10px; padding: .8rem 1rem; }
+.blocker p { margin: 0; }
+.adv-entries { list-style: none; margin: 0; padding: 0; display: grid; gap: .35rem; font-size: .95rem; }
+.adv-entries li { display: grid; grid-template-columns: 1.5rem minmax(0, 1fr); align-items: baseline; overflow-wrap: anywhere; }
+.adv-entries li.done { color: var(--muted); }
+.adv-entries li.done .adv-location, .adv-entries li.done .adv-item { text-decoration: line-through; }
+.adv-mark { font-weight: 700; text-align: center; }
+.adv-entries li.done .adv-mark { color: var(--ok); }
+.adv-location { color: var(--ok); font-weight: 600; }
+.adv-item { color: var(--accent); font-weight: 700; }
+.sphere { border: 1px solid var(--border); border-radius: 10px; padding: .6rem .9rem; }
+.sphere.current { border-color: var(--accent); }
+.sphere summary { cursor: pointer; display: flex; flex-wrap: wrap; align-items: center; gap: .4rem .75rem; }
+.sphere summary .progress { display: inline-block; width: 8rem; }
+.sphere details[open] > summary { margin-bottom: .6rem; }
+.adv-table td { vertical-align: top; }
 /* Objets reçus : groupes aérés, un objet par étiquette, puis la liste des derniers arrivés */
 .items-card { scroll-margin-top: 4rem; }
 /* Objets reçus : joueurs cochés (case + nom, pas la couleur seule) et recherche commune */
@@ -660,10 +683,12 @@ details.items-group > summary h3, details.items-group > summary h4 { display: in
 @media (max-width: 600px) {
   .room .card { padding: 1.1rem; }
   /* Progression : un bloc par joueur plutôt qu'un tableau trop large */
-  .progress-table thead { display: none; }
-  .progress-table, .progress-table tbody, .progress-table tr, .progress-table td { display: block; }
-  .progress-table tr { padding: .6rem .25rem; border-top: 1px solid var(--border); }
-  .progress-table td { padding: .15rem .5rem; }
+  .progress-table thead, .adv-table thead { display: none; }
+  .progress-table, .progress-table tbody, .progress-table tr, .progress-table td,
+  .adv-table, .adv-table tbody, .adv-table tr, .adv-table td { display: block; }
+  .progress-table tr, .adv-table tr { padding: .6rem .25rem; border-top: 1px solid var(--border); }
+  .progress-table td, .adv-table td { padding: .15rem .5rem; }
+  .adv-table td[data-label]::before { content: attr(data-label) " : "; color: var(--muted); font-size: .85rem; }
   .progress-table td.checks { display: grid; }
   .item-feed li { grid-template-columns: 2rem minmax(0, 1fr); }
   .item-feed .item-origin { grid-column: 2; }

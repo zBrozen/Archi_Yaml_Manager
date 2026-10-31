@@ -11,6 +11,7 @@ import { makeZip } from "./zip.js";
 import { guideLink } from "./guides.js";
 import { ItemsPanel, ProgressPanel, TextClient, defaultItemSlots, useTracker } from "./room-live.js";
 import { ScreensTab } from "./screens.js";
+import { AdvancementView } from "./spoiler.js";
 import { WishNotice, WishlistView, useWishNotices, useWishState } from "./wishlist.js";
 import {
   api, apRoomStatus, forgetAccess, hostLink, inviteLink, knownRooms, normalizeCode, playerLink,
@@ -312,7 +313,7 @@ export function RoomPage({ index, code, onCreate, onEdit }) {
     ["apercu", "Aperçu"],
     ...(!room.direct ? [["yaml", me ? `Mes YAML (${mine.length})` : "Rejoindre"], ["joueurs", `Joueurs (${players.length})`]]
       : me ? [] : [["yaml", "Rejoindre"]]),
-    ...(room.ap_room_url ? [["partie", "Progression"], ["wishlist", notices.fresh.length ? `Wishlist (♥ ${notices.fresh.length})` : "Wishlist"],
+    ...(room.ap_room_url ? [["partie", "Progression"], ...(admin ? [["avancement", "Avancement"]] : []), ["wishlist", notices.fresh.length ? `Wishlist (♥ ${notices.fresh.length})` : "Wishlist"],
       ["client", "Client texte"]] : []),
     ...(data.screens && (me || admin) ? [["ecrans", "Écrans"]] : []),
     ...(admin ? [["hote", "Hôte"]] : []),
@@ -345,6 +346,7 @@ export function RoomPage({ index, code, onCreate, onEdit }) {
     ${active === "yaml" && yaml}
     ${active === "joueurs" && html`<${PlayersList} room=${room} players=${players} me=${me} admin=${admin} refresh=${refresh} />`}
     ${active === "partie" && html`<${GameView} room=${room} online=${online} tracker=${tracker} mine=${mine} />`}
+    ${active === "avancement" && html`<${AdvancementView} room=${room} online=${online} tracker=${tracker} />`}
     ${active === "wishlist" && (online.status
       ? html`<${WishlistView} room=${room} status=${online.status} tracker=${tracker} lists=${wishes} mine=${mine} admin=${admin}
           wishlists=${data.wishlists} onSaved=${savedWishlist} notices=${notices} />`
@@ -1059,7 +1061,7 @@ function OnlineGeneration({ room, setData, data }) {
       <label><span>Coût d'un indice <span class="hint">(% des checks du joueur)</span></span>
         <input type="number" min="0" max="100" value=${options.hint_cost} disabled=${busy} onInput=${(e) => set("hint_cost", e.target.value)} /></label>
       <label class="check span-all"><input type="checkbox" checked=${options.spoiler} disabled=${busy} onChange=${(e) => set("spoiler", e.target.checked)} />
-        Garder un spoiler (fichier à part, pour vous seul : la partie à héberger n'en contient pas)</label>
+        Garder un spoiler (fichier à part, pour vous seul : la partie à héberger n'en contient pas ; il sert aussi à l'onglet « Avancement »)</label>
     </div>
     <div class="row">
       <button type="button" disabled=${action.busy || busy || room.open} onClick=${start}>
@@ -1158,7 +1160,7 @@ function HostedRoom({ room, setData, data }) {
 // Prochaine étape de l'hôte, d'après l'état de la room.
 function hostStep(room) {
   const gen = room.generation?.status;
-  if (room.ap_room_url) return "La partie est en ligne : suivez-la dans l'onglet « Progression ».";
+  if (room.ap_room_url) return "La partie est en ligne : suivez-la dans l'onglet « Progression », et avec le spoiler dans « Avancement » (sphères, ce qui bloque).";
   if (room.open) return "Les dépôts sont ouverts. Fermez-les quand tout le monde a déposé, puis vérifiez la room et générez la partie.";
   if (gen === "queued" || gen === "running") return "Génération en cours…";
   if (gen === "done") return "Partie générée : envoyez-la sur archipelago.gg, puis collez ici le lien de la room.";

@@ -202,6 +202,14 @@ leur nom dans la partie, qui sert à retrouver leurs fichiers.
    cumulable…) peut être attendu une fois de plus : il passe au vert quand son nombre augmente. Quand l'un
    d'eux arrive, la room le prévient par un bandeau, et le client texte comme l'overlay mettent la ligne en avant
    (♥ Wishlist). Les wishlists sont gardées par le service (table `wishlists`), par nom de joueur dans la partie.
+   L'hôte a en plus l'onglet **Avancement** : le spoiler de la partie (celui de la génération en ligne, ou le
+   fichier `…_Spoiler.txt` ou le `.zip` d'une partie générée chez lui, déposé dans la page) croisé avec le tracker.
+   Il montre le chemin de victoire calculé par Archipelago, sphère par sphère, avec les checks requis déjà faits ;
+   la première sphère pas finie est entièrement accessible, et ses checks restants disent qui peut faire avancer la
+   partie (joueur inactif, ou au but sans avoir libéré ses objets : `/release` à faire dans la console de la room).
+   Pour chaque joueur : ses checks requis restants, les objets requis qu'il attend et de qui, ou s'il a déjà tout
+   reçu pour finir. Le spoiler reste dans le navigateur de l'hôte (IndexedDB) ; un spoiler d'une autre génération
+   est repéré en comparant les objets déjà reçus. Une case masque objets et lieux pour un stream.
 7. Pour un stream, les joueurs peuvent partager la fenêtre de leur jeu, et l'hôte l'afficher dans OBS
    (voir « Écrans des joueurs » ci-dessous).
 
@@ -447,6 +455,7 @@ npx wrangler dev
 | `site/js/rooms.js`, `site/js/rooms-api.js` | Pages des rooms et appels au service des rooms |
 | `site/js/room-live.js` | Partie en cours : progression des joueurs et client texte |
 | `site/js/wishlist.js` | Wishlists des joueurs et bandeau des objets attendus reçus |
+| `site/js/spoiler.js` | Onglet « Avancement » de l'hôte : spoiler (sphères du chemin de victoire) croisé avec le tracker |
 | `site/js/tracker-*.js`, `site/js/trackers.js`, `site/js/unzip.js` | Trackers des packs PopTracker (voir « Trackers ») |
 | `site/js/guides.js`, `site/js/markdown.js` | Page « Installer un jeu » et affichage des guides |
 | `site/js/check.js` | Vérification d'un YAML hors de l'éditeur (dépôt dans une room, contrôle par l'hôte) |

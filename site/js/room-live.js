@@ -15,7 +15,7 @@ const STATUS = {
 };
 const IDLE_WARNING = 48 * 3600 * 1000; // en async, joueur sans activité depuis 2 jours
 
-function ago(ms) {
+export function ago(ms) {
   const minutes = Math.round((Date.now() - ms) / 60000);
   if (minutes < 1) return "à l'instant";
   if (minutes < 60) return `il y a ${minutes} min`;
@@ -141,7 +141,11 @@ function loadPackage(origin, checksum) {
   if (!packages.has(key)) {
     packages.set(key, fetch(`${origin}/api/datapackage/${checksum}`)
       .then((r) => { if (!r.ok) throw new Error(`Noms des objets indisponibles (${r.status}).`); return r.json(); })
-      .then((p) => ({ items: invert(p.item_name_to_id), locations: invert(p.location_name_to_id) }))
+      .then((p) => ({
+        items: invert(p.item_name_to_id),
+        locations: invert(p.location_name_to_id),
+        locationIds: new Map(Object.entries(p.location_name_to_id || {})),
+      }))
       .catch((e) => { packages.delete(key); throw e; }));
   }
   return packages.get(key);
