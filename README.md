@@ -275,8 +275,10 @@ Onglet « Écrans » de la room :
   co-streamer copie lui-même l'adresse pour son OBS, en grille automatique ou avec une disposition de l'hôte, sans
   que l'hôte ait à la lui envoyer. Les autres liens restent réservés à l'hôte. Les écrans partagés s'y placent seuls en grille,
   aussi grands que possible, et les **messages de la partie** (objets envoyés, indices obtenus, objectifs atteints,
-  release et collect) défilent à côté. Les réglages choisis sur la page sont ajoutés au lien copié : nombre d'écrans
-  (`max`, 4 par défaut, de 0 = messages seuls à 6), place des messages (`console=droite|bas|non`) et objets
+  release et collect) défilent à côté. La grille s'adapte au nombre de joueurs qui partagent (6 au plus) :
+  un seul prend toute la place, et elle se redécoupe à chaque partage qui commence ou s'arrête. Les réglages
+  choisis sur la page sont ajoutés au lien copié : écrans ou messages seuls (`max=0` ; les anciens liens peuvent
+  garder un maximum plus bas), place des messages (`console=droite|bas|non`) et objets
   montrés (`objets=tous|importants` : progression, utiles et pièges). Les objets de progression et les pièges
   sont marqués ★ et ⚠, en plus de leur couleur. 3 overlays affichant des écrans au maximum par room, car chaque joueur envoie son image à chacun.
 
@@ -289,12 +291,15 @@ chaque nouvel indice une fois, au format du serveur (`[Hint]: … is at … in �
 avant l'ouverture de l'overlay ne sont pas affichés.
 
 **Dispositions.** Pour placer chaque élément soi-même, l'hôte crée des dispositions dans l'éditeur de l'onglet
-« Écrans » (jusqu'à 12 par room, 40 éléments chacune), en partant d'un modèle (grille, écrans avec messages et
-progression, un grand écran et trois petits, deux équipes). Sur une page 16/9 qui représente la source OBS, il
+« Écrans » (jusqu'à 12 par room, 40 éléments chacune), en partant d'un modèle (écrans en grille, écrans avec
+messages et progression, un écran en vedette et les autres à côté). Sur une page 16/9 qui représente la source OBS, il
 ajoute, déplace et redimensionne à la souris ou au clavier :
 
-- des **écrans** : automatiques (remplis dans l'ordre des partages, par numéro) ou réservés à un joueur, avec ou
-  sans son nom et son jeu ; un écran sans joueur qui partage reste transparent ;
+- des **zones d'écrans**, qui placent en grille les joueurs qui partagent, autant qu'il y en a (jusqu'au maximum
+  choisi) : un seul prend toute la zone, plusieurs se la partagent. Une zone prend tous les joueurs qui ne sont
+  pas montrés ailleurs, ou seulement ceux qu'on coche (une équipe) ;
+- des **écrans** seuls : automatiques (remplis dans l'ordre des partages, par numéro) ou réservés à un joueur ;
+  écrans et zones montrent ou non le nom du joueur et son jeu, et restent transparents sans joueur qui partage ;
 - les **messages de la partie** (tous les objets ou les importants) ;
 - la **progression** des joueurs (checks faits et totaux, joueurs qui ont fini ; API du tracker d'archipelago.gg) ;
 - des **textes** (noms d'équipes, titre…).

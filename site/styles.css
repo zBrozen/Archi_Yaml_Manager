@@ -914,3 +914,5 @@ html.overlay-page body { background: transparent; overflow: hidden; }
 .ut-region { display: grid; gap: .4rem; width: 100%; }
 .ut-region h3 { margin: .4rem 0 0; font-size: 1.05rem; }
 .ut-yaml input[type="file"] { width: auto; max-width: 100%; }
+.overlay-zone { display: flex; align-items: center; justify-content: center; overflow: hidden; }
+.layout-item.type-screens { background: rgb(127 176 255 / 14%); border-color: #7fb0ff; border-style: dashed; }

@@ -8,7 +8,7 @@ import { html, useState, useEffect, useRef } from "../vendor/preact-htm.js";
 import { CopyButton, plural, useAction, useSetting } from "./ui.js";
 import { api, overlayLink, saveAccess, savedAccess } from "./rooms-api.js";
 import { ICE_SERVERS, serial, signaling } from "./screens-net.js";
-import { CONSOLE_PLACES, DEFAULT_SHOWN, ITEM_FILTERS, overlayOptions } from "./overlay-layout.js";
+import { CONSOLE_PLACES, ITEM_FILTERS, MAX_SHOWN, overlayOptions } from "./overlay-layout.js";
 import { LayoutEditor } from "./overlay-editor.js";
 
 // Qualité du partage, choisie par chaque joueur. `bitrate` : débit maximum envoyé à chaque overlay, en bit/s.
@@ -628,7 +628,11 @@ function OverlayPanel({ room, data, setData }) {
   const access = savedAccess(room.code);
   const links = data.overlay_links || [];
   const [name, setName] = useState("");
-  const [options, setOptions] = useState(() => overlayOptions(access.overlayOptions));
+  // Anciens réglages avec un nombre d'écrans fixe : la grille montre désormais tous ceux qui partagent.
+  const [options, setOptions] = useState(() => {
+    const saved = overlayOptions(access.overlayOptions);
+    return { ...saved, max: saved.max > 0 ? MAX_SHOWN : 0 };
+  });
   const set = (key, value) => {
     const next = { ...options, [key]: value };
     setOptions(next);
@@ -680,10 +684,10 @@ function OverlayPanel({ room, data, setData }) {
     <h3>Grille automatique</h3>
     <p class="hint">Réglages compris dans les liens copiés ci-dessus : après un changement, recopiez le lien dans OBS.</p>
     <div class="fields full">
-      <label><span>Écrans affichés</span>
+      <label><span>Écrans</span>
         <select value=${options.max} onChange=${(e) => set("max", Number(e.target.value))}>
+          <option value=${MAX_SHOWN}>Tous ceux qui partagent (${MAX_SHOWN} au plus)</option>
           <option value="0">Aucun (messages seulement)</option>
-          ${[1, 2, 3, 4, 5, 6].map((n) => html`<option value=${n}>${n === DEFAULT_SHOWN ? `${n} (conseillé)` : n}</option>`)}
         </select></label>
       ${options.max > 0 && html`<label><span>Messages de la partie</span>
         <select value=${options.console} onChange=${(e) => set("console", e.target.value)}>
@@ -697,9 +701,9 @@ function OverlayPanel({ room, data, setData }) {
     <ol class="steps">
       <li>Dans OBS : <strong>Sources → + → Navigateur</strong>, collez le lien, avec une largeur de 1920 et une hauteur de 1080
         (ou la taille de la zone de votre scène réservée aux écrans).</li>
-      <li>Les écrans se placent seuls en grille, dans l'ordre où les joueurs ont commencé à partager.
-        Au-delà de ${DEFAULT_SHOWN}, ils deviennent difficiles à suivre sur Twitch.</li>
-      <li>Pour placer les messages ailleurs dans la scène, ajoutez une deuxième source avec « Écrans affichés : aucun ».</li>
+      <li>Les écrans se placent seuls en grille, aussi grands que possible, dans l'ordre où les joueurs ont commencé à
+        partager : un seul prend toute la place, et la grille se redécoupe à chaque partage qui commence ou s'arrête.</li>
+      <li>Pour placer les messages ailleurs dans la scène, ajoutez une deuxième source avec « Écrans : aucun ».</li>
       <li>Les messages arrivent une fois la partie en ligne : l'overlay s'y connecte comme client texte du premier joueur,
         qui apparaît donc connecté une fois de plus.</li>
       <li>Chaque joueur envoie son image à chaque overlay qui affiche son écran : ${MAX_VIEWERS} au maximum.</li>

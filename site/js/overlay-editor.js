@@ -15,6 +15,10 @@ const snap = (v) => Math.round(v / STEP) * STEP;
 const round = (v) => Math.round(v * 100) / 100;
 
 function describe(item, players) {
+  if (item.type === "screens") {
+    const names = item.players.map((id) => players.find((p) => p.id === id)?.pseudo || "joueur retiré");
+    return names.length ? `Zone d'écrans : ${names.join(", ")}` : `Zone d'écrans (jusqu'à ${item.max})`;
+  }
   if (item.type === "screen") {
     return item.source === "auto"
       ? `Écran auto ${item.slot}`
@@ -100,6 +104,7 @@ function Choice({ value, choices, onChange }) {
 
 function ItemSettings({ item, layout, players, onChange, onRemove, onDuplicate, onOrder, full }) {
   const set = (key) => (value) => onChange(item.id, { [key]: value });
+  const isScreen = item.type === "screen" || item.type === "screens";
   const position = (key, max) => html`<input type="number" step=${STEP} min="0" max=${max} value=${round(item[key])}
     onChange=${(e) => {
       const n = Number(e.target.value);
@@ -123,14 +128,32 @@ function ItemSettings({ item, layout, players, onChange, onRemove, onDuplicate, 
           <input type="number" min="1" max="50" value=${item.slot} onChange=${(e) => set("slot")(clamp(Math.round(Number(e.target.value)) || 1, 1, 50))} /></${Field}>`}
         <label class="check span-all"><input type="checkbox" checked=${item.label} onChange=${(e) => set("label")(e.target.checked)} />
           Afficher le nom du joueur et son jeu</label>`}
+      ${item.type === "screens" && html`
+        <div class="span-all stack">
+          <p class="hint">La zone place en grille les joueurs qui partagent leur écran, aussi grands que possible : un seul
+            prend toute la zone, plusieurs se la partagent.</p>
+          <label class="check"><input type="radio" name=${`zone-${item.id}`} checked=${!item.players.length}
+            onChange=${() => set("players")([])} /> Tous les joueurs qui partagent (sauf ceux montrés ailleurs)</label>
+          <label class="check"><input type="radio" name=${`zone-${item.id}`} checked=${item.players.length > 0}
+            disabled=${!players.length} onChange=${() => set("players")(players.slice(0, 1).map((p) => p.id))} /> Seulement certains joueurs</label>
+          ${item.players.length > 0 && html`<div class="checks">${players.map((p) => html`<label>
+            <input type="checkbox" checked=${item.players.includes(p.id)} onChange=${(e) => set("players")(e.target.checked
+              ? [...item.players, p.id] : item.players.filter((id) => id !== p.id))} /> ${p.pseudo}</label>`)}</div>`}
+        </div>
+        <${Field} label="Écrans au plus">
+          <select value=${item.max} onChange=${(e) => set("max")(Number(e.target.value))}>
+            ${[1, 2, 3, 4, 5, 6, 8, 10, 12].map((n) => html`<option value=${n}>${n}</option>`)}
+          </select></${Field}>
+        <label class="check span-all"><input type="checkbox" checked=${item.label} onChange=${(e) => set("label")(e.target.checked)} />
+          Afficher le nom des joueurs et leur jeu</label>`}
       ${item.type === "feed" && html`<${Field} label="Objets montrés"><${Choice} value=${item.objets} choices=${ITEM_FILTERS} onChange=${set("objets")} /></${Field}>`}
       ${item.type === "text" && html`
         <${Field} label="Texte" wide>
           <textarea rows="2" maxLength=${LAYOUT_LIMITS.text} value=${item.text} onInput=${(e) => set("text")(e.target.value)}></textarea></${Field}>
         <${Field} label="Alignement"><${Choice} value=${item.align} choices=${ALIGNS} onChange=${set("align")} /></${Field}>`}
-      ${(item.type !== "screen" || item.label) && html`<${Field} label=${item.type === "screen" ? "Taille du nom" : "Taille du texte"}>
+      ${(!isScreen || item.label) && html`<${Field} label=${isScreen ? "Taille des noms" : "Taille du texte"}>
         <${Choice} value=${item.size} choices=${TEXT_SIZES} onChange=${set("size")} /></${Field}>`}
-      ${item.type !== "screen" && html`<label class="check span-all"><input type="checkbox" checked=${item.background}
+      ${!isScreen && html`<label class="check span-all"><input type="checkbox" checked=${item.background}
         onChange=${(e) => set("background")(e.target.checked)} /> Fond sombre (sinon texte ombré sur la scène)</label>`}
     </div>
     <div class="fields full position-fields">
@@ -233,8 +256,8 @@ export function LayoutEditor({ room, data, setData }) {
       <h2 class="grow">Dispositions de l'overlay</h2>
       ${dirty && html`<span class="badge warn">Modifications non enregistrées</span>`}
     </div>
-    <p>Placez vous-même les écrans des joueurs, les messages de la partie, la progression et des textes (noms
-      d'équipes…). Chaque disposition a son propre lien, à mettre dans OBS à la place du lien en grille ; les overlays
+    <p>Placez vous-même les écrans des joueurs, les messages de la partie, la progression et des textes
+      (titre…). Chaque disposition a son propre lien, à mettre dans OBS à la place du lien en grille ; les overlays
       ouverts changent dès l'enregistrement.</p>
 
     <div class="fields full">

@@ -11,7 +11,7 @@ import { Client, Hint } from "../vendor/archipelago.js";
 import { MessagePart, progressRows, wishHit, wishIndex } from "./room-live.js";
 import { api, apRoomStatus } from "./rooms-api.js";
 import { ICE_SERVERS, serial, signaling } from "./screens-net.js";
-import { TEXT_SIZES, assignScreens, overlayOptions } from "./overlay-layout.js";
+import { TEXT_SIZES, assignScreens, overlayOptions, shownStreams } from "./overlay-layout.js";
 
 const RETRY = 8000;
 const OFFER_TIMEOUT = 20000;
@@ -187,6 +187,19 @@ function Tile({ tile, style, font, label = true }) {
 
 const tileOf = (stream, view) => ({ ...stream, state: view.peers[stream.id]?.state || "connecting", stream: view.peers[stream.id]?.stream || null });
 
+// Écrans en grille dans une zone de `width` × `height` px, aussi grands que possible quel que soit leur nombre.
+// `scale` : taille du nom des joueurs par rapport à la taille moyenne.
+function ScreenGrid({ tiles, width, height, label = true, scale = 1 }) {
+  const grid = gridLayout(tiles.length, width, height, GAP);
+  if (!tiles.length || !grid.width) return null;
+  // Texte proportionnel à l'écran, jamais trop petit pour être lu dans un stream.
+  const font = Math.round(Math.min(40, Math.max(20, grid.width / 34)) * scale);
+  return html`<div class="overlay-grid" style=${{ width: `${grid.columns * grid.width + (grid.columns - 1) * GAP}px`, gap: `${GAP}px` }}>
+    ${tiles.map((tile) => html`<${Tile} key=${tile.id} tile=${tile} font=${font} label=${label}
+      style=${{ width: `${grid.width}px`, height: `${grid.height}px` }} />`)}
+  </div>`;
+}
+
 function Screens({ view, code, size, max }) {
   if (!view) return null;
   const tiles = view.streams.slice(0, max).map((s) => tileOf(s, view));
@@ -195,14 +208,7 @@ function Screens({ view, code, size, max }) {
       ${view.state === "ready" ? `Room ${code} : aucun joueur ne partage son écran pour l'instant.` : "Connexion au serveur des rooms…"}
     </p>`;
   }
-  const grid = gridLayout(tiles.length, size.width, size.height, GAP);
-  if (!grid.width) return null;
-  // Texte proportionnel à l'écran, jamais trop petit pour être lu dans un stream.
-  const font = Math.round(Math.min(40, Math.max(20, grid.width / 34)));
-  return html`<div class="overlay-grid" style=${{ width: `${grid.columns * grid.width + (grid.columns - 1) * GAP}px`, gap: `${GAP}px` }}>
-    ${tiles.map((tile) => html`<${Tile} key=${tile.id} tile=${tile} font=${font}
-      style=${{ width: `${grid.width}px`, height: `${grid.height}px` }} />`)}
-  </div>`;
+  return html`<${ScreenGrid} tiles=${tiles} width=${size.width} height=${size.height} />`;
 }
 
 // --- Partie en ligne : messages et progression ---------------------------------------------
@@ -402,6 +408,12 @@ function LayoutView({ layout, view, feed, wishes, progress }) {
       return stream && html`<${Tile} tile=${tileOf(stream, view)} label=${item.label} font=${Math.round(unit * TEXT_SIZES[item.size].unit)}
         style=${{ width: "100%", height: "100%" }} />`;
     }
+    if (item.type === "screens") {
+      const tiles = (assigned.get(item.id) || []).map((s) => tileOf(s, view));
+      return tiles.length > 0 && html`<div class="overlay-zone"><${ScreenGrid} tiles=${tiles} label=${item.label}
+        width=${(size.width * item.w) / 100} height=${(size.height * item.h) / 100}
+        scale=${TEXT_SIZES[item.size].unit / TEXT_SIZES.m.unit} /></div>`;
+    }
     if (item.type === "feed") return html`<${GameFeed} feed=${feed} wishes=${wishes} important=${item.objets === "importants"} style=${font} plain=${plain} />`;
     if (item.type === "progress") return html`<${ProgressBox} progress=${progress} style=${font} plain=${plain} />`;
     return html`<div class=${`overlay-box overlay-text ${plain ? "plain" : ""}`} style=${{ ...font, textAlign: item.align }}>${item.text}</div>`;
@@ -435,7 +447,7 @@ export function ScreensOverlay({ code, overlayKey, params }) {
     const select = layoutId
       ? (streams, layouts) => {
         const current = layouts.find((l) => l.id === layoutId);
-        return current ? [...new Set([...assignScreens(current.items, streams).values()].map((s) => s.id))] : [];
+        return current ? shownStreams(current.items, streams).map((s) => s.id) : [];
       }
       : (streams) => streams.slice(0, options.max).map((s) => s.id);
     const viewer = new Viewer(code, overlayKey, select, setView);

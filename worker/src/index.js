@@ -913,7 +913,8 @@ async function deleteOverlayLink(request, env, room, linkId) {
 // Dispositions de l'overlay (éditeur de l'hôte, voir site/js/overlay-layout.js) : positions en pourcentage
 // de la page, quatre types d'éléments. Tout ce qui n'est pas reconnu est retiré ou remplacé par sa valeur par défaut.
 const LAYOUT_LIMITS = { layouts: 12, items: 40, name: 40, text: 200, size: 64 * 1024 };
-const LAYOUT_ITEMS = ["screen", "feed", "progress", "text"];
+// screens : zone d'écrans en grille, qui s'adapte au nombre de joueurs qui partagent (tous, ou ceux de `players`).
+const LAYOUT_ITEMS = ["screens", "screen", "feed", "progress", "text"];
 const choice = (value, list, fallback) => (list.includes(value) ? value : fallback);
 
 function layoutId(value) {
@@ -936,7 +937,12 @@ function layoutItem(item) {
     size: choice(item.size, ["s", "m", "l", "xl"], "m"),
     background: !!item.background,
   };
-  if (type === "screen") {
+  if (type === "screens") {
+    if (item.players != null && !Array.isArray(item.players)) throw new HttpError(400, "Joueurs invalides dans la disposition.");
+    result.players = [...new Set((item.players || []).slice(0, LIMITS.playersPerRoom).map(layoutId))];
+    result.max = Math.min(12, Math.round(percent(item.max ?? 6, 1)));
+    result.label = item.label !== false;
+  } else if (type === "screen") {
     result.source = item.source == null || item.source === "auto" ? "auto" : layoutId(item.source);
     result.slot = Math.round(percent(item.slot ?? 1, 1));
     result.label = item.label !== false;
