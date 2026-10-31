@@ -1,8 +1,9 @@
-// Overlay OBS (#/overlay/CODE/CLÉ) : page à mettre en source navigateur dans OBS, sans en-tête ni pied de page.
+// Overlay d'un espace de partage (#/overlay/CODE/CLÉ) : page à mettre en source « Navigateur » d'un logiciel de
+// stream (OBS, Streamlabs…), sans en-tête ni pied de page.
 //
-// Sans disposition, les écrans partagés se placent seuls en grille, avec les messages de la partie à côté
-// (réglages dans l'adresse, voir overlayOptions). Avec ?disposition=ID, la page suit la disposition créée par
-// l'hôte avec l'éditeur ; le service l'envoie à la connexion puis à chaque enregistrement, sans recharger la page.
+// La page suit les réglages de l'espace (voir overlay-layout.js) : le service les envoie à la connexion puis à
+// chaque enregistrement, avec l'écran mis en vedette en direct, sans recharger la page. Les anciens liens gardent
+// leurs réglages dans l'adresse, ou une disposition de l'hôte (?disposition=ID).
 //
 // Les images arrivent directement du navigateur de chaque joueur (WebRTC) ; les messages et la progression
 // viennent du serveur de la partie sur archipelago.gg (client texte du premier joueur, API du tracker).
@@ -11,7 +12,9 @@ import { Client, Hint } from "../vendor/archipelago.js";
 import { MessagePart, progressRows, wishHit, wishIndex } from "./room-live.js";
 import { api, apRoomStatus } from "./rooms-api.js";
 import { ICE_SERVERS, serial, signaling } from "./screens-net.js";
-import { TEXT_SIZES, assignScreens, overlayOptions, shownStreams } from "./overlay-layout.js";
+import {
+  TEXT_SIZES, assignScreens, shownPlayers, shownStreams, spaceFromParams, spaceItems, spaceOf, spaceUses,
+} from "./overlay-layout.js";
 
 const RETRY = 8000;
 const OFFER_TIMEOUT = 20000;
@@ -28,6 +31,7 @@ class Viewer {
     this.select = select;
     this.streams = []; // joueurs qui partagent, dans l'ordre du service
     this.layouts = null; // dispositions de la room, reçues du service
+    this.space = undefined; // réglages de l'espace et écran en vedette ({ config, featured }), reçus du service
     this.peers = new Map(); // joueur → { state, pc, stream, timer }
     this.state = "connecting";
     this.message = null;
@@ -49,6 +53,7 @@ class Viewer {
       state: this.state,
       message: this.message,
       layouts: this.layouts,
+      space: this.space,
       streams: this.streams,
       peers: Object.fromEntries([...this.peers].map(([id, p]) => [id, { state: p.state, stream: p.stream }])),
     });
@@ -57,6 +62,10 @@ class Viewer {
   async receive(msg) {
     if (msg.type === "welcome" || msg.type === "layouts") {
       this.layouts = msg.layouts || [];
+      if (msg.type === "welcome") this.space = msg.space || null;
+      this.sync();
+    } else if (msg.type === "space") {
+      this.space = msg.space;
       this.sync();
     } else if (msg.type === "streams") {
       this.streams = msg.list;
@@ -67,7 +76,7 @@ class Viewer {
   }
 
   sync() {
-    const wanted = new Set(this.select(this.streams, this.layouts || []));
+    const wanted = new Set(this.select(this.streams, this.layouts || [], this.space));
     for (const id of [...this.peers.keys()]) {
       if (wanted.has(id)) continue;
       this.signal.send({ type: "signal", to: id, data: { type: "bye" } });
@@ -200,16 +209,6 @@ function ScreenGrid({ tiles, width, height, label = true, scale = 1 }) {
   </div>`;
 }
 
-function Screens({ view, code, size, max }) {
-  if (!view) return null;
-  const tiles = view.streams.slice(0, max).map((s) => tileOf(s, view));
-  if (!tiles.length) {
-    return html`<p class="overlay-message">
-      ${view.state === "ready" ? `Room ${code} : aucun joueur ne partage son écran pour l'instant.` : "Connexion au serveur des rooms…"}
-    </p>`;
-  }
-  return html`<${ScreenGrid} tiles=${tiles} width=${size.width} height=${size.height} />`;
-}
 
 // --- Partie en ligne : messages et progression ---------------------------------------------
 
@@ -359,8 +358,10 @@ function useProgress(code, enabled) {
             if (!r.ok) throw new Error(`Tracker indisponible (${r.status}).`);
             return r.json();
           });
-          const [live, fixed] = await Promise.all([get("tracker"), get("static_tracker")]);
-          if (alive) setProgress({ rows: progressRows(status, live, fixed), state: "live", message: null });
+          const [live, fixed, data] = await Promise.all([get("tracker"), get("static_tracker"), api.get(code).catch(() => null)]);
+          const goals = new Map((data?.players || []).flatMap((pl) => pl.slots).filter((s) => s.goal).map((s) => [s.name.toLowerCase(), s.goal]));
+          const rows = progressRows(status, live, fixed).map((r) => ({ ...r, goal: goals.get(r.name.toLowerCase()) || null }));
+          if (alive) setProgress({ rows, state: "live", message: null });
         }
       } catch (e) {
         if (alive) setProgress((p) => ({ ...p, state: p.rows.length ? "live" : "error", message: e?.message || String(e) }));
@@ -375,7 +376,8 @@ function useProgress(code, enabled) {
 
 const pct = (a, b) => (b ? Math.floor((a / b) * 100) : 0);
 
-function ProgressBox({ progress, style, plain }) {
+// `goal` : le goal de chaque joueur en petit sous son nom (rooms avec YAML seulement).
+function ProgressBox({ progress, style, plain, goal = false }) {
   const { rows } = progress;
   const sum = rows.reduce((n, r) => n + r.checks, 0);
   const all = rows.reduce((n, r) => n + r.total, 0);
@@ -385,7 +387,7 @@ function ProgressBox({ progress, style, plain }) {
       : progress.message || "Chargement de la progression…"}</div>`}
     ${rows.length > 0 && html`<div class="progress-total">Total : ${sum} / ${all} checks (${pct(sum, all)} %)</div>`}
     ${rows.map((r) => html`<div class="progress-line" key=${r.slot}>
-      <strong>${r.name}</strong>
+      <span class="progress-name"><strong>${r.name}</strong>${goal && r.goal && html`<span class="progress-goal">${r.goal}</span>`}</span>
       <span class="progress-bar"><span class=${r.finished ? "done" : ""} style=${{ width: `${pct(r.checks, r.total)}%` }}></span></span>
       <span class="progress-count">${r.finished ? "✓ Terminé" : `${r.checks} / ${r.total}`}</span>
     </div>`)}
@@ -396,73 +398,106 @@ function ProgressBox({ progress, style, plain }) {
 
 const boxStyle = (item) => ({ left: `${item.x}%`, top: `${item.y}%`, width: `${item.w}%`, height: `${item.h}%` });
 
-function LayoutView({ layout, view, feed, wishes, progress }) {
+// `items` : éléments à afficher ; `streams` : joueurs montrés ; `featured` : joueur en vedette. `empty` : message
+// affiché dans l'élément principal (`main`) quand aucun joueur montré ne partage.
+function LayoutView({ items, view, streams, featured, feed, wishes, progress, empty = null }) {
   const [ref, size] = useElementSize();
   const unit = size.height / 100; // 1 % de la hauteur de la page
-  const assigned = assignScreens(layout.items, view.streams);
+  const assigned = assignScreens(items, streams, featured);
   const content = (item) => {
     const font = { fontSize: `${Math.round(unit * TEXT_SIZES[item.size].unit)}px` };
     const plain = !item.background;
+    const nobody = item.main && empty && html`<div class="overlay-zone"><p class="overlay-message">${empty}</p></div>`;
     if (item.type === "screen") {
       const stream = assigned.get(item.id);
-      return stream && html`<${Tile} tile=${tileOf(stream, view)} label=${item.label} font=${Math.round(unit * TEXT_SIZES[item.size].unit)}
-        style=${{ width: "100%", height: "100%" }} />`;
+      return stream ? html`<${Tile} tile=${tileOf(stream, view)} label=${item.label} font=${Math.round(unit * TEXT_SIZES[item.size].unit)}
+        style=${{ width: "100%", height: "100%" }} />` : nobody;
     }
     if (item.type === "screens") {
       const tiles = (assigned.get(item.id) || []).map((s) => tileOf(s, view));
-      return tiles.length > 0 && html`<div class="overlay-zone"><${ScreenGrid} tiles=${tiles} label=${item.label}
+      return tiles.length > 0 ? html`<div class="overlay-zone"><${ScreenGrid} tiles=${tiles} label=${item.label}
         width=${(size.width * item.w) / 100} height=${(size.height * item.h) / 100}
-        scale=${TEXT_SIZES[item.size].unit / TEXT_SIZES.m.unit} /></div>`;
+        scale=${TEXT_SIZES[item.size].unit / TEXT_SIZES.m.unit} /></div>` : nobody;
     }
     if (item.type === "feed") return html`<${GameFeed} feed=${feed} wishes=${wishes} important=${item.objets === "importants"} style=${font} plain=${plain} />`;
-    if (item.type === "progress") return html`<${ProgressBox} progress=${progress} style=${font} plain=${plain} />`;
+    if (item.type === "progress") return html`<${ProgressBox} progress=${progress} style=${font} plain=${plain} goal=${item.goal} />`;
     return html`<div class=${`overlay-box overlay-text ${plain ? "plain" : ""}`} style=${{ ...font, textAlign: item.align }}>${item.text}</div>`;
   };
   return html`<div class="overlay-canvas" ref=${ref}>
-    ${size.height > 0 && layout.items.map((item) => html`<div class="overlay-item" key=${item.id} style=${boxStyle(item)}>${content(item)}</div>`)}
+    ${size.height > 0 && items.map((item) => html`<div class="overlay-item" key=${item.id} style=${boxStyle(item)}>${content(item)}</div>`)}
   </div>`;
 }
 
 // --- La page ------------------------------------------------------------------------------------
 
-// `params` : réglages lus dans l'adresse (voir overlayOptions), et `disposition` pour une disposition libre.
+// Écran en vedette : celui choisi en direct (`chosen`), puis, avec un roulement, le suivant toutes les `rotation`
+// secondes parmi ceux qui partagent. Un choix en direct repart de ce joueur.
+function useFeatured(chosen, rotation, players) {
+  const [featured, setFeatured] = useState(chosen);
+  const list = useRef(players);
+  list.current = players;
+  useEffect(() => setFeatured(chosen), [chosen]);
+  useEffect(() => {
+    if (!rotation) return undefined;
+    const timer = setInterval(() => setFeatured((current) => {
+      const all = list.current;
+      if (all.length < 2) return current;
+      const at = all.indexOf(current);
+      return all[(at + 1) % all.length];
+    }), rotation * 1000);
+    return () => clearInterval(timer);
+  }, [rotation, chosen]);
+  return featured;
+}
+
+// `params` : anciens réglages dans l'adresse (voir spaceFromParams), et `disposition` pour une disposition de l'hôte.
 export function ScreensOverlay({ code, overlayKey, params }) {
   const layoutId = params.disposition || null;
-  const options = overlayOptions(params);
-  const place = options.max === 0 ? "plein" : options.console;
+  const fromUrl = spaceFromParams(params);
   const [view, setView] = useState(null);
-  const [area, size] = useElementSize();
+  const config = fromUrl || spaceOf(view?.space?.config);
+  const known = !!fromUrl || view?.space !== undefined; // réglages reçus du service (ou dans l'adresse)
   const layout = layoutId ? view?.layouts?.find((l) => l.id === layoutId) : null;
   const refused = view?.state === "refused";
-  const uses = (type) => !refused && (layoutId ? !!layout?.items.some((i) => i.type === type) : type === "feed" && place !== "non");
+  const streams = layoutId ? view?.streams || [] : shownPlayers(config, view?.streams || []);
+  const featured = useFeatured(view?.space?.featured || null, layoutId ? 0 : config.rotation, streams.map((s) => s.player));
+  const items = layoutId ? layout?.items || [] : spaceItems(config, streams.length);
+  const uses = (type) => !refused && (layoutId ? !!layout?.items.some((i) => i.type === type) : known && spaceUses(config, type));
   const feed = useGameFeed(code, uses("feed"));
   const wishes = useWishlists(code, uses("feed"));
   const progress = useProgress(code, uses("progress"));
 
+  // Joueurs dont l'overlay demande l'image : relu à chaque changement des réglages ou de l'écran en vedette.
+  const select = useRef(null);
+  select.current = (all, layouts, space) => {
+    if (layoutId) {
+      const current = layouts.find((l) => l.id === layoutId);
+      return current ? shownStreams(current.items, all).map((s) => s.id) : [];
+    }
+    const cfg = fromUrl || spaceOf(space?.config);
+    const shown = shownPlayers(cfg, all);
+    return shownStreams(spaceItems(cfg, shown.length), shown, featured).map((s) => s.id);
+  };
+  const viewer = useRef(null);
   useEffect(() => {
     document.documentElement.classList.add("overlay-page");
     document.title = `Écrans · room ${code}`;
-    // Grille sans écran (messages seuls) : pas besoin du service.
-    if (!layoutId && !options.max) return undefined;
-    const select = layoutId
-      ? (streams, layouts) => {
-        const current = layouts.find((l) => l.id === layoutId);
-        return current ? shownStreams(current.items, streams).map((s) => s.id) : [];
-      }
-      : (streams) => streams.slice(0, options.max).map((s) => s.id);
-    const viewer = new Viewer(code, overlayKey, select, setView);
-    return () => viewer.close();
+    viewer.current = new Viewer(code, overlayKey, (...args) => select.current(...args), setView);
+    return () => viewer.current.close();
   }, []);
+  useEffect(() => { if (view?.state === "ready") viewer.current?.sync(); }, [featured]);
 
   const message = (text) => html`<div class="overlay"><div class="overlay-screens"><p class="overlay-message">${text}</p></div></div>`;
   if (refused) return message(view.message);
   if (layoutId) {
     if (!view?.layouts) return view?.state === "retrying" ? message("Connexion au serveur des rooms perdue, nouvelle tentative…") : null;
-    if (!layout) return message("Cette disposition n'existe plus : copiez à nouveau son lien depuis la room (onglet « Écrans »).");
-    return html`<${LayoutView} layout=${layout} view=${view} feed=${feed} wishes=${wishes} progress=${progress} />`;
+    if (!layout) return message("Cette disposition n'existe plus : copiez le lien d'un espace depuis la room (onglet « Écrans »).");
+    return html`<${LayoutView} items=${layout.items} view=${view} streams=${streams} featured=${featured} feed=${feed} wishes=${wishes} progress=${progress} />`;
   }
-  return html`<div class=${`overlay overlay-${place}`}>
-    ${options.max > 0 && html`<div class="overlay-screens" ref=${area}><${Screens} view=${view} code=${code} size=${size} max=${options.max} /></div>`}
-    ${place !== "non" && html`<${GameFeed} feed=${feed} wishes=${wishes} important=${options.objets === "importants"} />`}
-  </div>`;
+  if (!known) return view?.state === "retrying" ? message("Connexion au serveur des rooms perdue, nouvelle tentative…") : null;
+  if (config.mode === "manuel" && !config.variants.length) return message("Cet espace n'a pas encore de disposition : réglez-la dans la room (onglet « Écrans », vue « Overlay »).");
+  const empty = view?.state !== "ready" ? "Connexion au serveur des rooms…"
+    : `Room ${code} : ${config.joueurs.length ? "les joueurs choisis ne partagent pas" : "aucun joueur ne partage"} leur écran pour l'instant.`;
+  return html`<${LayoutView} items=${items} view=${view} streams=${streams} featured=${featured} feed=${feed} wishes=${wishes}
+    progress=${progress} empty=${streams.length ? null : empty} />`;
 }

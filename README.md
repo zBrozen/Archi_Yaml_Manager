@@ -239,9 +239,13 @@ Les YAML déposés dans une room sont visibles par leur auteur et par l'hôte. U
 6. Indiquer cette adresse dans `DEPLOYED` de [`site/js/config.js`](site/js/config.js) et pousser sur `main`.
    Tant qu'elle est vide, l'onglet « Rooms » n'apparaît pas sur le site en ligne.
 
-### Écrans des joueurs (overlay OBS)
+### Écrans des joueurs (overlay de stream)
 
-Onglet « Écrans » de la room :
+Onglet « Écrans » de la room, en trois vues : « Partager mon jeu », « Espaces de partage » (liste commune des
+overlays, que chacun crée et que tous les inscrits peuvent copier, avec « Copier le lien pour OBS ») et « Overlay »
+(ce que montre un espace, et l'écran en vedette en direct).
+L'overlay est une page web : il marche dans tout logiciel de stream qui a une source « Navigateur » (OBS,
+Streamlabs, XSplit…).
 
 - **Joueurs** : « Partager la fenêtre de mon jeu » ouvre le choix de fenêtre du navigateur (Chrome, Edge ou
   Firefox sur ordinateur, rien à installer). L'image part directement vers l'overlay, sans son, et n'est
@@ -265,22 +269,39 @@ Onglet « Écrans » de la room :
   réellement (définition, images par seconde, débit, codec et encodeur), le débit que le navigateur
   s'autorise, la latence et les pertes, et explique ce qui réduit l'image : débit de la qualité choisie,
   estimation encore en train de monter, réseau qui perd des paquets ou encodage trop lourd.
-- **Hôte** : « Créer un lien » donne une adresse secrète (`#/overlay/CODE/CLÉ`) à mettre dans OBS en source
-  **Navigateur** (1920 × 1080, fond transparent). L'hôte peut en créer plusieurs (10 au maximum), nommés, par
-  exemple un par streamer ou par ordinateur : ils restent dans la liste de l'onglet « Écrans », à recopier depuis
+- **Streamers** : « Créer un espace » donne une adresse secrète (`#/overlay/CODE/CLÉ`) à mettre en source
+  **Navigateur** du logiciel de stream (1920 × 1080, fond transparent). L'hôte et chaque joueur créent leurs
+  espaces (3 au plus par joueur). Tous les inscrits voient la liste et peuvent copier n'importe quel espace ;
+  seuls son créateur et l'hôte le renomment ou le suppriment, et ceux d'un joueur partent avec lui s'il quitte la
+  room (colonne `player_id`, migration 0012 ; la case « donner aux joueurs » de la migration 0010 n'existe plus).
+  L'hôte peut en créer plusieurs (10 au maximum), nommés, par exemple un par streamer ou par ordinateur : ils restent dans la liste de l'onglet « Écrans », à recopier depuis
   tout appareil où il est hôte, sans en recréer (table `overlay_links`, migration 0007). Supprimer un lien ne coupe
   que les overlays ouverts avec lui. Un lien créé avant cette liste (une seule clé par room) la rejoint quand
-  l'hôte rouvre la room dans le navigateur qui l'avait créé. Un lien coché « Visible par les joueurs de la room »
-  (migration 0010) apparaît dans l'onglet « Écrans » de chaque joueur inscrit, sous « Overlays de l'hôte » : un
-  co-streamer copie lui-même l'adresse pour son OBS, en grille automatique ou avec une disposition de l'hôte, sans
-  que l'hôte ait à la lui envoyer. Les autres liens restent réservés à l'hôte. Les écrans partagés s'y placent seuls en grille,
-  aussi grands que possible, et les **messages de la partie** (objets envoyés, indices obtenus, objectifs atteints,
-  release et collect) défilent à côté. La grille s'adapte au nombre de joueurs qui partagent (6 au plus) :
-  un seul prend toute la place, et elle se redécoupe à chaque partage qui commence ou s'arrête. Les réglages
-  choisis sur la page sont ajoutés au lien copié : écrans ou messages seuls (`max=0` ; les anciens liens peuvent
-  garder un maximum plus bas), place des messages (`console=droite|bas|non`) et objets
-  montrés (`objets=tous|importants` : progression, utiles et pièges). Les objets de progression et les pièges
-  sont marqués ★ et ⚠, en plus de leur couleur. 3 overlays affichant des écrans au maximum par room, car chaque joueur envoie son image à chacun.
+  l'hôte rouvre la room dans le navigateur qui l'avait créé.
+
+  Les réglages de l'overlay de chaque espace sont gardés par le service (colonne `config`, validée par
+  `spaceConfig` dans [`worker/src/index.js`](worker/src/index.js)) : le lien est le même pour tous, et les
+  overlays ouverts suivent chaque enregistrement sans recharger. Seuls le créateur de l'espace et l'hôte les
+  modifient. On y choisit les **joueurs montrés** (tous ceux qui partagent, ou seulement certains : les autres
+  n'apparaissent jamais sur cet overlay), puis :
+  - **Automatique** : écrans en grille (aussi grands que possible, 6 au plus, redécoupés à chaque partage qui
+    commence ou s'arrête) ou **un écran en vedette** en grand avec les autres en petit à côté, ou pas d'écran ;
+    **messages de la partie** (objets envoyés, indices obtenus, objectifs atteints, release et collect) à droite,
+    en bas ou masqués, tous les objets ou les importants ; **progression** masquée, affichée, ou affichée avec le
+    **goal** de chaque joueur en petit. Tout se place seul, sans qu'un écran en recouvre un autre.
+  - **À la main** : une disposition par nombre d'écrans affichés (aucun à 6), faite avec l'éditeur ci-dessous ;
+    l'overlay prend celle qui correspond au nombre de joueurs montrés qui partagent (sinon celle du nombre
+    inférieur le plus proche) et change dès qu'un joueur commence ou arrête de partager.
+
+  **Écran en vedette** : celui que le créateur de l'espace ou l'hôte choisit en direct dans la vue « Overlay »
+  (colonne `featured`, envoyée aussitôt aux overlays ouverts), sinon le premier qui partage ; avec un
+  **roulement** (toutes les 15 s à 2 min), l'overlay passe de lui-même au joueur suivant, et un choix en direct
+  repart de ce joueur. Le goal est lu dans le YAML de chaque joueur (`slotGoal` : option `goal` ou proche, ou
+  celle qui a le plus de poids), donc absent dans une room de partie déjà hébergée.
+
+  Les objets de progression et les pièges sont marqués ★ et ⚠, en plus de leur couleur. Chaque joueur envoie son
+  image à 3 overlays au plus. Les anciens liens gardent leurs réglages dans l'adresse (`max`, `console`, `objets`,
+  `joueurs`) ou une disposition de l'hôte (`?disposition=ID`, colonne `overlay_layouts`).
 
 Les messages viennent du serveur de la partie sur archipelago.gg, une fois son lien collé dans la room : l'overlay
 s'y connecte comme client texte du premier joueur (comme le client texte de la room, avec
@@ -290,24 +311,24 @@ les joueurs dans le stockage de la partie (clés `_read_hints_<équipe>_<joueur>
 chaque nouvel indice une fois, au format du serveur (`[Hint]: … is at … in …'s World.`). Les indices obtenus
 avant l'ouverture de l'overlay ne sont pas affichés.
 
-**Dispositions.** Pour placer chaque élément soi-même, l'hôte crée des dispositions dans l'éditeur de l'onglet
-« Écrans » (jusqu'à 12 par room, 40 éléments chacune), en partant d'un modèle (écrans en grille, écrans avec
-messages et progression, un écran en vedette et les autres à côté). Sur une page 16/9 qui représente la source OBS, il
-ajoute, déplace et redimensionne à la souris ou au clavier :
+**Dispositions à la main.** Dans la vue « Overlay », mode « À la main », on ajoute une disposition par nombre
+d'écrans (40 éléments chacune), en partant de la plus proche ou d'un modèle (page vide, écrans en grille, écrans avec
+messages et progression, un écran en vedette et les autres à côté). Sur une page 16/9 qui représente la source du
+logiciel de stream, on ajoute, déplace et redimensionne à la souris ou au clavier ; deux écrans (écran ou zone
+d'écrans) ne peuvent jamais se recouvrir : l'éditeur refuse le déplacement, et le service la disposition :
 
 - des **zones d'écrans**, qui placent en grille les joueurs qui partagent, autant qu'il y en a (jusqu'au maximum
   choisi) : un seul prend toute la zone, plusieurs se la partagent. Une zone prend tous les joueurs qui ne sont
   pas montrés ailleurs, ou seulement ceux qu'on coche (une équipe) ;
-- des **écrans** seuls : automatiques (remplis dans l'ordre des partages, par numéro) ou réservés à un joueur ;
+- des **écrans** seuls : en vedette, automatiques (remplis dans l'ordre des partages, par numéro) ou réservés à un joueur ;
   écrans et zones montrent ou non le nom du joueur et son jeu, et restent transparents sans joueur qui partage ;
 - les **messages de la partie** (tous les objets ou les importants) ;
-- la **progression** des joueurs (checks faits et totaux, joueurs qui ont fini ; API du tracker d'archipelago.gg) ;
+- la **progression** des joueurs (checks faits et totaux, joueurs qui ont fini ; API du tracker d'archipelago.gg),
+  avec ou sans le goal de chacun ;
 - des **textes** (noms d'équipes, titre…).
 
 Taille du texte, fond sombre ou texte ombré directement sur la scène, et ordre de superposition se règlent pour
-chaque élément. Chaque disposition a son propre lien (`?disposition=ID`, avec l'un des liens de la liste) ;
-l'enregistrer met à jour tout de suite les overlays ouverts, sans toucher à OBS. Les dispositions sont gardées
-par le service (colonne `overlay_layouts`, validée par `overlayLayouts` dans [`worker/src/index.js`](worker/src/index.js)).
+chaque élément. Enregistrer met à jour tout de suite les overlays ouverts de l'espace, sans toucher au logiciel de stream.
 
 Fonctionnement : les navigateurs se transmettent l'image en pair à pair (WebRTC). Le service ne fait que les
 mettre en relation, par WebSocket, avec un Durable Object par room (`ScreenRoom` dans

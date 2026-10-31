@@ -40,11 +40,15 @@
   Jeux qui exigent leur ROM pour générer (champ `rom`, relevé par `ap_extract.py` via `stage_assert_generate`) :
   signalés par la vérification, génération en ligne refusée. Ne pas ajouter de dépôt de ROM (droits d'auteur, et
   le code d'un apworld de l'hôte pourrait la recopier dans la partie).
-  Écrans des joueurs (overlay OBS, page `#/overlay/CODE/CLÉ`) : WebRTC entre navigateurs, mise en relation par le
-  Durable Object `ScreenRoom` du Worker (une instance par room). `screens.js` : partage du joueur et lien de l'hôte ;
+  Écrans des joueurs (overlay de stream, page `#/overlay/CODE/CLÉ`) : WebRTC entre navigateurs, mise en relation par le
+  Durable Object `ScreenRoom` du Worker (une instance par room). `screens.js` : partage du joueur et liens des streamers ;
   `overlay.js` : la page de l'overlay ; `overlay-layout.js` : modèle des dispositions (mêmes limites que le Worker) ;
   `overlay-editor.js` : éditeur ; `screens-net.js` : WebSocket commun. Liens de l'overlay : table `overlay_links`
-  (clé gardée en clair, montrée à l'hôte, et aux joueurs inscrits pour les liens `shared` via `shared_overlays`) ; `rooms.overlay_hash` n'est plus que l'ancienne clé unique, reprise
+  (« espaces de partage », clé gardée en clair, liste visible et copiable par l'hôte et tous les inscrits ; `player_id`
+  NULL pour l'hôte, sinon le joueur créateur, seul avec l'hôte à pouvoir renommer, régler ou supprimer ; `shared`
+  inutilisée). Réglages de l'overlay d'un espace dans `config` (`spaceConfig` du Worker et `DEFAULT_SPACE` de
+  `overlay-layout.js`, mêmes valeurs : mode auto ou dispositions par nombre d'écrans, deux écrans jamais superposés),
+  écran en vedette dans `featured`, poussés aux overlays ouverts par le Durable Object (message `space`) ; `rooms.overlay_hash` n'est plus que l'ancienne clé unique, reprise
   dans la liste à la réouverture par l'hôte.
   Wishlists (`wishlist.js`, table `wishlists`, par nom de joueur dans la partie) : objets reçus d'après le tracker
   d'archipelago.gg, noms lus dans les datapackages ; le tracker est lu une fois par `RoomPage` pour tous les onglets.

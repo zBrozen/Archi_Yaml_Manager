@@ -1,11 +1,10 @@
-// Éditeur des dispositions de l'overlay OBS (onglet « Écrans », espace de l'hôte) : l'hôte place librement
-// des écrans de joueurs, les messages de la partie, la progression et des textes sur une page 16/9, à la souris
-// ou au clavier. Chaque disposition a son propre lien ; l'enregistrer met à jour les overlays déjà ouverts.
-import { html, useState, useEffect, useRef } from "../vendor/preact-htm.js";
-import { CopyButton, useAction } from "./ui.js";
-import { api, overlayLink } from "./rooms-api.js";
+// Éditeur des dispositions d'un espace de partage (onglet « Écrans », vue « Overlay ») : son créateur ou l'hôte
+// place librement des écrans de joueurs, l'écran en vedette, les messages de la partie, la progression et des
+// textes sur une page 16/9, à la souris ou au clavier, avec une disposition par nombre d'écrans affichés.
+import { html, useState, useRef } from "../vendor/preact-htm.js";
 import {
-  ALIGNS, ITEM_FILTERS, ITEM_TYPES, LAYOUT_LIMITS, PRESETS, TEXT_SIZES, newId, newItem, nextSlot, presetItems,
+  ALIGNS, ITEM_FILTERS, ITEM_TYPES, LAYOUT_LIMITS, PRESETS, SCREEN_TYPES, TEXT_SIZES, coversScreen, newId, newItem, nextSlot,
+  presetItems, variantFor,
 } from "./overlay-layout.js";
 
 const STEP = 0.5; // pas de déplacement et d'aimantation, en % de la page
@@ -20,12 +19,13 @@ function describe(item, players) {
     return names.length ? `Zone d'écrans : ${names.join(", ")}` : `Zone d'écrans (jusqu'à ${item.max})`;
   }
   if (item.type === "screen") {
+    if (item.source === "vedette") return "Écran en vedette";
     return item.source === "auto"
       ? `Écran auto ${item.slot}`
       : `Écran : ${players.find((p) => p.id === item.source)?.pseudo || "joueur retiré"}`;
   }
   if (item.type === "feed") return item.objets === "importants" ? "Messages (objets importants)" : "Messages de la partie";
-  if (item.type === "progress") return "Progression";
+  if (item.type === "progress") return item.goal ? "Progression (avec les goals)" : "Progression";
   return `Texte : « ${item.text || "…"} »`;
 }
 
@@ -120,9 +120,10 @@ function ItemSettings({ item, layout, players, onChange, onRemove, onDuplicate, 
         <${Field} label="Joueur montré">
           <select value=${item.source} onChange=${(e) => onChange(item.id, e.target.value === "auto"
             ? { source: "auto", slot: nextSlot(layout.items.filter((i) => i.id !== item.id)) } : { source: e.target.value })}>
+            <option value="vedette">En vedette (choisi en direct, ou en roulement)</option>
             <option value="auto">Automatique (dans l'ordre des partages)</option>
             ${players.map((p) => html`<option value=${p.id}>${p.pseudo}</option>`)}
-            ${item.source !== "auto" && !players.some((p) => p.id === item.source) && html`<option value=${item.source}>Joueur retiré de la room</option>`}
+            ${!["auto", "vedette"].includes(item.source) && !players.some((p) => p.id === item.source) && html`<option value=${item.source}>Joueur retiré de la room</option>`}
           </select></${Field}>
         ${item.source === "auto" && html`<${Field} label="Numéro (ordre de remplissage)">
           <input type="number" min="1" max="50" value=${item.slot} onChange=${(e) => set("slot")(clamp(Math.round(Number(e.target.value)) || 1, 1, 50))} /></${Field}>`}
@@ -146,6 +147,8 @@ function ItemSettings({ item, layout, players, onChange, onRemove, onDuplicate, 
           </select></${Field}>
         <label class="check span-all"><input type="checkbox" checked=${item.label} onChange=${(e) => set("label")(e.target.checked)} />
           Afficher le nom des joueurs et leur jeu</label>`}
+      ${item.type === "progress" && html`<label class="check span-all"><input type="checkbox" checked=${!!item.goal}
+        onChange=${(e) => set("goal")(e.target.checked)} /> Afficher le goal de chaque joueur en petit (lu dans son YAML)</label>`}
       ${item.type === "feed" && html`<${Field} label="Objets montrés"><${Choice} value=${item.objets} choices=${ITEM_FILTERS} onChange=${set("objets")} /></${Field}>`}
       ${item.type === "text" && html`
         <${Field} label="Texte" wide>
@@ -164,7 +167,7 @@ function ItemSettings({ item, layout, players, onChange, onRemove, onDuplicate, 
     </div>
     <div class="row">
       ${item.type === "screen" && html`<button type="button" class="ghost small" title="Même largeur et hauteur en % : la forme d'un écran de jeu"
-        onClick=${() => { const s = Math.min(item.w, 100 - item.y); onChange(item.id, { w: s, h: s }); }}>Format 16/9</button>`}
+        onClick=${() => { const s = Math.min(item.w, 100 - item.y, 100 - item.x); onChange(item.id, { w: s, h: s }); }}>Format 16/9</button>`}
       <button type="button" class="ghost small" disabled=${full} onClick=${() => onDuplicate(item.id)}>Dupliquer</button>
       <button type="button" class="ghost small" onClick=${() => onOrder(item.id, 1)}>Mettre devant</button>
       <button type="button" class="ghost small" onClick=${() => onOrder(item.id, -1)}>Mettre derrière</button>
@@ -173,144 +176,112 @@ function ItemSettings({ item, layout, players, onChange, onRemove, onDuplicate, 
   </div>`;
 }
 
-// --- Éditeur ------------------------------------------------------------------------------------
+// --- Éditeur des dispositions d'un espace ----------------------------------------------------------
 
-export function LayoutEditor({ room, data, setData }) {
-  const saved = data.overlay_layouts || [];
-  const savedText = JSON.stringify(saved);
-  const [draft, setDraft] = useState(saved);
-  const [dirty, setDirty] = useState(false);
-  const [currentId, setCurrentId] = useState(saved[0]?.id || null);
+const SPACE_COUNTS = [0, 1, 2, 3, 4, 5, 6];
+export const countLabel = (n) => (n === 0 ? "Aucun écran" : n === 1 ? "1 écran" : `${n} écrans`);
+const withNewIds = (items) => items.map((i) => ({ ...structuredClone(i), id: newId() }));
+
+// Une disposition par nombre d'écrans affichés (`variants` : [{ count, items }], contrôlé par `onChange`) : l'overlay
+// change tout seul quand un joueur commence ou arrête de partager. Deux écrans ne se recouvrent jamais : un
+// déplacement qui en ferait chevaucher deux est refusé.
+export function SpaceLayouts({ variants, players, onChange }) {
+  const missing = SPACE_COUNTS.filter((n) => !variants.some((v) => v.count === n));
+  const [current, setCurrent] = useState(variants[0]?.count ?? null);
   const [selected, setSelected] = useState(null);
-  const [preset, setPreset] = useState("complet");
-  const [linkId, setLinkId] = useState(null);
-  const action = useAction();
-  const players = data.players || [];
+  const [addCount, setAddCount] = useState(missing.includes(1) ? 1 : missing[0]);
+  const [preset, setPreset] = useState(variants.length ? "copie" : "complet");
+  const [warning, setWarning] = useState(null);
+  const variant = variants.find((v) => v.count === current) || variants[0] || null;
+  const item = variant?.items.find((i) => i.id === selected) || null;
+  const full = !!variant && variant.items.length >= LAYOUT_LIMITS.items;
+  const count = missing.includes(addCount) ? addCount : missing[0];
 
-  // Relecture régulière de la room : les dispositions enregistrées ailleurs remplacent le brouillon s'il est intact.
-  useEffect(() => { if (!dirty) setDraft(JSON.parse(savedText)); }, [savedText]);
-
-  const layout = draft.find((l) => l.id === currentId) || draft[0] || null;
-  const item = layout?.items.find((i) => i.id === selected) || null;
-  const full = !!layout && layout.items.length >= LAYOUT_LIMITS.items;
-  const edit = (fn) => {
-    setDraft((all) => all.map((l) => (l.id === layout.id ? fn({ ...l, items: [...l.items] }) : l)));
-    setDirty(true);
+  const setItems = (items) => onChange(variants.map((v) => (v.count === variant.count ? { ...v, items } : v)));
+  const change = (id, patch) => {
+    const items = variant.items.map((i) => (i.id === id ? { ...i, ...patch } : i));
+    if (coversScreen(items.find((i) => i.id === id), items)) { setWarning("Deux écrans ne peuvent pas se recouvrir."); return; }
+    setWarning(null);
+    setItems(items);
   };
-  const change = (id, patch) => edit((l) => ({ ...l, items: l.items.map((i) => (i.id === id ? { ...i, ...patch } : i)) }));
-  const remove = (id) => { edit((l) => ({ ...l, items: l.items.filter((i) => i.id !== id) })); setSelected(null); };
-  const add = (type) => {
-    const next = newItem(type, layout.items);
-    edit((l) => ({ ...l, items: [...l.items, next] }));
+  const remove = (id) => { setItems(variant.items.filter((i) => i.id !== id)); setSelected(null); };
+  const add = (type, extra = {}) => {
+    const next = newItem(type, variant.items, extra);
+    if (!next) { setWarning("Plus de place libre pour un écran : réduisez-en un d'abord."); return; }
+    setWarning(null);
+    setItems([...variant.items, next]);
     setSelected(next.id);
   };
   const duplicate = (id) => {
-    const source = layout.items.find((i) => i.id === id);
-    const copy = { ...source, id: newId(), x: clamp(source.x + 2, 0, 100 - source.w), y: clamp(source.y + 2, 0, 100 - source.h) };
-    if (copy.type === "screen" && copy.source === "auto") copy.slot = nextSlot(layout.items);
-    edit((l) => ({ ...l, items: [...l.items, copy] }));
+    const source = variant.items.find((i) => i.id === id);
+    const { id: _, x, y, ...rest } = source;
+    if (SCREEN_TYPES.includes(source.type)) return add(source.type, rest);
+    const copy = { ...structuredClone(source), id: newId(), x: clamp(x + 2, 0, 100 - source.w), y: clamp(y + 2, 0, 100 - source.h) };
+    setItems([...variant.items, copy]);
     setSelected(copy.id);
   };
   // Les éléments sont dessinés dans l'ordre de la liste : le dernier est devant.
-  const order = (id, direction) => edit((l) => {
-    const moved = l.items.find((i) => i.id === id);
-    const rest = l.items.filter((i) => i.id !== id);
-    return { ...l, items: direction > 0 ? [...rest, moved] : [moved, ...rest] };
-  });
-  const create = () => {
-    const next = { id: newId(), name: `Disposition ${draft.length + 1}`, items: presetItems(preset) };
-    setDraft([...draft, next]);
-    setCurrentId(next.id);
-    setSelected(null);
-    setDirty(true);
+  const order = (id, direction) => {
+    const moved = variant.items.find((i) => i.id === id);
+    const rest = variant.items.filter((i) => i.id !== id);
+    setItems(direction > 0 ? [...rest, moved] : [moved, ...rest]);
   };
-  const applyPreset = () => {
-    if (layout.items.length && !confirm(`Remplacer les éléments de « ${layout.name} » par le modèle « ${PRESETS[preset].label} » ?`)) return;
-    edit((l) => ({ ...l, items: presetItems(preset) }));
+  const addVariant = () => {
+    const nearest = variantFor({ variants }, count);
+    const items = preset === "copie" && nearest ? withNewIds(nearest.items) : presetItems(preset === "copie" ? "complet" : preset);
+    onChange([...variants, { count, items }].sort((a, b) => a.count - b.count));
+    setCurrent(count);
     setSelected(null);
   };
-  const removeLayout = () => {
-    if (!confirm(`Supprimer la disposition « ${layout.name} » ? Son lien ne marchera plus.`)) return;
-    const rest = draft.filter((l) => l.id !== layout.id);
-    setDraft(rest);
-    setCurrentId(rest[0]?.id || null);
+  const removeVariant = () => {
+    if (!confirm(`Supprimer la disposition pour ${countLabel(variant.count).toLowerCase()} ?`)) return;
+    onChange(variants.filter((v) => v.count !== variant.count));
+    setCurrent(null);
     setSelected(null);
-    setDirty(true);
   };
-  const cancel = () => { setDraft(JSON.parse(savedText)); setDirty(false); setSelected(null); };
-  const save = () => action.run(async () => {
-    const result = await api.saveLayouts(room.code, draft);
-    setData({ ...data, overlay_layouts: result.layouts });
-    setDraft(result.layouts);
-    setDirty(false);
-  });
 
-  // Lien d'accès utilisé pour copier l'adresse de la disposition (le premier de la liste, sauf choix).
-  const links = data.overlay_links || [];
-  const access = links.find((l) => l.id === linkId) || links[0] || null;
-  const isSaved = layout && saved.some((l) => l.id === layout.id);
-  const link = access && isSaved ? `${overlayLink(room.code, access.key)}?disposition=${layout.id}` : null;
+  return html`<div class="stack full space-layouts">
+    <p class="hint">Une disposition par nombre d'écrans affichés : l'overlay change tout seul quand un joueur commence ou arrête
+      de partager. Sans disposition pour ce nombre, il prend celle du nombre inférieur le plus proche.</p>
+    ${variants.length > 0 && html`<div class="segmented" role="tablist" aria-label="Disposition pour">${variants.map((v) => html`<button
+      type="button" role="tab" aria-selected=${v.count === variant.count} class=${v.count === variant.count ? "active" : ""}
+      onClick=${() => { setCurrent(v.count); setSelected(null); setWarning(null); }}>${countLabel(v.count)}</button>`)}</div>`}
+    ${missing.length > 0 && html`<div class="row">
+      <label class="inline-field"><span>Disposition pour</span>
+        <select value=${count} onChange=${(e) => setAddCount(Number(e.target.value))}>
+          ${missing.map((n) => html`<option value=${n}>${countLabel(n).toLowerCase()}</option>`)}
+        </select></label>
+      <label class="inline-field"><span>à partir de</span>
+        <select value=${preset} onChange=${(e) => setPreset(e.target.value)}>
+          ${variants.length > 0 && html`<option value="copie">la disposition la plus proche</option>`}
+          ${Object.entries(PRESETS).map(([k, p]) => html`<option value=${k}>${p.label}</option>`)}
+        </select></label>
+      <button type="button" class=${variants.length ? "ghost small" : "small"} onClick=${addVariant}>Ajouter</button>
+    </div>`}
 
-  return html`<section class="card stack">
-    <div class="row full">
-      <h2 class="grow">Dispositions de l'overlay</h2>
-      ${dirty && html`<span class="badge warn">Modifications non enregistrées</span>`}
-    </div>
-    <p>Placez vous-même les écrans des joueurs, les messages de la partie, la progression et des textes
-      (titre…). Chaque disposition a son propre lien, à mettre dans OBS à la place du lien en grille ; les overlays
-      ouverts changent dès l'enregistrement.</p>
-
-    <div class="fields full">
-      ${draft.length > 0 && html`<${Field} label="Disposition">
-        <select value=${layout.id} onChange=${(e) => { setCurrentId(e.target.value); setSelected(null); }}>
-          ${draft.map((l) => html`<option value=${l.id}>${l.name}</option>`)}
-        </select></${Field}>`}
-      <${Field} label="Modèle de départ">
-        <${Choice} value=${preset} choices=${PRESETS} onChange=${setPreset} /></${Field}>
-    </div>
-    <div class="row">
-      <button type="button" class=${draft.length ? "ghost" : ""} disabled=${draft.length >= LAYOUT_LIMITS.layouts} onClick=${create}>
-        Nouvelle disposition</button>
-      ${layout && html`<button type="button" class="ghost" onClick=${applyPreset}>Appliquer le modèle à celle-ci</button>`}
-    </div>
-
-    ${layout && html`
-      <div class="fields full">
-        <${Field} label="Nom de la disposition">
-          <input type="text" maxLength=${LAYOUT_LIMITS.name} value=${layout.name}
-            onInput=${(e) => edit((l) => ({ ...l, name: e.target.value }))} /></${Field}>
-      </div>
+    ${variant && html`
       <div class="row">
         <span class="hint">Ajouter :</span>
-        ${Object.entries(ITEM_TYPES).map(([type, t]) => html`<button type="button" class="ghost small" disabled=${full}
-          onClick=${() => add(type)}>+ ${t.label}</button>`)}
+        <button type="button" class="ghost small" disabled=${full} onClick=${() => add("screens")}>+ Zone d'écrans</button>
+        <button type="button" class="ghost small" disabled=${full} onClick=${() => add("screen", { source: "vedette" })}>+ Écran en vedette</button>
+        <button type="button" class="ghost small" disabled=${full} onClick=${() => add("screen")}>+ Écran</button>
+        <button type="button" class="ghost small" disabled=${full} onClick=${() => add("feed")}>+ Messages</button>
+        <button type="button" class="ghost small" disabled=${full} onClick=${() => add("progress")}>+ Progression</button>
+        <button type="button" class="ghost small" disabled=${full} onClick=${() => add("text")}>+ Texte</button>
       </div>
-      <${Canvas} layout=${layout} players=${players} selected=${selected} onSelect=${setSelected} onChange=${change} onRemove=${remove} />
-      <p class="hint">Glissez un élément pour le déplacer, son coin bas droit pour le redimensionner (Maj : format d'un écran).
-        Au clavier : Tab pour choisir, flèches pour déplacer (Maj : plus vite), Alt + flèches pour redimensionner, Suppr pour retirer.
-        Un écran sans joueur qui partage reste vide (transparent) dans l'overlay.</p>
+      <${Canvas} layout=${variant} players=${players} selected=${selected} onSelect=${setSelected} onChange=${change} onRemove=${remove} />
+      ${warning && html`<div class="notice warn full" role="status">${warning}</div>`}
+      <p class="hint">Glissez un élément pour le déplacer, son coin bas droit pour le redimensionner.</p>
+      <details class="more">
+        <summary>Raccourcis</summary>
+        <p class="hint">Maj en redimensionnant : format d'un écran. Au clavier : Tab pour choisir, flèches pour déplacer
+          (Maj : plus vite), Alt + flèches pour redimensionner, Suppr pour retirer. Un écran sans joueur qui partage reste
+          transparent dans l'overlay.</p>
+      </details>
       ${item
-        ? html`<${ItemSettings} item=${item} layout=${layout} players=${players} onChange=${change} onRemove=${remove}
+        ? html`<${ItemSettings} item=${item} layout=${variant} players=${players} onChange=${change} onRemove=${remove}
             onDuplicate=${duplicate} onOrder=${order} full=${full} />`
-        : html`<p class="hint">Choisissez un élément pour le régler.</p>`}`}
-
-    ${action.error && html`<div class="notice error full">${action.error}</div>`}
-    <div class="row">
-      <button type="button" disabled=${!dirty || action.busy} onClick=${save}>${action.busy ? "Enregistrement…" : "Enregistrer"}</button>
-      ${dirty && html`<button type="button" class="ghost" disabled=${action.busy} onClick=${cancel}>Annuler les modifications</button>`}
-      ${layout && html`<button type="button" class="link danger-link" onClick=${removeLayout}>Supprimer cette disposition</button>`}
-    </div>
-    ${layout && (link
-      ? html`<div class="row">
-          ${links.length > 1 && html`<label class="inline-field"><span>Avec le lien</span>
-            <select value=${access.id} onChange=${(e) => setLinkId(e.target.value)}>
-              ${links.map((l) => html`<option value=${l.id}>${l.name}</option>`)}
-            </select></label>`}
-          <${CopyButton} text=${link} label="Copier le lien de cette disposition" className="small" />
-          <a class="button ghost small" href=${link} target="_blank" rel="noopener">Ouvrir</a>
-        </div>`
-      : html`<p class="hint">${!access
-        ? "Créez d'abord un lien d'overlay (ci-dessus) pour obtenir le lien de cette disposition."
-        : "Enregistrez la disposition pour obtenir son lien."}</p>`)}
-  </section>`;
+        : html`<p class="hint">Choisissez un élément pour le régler.</p>`}
+      <button type="button" class="link danger-link" onClick=${removeVariant}>Supprimer la disposition pour ${countLabel(variant.count).toLowerCase()}</button>`}
+  </div>`;
 }

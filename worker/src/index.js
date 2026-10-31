@@ -9,10 +9,10 @@
 // et renvoie ses résultats avec le secret partagé GENERATOR_SECRET (en-tête X-Generator-Secret) ;
 // les fichiers produits sont gardés dans le stockage KV (binding FILES).
 //
-// Écrans des joueurs (overlay OBS) : le Durable Object ScreenRoom (binding SCREENS), un par room, met en
+// Écrans des joueurs (overlay de stream) : le Durable Object ScreenRoom (binding SCREENS), un par room, met en
 // relation par WebSocket les joueurs qui partagent la fenêtre de leur jeu et les overlays ouverts avec l'un des
-// liens créés par l'hôte (table overlay_links). Il ne fait que relayer les messages WebRTC : les images vont
-// directement d'un navigateur à l'autre.
+// liens créés par l'hôte ou par un joueur (table overlay_links). Il ne fait que relayer les messages WebRTC :
+// les images vont directement d'un navigateur à l'autre.
 import { DurableObject } from "cloudflare:workers";
 
 const CODE_ALPHABET = "ABCDEFGHJKMNPQRSTUVWXYZ23456789"; // sans 0/O, 1/I/L
@@ -257,12 +257,34 @@ function publicRoom(room) {
   };
 }
 
+// Objectif d'un YAML (option goal ou proche), affiché dans la progression de l'overlay : sa valeur, ou, avec des
+// poids, celle qui en a le plus. Lecture simple des lignes, sans analyseur YAML : null si rien de lisible.
+const GOAL_KEYS = /^(goal|goals|goal_type|victory_condition|win_condition|completion_goal|ending|required_ending)$/i;
+const goalText = (value) => value.replace(/^['"]|['"]$/g, "").replace(/_/g, " ").trim().slice(0, 60) || null;
+
+function slotGoal(content) {
+  const lines = String(content || "").split(/\r?\n/);
+  for (let i = 0; i < lines.length; i++) {
+    const option = /^(\s+)([\w-]+)\s*:\s*([^#]*?)\s*(#.*)?$/.exec(lines[i]);
+    if (!option || !GOAL_KEYS.test(option[2])) continue;
+    if (option[3]) return goalText(option[3]);
+    let best = null;
+    for (let j = i + 1; j < lines.length; j++) {
+      const weight = /^(\s+)([^:#]+?)\s*:\s*([\d.]+)\s*(#.*)?$/.exec(lines[j]);
+      if (!weight || weight[1].length <= option[1].length) break;
+      if (Number(weight[3]) > 0 && (!best || Number(weight[3]) > best.weight)) best = { name: weight[2], weight: Number(weight[3]) };
+    }
+    return best ? goalText(best.name) : null;
+  }
+  return null;
+}
+
 async function getRoom(request, env, room) {
   const [admin, me, players, slots, wishes] = await Promise.all([
     isAdmin(request, room),
     currentPlayer(request, env, room),
     env.DB.prepare("SELECT id, pseudo, spoiler_access, created_at FROM players WHERE room_code = ? ORDER BY created_at").bind(room.code).all(),
-    env.DB.prepare("SELECT id, player_id, name, game, filename, issues, updated_at FROM slots WHERE room_code = ? ORDER BY created_at")
+    env.DB.prepare("SELECT id, player_id, name, game, filename, issues, content, updated_at FROM slots WHERE room_code = ? ORDER BY created_at")
       .bind(room.code).all(),
     env.DB.prepare("SELECT slot, items FROM wishlists WHERE room_code = ?").bind(room.code).all(),
   ]);
@@ -271,8 +293,12 @@ async function getRoom(request, env, room) {
     admin,
     online_generation: generatorConfigured(env),
     screens: !!env.SCREENS,
-    ...(admin ? { overlay_layouts: JSON.parse(room.overlay_layouts || "[]"), overlay_links: await overlayLinks(env, room) } : {}),
-    ...(me ? { shared_overlays: await sharedOverlays(env, room) } : {}),
+    // Espaces de partage d'écrans : visibles et copiables par l'hôte et tous les inscrits. Dispositions : entières
+    // pour l'hôte (éditeur), leur nom pour les joueurs (à choisir pour leur overlay).
+    ...(admin || me ? {
+      overlay_links: await overlayLinks(env, room),
+      overlay_layouts: JSON.parse(room.overlay_layouts || "[]").map((l) => (admin ? l : { id: l.id, name: l.name })),
+    } : {}),
     apworlds: await roomApworlds(env, room.code),
     me: me ? { id: me.id, pseudo: me.pseudo, spoiler_access: !!me.spoiler_access } : null,
     // Copie du spoiler (onglet « Avancement ») : pour l'hôte et les joueurs à qui il l'a ouvert.
@@ -281,7 +307,8 @@ async function getRoom(request, env, room) {
     players: players.results.map(({ spoiler_access, ...p }) => ({
       ...p,
       ...(admin ? { spoiler_access: !!spoiler_access } : {}),
-      slots: slots.results.filter((s) => s.player_id === p.id).map(({ player_id, issues: list, ...s }) => ({ ...s, issues: JSON.parse(list) })),
+      slots: slots.results.filter((s) => s.player_id === p.id)
+        .map(({ player_id, issues: list, content, ...s }) => ({ ...s, issues: JSON.parse(list), goal: slotGoal(content) })),
     })),
   });
 }
@@ -380,12 +407,15 @@ async function removePlayer(request, env, room, playerId) {
   if (!room.direct) requireOpen(room); // retirer un joueur retire aussi ses YAML et ses apworlds
   const apworlds = (await roomApworlds(env, room.code)).filter((a) => a.player_id === playerId);
   await Promise.all(apworlds.map((a) => deleteApworldFiles(env, room.code, a.file)));
+  const links = (await overlayLinks(env, room)).filter((l) => l.player_id === playerId);
   await env.DB.batch([
+    env.DB.prepare("DELETE FROM overlay_links WHERE room_code = ? AND player_id = ?").bind(room.code, playerId),
     env.DB.prepare("DELETE FROM room_apworlds WHERE room_code = ? AND player_id = ?").bind(room.code, playerId),
     env.DB.prepare("DELETE FROM slots WHERE room_code = ? AND player_id = ?").bind(room.code, playerId),
     env.DB.prepare("DELETE FROM players WHERE room_code = ? AND id = ?").bind(room.code, playerId),
     touch(env, room),
   ]);
+  await closeOverlays(env, room, links.map((l) => l.id));
   return json({ ok: true });
 }
 
@@ -854,60 +884,74 @@ function screensSocket(request, env, room) {
   return screens(env, room).fetch(forward);
 }
 
-// Liens de l'overlay (table overlay_links) : chacun a sa clé, et le supprimer ne coupe que les overlays ouverts
-// avec lui. Ils restent dans la liste pour être recopiés plus tard, depuis n'importe quel appareil de l'hôte.
-const OVERLAY_LINKS = { count: 10, name: 40 };
+// Espaces de partage d'écrans (table overlay_links) : chacun a sa clé, son lien d'overlay pour la source
+// « Navigateur » d'un logiciel de stream, et le supprimer ne coupe que les overlays ouverts avec lui. L'hôte et
+// chaque joueur en créent (`player_id`, NULL pour l'hôte) ; la liste est visible et copiable par tous les inscrits.
+// `count` : espaces de l'hôte ; `perPlayer` : espaces de chaque joueur.
+const OVERLAY_LINKS = { count: 10, perPlayer: 3, name: 40 };
 
+// Tous les espaces de la room, avec le pseudo de leur créateur (`by`, null pour l'hôte).
 const overlayLinks = async (env, room) => (await env.DB.prepare(
-  "SELECT id, name, key, shared, created_at FROM overlay_links WHERE room_code = ? ORDER BY created_at",
-).bind(room.code).all()).results.map((l) => ({ ...l, shared: !!l.shared }));
+  `SELECT l.id, l.name, l.key, l.created_at, l.player_id, l.config, l.featured, p.pseudo AS by FROM overlay_links l
+   LEFT JOIN players p ON p.id = l.player_id WHERE l.room_code = ? ORDER BY l.created_at`,
+).bind(room.code).all()).results.map((l) => ({ ...l, config: JSON.parse(l.config || "null") }));
 
-// Pour les joueurs de la room : les liens que l'hôte leur a rendus visibles, et le nom des dispositions,
-// pour qu'ils copient eux-mêmes l'adresse à mettre dans OBS.
-async function sharedOverlays(env, room) {
-  const links = (await overlayLinks(env, room)).filter((l) => l.shared).map(({ id, name, key }) => ({ id, name, key }));
-  if (!links.length) return null;
-  const layouts = JSON.parse(room.overlay_layouts || "[]").map(({ id, name }) => ({ id, name }));
-  return { links, layouts };
+// Créateur d'un nouvel espace : l'hôte (null) ou le joueur.
+async function overlayOwner(request, env, room) {
+  if (await isAdmin(request, room)) return null;
+  return (await requirePlayer(request, env, room)).id;
 }
 
 // `key` : ancienne clé unique, gardée par le navigateur de l'hôte (rooms.overlay_hash) ; elle rejoint la liste
-// telle quelle, pour que les sources OBS qui l'utilisent continuent de marcher.
+// telle quelle, pour que les sources qui l'utilisent continuent de marcher.
 async function createOverlayLink(request, env, room) {
-  await requireAdmin(request, room);
+  const owner = await overlayOwner(request, env, room);
   if (!env.SCREENS) throw new HttpError(501, "Le partage des écrans n'est pas configuré sur ce serveur.");
   const body = await readJson(request);
-  const { count } = await env.DB.prepare("SELECT COUNT(*) AS count FROM overlay_links WHERE room_code = ?").bind(room.code).first();
-  if (count >= OVERLAY_LINKS.count) throw new HttpError(409, `${OVERLAY_LINKS.count} liens d'overlay au maximum : supprimez-en un.`);
-  const name = text(body.name, "nom du lien", OVERLAY_LINKS.name, { required: false }) || `Lien ${count + 1}`;
-  const legacy = typeof body.key === "string" && !!room.overlay_hash && (await sha256(body.key)) === room.overlay_hash;
+  const all = await overlayLinks(env, room);
+  const count = all.filter((l) => l.player_id === owner).length;
+  const max = owner ? OVERLAY_LINKS.perPlayer : OVERLAY_LINKS.count;
+  if (count >= max) throw new HttpError(409, `${max} espaces au maximum : supprimez-en un.`);
+  const name = text(body.name, "nom de l'espace", OVERLAY_LINKS.name, { required: false }) || `Espace ${all.length + 1}`;
+  const legacy = !owner && typeof body.key === "string" && !!room.overlay_hash && (await sha256(body.key)) === room.overlay_hash;
   if (body.key != null && !legacy) throw new HttpError(409, "Cet ancien lien n'est plus valable.");
   await env.DB.batch([
-    env.DB.prepare("INSERT INTO overlay_links (id, room_code, name, key, created_at) VALUES (?, ?, ?, ?, ?)")
-      .bind(newId(), room.code, name, legacy ? body.key : newToken(), Date.now()),
+    env.DB.prepare("INSERT INTO overlay_links (id, room_code, name, key, created_at, player_id) VALUES (?, ?, ?, ?, ?, ?)")
+      .bind(newId(), room.code, name, legacy ? body.key : newToken(), Date.now(), owner),
     ...(legacy ? [env.DB.prepare("UPDATE rooms SET overlay_hash = NULL WHERE code = ?").bind(room.code)] : []),
   ]);
   return json({ links: await overlayLinks(env, room) }, 201);
 }
 
-// Nom du lien et `shared` : visible ou non par les joueurs de la room.
+// Espace que la requête peut renommer ou supprimer : l'hôte, tous ; un joueur, les siens.
+async function ownedLink(request, env, room, linkId) {
+  const link = await env.DB.prepare("SELECT name, player_id FROM overlay_links WHERE room_code = ? AND id = ?").bind(room.code, linkId).first();
+  if (!link) throw new HttpError(404, "Cet espace n'existe plus.");
+  if (!(await isAdmin(request, room)) && (await requirePlayer(request, env, room)).id !== link.player_id) {
+    throw new HttpError(403, "Seuls son créateur et l'hôte peuvent modifier cet espace.");
+  }
+  return link;
+}
+
 async function updateOverlayLink(request, env, room, linkId) {
-  await requireAdmin(request, room);
+  const link = await ownedLink(request, env, room, linkId);
   const body = await readJson(request);
-  const link = await env.DB.prepare("SELECT name, shared FROM overlay_links WHERE room_code = ? AND id = ?").bind(room.code, linkId).first();
-  if (!link) throw new HttpError(404, "Ce lien n'existe plus.");
-  const name = "name" in body ? text(body.name, "nom du lien", OVERLAY_LINKS.name) : link.name;
-  const shared = "shared" in body ? (body.shared ? 1 : 0) : link.shared;
-  await env.DB.prepare("UPDATE overlay_links SET name = ?, shared = ? WHERE room_code = ? AND id = ?").bind(name, shared, room.code, linkId).run();
+  const name = "name" in body ? text(body.name, "nom de l'espace", OVERLAY_LINKS.name) : link.name;
+  await env.DB.prepare("UPDATE overlay_links SET name = ? WHERE room_code = ? AND id = ?").bind(name, room.code, linkId).run();
   return json({ links: await overlayLinks(env, room) });
 }
 
-// Les overlays ouverts avec ce lien sont fermés tout de suite.
+// Les overlays ouverts avec cet espace sont fermés tout de suite.
 async function deleteOverlayLink(request, env, room, linkId) {
-  await requireAdmin(request, room);
+  await ownedLink(request, env, room, linkId);
   await env.DB.prepare("DELETE FROM overlay_links WHERE room_code = ? AND id = ?").bind(room.code, linkId).run();
-  if (env.SCREENS) await screens(env, room).fetch(`https://screens/overlays?link=${encodeURIComponent(linkId)}`, { method: "DELETE" });
+  await closeOverlays(env, room, [linkId]);
   return json({ links: await overlayLinks(env, room) });
+}
+
+async function closeOverlays(env, room, linkIds) {
+  if (!env.SCREENS) return;
+  await Promise.all(linkIds.map((id) => screens(env, room).fetch(`https://screens/overlays?link=${encodeURIComponent(id)}`, { method: "DELETE" })));
 }
 
 // Dispositions de l'overlay (éditeur de l'hôte, voir site/js/overlay-layout.js) : positions en pourcentage
@@ -943,11 +987,14 @@ function layoutItem(item) {
     result.max = Math.min(12, Math.round(percent(item.max ?? 6, 1)));
     result.label = item.label !== false;
   } else if (type === "screen") {
-    result.source = item.source == null || item.source === "auto" ? "auto" : layoutId(item.source);
+    // auto : dans l'ordre des partages ; vedette : l'écran mis en avant (en direct ou en roulement) ; sinon un joueur.
+    result.source = item.source == null || item.source === "auto" ? "auto" : item.source === "vedette" ? "vedette" : layoutId(item.source);
     result.slot = Math.round(percent(item.slot ?? 1, 1));
     result.label = item.label !== false;
   } else if (type === "feed") {
     result.objets = choice(item.objets, ["tous", "importants"], "tous");
+  } else if (type === "progress") {
+    result.goal = !!item.goal;
   } else if (type === "text") {
     result.text = text(item.text, "texte", LAYOUT_LIMITS.text, { required: false });
     result.align = choice(item.align, ["left", "center", "right"], "center");
@@ -970,6 +1017,81 @@ function overlayLayouts(value) {
   return saved;
 }
 
+// --- Réglages de l'overlay d'un espace ---------------------------------------------------
+// mode « auto » : écrans en grille ou un écran en vedette, messages et progression placés d'office ; mode
+// « manuel » : une disposition par nombre d'écrans affichés (0 à 6), l'overlay change quand un écran arrive ou
+// part. `joueurs` : joueurs montrés (vide : tous ceux qui partagent) ; `rotation` : secondes entre deux écrans en
+// vedette (0 : seulement à la main). Deux écrans ne se recouvrent jamais.
+const SPACE_COUNTS = [0, 1, 2, 3, 4, 5, 6];
+const SPACE_ROTATIONS = [0, 15, 30, 60, 120];
+const SCREEN_ITEMS = ["screen", "screens"];
+
+const crosses = (a, b) => a.x < b.x + b.w - 0.01 && b.x < a.x + a.w - 0.01 && a.y < b.y + b.h - 0.01 && b.y < a.y + a.h - 0.01;
+
+function spaceConfig(value) {
+  const v = value && typeof value === "object" ? value : {};
+  if (v.joueurs != null && !Array.isArray(v.joueurs)) throw new HttpError(400, "Joueurs invalides.");
+  if (v.variants != null && (!Array.isArray(v.variants) || v.variants.length > SPACE_COUNTS.length)) {
+    throw new HttpError(400, "Dispositions invalides.");
+  }
+  const counts = new Set();
+  const variants = (v.variants || []).map((variant) => {
+    const count = Number(variant?.count);
+    if (!SPACE_COUNTS.includes(count) || counts.has(count)) throw new HttpError(400, "Nombre d'écrans invalide dans une disposition.");
+    counts.add(count);
+    if (!Array.isArray(variant.items) || variant.items.length > LAYOUT_LIMITS.items) {
+      throw new HttpError(400, `${LAYOUT_LIMITS.items} éléments au maximum par disposition.`);
+    }
+    const items = variant.items.map(layoutItem);
+    const screens = items.filter((i) => SCREEN_ITEMS.includes(i.type));
+    if (screens.some((a, i) => screens.slice(i + 1).some((b) => crosses(a, b)))) {
+      throw new HttpError(400, "Deux écrans se recouvrent dans une disposition.");
+    }
+    return { count, items };
+  }).sort((a, b) => a.count - b.count);
+  const config = {
+    mode: choice(v.mode, ["auto", "manuel"], "auto"),
+    ecrans: choice(v.ecrans, ["grille", "vedette", "aucun"], "grille"),
+    joueurs: [...new Set((v.joueurs || []).slice(0, LIMITS.playersPerRoom).map(layoutId))],
+    messages: choice(v.messages, ["droite", "bas", "non"], "droite"),
+    objets: choice(v.objets, ["tous", "importants"], "tous"),
+    progression: choice(v.progression, ["non", "oui", "goal"], "non"),
+    rotation: SPACE_ROTATIONS.includes(Number(v.rotation)) ? Number(v.rotation) : 0,
+    variants,
+  };
+  const saved = JSON.stringify(config);
+  if (saved.length > LAYOUT_LIMITS.size) throw new HttpError(413, "Réglages trop grands.");
+  return saved;
+}
+
+// Les overlays ouverts avec cet espace suivent tout de suite ses réglages et son écran en vedette.
+async function pushSpace(env, room, linkId) {
+  if (!env.SCREENS) return;
+  const row = await env.DB.prepare("SELECT config, featured FROM overlay_links WHERE room_code = ? AND id = ?").bind(room.code, linkId).first();
+  if (!row) return;
+  await screens(env, room).fetch(`https://screens/space?link=${encodeURIComponent(linkId)}`, {
+    method: "POST", body: JSON.stringify({ config: JSON.parse(row.config || "null"), featured: row.featured || null }),
+  });
+}
+
+async function saveSpaceConfig(request, env, room, linkId) {
+  await ownedLink(request, env, room, linkId);
+  const saved = spaceConfig((await readJson(request)).config);
+  await env.DB.prepare("UPDATE overlay_links SET config = ? WHERE room_code = ? AND id = ?").bind(saved, room.code, linkId).run();
+  await pushSpace(env, room, linkId);
+  return json({ links: await overlayLinks(env, room) });
+}
+
+// `player` : joueur mis en vedette, ou null pour revenir au premier qui partage (ou au roulement).
+async function setFeatured(request, env, room, linkId) {
+  await ownedLink(request, env, room, linkId);
+  const { player } = await readJson(request);
+  const featured = player == null ? null : layoutId(player);
+  await env.DB.prepare("UPDATE overlay_links SET featured = ? WHERE room_code = ? AND id = ?").bind(featured, room.code, linkId).run();
+  await pushSpace(env, room, linkId);
+  return json({ links: await overlayLinks(env, room) });
+}
+
 // Les overlays ouverts reçoivent tout de suite les nouvelles dispositions.
 async function saveLayouts(request, env, room) {
   await requireAdmin(request, room);
@@ -988,7 +1110,8 @@ const sendTo = (ws, message) => {
 //                      puis { type: "signal", to, data } (relayé à un joueur s'il vient d'un overlay, et inversement).
 //   service → client : { type: "welcome", id }, { type: "error", message } (puis fermeture),
 //                      { type: "signal", from, data }, { type: "left", id } (aux joueurs : un overlay est parti),
-//                      { type: "streams", list: [{ id, player, label, games }] } (aux overlays : joueurs qui partagent).
+//                      { type: "streams", list: [{ id, player, label, games }] } (aux overlays : joueurs qui partagent),
+//                      { type: "space", space: { config, featured } } (aux overlays d'un espace : ses réglages ont changé).
 // Un joueur connecté est un joueur qui partage son écran : arrêter le partage ferme la connexion.
 export class ScreenRoom extends DurableObject {
   constructor(ctx, env) {
@@ -1000,8 +1123,14 @@ export class ScreenRoom extends DurableObject {
     if (request.method === "DELETE") {
       const link = new URL(request.url).searchParams.get("link");
       for (const ws of this.sockets("overlay")) {
-        if (ws.deserializeAttachment().link === link) this.refuse(ws, "Ce lien d'overlay a été supprimé par l'hôte : copiez-en un autre depuis la room.");
+        if (ws.deserializeAttachment().link === link) this.refuse(ws, "Ce lien d'overlay a été supprimé : copiez-en un autre depuis la room (onglet « Écrans »).");
       }
+      return new Response(null, { status: 204 });
+    }
+    if (request.method === "POST" && new URL(request.url).pathname === "/space") {
+      const link = new URL(request.url).searchParams.get("link");
+      const space = JSON.parse(await request.text());
+      for (const ws of this.sockets("overlay")) if (ws.deserializeAttachment().link === link) sendTo(ws, { type: "space", space });
       return new Response(null, { status: 204 });
     }
     if (request.method === "POST") {
@@ -1069,7 +1198,7 @@ export class ScreenRoom extends DurableObject {
       if (msg.role === "overlay") {
         // Un lien de la liste, ou l'ancienne clé unique tant qu'elle n'y a pas été reprise.
         const link = typeof msg.key === "string"
-          ? await this.env.DB.prepare("SELECT id FROM overlay_links WHERE room_code = ? AND key = ?").bind(room.code, msg.key).first()
+          ? await this.env.DB.prepare("SELECT id, config, featured FROM overlay_links WHERE room_code = ? AND key = ?").bind(room.code, msg.key).first()
           : null;
         const legacy = !link && typeof msg.key === "string" && !!room.overlay_hash && (await sha256(msg.key)) === room.overlay_hash;
         if (!link && !legacy) {
@@ -1079,6 +1208,7 @@ export class ScreenRoom extends DurableObject {
           throw new HttpError(409, `Déjà ${SCREEN_LIMITS.overlays} overlays ouverts pour cette room : fermez-en un.`);
         }
         Object.assign(me, { role: "overlay", link: link?.id || "ancien" });
+        me.space = link ? { config: JSON.parse(link.config || "null"), featured: link.featured || null } : null;
       } else if (msg.role === "player") {
         const player = typeof msg.token === "string"
           ? await this.env.DB.prepare("SELECT id, pseudo FROM players WHERE room_code = ? AND token_hash = ?").bind(room.code, await sha256(msg.token)).first()
@@ -1093,9 +1223,10 @@ export class ScreenRoom extends DurableObject {
       } else {
         throw new HttpError(400, "Rôle inconnu.");
       }
-      ws.serializeAttachment(me);
+      const { space, ...attachment } = me;
+      ws.serializeAttachment(attachment);
       sendTo(ws, me.role === "overlay"
-        ? { type: "welcome", id: me.id, layouts: JSON.parse(room.overlay_layouts || "[]") }
+        ? { type: "welcome", id: me.id, layouts: JSON.parse(room.overlay_layouts || "[]"), space }
         : { type: "welcome", id: me.id });
       if (me.role === "overlay") this.publish(null, ws);
       else this.publish();
@@ -1229,8 +1360,10 @@ async function route(request, env) {
     if (!id && method === "GET") return screensSocket(request, env, room);
     const linkId = parts[5];
     if (id === "links" && !linkId && method === "POST") return createOverlayLink(request, env, room);
-    if (id === "links" && linkId && method === "PATCH") return updateOverlayLink(request, env, room, linkId);
-    if (id === "links" && linkId && method === "DELETE") return deleteOverlayLink(request, env, room, linkId);
+    if (id === "links" && linkId && !parts[6] && method === "PATCH") return updateOverlayLink(request, env, room, linkId);
+    if (id === "links" && linkId && parts[6] === "config" && method === "PUT") return saveSpaceConfig(request, env, room, linkId);
+    if (id === "links" && linkId && parts[6] === "featured" && method === "PUT") return setFeatured(request, env, room, linkId);
+    if (id === "links" && linkId && !parts[6] && method === "DELETE") return deleteOverlayLink(request, env, room, linkId);
     if (id === "layouts" && method === "PUT") return saveLayouts(request, env, room);
   } else if (sub === "generator") {
     await requireGenerator(request, env);

@@ -730,6 +730,20 @@ details.items-group > summary h3, details.items-group > summary h4 { display: in
   object-fit: contain;
 }
 .tips { margin: 0; padding-left: 1.2rem; display: grid; gap: .35rem; }
+/* Écrans : choix entre partager son jeu et streamer la partie */
+.room-panel > .segmented { justify-self: start; max-width: 100%; }
+.room-panel > .segmented button { padding: .55rem 1.1rem; font-size: 1rem; }
+/* Overlay d'un espace : réglages (désactivés pour qui ne peut pas les modifier) et écran en vedette en direct */
+.plain-fieldset { border: none; margin: 0; padding: 0; min-width: 0; }
+.plain-fieldset:disabled { opacity: .75; }
+button.player-check { background: var(--surface); color: var(--text); font-weight: 500; }
+button.player-check:hover:not(:disabled) { background: var(--surface-2); }
+button.player-check.on { background: var(--accent-soft); color: var(--text); font-weight: 700; }
+.space-layouts > .segmented { justify-self: start; max-width: 100%; flex-wrap: wrap; }
+/* Détails repliés sous l'essentiel (réglages fins, dépannage) */
+.more > summary { cursor: pointer; font-weight: 600; color: var(--accent); }
+.more[open] > summary { margin-bottom: .6rem; }
+.more > .fields + .hint { margin-top: .6rem; }
 
 /* Overlay OBS : fond transparent, écrans en grille. Couleurs fixes (pas de thème) : anthracite et blanc cassé,
    texte grand et contrasté pour rester lisible une fois le stream compressé. */
@@ -786,6 +800,8 @@ html.overlay-page body { background: transparent; overflow: hidden; }
 .progress-total { font-size: .8em; color: #c9ced6; }
 .progress-line { display: grid; grid-template-columns: minmax(0, 1fr) minmax(3em, 1.2fr) auto; align-items: center; gap: .6em; }
 .progress-line strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.progress-name { display: grid; min-width: 0; }
+.progress-goal { font-size: .7em; color: #c9ced6; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .progress-bar { height: .45em; border-radius: 99px; background: rgb(238 240 243 / 18%); overflow: hidden; }
 .progress-bar span { display: block; height: 100%; background: #7fb0ff; border-radius: inherit; }
 .progress-bar span.done { background: #7ad69a; }

@@ -1,5 +1,6 @@
-// Onglet « Écrans » de la room : chaque joueur partage la fenêtre de son jeu, et l'hôte crée le lien de
-// l'overlay OBS (grille automatique ou dispositions de l'éditeur, overlay-editor.js). L'overlay est dans overlay.js.
+// Onglet « Écrans » de la room : chaque joueur partage la fenêtre de son jeu, et chaque streamer (l'hôte ou un joueur)
+// crée ses liens d'overlay pour la source « Navigateur » de son logiciel de stream (grille automatique, ou dispositions
+// de l'éditeur de l'hôte, overlay-editor.js). L'overlay est dans overlay.js.
 //
 // Les images vont directement du navigateur du joueur à l'overlay (WebRTC). Le service des rooms ne fait que
 // les mettre en relation (screens-net.js) : le joueur envoie une offre à chaque overlay qui lui demande son flux,
@@ -8,8 +9,8 @@ import { html, useState, useEffect, useRef } from "../vendor/preact-htm.js";
 import { CopyButton, plural, useAction, useSetting } from "./ui.js";
 import { api, overlayLink, saveAccess, savedAccess } from "./rooms-api.js";
 import { ICE_SERVERS, serial, signaling } from "./screens-net.js";
-import { CONSOLE_PLACES, ITEM_FILTERS, MAX_SHOWN, overlayOptions } from "./overlay-layout.js";
-import { LayoutEditor } from "./overlay-editor.js";
+import { CONSOLE_PLACES, ITEM_FILTERS, PROGRESS_MODES, ROTATIONS, SCREEN_MODES, spaceOf, spaceUses } from "./overlay-layout.js";
+import { SpaceLayouts } from "./overlay-editor.js";
 
 // Qualité du partage, choisie par chaque joueur. `bitrate` : débit maximum envoyé à chaque overlay, en bit/s.
 // La connexion du joueur (envoi), son processeur (encodage) et la connexion du streamer (réception de tous les
@@ -101,13 +102,6 @@ function preferCodec(transceiver, mime) {
 }
 
 const MAX_VIEWERS = 3; // overlays auxquels un joueur envoie son image ; les suivants reçoivent « busy »
-
-// Adresse de l'overlay avec les réglages qui diffèrent de ceux par défaut.
-function overlayUrl(code, key, options) {
-  const defaults = overlayOptions();
-  const query = new URLSearchParams(Object.entries(options).filter(([k, v]) => v !== defaults[k]).map(([k, v]) => [k, String(v)]));
-  return overlayLink(code, key) + (query.size ? `?${query}` : "");
-}
 
 // --- Joueur : partage de la fenêtre du jeu ---------------------------------------------
 
@@ -361,8 +355,8 @@ function CameraHelp({ error, seen }) {
 }
 
 const SOURCES = {
-  window: { label: "Fenêtre ou écran" },
-  camera: { label: "Caméra virtuelle d'OBS" },
+  window: { label: "La fenêtre du jeu", text: "Le plus simple : choisissez la fenêtre du jeu ou de l'émulateur." },
+  camera: { label: "La caméra virtuelle d'OBS", text: "Si vous streamez déjà avec OBS, ou si le jeu est en plein écran." },
 };
 
 const decimal = (n) => n.toLocaleString("fr-FR", { maximumFractionDigits: 1 });
@@ -397,10 +391,14 @@ function SentInfo({ sent, quality }) {
     sent.lost != null && `pertes ${decimal(sent.lost * 100)} %`,
   ].filter(Boolean);
   const limit = limitText(sent, quality);
+  // Mesures repliées : seule une image réduite mérite d'être signalée d'emblée.
   return html`<div class="stack full">
-    <p class="hint" role="status">Envoyé à l'overlay : ${sent.width} × ${sent.height}${sent.fps ? `, ${Math.round(sent.fps)} images/s` : ""}${sent.bitrate != null ? `, ${decimal(sent.bitrate / 1e6)} Mb/s` : ""}${encoder ? `, encodé en ${encoder}` : ""}.</p>
-    ${network.length > 0 && html`<p class="hint">Réseau : ${network.join(" · ")}.</p>`}
     ${limit && html`<div class="notice warn full">${limit}</div>`}
+    <details class="more">
+      <summary>Ce qui part vers l'overlay</summary>
+      <p class="hint" role="status">${sent.width} × ${sent.height}${sent.fps ? `, ${Math.round(sent.fps)} images/s` : ""}${sent.bitrate != null ? `, ${decimal(sent.bitrate / 1e6)} Mb/s` : ""}${encoder ? `, encodé en ${encoder}` : ""}.</p>
+      ${network.length > 0 && html`<p class="hint">Réseau : ${network.join(" · ")}.</p>`}
+    </details>
   </div>`;
 }
 
@@ -520,80 +518,92 @@ function ShareScreen({ room }) {
   };
 
   const status = !view ? null
-    : view.state === "retrying" ? "Connexion au serveur perdue, nouvelle tentative…"
-    : view.state === "connecting" ? "Connexion au serveur des rooms…"
-    : view.viewers ? `Affiché sur ${plural(view.viewers, "overlay")} de stream.`
-    : "Votre jeu est prêt à être affiché : il apparaîtra dès que l'overlay de l'hôte sera ouvert.";
+    : view.state === "retrying" ? "Connexion perdue, nouvelle tentative…"
+    : view.state === "connecting" ? "Connexion…"
+    : view.viewers ? `Votre jeu est affiché dans le stream (${plural(view.viewers, "overlay")}). Gardez cette page ouverte.`
+    : "Prêt : votre jeu apparaîtra dès qu'un streamer ouvrira son overlay. Gardez cette page ouverte.";
   const camera = source === "camera";
   const startLabel = busy ? (camera ? "Ouverture de la caméra…" : "Choix de la fenêtre…")
-    : camera ? "Partager la caméra" : "Partager la fenêtre de mon jeu";
+    : camera ? "Partager la caméra d'OBS" : "Partager la fenêtre de mon jeu";
+  const qualityKey = qualityName in QUALITIES ? qualityName : DEFAULT_QUALITY;
+  const priorityKey = priorityName in PRIORITIES ? priorityName : DEFAULT_PRIORITY;
 
+  // L'essentiel d'abord (quoi partager, le bouton) ; qualité et dépannage repliés.
   return html`<section class="card stack">
     <div class="row full">
-      <h2 class="grow">Partager mon jeu</h2>
-      ${view && html`<span class="badge ok">● Partage en cours</span>`}
+      <h2 class="grow">Montrer mon jeu dans le stream</h2>
+      ${view && html`<span class="badge ok">● En partage</span>`}
     </div>
-    <p>L'hôte peut afficher votre jeu dans son stream (overlay OBS). Partagez la fenêtre du jeu ou de l'émulateur,
-      ou la caméra virtuelle d'OBS : l'image va directement à l'overlay, sans son, et n'est pas enregistrée par le site.</p>
-    ${!windowSupported && !cameraSupported && html`<div class="notice warn full">Ce navigateur ne permet pas de partager une fenêtre
-      ni une caméra. Ouvrez la room dans Chrome, Edge ou Firefox sur l'ordinateur où vous jouez.</div>`}
-    ${(windowSupported || cameraSupported) && html`<div class="fields full">
-      ${windowSupported && cameraSupported && html`<label><span>Image à partager</span>
-        <select value=${source} disabled=${busy} onChange=${(e) => pickSource(e.target.value)}>
-          ${Object.entries(SOURCES).map(([name, s]) => html`<option value=${name}>${s.label}</option>`)}
-        </select></label>`}
-      ${camera && cameras.length > 0 && html`<label><span>Caméra</span>
-        <select value=${cameras.some((c) => c.deviceId === cameraId) ? cameraId : ""} disabled=${busy} onChange=${(e) => pickCamera(e.target.value)}>
-          <option value="">Automatique (OBS en priorité)</option>
-          ${cameras.map((c) => html`<option value=${c.deviceId}>${c.label}</option>`)}
-        </select></label>`}
-      <label><span>Qualité de l'image</span>
-        <select value=${qualityName in QUALITIES ? qualityName : DEFAULT_QUALITY} onChange=${(e) => choose(e.target.value, priorityName)}>
-          ${Object.entries(QUALITIES).map(([name, q]) => html`<option value=${name}>${q.label} (${q.detail})</option>`)}
-        </select></label>
-      <label><span>Si le débit manque, garder</span>
-        <select value=${priorityName in PRIORITIES ? priorityName : DEFAULT_PRIORITY} onChange=${(e) => choose(qualityName, e.target.value)}>
-          ${Object.entries(PRIORITIES).map(([name, p]) => html`<option value=${name}>${p.label}</option>`)}
-        </select>
-        <span class="hint">${priority.detail}</span></label>
-    </div>
+    <p>Votre image (sans le son) va directement aux overlays des streamers de la room. Le site ne l'enregistre pas.</p>
+    ${!windowSupported && !cameraSupported && html`<div class="notice warn full">Ce navigateur ne peut pas partager d'image :
+      ouvrez la room dans Chrome, Edge ou Firefox, sur l'ordinateur où vous jouez.</div>`}
+    ${(windowSupported || cameraSupported) && html`
+    ${windowSupported && cameraSupported && html`<fieldset class="start-choice full">
+      <legend class="sr-only">Image à partager</legend>
+      ${Object.entries(SOURCES).map(([name, s]) => html`<label class=${`start-option ${source === name ? "selected" : ""}`}>
+        <input type="radio" name="screen-source" value=${name} checked=${source === name} disabled=${busy} onChange=${() => pickSource(name)} />
+        <span><strong>${s.label}</strong><span class="hint">${s.text}</span></span>
+      </label>`)}
+    </fieldset>`}
     ${camera && html`<ol class="steps">
-      <li>Dans OBS, ajoutez une source <strong>Capture de jeu</strong> (elle voit aussi les jeux en plein écran) et cadrez-la
-        dans la scène. La caméra virtuelle reprend la scène d'OBS, à sa définition et à ses images par seconde
-        (Paramètres → Vidéo).</li>
-      <li>Cliquez sur <strong>Démarrer la caméra virtuelle</strong> (panneau Commandes, en bas à droite).</li>
-      <li>Ici, cliquez sur « Partager la caméra » et autorisez la caméra : celle d'OBS est choisie d'elle-même.</li>
+      <li>Dans OBS, mettez votre jeu dans la scène (source <strong>Capture de jeu</strong>).</li>
+      <li>Cliquez sur <strong>Démarrer la caméra virtuelle</strong> (en bas à droite d'OBS).</li>
+      <li>Ici, cliquez sur « Partager la caméra d'OBS » et autorisez la caméra.</li>
     </ol>`}
+    ${camera && cameras.length > 0 && html`<div class="fields full"><label><span>Caméra</span>
+      <select value=${cameras.some((c) => c.deviceId === cameraId) ? cameraId : ""} disabled=${busy} onChange=${(e) => pickCamera(e.target.value)}>
+        <option value="">Automatique (OBS en priorité)</option>
+        ${cameras.map((c) => html`<option value=${c.deviceId}>${c.label}</option>`)}
+      </select></label></div>`}
     <div class="row">
       ${view
         ? html`${!camera && html`<button type="button" class="ghost" disabled=${busy} onClick=${() => share()}>Changer de fenêtre</button>`}
           <button type="button" class="ghost" onClick=${stop}>Arrêter le partage</button>`
         : html`<button type="button" disabled=${busy} onClick=${() => share()}>${startLabel}</button>`}
     </div>`}
-    ${status && html`<p role="status">${status}</p>`}
-    <${SentInfo} sent=${sent} quality=${quality} />
-    ${view && html`<video class="screen-preview" ref=${preview} autoplay muted playsinline aria-label="Aperçu de votre partage"></video>`}
+    ${status && html`<p role="status"><strong>${status}</strong></p>`}
     ${error && (typeof error === "string" ? html`<div class="notice error full">${error}</div>` : error)}
-    <ul class="hint tips">
-      ${!camera && html`<li>Choisissez une <strong>fenêtre</strong> plutôt que l'écran entier : rien d'autre que le jeu ne sera visible.</li>
-        <li>Image noire ou figée ? Le jeu est en plein écran exclusif, que le navigateur ne voit pas. Passez-le en fenêtré
-          (certains jeux, comme Jak avec OpenGOAL, restent figés même sans bordure), ou partagez la caméra virtuelle d'OBS.</li>`}
-      <li>Jugez la qualité avec le jeu en mouvement : une image immobile n'envoie presque rien.</li>
-      <li>La qualité se change pendant le partage. Chaque overlay qui affiche votre jeu reçoit son propre envoi :
-        le débit choisi compte une fois par overlay. Le 1080p ne se voit que si l'overlay affiche peu d'écrans
-        (avec 4 écrans, chacun fait environ 960 × 540 dans un stream en 1080p).</li>
-      <li>Gardez cette page ouverte pendant la partie (les autres onglets de la room ne l'arrêtent pas).</li>
-    </ul>
+    ${view && html`<video class="screen-preview" ref=${preview} autoplay muted playsinline aria-label="Aperçu de votre partage"></video>`}
+    <${SentInfo} sent=${sent} quality=${quality} />
+    ${(windowSupported || cameraSupported) && html`<details class="more">
+      <summary>Qualité de l'image <span class="hint">(${QUALITIES[qualityKey].label}, ${PRIORITIES[priorityKey].label.toLowerCase()})</span></summary>
+      <div class="fields full">
+        <label><span>Qualité</span>
+          <select value=${qualityKey} onChange=${(e) => choose(e.target.value, priorityName)}>
+            ${Object.entries(QUALITIES).map(([name, q]) => html`<option value=${name}>${q.label} (${q.detail})</option>`)}
+          </select></label>
+        <label><span>Si la connexion ne suit pas, garder</span>
+          <select value=${priorityKey} onChange=${(e) => choose(qualityName, e.target.value)}>
+            ${Object.entries(PRIORITIES).map(([name, p]) => html`<option value=${name}>${p.label}</option>`)}
+          </select>
+          <span class="hint">${priority.detail}</span></label>
+      </div>
+      <p class="hint">Se change pendant le partage. Jugez avec le jeu en mouvement : une image immobile n'envoie presque rien.</p>
+    </details>
+    <details class="more">
+      <summary>Image noire, figée ou floue ?</summary>
+      <ul class="hint tips">
+        ${!camera && html`<li>Choisissez une <strong>fenêtre</strong> plutôt que l'écran entier : seul le jeu sera visible.</li>
+          <li>Image noire ou figée : le jeu est en plein écran exclusif. Passez-le en fenêtré, ou partagez la caméra d'OBS.</li>`}
+        <li>Image floue : avec plusieurs écrans dans le stream, chacun est petit ; le 1080p ne sert qu'avec peu d'écrans.</li>
+        <li>Les autres onglets de la room n'arrêtent pas le partage ; fermer cette page, si.</li>
+      </ul>
+    </details>`}
   </section>`;
 }
 
-// --- Hôte : liens de l'overlay ----------------------------------------------------------
+// --- Espaces de partage d'écrans ----------------------------------------------------------
+// Un espace = un lien d'overlay (`#/overlay/CODE/CLÉ`). L'hôte et chaque joueur en créent ; tous les inscrits voient
+// la liste et peuvent copier n'importe quel espace. Seuls son créateur et l'hôte le renomment ou le suppriment.
 
 const formatDay = (ms) => new Date(ms).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" });
 
-// Un lien de la liste : copier (avec les réglages de la grille), ouvrir, renommer, montrer aux joueurs, supprimer.
-function OverlayLinkRow({ room, link, url, action, onLinks }) {
+const canManage = (link, me, admin) => admin || (!!me && link.player_id === me.id);
+
+function SpaceRow({ room, link, manage, action, onLinks, onSettings }) {
   const [name, setName] = useState(null); // nom en cours de modification
+  // Les réglages de l'overlay sont gardés par le service : le lien est le même pour tous.
+  const url = overlayLink(room.code, link.key);
   const rename = (e) => {
     e.preventDefault();
     action.run(async () => {
@@ -601,21 +611,19 @@ function OverlayLinkRow({ room, link, url, action, onLinks }) {
       setName(null);
     });
   };
-  const share = (shared) => action.run(async () => onLinks((await api.updateOverlayLink(room.code, link.id, { shared })).links));
-  const remove = () => confirm(`Supprimer le lien « ${link.name} » ? Les sources OBS qui l'utilisent s'arrêteront.`)
+  const remove = () => confirm(`Supprimer l'espace « ${link.name} » ? Les overlays ouverts avec lui s'arrêteront.`)
     && action.run(async () => onLinks((await api.deleteOverlayLink(room.code, link.id)).links));
 
   return html`<li>
     ${name === null
-      ? html`<div class="grow"><strong>${link.name}</strong> <span class="hint">créé le ${formatDay(link.created_at)}</span></div>
-        <${CopyButton} text=${url} label="Copier" className="small" />
+      ? html`<div class="grow"><strong>${link.name}</strong>${" "}<span class="hint">par ${link.by || "l'hôte"} · ${formatDay(link.created_at)}</span></div>
+        <${CopyButton} text=${url} label="Copier le lien pour OBS" className="small" />
+        <button type="button" class="ghost small" onClick=${() => onSettings(link.id)}>Overlay</button>
         <a class="button ghost small" href=${url} target="_blank" rel="noopener">Ouvrir</a>
-        <button type="button" class="ghost small" disabled=${action.busy} onClick=${() => setName(link.name)}>Renommer</button>
-        <button type="button" class="ghost small" disabled=${action.busy} onClick=${remove}>Supprimer</button>
-        <label class="check link-shared"><input type="checkbox" checked=${link.shared} disabled=${action.busy}
-          onChange=${(e) => share(e.target.checked)} /> Visible par les joueurs de la room</label>`
+        ${manage && html`<button type="button" class="ghost small" disabled=${action.busy} onClick=${() => setName(link.name)}>Renommer</button>
+          <button type="button" class="ghost small" disabled=${action.busy} onClick=${remove}>Supprimer</button>`}`
       : html`<form class="row grow" onSubmit=${rename}>
-        <input type="text" class="grow" required maxLength="40" value=${name} aria-label="Nouveau nom du lien"
+        <input type="text" class="grow" required maxLength="40" value=${name} aria-label="Nouveau nom de l'espace"
           onInput=${(e) => setName(e.target.value)} />
         <button type="submit" class="small" disabled=${action.busy || !name.trim()}>Enregistrer</button>
         <button type="button" class="ghost small" onClick=${() => setName(null)}>Annuler</button>
@@ -623,28 +631,19 @@ function OverlayLinkRow({ room, link, url, action, onLinks }) {
   </li>`;
 }
 
-function OverlayPanel({ room, data, setData }) {
+// Liste commune des espaces. `onSettings(id)` : ouvre la vue « Overlay » de l'espace (aussi juste après sa création).
+function SpacesPanel({ room, data, setData, me, admin, onSettings }) {
   const action = useAction();
   const access = savedAccess(room.code);
   const links = data.overlay_links || [];
   const [name, setName] = useState("");
-  // Anciens réglages avec un nombre d'écrans fixe : la grille montre désormais tous ceux qui partagent.
-  const [options, setOptions] = useState(() => {
-    const saved = overlayOptions(access.overlayOptions);
-    return { ...saved, max: saved.max > 0 ? MAX_SHOWN : 0 };
-  });
-  const set = (key, value) => {
-    const next = { ...options, [key]: value };
-    setOptions(next);
-    saveAccess(room.code, { overlayOptions: next });
-  };
   const onLinks = (next) => setData((d) => ({ ...d, overlay_links: next, room: { ...d.room, overlay: false } }));
 
-  // Lien unique d'avant la liste, gardé par ce navigateur : il rejoint la liste, et les sources OBS qui
+  // Lien unique d'avant la liste, gardé par le navigateur de l'hôte : il rejoint la liste, et les sources qui
   // l'utilisent continuent de marcher.
   useEffect(() => {
     const old = access.overlay;
-    if (!old) return;
+    if (!admin || !old) return;
     if (links.some((l) => l.key === old)) { saveAccess(room.code, { overlay: null }); return; }
     if (!room.overlay) return;
     api.createOverlayLink(room.code, { name: "Lien d'origine", key: old })
@@ -656,92 +655,164 @@ function OverlayPanel({ room, data, setData }) {
   const create = (e) => {
     e.preventDefault();
     action.run(async () => {
-      onLinks((await api.createOverlayLink(room.code, { name })).links);
+      const next = (await api.createOverlayLink(room.code, { name })).links;
+      onLinks(next);
       setName("");
+      const added = next.find((l) => !links.some((o) => o.id === l.id));
+      if (added) onSettings(added.id);
     });
   };
 
   return html`<section class="card stack">
-    <h2>Overlay pour OBS</h2>
-    <p>Une page à ajouter dans OBS : elle affiche en grille le jeu des joueurs qui le partagent (onglet « Écrans »
-      de la room), et à côté les messages de la partie (objets envoyés, objectifs atteints…). Pour placer vous-même
-      chaque élément, créez une disposition plus bas : elle s'ouvre avec les mêmes liens.</p>
-
-    <h3>Liens</h3>
-    <p class="hint">Chaque lien donne accès à l'overlay : un par streamer ou par ordinateur, par exemple. Ils restent ici,
-      à recopier quand vous voulez, depuis tout appareil où vous êtes hôte. Le lien lui-même n'est jamais affiché, pour ne pas
-      apparaître dans votre stream ; supprimer un lien coupe les sources OBS qui l'utilisent. Un lien « visible par les joueurs »
-      apparaît dans leur onglet « Écrans » : un co-streamer le copie lui-même dans son OBS (il donne accès à tous les écrans partagés).</p>
-    ${links.length > 0 && html`<ul class="link-list full">${links.map((link) => html`<${OverlayLinkRow} key=${link.id}
-      room=${room} link=${link} url=${overlayUrl(room.code, link.key, options)} action=${action} onLinks=${onLinks} />`)}</ul>`}
+    <h2>Espaces de partage</h2>
+    <p>Un espace réunit les jeux partagés et les infos de la partie, pour un stream. Tous les joueurs voient cette liste
+      et peuvent copier n'importe quel espace.</p>
+    ${links.length > 0
+      ? html`<ul class="link-list full">${links.map((link) => html`<${SpaceRow} key=${link.id} room=${room} link=${link}
+          manage=${canManage(link, me, admin)} action=${action} onLinks=${onLinks} onSettings=${onSettings} />`)}</ul>`
+      : html`<p class="hint">Aucun espace pour l'instant.</p>`}
     <form class="row full" onSubmit=${create}>
-      <input type="text" class="grow" maxLength="40" value=${name} placeholder=${`Nom du lien (ex. OBS de ${data.me?.pseudo || "l'hôte"})`}
-        aria-label="Nom du nouveau lien" onInput=${(e) => setName(e.target.value)} />
-      <button type="submit" class=${links.length ? "ghost" : ""} disabled=${action.busy}>${links.length ? "Créer un autre lien" : "Créer un lien"}</button>
+      <input type="text" class="grow" maxLength="40" value=${name} placeholder=${`Nom de l'espace (ex. Stream de ${me?.pseudo || "l'hôte"})`}
+        aria-label="Nom du nouvel espace" onInput=${(e) => setName(e.target.value)} />
+      <button type="submit" class=${links.length ? "ghost" : ""} disabled=${action.busy}>Créer un espace</button>
     </form>
+    <p class="hint">« Copier le lien pour OBS », puis dans OBS : <strong>Sources → + → Navigateur</strong>, collez-le, taille
+      1920 × 1080. Marche aussi avec Streamlabs, XSplit… Ne montrez jamais le lien à l'écran.</p>
     ${action.error && html`<div class="notice error full">${action.error}</div>`}
-
-    <h3>Grille automatique</h3>
-    <p class="hint">Réglages compris dans les liens copiés ci-dessus : après un changement, recopiez le lien dans OBS.</p>
-    <div class="fields full">
-      <label><span>Écrans</span>
-        <select value=${options.max} onChange=${(e) => set("max", Number(e.target.value))}>
-          <option value=${MAX_SHOWN}>Tous ceux qui partagent (${MAX_SHOWN} au plus)</option>
-          <option value="0">Aucun (messages seulement)</option>
-        </select></label>
-      ${options.max > 0 && html`<label><span>Messages de la partie</span>
-        <select value=${options.console} onChange=${(e) => set("console", e.target.value)}>
-          ${Object.entries(CONSOLE_PLACES).map(([value, label]) => html`<option value=${value}>${label}</option>`)}
-        </select></label>`}
-      ${(options.max === 0 || options.console !== "non") && html`<label class="span-all"><span>Objets montrés</span>
-        <select value=${options.objets} onChange=${(e) => set("objets", e.target.value)}>
-          ${Object.entries(ITEM_FILTERS).map(([value, label]) => html`<option value=${value}>${label}</option>`)}
-        </select></label>`}
-    </div>
-    <ol class="steps">
-      <li>Dans OBS : <strong>Sources → + → Navigateur</strong>, collez le lien, avec une largeur de 1920 et une hauteur de 1080
-        (ou la taille de la zone de votre scène réservée aux écrans).</li>
-      <li>Les écrans se placent seuls en grille, aussi grands que possible, dans l'ordre où les joueurs ont commencé à
-        partager : un seul prend toute la place, et la grille se redécoupe à chaque partage qui commence ou s'arrête.</li>
-      <li>Pour placer les messages ailleurs dans la scène, ajoutez une deuxième source avec « Écrans : aucun ».</li>
-      <li>Les messages arrivent une fois la partie en ligne : l'overlay s'y connecte comme client texte du premier joueur,
-        qui apparaît donc connecté une fois de plus.</li>
-      <li>Chaque joueur envoie son image à chaque overlay qui affiche son écran : ${MAX_VIEWERS} au maximum.</li>
-    </ol>
   </section>`;
 }
 
-// --- Joueur : overlays rendus visibles par l'hôte ------------------------------------------
+// --- Overlay d'un espace : ce qu'il montre, et l'écran en vedette en direct -------------------------
 
-// Un co-streamer copie lui-même l'adresse pour son OBS, en grille automatique ou avec une disposition de l'hôte,
-// sans que l'hôte ait à lui envoyer le lien.
-function SharedOverlays({ room, shared }) {
-  const [view, setView] = useState(""); // "" : grille automatique, sinon identifiant de la disposition
-  if (!shared?.links?.length) return null;
-  const layout = shared.layouts.find((l) => l.id === view);
-  const urlOf = (key) => (layout ? `${overlayLink(room.code, key)}?disposition=${layout.id}` : overlayLink(room.code, key));
+const select = (value, choices, onChange) => html`<select value=${value} onChange=${(e) => onChange(e.target.value)}>
+  ${Object.entries(choices).map(([k, label]) => html`<option value=${k}>${label}</option>`)}
+</select>`;
+
+// Écran en vedette, changé en direct par le créateur de l'espace ou l'hôte : les overlays ouverts suivent aussitôt.
+function FeaturedControl({ room, link, players, rotation, onLinks }) {
+  const action = useAction();
+  const pick = (player) => action.run(async () => onLinks((await api.setFeatured(room.code, link.id, player)).links));
   return html`<section class="card stack">
-    <h2>Overlays de l'hôte</h2>
-    <p>L'hôte vous donne ces liens pour votre propre OBS (source <strong>Navigateur</strong>, 1920 × 1080) : ils montrent
-      les écrans partagés et les messages de la partie. Le lien n'est pas affiché ici ; ne le montrez pas dans votre stream.</p>
-    ${shared.layouts.length > 0 && html`<div class="fields full"><label><span>Affichage</span>
-      <select value=${layout ? view : ""} onChange=${(e) => setView(e.target.value)}>
-        <option value="">Grille automatique</option>
-        ${shared.layouts.map((l) => html`<option value=${l.id}>Disposition « ${l.name} »</option>`)}
-      </select></label></div>`}
-    <ul class="link-list full">${shared.links.map((link) => html`<li key=${link.id}>
-      <div class="grow"><strong>${link.name}</strong></div>
-      <${CopyButton} text=${urlOf(link.key)} label="Copier" className="small" />
-      <a class="button ghost small" href=${urlOf(link.key)} target="_blank" rel="noopener">Ouvrir</a>
-    </li>`)}</ul>
-    <p class="hint">Un overlay ouvert reçoit l'image de chaque joueur affiché, qui n'en envoie qu'à ${MAX_VIEWERS} :
-      après avoir vérifié l'affichage, fermez l'onglet ouvert ici.</p>
+    <h2>En direct : écran en vedette</h2>
+    <p class="hint">${rotation
+      ? `Roulement ${ROTATIONS[rotation].toLowerCase()} : un clic met ce joueur en vedette tout de suite, puis le roulement repart de lui.`
+      : "Un clic met ce joueur en grand sur l'overlay, tout de suite. S'il ne partage pas son jeu, c'est le premier qui partage."}</p>
+    <div class="items-players-list">
+      <button type="button" class=${`player-check ${!link.featured ? "on" : ""}`} aria-pressed=${!link.featured} disabled=${action.busy}
+        onClick=${() => pick(null)}>${!link.featured ? "✓ " : ""}Premier qui partage</button>
+      ${players.map((p) => html`<button type="button" class=${`player-check ${link.featured === p.id ? "on" : ""}`}
+        aria-pressed=${link.featured === p.id} disabled=${action.busy} onClick=${() => pick(p.id)}>
+        ${link.featured === p.id ? "✓ " : ""}<strong>${p.pseudo}</strong></button>`)}
+    </div>
+    ${action.error && html`<div class="notice error full">${action.error}</div>`}
   </section>`;
 }
 
+function OverlayPanel({ room, data, setData, me, admin, linkId, onLink, onBack }) {
+  const action = useAction();
+  const links = data.overlay_links || [];
+  const players = data.players || [];
+  const link = links.find((l) => l.id === linkId) || links[0] || null;
+  const [draft, setDraft] = useState(null); // réglages modifiés, pas encore enregistrés
+  useEffect(() => setDraft(null), [link?.id]);
+  if (!link) {
+    return html`<section class="card stack"><h2>Overlay</h2>
+      <p>Créez d'abord un espace (vue « Espaces de partage »).</p></section>`;
+  }
+  const manage = canManage(link, me, admin);
+  const config = draft || spaceOf(link.config);
+  const set = (patch) => setDraft({ ...config, ...patch });
+  const onLinks = (next) => setData((d) => ({ ...d, overlay_links: next }));
+  const save = () => action.run(async () => { onLinks((await api.saveSpaceConfig(room.code, link.id, config)).links); setDraft(null); });
+  const auto = config.mode !== "manuel";
+
+  return html`<section class="card stack">
+    <div class="row full">
+      <h2 class="grow">Overlay de l'espace</h2>
+      ${draft && html`<span class="badge warn">Modifications non enregistrées</span>`}
+    </div>
+    <div class="fields full">
+      <label class="span-all"><span>Espace</span>
+        <select value=${link.id} onChange=${(e) => { if (!draft || confirm("Abandonner les modifications non enregistrées ?")) onLink(e.target.value); }}>
+          ${links.map((l) => html`<option value=${l.id}>${l.name} (par ${l.by || "l'hôte"})</option>`)}
+        </select></label>
+    </div>
+    ${!manage && html`<p class="hint">Réglé par ${link.by || "l'hôte"} : seuls son créateur et l'hôte peuvent le modifier.</p>`}
+    <fieldset class="plain-fieldset stack full" disabled=${!manage}>
+      <legend class="sr-only">Réglages de l'overlay</legend>
+      <div class="start-choice full">
+        ${[["auto", "Automatique", "Le plus simple : écrans et infos se placent tout seuls."],
+          ["manuel", "À la main", "Une disposition par nombre d'écrans, qui change quand un joueur arrive ou part."]]
+          .map(([value, title, text]) => html`<label class=${`start-option ${config.mode === value ? "selected" : ""}`}>
+            <input type="radio" name="space-mode" value=${value} checked=${config.mode === value} onChange=${() => set({ mode: value })} />
+            <span><strong>${title}</strong><span class="hint">${text}</span></span>
+          </label>`)}
+      </div>
+
+      <div class="stack full">
+        <strong>Joueurs montrés</strong>
+        <label class="check"><input type="radio" name="space-players" checked=${!config.joueurs.length} onChange=${() => set({ joueurs: [] })} />
+          Tous ceux qui partagent leur jeu</label>
+        <label class="check"><input type="radio" name="space-players" checked=${config.joueurs.length > 0} disabled=${!players.length}
+          onChange=${() => set({ joueurs: [players[0].id] })} /> Seulement ceux-ci :</label>
+        ${config.joueurs.length > 0 && html`<div class="items-players-list">${players.map((p) => html`<span
+          class=${`player-check ${config.joueurs.includes(p.id) ? "on" : ""}`}><input type="checkbox" aria-label=${p.pseudo}
+          checked=${config.joueurs.includes(p.id)} onChange=${(e) => set({ joueurs: e.target.checked
+            ? [...config.joueurs, p.id] : config.joueurs.filter((id) => id !== p.id) })} /> <strong>${p.pseudo}</strong></span>`)}</div>`}
+      </div>
+
+      ${auto && html`<div class="fields full">
+        <label class="span-all"><span>Écrans de jeu</span>${select(config.ecrans, SCREEN_MODES, (v) => set({ ecrans: v }))}</label>
+        <label><span>Messages de la partie</span>${select(config.messages, CONSOLE_PLACES, (v) => set({ messages: v }))}</label>
+        ${config.messages !== "non" && html`<label><span>Objets montrés</span>${select(config.objets, ITEM_FILTERS, (v) => set({ objets: v }))}</label>`}
+        <label class="span-all"><span>Progression des joueurs</span>${select(config.progression, PROGRESS_MODES, (v) => set({ progression: v }))}</label>
+      </div>`}
+      ${!auto && html`<${SpaceLayouts} variants=${config.variants} players=${players} onChange=${(variants) => set({ variants })} />`}
+
+      ${spaceUses(config, "vedette") && html`<div class="fields full">
+        <label class="span-all"><span>Écran en vedette : roulement</span>
+          ${select(String(config.rotation), ROTATIONS, (v) => set({ rotation: Number(v) }))}
+          <span class="hint">Le roulement passe d'un joueur qui partage au suivant ; à la main, on choisit ci-dessous.</span></label>
+      </div>`}
+    </fieldset>
+
+    ${action.error && html`<div class="notice error full">${action.error}</div>`}
+    <div class="row">
+      ${manage && html`<button type="button" disabled=${!draft || action.busy} onClick=${save}>${action.busy ? "Enregistrement…" : "Enregistrer"}</button>
+        ${draft && html`<button type="button" class="ghost" onClick=${() => setDraft(null)}>Annuler</button>`}`}
+      <${CopyButton} text=${overlayLink(room.code, link.key)} label="Copier le lien pour OBS" className="ghost" />
+      <button type="button" class="ghost" onClick=${onBack}>Retour aux espaces</button>
+    </div>
+    <p class="hint">Les overlays ouverts suivent les réglages dès l'enregistrement : pas besoin de recopier le lien.</p>
+    <details class="more">
+      <summary>Comment ça marche</summary>
+      <ul class="hint tips">
+        <li>Deux écrans ne se recouvrent jamais : en automatique, tout se place seul ; à la main, l'éditeur refuse qu'un
+          écran en chevauche un autre.</li>
+        <li>Le goal de chaque joueur est lu dans son YAML de la room (absent dans une room de partie déjà hébergée).</li>
+        <li>Les messages arrivent une fois la partie en ligne : l'overlay s'y connecte comme client texte du premier joueur.</li>
+        <li>Chaque joueur envoie son image à ${MAX_VIEWERS} overlays au plus : après avoir vérifié avec « Ouvrir », fermez l'onglet.</li>
+      </ul>
+    </details>
+  </section>
+  ${manage && spaceUses(spaceOf(link.config), "vedette") && html`<${FeaturedControl} room=${room} link=${link} players=${players}
+    rotation=${spaceOf(link.config).rotation} onLinks=${onLinks} />`}`;
+}
+
+// Trois vues : partager son jeu (joueurs), les espaces de partage (liste commune, lien à copier pour OBS), et
+// l'overlay d'un espace (ce qu'il montre, écran en vedette en direct). Le partage reste actif quand on change de vue.
 export function ScreensTab({ room, me, admin, data, setData }) {
-  return html`${me && html`<${ShareScreen} room=${room} />`}
-    ${me && !admin && html`<${SharedOverlays} room=${room} shared=${data.shared_overlays} />`}
-    ${admin && html`<${OverlayPanel} room=${room} data=${data} setData=${setData} />
-      <${LayoutEditor} room=${room} data=${data} setData=${setData} />`}`;
+  const views = [...(me ? [["share", "Partager mon jeu"]] : []), ["spaces", "Espaces de partage"], ["overlay", "Overlay"]];
+  const [view, setView] = useSetting("screensView", "share");
+  const own = (data.overlay_links || []).find((l) => me && l.player_id === me.id);
+  const [linkId, setLinkId] = useState(own?.id || null);
+  const current = views.some(([id]) => id === view) ? view : views[0][0];
+  const openSettings = (id) => { setLinkId(id); setView("overlay"); };
+  return html`
+    <div class="segmented" role="tablist" aria-label="Écrans">${views.map(([id, label]) => html`<button type="button" role="tab"
+      aria-selected=${current === id} class=${current === id ? "active" : ""} onClick=${() => setView(id)}>${label}</button>`)}</div>
+    ${me && html`<div class="room-panel" hidden=${current !== "share"}><${ShareScreen} room=${room} /></div>`}
+    ${current === "spaces" && html`<${SpacesPanel} room=${room} data=${data} setData=${setData} me=${me} admin=${admin} onSettings=${openSettings} />`}
+    ${current === "overlay" && html`<${OverlayPanel} room=${room} data=${data} setData=${setData} me=${me} admin=${admin}
+      linkId=${linkId} onLink=${setLinkId} onBack=${() => setView("spaces")} />`}`;
 }
