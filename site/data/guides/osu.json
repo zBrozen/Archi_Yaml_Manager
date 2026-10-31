@@ -1,1 +1,1 @@
-{"info":[],"tutorials":[{"title":"WIP","description":"A guide to playing osu!ap.","language":"English","link":"guide/en","authors":["Kanave"],"text":"# WIP"}]}
+{"info":[],"tutorials":[{"title":"WIP","description":"A guide to playing osu!ap.","language":"English","link":"guide/en","authors":["Kanave"],"text":"# WIP"}],"notes":{"text":"- Fixed generation bug with Song Data\r\n- Added Minimum Length Option","url":"https://github.com/lilymnky-F/Archipelago-Osu/releases/tag/v1.3.2","tag":"v1.3.2"}}

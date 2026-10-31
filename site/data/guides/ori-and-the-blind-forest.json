@@ -1,0 +1,1 @@
+{"info":[],"tutorials":[],"notes":{"text":"Fixes\r\n- Fixed issue where unbeatable seeds would be created when setting require_final_escape option to false and accessibility to minimal\r\n\r\nThis version is meant to be used with any v0.4.x version of the client side mod.","url":"https://github.com/c-ostic/Archipelago/releases/tag/v0.4.2","tag":"v0.4.2"}}
