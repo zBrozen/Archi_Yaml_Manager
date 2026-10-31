@@ -174,7 +174,19 @@ export function RoomsHome() {
   const [start, setStart] = useSetting("roomStart", "yaml"); // yaml : rassembler les YAML ; direct : partie déjà hébergée
   const set = (key) => (e) => setForm({ ...form, [key]: e.target.value });
   const direct = start === "direct";
-  const rooms = knownRooms();
+  const [listTab, setListTab] = useSetting("roomsListTab", "current"); // current : en cours ; ended : clôturées
+  const [, setListTick] = useState(0);
+  const end = useAction();
+  const all = knownRooms();
+  const rooms = all.filter((r) => !!r.ended === (listTab === "ended"));
+  const endedCount = all.filter((r) => r.ended).length;
+  // Clôture ou réouverture depuis la liste (hôte seulement), sans ouvrir la room.
+  const setEnded = (r, ended) => (!ended || confirm(`Clôturer la room « ${r.title || r.code} » ? Plus personne ne pourra y déposer de YAML ni la rejoindre ; vous pourrez la rouvrir.`))
+    && end.run(async () => {
+      const result = await api.update(r.code, { ended });
+      saveAccess(r.code, { ended: result.room.ended_at ? true : null });
+      setListTick((n) => n + 1);
+    });
 
   if (!roomsEnabled()) {
     return html`<main class="home"><div class="notice warn">Les rooms ne sont pas encore activées sur ce site
@@ -239,14 +251,22 @@ export function RoomsHome() {
       <button type="submit" disabled=${create.busy || !form.title.trim() || (direct && !form.link.trim())}>${create.busy ? "Création…" : "Créer la room"}</button>
     </form>
 
-    ${rooms.length > 0 && html`<section class="card stack">
+    ${all.length > 0 && html`<section class="card stack">
       <h2>Vos rooms dans ce navigateur</h2>
-      <ul class="room-list full">${rooms.map((r) => html`<li>
+      <nav class="room-tabs full" role="tablist" aria-label="Rooms en cours ou clôturées">
+        ${[["current", `En cours (${all.length - endedCount})`], ["ended", `Clôturées (${endedCount})`]].map(([id, label]) => html`<button
+          type="button" role="tab" aria-selected=${listTab === id} class=${listTab === id ? "active" : ""} onClick=${() => setListTab(id)}>${label}</button>`)}
+      </nav>
+      ${end.error && html`<div class="notice error full">${end.error}</div>`}
+      ${rooms.length ? html`<ul class="room-list full">${rooms.map((r) => html`<li>
         <a href=${`#/room/${r.code}`}><strong>${r.title || r.code}</strong></a>
         <code>${r.code}</code>
         ${r.admin && html`<span class="badge accent">Hôte</span>`}
         ${r.pseudo && html`<span class="hint">${r.pseudo}</span>`}
-      </li>`)}</ul>
+        ${r.admin && html`<button type="button" class="ghost small" disabled=${end.busy} onClick=${() => setEnded(r, !r.ended)}>
+          ${r.ended ? "Rouvrir" : "Clôturer"}</button>`}
+      </li>`)}</ul>`
+        : html`<p class="hint full">${listTab === "ended" ? "Aucune room clôturée." : "Aucune room en cours."}</p>`}
     </section>`}
   </main>`;
 }
@@ -277,6 +297,7 @@ export function RoomPage({ index, code, onCreate, onEdit }) {
           admin: result.admin ? access.admin : null,
           player: result.me ? access.player : null,
           pseudo: result.me?.pseudo ?? null,
+          ended: result.room.ended_at ? true : null,
         });
       })
       .catch((e) => alive && setError(e));
@@ -408,7 +429,8 @@ function RoomHeader({ room, online }) {
     <div class="row">
       <h1 class="grow">${room.title}</h1>
       <span class="badge accent" title=${MODES[room.mode].text}>${MODES[room.mode].label}</span>
-      ${room.ap_room_url ? html`<span class="badge ok">Partie en ligne</span>`
+      ${room.ended_at ? html`<span class="badge danger">Clôturée</span>`
+        : room.ap_room_url ? html`<span class="badge ok">Partie en ligne</span>`
         : room.open ? html`<span class="badge ok">Dépôts ouverts</span>` : html`<span class="badge danger">Dépôts fermés</span>`}
     </div>
     <div class="row">
@@ -417,6 +439,8 @@ function RoomHeader({ room, online }) {
     </div>
     ${room.ap_room_url ? html`<${ServerAddress} room=${room} online=${online} />`
       : html`<p class="hint">${room.max_slots} YAML maximum par joueur${closing}</p>`}
+    ${room.ended_at && html`<p class="hint">Room clôturée par l'hôte le ${formatWhen(room.ended_at)} : elle reste consultable, mais plus
+      rien ne peut y être déposé ni modifié.</p>`}
     ${room.notes && html`<p class="room-notes">${room.notes}</p>`}
   </section>`;
 }
@@ -767,6 +791,14 @@ function HostPanel({ room, setData, data }) {
     setData({ ...data, room: result.room });
     setForm(null);
   });
+  // Clôture : la partie est finie, la room reste lisible mais figée (le Worker refuse dépôts, arrivées et génération).
+  const end = (ended) => (!ended || confirm("Clôturer la room ? Plus personne ne pourra y déposer de YAML ni la rejoindre ; vous pourrez la rouvrir."))
+    && save.run(async () => {
+      const result = await api.update(room.code, { ended });
+      saveAccess(room.code, { ended: result.room.ended_at ? true : null });
+      setData({ ...data, room: result.room });
+      setForm(null);
+    });
   const destroy = () => confirm("Supprimer définitivement la room et tous ses YAML ?")
     && save.run(async () => { await api.remove(room.code); forgetAccess(room.code); location.hash = "#/rooms"; });
 
@@ -795,13 +827,20 @@ function HostPanel({ room, setData, data }) {
             <textarea rows="3" maxLength="2000" value=${current.notes} onInput=${(e) => set("notes", e.target.value)}></textarea></label>
         </div>
         <div class="row">
-          <button type="submit" disabled=${save.busy || !changed}>Enregistrer</button>
+          <button type="submit" disabled=${save.busy || !changed || !!room.ended_at}>Enregistrer</button>
           ${changed && html`<button type="button" class="ghost" onClick=${() => setForm(null)}>Annuler</button>`}
         </div>
       </form>
     </details>
 
-    ${!room.direct && html`<div class="row">
+    <div class="row">
+      ${room.ended_at
+        ? html`<button type="button" disabled=${save.busy} onClick=${() => end(false)}>Rouvrir la room</button>
+          <span class="hint">Clôturée le ${formatWhen(room.ended_at)}.</span>`
+        : html`<button type="button" class="ghost" disabled=${save.busy} onClick=${() => end(true)}>Clôturer la room</button>
+          <span class="hint">Partie terminée : la room reste consultable, mais plus rien ne peut y être déposé ni modifié.</span>`}
+    </div>
+    ${!room.direct && !room.ended_at && html`<div class="row">
       ${room.open
         ? html`<button type="button" class="ghost" disabled=${save.busy} onClick=${() => close(true)}>Fermer les dépôts maintenant</button>`
         : html`<button type="button" class="ghost" disabled=${save.busy} onClick=${() => close(false)}>Rouvrir les dépôts</button>`}

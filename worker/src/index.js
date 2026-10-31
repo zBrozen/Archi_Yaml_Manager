@@ -144,7 +144,7 @@ function issues(value) {
   return JSON.stringify(value.slice(0, LIMITS.issues).map((i) => String(i).slice(0, 300)));
 }
 
-const isOpen = (room, now = Date.now()) => !room.locked && (room.closes_at == null || now < room.closes_at);
+const isOpen = (room, now = Date.now()) => !room.ended_at && !room.locked && (room.closes_at == null || now < room.closes_at);
 
 // --- Accès ---------------------------------------------------------------------
 
@@ -179,7 +179,13 @@ async function requirePlayer(request, env, room) {
 // Dépôts fermés : la liste des YAML est figée pour tout le monde, hôte compris, pour qu'elle corresponde
 // à la partie générée. L'hôte rouvre les dépôts pour la changer.
 function requireOpen(room) {
+  requireNotEnded(room);
   if (!isOpen(room)) throw new HttpError(409, "Les dépôts sont fermés : les YAML ne peuvent plus être ajoutés, modifiés ni retirés.");
+}
+
+// Room clôturée par l'hôte : seule sa réouverture (PATCH `ended: false`) la débloque.
+function requireNotEnded(room) {
+  if (room.ended_at) throw new HttpError(409, "Cette room est clôturée : l'hôte doit la rouvrir pour la modifier.");
 }
 
 // Room créée avec le lien d'une partie déjà hébergée : on y suit la partie, sans YAML ni génération.
@@ -246,6 +252,7 @@ function publicRoom(room) {
     closes_at: room.closes_at,
     locked: !!room.locked,
     open: isOpen(room),
+    ended_at: room.ended_at || null,
     max_slots: room.max_slots,
     notes: room.notes,
     ap_room_url: room.ap_room_url,
@@ -323,13 +330,16 @@ async function updateRoom(request, env, room) {
   if ("locked" in body) next.locked = body.locked ? 1 : 0;
   if ("max_slots" in body) next.max_slots = maxSlots(body.max_slots);
   if ("notes" in body) next.notes = text(body.notes, "message", LIMITS.notes, { required: false });
+  if ("ended" in body) next.ended_at = body.ended ? room.ended_at || Date.now() : null;
+  else requireNotEnded(room);
   if ("ap_room_url" in body) next.ap_room_url = apRoomUrl(body.ap_room_url);
   if (room.direct && !next.ap_room_url) throw new HttpError(400, "Cette room suit une partie hébergée : son lien est obligatoire.");
   next.updated_at = Date.now();
   await env.DB.prepare(
-    `UPDATE rooms SET title = ?, mode = ?, closes_at = ?, locked = ?, max_slots = ?, notes = ?, ap_room_url = ?, updated_at = ?
+    `UPDATE rooms SET title = ?, mode = ?, closes_at = ?, locked = ?, max_slots = ?, notes = ?, ap_room_url = ?, ended_at = ?, updated_at = ?
      WHERE code = ?`,
-  ).bind(next.title, next.mode, next.closes_at, next.locked, next.max_slots, next.notes, next.ap_room_url, next.updated_at, room.code).run();
+  ).bind(next.title, next.mode, next.closes_at, next.locked, next.max_slots, next.notes, next.ap_room_url, next.ended_at ?? null,
+    next.updated_at, room.code).run();
   return json({ room: publicRoom(next) });
 }
 
@@ -363,6 +373,7 @@ async function deleteRoom(request, env, room) {
 async function joinRoom(request, env, room) {
   const body = await readJson(request);
   const pseudo = text(body.pseudo, "pseudo", LIMITS.pseudo);
+  requireNotEnded(room);
   if (!room.direct && !isOpen(room)) throw new HttpError(409, "Les dépôts sont fermés : cette room n'accepte plus de nouveaux joueurs.");
   const { count } = await env.DB.prepare("SELECT COUNT(*) AS count FROM players WHERE room_code = ?").bind(room.code).first();
   if (count >= LIMITS.playersPerRoom) throw new HttpError(409, "Cette room est pleine.");
@@ -640,6 +651,7 @@ const generatorConfigured = (env) => !!(env.FILES && env.GH_DISPATCH_TOKEN && en
 async function startGeneration(request, env, room) {
   await requireAdmin(request, room);
   requireYamlRoom(room);
+  requireNotEnded(room);
   if (!generatorConfigured(env)) throw new HttpError(501, "La génération en ligne n'est pas configurée sur ce serveur.");
   if (isOpen(room)) throw new HttpError(409, "Fermez d'abord les dépôts : la partie doit être générée avec les YAML définitifs.");
   const { status } = generation(room);
