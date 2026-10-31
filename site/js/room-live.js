@@ -254,6 +254,7 @@ export function defaultItemSlots(status, mine) {
 // Objets reçus par les joueurs cochés (`selected` : numéros de slot), avec une recherche commune à tous.
 export function ItemsPanel({ status, tracker, mine, selected, onSelected, code }) {
   const [search, setSearch] = useState("");
+  const [hideFiller, setHideFiller] = useSetting("hintsHideFiller", false);
   const names = new Set(mine.map((s) => s.name.toLowerCase()));
   const own = status.slots.filter((s) => names.has(s.name.toLowerCase()));
   const slots = [...own, ...status.slots.filter((s) => !names.has(s.name.toLowerCase()))];
@@ -282,16 +283,19 @@ export function ItemsPanel({ status, tracker, mine, selected, onSelected, code }
         <button type="button" class="link" onClick=${() => onSelected([])}>Tout décocher</button>
       </div>
     </fieldset>
+    <label class="check items-hide-filler"><input type="checkbox" checked=${hideFiller} onChange=${(e) => setHideFiller(e.target.checked)} />
+      Masquer les indices sur des objets sans importance</label>
     ${!live ? html`<p class="hint">${tracker.error || "Chargement des objets…"}</p>`
       : !shown.length ? html`<p class="hint">Cochez un ou plusieurs joueurs pour voir leurs objets.</p>`
       : html`<div class="items-players-view full">${shown.map((s) => html`<${PlayerItems} key=${s.slot} slot=${s} status=${status} code=${code}
-          tracker=${tracker} needle=${needle} search=${search.trim()} titled=${shown.length > 1} />`)}</div>`}`;
+          tracker=${tracker} needle=${needle} search=${search.trim()} titled=${shown.length > 1} hideFiller=${hideFiller} />`)}</div>`}`;
 }
 
 // Objets d'un joueur : regroupés par importance (avec le nombre d'exemplaires), puis les derniers arrivés.
 // Avec une recherche, seuls les objets dont le nom la contient restent, et tous ceux arrivés sont listés.
 // `compact` : aperçu épuré (client texte) : objets de progression, utiles et pièges seulement, inventaire de départ replié.
-function PlayerItems({ slot, status, tracker, needle = "", search = "", titled, code, compact = false }) {
+// `hideFiller` : indices sur des objets sans importance masqués (leur nombre reste indiqué).
+function PlayerItems({ slot, status, tracker, needle = "", search = "", titled, code, compact = false, hideFiller = false }) {
   const [all, setAll] = useState(false);
   const received = receivedItems(tracker.data.live, slot.slot);
   const gameOf = (player) => (player === 0 ? "Archipelago" : status.slots.find((s) => s.slot === player)?.game);
@@ -319,11 +323,14 @@ function PlayerItems({ slot, status, tracker, needle = "", search = "", titled, 
   // Indices : d'abord ceux qui restent à trouver ; l'aperçu épuré n'en garde que ceux-là.
   const hintItem = (h) => loaded[gameOf(h.receiving_player)]?.items.get(h.item) || `Objet n° ${h.item}`;
   const hintPlace = (h) => loaded[gameOf(h.finding_player)]?.locations.get(h.location) || `Lieu n° ${h.location}`;
-  const hintsShown = hints.filter((h) => !(compact && h.found))
-    .filter((h) => !needle || hintItem(h).toLowerCase().includes(needle) || hintPlace(h).toLowerCase().includes(needle))
+  const hintsMatching = hints.filter((h) => !(compact && h.found))
+    .filter((h) => !needle || hintItem(h).toLowerCase().includes(needle) || hintPlace(h).toLowerCase().includes(needle));
+  const hintsShown = hintsMatching.filter((h) => !hideFiller || kindOf(h.item_flags || 0) !== "filler")
     .sort((a, b) => Number(a.found) - Number(b.found));
-  const hintList = hintsShown.length > 0 && html`<div class="items-group">
-    <h4>Indices <span class="hint">${hintsShown.filter((h) => !h.found).length} à trouver${compact ? "" : ` sur ${hintsShown.length}`}</span></h4>
+  const hiddenHints = hintsMatching.length - hintsShown.length;
+  const hintList = hintsMatching.length > 0 && html`<div class="items-group">
+    <h4>Indices <span class="hint">${hintsShown.filter((h) => !h.found).length} à trouver${compact ? "" : ` sur ${hintsShown.length}`}${
+      hiddenHints ? ` · ${hiddenHints} sans importance masqué${hiddenHints > 1 ? "s" : ""}` : ""}</span></h4>
     <ul class="hint-list">${hintsShown.map((h) => {
       const kind = ITEM_KINDS[kindOf(h.item_flags || 0)];
       const forMe = h.receiving_player === slot.slot;
@@ -356,13 +363,13 @@ function PlayerItems({ slot, status, tracker, needle = "", search = "", titled, 
       startCount ? ` · ${startCount} au départ` : ""}`;
 
   // Recherche sans résultat chez ce joueur : une seule ligne, pour ne pas encombrer quand plusieurs sont cochés.
-  if (needle && pkg && !matching.length && !startCount && !hintsShown.length) {
+  if (needle && pkg && !matching.length && !startCount && !hintsMatching.length) {
     return html`<p class="items-player-block items-none hint">${titled && html`<strong>${slot.name}</strong> : `}aucun objet reçu ne contient « ${search} » (${plural(received.length, "objet")} au total).</p>`;
   }
   if (compact) {
     return html`<section class="items-player-block inventory-compact">
       <h3>Inventaire de ${slot.name} <span class="hint">${plural(received.length, "objet")}</span></h3>
-      ${received.length === 0 && !startCount && !hintsShown.length ? html`<p class="hint">Aucun objet reçu pour l'instant.</p>`
+      ${received.length === 0 && !startCount && !hintsMatching.length ? html`<p class="hint">Aucun objet reçu pour l'instant.</p>`
         : waiting ? html`<p class="hint">Chargement des noms d'objets…</p>`
         : html`${counts.map((g) => html`<div class="items-group">${title(g)}${tags(g.kind)}</div>`)}
           ${!counts.length && html`<p class="hint">Que des objets sans importance pour l'instant.</p>`}
@@ -377,7 +384,7 @@ function PlayerItems({ slot, status, tracker, needle = "", search = "", titled, 
     ${titled && html`<h3>${slot.name} <span class="hint">${slot.game}</span></h3>`}
     <p class="hint">${summary}</p>
     ${error && html`<p class="hint">${error} Les objets sont affichés par numéro.</p>`}
-    ${received.length === 0 && !startCount && !hintsShown.length ? html`<p class="hint">Aucun objet reçu pour l'instant.</p>`
+    ${received.length === 0 && !startCount && !hintsMatching.length ? html`<p class="hint">Aucun objet reçu pour l'instant.</p>`
       : waiting ? html`<p class="hint">Chargement des noms d'objets…</p>`
       : html`<div class="items-panel">
         ${startCount > 0 && html`<div class="items-group">
@@ -470,7 +477,7 @@ export function MessagePart({ node, self, marks = false, wishes, mine }) {
 
 // --- Affichage des messages (client texte et overlay) ---------------------------------------
 // `lieux` : lieu où un objet envoyé a été trouvé ; `heure` : heure de chaque message ; `resumes` : un objet sans
-// importance envoyé tient en une ligne courte, et ceux qui arrivent à la suite s'y cumulent.
+// importance envoyé (ou un indice sur un tel objet) tient en une ligne courte, et ceux qui arrivent à la suite s'y cumulent.
 export const MESSAGE_OPTIONS = { lieux: true, heure: false, resumes: false };
 
 const isHintLine = (nodes) => String(nodes[0]?.text || "").startsWith("[Hint]");
@@ -496,23 +503,30 @@ export function withoutLocation(nodes) {
   return out;
 }
 
-// Objet envoyé sans importance (un seul objet, pas un indice).
-function fillerLine(nodes) {
+// Message d'un seul objet sans importance : « sent » (objet envoyé), « hint » (indice), sinon null.
+function fillerKind(nodes) {
   const items = nodes.filter((node) => node.type === "item");
-  return items.length === 1 && !isHintLine(nodes) && itemKind(items[0].item) === ITEM_KINDS.filler;
+  if (items.length !== 1 || itemKind(items[0].item) !== ITEM_KINDS.filler) return null;
+  return isHintLine(nodes) ? "hint" : "sent";
 }
+const FILLER_LABELS = {
+  sent: { text: "Objet sans importance", title: "Objet sans importance envoyé" },
+  hint: { text: "Indice : objet sans importance", title: "Indice sur un objet sans importance" },
+};
 
 // Lignes à afficher (`lines` : { id, time, nodes } ou { id, time, info }) selon les options. Une ligne résumée a
-// `filler` (nombre d'objets cumulés) et l'heure du dernier ; un objet de wishlist n'est jamais résumé.
+// `filler` (nombre de messages cumulés : objets envoyés, ou indices, à la suite), `fillerKind` et l'heure du dernier ;
+// un objet de wishlist n'est jamais résumé.
 export function displayLines(lines, options, wishes) {
   const out = [];
   for (const line of lines) {
     if (line.info) { out.push(line); continue; }
     const wish = wishHit(wishes, line.nodes);
-    if (options.resumes && !wish && fillerLine(line.nodes)) {
+    const kind = options.resumes && !wish && fillerKind(line.nodes);
+    if (kind) {
       const last = out.at(-1);
-      if (last?.filler) out[out.length - 1] = { ...last, filler: last.filler + 1, time: line.time };
-      else out.push({ ...line, filler: 1 });
+      if (last?.fillerKind === kind) out[out.length - 1] = { ...last, filler: last.filler + 1, time: line.time };
+      else out.push({ ...line, filler: 1, fillerKind: kind });
       continue;
     }
     out.push({ ...line, wish, nodes: options.lieux ? line.nodes : withoutLocation(line.nodes) });
@@ -527,7 +541,7 @@ export function MessageLine({ line, options, self, marks = false, wishes, mine }
   return html`${options.heure && line.time && html`<time class="msg-time" datetime=${new Date(line.time).toISOString()}>${clock(line.time)}</time>`}
     ${line.wish && html`<span class="wish-label">♥ Wishlist</span>`}
     ${line.filler
-      ? html`<span class="ap-filler msg-filler" title="Objet sans importance envoyé">Objet sans importance</span>${line.filler > 1 && html` <span class="item-count">×${line.filler}</span>`}`
+      ? html`<span class="ap-filler msg-filler" title=${FILLER_LABELS[line.fillerKind].title}>${FILLER_LABELS[line.fillerKind].text}</span>${line.filler > 1 && html` <span class="item-count">×${line.filler}</span>`}`
       : line.nodes.map((node) => html`<${MessagePart} node=${node} self=${self} marks=${marks} wishes=${wishes} mine=${mine} />`)}`;
 }
 

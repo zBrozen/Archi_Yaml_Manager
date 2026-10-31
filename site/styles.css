@@ -662,7 +662,7 @@ details.items-group > summary h3, details.items-group > summary h4 { display: in
 .msg-time { color: var(--muted); font-variant-numeric: tabular-nums; margin-right: .6em; font-size: .9em; }
 .msg-filler { font-style: italic; }
 .message-options { display: flex; flex-wrap: wrap; gap: .3rem 1.2rem; }
-.message-options label.check { display: inline-flex; align-items: center; gap: .4rem; font-size: .92rem; }
+.message-options label.check, .items-hide-filler { display: inline-flex; align-items: center; gap: .4rem; font-size: .92rem; }
 /* Palette du client texte d'Archipelago, assombrie en thème clair pour rester lisible. */
 .client-log, .items-panel, .inventory-compact {
   --ap-self: #b5179e; --ap-player: #8a6100; --ap-progression: #6d3fc0; --ap-useful: #3556c9; --ap-trap: #c2412d;

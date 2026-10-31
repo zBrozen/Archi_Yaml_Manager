@@ -223,7 +223,7 @@ function hintNodes(client, raw) {
 }
 
 // Objets envoyés, objectifs atteints, release et collect, reçus en client texte du premier joueur, et indices.
-// `important` sur chaque ligne : objet de progression, utile ou piège, indice, ou événement d'un joueur.
+// `important` sur chaque ligne : objet (envoyé ou indiqué) de progression, utile ou piège, ou événement d'un joueur.
 function useGameFeed(code, enabled) {
   const [feed, setFeed] = useState({ state: "loading", message: null, lines: [] });
   useEffect(() => {
@@ -273,7 +273,9 @@ function useGameFeed(code, enabled) {
           for (const raw of hints || []) {
             if (seen.has(hintId(raw))) continue;
             seen.add(hintId(raw));
-            if (client === next) push(hintNodes(next, raw), true);
+            if (client !== next) continue;
+            const nodes = hintNodes(next, raw);
+            push(nodes, important(nodes.find((node) => node.type === "item").item));
           }
         });
         for (const hints of Object.values(known || {})) for (const raw of hints || []) seen.add(hintId(raw));
