@@ -358,7 +358,7 @@ export function RoomPage({ index, code, onCreate, onEdit }) {
           wishlists=${data.wishlists} onSaved=${savedWishlist} notices=${notices} />`
       : html`<section class="card"><p class="hint">${online.error || "Chargement de la partie…"}</p></section>`)}
     ${room.ap_room_url && (clientSeen || active === "client") && html`<div hidden=${active !== "client"}>
-      <${ClientView} room=${room} online=${online} mine=${mine} wishlists=${data.wishlists} /></div>`}
+      <${ClientView} room=${room} online=${online} tracker=${tracker} mine=${mine} wishlists=${data.wishlists} /></div>`}
     ${screens && (screensSeen || active === "ecrans") && html`<div class="room-panel" hidden=${active !== "ecrans"}>
       <${ScreensTab} room=${room} me=${me} admin=${admin} data=${data} setData=${setData} /></div>`}
     ${active === "hote" && html`<${HostPanel} room=${room} setData=${setData} data=${data} />`}
@@ -1295,10 +1295,10 @@ function GameView({ room, online, tracker, mine }) {
   </details>`}`;
 }
 
-function ClientView({ room, online, mine, wishlists }) {
+function ClientView({ room, online, tracker, mine, wishlists }) {
   const { status, error } = online;
   return html`<section class="card stack">
     <h2>Client texte</h2>
-    ${status ? html`<${TextClient} room=${room} status=${status} mine=${mine} wishlists=${wishlists} />` : html`<p class="hint">${error || "Chargement de la partie…"}</p>`}
+    ${status ? html`<${TextClient} room=${room} status=${status} tracker=${tracker} mine=${mine} wishlists=${wishlists} />` : html`<p class="hint">${error || "Chargement de la partie…"}</p>`}
   </section>`;
 }

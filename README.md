@@ -199,7 +199,9 @@ leur nom dans la partie, qui sert à retrouver leurs fichiers.
    (`/generic_tracker/…`, qui le compte avec les objets reçus) et le site en retire les objets reçus de l'API,
    seulement quand les deux lectures sont du même moment. Elle propose aussi un
    **client texte** : chat et commandes (`!hint`, `!remaining`…) depuis le navigateur, avec
-   [archipelago.js](https://github.com/ThePhar/archipelago.js) (`site/vendor/archipelago.js`).
+   [archipelago.js](https://github.com/ThePhar/archipelago.js) (`site/vendor/archipelago.js`). Les objets reçus ou
+   envoyés par vos joueurs (et le joueur connecté) y sont surlignés, sauf les objets sans importance, et un aperçu
+   épuré de l'inventaire du joueur choisi (progression, utiles, pièges, inventaire de départ replié) s'affiche à côté.
    Chaque joueur remplit aussi sa **wishlist** (onglet « Wishlist ») parmi les objets de son jeu : en rouge tant
    qu'ils manquent, en vert une fois reçus (un bouton retire les objets reçus). Un objet déjà reçu (progressif,
    cumulable…) peut être attendu une fois de plus : il passe au vert quand son nombre augmente. Quand l'un
@@ -299,7 +301,9 @@ Streamlabs, XSplit…).
   repart de ce joueur. Le goal est lu dans le YAML de chaque joueur (`slotGoal` : option `goal` ou proche, ou
   celle qui a le plus de poids), donc absent dans une room de partie déjà hébergée.
 
-  Les objets de progression et les pièges sont marqués ★ et ⚠, en plus de leur couleur. Chaque joueur envoie son
+  Les objets de progression et les pièges sont marqués ★ et ⚠, en plus de leur couleur. Dans les messages, les objets
+  reçus ou envoyés par les joueurs montrés de l'espace (sinon par son créateur) sont surlignés, sauf les objets sans
+  importance. Chaque joueur envoie son
   image à 3 overlays au plus. Les anciens liens gardent leurs réglages dans l'adresse (`max`, `console`, `objets`,
   `joueurs`) ou une disposition de l'hôte (`?disposition=ID`, colonne `overlay_layouts`).
 

@@ -623,6 +623,19 @@ details.items-group > summary h3, details.items-group > summary h4 { display: in
 .wish-notice .row button { margin-left: 0; }
 /* Objet d'une wishlist dans le client texte et l'overlay (♥), et ligne où il vient d'être envoyé */
 .wish-item { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 3px; }
+/* Objet qui vous concerne (reçu ou envoyé par votre joueur) : surligné comme au feutre, avec un trait épais
+   en dessous en plus du fond (pas la couleur seule). La couleur de l'objet reste lisible dessus. */
+.mine-item {
+  background: rgb(250 210 90 / 30%); box-shadow: inset 0 -0.18em 0 #e0a800; border-radius: 3px; padding: 0 .2em;
+  box-decoration-break: clone; -webkit-box-decoration-break: clone;
+}
+.game-feed .mine-item { background: rgb(250 210 90 / 24%); box-shadow: inset 0 -0.18em 0 #fad25a; }
+/* Client texte : le chat, et l'inventaire du joueur choisi à côté sur un écran large */
+.client-main { display: grid; gap: 1rem; align-items: start; }
+.client-main.with-inventory { grid-template-columns: minmax(0, 1fr) minmax(15rem, 22rem); }
+.client-inventory { background: var(--surface-2); border-radius: 10px; padding: .8rem 1rem; max-height: 34rem; overflow-y: auto; }
+.inventory-compact .items-group h4 { font-size: .95rem; }
+@media (max-width: 900px) { .client-main.with-inventory { grid-template-columns: minmax(0, 1fr); } }
 .client-log .wish-hit {
   background: color-mix(in srgb, var(--ok) 20%, transparent); border-left: 4px solid var(--ok); border-radius: 4px; padding: .25rem .6rem;
 }
@@ -634,7 +647,7 @@ details.items-group > summary h3, details.items-group > summary h4 { display: in
 .client-log > div + div { margin-top: .25rem; }
 .client-log > div { white-space: pre-wrap; overflow-wrap: anywhere; }
 /* Palette du client texte d'Archipelago, assombrie en thème clair pour rester lisible. */
-.client-log, .items-panel {
+.client-log, .items-panel, .inventory-compact {
   --ap-self: #b5179e; --ap-player: #8a6100; --ap-progression: #6d3fc0; --ap-useful: #3556c9; --ap-trap: #c2412d;
   --ap-filler: #00788a; --ap-location: #19804a; --ap-entrance: #2f68c4;
 }
@@ -712,12 +725,12 @@ details.items-group > summary h3, details.items-group > summary h4 { display: in
 }
 
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) .client-log, :root:not([data-theme="light"]) .items-panel {
+  :root:not([data-theme="light"]) .client-log, :root:not([data-theme="light"]) .items-panel, :root:not([data-theme="light"]) .inventory-compact {
   --ap-self: #ff7ee2; --ap-player: #fad25a; --ap-progression: #c3a8ff; --ap-useful: #8fa8ff; --ap-trap: #ff8f80;
   --ap-filler: #5fe3e8; --ap-location: #63e59b; --ap-entrance: #8ab4ff;
   }
 }
-:root[data-theme="dark"] .client-log, :root[data-theme="dark"] .items-panel {
+:root[data-theme="dark"] .client-log, :root[data-theme="dark"] .items-panel, :root[data-theme="dark"] .inventory-compact {
   --ap-self: #ff7ee2; --ap-player: #fad25a; --ap-progression: #c3a8ff; --ap-useful: #8fa8ff; --ap-trap: #ff8f80;
   --ap-filler: #5fe3e8; --ap-location: #63e59b; --ap-entrance: #8ab4ff;
 }

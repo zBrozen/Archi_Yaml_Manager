@@ -1056,14 +1056,16 @@ function spaceConfig(value) {
   return saved;
 }
 
+// Ce que l'overlay d'un espace reçoit : ses réglages, l'écran en vedette, et son créateur (`owner`, null pour l'hôte),
+// dont les objets sont surlignés dans les messages quand l'espace ne choisit pas ses joueurs.
+const spaceOf = (row) => ({ config: JSON.parse(row.config || "null"), featured: row.featured || null, owner: row.player_id || null });
+
 // Les overlays ouverts avec cet espace suivent tout de suite ses réglages et son écran en vedette.
 async function pushSpace(env, room, linkId) {
   if (!env.SCREENS) return;
-  const row = await env.DB.prepare("SELECT config, featured FROM overlay_links WHERE room_code = ? AND id = ?").bind(room.code, linkId).first();
+  const row = await env.DB.prepare("SELECT config, featured, player_id FROM overlay_links WHERE room_code = ? AND id = ?").bind(room.code, linkId).first();
   if (!row) return;
-  await screens(env, room).fetch(`https://screens/space?link=${encodeURIComponent(linkId)}`, {
-    method: "POST", body: JSON.stringify({ config: JSON.parse(row.config || "null"), featured: row.featured || null }),
-  });
+  await screens(env, room).fetch(`https://screens/space?link=${encodeURIComponent(linkId)}`, { method: "POST", body: JSON.stringify(spaceOf(row)) });
 }
 
 async function saveSpaceConfig(request, env, room, linkId) {
@@ -1103,7 +1105,7 @@ const sendTo = (ws, message) => {
 //   service → client : { type: "welcome", id }, { type: "error", message } (puis fermeture),
 //                      { type: "signal", from, data }, { type: "left", id } (aux joueurs : un overlay est parti),
 //                      { type: "streams", list: [{ id, player, label, games }] } (aux overlays : joueurs qui partagent),
-//                      { type: "space", space: { config, featured } } (aux overlays d'un espace : ses réglages ont changé).
+//                      { type: "space", space: { config, featured, owner } } (aux overlays d'un espace : ses réglages ont changé).
 // Un joueur connecté est un joueur qui partage son écran : arrêter le partage ferme la connexion.
 export class ScreenRoom extends DurableObject {
   constructor(ctx, env) {
@@ -1190,7 +1192,7 @@ export class ScreenRoom extends DurableObject {
       if (msg.role === "overlay") {
         // Un lien de la liste, ou l'ancienne clé unique tant qu'elle n'y a pas été reprise.
         const link = typeof msg.key === "string"
-          ? await this.env.DB.prepare("SELECT id, config, featured FROM overlay_links WHERE room_code = ? AND key = ?").bind(room.code, msg.key).first()
+          ? await this.env.DB.prepare("SELECT id, config, featured, player_id FROM overlay_links WHERE room_code = ? AND key = ?").bind(room.code, msg.key).first()
           : null;
         const legacy = !link && typeof msg.key === "string" && !!room.overlay_hash && (await sha256(msg.key)) === room.overlay_hash;
         if (!link && !legacy) {
@@ -1200,7 +1202,7 @@ export class ScreenRoom extends DurableObject {
           throw new HttpError(409, `Déjà ${SCREEN_LIMITS.overlays} overlays ouverts pour cette room : fermez-en un.`);
         }
         Object.assign(me, { role: "overlay", link: link?.id || "ancien" });
-        me.space = link ? { config: JSON.parse(link.config || "null"), featured: link.featured || null } : null;
+        me.space = link ? spaceOf(link) : null;
       } else if (msg.role === "player") {
         const player = typeof msg.token === "string"
           ? await this.env.DB.prepare("SELECT id, pseudo FROM players WHERE room_code = ? AND token_hash = ?").bind(room.code, await sha256(msg.token)).first()

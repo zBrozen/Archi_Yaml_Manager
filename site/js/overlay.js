@@ -291,22 +291,27 @@ function useGameFeed(code, enabled) {
   return feed;
 }
 
-// Wishlists des joueurs, relues de temps en temps : leurs objets sont mis en avant quand ils sont envoyés.
-function useWishlists(code, enabled) {
-  const [wishes, setWishes] = useState(null);
+// Wishlists des joueurs (leurs objets sont mis en avant quand ils sont envoyés) et joueurs de la room avec leurs noms
+// dans la partie (pour surligner les objets des joueurs de l'espace), relus de temps en temps.
+function useRoomInfo(code, enabled) {
+  const [info, setInfo] = useState({ wishes: null, players: [], direct: false });
   useEffect(() => {
     if (!enabled) return undefined;
     let alive = true;
     let timer = null;
     const load = () => api.get(code)
-      .then((data) => alive && setWishes(wishIndex(data.wishlists)))
+      .then((data) => alive && setInfo({ wishes: wishIndex(data.wishlists), players: data.players || [], direct: !!data.room?.direct }))
       .catch(() => {})
       .finally(() => { if (alive) timer = setTimeout(load, GAME_WAIT); });
     load();
     return () => { alive = false; clearTimeout(timer); };
   }, [code, enabled]);
-  return wishes;
+  return info;
 }
+
+// Noms dans la partie (en minuscules) des joueurs `ids` : ses YAML, ou son pseudo dans une room de partie déjà hébergée.
+const slotNames = (info, ids) => new Set(info.players.filter((p) => ids.includes(p.id))
+  .flatMap((p) => (info.direct || !p.slots?.length ? [p.pseudo] : p.slots.map((s) => s.name))).map((n) => n.toLowerCase()));
 
 const FEED_STATES = {
   loading: "Connexion à la partie…",
@@ -316,8 +321,8 @@ const FEED_STATES = {
 };
 
 // `important` : seulement les objets de progression, utiles et les pièges (et les événements des joueurs),
-// plus ceux des wishlists.
-function GameFeed({ feed, wishes, important = false, style, plain = false }) {
+// plus ceux des wishlists. `mine` : joueurs dont les objets sont surlignés.
+function GameFeed({ feed, wishes, mine, important = false, style, plain = false }) {
   const lines = feed.lines.map((l) => ({ ...l, wish: wishHit(wishes, l.nodes) })).filter((l) => !important || l.important || l.wish);
   const status = feed.state === "error" ? `${feed.message} Nouvelle tentative dans ${FEED_RETRY / 1000} s.`
     : feed.state === "live" && lines.length ? null
@@ -325,7 +330,7 @@ function GameFeed({ feed, wishes, important = false, style, plain = false }) {
   return html`<div class=${`game-feed ${plain ? "plain" : ""}`} style=${style} role="log" aria-live="polite">
     ${lines.map((line) => html`<div key=${line.id} class=${line.wish ? "wish-hit" : ""}>
       ${line.wish && html`<span class="wish-label">♥ Wishlist</span>`}
-      ${line.nodes.map((node) => html`<${MessagePart} node=${node} marks wishes=${wishes} />`)}</div>`)}
+      ${line.nodes.map((node) => html`<${MessagePart} node=${node} marks wishes=${wishes} mine=${mine} />`)}</div>`)}
     ${status && html`<div class="feed-status">${status}</div>`}
   </div>`;
 }
@@ -389,7 +394,7 @@ const boxStyle = (item) => ({ left: `${item.x}%`, top: `${item.y}%`, width: `${i
 
 // `items` : éléments à afficher ; `streams` : joueurs montrés ; `featured` : joueur en vedette. `empty` : message
 // affiché dans l'élément principal (`main`) quand aucun joueur montré ne partage.
-function LayoutView({ items, view, streams, featured, feed, wishes, progress, empty = null }) {
+function LayoutView({ items, view, streams, featured, feed, wishes, mine, progress, empty = null }) {
   const [ref, size] = useElementSize();
   const unit = size.height / 100; // 1 % de la hauteur de la page
   const assigned = assignScreens(items, streams, featured);
@@ -408,7 +413,7 @@ function LayoutView({ items, view, streams, featured, feed, wishes, progress, em
         width=${(size.width * item.w) / 100} height=${(size.height * item.h) / 100}
         scale=${TEXT_SIZES[item.size].unit / TEXT_SIZES.m.unit} /></div>` : nobody;
     }
-    if (item.type === "feed") return html`<${GameFeed} feed=${feed} wishes=${wishes} important=${item.objets === "importants"} style=${font} plain=${plain} />`;
+    if (item.type === "feed") return html`<${GameFeed} feed=${feed} wishes=${wishes} mine=${mine} important=${item.objets === "importants"} style=${font} plain=${plain} />`;
     if (item.type === "progress") return html`<${ProgressBox} progress=${progress} style=${font} plain=${plain} goal=${item.goal} />`;
     return html`<div class=${`overlay-box overlay-text ${plain ? "plain" : ""}`} style=${{ ...font, textAlign: item.align }}>${item.text}</div>`;
   };
@@ -453,7 +458,10 @@ export function ScreensOverlay({ code, overlayKey, params }) {
   const items = layoutId ? layout?.items || [] : spaceItems(config, streams.length);
   const uses = (type) => !refused && (layoutId ? !!layout?.items.some((i) => i.type === type) : known && spaceUses(config, type));
   const feed = useGameFeed(code, uses("feed"));
-  const wishes = useWishlists(code, uses("feed"));
+  const info = useRoomInfo(code, uses("feed"));
+  const { wishes } = info;
+  // Objets surlignés : ceux des joueurs montrés par l'espace, sinon ceux de son créateur (le streamer).
+  const mine = slotNames(info, config.joueurs.length ? config.joueurs : [view?.space?.owner].filter(Boolean));
   const progress = useProgress(code, uses("progress"));
 
   // Joueurs dont l'overlay demande l'image : relu à chaque changement des réglages ou de l'écran en vedette.
@@ -481,12 +489,12 @@ export function ScreensOverlay({ code, overlayKey, params }) {
   if (layoutId) {
     if (!view?.layouts) return view?.state === "retrying" ? message("Connexion au serveur des rooms perdue, nouvelle tentative…") : null;
     if (!layout) return message("Cette disposition n'existe plus : copiez le lien d'un espace depuis la room (onglet « Écrans »).");
-    return html`<${LayoutView} items=${layout.items} view=${view} streams=${streams} featured=${featured} feed=${feed} wishes=${wishes} progress=${progress} />`;
+    return html`<${LayoutView} items=${layout.items} view=${view} streams=${streams} featured=${featured} feed=${feed} wishes=${wishes} mine=${mine} progress=${progress} />`;
   }
   if (!known) return view?.state === "retrying" ? message("Connexion au serveur des rooms perdue, nouvelle tentative…") : null;
   if (config.mode === "manuel" && !config.variants.length) return message("Cet espace n'a pas encore de disposition : réglez-la dans la room (onglet « Écrans », vue « Overlay »).");
   const empty = view?.state !== "ready" ? "Connexion au serveur des rooms…"
     : `Room ${code} : ${config.joueurs.length ? "les joueurs choisis ne partagent pas" : "aucun joueur ne partage"} leur écran pour l'instant.`;
   return html`<${LayoutView} items=${items} view=${view} streams=${streams} featured=${featured} feed=${feed} wishes=${wishes}
-    progress=${progress} empty=${streams.length ? null : empty} />`;
+    mine=${mine} progress=${progress} empty=${streams.length ? null : empty} />`;
 }

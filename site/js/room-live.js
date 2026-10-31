@@ -272,7 +272,8 @@ export function ItemsPanel({ status, tracker, mine, selected, onSelected, code }
 
 // Objets d'un joueur : regroupés par importance (avec le nombre d'exemplaires), puis les derniers arrivés.
 // Avec une recherche, seuls les objets dont le nom la contient restent, et tous ceux arrivés sont listés.
-function PlayerItems({ slot, status, tracker, needle, search, titled, code }) {
+// `compact` : aperçu épuré (client texte) : objets de progression, utiles et pièges seulement, inventaire de départ replié.
+function PlayerItems({ slot, status, tracker, needle = "", search = "", titled, code, compact = false }) {
   const [all, setAll] = useState(false);
   const received = receivedItems(tracker.data.live, slot.slot);
   const gameOf = (player) => (player === 0 ? "Archipelago" : status.slots.find((s) => s.slot === player)?.game);
@@ -302,7 +303,7 @@ function PlayerItems({ slot, status, tracker, needle, search, titled, code }) {
     group.set(i.name, (group.get(i.name) || 0) + 1);
   }
   const counts = GROUPS.map(([kind, label, word]) => ({ kind, label, word, n: [...groups[kind].values()].reduce((a, b) => a + b, 0) }))
-    .filter((g) => g.n);
+    .filter((g) => g.n && !(compact && g.kind === "filler"));
   const recent = [...matching].reverse().slice(0, all || needle ? undefined : RECENT);
 
   const tags = (kind) => html`<ul class="item-tags">${[...groups[kind]].sort((a, b) => a[0].localeCompare(b[0]))
@@ -317,6 +318,19 @@ function PlayerItems({ slot, status, tracker, needle, search, titled, code }) {
   // Recherche sans résultat chez ce joueur : une seule ligne, pour ne pas encombrer quand plusieurs sont cochés.
   if (needle && pkg && !matching.length && !startCount) {
     return html`<p class="items-player-block items-none hint">${titled && html`<strong>${slot.name}</strong> : `}aucun objet reçu ne contient « ${search} » (${plural(received.length, "objet")} au total).</p>`;
+  }
+  if (compact) {
+    return html`<section class="items-player-block inventory-compact">
+      <h3>Inventaire de ${slot.name} <span class="hint">${plural(received.length, "objet")}</span></h3>
+      ${received.length === 0 && !startCount ? html`<p class="hint">Aucun objet reçu pour l'instant.</p>`
+        : waiting ? html`<p class="hint">Chargement des noms d'objets…</p>`
+        : html`${counts.map((g) => html`<div class="items-group">${title(g)}${tags(g.kind)}</div>`)}
+          ${!counts.length && html`<p class="hint">Que des objets sans importance pour l'instant.</p>`}
+          ${startCount > 0 && html`<details class="items-group"><summary><h4>Inventaire de départ <span class="hint">${startCount}</span></h4></summary>
+            <ul class="item-tags">${startShown.map(([name, n]) => html`<li><span>${name}</span>${n > 1 && html`<span class="item-count">×${n}</span>`}</li>`)}</ul>
+          </details>`}`}
+      <p class="hint">Tout le détail (objets sans importance, derniers arrivés) : onglet « Progression ».</p>
+    </section>`;
   }
   return html`<section class="items-player-block">
     ${titled && html`<h3>${slot.name} <span class="hint">${slot.game}</span></h3>`}
@@ -383,14 +397,22 @@ const isWished = (wishes, node) => node.type === "item" && !!wishes?.get(String(
 export const wishHit = (wishes, nodes) => !!wishes?.size && !String(nodes[0]?.text || "").startsWith("[Hint]")
   && nodes.some((node) => isWished(wishes, node));
 
-export function MessagePart({ node, self, marks = false, wishes }) {
+// Objet qui concerne l'un des joueurs de `mine` (noms en minuscules) : reçu ou envoyé par lui, sauf un objet sans
+// importance (bleu clair). Surligné dans le client texte et les messages de l'overlay.
+export const mineHit = (mine, node) => node.type === "item" && !!mine?.size && itemKind(node.item) !== ITEM_KINDS.filler
+  && [node.item.receiver?.name, node.item.sender?.name].some((name) => name && mine.has(String(name).toLowerCase()));
+
+// `mine` : joueurs dont les objets sont surlignés (voir mineHit).
+export function MessagePart({ node, self, marks = false, wishes, mine }) {
   switch (node.type) {
     case "player":
       return html`<span class=${node.player?.name === self || node.text === self ? "ap-self" : "ap-player"}>${node.text}</span>`;
     case "item": {
       const kind = itemKind(node.item);
       const wished = isWished(wishes, node);
-      return html`<span class=${`${kind.cls} ${wished ? "wish-item" : ""}`} title=${wished ? `${kind.title}, dans la wishlist de ${node.item.receiver?.name}` : kind.title}>${
+      const own = mineHit(mine, node);
+      const title = `${kind.title}${wished ? `, dans la wishlist de ${node.item.receiver?.name}` : ""}${own ? ", vous concerne" : ""}`;
+      return html`<span class=${`${kind.cls} ${wished ? "wish-item" : ""} ${own ? "mine-item" : ""}`} title=${title}>${
         wished && "♥ "}${marks && kind.mark}${node.text}</span>`;
     }
     case "location":
@@ -404,7 +426,8 @@ export function MessagePart({ node, self, marks = false, wishes }) {
   }
 }
 
-export function TextClient({ room, status, mine, wishlists }) {
+// `tracker` : tracker de la partie (lu par la page de la room), pour l'inventaire du joueur choisi.
+export function TextClient({ room, status, mine, wishlists, tracker }) {
   const own = status.slots.filter((s) => mine.some((m) => m.name.toLowerCase() === s.name.toLowerCase()));
   const [slot, setSlot] = useState((own[0] || status.slots[0])?.name || "");
   const [password, setPassword] = useState("");
@@ -417,6 +440,9 @@ export function TextClient({ room, status, mine, wishlists }) {
   const nextId = useRef(0);
 
   const wishes = wishIndex(wishlists);
+  // Objets surlignés : ceux de vos joueurs, et du joueur dont le client est connecté.
+  const mineNames = new Set([...own.map((s) => s.name), slot].filter(Boolean).map((n) => n.toLowerCase()));
+  const shownSlot = status.slots.find((s) => s.name === slot);
   const push = (line) => setLines((all) => [...all.slice(-499), { id: nextId.current++, ...line }]);
   useEffect(() => () => client.current?.socket.disconnect(), []);
   useEffect(() => { if (log.current) log.current.scrollTop = log.current.scrollHeight; }, [lines]);
@@ -458,6 +484,9 @@ export function TextClient({ room, status, mine, wishlists }) {
   };
 
   const connected = state === "connected";
+  // Aperçu de l'inventaire du joueur choisi, à côté du chat sur un écran large.
+  const inventory = shownSlot && tracker?.data && html`<${PlayerItems} key=${shownSlot.slot} slot=${shownSlot} status=${status}
+    tracker=${tracker} code=${room.code} compact />`;
   return html`<div class="stack full text-client">
     <p class="hint">Chat et commandes (<code>!hint</code>, <code>!remaining</code>…) sans lancer Archipelago. Les autres joueurs
       voient ce client rejoindre la partie.</p>
@@ -473,12 +502,14 @@ export function TextClient({ room, status, mine, wishlists }) {
         ${state === "connecting" ? "Connexion…" : state === "closed" ? "Se reconnecter" : "Se connecter"}</button>
     </div>`}
     ${error && html`<div class="notice error full">${error}</div>`}
+    <div class=${`client-main full ${lines.length > 0 && inventory ? "with-inventory" : ""}`}>
+    <div class="stack full">
     ${lines.length > 0 && html`<div class="client-log full" ref=${log} role="log" aria-live="polite">
       ${lines.map((line) => {
         const hit = !line.info && wishHit(wishes, line.nodes);
         return html`<div key=${line.id} class=${line.info ? "hint" : hit ? "wish-hit" : ""}>
           ${hit && html`<span class="wish-label">♥ Wishlist</span>`}
-          ${line.info || line.nodes.map((node) => html`<${MessagePart} node=${node} self=${slot} wishes=${wishes} />`)}</div>`;
+          ${line.info || line.nodes.map((node) => html`<${MessagePart} node=${node} self=${slot} wishes=${wishes} mine=${mineNames} />`)}</div>`;
       })}
     </div>`}
     ${connected && html`<form class="row full" onSubmit=${(e) => { e.preventDefault(); send(input); }}>
@@ -489,5 +520,10 @@ export function TextClient({ room, status, mine, wishlists }) {
     </form>
     <div class="chips-row">${QUICK.map((q) => html`<button type="button" class="chip-btn" title=${q.title}
       onClick=${() => (q.fill ? setInput(q.text) : (!q.confirm || confirm(q.confirm)) && send(q.text))}>${q.label}</button>`)}</div>`}
+    ${lines.length > 0 && html`<p class="hint">Surlignés : les objets reçus ou envoyés par ${[...new Set([...own.map((s) => s.name), slot])].join(", ")}
+      (sauf les objets sans importance).</p>`}
+    </div>
+    ${inventory && html`<aside class="client-inventory">${inventory}</aside>`}
+    </div>
   </div>`;
 }
