@@ -3,10 +3,10 @@
 // Rien n'est simulé : Archipelago seul connaît la logique des jeux. L'estimation se fait par rapport aux réglages
 // par défaut du jeu, d'après les noms et valeurs des options (« logic_difficulty: hard », « trap_percentage »,
 // « entrance_shuffle »…), assez réguliers d'un monde à l'autre pour donner une tendance sur les 700 jeux.
-import { html } from "../vendor/preact-htm.js";
+import { html, useMemo, useState } from "../vendor/preact-htm.js";
 import { isPlainObject } from "./yaml-model.js";
 import { cachedGame, gameEntry } from "./data.js";
-import { COMMON_TEXT, parseRandomRange, resolveChoice, toggleState } from "./options.js";
+import { COMMON_TEXT, describeScalar, parseRandomRange, resolveChoice, singleValue, toggleState, writeSingle } from "./options.js";
 
 export const DIFFICULTY_LEVELS = ["Très accessible", "Accessible", "Standard", "Exigeant", "Difficile", "Très difficile"];
 export const LENGTH_LEVELS = ["Bien plus courte", "Plus courte", "Normale", "Plus longue", "Bien plus longue"];
@@ -119,7 +119,14 @@ const isActive = (option, v) => option.kind === "toggle" ? v === true
   : RANGE_KINDS.includes(option.kind) ? v > 0 : !INACTIVE.test(String(v));
 const sizeOf = (value) => Array.isArray(value) ? value.length : isPlainObject(value) ? Object.keys(value).length : 0;
 
+// Règle de chaque option, gardée : la recherche de réglages (suggestSettings) note des centaines de variantes.
+const rules = new WeakMap();
 function ruleFor(option) {
+  if (!rules.has(option)) rules.set(option, findRule(option) || null);
+  return rules.get(option);
+}
+
+function findRule(option) {
   // Clés en snake_case ou en CamelCase (« RandomizeGrubs » → « randomize_grubs »).
   const key = option.key.replace(/([a-z0-9])([A-Z])/g, "$1_$2").toLowerCase();
   const kind = option.kind;
@@ -154,7 +161,7 @@ function ruleFor(option) {
   }
   if (/sanity|shuffle|randomi[sz]e/.test(key) && (kind === "toggle" || CHOICE_KINDS.includes(kind))) {
     // Ennemis et boss mélangés : plus durs, pas plus longs ; prix et point de départ : ni l'un ni l'autre.
-    if (/enem|boss|monster/.test(key) && !/sanity/.test(key)) return { cat: "logic", score: (v) => ({ d: isActive(option, v) ? 0.5 : 0 }) };
+    if (/(enem(y|ies)|boss(es)?|monsters?)(_shuffle|_rando\w*|_randomi[sz]\w*)?$/.test(key) && !/sanity/.test(key)) return { cat: "logic", score: (v) => ({ d: isActive(option, v) ? 0.5 : 0 }) };
     if (/price|cost|start/.test(key)) return null;
     const more = /sanity/.test(key) ? 0.5 : 0.3; // les « …sanity » ajoutent des lieux à visiter
     return { cat: "shuffle", score: (v) => (isActive(option, v) ? { l: more, ...(REMOTE.test(String(v)) && { d: 0.4, flag: "remote" }) } : {}) };
@@ -168,7 +175,7 @@ function ruleFor(option) {
   }
   if (CHOICE_KINDS.includes(kind)) {
     // Ordre des choix (du plus facile au plus dur, le plus souvent) quand les valeurs ne disent rien d'elles-mêmes.
-    const ordered = /difficult|logic|skill|precision|obscurity/.test(key) && option.choices?.length > 1;
+    const ordered = /difficult|skill_level|precision|obscurity|(^|_)logic(_level|_mode|_type|_rules)?$/.test(key) && option.choices?.length > 1;
     const rank = (v) => option.choices.findIndex((c) => c.value === v);
     const glitchy = option.choices?.some((c) => GLITCH(c.value.toLowerCase()) || NO_LOGIC.test(c.value.toLowerCase()));
     return {
@@ -304,8 +311,8 @@ function gameRisks(game, section, data, entry, flags) {
 
 // --- Prévision d'un jeu, d'un YAML, d'une room ----------------------------------------------
 
-// { game, difficulty, length, level, lengthLevel, factors, random, risks }
-export function forecastGame(game, section, data, entry = gameEntry(game)) {
+// Notes d'une section : { difficulty, length, factors, flags, random }.
+function score(section, data) {
   const sums = new Map();
   const flags = new Set();
   const random = [];
@@ -336,10 +343,102 @@ export function forecastGame(game, section, data, entry = gameEntry(game)) {
     }))
     .sort((a, b) => Math.abs(b.delta) - Math.abs(a.delta));
   const total = (axis) => factors.filter((f) => f.axis === axis).reduce((s, f) => s + f.delta, 0);
-  const difficulty = total("d"), length = total("l");
+  return { difficulty: total("d"), length: total("l"), factors, flags, random: [...new Set(random)] };
+}
+
+// { game, difficulty, length, level, lengthLevel, factors, random, risks }
+export function forecastGame(game, section, data, entry = gameEntry(game)) {
+  const { difficulty, length, factors, flags, random } = score(section, data);
   return {
     game, difficulty, length, level: difficultyLevel(difficulty), lengthLevel: lengthLevel(length),
-    factors, random: [...new Set(random)], risks: gameRisks(game, section, data, entry, flags),
+    factors, random, risks: gameRisks(game, section, data, entry, flags),
+  };
+}
+
+// --- Réglages pour viser un niveau ------------------------------------------------------------
+//
+// On change une option à la fois, en gardant à chaque pas celle qui rapproche le plus du niveau visé (le centre de
+// sa plage) en bougeant le moins l'autre axe. Seules les options de jeu « sûres » sont touchées : ni glitchs ni
+// absence de logique, ni DeathLink, équilibrage ou objets envoyés aux autres (ils engagent les autres joueurs),
+// ni objets de départ (le site ne choisit pas d'objets à la place du joueur).
+
+const TARGETS = { d: [-2.6, -1.4, 0, 1.75, 3.25, 4.5], l: [-2.6, -1.4, 0, 1.6, 3] };
+const ADJUSTABLE = { logic: 0, trap: 0.1, goal: 0, shuffle: 0.15, entrance: 0.5 };
+const MAX_CHANGES = 8;
+
+// Valeurs à essayer pour une option : chaque choix, oui/non, et quelques crans d'un intervalle.
+function candidates(option) {
+  if (option.kind === "toggle") return [true, false];
+  if (CHOICE_KINDS.includes(option.kind)) return (option.choices || []).map((c) => c.value).filter((v) => v !== "random");
+  if (RANGE_KINDS.includes(option.kind) && option.min != null && option.max != null) {
+    const steps = [0, 0.1, 0.25, 0.5, 0.75, 1].map((t) => Math.round(option.min + t * (option.max - option.min)));
+    const def = scalar(option, option.default);
+    return [...new Set([...steps, ...(Number.isFinite(def) ? [def] : [])])];
+  }
+  return [];
+}
+
+// { changes: [{ key, name, from, to, value }], level, reached } : `value`, à écrire dans le YAML.
+export function suggestSettings(section, data, axis, target) {
+  const levelOf = axis === "d" ? difficultyLevel : lengthLevel;
+  const other = axis === "d" ? "length" : "difficulty";
+  const mine = axis === "d" ? "difficulty" : "length";
+  const goal = TARGETS[axis][target];
+  const moves = [];
+  for (const option of data.options.values()) {
+    const rule = ruleFor(option);
+    if (!rule || rule.whole || !(rule.cat in ADJUSTABLE) || option.kind === "removed" || !option.visibility) continue;
+    // Options de la page simple d'abord : celles que le joueur connaît.
+    const cost = ADJUSTABLE[rule.cat] + ((option.visibility & 2) === 2 ? 0 : 0.2);
+    for (const value of candidates(option)) {
+      const s = rule.score(value);
+      if (s.flag) continue;
+      moves.push({ option, value, cost });
+    }
+  }
+
+  // Une proposition ne doit pas créer de risque (objectif au-dessus du disponible, trop de lieux exclus…).
+  const risky = (sec, s) => gameRisks(null, sec, data, null, s.flags).filter((r) => r.level !== "info").length;
+  let current = { ...section };
+  let now = score(current, data);
+  const allowed = risky(current, now);
+  const chosen = new Map();
+  const banned = new Set();
+  for (let step = 0; step < MAX_CHANGES && levelOf(now[mine]) !== target; step++) {
+    const distance = Math.abs(now[mine] - goal);
+    let best = null;
+    for (const move of moves) {
+      if (banned.has(move) || (chosen.has(move.option.key) && chosen.get(move.option.key) === move.value)) continue;
+      const next = score({ ...current, [move.option.key]: move.value }, data);
+      if (next.flags.size > now.flags.size) continue;
+      const gain = distance - Math.abs(next[mine] - goal);
+      if (gain < 0.1) continue;
+      const rank = Math.abs(next[mine] - goal) + move.cost + 0.5 * Math.abs(next[other] - now[other]);
+      if (!best || rank < best.rank) best = { ...move, next, rank };
+    }
+    if (!best) break;
+    if (risky({ ...current, [best.option.key]: best.value }, best.next) > allowed) {
+      banned.add(moves.find((m) => m.option === best.option && m.value === best.value));
+      step--;
+      continue;
+    }
+    current = { ...current, [best.option.key]: best.value };
+    chosen.set(best.option.key, best.value);
+    now = best.next;
+  }
+
+  const shown = (option, value) => {
+    if (value === undefined) value = option.default;
+    const single = singleValue(option, value);
+    return single.single ? describeScalar(option, single.value) : "Tirage au sort";
+  };
+  const changes = [...chosen].map(([key, value]) => {
+    const option = data.options.get(key);
+    return { key, name: optionLabel(option), from: shown(option, section[key]), to: describeScalar(option, value), value: writeSingle(option, section[key], value) };
+  }).filter((c) => c.from !== c.to);
+  return {
+    changes, level: levelOf(now[mine]), reached: levelOf(now[mine]) === target,
+    after: { level: difficultyLevel(now.difficulty), lengthLevel: lengthLevel(now.length) },
   };
 }
 
@@ -428,11 +527,47 @@ export function forecastRoom(entries, { mode } = {}) {
 // --- Affichage ---------------------------------------------------------------------------
 // Chaque niveau est écrit en toutes lettres : la jauge et les couleurs ne portent jamais seules l'information.
 
-function Meter({ label, levels, level }) {
+const AXES = {
+  d: { label: "Difficulté", levels: DIFFICULTY_LEVELS, current: (f) => f.level, noun: "une difficulté" },
+  l: { label: "Durée", levels: LENGTH_LEVELS, current: (f) => f.lengthLevel, noun: "une durée" },
+};
+
+// Jauge en lecture seule (sans `onTarget`), ou curseur : le déplacer choisit un niveau à viser.
+function Meter({ axis, level, target, onTarget }) {
+  const { label, levels } = AXES[axis];
+  const shown = target ?? level;
+  const text = target != null ? `${levels[level]} → ${levels[target]}` : levels[level];
   return html`<div class="meter-row">
     <span class="meter-label">${label}</span>
-    <strong class="meter-value">${levels[level]}</strong>
-    <span class="meter" aria-hidden="true">${levels.map((_, i) => html`<span class=${i <= level ? "on" : ""}></span>`)}</span>
+    <strong class="meter-value">${text}</strong>
+    ${onTarget
+      ? html`<input type="range" class="meter-slider" min="0" max=${levels.length - 1} step="1" value=${shown}
+          aria-label=${`${label} visée`} aria-valuetext=${levels[shown]}
+          onInput=${(e) => { const next = Number(e.target.value); onTarget(next === level ? null : next); }} />`
+      : html`<span class="meter" aria-hidden="true">${levels.map((_, i) => html`<span class=${i <= level ? "on" : ""}></span>`)}</span>`}
+  </div>`;
+}
+
+// Réglages proposés pour atteindre le niveau visé, à appliquer d'un clic.
+function Proposal({ forecast, section, data, axis, target, onApply, onCancel }) {
+  const { levels, noun } = AXES[axis];
+  const key = JSON.stringify(section);
+  const result = useMemo(() => suggestSettings(section, data, axis, target), [key, axis, target]);
+  const other = axis === "d" ? "l" : "d";
+  const otherBefore = AXES[other].current(forecast);
+  const otherAfter = other === "d" ? result.after.level : result.after.lengthLevel;
+  return html`<div class="proposal stack full" role="region" aria-label="Réglages proposés">
+    ${result.changes.length === 0
+      ? html`<p>Aucune option reconnue de ce jeu ne permet de viser ${noun} « ${levels[target]} ».</p>`
+      : html`<p>Pour viser ${noun} « ${levels[target]} », changer :</p>
+        <ul class="factors">${result.changes.map((c) => html`<li><strong>${c.name}</strong> : ${c.from} → ${c.to}</li>`)}</ul>
+        ${!result.reached && html`<p class="hint">Ces réglages n'atteignent que « ${levels[result.level]} » : le site ne reconnaît
+          pas assez d'options de ce jeu pour aller plus loin.</p>`}
+        ${otherAfter !== otherBefore && html`<p class="hint">${AXES[other].label} aussi : ${AXES[other].levels[otherBefore]} → ${AXES[other].levels[otherAfter]}.</p>`}`}
+    <div class="row">
+      ${result.changes.length > 0 && html`<button type="button" onClick=${() => onApply(result.changes)}>Appliquer ces réglages</button>`}
+      <button type="button" class="ghost" onClick=${onCancel}>Annuler</button>
+    </div>
   </div>`;
 }
 
@@ -445,8 +580,10 @@ export function RiskList({ risks }) {
 
 const factorSign = (f) => (f.axis === "d" ? (f.delta > 0 ? "Plus dur" : "Plus facile") : f.delta > 0 ? "Plus long" : "Plus court");
 
-function GameForecast({ forecast, title }) {
+function GameForecast({ forecast, title, section, data, onApply }) {
   const { risks, random } = forecast;
+  const [target, setTarget] = useState(null); // { axis, level }
+  const slider = (axis) => onApply && ((level) => setTarget(level == null ? null : { axis, level }));
   // Un même facteur sur les deux axes (équilibrage bas : plus dur et plus long) tient sur une ligne.
   const factors = [];
   for (const f of forecast.factors) {
@@ -457,9 +594,12 @@ function GameForecast({ forecast, title }) {
   return html`<div class="forecast-game stack full">
     ${title && html`<h3>${title}</h3>`}
     <div class="meters">
-      <${Meter} label="Difficulté" levels=${DIFFICULTY_LEVELS} level=${forecast.level} />
-      <${Meter} label="Durée" levels=${LENGTH_LEVELS} level=${forecast.lengthLevel} />
+      ${["d", "l"].map((axis) => html`<${Meter} axis=${axis} level=${AXES[axis].current(forecast)}
+        target=${target?.axis === axis ? target.level : null} onTarget=${slider(axis)} />`)}
     </div>
+    ${onApply && !target && html`<p class="hint">Déplacez un curseur pour viser un autre niveau : le site propose les options à changer.</p>`}
+    ${target && html`<${Proposal} forecast=${forecast} section=${section} data=${data} axis=${target.axis} target=${target.level}
+      onApply=${(changes) => { onApply(changes); setTarget(null); }} onCancel=${() => setTarget(null)} />`}
     ${risks.length > 0 && html`<${RiskList} risks=${risks} />`}
     ${random.length > 0 && html`<p class="hint">Tirage au sort sur ${random.join(", ")} : la difficulté réelle dépendra du tirage.</p>`}
     ${factors.length > 0
@@ -470,8 +610,8 @@ function GameForecast({ forecast, title }) {
   </div>`;
 }
 
-// Carte de l'éditeur : recalculée à chaque changement d'option.
-export function ForecastCard({ js }) {
+// Carte de l'éditeur : recalculée à chaque changement d'option. `update(path, value)` : écrit une option du YAML.
+export function ForecastCard({ js, update }) {
   const forecast = forecastDoc(js);
   if (!forecast.games.length) return null;
   const several = forecast.games.length > 1;
@@ -480,7 +620,9 @@ export function ForecastCard({ js }) {
     ${several && html`<p class="hint">Jeu tiré au sort : une prévision par jeu possible.</p>`}
     ${forecast.games.map((g) => g.missing
       ? html`<p class="hint">${g.game} : options non disponibles, pas de prévision.</p>`
-      : html`<${GameForecast} forecast=${g} title=${several ? g.game : null} />`)}
+      : html`<${GameForecast} key=${g.game} forecast=${g} title=${several ? g.game : null}
+          section=${isPlainObject(js[g.game]) ? js[g.game] : {}} data=${cachedGame(g.game)}
+          onApply=${update && ((changes) => changes.forEach((c) => update([g.game, c.key], c.value)))} />`)}
     <p class="hint">Estimation par rapport aux réglages par défaut du jeu, d'après les noms et valeurs des options : ni la difficulté
       propre au jeu ni sa logique ne sont connues du site. Seule la génération dira si la partie est possible.</p>
   </section>`;

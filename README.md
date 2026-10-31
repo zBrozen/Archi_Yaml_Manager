@@ -20,6 +20,9 @@ sans éditer le code à la main.
   de logique (les objets des autres joueurs peuvent devenir inaccessibles), trop de lieux exclus (la génération
   échoue), objectif qui demande plus qu'il n'en existe, options contradictoires. Rien n'est simulé : l'estimation
   se lit dans les noms et valeurs des options (`site/js/forecast.js`), seule la génération dit si la partie est possible.
+  Les deux jauges sont des curseurs : en visant un autre niveau, le site propose les options à changer (logique,
+  pièges, objectif, lieux mélangés…), à appliquer d'un clic. Il ne touche jamais aux réglages qui engagent les autres
+  joueurs (glitchs, DeathLink, équilibrage, objets envoyés aux autres) et écarte toute proposition qui créerait un risque.
 - **Exporter** : le fichier contient toutes les options du jeu, comme les modèles d'Archipelago ; celles qui
   manquaient sont ajoutées à leur valeur par défaut, avec leur description en commentaire. Le reste du fichier
   (commentaires, mise en forme) est conservé, et une table de poids garde sa forme (la valeur choisie prend

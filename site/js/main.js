@@ -484,7 +484,7 @@ function Editor({ index, file, setFile, onClose, advanced, onSend }) {
 
     <div class="content">
       <${PlayerCard} js=${entry.js} index=${index} games=${games} update=${update} />
-      ${games.length > 0 && html`<${ForecastCard} js=${entry.js} />`}
+      ${games.length > 0 && html`<${ForecastCard} key=${active} js=${entry.js} update=${update} />`}
       ${games.length === 0 && html`<div class="notice warn">Aucun jeu n'est indiqué dans le champ « game ».</div>`}
       ${games.map((g) => html`<${GameSection} key=${`${active}-${g}`} name=${g} entry=${entry} index=${index} update=${update} view=${view}
         onApworld=${() => setApworlds((n) => n + 1)} />`)}

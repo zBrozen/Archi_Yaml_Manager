@@ -58,6 +58,8 @@
   noms et valeurs des options, notées par rapport à la valeur par défaut (un YAML aux réglages par défaut donne
   toujours « Standard / Normale »). Après un changement des règles, relancer sur tous les jeux de `index.json` :
   aucune erreur, aucun écart aux réglages par défaut, et relire les options classées par catégorie (faux positifs).
+  Les curseurs de la carte (`suggestSettings`) changent une option à la fois vers le niveau visé : vérifier aussi que
+  le niveau annoncé est celui obtenu et qu'aucune proposition ne crée de risque.
 - Lisibilité, y compris en stream : le site (pages des rooms surtout) doit rester lisible quand il est filmé
   ou intégré comme overlay dans un stream (source navigateur OBS) : textes assez grands et aérés, contrastes
   élevés en clair comme en sombre (pas de noir pur sous du blanc pur), information jamais portée par la
