@@ -180,6 +180,16 @@ export function RoomsHome() {
   const all = knownRooms();
   const rooms = all.filter((r) => !!r.ended === (listTab === "ended"));
   const endedCount = all.filter((r) => r.ended).length;
+  // Nettoyage des rooms clôturées : supprimées du serveur pour celles dont on est l'hôte, oubliées ici pour les autres.
+  // Une room déjà supprimée (404) est simplement oubliée.
+  const purge = () => confirm(`Supprimer les ${endedCount} rooms clôturées ? Celles dont vous êtes l'hôte sont supprimées définitivement avec leurs YAML ; les autres sont seulement retirées de cette liste.`)
+    && end.run(async () => {
+      for (const r of all.filter((x) => x.ended)) {
+        if (r.admin) await api.remove(r.code).catch((e) => { if (e.status !== 404) throw e; });
+        forgetAccess(r.code);
+      }
+      setListTick((n) => n + 1);
+    });
   // Clôture ou réouverture depuis la liste (hôte seulement), sans ouvrir la room.
   const setEnded = (r, ended) => (!ended || confirm(`Clôturer la room « ${r.title || r.code} » ? Plus personne ne pourra y déposer de YAML ni la rejoindre ; vous pourrez la rouvrir.`))
     && end.run(async () => {
@@ -267,6 +277,10 @@ export function RoomsHome() {
           ${r.ended ? "Rouvrir" : "Clôturer"}</button>`}
       </li>`)}</ul>`
         : html`<p class="hint full">${listTab === "ended" ? "Aucune room clôturée." : "Aucune room en cours."}</p>`}
+      ${listTab === "ended" && endedCount > 0 && html`<div class="row full">
+        <button type="button" class="ghost" disabled=${end.busy} onClick=${purge}>Supprimer les rooms clôturées</button>
+        <span class="hint">Sinon, elles sont supprimées automatiquement une semaine après leur clôture.</span>
+      </div>`}
     </section>`}
   </main>`;
 }
@@ -440,7 +454,7 @@ function RoomHeader({ room, online }) {
     ${room.ap_room_url ? html`<${ServerAddress} room=${room} online=${online} />`
       : html`<p class="hint">${room.max_slots} YAML maximum par joueur${closing}</p>`}
     ${room.ended_at && html`<p class="hint">Room clôturée par l'hôte le ${formatWhen(room.ended_at)} : elle reste consultable, mais plus
-      rien ne peut y être déposé ni modifié.</p>`}
+      rien ne peut y être déposé ni modifié. Elle sera supprimée le ${formatWhen(room.purge_at)}, sauf réouverture.</p>`}
     ${room.notes && html`<p class="room-notes">${room.notes}</p>`}
   </section>`;
 }
@@ -836,9 +850,9 @@ function HostPanel({ room, setData, data }) {
     <div class="row">
       ${room.ended_at
         ? html`<button type="button" disabled=${save.busy} onClick=${() => end(false)}>Rouvrir la room</button>
-          <span class="hint">Clôturée le ${formatWhen(room.ended_at)}.</span>`
+          <span class="hint">Clôturée le ${formatWhen(room.ended_at)} ; suppression automatique le ${formatWhen(room.purge_at)}.</span>`
         : html`<button type="button" class="ghost" disabled=${save.busy} onClick=${() => end(true)}>Clôturer la room</button>
-          <span class="hint">Partie terminée : la room reste consultable, mais plus rien ne peut y être déposé ni modifié.</span>`}
+          <span class="hint">Partie terminée : la room reste consultable, mais plus rien ne peut y être déposé ni modifié. Elle est supprimée une semaine plus tard, sauf réouverture.</span>`}
     </div>
     ${!room.direct && !room.ended_at && html`<div class="row">
       ${room.open

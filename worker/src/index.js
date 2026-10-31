@@ -31,6 +31,7 @@ const LIMITS = {
   wishName: 120,
 };
 const ROOM_LIFETIME_DAYS = 90; // rooms sans activité supprimées par la tâche planifiée
+const ENDED_LIFETIME_DAYS = 7; // rooms clôturées supprimées par la tâche planifiée, une semaine après la clôture
 
 // Génération en ligne.
 const FILE_KINDS = ["output", "spoiler"];
@@ -253,6 +254,7 @@ function publicRoom(room) {
     locked: !!room.locked,
     open: isOpen(room),
     ended_at: room.ended_at || null,
+    purge_at: room.ended_at ? room.ended_at + ENDED_LIFETIME_DAYS * 24 * 3600 * 1000 : null, // suppression automatique
     max_slots: room.max_slots,
     notes: room.notes,
     ap_room_url: room.ap_room_url,
@@ -1407,7 +1409,8 @@ export default {
   // Tâche planifiée (voir wrangler.toml) : supprime les rooms sans activité depuis longtemps.
   async scheduled(event, env) {
     const limit = Date.now() - ROOM_LIFETIME_DAYS * 24 * 3600 * 1000;
-    const { results } = await env.DB.prepare("SELECT code FROM rooms WHERE updated_at < ?").bind(limit).all();
+    const ended = Date.now() - ENDED_LIFETIME_DAYS * 24 * 3600 * 1000;
+    const { results } = await env.DB.prepare("SELECT code FROM rooms WHERE updated_at < ? OR ended_at < ?").bind(limit, ended).all();
     for (const { code } of results) await purgeRoom(env, code);
   },
 };
