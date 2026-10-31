@@ -1273,7 +1273,8 @@ function GameView({ room, online, tracker, mine }) {
     <${ProgressPanel} status=${status} tracker=${tracker} mode=${room.mode} mine=${mine} code=${room.code} onItems=${showItems} />
   </section>
   ${tracker.trackerId && html`<section class="card stack items-card" ref=${itemsCard}>
-    <${ItemsPanel} status=${status} tracker=${tracker} mine=${mine} selected=${selected} onSelected=${setItemSlots} />
+    <${ItemsPanel} status=${status} tracker=${tracker} mine=${mine} selected=${selected} onSelected=${setItemSlots}
+      code=${room.code} />
   </section>`}
   <section class="card stack">
     <h2>Fichiers de tous les joueurs</h2>

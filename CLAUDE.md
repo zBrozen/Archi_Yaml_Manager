@@ -48,6 +48,9 @@
   dans la liste à la réouverture par l'hôte.
   Wishlists (`wishlist.js`, table `wishlists`, par nom de joueur dans la partie) : objets reçus d'après le tracker
   d'archipelago.gg, noms lus dans les datapackages ; le tracker est lu une fois par `RoomPage` pour tous les onglets.
+  Inventaire de départ (sphère 0) : absent de l'API du tracker (`player_items_received` ne lit que les objets reçus) ;
+  `GET /ap-inventory/<slot>` du Worker lit le tableau `received-table` du tracker générique d'archipelago.gg
+  (inventaire avec le départ), `startingFrom` (`room-live.js`) en retire les objets reçus si les deux lectures concordent.
   Avancement (`spoiler.js`, onglet de l'hôte) : lecture du spoiler au format de `Spoiler.to_file` (BaseClasses.py,
   niveau 2 au moins pour le « Playthrough »), lieux reliés aux checks du tracker par les datapackages (un lieu sans
   numéro est un événement, non suivi). Le spoiler reste dans le navigateur de l'hôte (IndexedDB `room-spoilers`), sauf

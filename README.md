@@ -194,7 +194,10 @@ leur nom dans la partie, qui sert à retrouver leurs fichiers.
    activité, signalée en async au-delà de 2 jours ; API publique du tracker d'archipelago.gg) et les **objets
    reçus** par les joueurs cochés, avec une recherche commune (regroupés par importance, puis les derniers
    arrivés avec qui les a envoyés et d'où ; noms
-   lus dans le « datapackage » de chaque jeu, `/api/datapackage/<checksum>`), et propose un
+   lus dans le « datapackage » de chaque jeu, `/api/datapackage/<checksum>`), avec leur **inventaire de départ**
+   (sphère 0). L'API du tracker ne le donne pas : le service lit l'inventaire du tracker générique du joueur
+   (`/generic_tracker/…`, qui le compte avec les objets reçus) et le site en retire les objets reçus de l'API,
+   seulement quand les deux lectures sont du même moment. Elle propose aussi un
    **client texte** : chat et commandes (`!hint`, `!remaining`…) depuis le navigateur, avec
    [archipelago.js](https://github.com/ThePhar/archipelago.js) (`site/vendor/archipelago.js`).
    Chaque joueur remplit aussi sa **wishlist** (onglet « Wishlist ») parmi les objets de son jeu : en rouge tant
