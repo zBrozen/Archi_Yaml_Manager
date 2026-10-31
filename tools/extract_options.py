@@ -7,6 +7,7 @@ Le script charge Archipelago depuis ses sources (y compris les .apworld placés
 dans <Archipelago>/custom_worlds) et écrit :
     <out>/index.json         liste des jeux + version d'Archipelago
     <out>/games/<slug>.json  options d'un jeu, rangées par groupe
+    <out>/guides/<slug>.json guides du jeu (page du jeu et guides d'installation, en Markdown)
 """
 from __future__ import annotations
 
@@ -15,6 +16,7 @@ import datetime
 import json
 import logging
 import os
+import pkgutil
 import re
 import shutil
 import subprocess
@@ -29,6 +31,9 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "site" / "py"))
 from ap_extract import describe_world  # noqa: E402
 
 TRANSLATED_FIELDS = ("doc_fr", "doc_html_fr")
+# Guides gardés : anglais et français (toutes les langues si le jeu n'a ni l'un ni l'autre).
+GUIDE_LANGUAGES = {"English", "Français", "French"}
+GUIDE_MAX = 100_000  # caractères par guide
 
 
 def parse_args() -> argparse.Namespace:
@@ -72,6 +77,35 @@ def fingerprint(data: dict[str, Any]) -> str:
     return json.dumps(copy, sort_keys=True, ensure_ascii=False)
 
 
+def world_guides(game: str, world) -> dict[str, Any] | None:
+    """Page du jeu et guides d'installation, lus dans le dossier docs/ du monde (ceux d'archipelago.gg)."""
+    package = ".".join(world.__module__.split(".")[:2])
+
+    def read(name: str) -> str | None:
+        try:
+            data = pkgutil.get_data(package, f"docs/{name}")  # dossier ou .apworld (zip)
+        except Exception:
+            return None
+        return data.decode("utf-8", "replace").lstrip("﻿")[:GUIDE_MAX] if data else None
+
+    info = []
+    for language in getattr(world.web, "game_info_languages", None) or ["en"]:
+        if language in ("en", "fr") and (text := read(f"{language}_{game}.md")):
+            info.append({"language": language, "text": text})
+    tutorials = []
+    for tutorial in getattr(world.web, "tutorials", None) or []:
+        try:
+            name, description, language, file_name, link, authors = tutorial[:6]
+        except (TypeError, ValueError):
+            continue
+        if text := read(file_name):
+            tutorials.append({"title": name, "description": description, "language": language, "link": link,
+                              "authors": [str(a) for a in authors or []], "text": text})
+    preferred = [t for t in tutorials if t["language"] in GUIDE_LANGUAGES]
+    tutorials = preferred or tutorials
+    return {"info": info, "tutorials": tutorials} if info or tutorials else None
+
+
 # --- Chargement isolé ----------------------------------------------------------
 # Des centaines d'apworlds de la communauté : un seul qui plante, boucle ou épuise la mémoire
 # ne doit pas emporter les autres. Chaque lot est chargé dans son propre processus (limité en
@@ -110,7 +144,11 @@ def worker(ap_dir: Path, folder: Path, result: Path) -> int:
         except Exception as ex:  # un monde cassé ne doit pas bloquer les autres
             errors[game] = f"{type(ex).__name__}: {ex}"
             continue
-        games.append({"game": game, "data": data})
+        try:
+            guides = world_guides(game, world)
+        except Exception:  # guides facultatifs
+            guides = None
+        games.append({"game": game, "data": data, "guides": guides})
     for name, reason in worlds.failed_world_loads.items():
         errors[name] = reason.strip().splitlines()[-1] if reason.strip() else "échec du chargement"
     result.write_text(json.dumps({"ap_version": Utils.__version__, "games": games, "errors": errors},
@@ -188,19 +226,25 @@ def main() -> int:
 
     # Un jeu chargé par plusieurs lots (jeu officiel, ou deux apworlds du même jeu) : le premier compte.
     loaded: dict[str, dict] = {}
+    guides: dict[str, dict | None] = {}
     errors: dict[str, str] = {}
     for result in [core, *results]:
         for item in result["games"]:
-            loaded.setdefault(item["game"], item["data"])
+            if item["game"] not in loaded:
+                loaded[item["game"]] = item["data"]
+                guides[item["game"]] = item.get("guides")
         for name, reason in result["errors"].items():
             errors.setdefault(name, reason)
     for game in loaded:
         errors.pop(game, None)
 
-    games_dir.mkdir(parents=True, exist_ok=True)
-    previous_files = {old.name: old.read_bytes() for old in games_dir.glob("*.json")}
-    for old in games_dir.glob("*.json"):
-        old.unlink()
+    guides_dir = out_dir / "guides"
+    previous_files = {}
+    for folder in (games_dir, guides_dir):
+        folder.mkdir(parents=True, exist_ok=True)
+        for old in folder.glob("*.json"):
+            previous_files[f"{folder.name}/{old.name}"] = old.read_bytes()
+            old.unlink()
     changed = False
 
     index_games = []
@@ -208,11 +252,15 @@ def main() -> int:
     for game, data in sorted(loaded.items(), key=lambda kv: kv[0].casefold()):
         slug = slugify(game, taken)
         content = json.dumps(data, ensure_ascii=False, separators=(",", ":")).encode("utf-8")
-        previous = previous_files.pop(f"{slug}.json", None)
+        previous = previous_files.pop(f"games/{slug}.json", None)
         if previous is not None and fingerprint(json.loads(previous)) == fingerprint(data):
             content = previous  # même contenu : on garde le fichier tel quel
         (games_dir / f"{slug}.json").write_bytes(content)
         changed |= previous != content
+        if guides.get(game):
+            content = json.dumps(guides[game], ensure_ascii=False, separators=(",", ":")).encode("utf-8")
+            changed |= previous_files.pop(f"guides/{slug}.json", None) != content
+            (guides_dir / f"{slug}.json").write_bytes(content)
         index_games.append({
             "game": game,
             "file": f"games/{slug}.json",
@@ -220,6 +268,7 @@ def main() -> int:
             "apworld": data["apworld"],
             "world_version": data["world_version"],
             **({"rom": data["rom"]} if "rom" in data else {}),  # fichier exigé pour générer (voir ap_extract)
+            **({"guides": f"guides/{slug}.json"} if guides.get(game) else {}),
         })
 
     # Infos du tableur des jeux (stabilité, 18+…), relevées par fetch_apworlds.py.

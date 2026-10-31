@@ -20,7 +20,9 @@ de requêtes), les apworlds téléchargés et leurs licences sont gardés d'une 
 téléchargement échoue (limite atteinte, release supprimée…), la dernière version connue est réutilisée.
 
 Avec --credits, écrit pour chaque apworld le jeu, sa version, ses auteurs (archipelago.json), sa source,
-sa licence (fichier LICENSE de l'apworld, sinon celui du dépôt) et ses informations du tableur.
+sa licence (fichier LICENSE de l'apworld, sinon celui du dépôt), ses informations du tableur, et de quoi
+l'installer (page « Installer un jeu » du site) : lien direct du fichier, page de la release et liens de la
+colonne « Links & Downloads ».
 
 Usage :
     python tools/fetch_apworlds.py --config apworlds.json --local apworlds \\
@@ -47,6 +49,8 @@ from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 DEFAULT_SHEET = "1iuzDTOAvdoNe8Ne8i461qGNucg5OuEoF-Ikqs8aUQZw"
+# Dépôt du site : les apworlds du dossier apworlds/ se téléchargent depuis lui.
+SITE_REPO = os.environ.get("GITHUB_REPOSITORY", "zBrozen/Archi_Yaml_Manager")
 XLSX = {"m": "http://schemas.openxmlformats.org/spreadsheetml/2006/main"}
 REL_ID = "{http://schemas.openxmlformats.org/officeDocument/2006/relationships}id"
 WORKERS = 8
@@ -118,7 +122,8 @@ class Http:
 
 def read_sheet(http: Http, sheet_id: str) -> dict[str, dict]:
     """Jeux de la feuille « Playable Worlds », par nom normalisé :
-    nom affiché, stabilité, statut de PR, 18+, liens (colonne « Links & Downloads » en premier)."""
+    nom affiché, stabilité, statut de PR, 18+, liens (colonne « Links & Downloads » en premier),
+    liens de la seule colonne « Links & Downloads » (downloads)."""
     url = f"https://docs.google.com/spreadsheets/d/{sheet_id}/export?format=xlsx"
     book = zipfile.ZipFile(io.BytesIO(http.read(url)))
 
@@ -168,6 +173,7 @@ def read_sheet(http: Http, sheet_id: str) -> dict[str, dict]:
                 "pr_status": cells.get(columns.get("PR Status", ""), None),
                 "adult": cells.get(columns.get("18+ / Unrated", ""), "0") == "1",
                 "links": [url for _, url in row_links],
+                "downloads": [url for col, url in row_links if col == downloads],
             })
         if columns:
             break
@@ -186,7 +192,7 @@ def source_from_links(links: list[str]) -> dict | None:
 # --- Releases ---------------------------------------------------------------------
 
 def releases_of(http: Http, entry: dict) -> tuple[str, list[dict]]:
-    """Page du dépôt, releases [{tag, prerelease, assets: [(nom, url)]}] de la plus récente à la plus ancienne."""
+    """Page du dépôt, releases [{tag, page, prerelease, assets: [(nom, url)]}] de la plus récente à la plus ancienne."""
     if "gitlab" in entry:
         project = entry["gitlab"]
         api = f"https://gitlab.com/api/v4/projects/{urllib.parse.quote(project, safe='')}/releases"
@@ -194,6 +200,7 @@ def releases_of(http: Http, entry: dict) -> tuple[str, list[dict]]:
             else http.json(f"{api}?per_page=10")
         return f"https://gitlab.com/{project}", [{
             "tag": r.get("tag_name"),
+            "page": f"https://gitlab.com/{project}/-/releases/{urllib.parse.quote(r.get('tag_name') or '', safe='')}",
             "prerelease": r.get("upcoming_release", False),
             "assets": [(link["name"], link.get("direct_asset_url") or link["url"])
                        for link in r.get("assets", {}).get("links", [])],
@@ -204,6 +211,7 @@ def releases_of(http: Http, entry: dict) -> tuple[str, list[dict]]:
     # browser_download_url : téléchargement hors API, donc hors limite de requêtes.
     return f"https://github.com/{repo}", [{
         "tag": r.get("tag_name"),
+        "page": r.get("html_url"),
         "prerelease": r.get("prerelease", False) or r.get("draft", False),
         "assets": [(a["name"], a["browser_download_url"]) for a in r.get("assets", [])],
     } for r in raw]
@@ -371,8 +379,10 @@ def load_entries(http: Http, settings: dict) -> list[dict]:
                 if sheet:
                     close = difflib.get_close_matches(game["game"], [r["name"] for r in sheet.values()], n=3)
                     warn(f"{game['game']} : absent du tableur" + (f" (voulez-vous dire : {', '.join(close)} ?)" if close else ""))
-            elif "repo" not in game and "gitlab" not in game:
-                game.update(source_from_links(row["links"]) or {})
+            else:
+                game["links"] = row["downloads"]
+                if "repo" not in game and "gitlab" not in game:
+                    game.update(source_from_links(row["links"]) or {})
     return games + [dict(e) for e in settings.get("github", [])]
 
 
@@ -410,6 +420,7 @@ def fetch(http: Http, entry: dict, cache: Path | None, last: dict) -> list[dict]
                     and similarity(name[:-8], entry["game"]) < 0.6:
                 raise Skipped(f"la dernière release de {page} est un autre jeu ({game})")
             results.append({"name": name, "page": page, "tag": release["tag"], "data": data,
+                            "url": url, "release": release.get("page"),
                             "stored": str(stored) if stored else None})
         return results
     except Exception as ex:
@@ -475,7 +486,8 @@ def main() -> int:
                 continue
             taken.add(f["name"])
             (dest / f["name"]).write_bytes(f["data"])
-            files.append((dest / f["name"], f["page"], {**entry, "tag": f["tag"]}))
+            files.append((dest / f["name"], f["page"], {**entry, "tag": f["tag"], "url": f.get("url"),
+                                                        "release": f.get("release")}))
     print(f"{len(files)} apworld(s) ajouté(s) sur {len(entries)} jeu(x) listé(s)", flush=True)
     skipped = [e for e in entries if "_skipped" in e]
     if skipped:
@@ -501,7 +513,13 @@ def main() -> int:
                 kept[key] = info
             if entry.get("game"):
                 info = {**info, "sheet": {k: entry[k] for k in ("game", "stability", "pr_status", "adult") if k in entry}}
-            return info
+            # Pour installer le jeu : hors du cache des licences, ces liens changent à chaque release.
+            install = {
+                "download": entry.get("url") if page else f"https://github.com/{SITE_REPO}/raw/HEAD/apworlds/{path.name}",
+                "release": entry.get("release"),
+                "links": entry.get("links"),
+            }
+            return {**info, **{k: v for k, v in install.items() if v}}
 
         with ThreadPoolExecutor(WORKERS) as pool:
             credits = [c for c in pool.map(credit, files) if c]

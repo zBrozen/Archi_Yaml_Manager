@@ -8,6 +8,7 @@ import { useSetting, download, plural, SheetBadges, GamePicker, loadCredits } fr
 import { versionProblem, checkText, nameProblem } from "./check.js";
 import { RoomsHome, RoomPage, shareApworlds } from "./rooms.js";
 import { ScreensOverlay } from "./overlay.js";
+import { GuidesPage, guideLink } from "./guides.js";
 import { api as roomsApi, normalizeCode, roomsEnabled, saveAccess } from "./rooms-api.js";
 
 // Page du tracker chargée à la demande : elle embarque Lua (wasmoon), inutile ailleurs.
@@ -348,6 +349,7 @@ function GameSection({ name, entry, index, update, view, onApworld }) {
   return html`<section class="game">
     ${head(html`
       ${data.source === "custom" && html`<span class="badge accent">Jeu non officiel</span>`}
+      ${index.games.some((g) => g.game === name) && html`<a class="small" href=${guideLink(name)} target="_blank" rel="noopener">Installer ce jeu</a>`}
       <${SheetBadges} sheet=${gameEntry(name)?.sheet} />
       ${data.source === "apworld" && html`<span class="badge accent">Apworld ${data.world_version || ""}</span>`}
       <span class="stats">${changed} ${changed > 1 ? "options modifiées" : "option modifiée"}${problems > 0
@@ -529,10 +531,11 @@ function Header({ page, advanced, setAdvanced, docLanguage, setDocLanguage, them
   }, []);
   return html`<header class="site-header" ref=${ref}>
     <a class="brand" href="#/"><span class="logo" aria-hidden="true">◆</span> Archipelago YAML Manager</a>
-    ${roomsEnabled() && html`<nav class="site-nav">
+    <nav class="site-nav">
       <a href="#/" class=${page === "home" ? "active" : ""}>Éditeur</a>
-      <a href="#/rooms" class=${page !== "home" ? "active" : ""}>Rooms</a>
-    </nav>`}
+      <a href="#/installer" class=${page === "installer" ? "active" : ""}>Installer un jeu</a>
+      ${roomsEnabled() && html`<a href="#/rooms" class=${["rooms", "room", "tracker"].includes(page) ? "active" : ""}>Rooms</a>`}
+    </nav>
     <div class="header-tools">
       <label class="switch" title="Affiche les tirages au sort, les poids et le YAML brut">
         <input type="checkbox" checked=${advanced} onChange=${(e) => setAdvanced(e.target.checked)} />
@@ -552,7 +555,7 @@ function Header({ page, advanced, setAdvanced, docLanguage, setDocLanguage, them
   </header>`;
 }
 
-// Adresse de la page : #/ (éditeur), #/rooms, #/room/CODE. Les liens personnels
+// Adresse de la page : #/ (éditeur), #/installer?game=… (guide d'installation), #/rooms, #/room/CODE. Les liens personnels
 // (#/room/CODE/p/JETON, #/room/CODE/h/JETON) sont mémorisés puis retirés de l'adresse.
 // #/overlay/CODE/CLÉ?max=…&console=…&objets=… : écrans des joueurs et messages de la partie pour OBS,
 // page à part (ni en-tête ni pied de page).
@@ -561,6 +564,7 @@ function readRoute() {
   const [path, query = ""] = location.hash.replace(/^#\/?/, "").split("?");
   const parts = path.split("/").filter(Boolean);
   if (parts[0] === "rooms") return { page: "rooms" };
+  if (parts[0] === "installer") return { page: "installer", game: new URLSearchParams(query).get("game") || "" };
   if (parts[0] === "tracker") return { page: "tracker", params: Object.fromEntries(new URLSearchParams(query)) };
   if (parts[0] === "overlay" && parts[1] && parts[2]) {
     return { page: "overlay", code: normalizeCode(parts[1]), key: parts[2], params: Object.fromEntries(new URLSearchParams(query)) };
@@ -629,6 +633,9 @@ function App() {
   else if (!index) body = html`<main class="home"><p class="hint center">Chargement…</p></main>`;
   else if (file) {
     body = html`<${Editor} index=${index} file=${file} setFile=${setFile} advanced=${advanced} onClose=${() => setFile(null)} onSend=${sendToRoom} />`;
+  } else if (route.page === "installer") {
+    body = html`<${GuidesPage} key=${route.game} index=${index} game=${route.game}
+      onCreate=${(game) => setFile({ name: null, original: null, docs: [{ source: 0, js: newDocument(index, game), original: {}, dirty: [] }] })} />`;
   } else if (route.page === "rooms") {
     body = html`<${RoomsHome} />`;
   } else if (route.page === "tracker") {

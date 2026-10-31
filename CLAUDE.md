@@ -9,6 +9,10 @@
   `site/data/apworld-credits.json` (auteurs, source, licence, infos du tableur). `extract_options.py`
   recopie les infos du tableur (stabilité, PR, 18+) dans `index.json` (`sheet`), que le site affiche.
   Détails dans la section « Jeux non officiels » du README.
+- Page « Installer un jeu » (`#/installer?game=…`, `guides.js`) : liens d'installation des crédits (`download`,
+  `release`, `links`, relevés par `fetch_apworlds.py`) et guides du jeu (`site/data/guides/`, relevés par
+  `extract_options.py` dans `docs/` du monde). Les guides sont écrits par les auteurs des apworlds : `markdown.js`
+  les rend en nœuds Preact, jamais en HTML brut (ne pas passer à `innerHTML` / `dangerouslySetInnerHTML`).
 - Dans le navigateur, un apworld déposé (`data.js`, `local`) passe avant le jeu de la base : `gameEntry` renvoie
   d'abord l'entrée de la room (`source: "room"`, page d'une room), puis l'entrée locale (`source: "apworld"`), dont
   `server` décrit le jeu de la base remplacé (sa source, `core` ou non, est là).

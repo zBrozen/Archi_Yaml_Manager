@@ -35,6 +35,10 @@ sans éditer le code à la main.
   leurs YAML (un fichier par jeu). L'hôte vérifie la room, télécharge tous les YAML pour générer la partie avec
   son Archipelago, puis l'héberge sur archipelago.gg : chaque joueur retrouve l'adresse, le tracker et ses fichiers
   sur la page de la room. Voir la section « Rooms ».
+- **Installer un jeu** (page `#/installer`) : pour chaque jeu de la base, ce qu'il faut pour y jouer sans
+  chercher sur GitHub : Archipelago (version du site), le lien direct de l'apworld des jeux non officiels et
+  comment l'installer, les liens de l'auteur (tableur), le tracker s'il existe, et les guides d'installation du
+  jeu (ceux d'archipelago.gg, lus dans le dossier `docs/` de son monde). L'éditeur et les rooms y renvoient.
 - **Trackers** : les packs [PopTracker](https://github.com/black-sliver/PopTracker) des jeux s'ouvrent
   directement dans le site (objets, cartes, lieux accessibles), et suivent la partie en direct. Voir la section
   « Trackers (packs PopTracker) ».
@@ -50,7 +54,7 @@ Les options ne sont pas recopiées à la main. Le workflow GitHub
    ([`tools/sync_sheet.py`](tools/sync_sheet.py)) ;
 2. il télécharge la dernière release d'Archipelago et y ajoute les apworlds de ces jeux (voir ci-dessous) ;
 3. il charge tous les jeux avec Archipelago et exporte leurs options en JSON dans `site/data/`
-   ([`tools/extract_options.py`](tools/extract_options.py)) ;
+   ([`tools/extract_options.py`](tools/extract_options.py)), ainsi que leurs guides (`site/data/guides/`) ;
 4. il traduit en français les descriptions nouvelles ou modifiées
    ([`tools/translate_docs.py`](tools/translate_docs.py)) ;
 5. il construit `site/data/ap-core.zip`, la copie d'Archipelago utilisée par le navigateur pour lire
@@ -121,7 +125,15 @@ n'est pas dépassée.
 **Crédits et licences.** Pour chaque apworld, `site/data/apworld-credits.json` relève le jeu, sa version et
 ses auteurs (`archipelago.json` de l'apworld), son dépôt, sa licence (celle incluse dans l'apworld, sinon
 celle du dépôt, avec les lignes de copyright) et ses infos du tableur. Le site les affiche via le lien
-« Jeux non officiels : auteurs et licences » du pied de page.
+« Jeux non officiels : auteurs et licences » du pied de page. Il y relève aussi de quoi installer le jeu, pour la
+page « Installer un jeu » : `download` (lien direct du fichier de la release, ou du dossier `apworlds/` du dépôt),
+`release` (page de la release) et `links` (liens de la colonne « Links & Downloads » du tableur).
+
+**Guides.** `extract_options.py` lit les guides de chaque monde comme archipelago.gg : la page du jeu
+(`docs/en_<jeu>.md`, `fr_…`) et les tutoriels de `web.tutorials` (anglais et français seulement, sinon toutes
+les langues), écrits dans `site/data/guides/<jeu>.json` (`guides` dans `index.json`). Le site les affiche avec
+son propre lecteur Markdown (`site/js/markdown.js`), qui ne produit jamais de HTML brut : balises ignorées, liens
+http(s) seulement, images d'archipelago.gg et de GitHub seulement.
 
 Un apworld qui ne se charge pas (par exemple incompatible avec la version d'Archipelago) n'empêche pas
 la mise à jour des autres jeux. Il apparaît sur la page d'accueil du site et dans les avertissements du workflow.
@@ -420,6 +432,7 @@ npx wrangler dev
 | `site/js/room-live.js` | Partie en cours : progression des joueurs et client texte |
 | `site/js/wishlist.js` | Wishlists des joueurs et bandeau des objets attendus reçus |
 | `site/js/tracker-*.js`, `site/js/trackers.js`, `site/js/unzip.js` | Trackers des packs PopTracker (voir « Trackers ») |
+| `site/js/guides.js`, `site/js/markdown.js` | Page « Installer un jeu » et affichage des guides |
 | `site/js/check.js` | Vérification d'un YAML hors de l'éditeur (dépôt dans une room, contrôle par l'hôte) |
 | `site/js/config.js` | Adresse du service des rooms |
 | `worker/` | Service des rooms (Cloudflare Worker, base D1 : `migrations/`) |

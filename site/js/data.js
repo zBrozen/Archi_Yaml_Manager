@@ -24,7 +24,8 @@ export function gameEntry(name) {
   return room.get(name)?.entry || local.get(name) || serverEntry(name);
 }
 
-function serverEntry(name) {
+// Jeu de la base du site seule (sans apworld déposé), ou null.
+export function serverEntry(name) {
   return index?.games.find((g) => g.game === name) || null;
 }
 

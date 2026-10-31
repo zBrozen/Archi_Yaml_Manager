@@ -1,12 +1,13 @@
 // Pages des rooms : créer ou rejoindre une room, déposer ses YAML, vérifier et préparer la génération (hôte),
 // puis retrouver la partie hébergée sur archipelago.gg (adresse, tracker, fichiers de chaque joueur).
 import { html, useState, useEffect, useRef } from "../vendor/preact-htm.js";
-import { apVersion, apworldFileOf, gameEntry, knownGames, localGameData, localGames, setRoomGames } from "./data.js";
+import { apVersion, apworldFileOf, gameEntry, knownGames, localGameData, localGames, serverEntry, setRoomGames } from "./data.js";
 import { useApworldLoader } from "./apworld.js";
 import { gamesOf, parseFile, splitFile } from "./yaml-model.js";
 import { checkText, nameProblem, MAX_NAME } from "./check.js";
 import { CopyButton, GamePicker, SheetBadges, download, loadCredits, plural, useAction, useSetting } from "./ui.js";
 import { makeZip } from "./zip.js";
+import { guideLink } from "./guides.js";
 import { ItemsPanel, ProgressPanel, TextClient, defaultItemSlots, useTracker } from "./room-live.js";
 import { ScreensTab } from "./screens.js";
 import { WishNotice, WishlistView, useWishNotices, useWishState } from "./wishlist.js";
@@ -1163,7 +1164,8 @@ function Overview({ room, me, admin, mine, players, online, tracker, join, go })
       <div class="row full"><h2 class="grow">Vos YAML</h2>
         <button type="button" class="ghost small" onClick=${() => go("yaml")}>${room.open ? "Gérer mes YAML" : "Voir mes YAML"}</button></div>
       ${mine.length
-        ? html`<ul class="summary-list full">${mine.map((s) => html`<li><strong>${s.name}</strong> <span class="hint">${s.game}</span> <${GameBadges} game=${s.game} /></li>`)}</ul>`
+        ? html`<ul class="summary-list full">${mine.map((s) => html`<li><strong>${s.name}</strong> <span class="hint">${s.game}</span> <${GameBadges} game=${s.game} />
+          ${inBase(s.game) && html`<a class="small" href=${guideLink(s.game)} target="_blank" rel="noopener">Installer le jeu</a>`}</li>`)}</ul>`
         : html`<p class="hint">Aucun YAML déposé${room.open ? " pour l'instant." : "."}</p>`}
     </section>`}
     ${!room.direct && html`<section class="card stack">
@@ -1179,11 +1181,15 @@ function Overview({ room, me, admin, mine, players, online, tracker, join, go })
     </section>`}`;
 }
 
-// Liens d'aide pour installer un jeu : page d'archipelago.gg (officiel) ou dépôt du mod (non officiel).
+const inBase = (game) => !!serverEntry(game);
+
+// Liens d'aide pour installer un jeu : guide du site (jeu de la base), sinon page d'archipelago.gg (officiel) ou
+// dépôt du mod (non officiel).
 function useGameHelp(origin) {
   const [credits, setCredits] = useState([]);
   useEffect(() => { loadCredits().then(setCredits); }, []);
   return (game) => {
+    if (inBase(game)) return { href: guideLink(game), label: "Installer le jeu" };
     const entry = gameEntry(game);
     if ((entry?.server?.source ?? entry?.source) === "core") return { href: `${origin}/games/${encodeURIComponent(game)}/info/en`, label: "Page du jeu (installation)" };
     const source = credits.find((c) => c.game === game)?.source;
