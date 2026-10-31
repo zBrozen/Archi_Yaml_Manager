@@ -794,7 +794,7 @@ async function checkRoom(room, players, slots, roomApworlds = []) {
     const problems = [];
     if (check.docs.length > 1) problems.push("Plusieurs joueurs dans un même fichier : il faut un fichier par joueur.");
     const [doc] = check.docs;
-    return { slot, problems: [...problems, ...doc.problems], warnings: doc.warnings, deathLink: doc.deathLink, games: doc.games };
+    return { slot, problems: [...problems, ...doc.problems], warnings: doc.warnings, deathLink: doc.deathLink, games: doc.games, outdated: doc.outdated };
   }));
 
   const notes = []; // { level: "error" | "warn" | "info", text }
@@ -831,10 +831,17 @@ async function checkRoom(room, players, slots, roomApworlds = []) {
   if (sent.length) {
     notes.push({ level: "info", text: `Apworlds de la room, utilisés pour vérifier et générer : ${sent.map((g) => `${label(g)}, déposé par ${inRoom.get(g).by || "vous"}`).join(" ; ")}.` });
   }
+  const owners = (g, list = results.filter((r) => r.games?.includes(g))) => [...new Set(list.map((r) => r.slot.pseudo))].join(", ");
+  // Options inconnues d'un jeu non officiel : le YAML vient sans doute d'une autre version de l'apworld.
+  const outdated = [...new Set(results.flatMap((r) => r.outdated || []))].sort();
+  if (outdated.length) {
+    const who = (g) => owners(g, results.filter((r) => r.outdated?.includes(g)));
+    const site = !outdated.every((g) => inRoom.has(g) || gameEntry(g)?.source === "apworld");
+    notes.push({ level: "warn", text: `Apworld pas à jour ? ${outdated.map((g) => `${g} (YAML de ${who(g)})`).join(" ; ")} : des options du YAML sont inconnues ou invalides pour l'apworld ${site ? "du site" : "déposé"}. Le joueur a sans doute une autre version de l'apworld${site ? ", souvent plus récente que celle du tableur des jeux" : ""} : demandez-lui de la déposer avec son YAML, ou déposez-la dans « Générer en ligne ».${site ? " Pour générer chez vous, installez cette version-là, pas celle du lien plus bas." : ""}` });
+  }
   // Jeu inconnu du site et de la room : seul le joueur a son apworld.
   const absent = [...games].filter((g) => !gameEntry(g) && !inRoom.has(g)).sort();
   if (absent.length) {
-    const owners = (g) => [...new Set(results.filter((r) => r.games?.includes(g)).map((r) => r.slot.pseudo))].join(", ");
     notes.push({ level: "warn", text: `Apworld manquant : ${absent.map((g) => `${g} (YAML de ${owners(g)})`).join(" ; ")}. Ce jeu n'est pas dans la base du site : la génération en ligne en a besoin. Le joueur peut le déposer avec ses YAML (dépôts ouverts), ou vous dans « Générer en ligne ».` });
   }
   // Apworld de ce navigateur seulement : la génération en ligne ne l'a pas.

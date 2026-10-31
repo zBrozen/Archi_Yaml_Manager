@@ -42,7 +42,7 @@ function enabled(value) {
   return value === true || value === 1 || ["true", "on", "yes", "1"].includes(String(value).toLowerCase());
 }
 
-// Résultat : { name, game, games, problems, warnings, deathLink }.
+// Résultat : { name, game, games, problems, warnings, deathLink, outdated }.
 // `problems` empêchent la génération, `warnings` sont à lire par l'hôte.
 export async function checkDoc(js) {
   const problems = [];
@@ -58,6 +58,7 @@ export async function checkDoc(js) {
   }
 
   let deathLink = false;
+  const outdated = []; // jeux dont l'apworld ne semble pas être celui du YAML
   for (const game of games) {
     const section = isPlainObject(js[game]) ? js[game] : {};
     if (enabled(section.death_link)) deathLink = true;
@@ -75,6 +76,7 @@ export async function checkDoc(js) {
     if (stability === "Broken on Main") problems.push(`${game} : jeu signalé cassé sur la version actuelle d'Archipelago.`);
     else if (stability === "Unstable") warnings.push(`${game} : jeu signalé instable.`);
     const extra = new Set(["triggers", ...(data.extra_keys || [])]);
+    const first = problems.length;
     for (const [key, value] of Object.entries(section)) {
       const option = data.options.get(key);
       if (!option) {
@@ -84,8 +86,21 @@ export async function checkDoc(js) {
       if (option.kind === "removed") { warnings.push(`${game} : l'option « ${key} » n'existe plus, elle sera ignorée.`); continue; }
       for (const problem of checkValue(option, value, data)) problems.push(`${game} › ${option.name || key} : ${problem}`);
     }
+    // Options inconnues ou invalides pour un jeu non officiel : le plus souvent, le YAML vient d'une autre version
+    // de l'apworld (une plus récente que celle du site, que le tableur des jeux ne connaît pas encore).
+    const count = problems.length - first;
+    if (count && entry.source !== "core") {
+      const deposited = entry.source === "apworld" || entry.source === "room";
+      const version = entry.world_version ? ` (version ${entry.world_version})` : "";
+      const options = `${count} option${count > 1 ? "s" : ""} ne correspond${count > 1 ? "ent" : ""} pas`;
+      const likely = count > 1 ? "sans doute" : "peut-être"; // une seule option : souvent une faute de frappe
+      outdated.push(game);
+      problems.splice(first, 0, deposited
+        ? `${game} : ${options} à l'apworld déposé${version}. Le YAML a ${likely} été fait avec une autre version de cet apworld : vérifiez que c'est bien celle du joueur.`
+        : `${game} : ${options} à l'apworld du site${version}. Le YAML a ${likely} été fait avec une autre version de l'apworld, souvent plus récente : déposez dans la room l'apworld qui a servi à créer ce YAML.`);
+    }
   }
-  return { name: typeof js.name === "string" ? js.name.trim() : "", game: gameLabel(js), games, problems, warnings, deathLink };
+  return { name: typeof js.name === "string" ? js.name.trim() : "", game: gameLabel(js), games, problems, warnings, deathLink, outdated };
 }
 
 // Vérifie un fichier entier (un résultat par document) ; `errors` si le YAML est illisible.
