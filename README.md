@@ -50,8 +50,8 @@ sans éditer le code à la main.
   client, patch…) : les guides d'archipelago.gg (dossier `docs/` du monde), et pour les jeux non officiels le
   README de leur dépôt et les notes de leur release. L'éditeur et les rooms y renvoient.
 - **Trackers** : les packs [PopTracker](https://github.com/black-sliver/PopTracker) des jeux s'ouvrent
-  directement dans le site (objets, cartes, lieux accessibles), et suivent la partie en direct. Voir la section
-  « Trackers (packs PopTracker) ».
+  directement dans le site (objets, cartes, lieux accessibles), et la logique du jeu donne les lieux en logique,
+  comme Universal Tracker, pour tous les jeux. Le tout suit la partie en direct. Voir la section « Trackers ».
 
 Hors rooms, tout se passe dans le navigateur : les fichiers des joueurs ne sont envoyés nulle part.
 
@@ -376,11 +376,14 @@ gratuite : 1 000 écritures par jour).
 Le jeton GitHub expire à la date choisie à sa création : il suffit alors d'en créer un nouveau et de remplacer
 le secret, puis de relancer « Publier le service des rooms ».
 
-## Trackers (packs PopTracker)
+## Trackers
 
-Page `#/tracker` : un pack PopTracker lu par le navigateur, sans installer PopTracker. On y arrive par le lien
-« tracker du pack » de chaque joueur dans la progression d'une room (jeu, serveur et nom du joueur déjà remplis),
-ou directement en choisissant le jeu ou en déposant le `.zip` d'un pack.
+Page `#/tracker` : suivi en direct de la partie d'un joueur, avec deux outils qui partagent la même connexion
+(`site/js/tracker-ap.js`) : le pack PopTracker du jeu, lu par le navigateur sans installer PopTracker, et la
+logique du jeu, à la manière d'Universal Tracker. On y arrive par le lien « tracker détaillé » de chaque joueur
+dans la progression d'une room (jeu, serveur et nom du joueur déjà remplis), ou directement.
+
+### Packs PopTracker
 
 - **Packs.** `tools/fetch_trackers.py` (job `sync` de `update-data.yml`) relève les liens « Poptracker » du
   tableur des jeux. Il lit la page HTML du tableur : l'export xlsx ne garde que le premier lien de chaque
@@ -401,6 +404,29 @@ ou directement en choisissant le jeu ou en déposant le `.zip` d'un pack.
   faits, objets reçus, stockage. Rien n'est envoyé au serveur.
 - **Limites.** Lecture de la mémoire d'un émulateur (packs sans suivi Archipelago), `recentpins` et une partie
   des options de mise en page ne sont pas gérés ; l'état coché à la main n'est pas gardé d'une visite à l'autre.
+
+### Logique du jeu (à la manière d'Universal Tracker)
+
+Les lieux restants **en logique** avec les objets reçus, calculés par Archipelago lui-même, pour tous les jeux.
+Comme [Universal Tracker](https://github.com/FarisTheAncient/Archipelago/releases), la génération du jeu du joueur
+est refaite sans remplir les objets (YAML du joueur, puis données de la partie passées au monde), et chaque
+mise à jour collecte les objets reçus et demande à Archipelago les lieux atteignables. Le code est propre au site
+(`site/py/ut_core.py`), mais respecte l'interface que les apworlds exposent à Universal Tracker :
+`disable_ut`, `ut_can_gen_without_yaml`, `interpret_slot_data` et `re_gen_passthrough`,
+`multiworld.generation_is_fake`, `glitches_item_name` (lieux « hors logique »), `location_id_to_alias`.
+
+- **Où ça tourne** : Archipelago dans Pyodide, dans un worker (`site/js/ut-worker.js`), avec la même archive du
+  cœur que la lecture des apworlds (`site/data/ap-core.zip`). Activée par le joueur (environ 15 Mo la première fois).
+- **Code du jeu** (`site/js/ut.js`) : l'apworld déposé dans le navigateur, sinon pour un jeu officiel l'archive
+  `site/data/worlds/<dossier>.zip`, sinon la release de l'auteur relevée dans les crédits, par le relais
+  `/api/packs`. Les archives des jeux officiels (sans tests, guides, images ni sons, environ 8,5 Mo en tout) ne
+  sont pas commitées : `deploy.yml` les fabrique à chaque publication avec `tools/build_ap_core.py --worlds`, à
+  la version d'Archipelago de la base.
+- **YAML** : celui du joueur dans sa room s'il en est le propriétaire ou l'hôte, sinon un YAML déposé sur la page.
+  Sans YAML, seuls les jeux qui le permettent (`ut_can_gen_without_yaml`) sont calculés. Une option tirée au
+  hasard dans le YAML peut donner une logique différente de la partie, comme avec Universal Tracker.
+- **Limites** : jeux dont le monde demande un module natif absent de Pyodide ; cartes d'Universal Tracker
+  (intégration aux packs PopTracker) et entrées découvertes en cours de partie non gérées.
 
 ## Mise en ligne (GitHub Pages)
 
@@ -437,6 +463,12 @@ et l'archive utilisée pour lire les apworlds dans le navigateur :
 python tools/build_ap_core.py --ap ../Archipelago --out site/data/ap-core.zip
 ```
 
+et, pour la logique des trackers, le code des jeux officiels (non commité) :
+
+```bash
+python tools/build_ap_core.py --ap ../Archipelago --worlds site/data/worlds
+```
+
 Les apworlds à tester localement se copient dans `../Archipelago/custom_worlds/`, ou avec
 `python tools/fetch_apworlds.py --dest ../Archipelago/custom_worlds`.
 
@@ -464,6 +496,7 @@ npx wrangler dev
 | `site/js/wishlist.js` | Wishlists des joueurs et bandeau des objets attendus reçus |
 | `site/js/spoiler.js` | Onglet « Avancement » de l'hôte : spoiler (sphères du chemin de victoire) croisé avec le tracker |
 | `site/js/tracker-*.js`, `site/js/trackers.js`, `site/js/unzip.js` | Trackers des packs PopTracker (voir « Trackers ») |
+| `site/js/ut.js`, `site/js/ut-worker.js`, `site/py/ut_core.py` | Logique du jeu à la manière d'Universal Tracker (voir « Trackers ») |
 | `site/js/guides.js`, `site/js/markdown.js` | Page « Installer un jeu » et affichage des guides |
 | `site/js/check.js` | Vérification d'un YAML hors de l'éditeur (dépôt dans une room, contrôle par l'hôte) |
 | `site/js/forecast.js` | Prévision avant génération : difficulté, durée et risques d'un YAML ou d'une room |

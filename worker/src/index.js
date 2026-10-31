@@ -1155,10 +1155,10 @@ async function saveWishlist(request, env, room, slot) {
 
 // --- Packs PopTracker ------------------------------------------------------------
 
-// Relais des archives des packs (releases GitHub, voir tools/fetch_trackers.py) : GitHub ne permet pas
-// au navigateur de les lire depuis une autre adresse. Rien n'est stocké : la réponse reste dans le
-// cache de Cloudflare une journée.
-const PACK_URL = /^https:\/\/github\.com\/[\w.-]+\/[\w.-]+\/releases\/download\/[^?#]+\.zip$/i;
+// Relais des packs PopTracker et des apworlds (releases GitHub, voir tools/fetch_trackers.py et les crédits
+// des jeux) pour les trackers du site : GitHub ne permet pas au navigateur de les lire depuis une autre
+// adresse. Rien n'est stocké : la réponse reste dans le cache de Cloudflare une journée.
+const PACK_URL = /^https:\/\/github\.com\/[\w.-]+\/[\w.-]+\/releases\/download\/[^?#]+\.(zip|apworld)$/i;
 const PACK_MAX_SIZE = 64 * 1024 * 1024;
 
 async function relayPack(url) {

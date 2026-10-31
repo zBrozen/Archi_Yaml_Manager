@@ -108,8 +108,8 @@ export function ProgressPanel({ status, tracker, mode, mine, code, compact = fal
         const idle = mode === "async" && !r.finished && r.last && Date.now() - r.last > IDLE_WARNING;
         return html`<tr class=${r.mine ? "mine" : ""}>
           <td><strong>${r.name}</strong>${r.tracker && html` <a href=${r.tracker} target="_blank" rel="noopener" class="small">tracker</a>`}
-            ${packsFor(packs, r.game).some((p) => p.url) && html` <a href=${trackerLink({ game: r.game, server: status.port ? `${status.host}:${status.port}` : "", slot: r.name, room: code })}
-              class="small" title="Objets, cartes et lieux accessibles, d'après le pack PopTracker du jeu">tracker du pack</a>`}</td>
+            <a href=${trackerLink({ game: r.game, server: status.port ? `${status.host}:${status.port}` : "", slot: r.name, room: code })} class="small"
+              title=${packsFor(packs, r.game).some((p) => p.url) ? "Lieux en logique, et pack PopTracker du jeu (objets, cartes)" : "Lieux en logique d'après la logique du jeu"}>tracker détaillé</a></td>
           <td>${r.game}</td>
           <td class="checks">
             <div class="progress small" title=${`${pct(r.checks, r.total)} %`}><span class=${r.finished ? "ok" : ""} style=${`width: ${pct(r.checks, r.total)}%`}></span></div>

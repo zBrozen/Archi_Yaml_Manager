@@ -62,6 +62,10 @@
   documentation de PopTracker, sans reprendre son code (GPL-3.0). Lua (wasmoon) n'a accès à aucun objet JS :
   `enableProxy: false`, une seule passerelle `__js(op, …)` qui n'échange que des valeurs simples, l'interface
   PopTracker écrite en Lua (`tracker-lua.js`). Ne jamais exposer un objet JS à Lua (remontée jusqu'à `Function`).
+  Connexion à la partie partagée (`openSession` dans `tracker-ap.js`, état rejoué à chaque abonné) entre le pack
+  (`attachPack`) et la logique du jeu à la manière d'Universal Tracker (`ut.js`, `ut-worker.js`, `py/ut_core.py` :
+  génération sans remplissage dans Pyodide, interface UT des apworlds respectée, code propre au site). Code des
+  jeux officiels : `site/data/worlds/` fabriqué par `deploy.yml` (`build_ap_core.py --worlds`), jamais commité.
 - Prévision avant génération (`forecast.js`, carte de l'éditeur et vérification de la room) : heuristiques sur les
   noms et valeurs des options, notées par rapport à la valeur par défaut (un YAML aux réglages par défaut donne
   toujours « Standard / Normale »). Après un changement des règles, relancer sur tous les jeux de `index.json` :

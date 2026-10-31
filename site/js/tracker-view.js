@@ -1,11 +1,12 @@
-// Page « Tracker » : un pack PopTracker affiché dans le site (objets, cartes, lieux), suivi en direct
-// de la partie Archipelago du joueur. Le moteur est dans tracker-engine.js.
+// Page « Tracker » : suivi en direct de la partie Archipelago d'un joueur, avec le pack PopTracker du jeu
+// (objets, cartes, lieux ; moteur dans tracker-engine.js) et la logique du jeu à la manière d'Universal
+// Tracker (lieux en logique calculés par Archipelago, voir ut.js).
 import { html, useState, useEffect, useRef, useMemo } from "../vendor/preact-htm.js";
 import { openPack, Tracker, Access } from "./tracker-engine.js";
-import { connectTracker } from "./tracker-ap.js";
-import { ROOMS_API } from "./config.js";
+import { openSession, attachPack } from "./tracker-ap.js";
+import { useLogic, roomYaml } from "./ut.js";
 import { useSetting } from "./ui.js";
-import { loadTrackers, packsFor } from "./trackers.js";
+import { loadTrackers, packsFor, fetchRelease } from "./trackers.js";
 
 // États des lieux : couleur de PopTracker, mais toujours avec un symbole et un texte.
 export const STATES = {
@@ -286,19 +287,19 @@ function LocationList({ tracker }) {
 
 // --- Connexion à la partie -------------------------------------------------------------------
 
-function Connection({ tracker, initial }) {
+function Connection({ initial, session, onSession }) {
   const [form, setForm] = useState({ address: initial.server || "", slot: initial.slot || "", password: "" });
   const [state, setState] = useState("idle");
   const [error, setError] = useState(null);
-  const bridge = useRef(null);
-  useEffect(() => () => bridge.current?.disconnect(), [tracker]);
+  useEffect(() => () => session?.disconnect(), [session]);
+  useEffect(() => session?.subscribe((event) => event.type === "closed" && setState("closed")), [session]);
   const set = (key) => (e) => setForm({ ...form, [key]: e.target.value });
   const connect = async (e) => {
     e.preventDefault();
     setError(null);
     setState("connecting");
     try {
-      bridge.current = await connectTracker(tracker, form, (s) => setState(s));
+      onSession(await openSession(form));
       setState("connected");
     } catch (err) {
       setError(err.message);
@@ -306,19 +307,20 @@ function Connection({ tracker, initial }) {
     }
   };
   const disconnect = () => {
-    bridge.current?.disconnect();
-    bridge.current = null;
+    session?.disconnect();
+    onSession(null);
     setState("idle");
   };
-  if (state === "connected") {
+  if (state === "connected" && session) {
     return html`<div class="notice ok row">
-      <span>Partie suivie en direct : <strong>${form.slot}</strong> sur ${form.address}.</span>
+      <span>Partie suivie en direct : <strong>${session.slotName}</strong> (${session.game}) sur ${form.address}.</span>
       <span class="spacer"></span><button type="button" class="ghost small" onClick=${disconnect}>Arrêter le suivi</button>
     </div>`;
   }
   return html`<form class="card stack full" onSubmit=${connect}>
     <strong>Suivre la partie</strong>
-    <p class="hint">Les objets reçus et les lieux faits s'affichent tout seuls. Sans connexion, cliquez sur les objets et les lieux pour les cocher.</p>
+    <p class="hint">Les objets reçus et les lieux faits s'affichent tout seuls, et la logique du jeu dit quels lieux sont accessibles.
+      Sans connexion, cliquez sur les objets et les lieux du pack pour les cocher.</p>
     <div class="fields">
       <label><span>Serveur</span><input required aria-label="Serveur" value=${form.address} onInput=${set("address")} placeholder="archipelago.gg:38281" /></label>
       <label><span>Nom du joueur</span><input required aria-label="Nom du joueur" value=${form.slot} onInput=${set("slot")} /></label>
@@ -330,10 +332,94 @@ function Connection({ tracker, initial }) {
   </form>`;
 }
 
+// --- Logique du jeu (à la manière d'Universal Tracker) ------------------------------------------
+
+function LogicPanel({ session, room }) {
+  const [enabled, setEnabled] = useSetting("trackerLogic", false);
+  // YAML de la room : undefined tant qu'il n'a pas été cherché, null s'il n'y en a pas. Un YAML déposé passe avant.
+  const [roomText, setRoomText] = useState(undefined);
+  const [file, setFile] = useState(null);
+  const [filter, setFilter] = useState("");
+  const connected = !!session?.connected;
+  useEffect(() => {
+    setRoomText(undefined);
+    if (!connected || !enabled) return undefined;
+    let alive = true;
+    roomYaml(room, session.slotName, session.game).then((text) => alive && setRoomText(text));
+    return () => { alive = false; };
+  }, [session, enabled]);
+  const yaml = file?.text ?? roomText ?? null;
+  const yamlFrom = file ? `« ${file.name} »` : roomText ? "la room" : null;
+  const { status, error, result } = useLogic(session, yaml, enabled && connected && (!!file || roomText !== undefined));
+  const readYaml = async (picked) => setFile({ name: picked.name, text: await picked.text() });
+
+  if (!enabled) {
+    return html`<section class="card stack full">
+      <h2 class="ut-title">Logique du jeu</h2>
+      <p>Les lieux restants <strong>en logique</strong> avec les objets reçus, calculés par la logique d'Archipelago elle-même,
+        comme le fait <a href="https://github.com/FarisTheAncient/Archipelago/releases" target="_blank" rel="noreferrer">Universal Tracker</a>.
+        Pour tous les jeux, avec ou sans pack PopTracker.</p>
+      <p class="hint">Archipelago tourne dans votre navigateur : environ 15 Mo à télécharger la première fois.</p>
+      <div class="row"><button type="button" onClick=${() => setEnabled(true)}>Activer la logique du jeu</button></div>
+    </section>`;
+  }
+
+  const needle = filter.trim().toLowerCase();
+  const groups = new Map();
+  const add = (id, glitched) => {
+    const region = result.regions[id] || "Autres lieux";
+    const label = session.name("location", id);
+    if (needle && !label.toLowerCase().includes(needle) && !region.toLowerCase().includes(needle)) return;
+    if (!groups.has(region)) groups.set(region, []);
+    groups.get(region).push({ id, label, glitched });
+  };
+  if (result) {
+    result.logic.forEach((id) => add(id, false));
+    result.glitched.forEach((id) => add(id, true));
+  }
+  const sorted = [...groups].sort(([a], [b]) => a.localeCompare(b));
+  const count = (n, one, many) => `${n} ${n > 1 ? many : one}`;
+  return html`<section class="card stack full">
+    <div class="row full">
+      <h2 class="ut-title grow">Logique du jeu</h2>
+      <button type="button" class="ghost small" onClick=${() => setEnabled(false)}>Désactiver</button>
+    </div>
+    ${!connected && html`<p class="hint">Connectez-vous à la partie (ci-dessus) pour calculer les lieux en logique.</p>`}
+    ${connected && html`<p class="hint">${yamlFrom ? `YAML du joueur lu dans ${yamlFrom}.` : "Sans YAML du joueur : seuls les jeux qui le permettent sont calculés."}</p>`}
+    <${YamlDrop} onFile=${readYaml} />
+    ${status && html`<p class="hint">${status}</p>`}
+    ${error && html`<div class="notice error">${error}</div>`}
+    ${result && html`<div class="stack full">
+      <div class="row full">
+        <strong class="grow">${count(result.logic.length, "lieu en logique", "lieux en logique")}${result.glitched.length ? `, ${count(result.glitched.length, "hors logique", "hors logique")}` : ""}</strong>
+        <input class="search" type="search" aria-label="Chercher un lieu" placeholder="Chercher un lieu ou une région" value=${filter} onInput=${(e) => setFilter(e.target.value)} />
+      </div>
+      ${sorted.length === 0 && html`<p class="hint">${needle ? "Aucun lieu ne correspond." : "Aucun lieu en logique pour l'instant."}</p>`}
+      ${sorted.map(([region, entries]) => html`<div key=${region} class="ut-region">
+        <h3>${region} <span class="hint">(${entries.length})</span></h3>
+        <ul class="pt-sections">${entries.sort((a, b) => a.label.localeCompare(b.label)).map((e) => html`<li key=${e.id} class="pt-section">
+          <span class=${`pt-swatch ${e.glitched ? "glitch" : "normal"}`} aria-hidden="true">${e.glitched ? "?" : "!"}</span>
+          <span class="pt-section-name">${e.label}<span class="hint"> · ${e.glitched ? "hors logique (glitch)" : "en logique"}</span>${result.aliases?.[e.id] ? html`<span class="hint"> · ${result.aliases[e.id]}</span>` : ""}</span>
+        </li>`)}</ul>
+      </div>`)}
+      ${result.errors?.length > 0 && html`<details class="notice warn"><summary>Remarques du calcul (${result.errors.length})</summary>
+        <ul>${result.errors.map((e, i) => html`<li key=${i}>${e}</li>`)}</ul></details>`}
+    </div>`}
+  </section>`;
+}
+
+function YamlDrop({ onFile }) {
+  return html`<label class="row small ut-yaml">
+    <span>Utiliser un autre YAML :</span>
+    <input type="file" accept=".yaml,.yml,.txt" onChange=${(e) => { if (e.target.files[0]) onFile(e.target.files[0]); e.target.value = ""; }} />
+  </label>`;
+}
+
 // --- Vue du tracker ------------------------------------------------------------------------------
 
-function TrackerView({ tracker, initial }) {
+function TrackerView({ tracker, session }) {
   useVersion(tracker);
+  useEffect(() => (session?.connected ? attachPack(tracker, session) : undefined), [tracker, session]);
   const [view, setView] = useSetting("trackerView", "pack");
   const [zoom, setZoom] = useSetting("trackerZoom", 1.5);
   const [detail, setDetail] = useState(null);
@@ -342,7 +428,6 @@ function TrackerView({ tracker, initial }) {
   const settings = tracker.rootLayout("settings");
   tracker.zoom = zoom; // lu par les cartes pour la taille des repères
   return html`<div class="stack full">
-    <${Connection} tracker=${tracker} initial=${initial} />
     <div class="toolbar-row pt-toolbar">
       <div class="tabs row" role="tablist">
         <button type="button" role="tab" aria-selected=${view === "pack"} class=${view === "pack" ? "active" : ""} onClick=${() => setView("pack")}>Tracker</button>
@@ -380,21 +465,7 @@ function TrackerView({ tracker, initial }) {
 
 // --- Page -------------------------------------------------------------------------------------------
 
-async function fetchPack(url) {
-  const direct = !/^https:\/\/github\.com\//i.test(url);
-  if (!direct && !ROOMS_API) throw new Error("Le relais des packs (service des rooms) n'est pas configuré sur ce site.");
-  let response;
-  try {
-    response = await fetch(direct ? url : `${ROOMS_API}/api/packs?url=${encodeURIComponent(url)}`);
-  } catch {
-    throw new Error(direct ? "Ce pack est injoignable." : "Le relais des packs ne répond pas : réessayez dans un moment.");
-  }
-  if (!response.ok) {
-    const body = await response.json().catch(() => null);
-    throw new Error(body?.error || `Téléchargement du pack impossible (${response.status}).`);
-  }
-  return response.arrayBuffer();
-}
+const fetchPack = (url) => fetchRelease(url, "le pack");
 
 export function TrackerPage({ params }) {
   const [index, setIndex] = useState(null);
@@ -405,8 +476,11 @@ export function TrackerPage({ params }) {
   const [tracker, setTracker] = useState(null);
   const [status, setStatus] = useState(null);
   const [error, setError] = useState(null);
+  const [session, setSession] = useState(null);
 
   useEffect(() => { loadTrackers().then(setIndex); }, []);
+  // Connecté, le jeu est celui du joueur.
+  useEffect(() => { if (session?.game && !pack) setGame(session.game); }, [session]);
   const packs = useMemo(() => packsFor(index, game), [index, game]);
   const games = useMemo(() => Object.entries(index?.games || {}).filter(([, list]) => list.some((p) => p.url)).map(([name]) => name), [index]);
 
@@ -458,7 +532,9 @@ export function TrackerPage({ params }) {
         <span class="spacer"></span>
         ${params.room && html`<a href=${`#/room/${params.room}`}>Retour à la room</a>`}
       </div>
+      <${Connection} initial=${params} session=${session} onSession=${setSession} />
       ${!pack && !status && !(params.pack && !error) && html`<div class="card stack full">
+        <h2 class="ut-title">Pack PopTracker</h2>
         <label class="stack full"><strong>Jeu</strong>
           <input list="pt-games" value=${game} onInput=${(e) => { setGame(e.target.value); setChoice(0); }} placeholder="Nom du jeu" />
           <datalist id="pt-games">${games.map((name) => html`<option key=${name} value=${name} />`)}</datalist>
@@ -482,9 +558,10 @@ export function TrackerPage({ params }) {
         </select></label>`}
       ${status && html`<p class="hint">${status}</p>`}
       ${error && html`<div class="notice error">${error}</div>`}
-      ${tracker && html`<${TrackerView} key=${`${pack.uid}/${variant}`} tracker=${tracker} initial=${params} />`}
+      ${tracker && html`<${TrackerView} key=${`${pack.uid}/${variant}`} tracker=${tracker} session=${session} />`}
       ${pack && html`<p class="hint small">Pack « ${pack.name} »${pack.manifest.author ? ` de ${pack.manifest.author}` : ""}, lu dans le navigateur sans PopTracker.${" "}
         <button type="button" class="link" onClick=${() => { setPack(null); setTracker(null); }}>Changer de pack</button></p>`}
+      <${LogicPanel} session=${session} room=${params.room} />
     </div>
   </main>`;
 }

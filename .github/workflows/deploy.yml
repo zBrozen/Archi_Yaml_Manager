@@ -29,6 +29,19 @@ jobs:
         with:
           ref: main # pour inclure les données que le workflow de mise à jour vient d'enregistrer
 
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # Code des jeux officiels pour la logique des trackers (js/ut.js), à la version d'Archipelago de la
+      # base : fabriqué à chaque publication plutôt que commité. Sans lui, le reste du site est publié.
+      - name: Archives des jeux officiels
+        continue-on-error: true
+        run: |
+          tag=$(python -c "import json; print(json.load(open('site/data/index.json', encoding='utf-8'))['ap_version'])")
+          git clone --depth 1 --branch "$tag" https://github.com/ArchipelagoMW/Archipelago.git "$RUNNER_TEMP/Archipelago"
+          python tools/build_ap_core.py --ap "$RUNNER_TEMP/Archipelago" --worlds site/data/worlds
+
       - uses: actions/configure-pages@v5
 
       - uses: actions/upload-pages-artifact@v3

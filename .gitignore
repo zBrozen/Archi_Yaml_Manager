@@ -1,3 +1,5 @@
 __pycache__/
 node_modules/
 worker/.wrangler/
+# Jeux officiels pour les trackers : fabriqués à la publication (tools/build_ap_core.py --worlds).
+site/data/worlds/
