@@ -787,8 +787,8 @@ function OverlayPanel({ room, data, setData, me, admin, linkId, onLink, onBack }
     <details class="more">
       <summary>Comment ça marche</summary>
       <ul class="hint tips">
-        <li>Deux écrans ne se recouvrent jamais : en automatique, tout se place seul ; à la main, l'éditeur refuse qu'un
-          écran en chevauche un autre.</li>
+        <li>En automatique, tout se place seul sans qu'un écran en recouvre un autre ; à la main, l'éditeur signale les
+          écrans qui se recouvrent.</li>
         <li>Le goal de chaque joueur est lu dans son YAML de la room (absent dans une room de partie déjà hébergée).</li>
         <li>Les messages arrivent une fois la partie en ligne : l'overlay s'y connecte comme client texte du premier joueur.</li>
         <li>Chaque joueur envoie son image à ${MAX_VIEWERS} overlays au plus : après avoir vérifié avec « Ouvrir », fermez l'onglet.</li>

@@ -141,7 +141,20 @@ export function spaceUses(config, type) {
   return type === "vedette" ? items.some((i) => i.type === "screen" && i.source === "vedette") : items.some((i) => i.type === type);
 }
 
-// Deux écrans (écran ou zone d'écrans) ne se recouvrent jamais.
+// Taille des écrans (16/9) : le nombre de colonnes qui les rend les plus grands possible dans la zone (overlay, et
+// aperçu de l'éditeur).
+export function gridLayout(count, width, height, gap) {
+  let best = { columns: 1, width: 0 };
+  for (let columns = 1; columns <= count; columns++) {
+    const rows = Math.ceil(count / columns);
+    const tile = Math.min((width - gap * (columns - 1)) / columns, ((height - gap * (rows - 1)) / rows) * 16 / 9);
+    if (tile > best.width) best = { columns, width: tile };
+  }
+  const tile = Math.max(0, Math.floor(best.width));
+  return { columns: best.columns, width: tile, height: Math.floor(tile * 9 / 16) };
+}
+
+// Deux écrans (écran ou zone d'écrans) qui se recouvrent : permis, mais l'éditeur en avertit.
 export const SCREEN_TYPES = ["screen", "screens"];
 export const crosses = (a, b) => a.x < b.x + b.w - 0.01 && b.x < a.x + a.w - 0.01 && a.y < b.y + b.h - 0.01 && b.y < a.y + a.h - 0.01;
 export const coversScreen = (item, items) => SCREEN_TYPES.includes(item.type)

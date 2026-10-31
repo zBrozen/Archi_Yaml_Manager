@@ -13,7 +13,7 @@ import { MessagePart, progressRows, wishHit, wishIndex } from "./room-live.js";
 import { api, apRoomStatus } from "./rooms-api.js";
 import { ICE_SERVERS, serial, signaling } from "./screens-net.js";
 import {
-  TEXT_SIZES, assignScreens, shownPlayers, shownStreams, spaceFromParams, spaceItems, spaceOf, spaceUses,
+  TEXT_SIZES, assignScreens, gridLayout, shownPlayers, shownStreams, spaceFromParams, spaceItems, spaceOf, spaceUses,
 } from "./overlay-layout.js";
 
 const RETRY = 8000;
@@ -146,17 +146,6 @@ class Viewer {
   }
 }
 
-// Taille des écrans (16/9) : le nombre de colonnes qui les rend les plus grands possible dans la page.
-export function gridLayout(count, width, height, gap) {
-  let best = { columns: 1, width: 0 };
-  for (let columns = 1; columns <= count; columns++) {
-    const rows = Math.ceil(count / columns);
-    const tile = Math.min((width - gap * (columns - 1)) / columns, ((height - gap * (rows - 1)) / rows) * 16 / 9);
-    if (tile > best.width) best = { columns, width: tile };
-  }
-  const tile = Math.max(0, Math.floor(best.width));
-  return { columns: best.columns, width: tile, height: Math.floor(tile * 9 / 16) };
-}
 
 // Taille d'un élément (zone des écrans, ou page entière pour une disposition).
 function useElementSize() {

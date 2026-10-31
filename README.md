@@ -314,8 +314,10 @@ avant l'ouverture de l'overlay ne sont pas affichés.
 **Dispositions à la main.** Dans la vue « Overlay », mode « À la main », on ajoute une disposition par nombre
 d'écrans (40 éléments chacune), en partant de la plus proche ou d'un modèle (page vide, écrans en grille, écrans avec
 messages et progression, un écran en vedette et les autres à côté). Sur une page 16/9 qui représente la source du
-logiciel de stream, on ajoute, déplace et redimensionne à la souris ou au clavier ; deux écrans (écran ou zone
-d'écrans) ne peuvent jamais se recouvrir : l'éditeur refuse le déplacement, et le service la disposition :
+logiciel de stream, on ajoute, déplace et redimensionne à la souris ou au clavier. Chaque écran y est dessiné en
+16/9, à la place qu'il aurait avec le nombre d'écrans de la disposition (« Écran 1 »…, « ★ Vedette », ou le joueur
+choisi), y compris dans les zones d'écrans. Des écrans qui se recouvrent sont permis (incrustation…) : l'éditeur les
+encadre en rouge et en avertit :
 
 - des **zones d'écrans**, qui placent en grille les joueurs qui partagent, autant qu'il y en a (jusqu'au maximum
   choisi) : un seul prend toute la zone, plusieurs se la partagent. Une zone prend tous les joueurs qui ne sont

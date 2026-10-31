@@ -834,6 +834,18 @@ html.overlay-page body { background: transparent; overflow: hidden; }
   position: absolute; right: 0; bottom: 0; width: 18px; height: 18px; cursor: nwse-resize; touch-action: none;
   background: linear-gradient(135deg, transparent 50%, #eef0f3 50%);
 }
+/* Aperçu des écrans dans l'éditeur : chaque écran en 16/9, à sa place, avec son numéro (ou le joueur choisi) */
+.layout-tiles {
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); max-height: 100%;
+  display: flex; flex-wrap: wrap; justify-content: center; align-content: center; pointer-events: none;
+}
+.layout-tile {
+  aspect-ratio: 16 / 9; display: grid; place-items: center; border: 2px solid #7fb0ff; border-radius: 3px;
+  background: rgb(127 176 255 / 30%); color: #eef0f3; font-size: .75rem; font-weight: 700; overflow: hidden; white-space: nowrap;
+}
+.layout-empty { position: absolute; inset: 0; display: grid; place-items: center; color: #c9ced6; font-size: .8rem; pointer-events: none; }
+.layout-item.type-screen, .layout-item.type-screens { background: rgb(127 176 255 / 8%); container-type: size; }
+.layout-item.overlap { border-color: #ff8f80; border-style: solid; box-shadow: inset 0 0 0 2px #ff8f80; }
 .layout-settings { background: var(--surface-2); border-radius: 10px; padding: .9rem 1rem; }
 .layout-settings h4 { margin: 0; font-size: 1rem; }
 .position-fields { grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); }

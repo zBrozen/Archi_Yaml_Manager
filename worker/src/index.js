@@ -1021,12 +1021,9 @@ function overlayLayouts(value) {
 // mode « auto » : écrans en grille ou un écran en vedette, messages et progression placés d'office ; mode
 // « manuel » : une disposition par nombre d'écrans affichés (0 à 6), l'overlay change quand un écran arrive ou
 // part. `joueurs` : joueurs montrés (vide : tous ceux qui partagent) ; `rotation` : secondes entre deux écrans en
-// vedette (0 : seulement à la main). Deux écrans ne se recouvrent jamais.
+// vedette (0 : seulement à la main). Des écrans qui se recouvrent sont permis : l'éditeur en avertit seulement.
 const SPACE_COUNTS = [0, 1, 2, 3, 4, 5, 6];
 const SPACE_ROTATIONS = [0, 15, 30, 60, 120];
-const SCREEN_ITEMS = ["screen", "screens"];
-
-const crosses = (a, b) => a.x < b.x + b.w - 0.01 && b.x < a.x + a.w - 0.01 && a.y < b.y + b.h - 0.01 && b.y < a.y + a.h - 0.01;
 
 function spaceConfig(value) {
   const v = value && typeof value === "object" ? value : {};
@@ -1042,12 +1039,7 @@ function spaceConfig(value) {
     if (!Array.isArray(variant.items) || variant.items.length > LAYOUT_LIMITS.items) {
       throw new HttpError(400, `${LAYOUT_LIMITS.items} éléments au maximum par disposition.`);
     }
-    const items = variant.items.map(layoutItem);
-    const screens = items.filter((i) => SCREEN_ITEMS.includes(i.type));
-    if (screens.some((a, i) => screens.slice(i + 1).some((b) => crosses(a, b)))) {
-      throw new HttpError(400, "Deux écrans se recouvrent dans une disposition.");
-    }
-    return { count, items };
+    return { count, items: variant.items.map(layoutItem) };
   }).sort((a, b) => a.count - b.count);
   const config = {
     mode: choice(v.mode, ["auto", "manuel"], "auto"),

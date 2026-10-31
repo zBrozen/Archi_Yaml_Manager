@@ -3,8 +3,8 @@
 // textes sur une page 16/9, à la souris ou au clavier, avec une disposition par nombre d'écrans affichés.
 import { html, useState, useRef } from "../vendor/preact-htm.js";
 import {
-  ALIGNS, ITEM_FILTERS, ITEM_TYPES, LAYOUT_LIMITS, PRESETS, SCREEN_TYPES, TEXT_SIZES, coversScreen, newId, newItem, nextSlot,
-  presetItems, variantFor,
+  ALIGNS, ITEM_FILTERS, ITEM_TYPES, LAYOUT_LIMITS, PRESETS, SCREEN_TYPES, TEXT_SIZES, assignScreens, coversScreen, gridLayout,
+  newId, newItem, nextSlot, presetItems, variantFor,
 } from "./overlay-layout.js";
 
 const STEP = 0.5; // pas de déplacement et d'aimantation, en % de la page
@@ -29,9 +29,44 @@ function describe(item, players) {
   return `Texte : « ${item.text || "…"} »`;
 }
 
+// --- Aperçu des écrans ------------------------------------------------------------------------
+// Pour une disposition de `count` écrans : qui irait où, avec des joueurs fictifs (« Écran 1 »…) en plus des joueurs
+// choisis dans la disposition. Chaque écran est dessiné en 16/9, placé comme dans l'overlay.
+
+const PAGE = { width: 16, height: 9 }; // unités d'une page 16/9 par % de sa largeur et de sa hauteur
+const PREVIEW_GAP = 0.42 * PAGE.width; // l'écart de l'overlay (8 px sur 1920)
+
+function previewStreams(items, players, count) {
+  const reserved = [...new Set([
+    ...items.filter((i) => i.type === "screen" && !["auto", "vedette"].includes(i.source)).map((i) => i.source),
+    ...items.filter((i) => i.type === "screens").flatMap((i) => i.players),
+  ])].map((id) => ({ id, player: id, label: players.find((p) => p.id === id)?.pseudo || "Joueur retiré" }));
+  const free = Array.from({ length: Math.max(0, count - reserved.length) }, (_, n) => ({ id: `e${n + 1}`, player: `e${n + 1}`, label: `Écran ${n + 1}` }));
+  return [...free, ...reserved].slice(0, Math.max(count, 0));
+}
+
+function ScreenPreview({ item, streams, star }) {
+  const list = Array.isArray(streams) ? streams : streams ? [streams] : [];
+  if (!list.length) return html`<span class="layout-empty">${item.type === "screens" ? "Aucun écran ici" : "Vide"}</span>`;
+  const w = item.w * PAGE.width;
+  const h = item.h * PAGE.height;
+  const grid = gridLayout(list.length, w, h, PREVIEW_GAP);
+  if (!grid.width) return null;
+  const width = grid.columns * grid.width + (grid.columns - 1) * PREVIEW_GAP;
+  // cqw : % de la largeur de l'élément (conteneur), pour le même écart entre lignes et colonnes.
+  return html`<div class="layout-tiles" style=${{ width: `${(width / w) * 100}%`, gap: `${(PREVIEW_GAP / w) * 100}cqw` }}>
+    ${list.map((s) => html`<span key=${s.id} class="layout-tile" style=${{ width: `${(grid.width / width) * 100}%` }}>
+      ${s.id === star ? "★ Vedette" : s.label}</span>`)}
+  </div>`;
+}
+
 // --- Page 16/9 : déplacer et redimensionner -----------------------------------------------
 
-function Canvas({ layout, players, selected, onSelect, onChange, onRemove }) {
+// `count` : nombre d'écrans de la disposition, pour l'aperçu des écrans. `overlapping` : écrans qui en recouvrent un autre.
+function Canvas({ layout, players, count, overlapping, selected, onSelect, onChange, onRemove }) {
+  const streams = previewStreams(layout.items, players, count);
+  const star = layout.items.some((i) => i.type === "screen" && i.source === "vedette") ? streams[0]?.id : null;
+  const assigned = assignScreens(layout.items, streams, streams[0]?.player);
   const ref = useRef(null);
   const drag = useRef(null);
 
@@ -78,10 +113,11 @@ function Canvas({ layout, players, selected, onSelect, onChange, onRemove }) {
       const label = describe(item, players);
       return html`<div key=${item.id} tabIndex="0" role="button" aria-pressed=${selected === item.id}
         aria-label=${`${label} : ${round(item.x)} %, ${round(item.y)} %, ${round(item.w)} × ${round(item.h)} %`}
-        class=${`layout-item type-${item.type} ${selected === item.id ? "selected" : ""}`}
+        class=${`layout-item type-${item.type} ${selected === item.id ? "selected" : ""} ${overlapping.has(item.id) ? "overlap" : ""}`}
         style=${{ left: `${item.x}%`, top: `${item.y}%`, width: `${item.w}%`, height: `${item.h}%` }}
         onPointerDown=${(e) => start(e, item, "move")} onPointerMove=${move} onPointerUp=${end} onPointerCancel=${end}
         onFocus=${() => onSelect(item.id)} onKeyDown=${(e) => key(e, item)}>
+        ${SCREEN_TYPES.includes(item.type) && html`<${ScreenPreview} item=${item} streams=${assigned.get(item.id)} star=${star} />`}
         <span class="layout-item-label">${label}</span>
         <span class="layout-resize" title="Redimensionner (Maj : proportions d'un écran)"
           onPointerDown=${(e) => start(e, item, "resize")} onPointerMove=${move} onPointerUp=${end} onPointerCancel=${end}></span>
@@ -183,8 +219,8 @@ export const countLabel = (n) => (n === 0 ? "Aucun écran" : n === 1 ? "1 écran
 const withNewIds = (items) => items.map((i) => ({ ...structuredClone(i), id: newId() }));
 
 // Une disposition par nombre d'écrans affichés (`variants` : [{ count, items }], contrôlé par `onChange`) : l'overlay
-// change tout seul quand un joueur commence ou arrête de partager. Deux écrans ne se recouvrent jamais : un
-// déplacement qui en ferait chevaucher deux est refusé.
+// change tout seul quand un joueur commence ou arrête de partager. Des écrans qui se recouvrent sont permis (un
+// écran en incrustation…), mais signalés.
 export function SpaceLayouts({ variants, players, onChange }) {
   const missing = SPACE_COUNTS.filter((n) => !variants.some((v) => v.count === n));
   const [current, setCurrent] = useState(variants[0]?.count ?? null);
@@ -196,13 +232,12 @@ export function SpaceLayouts({ variants, players, onChange }) {
   const item = variant?.items.find((i) => i.id === selected) || null;
   const full = !!variant && variant.items.length >= LAYOUT_LIMITS.items;
   const count = missing.includes(addCount) ? addCount : missing[0];
+  const overlapping = new Set((variant?.items || []).filter((i) => coversScreen(i, variant.items)).map((i) => i.id));
 
   const setItems = (items) => onChange(variants.map((v) => (v.count === variant.count ? { ...v, items } : v)));
   const change = (id, patch) => {
-    const items = variant.items.map((i) => (i.id === id ? { ...i, ...patch } : i));
-    if (coversScreen(items.find((i) => i.id === id), items)) { setWarning("Deux écrans ne peuvent pas se recouvrir."); return; }
     setWarning(null);
-    setItems(items);
+    setItems(variant.items.map((i) => (i.id === id ? { ...i, ...patch } : i)));
   };
   const remove = (id) => { setItems(variant.items.filter((i) => i.id !== id)); setSelected(null); };
   const add = (type, extra = {}) => {
@@ -269,9 +304,13 @@ export function SpaceLayouts({ variants, players, onChange }) {
         <button type="button" class="ghost small" disabled=${full} onClick=${() => add("progress")}>+ Progression</button>
         <button type="button" class="ghost small" disabled=${full} onClick=${() => add("text")}>+ Texte</button>
       </div>
-      <${Canvas} layout=${variant} players=${players} selected=${selected} onSelect=${setSelected} onChange=${change} onRemove=${remove} />
+      <${Canvas} layout=${variant} players=${players} count=${variant.count} overlapping=${overlapping} selected=${selected}
+        onSelect=${setSelected} onChange=${change} onRemove=${remove} />
+      ${overlapping.size > 0 && html`<div class="notice warn full" role="status">Attention : des écrans se recouvrent (encadrés en rouge).
+        Dans l'overlay, celui du dessus cache une partie de l'autre.</div>`}
       ${warning && html`<div class="notice warn full" role="status">${warning}</div>`}
-      <p class="hint">Glissez un élément pour le déplacer, son coin bas droit pour le redimensionner.</p>
+      <p class="hint">Glissez un élément pour le déplacer, son coin bas droit pour le redimensionner. Les écrans sont dessinés
+        tels qu'ils seraient placés avec ${variant.count === 0 ? "aucun joueur qui partage" : variant.count === 1 ? "un joueur qui partage" : `${variant.count} joueurs qui partagent`}.</p>
       <details class="more">
         <summary>Raccourcis</summary>
         <p class="hint">Maj en redimensionnant : format d'un écran. Au clavier : Tab pour choisir, flèches pour déplacer
