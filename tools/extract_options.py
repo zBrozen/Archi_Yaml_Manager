@@ -7,7 +7,8 @@ Le script charge Archipelago depuis ses sources (y compris les .apworld placés
 dans <Archipelago>/custom_worlds) et écrit :
     <out>/index.json         liste des jeux + version d'Archipelago
     <out>/games/<slug>.json  options d'un jeu, rangées par groupe
-    <out>/guides/<slug>.json guides du jeu (page du jeu et guides d'installation, en Markdown)
+    <out>/guides/<slug>.json guides du jeu (page du jeu et guides d'installation, en Markdown), avec le
+                             README du dépôt et les notes de release (--guides, écrit par fetch_apworlds.py)
 """
 from __future__ import annotations
 
@@ -42,6 +43,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--out", help="Dossier de sortie des JSON")
     parser.add_argument("--jobs", type=int, default=3, help="Processus de chargement en parallèle")
     parser.add_argument("--batch", type=int, default=40, help="Apworlds chargés par processus")
+    parser.add_argument("--guides", help="README et notes de release des apworlds (fetch_apworlds.py --guides)")
     # Usage interne : un processus qui charge les apworlds d'un dossier et écrit le résultat.
     parser.add_argument("--worker", nargs=2, metavar=("DOSSIER", "RESULTAT"), help=argparse.SUPPRESS)
     args = parser.parse_args()
@@ -237,6 +239,12 @@ def main() -> int:
             errors.setdefault(name, reason)
     for game in loaded:
         errors.pop(game, None)
+
+    # Guides des auteurs (README, notes de release), par fichier .apworld.
+    author = json.loads(Path(args.guides).read_text(encoding="utf-8")) if args.guides and Path(args.guides).exists() else {}
+    for game, data in loaded.items():
+        if data["apworld"] in author:
+            guides[game] = {"info": [], "tutorials": [], **(guides.get(game) or {}), **author[data["apworld"]]}
 
     guides_dir = out_dir / "guides"
     previous_files = {}

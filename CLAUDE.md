@@ -11,7 +11,8 @@
   Détails dans la section « Jeux non officiels » du README.
 - Page « Installer un jeu » (`#/installer?game=…`, `guides.js`) : liens d'installation des crédits (`download`,
   `release`, `links`, relevés par `fetch_apworlds.py`) et guides du jeu (`site/data/guides/`, relevés par
-  `extract_options.py` dans `docs/` du monde). Les guides sont écrits par les auteurs des apworlds : `markdown.js`
+  `extract_options.py` dans `docs/` du monde, plus README du dépôt et notes de release passés par
+  `fetch_apworlds.py --guides`). Les guides sont écrits par les auteurs des apworlds : `markdown.js`
   les rend en nœuds Preact, jamais en HTML brut (ne pas passer à `innerHTML` / `dangerouslySetInnerHTML`).
 - Dans le navigateur, un apworld déposé (`data.js`, `local`) passe avant le jeu de la base : `gameEntry` renvoie
   d'abord l'entrée de la room (`source: "room"`, page d'une room), puis l'entrée locale (`source: "apworld"`), dont

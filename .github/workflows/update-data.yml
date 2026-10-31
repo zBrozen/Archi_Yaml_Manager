@@ -124,7 +124,7 @@ jobs:
         run: >
           python tools/fetch_apworlds.py --config apworlds.json --local apworlds
           --dest "$RUNNER_TEMP/Archipelago/custom_worlds" --cache "$RUNNER_TEMP/apworld-cache"
-          --credits site/data/apworld-credits.json
+          --credits site/data/apworld-credits.json --guides "$RUNNER_TEMP/apworld-guides.json"
 
       - uses: actions/cache/save@v4
         if: always()
@@ -134,7 +134,9 @@ jobs:
 
       # Chaque lot d'apworlds est chargé dans un processus séparé (voir extract_options.py).
       - name: Extraire les options
-        run: python tools/extract_options.py --ap "$RUNNER_TEMP/Archipelago" --out site/data < /dev/null
+        run: >
+          python tools/extract_options.py --ap "$RUNNER_TEMP/Archipelago" --out site/data
+          --guides "$RUNNER_TEMP/apworld-guides.json" < /dev/null
 
       # Archipelago pour le navigateur : lecture des apworlds déposés par les joueurs.
       - name: Construire le paquet Archipelago du site

@@ -37,8 +37,9 @@ sans éditer le code à la main.
   sur la page de la room. Voir la section « Rooms ».
 - **Installer un jeu** (page `#/installer`) : pour chaque jeu de la base, ce qu'il faut pour y jouer sans
   chercher sur GitHub : Archipelago (version du site), le lien direct de l'apworld des jeux non officiels et
-  comment l'installer, les liens de l'auteur (tableur), le tracker s'il existe, et les guides d'installation du
-  jeu (ceux d'archipelago.gg, lus dans le dossier `docs/` de son monde). L'éditeur et les rooms y renvoient.
+  comment l'installer, les liens de l'auteur (tableur), le tracker s'il existe, et de quoi préparer le jeu (mod,
+  client, patch…) : les guides d'archipelago.gg (dossier `docs/` du monde), et pour les jeux non officiels le
+  README de leur dépôt et les notes de leur release. L'éditeur et les rooms y renvoient.
 - **Trackers** : les packs [PopTracker](https://github.com/black-sliver/PopTracker) des jeux s'ouvrent
   directement dans le site (objets, cartes, lieux accessibles), et suivent la partie en direct. Voir la section
   « Trackers (packs PopTracker) ».
@@ -131,7 +132,10 @@ page « Installer un jeu » : `download` (lien direct du fichier de la release, 
 
 **Guides.** `extract_options.py` lit les guides de chaque monde comme archipelago.gg : la page du jeu
 (`docs/en_<jeu>.md`, `fr_…`) et les tutoriels de `web.tutorials` (anglais et français seulement, sinon toutes
-les langues), écrits dans `site/data/guides/<jeu>.json` (`guides` dans `index.json`). Le site les affiche avec
+les langues), écrits dans `site/data/guides/<jeu>.json` (`guides` dans `index.json`). Pour les jeux non
+officiels, le guide de modding est souvent ailleurs : `fetch_apworlds.py --guides` relève aussi le README du
+dépôt GitHub (sauf celui d'un fork d'Archipelago, qui ne parle pas du jeu) et les notes de la release, ajoutés
+au même fichier (`readme`, `notes`). Le site les affiche avec
 son propre lecteur Markdown (`site/js/markdown.js`), qui ne produit jamais de HTML brut : balises ignorées, liens
 http(s) seulement, images d'archipelago.gg et de GitHub seulement.
 

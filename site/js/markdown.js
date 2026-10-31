@@ -18,10 +18,11 @@ const HTML_LINE = /^ *<\/?[a-zA-Z][^>]*> *$/;
 // Identifiant d'un titre, pour les liens internes (#titre) du guide.
 const anchor = (text) => "guide-" + text.toLowerCase().replace(/[^\p{L}\p{N}\s-]/gu, "").trim().replace(/\s+/g, "-");
 
-// `base` : adresse à laquelle se lisent les liens relatifs (images…) ; sans elle, ils restent du texte.
-export function Markdown({ text, base }) {
+// `base` : adresse à laquelle se lisent les liens relatifs ; sans elle, ils restent du texte. `imageBase` : la
+// même chose pour les images, si elles sont ailleurs (fichiers bruts d'un dépôt GitHub).
+export function Markdown({ text, base, imageBase }) {
   const lines = String(text || "").replace(/<!--[\s\S]*?-->/g, "").replace(/\r\n?/g, "\n").replace(/\t/g, "    ").split("\n");
-  return html`<div class="markdown">${blocks(lines, { base })}</div>`;
+  return html`<div class="markdown">${blocks(lines, { base, imageBase })}</div>`;
 }
 
 function startsBlock(line) {
@@ -154,7 +155,7 @@ const INLINE = [
   [/^\\([\\`*_{}[\]()#+\-.!|<>~])/, (m) => m[1]],
   [/^(`+)([\s\S]*?[^`])\1(?!`)/, (m) => html`<code>${m[2].trim()}</code>`],
   [/^!\[([^\]]*)\]\(\s*<?([^)\s>]*)>?(?:\s+"[^"]*")?\s*\)/, (m, ctx) => {
-    const url = resolve(m[2], ctx);
+    const url = resolve(m[2], { ...ctx, base: ctx.imageBase || ctx.base });
     if (!url || ctx.noLinks) return m[1];
     if (url.protocol === "https:" && IMAGE_HOSTS.test(url.hostname)) {
       return html`<img src=${url.href} alt=${m[1]} loading="lazy" referrerpolicy="no-referrer" />`;

@@ -1,6 +1,7 @@
 // Page « Installer un jeu » (#/installer?game=…) : étapes communes à tous les jeux, puis pour le jeu choisi
-// l'apworld à télécharger (jeux non officiels), les liens de son auteur et ses guides d'installation, lus dans le
-// dossier docs/ de son monde par tools/extract_options.py (les mêmes que sur archipelago.gg).
+// l'apworld à télécharger (jeux non officiels), les liens de son auteur et ses guides d'installation : ceux du
+// dossier docs/ de son monde (les mêmes que sur archipelago.gg), le README de son dépôt et les notes de sa release
+// (souvent là que l'auteur explique comment modder le jeu), relevés par tools/extract_options.py.
 import { html, useState, useEffect } from "../vendor/preact-htm.js";
 import { SheetBadges, GamePicker, loadCredits } from "./ui.js";
 import { Markdown } from "./markdown.js";
@@ -95,11 +96,18 @@ function GameGuide({ entry, onCreate }) {
   const source = credit && safeUrl(credit.source);
   const links = [...new Set([source, ...(credit?.links || []).map(safeUrl)].filter(Boolean))];
 
-  // Onglets : guides d'installation d'abord, puis la page du jeu (ce qui change dans la partie).
+  // Onglets : guides d'installation de l'apworld, README du dépôt, notes de la release, puis la page du jeu
+  // (ce qui change dans la partie). `base` : dossier des liens relatifs, `imageBase` : celui des images.
   const languages = new Set(guides?.tutorials.map((t) => t.language));
+  const apSite = (url) => ({ url, site: "archipelago.gg", base: official ? docsFolder(entry.game) : null });
+  const readme = guides?.readme, notes = guides?.notes;
   const pages = guides ? [
-    ...guides.tutorials.map((t) => ({ ...t, label: `${t.title || "Guide"}${languages.size > 1 ? ` (${t.language})` : ""}`, url: official && t.link ? `${AP_SITE}/tutorial/${encodeURIComponent(entry.game)}/${t.link}` : null })),
-    ...guides.info.map((p) => ({ ...p, label: `Présentation du jeu${guides.info.length > 1 ? ` (${p.language})` : ""}`, url: official ? `${AP_SITE}/games/${encodeURIComponent(entry.game)}/info/${p.language}` : null })),
+    ...guides.tutorials.map((t) => ({ ...t, label: `${t.title || "Guide"}${languages.size > 1 ? ` (${t.language})` : ""}`,
+      ...apSite(official && t.link ? `${AP_SITE}/tutorial/${encodeURIComponent(entry.game)}/${t.link}` : null) })),
+    ...(readme ? [{ ...readme, label: "README du projet", site: "GitHub", url: safeUrl(readme.url), base: safeUrl(readme.url), imageBase: safeUrl(readme.raw) }] : []),
+    ...(notes ? [{ ...notes, label: `Notes de la release${notes.tag ? ` ${notes.tag}` : ""}`, site: "la page de la release", url: safeUrl(notes.url), base: safeUrl(notes.url) }] : []),
+    ...guides.info.map((p) => ({ ...p, label: `Présentation du jeu${guides.info.length > 1 ? ` (${p.language})` : ""}`,
+      ...apSite(official ? `${AP_SITE}/games/${encodeURIComponent(entry.game)}/info/${p.language}` : null) })),
   ] : [];
   const page = pages[Math.min(tab, pages.length - 1)];
 
@@ -130,9 +138,11 @@ function GameGuide({ entry, onCreate }) {
       ${entry.rom && html`<li><strong>Ce jeu se joue avec votre propre copie</strong> (ROM ou fichier du jeu) : le site ne la fournit pas.
         ${entry.rom.description && html` <span class="hint">Fichier demandé : ${entry.rom.description}.</span>`}</li>`}
       <li>${pages.length
-        ? "Installez le jeu et son client en suivant le guide ci-dessous."
+        ? html`Préparez le jeu pour Archipelago (mod, client, patch… selon le jeu) en suivant le guide ci-dessous.
+          ${pages.length > 1 ? " Chaque onglet est une source différente : lisez-les tous." : ""}`
         : guides === undefined ? "Chargement du guide…"
-          : html`Installez le jeu et son client : ${official ? "voyez sa page sur archipelago.gg" : "le guide est sur la page de l'auteur (lien ci-dessous)"}.`}</li>
+          : html`Préparez le jeu pour Archipelago (mod, client, patch… selon le jeu) : ${official
+            ? "voyez sa page sur archipelago.gg" : "son auteur n'a pas publié de guide lisible ici, voyez ses liens ci-dessous"}.`}</li>
       <li><div class="stack">
         <span>Créez votre YAML (vos options pour ce jeu), puis rejoignez la partie.</span>
         <div class="row">
@@ -154,9 +164,9 @@ function GameGuide({ entry, onCreate }) {
       <div class="guide-meta hint">
         ${page.description && html`<span>${page.description}</span>`}
         ${page.authors?.length > 0 && html`<span>Par ${page.authors.join(", ")}</span>`}
-        ${page.url && html`<a href=${page.url} target="_blank" rel="noopener">Voir sur archipelago.gg</a>`}
+        ${page.url && html`<a href=${page.url} target="_blank" rel="noopener">Voir sur ${page.site}</a>`}
       </div>
-      <${Markdown} key=${tab} text=${page.text} base=${official ? docsFolder(entry.game) : null} />
+      <${Markdown} key=${tab} text=${page.text} base=${page.base} imageBase=${page.imageBase} />
     </div>`}
   </section>`;
 }

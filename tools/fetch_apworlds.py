@@ -24,13 +24,19 @@ sa licence (fichier LICENSE de l'apworld, sinon celui du dépôt), ses informati
 l'installer (page « Installer un jeu » du site) : lien direct du fichier, page de la release et liens de la
 colonne « Links & Downloads ».
 
+Avec --guides, écrit pour chaque apworld le README de son dépôt GitHub et les notes de sa release : c'est souvent
+là que l'auteur explique comment modder le jeu, quand l'apworld n'a pas de guide. extract_options.py (--guides)
+les ajoute aux guides du jeu.
+
 Usage :
     python tools/fetch_apworlds.py --config apworlds.json --local apworlds \\
-        --dest ../Archipelago/custom_worlds --cache ../apworld-cache --credits site/data/apworld-credits.json
+        --dest ../Archipelago/custom_worlds --cache ../apworld-cache --credits site/data/apworld-credits.json \
+        --guides ../apworld-guides.json
 """
 from __future__ import annotations
 
 import argparse
+import base64
 import difflib
 import hashlib
 import io
@@ -54,6 +60,9 @@ SITE_REPO = os.environ.get("GITHUB_REPOSITORY", "zBrozen/Archi_Yaml_Manager")
 XLSX = {"m": "http://schemas.openxmlformats.org/spreadsheetml/2006/main"}
 REL_ID = "{http://schemas.openxmlformats.org/officeDocument/2006/relationships}id"
 WORKERS = 8
+GUIDE_MAX = 100_000  # caractères gardés d'un README ou de notes de release
+# README d'Archipelago lui-même : celui des forks qui publient un jeu, sans rien sur ce jeu.
+AP_README = "Archipelago provides a generic framework for developing multiworld capability"
 
 
 def warn(message: str) -> None:
@@ -201,6 +210,7 @@ def releases_of(http: Http, entry: dict) -> tuple[str, list[dict]]:
         return f"https://gitlab.com/{project}", [{
             "tag": r.get("tag_name"),
             "page": f"https://gitlab.com/{project}/-/releases/{urllib.parse.quote(r.get('tag_name') or '', safe='')}",
+            "notes": r.get("description") or "",
             "prerelease": r.get("upcoming_release", False),
             "assets": [(link["name"], link.get("direct_asset_url") or link["url"])
                        for link in r.get("assets", {}).get("links", [])],
@@ -212,6 +222,7 @@ def releases_of(http: Http, entry: dict) -> tuple[str, list[dict]]:
     return f"https://github.com/{repo}", [{
         "tag": r.get("tag_name"),
         "page": r.get("html_url"),
+        "notes": r.get("body") or "",
         "prerelease": r.get("prerelease", False) or r.get("draft", False),
         "assets": [(a["name"], a["browser_download_url"]) for a in r.get("assets", [])],
     } for r in raw]
@@ -357,6 +368,40 @@ def credits_of(http: Http, path: Path, page: str | None) -> dict:
     return entry
 
 
+# --- Guides des auteurs ------------------------------------------------------------
+
+def repo_readme(http: Http, page: str | None) -> dict | None:
+    """README d'un dépôt GitHub : texte, page (base des liens relatifs) et fichier brut (base des images)."""
+    if not page or not page.startswith("https://github.com/"):
+        return None
+    repo = page.removeprefix("https://github.com/")
+    try:
+        data = http.json(f"https://api.github.com/repos/{repo}/readme")
+        text = base64.b64decode(data["content"]).decode("utf-8", "replace").lstrip("﻿")
+    except Exception:
+        return None  # pas de README (404) ou API indisponible
+    if AP_README in text or not text.strip():
+        return None
+    return {"text": text[:GUIDE_MAX], "url": data.get("html_url"), "raw": data.get("download_url")}
+
+
+def author_guides(http: Http, files: list[tuple[Path, str | None, dict]]) -> dict[str, dict]:
+    """Par fichier .apworld : README du dépôt et notes de la release, s'il y en a."""
+    pages = sorted({page for _, page, _ in files if page})
+    with ThreadPoolExecutor(WORKERS) as pool:
+        readmes = dict(zip(pages, pool.map(lambda page: repo_readme(http, page), pages)))
+    guides = {}
+    for path, page, entry in files:
+        guide = {}
+        if readmes.get(page):
+            guide["readme"] = readmes[page]
+        if (entry.get("notes") or "").strip():
+            guide["notes"] = {"text": entry["notes"][:GUIDE_MAX], "url": entry.get("release"), "tag": entry.get("tag")}
+        if guide:
+            guides[path.name] = guide
+    return guides
+
+
 # --- Programme --------------------------------------------------------------------
 
 def load_entries(http: Http, settings: dict) -> list[dict]:
@@ -420,7 +465,7 @@ def fetch(http: Http, entry: dict, cache: Path | None, last: dict) -> list[dict]
                     and similarity(name[:-8], entry["game"]) < 0.6:
                 raise Skipped(f"la dernière release de {page} est un autre jeu ({game})")
             results.append({"name": name, "page": page, "tag": release["tag"], "data": data,
-                            "url": url, "release": release.get("page"),
+                            "url": url, "release": release.get("page"), "notes": release.get("notes"),
                             "stored": str(stored) if stored else None})
         return results
     except Exception as ex:
@@ -442,6 +487,7 @@ def main() -> int:
     parser.add_argument("--dest", required=True)
     parser.add_argument("--cache", help="dossier gardé d'une exécution à l'autre")
     parser.add_argument("--credits", help="fichier JSON des crédits à écrire")
+    parser.add_argument("--guides", help="fichier JSON des README et notes de release à écrire")
     args = parser.parse_args()
 
     dest = Path(args.dest)
@@ -487,7 +533,7 @@ def main() -> int:
             taken.add(f["name"])
             (dest / f["name"]).write_bytes(f["data"])
             files.append((dest / f["name"], f["page"], {**entry, "tag": f["tag"], "url": f.get("url"),
-                                                        "release": f.get("release")}))
+                                                        "release": f.get("release"), "notes": f.get("notes")}))
     print(f"{len(files)} apworld(s) ajouté(s) sur {len(entries)} jeu(x) listé(s)", flush=True)
     skipped = [e for e in entries if "_skipped" in e]
     if skipped:
@@ -529,6 +575,11 @@ def main() -> int:
         out.write_text(json.dumps(credits, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
         if license_file:
             license_file.write_text(json.dumps(kept, ensure_ascii=False), encoding="utf-8")
+
+    if args.guides:
+        guides = author_guides(http, files)
+        Path(args.guides).write_text(json.dumps(guides, ensure_ascii=False), encoding="utf-8")
+        print(f"Guides des auteurs : {len(guides)} apworld(s) avec un README ou des notes de release", flush=True)
 
     if last_file:
         # Un jeu sans téléchargement ce coup-ci garde sa dernière version connue pour la prochaine fois.
