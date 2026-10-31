@@ -1,6 +1,6 @@
 {
  "ap_version": "0.6.8",
- "generated_at": "2026-10-31T09:06:17+00:00",
+ "generated_at": "2026-10-31T09:21:44+00:00",
  "games": [
   {
    "game": "2048",
@@ -8,6 +8,7 @@
    "source": "custom",
    "apworld": "2048.apworld",
    "world_version": "1.1.3",
+   "guides": "guides/2048.json",
    "sheet": {
     "game": "2048",
     "stability": "Unstable"
@@ -43,6 +44,7 @@
    "source": "custom",
    "apworld": "difficult_climbing.apworld",
    "world_version": null,
+   "guides": "guides/a-difficult-game-about-climbing.json",
    "sheet": {
     "game": "A Difficult Game About Climbing",
     "stability": "Stable"
@@ -53,7 +55,8 @@
    "file": "games/a-hat-in-time.json",
    "source": "core",
    "apworld": null,
-   "world_version": null
+   "world_version": null,
+   "guides": "guides/a-hat-in-time.json"
   },
   {
    "game": "A Link Between Worlds",
@@ -61,6 +64,7 @@
    "source": "custom",
    "apworld": "albw.apworld",
    "world_version": "0.3.6",
+   "guides": "guides/a-link-between-worlds.json",
    "sheet": {
     "game": "The Legend of Zelda: A Link Between Worlds",
     "stability": "Stable"
@@ -77,14 +81,16 @@
     "setting": "rom_file",
     "file": "Zelda no Densetsu - Kamigami no Triforce (Japan).sfc",
     "description": "ALTTP v1.0 J ROM File"
-   }
+   },
+   "guides": "guides/a-link-to-the-past.json"
   },
   {
    "game": "A Short Hike",
    "file": "games/a-short-hike.json",
    "source": "core",
    "apworld": null,
-   "world_version": null
+   "world_version": null,
+   "guides": "guides/a-short-hike.json"
   },
   {
    "game": "Actraiser",
@@ -92,6 +98,7 @@
    "source": "custom",
    "apworld": "actraiser.apworld",
    "world_version": "1.3.4",
+   "guides": "guides/actraiser.json",
    "sheet": {
     "game": "ActRaiser",
     "stability": "Stable"
@@ -102,7 +109,8 @@
    "file": "games/adventure.json",
    "source": "core",
    "apworld": null,
-   "world_version": null
+   "world_version": null,
+   "guides": "guides/adventure.json"
   },
   {
    "game": "AEMinecraft",
@@ -154,6 +162,7 @@
    "source": "custom",
    "apworld": "air_delivery.apworld",
    "world_version": null,
+   "guides": "guides/air-delivery.json",
    "sheet": {
     "game": "Air Delivery",
     "stability": "Stable"
@@ -176,6 +185,7 @@
    "source": "custom",
    "apworld": "aus.apworld",
    "world_version": null,
+   "guides": "guides/an-untitled-story.json",
    "sheet": {
     "game": "An Untitled Story",
     "stability": "Stable"
@@ -187,6 +197,7 @@
    "source": "custom",
    "apworld": "angband.apworld",
    "world_version": "0.4.0",
+   "guides": "guides/angband.json",
    "sheet": {
     "game": "Angband",
     "stability": "Unstable",
@@ -210,6 +221,7 @@
    "source": "custom",
    "apworld": "animal_well.apworld",
    "world_version": "0.5.4",
+   "guides": "guides/animal-well.json",
    "sheet": {
     "game": "ANIMAL WELL",
     "stability": "Stable",
@@ -233,6 +245,7 @@
    "source": "custom",
    "apworld": "anodyne.apworld",
    "world_version": "0.6.3",
+   "guides": "guides/anodyne.json",
    "sheet": {
     "game": "Anodyne",
     "stability": "Stable"
@@ -255,6 +268,7 @@
    "source": "custom",
    "apworld": "aptombola.apworld",
    "world_version": "0.4.0",
+   "guides": "guides/ap-tombola.json",
    "sheet": {
     "game": "Tombola",
     "stability": "Unstable"
@@ -266,6 +280,7 @@
    "source": "custom",
    "apworld": "rummy.apworld",
    "world_version": "1.0.0",
+   "guides": "guides/ap-rummy.json",
    "sheet": {
     "game": "AP Rummy",
     "stability": "Unstable",
@@ -278,6 +293,7 @@
    "source": "custom",
    "apworld": "apeescape.apworld",
    "world_version": "0.9.10",
+   "guides": "guides/ape-escape.json",
    "sheet": {
     "game": "Ape Escape",
     "stability": "Stable"
@@ -310,14 +326,16 @@
    "file": "games/apquest.json",
    "source": "core",
    "apworld": null,
-   "world_version": "2.0.0"
+   "world_version": "2.0.0",
+   "guides": "guides/apquest.json"
   },
   {
    "game": "Aquaria",
    "file": "games/aquaria.json",
    "source": "core",
    "apworld": null,
-   "world_version": "1.5.2"
+   "world_version": "1.5.2",
+   "guides": "guides/aquaria.json"
   },
   {
    "game": "Archipela-Go!",
@@ -325,6 +343,7 @@
    "source": "custom",
    "apworld": "apgo.apworld",
    "world_version": null,
+   "guides": "guides/archipela-go.json",
    "sheet": {
     "game": "Archipela-Go!",
     "stability": "Unstable"
@@ -336,6 +355,7 @@
    "source": "custom",
    "apworld": "archipelacode.apworld",
    "world_version": "0.0.1",
+   "guides": "guides/archipelacode.json",
    "sheet": {
     "game": "Archipelacode",
     "stability": "Unstable"
@@ -347,6 +367,7 @@
    "source": "custom",
    "apworld": "archipeladoku.apworld",
    "world_version": "2026.9.26",
+   "guides": "guides/archipeladoku.json",
    "sheet": {
     "game": "Archipeladoku (Sudoku)",
     "stability": "Stable",
@@ -381,6 +402,7 @@
    "source": "custom",
    "apworld": "armoredcore.apworld",
    "world_version": "0.3.0",
+   "guides": "guides/armored-core.json",
    "sheet": {
     "game": "Armored Core (PSX)",
     "stability": "Unstable"
@@ -392,6 +414,7 @@
    "source": "custom",
    "apworld": "armoredcore3.apworld",
    "world_version": "0.2.0",
+   "guides": "guides/armored-core-3.json",
    "sheet": {
     "game": "Armored Core 3",
     "stability": "Unstable"
@@ -403,6 +426,7 @@
    "source": "custom",
    "apworld": "arzette.apworld",
    "world_version": "1.0.0",
+   "guides": "guides/arzette-the-jewel-of-faramore.json",
    "sheet": {
     "game": "Arzette: The Jewel of Faramore",
     "stability": "Unstable"
@@ -414,6 +438,7 @@
    "source": "custom",
    "apworld": "astalon.apworld",
    "world_version": "0.27.1",
+   "guides": "guides/astalon.json",
    "sheet": {
     "game": "Astalon: Tears of the Earth",
     "stability": "Stable",
@@ -426,6 +451,7 @@
    "source": "custom",
    "apworld": "autopelago.apworld",
    "world_version": "1.1.1",
+   "guides": "guides/autopelago.json",
    "sheet": {
     "game": "Autopelago",
     "stability": "Stable",
@@ -460,6 +486,7 @@
    "source": "custom",
    "apworld": "balatro.apworld",
    "world_version": null,
+   "guides": "guides/balatro.json",
    "sheet": {
     "game": "Balatro",
     "stability": "Stable"
@@ -471,6 +498,7 @@
    "source": "custom",
    "apworld": "bg3.apworld",
    "world_version": "0.8.0",
+   "guides": "guides/baldur-s-gate-3.json",
    "sheet": {
     "game": "Baldur's Gate 3",
     "stability": "Stable",
@@ -484,6 +512,7 @@
    "source": "custom",
    "apworld": "bg3tot.apworld",
    "world_version": "1.2.2",
+   "guides": "guides/baldur-s-gate-3-tot.json",
    "sheet": {
     "game": "Baldur's Gate 3 - Trials of Tav",
     "stability": "Unstable",
@@ -497,6 +526,7 @@
    "source": "custom",
    "apworld": "banjo_tooie.apworld",
    "world_version": "4.13.1",
+   "guides": "guides/banjo-tooie.json",
    "sheet": {
     "game": "Banjo-Tooie",
     "stability": "Stable",
@@ -533,6 +563,7 @@
    "source": "custom",
    "apworld": "beat_saber.apworld",
    "world_version": null,
+   "guides": "guides/beat-saber.json",
    "sheet": {
     "game": "Beat Saber",
     "stability": "Unstable"
@@ -555,6 +586,7 @@
    "source": "custom",
    "apworld": "bitty_buddies.apworld",
    "world_version": "1.0.0",
+   "guides": "guides/bitty-buddies.json",
    "sheet": {
     "game": "Bitty Buddies",
     "stability": "Unstable"
@@ -566,6 +598,7 @@
    "source": "custom",
    "apworld": "bksim.apworld",
    "world_version": "1.0.2",
+   "guides": "guides/bksimulator.json",
    "sheet": {
     "game": "BK Simulator",
     "stability": "Stable",
@@ -601,7 +634,8 @@
    "file": "games/blasphemous.json",
    "source": "core",
    "apworld": null,
-   "world_version": null
+   "world_version": null,
+   "guides": "guides/blasphemous.json"
   },
   {
    "game": "Blender",
@@ -620,6 +654,7 @@
    "source": "custom",
    "apworld": "blockupelago.apworld",
    "world_version": null,
+   "guides": "guides/blockupelago.json",
    "sheet": {
     "game": "Blockupelago",
     "stability": "Unstable"
@@ -654,6 +689,7 @@
    "source": "custom",
    "apworld": "blueprince.apworld",
    "world_version": "0.1.3",
+   "guides": "guides/blue-prince.json",
    "sheet": {
     "game": "Blue Prince",
     "stability": "Unstable"
@@ -664,7 +700,8 @@
    "file": "games/bomb-rush-cyberfunk.json",
    "source": "core",
    "apworld": null,
-   "world_version": "1.0.6"
+   "world_version": "1.0.6",
+   "guides": "guides/bomb-rush-cyberfunk.json"
   },
   {
    "game": "Bomberman Quest",
@@ -672,6 +709,7 @@
    "source": "custom",
    "apworld": "bomberman_quest.apworld",
    "world_version": "0.1.2",
+   "guides": "guides/bomberman-quest.json",
    "sheet": {
     "game": "Bomberman 64",
     "stability": "Unstable"
@@ -683,6 +721,7 @@
    "source": "custom",
    "apworld": "borderlands2.apworld",
    "world_version": null,
+   "guides": "guides/borderlands-2.json",
    "sheet": {
     "game": "Borderlands 2",
     "stability": "Unstable",
@@ -696,6 +735,7 @@
    "source": "custom",
    "apworld": "bfm.apworld",
    "world_version": "0.8.1",
+   "guides": "guides/brave-fencer-musashi.json",
    "sheet": {
     "game": "Brave Fencer Musashi",
     "stability": "Stable"
@@ -707,6 +747,7 @@
    "source": "custom",
    "apworld": "brotato.apworld",
    "world_version": "0.17.2",
+   "guides": "guides/brotato.json",
    "sheet": {
     "game": "Brotato",
     "stability": "Stable"
@@ -729,6 +770,7 @@
    "source": "custom",
    "apworld": "buckshot.apworld",
    "world_version": "0.4.1",
+   "guides": "guides/buckshot-roulette.json",
    "sheet": {
     "game": "Buckshot Roulette",
     "stability": "Stable"
@@ -751,6 +793,7 @@
    "source": "custom",
    "apworld": "bugsnax.apworld",
    "world_version": null,
+   "guides": "guides/bugsnax.json",
    "sheet": {
     "game": "Bugsnax",
     "stability": "Unstable"
@@ -762,6 +805,7 @@
    "source": "custom",
    "apworld": "build_a_jetpack.apworld",
    "world_version": "0.3.0",
+   "guides": "guides/build-a-jetpack.json",
    "sheet": {
     "game": "Build a Jetpack",
     "stability": "Stable",
@@ -773,7 +817,8 @@
    "file": "games/bumper-stickers.json",
    "source": "core",
    "apworld": null,
-   "world_version": "1.0.0"
+   "world_version": "1.0.0",
+   "guides": "guides/bumper-stickers.json"
   },
   {
    "game": "Burger Shop",
@@ -781,6 +826,7 @@
    "source": "custom",
    "apworld": "burger_shop.apworld",
    "world_version": null,
+   "guides": "guides/burger-shop.json",
    "sheet": {
     "game": "Burger Shop",
     "stability": "Unstable"
@@ -803,6 +849,7 @@
    "source": "custom",
    "apworld": "cnc_reloaded.apworld",
    "world_version": "2.0.0",
+   "guides": "guides/c-c-reloaded.json",
    "sheet": {
     "game": "C&C Reloaded",
     "stability": "Unstable",
@@ -815,6 +862,7 @@
    "source": "custom",
    "apworld": "candybox2.apworld",
    "world_version": "1.20260822.1",
+   "guides": "guides/candy-box-2.json",
    "sheet": {
     "game": "Candy Box 2",
     "stability": "Stable",
@@ -827,6 +875,7 @@
    "source": "custom",
    "apworld": "carnival_games_minigolf.apworld",
    "world_version": "0.1.0",
+   "guides": "guides/carnival-games-minigolf.json",
    "sheet": {
     "game": "Carnival Games MiniGolf",
     "stability": "Unstable"
@@ -859,14 +908,16 @@
    "file": "games/castlevania-circle-of-the-moon.json",
    "source": "core",
    "apworld": null,
-   "world_version": null
+   "world_version": null,
+   "guides": "guides/castlevania-circle-of-the-moon.json"
   },
   {
    "game": "Castlevania 64",
    "file": "games/castlevania-64.json",
    "source": "core",
    "apworld": null,
-   "world_version": null
+   "world_version": null,
+   "guides": "guides/castlevania-64.json"
   },
   {
    "game": "Castlevania: Legacy of Darkness",
@@ -874,6 +925,7 @@
    "source": "custom",
    "apworld": "cvlod.apworld",
    "world_version": "2.0.2",
+   "guides": "guides/castlevania-legacy-of-darkness.json",
    "sheet": {
     "game": "Castlevania: Harmony of Dissonance",
     "stability": "Stable"
@@ -885,6 +937,7 @@
    "source": "custom",
    "apworld": "los.apworld",
    "world_version": "0.7.4",
+   "guides": "guides/castlevania-lords-of-shadow.json",
    "sheet": {
     "game": "Castlevania: Lords of Shadow",
     "stability": "Unstable"
@@ -896,6 +949,7 @@
    "source": "custom",
    "apworld": "cv_ooe.apworld",
    "world_version": "2.1.0",
+   "guides": "guides/castlevania-order-of-ecclesia.json",
    "sheet": {
     "game": "Castlevania: Dawn of Sorrow",
     "stability": "Stable"
@@ -907,6 +961,7 @@
    "source": "custom",
    "apworld": "casualtiesunknown.apworld",
    "world_version": "0.12.1",
+   "guides": "guides/casualties-unknown.json",
    "sheet": {
     "game": "Casualties: Unknown (Scav Prototype Demo)",
     "stability": "Unstable",
@@ -920,6 +975,7 @@
    "source": "custom",
    "apworld": "cave_story.apworld",
    "world_version": null,
+   "guides": "guides/cave-story.json",
    "sheet": {
     "game": "Cave Story",
     "stability": "Stable"
@@ -952,14 +1008,16 @@
    "file": "games/celeste-open-world.json",
    "source": "core",
    "apworld": null,
-   "world_version": "1.0.7"
+   "world_version": "1.0.7",
+   "guides": "guides/celeste-open-world.json"
   },
   {
    "game": "Celeste 64",
    "file": "games/celeste-64.json",
    "source": "core",
    "apworld": null,
-   "world_version": "1.3.1"
+   "world_version": "1.3.1",
+   "guides": "guides/celeste-64.json"
   },
   {
    "game": "Celeste Classic",
@@ -967,6 +1025,7 @@
    "source": "custom",
    "apworld": "celeste_classic.apworld",
    "world_version": "0.2.0",
+   "guides": "guides/celeste-classic.json",
    "sheet": {
     "game": "Celeste Classic",
     "stability": "Unstable",
@@ -1000,7 +1059,8 @@
    "file": "games/checksfinder.json",
    "source": "core",
    "apworld": null,
-   "world_version": null
+   "world_version": null,
+   "guides": "guides/checksfinder.json"
   },
   {
    "game": "ChecksMate",
@@ -1008,6 +1068,7 @@
    "source": "custom",
    "apworld": "checksmate.apworld",
    "world_version": null,
+   "guides": "guides/checksmate.json",
    "sheet": {
     "game": "ChecksMate (Chess)",
     "stability": "Stable",
@@ -1020,6 +1081,7 @@
    "source": "custom",
    "apworld": "chibi_robo.apworld",
    "world_version": null,
+   "guides": "guides/chibi-robo.json",
    "sheet": {
     "game": "Chibi Robo! Plug into Adventure",
     "stability": "Unstable"
@@ -1031,6 +1093,7 @@
    "source": "custom",
    "apworld": "children_of_morta.apworld",
    "world_version": null,
+   "guides": "guides/children-of-morta.json",
    "sheet": {
     "game": "Children of Morta",
     "stability": "Unstable"
@@ -1041,7 +1104,8 @@
    "file": "games/choo-choo-charles.json",
    "source": "core",
    "apworld": null,
-   "world_version": null
+   "world_version": null,
+   "guides": "guides/choo-choo-charles.json"
   },
   {
    "game": "Chrono Trigger Rando-Dalton Imperial",
@@ -1049,6 +1113,7 @@
    "source": "custom",
    "apworld": "ctrdi.apworld",
    "world_version": "0.0.4",
+   "guides": "guides/chrono-trigger-rando-dalton-imperial.json",
    "sheet": {
     "game": "Chrono Trigger Rando-Dalton Imperial (SNES)",
     "stability": "Unstable",
@@ -1082,7 +1147,8 @@
    "file": "games/civilization-vi.json",
    "source": "core",
    "apworld": null,
-   "world_version": null
+   "world_version": null,
+   "guides": "guides/civilization-vi.json"
   },
   {
    "game": "Clair Obscur Expedition 33",
@@ -1090,6 +1156,7 @@
    "source": "custom",
    "apworld": "clair_obscur.apworld",
    "world_version": "0.4.3",
+   "guides": "guides/clair-obscur-expedition-33.json",
    "sheet": {
     "game": "Clair Obscur Expedition 33",
     "stability": "Unstable",
@@ -1114,6 +1181,7 @@
    "source": "custom",
    "apworld": "cluster_truck.apworld",
    "world_version": "1.3.2",
+   "guides": "guides/clustertruck.json",
    "sheet": {
     "game": "ClusterTruck",
     "stability": "Stable"
@@ -1125,6 +1193,7 @@
    "source": "custom",
    "apworld": "cobalt_core.apworld",
    "world_version": null,
+   "guides": "guides/cobalt-core.json",
    "sheet": {
     "game": "Cobalt Core",
     "stability": "Stable"
@@ -1136,6 +1205,7 @@
    "source": "custom",
    "apworld": "codeforces.apworld",
    "world_version": "0.0.3",
+   "guides": "guides/codeforces.json",
    "sheet": {
     "game": "Codeforces",
     "stability": "Unstable"
@@ -1147,6 +1217,7 @@
    "source": "custom",
    "apworld": "keen.apworld",
    "world_version": null,
+   "guides": "guides/commander-keen.json",
    "sheet": {
     "game": "Commander Keen in Goodbye, Galaxy",
     "stability": "Unstable"
@@ -1180,6 +1251,7 @@
    "source": "custom",
    "apworld": "control.apworld",
    "world_version": null,
+   "guides": "guides/control.json",
    "sheet": {
     "game": "Control (Ultimate Edition)",
     "stability": "Unstable"
@@ -1203,6 +1275,7 @@
    "source": "custom",
    "apworld": "cookingmama3.apworld",
    "world_version": "1.1.1",
+   "guides": "guides/cooking-mama-3.json",
    "sheet": {
     "game": "Cooking Mama 3",
     "stability": "Unstable"
@@ -1214,6 +1287,7 @@
    "source": "custom",
    "apworld": "cornkidz64.apworld",
    "world_version": "0.0.7",
+   "guides": "guides/corn-kidz-64.json",
    "sheet": {
     "game": "Corn Kidz 64",
     "stability": "Stable"
@@ -1225,6 +1299,7 @@
    "source": "custom",
    "apworld": "corruobserver.apworld",
    "world_version": "0.1.4",
+   "guides": "guides/corruobserver.json",
    "sheet": {
     "game": "corru.observer",
     "stability": "Unstable"
@@ -1294,6 +1369,7 @@
    "source": "custom",
    "apworld": "ctr.apworld",
    "world_version": "0.2.4",
+   "guides": "guides/crash-team-racing.json",
    "sheet": {
     "game": "Crash Team Racing",
     "stability": "Unstable"
@@ -1305,6 +1381,7 @@
    "source": "custom",
    "apworld": "create.apworld",
    "world_version": "0.1.3",
+   "guides": "guides/create.json",
    "sheet": {
     "game": "Create",
     "stability": "Stable"
@@ -1316,6 +1393,7 @@
    "source": "custom",
    "apworld": "crosscode.apworld",
    "world_version": "0.9.8",
+   "guides": "guides/crosscode.json",
    "sheet": {
     "game": "CrossCode",
     "stability": "Stable"
@@ -1338,6 +1416,7 @@
    "source": "custom",
    "apworld": "cotnd.apworld",
    "world_version": "0.8.4",
+   "guides": "guides/crypt-of-the-necrodancer.json",
    "sheet": {
     "game": "Crypt of the NecroDancer",
     "stability": "Stable"
@@ -1349,6 +1428,7 @@
    "source": "custom",
    "apworld": "crystal_project.apworld",
    "world_version": "0.19.0",
+   "guides": "guides/crystal-project.json",
    "sheet": {
     "game": "Crystal Project",
     "stability": "Stable",
@@ -1361,6 +1441,7 @@
    "source": "custom",
    "apworld": "crystalis.apworld",
    "world_version": "3.1.0",
+   "guides": "guides/crystalis.json",
    "sheet": {
     "game": "Crystalis",
     "stability": "Stable"
@@ -1383,6 +1464,7 @@
    "source": "custom",
    "apworld": "cuphead.apworld",
    "world_version": "0.2.20021210",
+   "guides": "guides/cuphead.json",
    "sheet": {
     "game": "Cuphead",
     "stability": "Stable"
@@ -1394,6 +1476,7 @@
    "source": "custom",
    "apworld": "Cursed_Mario_64.apworld",
    "world_version": null,
+   "guides": "guides/cursed-mario-64.json",
    "sheet": {
     "game": "Cursed Mario 64",
     "stability": "Unstable"
@@ -1416,6 +1499,7 @@
    "source": "custom",
    "apworld": "cyberhook.apworld",
    "world_version": "0.1.0",
+   "guides": "guides/cyber-hook.json",
    "sheet": {
     "game": "Cyber Hook",
     "stability": "Unstable"
@@ -1440,6 +1524,7 @@
    "source": "custom",
    "apworld": "dc1.apworld",
    "world_version": "0.6.0",
+   "guides": "guides/dark-cloud-1.json",
    "sheet": {
     "game": "Dark Cloud 1",
     "stability": "Stable"
@@ -1461,7 +1546,8 @@
    "file": "games/dark-souls-iii.json",
    "source": "core",
    "apworld": null,
-   "world_version": null
+   "world_version": null,
+   "guides": "guides/dark-souls-iii.json"
   },
   {
    "game": "Dark Souls Remastered",
@@ -1469,6 +1555,7 @@
    "source": "custom",
    "apworld": "dsr.apworld",
    "world_version": "0.2.6",
+   "guides": "guides/dark-souls-remastered.json",
    "sheet": {
     "game": "Dark Souls Remastered",
     "stability": "Unstable",
@@ -1492,6 +1579,7 @@
    "source": "custom",
    "apworld": "drdr.apworld",
    "world_version": "1.1.1",
+   "guides": "guides/dead-rising-deluxe-remaster.json",
    "sheet": {
     "game": "Dead Rising Deluxe Remastered",
     "stability": "Stable",
@@ -1505,6 +1593,7 @@
    "source": "custom",
    "apworld": "deadlock.apworld",
    "world_version": null,
+   "guides": "guides/deadlock.json",
    "sheet": {
     "game": "Deadlock",
     "stability": "Unstable"
@@ -1516,6 +1605,7 @@
    "source": "custom",
    "apworld": "death_road_to_canada.apworld",
    "world_version": null,
+   "guides": "guides/death-road-to-canada.json",
    "sheet": {
     "game": "Death Road to Canada",
     "stability": "Unstable"
@@ -1527,6 +1617,7 @@
    "source": "custom",
    "apworld": "deaths_door.apworld",
    "world_version": "0.4.2",
+   "guides": "guides/death-s-door.json",
    "sheet": {
     "game": "Death's Door",
     "stability": "Unstable"
@@ -1549,6 +1640,7 @@
    "source": "custom",
    "apworld": "deep_rock_galactic.apworld",
    "world_version": "0.20.1",
+   "guides": "guides/deep-rock-galactic.json",
    "sheet": {
     "game": "Deep Rock Galactic",
     "stability": "Stable"
@@ -1560,6 +1652,7 @@
    "source": "custom",
    "apworld": "DeliveringHope.apworld",
    "world_version": "0.3.0",
+   "guides": "guides/delivering-hope.json",
    "sheet": {
     "game": "Delivering Hope",
     "stability": "Unstable"
@@ -1571,6 +1664,7 @@
    "source": "custom",
    "apworld": "deltarune.apworld",
    "world_version": "2.3.0",
+   "guides": "guides/deltarune.json",
    "sheet": {
     "game": "DELTARUNE",
     "stability": "Stable"
@@ -1582,6 +1676,7 @@
    "source": "custom",
    "apworld": "dmc3.apworld",
    "world_version": "0.5.1",
+   "guides": "guides/devil-may-cry-3.json",
    "sheet": {
     "game": "Devil May Cry 3 (Special Edition)",
     "stability": "Unstable"
@@ -1593,6 +1688,7 @@
    "source": "custom",
    "apworld": "diceydungeons.apworld",
    "world_version": "0.6.0",
+   "guides": "guides/dicey-dungeons.json",
    "sheet": {
     "game": "Dicey Dungeons",
     "stability": "Unstable"
@@ -1604,6 +1700,7 @@
    "source": "custom",
    "apworld": "diddy_kong_racing.apworld",
    "world_version": "1.1.4",
+   "guides": "guides/diddy-kong-racing.json",
    "sheet": {
     "game": "Diddy Kong Racing",
     "stability": "Stable"
@@ -1627,7 +1724,8 @@
    "file": "games/dlcquest.json",
    "source": "core",
    "apworld": null,
-   "world_version": null
+   "world_version": null,
+   "guides": "guides/dlcquest.json"
   },
   {
    "game": "Dome Keeper",
@@ -1635,6 +1733,7 @@
    "source": "custom",
    "apworld": "dome_keeper.apworld",
    "world_version": null,
+   "guides": "guides/dome-keeper.json",
    "sheet": {
     "game": "Dome Keeper",
     "stability": "Stable"
@@ -1646,6 +1745,7 @@
    "source": "custom",
    "apworld": "dontstarvetogether.apworld",
    "world_version": "1.3.3",
+   "guides": "guides/don-t-starve-together.json",
    "sheet": {
     "game": "Don't Starve Together",
     "stability": "Stable",
@@ -1669,6 +1769,7 @@
    "source": "custom",
    "apworld": "donutcounty.apworld",
    "world_version": "0.2.0",
+   "guides": "guides/donut-county.json",
    "sheet": {
     "game": "Donut County",
     "stability": "Unstable",
@@ -1680,7 +1781,8 @@
    "file": "games/doom-1993.json",
    "source": "core",
    "apworld": null,
-   "world_version": null
+   "world_version": null,
+   "guides": "guides/doom-1993.json"
   },
   {
    "game": "DOOM Eternal",
@@ -1688,6 +1790,7 @@
    "source": "custom",
    "apworld": "doometernal.apworld",
    "world_version": "0.7.1",
+   "guides": "guides/doom-eternal.json",
    "sheet": {
     "game": "DOOM Eternal",
     "stability": "Unstable",
@@ -1699,7 +1802,8 @@
    "file": "games/doom-ii.json",
    "source": "core",
    "apworld": null,
-   "world_version": null
+   "world_version": null,
+   "guides": "guides/doom-ii.json"
   },
   {
    "game": "Door to Door Door Salesman",
@@ -1707,6 +1811,7 @@
    "source": "custom",
    "apworld": "dtdds.apworld",
    "world_version": "0.0.2",
+   "guides": "guides/door-to-door-door-salesman.json",
    "sheet": {
     "game": "Door to Door Door Salesman",
     "stability": "Stable"
@@ -1729,6 +1834,7 @@
    "source": "custom",
    "apworld": "dota_2.apworld",
    "world_version": null,
+   "guides": "guides/dota-2.json",
    "sheet": {
     "game": "DOTA 2",
     "stability": "Unstable",
@@ -1741,6 +1847,7 @@
    "source": "custom",
    "apworld": "dracomino.apworld",
    "world_version": "0.3.0",
+   "guides": "guides/dracomino.json",
    "sheet": {
     "game": "Dracomino",
     "stability": "Stable",
@@ -1798,6 +1905,7 @@
    "source": "custom",
    "apworld": "dredge.apworld",
    "world_version": "0.7.0",
+   "guides": "guides/dredge.json",
    "sheet": {
     "game": "DREDGE",
     "stability": "Unstable"
@@ -1864,6 +1972,7 @@
    "source": "custom",
    "apworld": "dwarf_fortress.apworld",
    "world_version": "2.1.2",
+   "guides": "guides/dwarf-fortress.json",
    "sheet": {
     "game": "Dwarf Fortress",
     "stability": "Unstable"
@@ -1874,7 +1983,8 @@
    "file": "games/earthbound.json",
    "source": "core",
    "apworld": null,
-   "world_version": "4.3.1"
+   "world_version": "4.3.1",
+   "guides": "guides/earthbound.json"
   },
   {
    "game": "Easy Delivery Co.",
@@ -1882,6 +1992,7 @@
    "source": "custom",
    "apworld": "easy_delivery_co.apworld",
    "world_version": "0.3.0",
+   "guides": "guides/easy-delivery-co.json",
    "sheet": {
     "game": "Easy Delivery Co.",
     "stability": "Unstable"
@@ -1893,6 +2004,7 @@
    "source": "custom",
    "apworld": "nightreign.apworld",
    "world_version": "0.4.7",
+   "guides": "guides/elden-ring-nightreign.json",
    "sheet": {
     "game": "Elden Ring Nightreign",
     "stability": "Unstable",
@@ -1940,6 +2052,7 @@
    "source": "custom",
    "apworld": "endermagnolia.apworld",
    "world_version": "0.1.8",
+   "guides": "guides/ender-magnolia.json",
    "sheet": {
     "game": "Ender Magnolia: Bloom In The Mist",
     "stability": "Unstable"
@@ -1951,6 +2064,7 @@
    "source": "custom",
    "apworld": "enter_the_gungeon.apworld",
    "world_version": null,
+   "guides": "guides/enter-the-gungeon.json",
    "sheet": {
     "game": "Enter the Gungeon",
     "stability": "Unstable",
@@ -1963,6 +2077,7 @@
    "source": "custom",
    "apworld": "equilinox.apworld",
    "world_version": null,
+   "guides": "guides/equilinox.json",
    "sheet": {
     "game": "Equilinox",
     "stability": "Unstable"
@@ -1974,6 +2089,7 @@
    "source": "custom",
    "apworld": "etrian_odyssey.apworld",
    "world_version": "0.4.1",
+   "guides": "guides/etrian-odyssey.json",
    "sheet": {
     "game": "Etrian Odyssey (DS)",
     "stability": "Unstable"
@@ -1985,6 +2101,7 @@
    "source": "custom",
    "apworld": "everhood_2.apworld",
    "world_version": "0.4.8",
+   "guides": "guides/everhood-2.json",
    "sheet": {
     "game": "Everhood 2",
     "stability": "Unstable"
@@ -1996,6 +2113,7 @@
    "source": "custom",
    "apworld": "evolve.apworld",
    "world_version": "0.3.17",
+   "guides": "guides/evolve.json",
    "sheet": {
     "game": "Evolve Incremental",
     "stability": "Unstable"
@@ -2006,7 +2124,8 @@
    "file": "games/factorio.json",
    "source": "core",
    "apworld": null,
-   "world_version": null
+   "world_version": null,
+   "guides": "guides/factorio.json"
   },
   {
    "game": "Factorio - Space Age Without Space",
@@ -2014,6 +2133,7 @@
    "source": "custom",
    "apworld": "factorio_saws.apworld",
    "world_version": "0.9.5",
+   "guides": "guides/factorio-space-age-without-space.json",
    "sheet": {
     "game": "Factorio - Space Age Without Space",
     "stability": "Stable"
@@ -2025,6 +2145,7 @@
    "source": "custom",
    "apworld": "factorio_modpacks.apworld",
    "world_version": "2.3.1",
+   "guides": "guides/factorio-modpacks.json",
    "sheet": {
     "game": "Factorio w/ Bob's Mods",
     "stability": "Unstable"
@@ -2079,7 +2200,8 @@
    "file": "games/faxanadu.json",
    "source": "core",
    "apworld": null,
-   "world_version": null
+   "world_version": null,
+   "guides": "guides/faxanadu.json"
   },
   {
    "game": "Feeding Frenzy 2",
@@ -2098,6 +2220,7 @@
    "source": "custom",
    "apworld": "ff1pr.apworld",
    "world_version": "0.6.0",
+   "guides": "guides/ff1-pixel-remaster.json",
    "sheet": {
     "game": "Final Fantasy 1: Pixel Remaster",
     "stability": "Unstable"
@@ -2108,7 +2231,8 @@
    "file": "games/final-fantasy.json",
    "source": "core",
    "apworld": null,
-   "world_version": "1.0.0"
+   "world_version": "1.0.0",
+   "guides": "guides/final-fantasy.json"
   },
   {
    "game": "Final Fantasy 1 PSP",
@@ -2127,6 +2251,7 @@
    "source": "custom",
    "apworld": "ff12_open_world.apworld",
    "world_version": "0.6.3",
+   "guides": "guides/final-fantasy-12-open-world.json",
    "sheet": {
     "game": "Final Fantasy XII: Open World",
     "stability": "Stable"
@@ -2138,6 +2263,7 @@
    "source": "custom",
    "apworld": "ffcc.apworld",
    "world_version": "0.2.0",
+   "guides": "guides/final-fantasy-crystal-chronicles.json",
    "sheet": {
     "game": "Final Fantasy: Crystal Chronicles",
     "stability": "Unstable"
@@ -2148,7 +2274,8 @@
    "file": "games/final-fantasy-mystic-quest.json",
    "source": "core",
    "apworld": null,
-   "world_version": null
+   "world_version": null,
+   "guides": "guides/final-fantasy-mystic-quest.json"
   },
   {
    "game": "Final Fantasy Tactics Ivalice Island",
@@ -2156,6 +2283,7 @@
    "source": "custom",
    "apworld": "fftii.apworld",
    "world_version": "0.4.0",
+   "guides": "guides/final-fantasy-tactics-ivalice-island.json",
    "sheet": {
     "game": "Final Fantasy Tactics: Ivalice Island (FFT PSX)",
     "stability": "Stable"
@@ -2167,6 +2295,7 @@
    "source": "custom",
    "apworld": "ff7.apworld",
    "world_version": "0.0.6",
+   "guides": "guides/final-fantasy-vii.json",
    "sheet": {
     "game": "Final Fantasy VII",
     "stability": "Unstable"
@@ -2178,6 +2307,7 @@
    "source": "custom",
    "apworld": "ffx.apworld",
    "world_version": "0.10.0",
+   "guides": "guides/final-fantasy-x.json",
    "sheet": {
     "game": "Final Fantasy X",
     "stability": "Stable",
@@ -2190,6 +2320,7 @@
    "source": "custom",
    "apworld": "ff132.apworld",
    "world_version": "0.3.0",
+   "guides": "guides/final-fantasy-xiii-2.json",
    "sheet": {
     "game": "Final Fantasy XIII-2",
     "stability": "Unstable"
@@ -2201,6 +2332,7 @@
    "source": "custom",
    "apworld": "fe8.apworld",
    "world_version": null,
+   "guides": "guides/fire-emblem-sacred-stones.json",
    "sheet": {
     "game": "Fire Emblem: The Sacred Stones",
     "stability": "Stable"
@@ -2258,6 +2390,7 @@
    "source": "custom",
    "apworld": "frogmonster.apworld",
    "world_version": "0.2.5",
+   "guides": "guides/frogmonster.json",
    "sheet": {
     "game": "Frogmonster",
     "stability": "Stable",
@@ -2270,6 +2403,7 @@
    "source": "custom",
    "apworld": "funi_raccoon.apworld",
    "world_version": "1.8.1",
+   "guides": "guides/funi-raccoon-game.json",
    "sheet": {
     "game": "Funi Raccoon Game",
     "stability": "Stable",
@@ -2282,6 +2416,7 @@
    "source": "custom",
    "apworld": "garfkart.apworld",
    "world_version": "1.1.0",
+   "guides": "guides/garfield-kart-furious-racing.json",
    "sheet": {
     "game": "Garfield Kart: Furious Racing",
     "stability": "Stable",
@@ -2294,6 +2429,7 @@
    "source": "custom",
    "apworld": "gatoroboto.apworld",
    "world_version": null,
+   "guides": "guides/gato-roboto.json",
    "sheet": {
     "game": "Gato Roboto",
     "stability": "Stable"
@@ -2305,6 +2441,7 @@
    "source": "custom",
    "apworld": "gatoroboto_b_side.apworld",
    "world_version": "0.8.1",
+   "guides": "guides/gato-roboto-b-side.json",
    "sheet": {
     "game": "Gato Roboto B-Side",
     "stability": "Stable"
@@ -2315,7 +2452,8 @@
    "file": "games/gauntlet-legends.json",
    "source": "core",
    "apworld": null,
-   "world_version": "2.1.7"
+   "world_version": "2.1.7",
+   "guides": "guides/gauntlet-legends.json"
   },
   {
    "game": "GBAPQuest",
@@ -2323,6 +2461,7 @@
    "source": "custom",
    "apworld": "gbapquest.apworld",
    "world_version": null,
+   "guides": "guides/gbapquest.json",
    "sheet": {
     "game": "GBAPQuest",
     "stability": "Unstable"
@@ -2356,6 +2495,7 @@
    "source": "custom",
    "apworld": "getting_over_it.apworld",
    "world_version": null,
+   "guides": "guides/getting-over-it.json",
    "sheet": {
     "game": "Getting Over It with Bennett Foddy",
     "stability": "Stable"
@@ -2367,6 +2507,7 @@
    "source": "custom",
    "apworld": "glover.apworld",
    "world_version": null,
+   "guides": "guides/glover.json",
    "sheet": {
     "game": "Glover",
     "stability": "Stable",
@@ -2390,6 +2531,7 @@
    "source": "custom",
    "apworld": "gmod_apadv.apworld",
    "world_version": null,
+   "guides": "guides/gmod-apadventure.json",
    "sheet": {
     "game": "Garry's Mod (apAdventure)",
     "stability": "Unstable",
@@ -2403,6 +2545,7 @@
    "source": "custom",
    "apworld": "gnosia.apworld",
    "world_version": "0.1.4",
+   "guides": "guides/gnosia.json",
    "sheet": {
     "game": "Gnosia",
     "stability": "Unstable",
@@ -2415,6 +2558,7 @@
    "source": "custom",
    "apworld": "gstla.apworld",
    "world_version": "0.2.3",
+   "guides": "guides/golden-sun-the-lost-age.json",
    "sheet": {
     "game": "Golden Sun: The Lost Age",
     "stability": "Stable"
@@ -2426,6 +2570,7 @@
    "source": "custom",
    "apworld": "goldeneye.apworld",
    "world_version": "0.1.1",
+   "guides": "guides/goldeneye-007.json",
    "sheet": {
     "game": "GoldenEye 007",
     "stability": "Unstable"
@@ -2463,6 +2608,7 @@
    "source": "custom",
    "apworld": "grandia.apworld",
    "world_version": "0.15.0",
+   "guides": "guides/grandia.json",
    "sheet": {
     "game": "Grandia HD Remaster",
     "stability": "Stable"
@@ -2474,6 +2620,7 @@
    "source": "custom",
    "apworld": "grappledog.apworld",
    "world_version": "1.2.0",
+   "guides": "guides/grapple-dog.json",
    "sheet": {
     "game": "Grapple Dog",
     "stability": "Unstable"
@@ -2485,6 +2632,7 @@
    "source": "custom",
    "apworld": "grim_dawn.apworld",
    "world_version": "0.4.1",
+   "guides": "guides/grim-dawn.json",
    "sheet": {
     "game": "Grim Dawn",
     "stability": "Stable"
@@ -2496,6 +2644,7 @@
    "source": "custom",
    "apworld": "grunn.apworld",
    "world_version": "1.1.6",
+   "guides": "guides/grunn.json",
    "sheet": {
     "game": "Grunn",
     "stability": "Unstable"
@@ -2518,6 +2667,7 @@
    "source": "custom",
    "apworld": "hacknet.apworld",
    "world_version": null,
+   "guides": "guides/hacknet.json",
    "sheet": {
     "game": "Hacknet",
     "stability": "Unstable",
@@ -2530,6 +2680,7 @@
    "source": "custom",
    "apworld": "hades.apworld",
    "world_version": "0.16.3",
+   "guides": "guides/hades.json",
    "sheet": {
     "game": "Hades",
     "stability": "Stable",
@@ -2542,6 +2693,7 @@
    "source": "custom",
    "apworld": "Hades2Rogue.apworld",
    "world_version": "0.10.0",
+   "guides": "guides/hades2rogue.json",
    "sheet": {
     "game": "Hades 2 (Rogue)",
     "stability": "Stable"
@@ -2553,6 +2705,7 @@
    "source": "custom",
    "apworld": "half_life.apworld",
    "world_version": "0.3.0",
+   "guides": "guides/half-life.json",
    "sheet": {
     "game": "Half-Life Trilogy",
     "stability": "Unstable"
@@ -2564,6 +2717,7 @@
    "source": "custom",
    "apworld": "half_life_sven.apworld",
    "world_version": "0.4.0",
+   "guides": "guides/half-life-sven-co-op.json",
    "sheet": {
     "game": "Sven Co-op",
     "stability": "Unstable"
@@ -2586,6 +2740,7 @@
    "source": "custom",
    "apworld": "hammerwatch.apworld",
    "world_version": "4.1.4",
+   "guides": "guides/hammerwatch.json",
    "sheet": {
     "game": "Hammerwatch",
     "stability": "Stable"
@@ -2597,6 +2752,7 @@
    "source": "custom",
    "apworld": "haste.apworld",
    "world_version": "0.5.1",
+   "guides": "guides/haste.json",
    "sheet": {
     "game": "HASTE: Broken Worlds",
     "stability": "Unstable"
@@ -2608,6 +2764,7 @@
    "source": "custom",
    "apworld": "megamix.apworld",
    "world_version": "1.5.3",
+   "guides": "guides/hatsune-miku-project-diva-mega-mix.json",
    "sheet": {
     "game": "Hatsune Miku: Project Diva Megamix+",
     "stability": "Stable"
@@ -2619,6 +2776,7 @@
    "source": "custom",
    "apworld": "hcniko.apworld",
    "world_version": "0.8.5",
+   "guides": "guides/here-comes-niko.json",
    "sheet": {
     "game": "Here Comes Niko!",
     "stability": "Stable"
@@ -2629,7 +2787,8 @@
    "file": "games/heretic.json",
    "source": "core",
    "apworld": null,
-   "world_version": null
+   "world_version": null,
+   "guides": "guides/heretic.json"
   },
   {
    "game": "Hero Core",
@@ -2659,6 +2818,7 @@
    "source": "custom",
    "apworld": "hexcells_infinite.apworld",
    "world_version": "1.3.4",
+   "guides": "guides/hexcells-infinite.json",
    "sheet": {
     "game": "Hexcells Infinite",
     "stability": "Stable"
@@ -2692,6 +2852,7 @@
    "source": "custom",
    "apworld": "hitman_woa.apworld",
    "world_version": "0.8.2",
+   "guides": "guides/hitman-world-of-assassination.json",
    "sheet": {
     "game": "HITMAN: World of Assassination",
     "stability": "Unstable",
@@ -2704,7 +2865,8 @@
    "file": "games/hollow-knight.json",
    "source": "core",
    "apworld": null,
-   "world_version": null
+   "world_version": null,
+   "guides": "guides/hollow-knight.json"
   },
   {
    "game": "Hollow Knight: Silksong",
@@ -2712,6 +2874,7 @@
    "source": "custom",
    "apworld": "silksong.apworld",
    "world_version": "0.5.3",
+   "guides": "guides/hollow-knight-silksong.json",
    "sheet": {
     "game": "Hollow Knight: Silksong (Batsong)",
     "stability": "Unstable"
@@ -2723,6 +2886,7 @@
    "source": "custom",
    "apworld": "holo8.apworld",
    "world_version": "0.3.0",
+   "guides": "guides/holo8.json",
    "sheet": {
     "game": "holo8",
     "stability": "Unstable"
@@ -2734,6 +2898,7 @@
    "source": "custom",
    "apworld": "HololiveTreasureMountain.apworld",
    "world_version": "1.0.0",
+   "guides": "guides/hololive-treasure-mountain.json",
    "sheet": {
     "game": "Hololive Treasure Mountain",
     "stability": "Unstable"
@@ -2767,6 +2932,7 @@
    "source": "custom",
    "apworld": "HungryPumkinAP.apworld",
    "world_version": "0.1.0",
+   "guides": "guides/hungry-pumkin.json",
    "sheet": {
     "game": "Hungry Pumkin",
     "stability": "Unstable"
@@ -2816,7 +2982,8 @@
    "file": "games/hylics-2.json",
    "source": "core",
    "apworld": null,
-   "world_version": null
+   "world_version": null,
+   "guides": "guides/hylics-2.json"
   },
   {
    "game": "Hyperdimension Neptunia Re;Birth3 V GENERATION",
@@ -2835,6 +3002,7 @@
    "source": "custom",
    "apworld": "hyperrogue.apworld",
    "world_version": null,
+   "guides": "guides/hyperrogue.json",
    "sheet": {
     "game": "HyperRogue",
     "stability": "Unstable"
@@ -2857,6 +3025,7 @@
    "source": "custom",
    "apworld": "ihyps.apworld",
    "world_version": null,
+   "guides": "guides/i-hate-you-please-suffer.json",
    "sheet": {
     "game": "I Hate You, Please Suffer",
     "stability": "Unstable"
@@ -2868,6 +3037,7 @@
    "source": "custom",
    "apworld": "exocolonist.apworld",
    "world_version": "1.1.0",
+   "guides": "guides/i-was-a-teenage-exocolonist.json",
    "sheet": {
     "game": "I Was A Teenage Exocolonist",
     "stability": "Unstable"
@@ -2901,6 +3071,7 @@
    "source": "custom",
    "apworld": "idleloops.apworld",
    "world_version": "0.4.7",
+   "guides": "guides/idle-loops.json",
    "sheet": {
     "game": "Idle Loops",
     "stability": "Unstable"
@@ -2922,7 +3093,8 @@
    "file": "games/inscryption.json",
    "source": "core",
    "apworld": null,
-   "world_version": null
+   "world_version": null,
+   "guides": "guides/inscryption.json"
   },
   {
    "game": "Into the Breach",
@@ -2941,6 +3113,7 @@
    "source": "custom",
    "apworld": "isles_of_sea_and_sky.apworld",
    "world_version": "2.1.2",
+   "guides": "guides/isles-of-sea-and-sky.json",
    "sheet": {
     "game": "Isles of Sea and Sky",
     "stability": "Stable"
@@ -2952,6 +3125,7 @@
    "source": "custom",
    "apworld": "isles_of_trials.apworld",
    "world_version": "0.2.0",
+   "guides": "guides/isles-of-trials.json",
    "sheet": {
     "game": "Isles of Trials",
     "stability": "Stable",
@@ -2964,6 +3138,7 @@
    "source": "custom",
    "apworld": "ittle_dew_2.apworld",
    "world_version": null,
+   "guides": "guides/ittle-dew-2.json",
    "sheet": {
     "game": "Ittle Dew 2+",
     "stability": "Stable"
@@ -2975,6 +3150,7 @@
    "source": "custom",
    "apworld": "jak3.apworld",
    "world_version": null,
+   "guides": "guides/jak-3.json",
    "sheet": {
     "game": "Jak 3",
     "stability": "Stable"
@@ -2985,7 +3161,8 @@
    "file": "games/jak-and-daxter-the-precursor-legacy.json",
    "source": "core",
    "apworld": null,
-   "world_version": "1.1.6"
+   "world_version": "1.1.6",
+   "guides": "guides/jak-and-daxter-the-precursor-legacy.json"
   },
   {
    "game": "Jak II",
@@ -2993,6 +3170,7 @@
    "source": "custom",
    "apworld": "jakii.apworld",
    "world_version": null,
+   "guides": "guides/jak-ii.json",
    "sheet": {
     "game": "Jak II",
     "stability": "Unstable"
@@ -3004,6 +3182,7 @@
    "source": "custom",
    "apworld": "jigsaw.apworld",
    "world_version": "0.10.0",
+   "guides": "guides/jigsaw.json",
    "sheet": {
     "game": "Jigsaw Puzzle for Archipelago",
     "stability": "Stable"
@@ -3048,6 +3227,7 @@
    "source": "custom",
    "apworld": "ktane.apworld",
    "world_version": "0.3.0",
+   "guides": "guides/keep-talking-and-nobody-explodes.json",
    "sheet": {
     "game": "Keep Talking and Nobody Explodes",
     "stability": "Stable"
@@ -3059,6 +3239,7 @@
    "source": "custom",
    "apworld": "ksp1.apworld",
    "world_version": null,
+   "guides": "guides/kerbal-space-program-1.json",
    "sheet": {
     "game": "Kerbal Space Program",
     "stability": "Unstable"
@@ -3081,6 +3262,7 @@
    "source": "custom",
    "apworld": "kindergarten_2.apworld",
    "world_version": null,
+   "guides": "guides/kindergarten-2.json",
    "sheet": {
     "game": "Kindergarten 2",
     "stability": "Stable",
@@ -3093,14 +3275,16 @@
    "file": "games/kingdom-hearts.json",
    "source": "core",
    "apworld": null,
-   "world_version": null
+   "world_version": null,
+   "guides": "guides/kingdom-hearts.json"
   },
   {
    "game": "Kingdom Hearts 2",
    "file": "games/kingdom-hearts-2.json",
    "source": "core",
    "apworld": null,
-   "world_version": "2.0.0"
+   "world_version": "2.0.0",
+   "guides": "guides/kingdom-hearts-2.json"
   },
   {
    "game": "Kingdom Hearts Birth by Sleep",
@@ -3119,6 +3303,7 @@
    "source": "custom",
    "apworld": "khcom.apworld",
    "world_version": null,
+   "guides": "guides/kingdom-hearts-chain-of-memories.json",
    "sheet": {
     "game": "Kingdom Hearts: Chain of Memories (GBA)",
     "stability": "Stable"
@@ -3141,6 +3326,7 @@
    "source": "custom",
    "apworld": "khrecom.apworld",
    "world_version": null,
+   "guides": "guides/kingdom-hearts-re-chain-of-memories.json",
    "sheet": {
     "game": "Kingdom Hearts: RE Chain of Memories",
     "stability": "Stable",
@@ -3153,6 +3339,7 @@
    "source": "custom",
    "apworld": "kirbyam.apworld",
    "world_version": "0.4.1",
+   "guides": "guides/kirby-the-amazing-mirror.json",
    "sheet": {
     "game": "Kirby & The Amazing Mirror",
     "stability": "Unstable"
@@ -3164,6 +3351,7 @@
    "source": "custom",
    "apworld": "kirby_air_ride.apworld",
    "world_version": "1.3.0",
+   "guides": "guides/kirby-air-ride.json",
    "sheet": {
     "game": "Kirby Air Ride",
     "stability": "Unstable"
@@ -3186,6 +3374,7 @@
    "source": "custom",
    "apworld": "kssu.apworld",
    "world_version": "0.2.21",
+   "guides": "guides/kirby-super-star-ultra.json",
    "sheet": {
     "game": "Kirby Super Star Ultra",
     "stability": "Unstable"
@@ -3196,7 +3385,8 @@
    "file": "games/kirby-s-dream-land-3.json",
    "source": "core",
    "apworld": null,
-   "world_version": null
+   "world_version": null,
+   "guides": "guides/kirby-s-dream-land-3.json"
   },
   {
    "game": "Kirby: Planet Robobot",
@@ -3204,6 +3394,7 @@
    "source": "custom",
    "apworld": "kirby_robobot.apworld",
    "world_version": "0.1.0",
+   "guides": "guides/kirby-planet-robobot.json",
    "sheet": {
     "game": "Kirby Planet Robobot",
     "stability": "Unstable"
@@ -3236,7 +3427,8 @@
    "file": "games/landstalker-the-treasures-of-king-nole.json",
    "source": "core",
    "apworld": null,
-   "world_version": "1.8.7"
+   "world_version": "1.8.7",
+   "guides": "guides/landstalker-the-treasures-of-king-nole.json"
   },
   {
    "game": "Layer8Problem",
@@ -3255,6 +3447,7 @@
    "source": "custom",
    "apworld": "lol.apworld",
    "world_version": "0.2.6",
+   "guides": "guides/league-of-legends.json",
    "sheet": {
     "game": "League of Legends",
     "stability": "Stable"
@@ -3266,6 +3459,7 @@
    "source": "custom",
    "apworld": "lego_batman_1.apworld",
    "world_version": null,
+   "guides": "guides/lego-batman-the-video-game.json",
    "sheet": {
     "game": "LEGO Batman: The Video Game",
     "stability": "Unstable"
@@ -3288,6 +3482,7 @@
    "source": "custom",
    "apworld": "lego_star_wars_tcs.apworld",
    "world_version": "1.4.4",
+   "guides": "guides/lego-star-wars-the-complete-saga.json",
    "sheet": {
     "game": "Lego Star Wars: The Complete Saga",
     "stability": "Stable"
@@ -3299,6 +3494,7 @@
    "source": "custom",
    "apworld": "lethal_company.apworld",
    "world_version": "0.8.0",
+   "guides": "guides/lethal-company.json",
    "sheet": {
     "game": "Lethal Company",
     "stability": "Unstable"
@@ -3310,6 +3506,7 @@
    "source": "custom",
    "apworld": "lethalcrisis.apworld",
    "world_version": "0.1.0",
+   "guides": "guides/lethal-crisis.json",
    "sheet": {
     "game": "Lethal Crisis",
     "stability": "Unstable"
@@ -3355,14 +3552,16 @@
    "file": "games/lingo.json",
    "source": "core",
    "apworld": null,
-   "world_version": "5.0.0"
+   "world_version": "5.0.0",
+   "guides": "guides/lingo.json"
   },
   {
    "game": "Links Awakening DX",
    "file": "games/links-awakening-dx.json",
    "source": "core",
    "apworld": null,
-   "world_version": "2.0.2"
+   "world_version": "2.0.2",
+   "guides": "guides/links-awakening-dx.json"
   },
   {
    "game": "Little Witch Nobeta",
@@ -3370,6 +3569,7 @@
    "source": "custom",
    "apworld": "little_witch_nobeta.apworld",
    "world_version": "0.3.3",
+   "guides": "guides/little-witch-nobeta.json",
    "sheet": {
     "game": "Little Witch Nobeta",
     "stability": "Stable"
@@ -3394,6 +3594,7 @@
    "source": "custom",
    "apworld": "look_outside.apworld",
    "world_version": null,
+   "guides": "guides/look-outside.json",
    "sheet": {
     "game": "Look Outside",
     "stability": "Unstable"
@@ -3405,6 +3606,7 @@
    "source": "custom",
    "apworld": "loonyland.apworld",
    "world_version": null,
+   "guides": "guides/loonyland.json",
    "sheet": {
     "game": "Loonyland: Halloween Hill",
     "stability": "Stable",
@@ -3433,7 +3635,8 @@
     "setting": "rom_file",
     "file": "Lufia II - Rise of the Sinistrals (USA).sfc",
     "description": "Lufia II ROM File"
-   }
+   },
+   "guides": "guides/lufia-ii-ancient-cave.json"
   },
   {
    "game": "Luigi's Mansion",
@@ -3441,6 +3644,7 @@
    "source": "custom",
    "apworld": "luigismansion.apworld",
    "world_version": "0.6.4",
+   "guides": "guides/luigi-s-mansion.json",
    "sheet": {
     "game": "Luigi's Mansion",
     "stability": "Stable"
@@ -3452,6 +3656,7 @@
    "source": "custom",
    "apworld": "lunacid.apworld",
    "world_version": null,
+   "guides": "guides/lunacid.json",
    "sheet": {
     "game": "Lunacid",
     "stability": "Stable",
@@ -3464,6 +3669,7 @@
    "source": "custom",
    "apworld": "madou.apworld",
    "world_version": null,
+   "guides": "guides/madou-monogatari-hanamaru-daiyouchienji.json",
    "sheet": {
     "game": "Madou Monogatari Hanamaru Dai Youchienji",
     "stability": "Unstable"
@@ -3475,6 +3681,7 @@
    "source": "custom",
    "apworld": "mm_recomp.apworld",
    "world_version": null,
+   "guides": "guides/majora-s-mask-recompiled.json",
    "sheet": {
     "game": "The Legend of Zelda: Majora's Mask",
     "stability": "Stable"
@@ -3486,6 +3693,7 @@
    "source": "custom",
    "apworld": "manicminers.apworld",
    "world_version": "1.6.0",
+   "guides": "guides/manic-miners.json",
    "sheet": {
     "game": "LEGO Rock Raiders/Manic Miners",
     "stability": "Unstable"
@@ -3497,6 +3705,7 @@
    "source": "custom",
    "apworld": "manual_freedomplanet2_knuxfan24.apworld",
    "world_version": null,
+   "guides": "guides/manual-freedomplanet2-knuxfan24.json",
    "sheet": {
     "game": "Freedom Planet 2",
     "stability": "Unstable"
@@ -3508,6 +3717,7 @@
    "source": "custom",
    "apworld": "miuultra.apworld",
    "world_version": "0.3.0",
+   "guides": "guides/marble-it-up-ultra.json",
    "sheet": {
     "game": "Marble It Up! Ultra",
     "stability": "Unstable"
@@ -3519,6 +3729,7 @@
    "source": "custom",
    "apworld": "marbles_balance_challenge.apworld",
    "world_version": "0.1.0",
+   "guides": "guides/marbles-balance-challenge.json",
    "sheet": {
     "game": "Marbles! Balance Challenge",
     "stability": "Stable"
@@ -3529,7 +3740,8 @@
    "file": "games/mario-luigi-superstar-saga.json",
    "source": "core",
    "apworld": null,
-   "world_version": "1.10.2"
+   "world_version": "1.10.2",
+   "guides": "guides/mario-luigi-superstar-saga.json"
   },
   {
    "game": "Mario and Luigi Dream Team",
@@ -3555,6 +3767,7 @@
     "file": "Mario Is Missing! (USA).sfc",
     "description": "Mario is Missing ROM File"
    },
+   "guides": "guides/mario-is-missing.json",
    "sheet": {
     "game": "Mario is Missing (SNES)",
     "stability": "Stable"
@@ -3583,6 +3796,7 @@
    "source": "custom",
    "apworld": "mario_kart_double_dash.apworld",
    "world_version": "1.0.1",
+   "guides": "guides/mario-kart-double-dash.json",
    "sheet": {
     "game": "Mario Kart: Double Dash",
     "stability": "Stable",
@@ -3606,6 +3820,7 @@
    "source": "custom",
    "apworld": "mario_sports_mix.apworld",
    "world_version": "3.1.3",
+   "guides": "guides/mario-sports-mix.json",
    "sheet": {
     "game": "Mario Sports Mix",
     "stability": "Unstable",
@@ -3618,6 +3833,7 @@
    "source": "custom",
    "apworld": "mario_super_sluggers.apworld",
    "world_version": "1.0.0",
+   "guides": "guides/mario-super-sluggers.json",
    "sheet": {
     "game": "Mario Super Sluggers",
     "stability": "Stable"
@@ -3629,6 +3845,7 @@
    "source": "custom",
    "apworld": "mario_tennis_gbc.apworld",
    "world_version": "0.3.0",
+   "guides": "guides/mario-tennis-gbc.json",
    "sheet": {
     "game": "Mario Tennis (GBC)",
     "stability": "Unstable",
@@ -3641,6 +3858,7 @@
    "source": "custom",
    "apworld": "medievil.apworld",
    "world_version": "0.3.0",
+   "guides": "guides/medievil.json",
    "sheet": {
     "game": "MediEvil (1998)",
     "stability": "Unstable"
@@ -3662,14 +3880,16 @@
    "file": "games/mega-man-2.json",
    "source": "core",
    "apworld": null,
-   "world_version": "0.3.3"
+   "world_version": "0.3.3",
+   "guides": "guides/mega-man-2.json"
   },
   {
    "game": "Mega Man 3",
    "file": "games/mega-man-3.json",
    "source": "core",
    "apworld": null,
-   "world_version": "0.1.8"
+   "world_version": "0.1.8",
+   "guides": "guides/mega-man-3.json"
   },
   {
    "game": "Mega Man X Command Mission",
@@ -3688,6 +3908,7 @@
    "source": "custom",
    "apworld": "mmx2.apworld",
    "world_version": "2.0.6",
+   "guides": "guides/mega-man-x2.json",
    "sheet": {
     "game": "Mega Man X2",
     "stability": "Stable",
@@ -3700,6 +3921,7 @@
    "source": "custom",
    "apworld": "mmx4.apworld",
    "world_version": "0.1.4",
+   "guides": "guides/mega-man-x4.json",
    "sheet": {
     "game": "Mega Man X4",
     "stability": "Stable"
@@ -3711,6 +3933,7 @@
    "source": "custom",
    "apworld": "mmzero3.apworld",
    "world_version": "0.4.1",
+   "guides": "guides/mega-man-zero-3.json",
    "sheet": {
     "game": "Mega Man Zero 3",
     "stability": "Stable"
@@ -3722,6 +3945,7 @@
    "source": "custom",
    "apworld": "mmzx.apworld",
    "world_version": null,
+   "guides": "guides/mega-man-zx.json",
    "sheet": {
     "game": "Mega Man ZX",
     "stability": "Unstable"
@@ -3738,7 +3962,8 @@
     "setting": "rom_file",
     "file": "Mega Man Battle Network 3 - Blue Version (USA).gba",
     "description": "MMBN3 ROM File"
-   }
+   },
+   "guides": "guides/megaman-battle-network-3.json"
   },
   {
    "game": "MegaMan Battle Network 6",
@@ -3746,6 +3971,7 @@
    "source": "custom",
    "apworld": "mmbn6.apworld",
    "world_version": null,
+   "guides": "guides/megaman-battle-network-6.json",
    "sheet": {
     "game": "Mega Man Battle Network 6",
     "stability": "Stable"
@@ -3768,6 +3994,7 @@
    "source": "custom",
    "apworld": "mio.apworld",
    "world_version": "0.0.1",
+   "guides": "guides/memories-in-orbit.json",
    "sheet": {
     "game": "MIO: Memories in Orbit",
     "stability": "Unstable"
@@ -3779,6 +4006,7 @@
    "source": "custom",
    "apworld": "mental_omega.apworld",
    "world_version": "0.6.10",
+   "guides": "guides/mental-omega.json",
    "sheet": {
     "game": "Command & Conquer: Mental Omega",
     "stability": "Unstable",
@@ -3790,7 +4018,8 @@
    "file": "games/meritous.json",
    "source": "core",
    "apworld": null,
-   "world_version": "1.0.0"
+   "world_version": "1.0.0",
+   "guides": "guides/meritous.json"
   },
   {
    "game": "Metal Gear Solid",
@@ -3798,6 +4027,7 @@
    "source": "custom",
    "apworld": "mgs.apworld",
    "world_version": null,
+   "guides": "guides/metal-gear-solid.json",
    "sheet": {
     "game": "Metal Gear Solid",
     "stability": "Unstable",
@@ -3811,6 +4041,7 @@
    "source": "custom",
    "apworld": "metal_hellsinger.apworld",
    "world_version": null,
+   "guides": "guides/metal-hellsinger.json",
    "sheet": {
     "game": "Metal Hellsinger",
     "stability": "Unstable"
@@ -3833,6 +4064,7 @@
    "source": "custom",
    "apworld": "metroidfusion.apworld",
    "world_version": null,
+   "guides": "guides/metroid-fusion.json",
    "sheet": {
     "game": "Metroid Fusion",
     "stability": "Stable"
@@ -3844,6 +4076,7 @@
    "source": "custom",
    "apworld": "metroidprime.apworld",
    "world_version": "0.5.4",
+   "guides": "guides/metroid-prime.json",
    "sheet": {
     "game": "Metroid Prime",
     "stability": "Stable",
@@ -3856,6 +4089,7 @@
    "source": "custom",
    "apworld": "msr.apworld",
    "world_version": "0.3.2",
+   "guides": "guides/metroid-samus-returns.json",
    "sheet": {
     "game": "Metroid: Samus Returns",
     "stability": "Unstable"
@@ -3878,6 +4112,7 @@
    "source": "custom",
    "apworld": "mgsalad.apworld",
    "world_version": null,
+   "guides": "guides/mgs-masala-garden-salad.json",
    "sheet": {
     "game": "Metal Gear Solid - Masala Garden Salad",
     "stability": "Stable",
@@ -3891,6 +4126,7 @@
    "source": "custom",
    "apworld": "mina_the_hollower.apworld",
    "world_version": "1.1.1",
+   "guides": "guides/mina-the-hollower.json",
    "sheet": {
     "game": "Mina the Hollower",
     "stability": "Stable"
@@ -3902,6 +4138,7 @@
    "source": "custom",
    "apworld": "minecraft.apworld",
    "world_version": "2.2.0",
+   "guides": "guides/minecraft.json",
    "sheet": {
     "game": "Minecraft",
     "stability": "Stable"
@@ -3946,6 +4183,7 @@
    "source": "custom",
    "apworld": "minishoot.apworld",
    "world_version": "0.6.0",
+   "guides": "guides/minishoot-adventures.json",
    "sheet": {
     "game": "Minishoot' Adventures",
     "stability": "Stable"
@@ -3957,6 +4195,7 @@
    "source": "custom",
    "apworld": "minit.apworld",
    "world_version": "0.7.0",
+   "guides": "guides/minit.json",
    "sheet": {
     "game": "Minit",
     "stability": "Stable"
@@ -3968,6 +4207,7 @@
    "source": "custom",
    "apworld": "moddedminecraft.apworld",
    "world_version": "3.0.11",
+   "guides": "guides/modded-minecraft.json",
    "sheet": {
     "game": "Minecraft Modded",
     "stability": "Unstable"
@@ -4001,6 +4241,7 @@
    "source": "custom",
    "apworld": "mhfu.apworld",
    "world_version": "0.0.3",
+   "guides": "guides/monster-hunter-freedom-unite.json",
    "sheet": {
     "game": "Monster Hunter Freedom Unite",
     "stability": "Unstable"
@@ -4012,6 +4253,7 @@
    "source": "custom",
    "apworld": "mhrise.apworld",
    "world_version": "0.5.3",
+   "guides": "guides/monster-hunter-rise.json",
    "sheet": {
     "game": "Monster Hunter Rise",
     "stability": "Stable"
@@ -4034,6 +4276,7 @@
    "source": "custom",
    "apworld": "monster_sanctuary.apworld",
    "world_version": null,
+   "guides": "guides/monster-sanctuary.json",
    "sheet": {
     "game": "Monster Sanctuary",
     "stability": "Stable"
@@ -4045,6 +4288,7 @@
    "source": "custom",
    "apworld": "moonlighter.apworld",
    "world_version": "0.1.0",
+   "guides": "guides/moonlighter.json",
    "sheet": {
     "game": "Moonlighter",
     "stability": "Unstable"
@@ -4056,6 +4300,7 @@
    "source": "custom",
    "apworld": "mksm.apworld",
    "world_version": "1.1.1",
+   "guides": "guides/mortal-kombat-shaolin-monks.json",
    "sheet": {
     "game": "Mortal Kombat: Shaolin Monks",
     "stability": "Unstable",
@@ -4068,6 +4313,7 @@
    "source": "custom",
    "apworld": "bannerlord.apworld",
    "world_version": null,
+   "guides": "guides/mount-and-blade-bannerlord.json",
    "sheet": {
     "game": "Mount & Blade II: Bannerlord",
     "stability": "Unstable"
@@ -4089,7 +4335,8 @@
    "file": "games/muse-dash.json",
    "source": "core",
    "apworld": null,
-   "world_version": "1.5.37"
+   "world_version": "1.5.37",
+   "guides": "guides/muse-dash.json"
   },
   {
    "game": "Naruto Clash of Ninja 2",
@@ -4097,6 +4344,7 @@
    "source": "custom",
    "apworld": "naruto_con_2.apworld",
    "world_version": null,
+   "guides": "guides/naruto-clash-of-ninja-2.json",
    "sheet": {
     "game": "Naruto Clash of Ninja 2",
     "stability": "Unstable"
@@ -4108,6 +4356,7 @@
    "source": "custom",
    "apworld": "neotwewy.apworld",
    "world_version": "0.0.4",
+   "guides": "guides/neo-the-world-ends-with-you.json",
    "sheet": {
     "game": "NEO: The World Ends with You",
     "stability": "Unstable"
@@ -4119,6 +4368,7 @@
    "source": "custom",
    "apworld": "neonwhite.apworld",
    "world_version": "0.1.1",
+   "guides": "guides/neon-white.json",
    "sheet": {
     "game": "Neon White",
     "stability": "Unstable",
@@ -4131,6 +4381,7 @@
    "source": "custom",
    "apworld": "nsmbds.apworld",
    "world_version": "0.5.3",
+   "guides": "guides/new-super-mario-bros-ds.json",
    "sheet": {
     "game": "New Super Mario Bros DS",
     "stability": "Unstable"
@@ -4142,6 +4393,7 @@
    "source": "custom",
    "apworld": "nicktoons_bfvi.apworld",
    "world_version": "2.1.0",
+   "guides": "guides/nicktoons-battle-for-volcano-island.json",
    "sheet": {
     "game": "Nicktoons: Battle for Volcano Island",
     "stability": "Stable"
@@ -4153,6 +4405,7 @@
    "source": "custom",
    "apworld": "nine_sols.apworld",
    "world_version": "0.6.4",
+   "guides": "guides/nine-sols.json",
    "sheet": {
     "game": "Nine Sols",
     "stability": "Stable",
@@ -4165,6 +4418,7 @@
    "source": "custom",
    "apworld": "nodebuster.apworld",
    "world_version": "0.1.3",
+   "guides": "guides/nodebuster.json",
    "sheet": {
     "game": "Nodebuster",
     "stability": "Unstable"
@@ -4175,7 +4429,8 @@
    "file": "games/noita.json",
    "source": "core",
    "apworld": null,
-   "world_version": "1.4.0"
+   "world_version": "1.4.0",
+   "guides": "guides/noita.json"
   },
   {
    "game": "Noita-Killsanity",
@@ -4194,6 +4449,7 @@
    "source": "custom",
    "apworld": "nonograhmm.apworld",
    "world_version": "0.3.1",
+   "guides": "guides/nonograhmm.json",
    "sheet": {
     "game": "Nonograhmm",
     "stability": "Stable"
@@ -4205,6 +4461,7 @@
    "source": "custom",
    "apworld": "nonopelagram.apworld",
    "world_version": "1.0.2",
+   "guides": "guides/nonopelagram.json",
    "sheet": {
     "game": "Nonopelagram",
     "stability": "Unstable"
@@ -4216,6 +4473,7 @@
    "source": "custom",
    "apworld": "northgard.apworld",
    "world_version": "2026.10.25",
+   "guides": "guides/northgard.json",
    "sheet": {
     "game": "Northgard",
     "stability": "Unstable"
@@ -4227,6 +4485,7 @@
    "source": "custom",
    "apworld": "novalands.apworld",
    "world_version": "0.2.0",
+   "guides": "guides/nova-lands.json",
    "sheet": {
     "game": "Nova Lands",
     "stability": "Unstable"
@@ -4249,6 +4508,7 @@
    "source": "custom",
    "apworld": "nuclear_throne.apworld",
    "world_version": "1.4.3",
+   "guides": "guides/nuclear-throne.json",
    "sheet": {
     "game": "Nuclear Throne",
     "stability": "Unstable"
@@ -4278,7 +4538,8 @@
     "setting": "rom_file",
     "file": "The Legend of Zelda - Ocarina of Time.z64",
     "description": "Ocarina of Time ROM File"
-   }
+   },
+   "guides": "guides/ocarina-of-time.json"
   },
   {
    "game": "Oh So Hero!",
@@ -4299,6 +4560,7 @@
    "source": "custom",
    "apworld": "okamihd.apworld",
    "world_version": "0.5.4",
+   "guides": "guides/okami-hd.json",
    "sheet": {
     "game": "Okami HD",
     "stability": "Unstable"
@@ -4309,7 +4571,8 @@
    "file": "games/old-school-runescape.json",
    "source": "core",
    "apworld": null,
-   "world_version": null
+   "world_version": null,
+   "guides": "guides/old-school-runescape.json"
   },
   {
    "game": "Once Upon a Katamari",
@@ -4317,6 +4580,7 @@
    "source": "custom",
    "apworld": "ouakatamari.apworld",
    "world_version": "0.3.0",
+   "guides": "guides/once-upon-a-katamari.json",
    "sheet": {
     "game": "Once Upon a Katamari",
     "stability": "Unstable"
@@ -4328,6 +4592,7 @@
    "source": "custom",
    "apworld": "openomf.apworld",
    "world_version": "0.0.4",
+   "guides": "guides/one-must-fall-2097.json",
    "sheet": {
     "game": "One Must Fall: 2097",
     "stability": "Unstable"
@@ -4339,6 +4604,7 @@
    "source": "custom",
    "apworld": "openrct2.apworld",
    "world_version": "0.1.22",
+   "guides": "guides/openrct2.json",
    "sheet": {
     "game": "OpenRCT2",
     "stability": "Stable",
@@ -4351,6 +4617,7 @@
    "source": "custom",
    "apworld": "openttd.apworld",
    "world_version": "2.6.0",
+   "guides": "guides/openttd.json",
    "sheet": {
     "game": "OpenTTD",
     "stability": "Unstable"
@@ -4395,6 +4662,7 @@
    "source": "custom",
    "apworld": "ori_wotw.apworld",
    "world_version": "0.6.5",
+   "guides": "guides/ori-and-the-will-of-the-wisps.json",
    "sheet": {
     "game": "Ori and the Will of the Wisps",
     "stability": "Stable"
@@ -4406,6 +4674,7 @@
    "source": "custom",
    "apworld": "osu.apworld",
    "world_version": "1.3.2",
+   "guides": "guides/osu.json",
    "sheet": {
     "game": "osu!",
     "stability": "Stable",
@@ -4429,6 +4698,7 @@
    "source": "custom",
    "apworld": "outer_wilds.apworld",
    "world_version": "1.4.0",
+   "guides": "guides/outer-wilds.json",
    "sheet": {
     "game": "Outer Wilds",
     "stability": "Stable",
@@ -4451,7 +4721,8 @@
    "file": "games/overcooked-2.json",
    "source": "core",
    "apworld": null,
-   "world_version": null
+   "world_version": null,
+   "guides": "guides/overcooked-2.json"
   },
   {
    "game": "Oxygen Not Included",
@@ -4482,7 +4753,8 @@
    "file": "games/paint.json",
    "source": "core",
    "apworld": null,
-   "world_version": "0.5.2"
+   "world_version": "0.5.2",
+   "guides": "guides/paint.json"
   },
   {
    "game": "Paper Mario",
@@ -4490,6 +4762,7 @@
    "source": "custom",
    "apworld": "papermario.apworld",
    "world_version": null,
+   "guides": "guides/paper-mario.json",
    "sheet": {
     "game": "Paper Mario 64",
     "stability": "Stable"
@@ -4501,6 +4774,7 @@
    "source": "custom",
    "apworld": "ttyd.apworld",
    "world_version": "0.14.1",
+   "guides": "guides/paper-mario-the-thousand-year-door.json",
    "sheet": {
     "game": "Paper Mario: The Thousand Year Door",
     "stability": "Stable"
@@ -4512,6 +4786,7 @@
    "source": "custom",
    "apworld": "paquerette_down_the_bunburrows.apworld",
    "world_version": "0.2.0",
+   "guides": "guides/paquerette-down-the-bunburrows.json",
    "sheet": {
     "game": "Paquerette Down the Bunburrows",
     "stability": "Unstable"
@@ -4523,6 +4798,7 @@
    "source": "custom",
    "apworld": "parkitect.apworld",
    "world_version": null,
+   "guides": "guides/parkitect.json",
    "sheet": {
     "game": "Parkitect",
     "stability": "Stable"
@@ -4534,6 +4810,7 @@
    "source": "custom",
    "apworld": "poe.apworld",
    "world_version": "2.2.1",
+   "guides": "guides/path-of-exile.json",
    "sheet": {
     "game": "Path of Exile",
     "stability": "Stable",
@@ -4560,6 +4837,7 @@
    "source": "custom",
    "apworld": "peak.apworld",
    "world_version": null,
+   "guides": "guides/peak.json",
    "sheet": {
     "game": "PEAK",
     "stability": "Stable"
@@ -4571,6 +4849,7 @@
    "source": "custom",
    "apworld": "peggle_deluxe.apworld",
    "world_version": "2.2.0",
+   "guides": "guides/peggle-deluxe.json",
    "sheet": {
     "game": "Peggle Deluxe",
     "stability": "Stable",
@@ -4583,6 +4862,7 @@
    "source": "custom",
    "apworld": "peggle_nights.apworld",
    "world_version": "2.0.0",
+   "guides": "guides/peggle-nights.json",
    "sheet": {
     "game": "Peggle Nights",
     "stability": "Stable",
@@ -4595,6 +4875,7 @@
    "source": "custom",
    "apworld": "perfect_dark.apworld",
    "world_version": "0.7.0",
+   "guides": "guides/perfect-dark.json",
    "sheet": {
     "game": "Perfect Dark",
     "stability": "Unstable",
@@ -4629,6 +4910,7 @@
    "source": "custom",
    "apworld": "phoa.apworld",
    "world_version": "0.4.0",
+   "guides": "guides/phoenotopia-awakening.json",
    "sheet": {
     "game": "Phoenotopia: Awakening",
     "stability": "Unstable"
@@ -4640,6 +4922,7 @@
    "source": "custom",
    "apworld": "pikmin.apworld",
    "world_version": "0.6.0",
+   "guides": "guides/pikmin.json",
    "sheet": {
     "game": "Pikmin 1",
     "stability": "Unstable"
@@ -4651,6 +4934,7 @@
    "source": "custom",
    "apworld": "pikmin2.apworld",
    "world_version": "1.0.0",
+   "guides": "guides/pikmin-2.json",
    "sheet": {
     "game": "Pikmin 2",
     "stability": "Unstable"
@@ -4662,6 +4946,7 @@
    "source": "custom",
    "apworld": "pikuniku.apworld",
    "world_version": "0.3.1",
+   "guides": "guides/pikuniku.json",
    "sheet": {
     "game": "Pikuniku",
     "stability": "Stable",
@@ -4674,6 +4959,7 @@
    "source": "custom",
    "apworld": "pipistrello.apworld",
    "world_version": "0.3.0",
+   "guides": "guides/pipistrello-and-the-cursed-yoyo.json",
    "sheet": {
     "game": "Pipistrello and the Cursed Yoyo",
     "stability": "Unstable"
@@ -4685,6 +4971,7 @@
    "source": "custom",
    "apworld": "pixeldraw.apworld",
    "world_version": "1.3.3",
+   "guides": "guides/pixeldraw.json",
    "sheet": {
     "game": "PixelDraw",
     "stability": "Stable"
@@ -4696,6 +4983,7 @@
    "source": "custom",
    "apworld": "pizza_tower.apworld",
    "world_version": "1.3.3",
+   "guides": "guides/pizza-tower.json",
    "sheet": {
     "game": "Pizza Tower",
     "stability": "Stable"
@@ -4740,6 +5028,7 @@
    "source": "custom",
    "apworld": "plateup.apworld",
    "world_version": null,
+   "guides": "guides/plateup.json",
    "sheet": {
     "game": "Plateup!",
     "stability": "Stable"
@@ -4751,6 +5040,7 @@
    "source": "custom",
    "apworld": "plok.apworld",
    "world_version": "0.1.1",
+   "guides": "guides/plok.json",
    "sheet": {
     "game": "Plok",
     "stability": "Unstable"
@@ -4773,6 +5063,7 @@
    "source": "custom",
    "apworld": "pokemon_bw.apworld",
    "world_version": "0.4.3",
+   "guides": "guides/pokemon-black-and-white.json",
    "sheet": {
     "game": "Pokémon Black and White",
     "stability": "Stable"
@@ -4784,6 +5075,7 @@
    "source": "custom",
    "apworld": "pokemon_crystal.apworld",
    "world_version": "6.0.5",
+   "guides": "guides/pokemon-crystal.json",
    "sheet": {
     "game": "Pokémon Crystal",
     "stability": "Stable",
@@ -4795,7 +5087,8 @@
    "file": "games/pokemon-emerald.json",
    "source": "core",
    "apworld": null,
-   "world_version": "2.6.0"
+   "world_version": "2.6.0",
+   "guides": "guides/pokemon-emerald.json"
   },
   {
    "game": "Pokemon FireRed and LeafGreen",
@@ -4803,6 +5096,7 @@
    "source": "custom",
    "apworld": "pokemon_frlg.apworld",
    "world_version": "1.1.5",
+   "guides": "guides/pokemon-firered-and-leafgreen.json",
    "sheet": {
     "game": "Pokémon FireRed and LeafGreen",
     "stability": "Stable"
@@ -4814,6 +5108,7 @@
    "source": "custom",
    "apworld": "pokemon_heartgold.apworld",
    "world_version": "0.2.0",
+   "guides": "guides/pokemon-heartgold.json",
    "sheet": {
     "game": "Pokémon HeartGold & SoulSilver (Singe)",
     "stability": "Unstable"
@@ -4825,6 +5120,7 @@
    "source": "custom",
    "apworld": "pmd_eos.apworld",
    "world_version": "0.3.2",
+   "guides": "guides/pokemon-mystery-dungeon-explorers-of-sky.json",
    "sheet": {
     "game": "Pokémon Mystery Dungeon: Explorers of Sky",
     "stability": "Stable"
@@ -4836,6 +5132,7 @@
    "source": "custom",
    "apworld": "pokemon_pinball_rs.apworld",
    "world_version": "0.3.2",
+   "guides": "guides/pokemon-pinball-ruby-sapphire.json",
    "sheet": {
     "game": "Pokémon Pinball Ruby & Sapphire",
     "stability": "Unstable"
@@ -4847,6 +5144,7 @@
    "source": "custom",
    "apworld": "pokemon_platinum.apworld",
    "world_version": "0.2.2",
+   "guides": "guides/pokemon-platinum.json",
    "sheet": {
     "game": "Pokémon Platinum",
     "stability": "Stable"
@@ -4858,6 +5156,7 @@
    "source": "custom",
    "apworld": "pkmn_ranger_quest.apworld",
    "world_version": "1.0.5",
+   "guides": "guides/pokemon-ranger-quest.json",
    "sheet": {
     "game": "Pokémon Ranger (Quest)",
     "stability": "Unstable"
@@ -4868,7 +5167,8 @@
    "file": "games/pokemon-red-and-blue.json",
    "source": "core",
    "apworld": null,
-   "world_version": null
+   "world_version": null,
+   "guides": "guides/pokemon-red-and-blue.json"
   },
   {
    "game": "Pokemon Snap",
@@ -4876,6 +5176,7 @@
    "source": "custom",
    "apworld": "pokemon_snap.apworld",
    "world_version": "0.8.0",
+   "guides": "guides/pokemon-snap.json",
    "sheet": {
     "game": "Pokémon Snap",
     "stability": "Unstable"
@@ -4898,6 +5199,7 @@
    "source": "custom",
    "apworld": "pokemon_trozei.apworld",
    "world_version": "0.0.3",
+   "guides": "guides/pokemon-trozei.json",
    "sheet": {
     "game": "Pokémon Trozei / Link",
     "stability": "Unstable"
@@ -4909,6 +5211,7 @@
    "source": "custom",
    "apworld": "pokemon_xd.apworld",
    "world_version": "0.1.6",
+   "guides": "guides/pokemon-xd-gale-of-darkness.json",
    "sheet": {
     "game": "Pokémon XD: Gale of Darkness",
     "stability": "Unstable"
@@ -4920,6 +5223,7 @@
    "source": "custom",
    "apworld": "pokepark.apworld",
    "world_version": "1.2.8",
+   "guides": "guides/pokepark.json",
    "sheet": {
     "game": "PokéPark Wii: Pikachu's Adventure",
     "stability": "Stable"
@@ -4942,6 +5246,7 @@
    "source": "custom",
    "apworld": "pokemon_revo.apworld",
    "world_version": "0.1.1",
+   "guides": "guides/pok-mon-battle-revolution.json",
    "sheet": {
     "game": "Pokémon Battle Revolution",
     "stability": "Unstable"
@@ -4953,6 +5258,7 @@
    "source": "custom",
    "apworld": "portal2.apworld",
    "world_version": "0.8.2",
+   "guides": "guides/portal-2.json",
    "sheet": {
     "game": "Portal 2",
     "stability": "Stable"
@@ -4986,6 +5292,7 @@
    "source": "custom",
    "apworld": "prodigal.apworld",
    "world_version": "0.2.4",
+   "guides": "guides/prodigal.json",
    "sheet": {
     "game": "Prodigal",
     "stability": "Stable"
@@ -4997,6 +5304,7 @@
    "source": "custom",
    "apworld": "pseudoregalia.apworld",
    "world_version": "0.11.0",
+   "guides": "guides/pseudoregalia.json",
    "sheet": {
     "game": "Pseudoregalia",
     "stability": "Stable"
@@ -5008,6 +5316,7 @@
    "source": "custom",
    "apworld": "psychonauts.apworld",
    "world_version": "1.0.0",
+   "guides": "guides/psychonauts.json",
    "sheet": {
     "game": "Psychonauts",
     "stability": "Stable",
@@ -5020,6 +5329,7 @@
    "source": "custom",
    "apworld": "puzzlebobble4.apworld",
    "world_version": "0.8.0",
+   "guides": "guides/puzzle-bobble-4.json",
    "sheet": {
     "game": "Puzzle Bobble 4",
     "stability": "Unstable"
@@ -5031,6 +5341,7 @@
    "source": "custom",
    "apworld": "q_up.apworld",
    "world_version": "3.0.1",
+   "guides": "guides/q-up.json",
    "sheet": {
     "game": "Q-Up",
     "stability": "Unstable"
@@ -5055,6 +5366,7 @@
    "source": "custom",
    "apworld": "quest64.apworld",
    "world_version": "1.10.0",
+   "guides": "guides/quest-64-recompiled.json",
    "sheet": {
     "game": "Quest 64 (Recomp)",
     "stability": "Unstable",
@@ -5089,6 +5401,7 @@
    "source": "custom",
    "apworld": "rabi_ribi.apworld",
    "world_version": "1.5.3",
+   "guides": "guides/rabi-ribi.json",
    "sheet": {
     "game": "Rabi-Ribi",
     "stability": "Stable"
@@ -5099,7 +5412,8 @@
    "file": "games/raft.json",
    "source": "core",
    "apworld": null,
-   "world_version": null
+   "world_version": null,
+   "guides": "guides/raft.json"
   },
   {
    "game": "Rain World",
@@ -5107,6 +5421,7 @@
    "source": "custom",
    "apworld": "rain_world.apworld",
    "world_version": "1.6.1",
+   "guides": "guides/rain-world.json",
    "sheet": {
     "game": "Rain World",
     "stability": "Stable"
@@ -5118,6 +5433,7 @@
    "source": "custom",
    "apworld": "rac2.apworld",
    "world_version": null,
+   "guides": "guides/ratchet-clank-2.json",
    "sheet": {
     "game": "Ratchet & Clank 2: Going Commando",
     "stability": "Stable"
@@ -5129,6 +5445,7 @@
    "source": "custom",
    "apworld": "rac_size_matters.apworld",
    "world_version": "0.5.8",
+   "guides": "guides/ratchet-clank-size-matters.json",
    "sheet": {
     "game": "Ratchet & Clank: Size Matters",
     "stability": "Unstable"
@@ -5151,6 +5468,7 @@
    "source": "custom",
    "apworld": "rac3.apworld",
    "world_version": "0.7.0",
+   "guides": "guides/ratchet-and-clank-3.json",
    "sheet": {
     "game": "Ratchet & Clank 3: Up Your Arsenal",
     "stability": "Stable"
@@ -5162,6 +5480,7 @@
    "source": "custom",
    "apworld": "rayman2.apworld",
    "world_version": null,
+   "guides": "guides/rayman-2.json",
    "sheet": {
     "game": "Rayman 2: The Great Escape",
     "stability": "Stable"
@@ -5173,6 +5492,7 @@
    "source": "custom",
    "apworld": "re3remake.apworld",
    "world_version": "0.3.0",
+   "guides": "guides/re3remake.json",
    "sheet": {
     "game": "Resident Evil 3 Remake",
     "stability": "Stable",
@@ -5210,6 +5530,7 @@
    "source": "custom",
    "apworld": "refunct.apworld",
    "world_version": "1.8.0",
+   "guides": "guides/refunct.json",
    "sheet": {
     "game": "Refunct",
     "stability": "Stable"
@@ -5221,6 +5542,7 @@
    "source": "custom",
    "apworld": "residentevil2remake.apworld",
    "world_version": "0.3.5",
+   "guides": "guides/resident-evil-2-remake.json",
    "sheet": {
     "game": "Resident Evil 2 Remake",
     "stability": "Stable",
@@ -5247,6 +5569,7 @@
    "source": "custom",
    "apworld": "obradinn.apworld",
    "world_version": null,
+   "guides": "guides/return-of-the-obra-dinn.json",
    "sheet": {
     "game": "Return of the Obra Dinn",
     "stability": "Stable",
@@ -5260,6 +5583,7 @@
    "source": "custom",
    "apworld": "rhythm_tengoku.apworld",
    "world_version": "1.0.3",
+   "guides": "guides/rhythm-tengoku.json",
    "sheet": {
     "game": "Rhythm Tengoku",
     "stability": "Stable"
@@ -5271,6 +5595,7 @@
    "source": "custom",
    "apworld": "rotn.apworld",
    "world_version": "0.17.0",
+   "guides": "guides/rift-of-the-necrodancer.json",
    "sheet": {
     "game": "Rift of the Necrodancer",
     "stability": "Stable"
@@ -5282,6 +5607,7 @@
    "source": "custom",
    "apworld": "riftwizard.apworld",
    "world_version": null,
+   "guides": "guides/rift-wizard.json",
    "sheet": {
     "game": "Rift Wizard",
     "stability": "Stable"
@@ -5316,7 +5642,8 @@
    "file": "games/risk-of-rain-2.json",
    "source": "core",
    "apworld": null,
-   "world_version": "1.5.0"
+   "world_version": "1.5.0",
+   "guides": "guides/risk-of-rain-2.json"
   },
   {
    "game": "Road Trip Adventure",
@@ -5324,6 +5651,7 @@
    "source": "custom",
    "apworld": "roadtrip.apworld",
    "world_version": "0.3.1",
+   "guides": "guides/road-trip-adventure.json",
    "sheet": {
     "game": "Road Trip Adventure",
     "stability": "Unstable"
@@ -5335,6 +5663,7 @@
    "source": "custom",
    "apworld": "rogue_legacy.apworld",
    "world_version": null,
+   "guides": "guides/rogue-legacy.json",
    "sheet": {
     "game": "Rogue Legacy",
     "stability": "Stable",
@@ -5358,6 +5687,7 @@
    "source": "custom",
    "apworld": "rune4.apworld",
    "world_version": "0.3.2",
+   "guides": "guides/rune-factory-4.json",
    "sheet": {
     "game": "Rune Factory 4 Special",
     "stability": "Unstable"
@@ -5369,6 +5699,7 @@
    "source": "custom",
    "apworld": "rwr.apworld",
    "world_version": "0.1.0",
+   "guides": "guides/running-with-rifles.json",
    "sheet": {
     "game": "Running with Rifles",
     "stability": "Unstable"
@@ -5380,6 +5711,7 @@
    "source": "custom",
    "apworld": "rusted_moss.apworld",
    "world_version": null,
+   "guides": "guides/rusted-moss.json",
    "sheet": {
     "game": "Rusted Moss",
     "stability": "Stable"
@@ -5391,6 +5723,7 @@
    "source": "custom",
    "apworld": "rwby_ge.apworld",
    "world_version": "0.2.3",
+   "guides": "guides/rwby-grimm-eclipse.json",
    "sheet": {
     "game": "RWBY: Grimm Eclipse",
     "stability": "Unstable"
@@ -5402,6 +5735,7 @@
    "source": "custom",
    "apworld": "saints_row_2.apworld",
    "world_version": "0.4.0",
+   "guides": "guides/saints-row-2.json",
    "sheet": {
     "game": "Saints Row 2",
     "stability": "Unstable",
@@ -5425,14 +5759,16 @@
    "file": "games/satisfactory.json",
    "source": "core",
    "apworld": null,
-   "world_version": "2.2.0"
+   "world_version": "2.2.0",
+   "guides": "guides/satisfactory.json"
   },
   {
    "game": "Saving Princess",
    "file": "games/saving-princess.json",
    "source": "core",
    "apworld": null,
-   "world_version": "1.0.0"
+   "world_version": "1.0.0",
+   "guides": "guides/saving-princess.json"
   },
   {
    "game": "Sayonara Wild Hearts",
@@ -5451,6 +5787,7 @@
    "source": "custom",
    "apworld": "schedule_I.apworld",
    "world_version": "3.6.6",
+   "guides": "guides/schedule-i.json",
    "sheet": {
     "game": "Schedule I",
     "stability": "Unstable",
@@ -5464,6 +5801,7 @@
    "source": "custom",
    "apworld": "no100f.apworld",
    "world_version": "1.4.2",
+   "guides": "guides/scooby-doo-night-of-100-frights.json",
    "sheet": {
     "game": "Scooby-Doo! Night of 100 Frights",
     "stability": "Stable",
@@ -5476,6 +5814,7 @@
    "source": "custom",
    "apworld": "scorpion_swamp.apworld",
    "world_version": "1.0.1",
+   "guides": "guides/scorpion-swamp.json",
    "sheet": {
     "game": "Scorpion Swamp",
     "stability": "Stable"
@@ -5492,7 +5831,8 @@
     "setting": "rom_file",
     "file": "Secret of Evermore (USA).sfc",
     "description": "Secret of Evermore (USA) ROM"
-   }
+   },
+   "guides": "guides/secret-of-evermore.json"
   },
   {
    "game": "Seedling",
@@ -5500,6 +5840,7 @@
    "source": "custom",
    "apworld": "seedling.apworld",
    "world_version": null,
+   "guides": "guides/seedling.json",
    "sheet": {
     "game": "Seedling",
     "stability": "Broken on Main"
@@ -5511,6 +5852,7 @@
    "source": "custom",
    "apworld": "sekiro.apworld",
    "world_version": "1.0.1",
+   "guides": "guides/sekiro-shadows-die-twice.json",
    "sheet": {
     "game": "Sekiro: Shadows Die Twice",
     "stability": "Stable",
@@ -5535,6 +5877,7 @@
    "source": "custom",
    "apworld": "seum.apworld",
    "world_version": null,
+   "guides": "guides/seum-speedrunners-from-hell.json",
    "sheet": {
     "game": "SEUM: Speedrunners from Hell",
     "stability": "Unstable"
@@ -5557,6 +5900,7 @@
    "source": "custom",
    "apworld": "severed_steel.apworld",
    "world_version": "1.0.1",
+   "guides": "guides/severed-steel.json",
    "sheet": {
     "game": "Severed Steel",
     "stability": "Unstable"
@@ -5580,6 +5924,7 @@
    "source": "custom",
    "apworld": "shadow_the_hedgehog.apworld",
    "world_version": "0.5.2",
+   "guides": "guides/shadow-the-hedgehog.json",
    "sheet": {
     "game": "Shadow the Hedgehog",
     "stability": "Stable"
@@ -5591,6 +5936,7 @@
    "source": "custom",
    "apworld": "shadowgate64.apworld",
    "world_version": "1.0.1",
+   "guides": "guides/shadowgate-64.json",
    "sheet": {
     "game": "Shadowgate 64: Trials of the Four Towers",
     "stability": "Unstable"
@@ -5601,7 +5947,8 @@
    "file": "games/shapez.json",
    "source": "core",
    "apworld": null,
-   "world_version": null
+   "world_version": null,
+   "guides": "guides/shapez.json"
   },
   {
    "game": "shapez 2",
@@ -5609,6 +5956,7 @@
    "source": "custom",
    "apworld": "shapez_2.apworld",
    "world_version": "1.0.1",
+   "guides": "guides/shapez-2.json",
    "sheet": {
     "game": "shapez 2",
     "stability": "Unstable"
@@ -5620,6 +5968,7 @@
    "source": "custom",
    "apworld": "shellipelago.apworld",
    "world_version": "1.15.0",
+   "guides": "guides/shellipelago.json",
    "sheet": {
     "game": "Shellipelago",
     "stability": "Stable",
@@ -5638,6 +5987,7 @@
     "file": "Shining in the Darkness (UE) [!].gen",
     "description": "Shining in the Darkness ROM File"
    },
+   "guides": "guides/shining-in-the-darkness.json",
    "sheet": {
     "game": "Shining in the Darkness",
     "stability": "Unstable"
@@ -5649,6 +5999,7 @@
    "source": "custom",
    "apworld": "oot_soh.apworld",
    "world_version": "1.4.1",
+   "guides": "guides/ship-of-harkinian.json",
    "sheet": {
     "game": "The Legend of Zelda: Ocarina of Time - Ship of Harkinian",
     "stability": "Stable"
@@ -5659,7 +6010,8 @@
    "file": "games/shivers.json",
    "source": "core",
    "apworld": null,
-   "world_version": "2.7.5"
+   "world_version": "2.7.5",
+   "guides": "guides/shivers.json"
   },
   {
    "game": "Shovel Knight Pocket Dungeon",
@@ -5667,6 +6019,7 @@
    "source": "custom",
    "apworld": "pocket_dungeon.apworld",
    "world_version": "1.0.0",
+   "guides": "guides/shovel-knight-pocket-dungeon.json",
    "sheet": {
     "game": "Shovel Knight Pocket Dungeon",
     "stability": "Unstable"
@@ -5689,6 +6042,7 @@
    "source": "custom",
    "apworld": "silverdaze.apworld",
    "world_version": null,
+   "guides": "guides/silver-daze.json",
    "sheet": {
     "game": "Silver Daze",
     "stability": "Unstable"
@@ -5711,6 +6065,7 @@
    "source": "custom",
    "apworld": "simpsonshitnrun.apworld",
    "world_version": "0.5.5",
+   "guides": "guides/simpsons-hit-and-run.json",
    "sheet": {
     "game": "The Simpsons: Hit & Run",
     "stability": "Stable"
@@ -5722,6 +6077,7 @@
    "source": "custom",
    "apworld": "skul.apworld",
    "world_version": "1.0.2",
+   "guides": "guides/skul-the-hero-slayer.json",
    "sheet": {
     "game": "Skul: The Hero Slayer",
     "stability": "Stable",
@@ -5734,6 +6090,7 @@
    "source": "custom",
    "apworld": "ss.apworld",
    "world_version": "0.5.6",
+   "guides": "guides/skyward-sword.json",
    "sheet": {
     "game": "The Legend of Zelda: Skyward Sword",
     "stability": "Stable"
@@ -5758,6 +6115,7 @@
    "source": "custom",
    "apworld": "spire.apworld",
    "world_version": "2.3.5",
+   "guides": "guides/slay-the-spire.json",
    "sheet": {
     "game": "Slay the Spire",
     "stability": "Stable",
@@ -5770,6 +6128,7 @@
    "source": "custom",
    "apworld": "spire2.apworld",
    "world_version": "1.2.0",
+   "guides": "guides/slay-the-spire-ii.json",
    "sheet": {
     "game": "Slay the Spire 2",
     "stability": "Unstable"
@@ -5792,6 +6151,7 @@
    "source": "custom",
    "apworld": "slime_rancher_2.apworld",
    "world_version": "0.15.0",
+   "guides": "guides/slime-rancher-2.json",
    "sheet": {
     "game": "Slime Rancher 2",
     "stability": "Stable"
@@ -5825,6 +6185,7 @@
    "source": "custom",
    "apworld": "sly1.apworld",
    "world_version": "0.3.5",
+   "guides": "guides/sly-cooper-and-the-thievius-raccoonus.json",
    "sheet": {
     "game": "Sly Cooper and the Thievius Raccoonus",
     "stability": "Stable"
@@ -5836,6 +6197,7 @@
    "source": "custom",
    "apworld": "sm64ex_spicy.apworld",
    "world_version": "1.0.4",
+   "guides": "guides/sm64-spicy-mycena-64.json",
    "sheet": {
     "game": "Super Mario 64 - Spicy Mycena 64",
     "stability": "Unstable"
@@ -5857,7 +6219,8 @@
    "file": "games/smz3.json",
    "source": "core",
    "apworld": null,
-   "world_version": null
+   "world_version": null,
+   "guides": "guides/smz3.json"
   },
   {
    "game": "Sneak King",
@@ -5865,6 +6228,7 @@
    "source": "custom",
    "apworld": "sneak_king.apworld",
    "world_version": "0.1.0",
+   "guides": "guides/sneak-king.json",
    "sheet": {
     "game": "Sneak King",
     "stability": "Unstable"
@@ -5876,6 +6240,7 @@
    "source": "custom",
    "apworld": "sadv2.apworld",
    "world_version": "0.1.0",
+   "guides": "guides/sonic-advance-2.json",
    "sheet": {
     "game": "Sonic Advance 2",
     "stability": "Unstable"
@@ -5886,7 +6251,8 @@
    "file": "games/sonic-adventure-2-battle.json",
    "source": "core",
    "apworld": null,
-   "world_version": "2.4.6"
+   "world_version": "2.4.6",
+   "guides": "guides/sonic-adventure-2-battle.json"
   },
   {
    "game": "Sonic Adventure DX",
@@ -5894,6 +6260,7 @@
    "source": "custom",
    "apworld": "sadx.apworld",
    "world_version": "1.2.2",
+   "guides": "guides/sonic-adventure-dx.json",
    "sheet": {
     "game": "Sonic Adventure DX",
     "stability": "Stable"
@@ -5905,6 +6272,7 @@
    "source": "custom",
    "apworld": "sonic_battle.apworld",
    "world_version": "0.1.7",
+   "guides": "guides/sonic-battle.json",
    "sheet": {
     "game": "Sonic Battle",
     "stability": "Unstable"
@@ -5916,6 +6284,7 @@
    "source": "custom",
    "apworld": "sonic_colours_ds.apworld",
    "world_version": "0.2.4",
+   "guides": "guides/sonic-colours-ds.json",
    "sheet": {
     "game": "Sonic Colors (DS)",
     "stability": "Unstable"
@@ -5927,6 +6296,7 @@
    "source": "custom",
    "apworld": "sonic_colours_wii.apworld",
    "world_version": "0.6.0",
+   "guides": "guides/sonic-colours-wii.json",
    "sheet": {
     "game": "Sonic Colors (Wii)",
     "stability": "Unstable"
@@ -5938,6 +6308,7 @@
    "source": "custom",
    "apworld": "sdc.apworld",
    "world_version": "0.4.0",
+   "guides": "guides/sonic-dreams-collection.json",
    "sheet": {
     "game": "Sonic Dreams Collection",
     "stability": "Unstable",
@@ -5962,6 +6333,7 @@
    "source": "custom",
    "apworld": "sonic_heroes.apworld",
    "world_version": "2.2.0",
+   "guides": "guides/sonic-heroes.json",
    "sheet": {
     "game": "Sonic Heroes",
     "stability": "Stable"
@@ -5973,6 +6345,7 @@
    "source": "custom",
    "apworld": "sonicriders.apworld",
    "world_version": "0.2.3",
+   "guides": "guides/sonic-riders.json",
    "sheet": {
     "game": "Sonic Riders",
     "stability": "Stable",
@@ -5985,6 +6358,7 @@
    "source": "custom",
    "apworld": "sonic_rush.apworld",
    "world_version": null,
+   "guides": "guides/sonic-rush.json",
    "sheet": {
     "game": "Sonic Rush",
     "stability": "Stable"
@@ -5996,6 +6370,7 @@
    "source": "custom",
    "apworld": "sonic1.apworld",
    "world_version": null,
+   "guides": "guides/sonic-the-hedgehog-1.json",
    "sheet": {
     "game": "Sonic the Hedgehog",
     "stability": "Stable"
@@ -6007,6 +6382,7 @@
    "source": "custom",
    "apworld": "soulblazer.apworld",
    "world_version": "0.7.0",
+   "guides": "guides/soul-blazer.json",
    "sheet": {
     "game": "SoulBlazer",
     "stability": "Stable"
@@ -6040,6 +6416,7 @@
    "source": "custom",
    "apworld": "spinball.apworld",
    "world_version": null,
+   "guides": "guides/spinball.json",
    "sheet": {
     "game": "Spinball",
     "stability": "Stable"
@@ -6051,6 +6428,7 @@
    "source": "custom",
    "apworld": "spirit_island.apworld",
    "world_version": "0.1.5",
+   "guides": "guides/spirit-island.json",
    "sheet": {
     "game": "Spirit Island",
     "stability": "Unstable"
@@ -6062,6 +6440,7 @@
    "source": "custom",
    "apworld": "tloz_st.apworld",
    "world_version": "0.8.4",
+   "guides": "guides/spirit-tracks.json",
    "sheet": {
     "game": "The Legend of Zelda: Spirit Tracks",
     "stability": "Unstable"
@@ -6086,6 +6465,7 @@
    "source": "custom",
    "apworld": "splasher.apworld",
    "world_version": "0.0.9",
+   "guides": "guides/splasher.json",
    "sheet": {
     "game": "Splasher",
     "stability": "Unstable"
@@ -6097,6 +6477,7 @@
    "source": "custom",
    "apworld": "spyro2.apworld",
    "world_version": "2.2.1",
+   "guides": "guides/spyro-2.json",
    "sheet": {
     "game": "Spyro 2: Ripto's Rage",
     "stability": "Stable"
@@ -6108,6 +6489,7 @@
    "source": "custom",
    "apworld": "spyro3.apworld",
    "world_version": "1.4.0",
+   "guides": "guides/spyro-3.json",
    "sheet": {
     "game": "Spyro 3: Year of the Dragon",
     "stability": "Stable"
@@ -6130,6 +6512,7 @@
    "source": "custom",
    "apworld": "stacklands.apworld",
    "world_version": "0.2.6",
+   "guides": "guides/stacklands.json",
    "sheet": {
     "game": "Stacklands",
     "stability": "Stable"
@@ -6141,6 +6524,7 @@
    "source": "custom",
    "apworld": "star_fox_64.apworld",
    "world_version": null,
+   "guides": "guides/star-fox-64.json",
    "sheet": {
     "game": "Star Fox 64",
     "stability": "Stable"
@@ -6173,14 +6557,16 @@
    "file": "games/starcraft-2.json",
    "source": "core",
    "apworld": null,
-   "world_version": "4.0.0"
+   "world_version": "4.0.0",
+   "guides": "guides/starcraft-2.json"
   },
   {
    "game": "Stardew Valley",
    "file": "games/stardew-valley.json",
    "source": "core",
    "apworld": null,
-   "world_version": "7.4.25"
+   "world_version": "7.4.25",
+   "guides": "guides/stardew-valley.json"
   },
   {
    "game": "Starship Titanic",
@@ -6211,6 +6597,7 @@
    "source": "custom",
    "apworld": "stella.apworld",
    "world_version": null,
+   "guides": "guides/stella.json",
    "sheet": {
     "game": "Stella",
     "stability": "Unstable"
@@ -6233,6 +6620,7 @@
    "source": "custom",
    "apworld": "stick_ranger.apworld",
    "world_version": "1.8.12",
+   "guides": "guides/stick-ranger.json",
    "sheet": {
     "game": "Stick Ranger",
     "stability": "Stable",
@@ -6245,6 +6633,7 @@
    "source": "custom",
    "apworld": "stray.apworld",
    "world_version": "0.0.4",
+   "guides": "guides/stray.json",
    "sheet": {
     "game": "Stray",
     "stability": "Unstable"
@@ -6277,7 +6666,8 @@
    "file": "games/subnautica.json",
    "source": "core",
    "apworld": null,
-   "world_version": null
+   "world_version": null,
+   "guides": "guides/subnautica.json"
   },
   {
    "game": "Suikapelago",
@@ -6308,6 +6698,7 @@
    "source": "custom",
    "apworld": "super_hexagon.apworld",
    "world_version": "1.1.0",
+   "guides": "guides/super-hexagon.json",
    "sheet": {
     "game": "Super Hexagon",
     "stability": "Unstable",
@@ -6330,7 +6721,8 @@
    "file": "games/super-mario-64.json",
    "source": "core",
    "apworld": null,
-   "world_version": null
+   "world_version": null,
+   "guides": "guides/super-mario-64.json"
   },
   {
    "game": "Super Mario Galaxy",
@@ -6338,6 +6730,7 @@
    "source": "custom",
    "apworld": "smgalaxy.apworld",
    "world_version": "0.0.1",
+   "guides": "guides/super-mario-galaxy.json",
    "sheet": {
     "game": "Super Mario Galaxy",
     "stability": "Unstable"
@@ -6359,7 +6752,8 @@
    "file": "games/super-mario-land-2.json",
    "source": "core",
    "apworld": null,
-   "world_version": null
+   "world_version": null,
+   "guides": "guides/super-mario-land-2.json"
   },
   {
    "game": "Super Mario Sunshine",
@@ -6367,6 +6761,7 @@
    "source": "custom",
    "apworld": "sms.apworld",
    "world_version": "0.6.2",
+   "guides": "guides/super-mario-sunshine.json",
    "sheet": {
     "game": "Super Mario Sunshine",
     "stability": "Unstable"
@@ -6383,7 +6778,8 @@
     "setting": "rom_file",
     "file": "Super Mario World (USA).sfc",
     "description": "Super Mario World (USA) ROM File"
-   }
+   },
+   "guides": "guides/super-mario-world.json"
   },
   {
    "game": "Super Meat Boy",
@@ -6401,7 +6797,8 @@
    "file": "games/super-metroid.json",
    "source": "core",
    "apworld": null,
-   "world_version": null
+   "world_version": null,
+   "guides": "guides/super-metroid.json"
   },
   {
    "game": "Super Smash Bros. Brawl - The Subspace Emissary",
@@ -6409,6 +6806,7 @@
    "source": "custom",
    "apworld": "ssbb_sse.apworld",
    "world_version": "0.2.7",
+   "guides": "guides/super-smash-bros-brawl-the-subspace-emissary.json",
    "sheet": {
     "game": "Super Smash Bros. Brawl - The Subspace Emissary",
     "stability": "Unstable"
@@ -6420,6 +6818,7 @@
    "source": "custom",
    "apworld": "superhot.apworld",
    "world_version": "0.1.0",
+   "guides": "guides/superhot.json",
    "sheet": {
     "game": "SUPERHOT",
     "stability": "Unstable"
@@ -6431,6 +6830,7 @@
    "source": "custom",
    "apworld": "supermarket_simulator.apworld",
    "world_version": "0.3.6",
+   "guides": "guides/supermarket-simulator.json",
    "sheet": {
     "game": "Supermarket Simulator",
     "stability": "Unstable"
@@ -6442,6 +6842,7 @@
    "source": "custom",
    "apworld": "sotn.apworld",
    "world_version": "0.8.16",
+   "guides": "guides/symphony-of-the-night.json",
    "sheet": {
     "game": "Castlevania: Symphony of the Night",
     "stability": "Stable"
@@ -6453,6 +6854,7 @@
    "source": "custom",
    "apworld": "sotn_recomp.apworld",
    "world_version": "0.3.3",
+   "guides": "guides/symphony-of-the-night-recomp.json",
    "sheet": {
     "game": "Castlevania: Symphony of the Night (SymphonyRecomp)",
     "stability": "Unstable",
@@ -6465,6 +6867,7 @@
    "source": "custom",
    "apworld": "tazwanted.apworld",
    "world_version": "1.2.4",
+   "guides": "guides/taz-wanted.json",
    "sheet": {
     "game": "Taz: Wanted",
     "stability": "Unstable"
@@ -6476,6 +6879,7 @@
    "source": "custom",
    "apworld": "tcg_card_shop_simulator.apworld",
    "world_version": "1.2.0",
+   "guides": "guides/tcg-card-shop-simulator.json",
    "sheet": {
     "game": "TCG Card Shop Simulator",
     "stability": "Stable"
@@ -6487,6 +6891,7 @@
    "source": "custom",
    "apworld": "tf2_mvm.apworld",
    "world_version": "1.18.5",
+   "guides": "guides/team-fortress-2-mann-vs-machine.json",
    "sheet": {
     "game": "Team Fortress 2 (Mann vs Machine)",
     "stability": "Unstable"
@@ -6509,6 +6914,7 @@
    "source": "custom",
    "apworld": "TerraNil.apworld",
    "world_version": "0.2.1",
+   "guides": "guides/terranil.json",
    "sheet": {
     "game": "Terra Nil",
     "stability": "Unstable"
@@ -6519,7 +6925,8 @@
    "file": "games/terraria.json",
    "source": "core",
    "apworld": null,
-   "world_version": null
+   "world_version": null,
+   "guides": "guides/terraria.json"
   },
   {
    "game": "Tetris Attack",
@@ -6538,6 +6945,7 @@
    "source": "custom",
    "apworld": "tevi.apworld",
    "world_version": "0.7.6",
+   "guides": "guides/tevi.json",
    "sheet": {
     "game": "Tevi",
     "stability": "Stable"
@@ -6549,6 +6957,7 @@
    "source": "custom",
    "apworld": "tboir.apworld",
    "world_version": "0.4.3",
+   "guides": "guides/the-binding-of-isaac-repentance.json",
    "sheet": {
     "game": "The Binding of Isaac: Repentance",
     "stability": "Stable",
@@ -6572,6 +6981,7 @@
    "source": "custom",
    "apworld": "forestsend.apworld",
    "world_version": "1.0.0",
+   "guides": "guides/the-forest-s-end.json",
    "sheet": {
     "game": "The Forest's End",
     "stability": "Unstable"
@@ -6583,6 +6993,7 @@
    "source": "custom",
    "apworld": "grinch.apworld",
    "world_version": "1.6.3",
+   "guides": "guides/the-grinch.json",
    "sheet": {
     "game": "The Grinch",
     "stability": "Stable"
@@ -6594,6 +7005,7 @@
    "source": "custom",
    "apworld": "guardianlegend.apworld",
    "world_version": "0.7.0",
+   "guides": "guides/the-guardian-legend.json",
    "sheet": {
     "game": "The Guardian Legend",
     "stability": "Stable",
@@ -6618,6 +7030,7 @@
    "source": "custom",
    "apworld": "legend_of_dragoon.apworld",
    "world_version": "2.0.0",
+   "guides": "guides/the-legend-of-dragoon.json",
    "sheet": {
     "game": "The Legend of Dragoon",
     "stability": "Unstable"
@@ -6634,7 +7047,8 @@
     "setting": "rom_file",
     "file": "Legend of Zelda, The (U) (PRG0) [!].nes",
     "description": "The Legend of Zelda (U) ROM File"
-   }
+   },
+   "guides": "guides/the-legend-of-zelda.json"
   },
   {
    "game": "The Legend of Zelda - Oracle of Ages",
@@ -6642,6 +7056,7 @@
    "source": "custom",
    "apworld": "tloz_ooa.apworld",
    "world_version": "2.0.0",
+   "guides": "guides/the-legend-of-zelda-oracle-of-ages.json",
    "sheet": {
     "game": "The Legend of Zelda: Oracle of Ages",
     "stability": "Unstable"
@@ -6653,6 +7068,7 @@
    "source": "custom",
    "apworld": "tloz_oos.apworld",
    "world_version": "20.1.13",
+   "guides": "guides/the-legend-of-zelda-oracle-of-seasons.json",
    "sheet": {
     "game": "The Legend of Zelda: Oracle of Seasons",
     "stability": "Stable"
@@ -6664,6 +7080,7 @@
    "source": "custom",
    "apworld": "tloz_ph.apworld",
    "world_version": "0.10.2",
+   "guides": "guides/the-legend-of-zelda-phantom-hourglass.json",
    "sheet": {
     "game": "The Legend of Zelda: Phantom Hourglass",
     "stability": "Stable"
@@ -6697,6 +7114,7 @@
    "source": "custom",
    "apworld": "magical_quest.apworld",
    "world_version": null,
+   "guides": "guides/the-magical-quest-starring-mickey-mouse.json",
    "sheet": {
     "game": "The Magical Quest starring Mickey Mouse",
     "stability": "Unstable"
@@ -6707,7 +7125,8 @@
    "file": "games/the-messenger.json",
    "source": "core",
    "apworld": null,
-   "world_version": null
+   "world_version": null,
+   "guides": "guides/the-messenger.json"
   },
   {
    "game": "The Minish Cap",
@@ -6715,6 +7134,7 @@
    "source": "custom",
    "apworld": "tmc.apworld",
    "world_version": "0.3.1",
+   "guides": "guides/the-minish-cap.json",
    "sheet": {
     "game": "The Legend of Zelda: The Minish Cap",
     "stability": "Stable"
@@ -6737,6 +7157,7 @@
    "source": "custom",
    "apworld": "sims4.apworld",
    "world_version": "2.0.1",
+   "guides": "guides/the-sims-4.json",
    "sheet": {
     "game": "The Sims 4",
     "stability": "Stable"
@@ -6748,6 +7169,7 @@
    "source": "custom",
    "apworld": "talos_principle_reawakened.apworld",
    "world_version": "1.4.0",
+   "guides": "guides/the-talos-principle-reawakened.json",
    "sheet": {
     "game": "The Talos Principle Reawakened",
     "stability": "Unstable"
@@ -6769,7 +7191,8 @@
    "file": "games/the-wind-waker.json",
    "source": "core",
    "apworld": null,
-   "world_version": null
+   "world_version": null,
+   "guides": "guides/the-wind-waker.json"
   },
   {
    "game": "The Wind Waker HD",
@@ -6777,6 +7200,7 @@
    "source": "custom",
    "apworld": "twwhd.apworld",
    "world_version": null,
+   "guides": "guides/the-wind-waker-hd.json",
    "sheet": {
     "game": "The Legend of Zelda: Wind Waker HD",
     "stability": "Stable"
@@ -6787,7 +7211,8 @@
    "file": "games/the-witness.json",
    "source": "core",
    "apworld": null,
-   "world_version": "8.0.0"
+   "world_version": "8.0.0",
+   "guides": "guides/the-witness.json"
   },
   {
    "game": "Three Goblin Wobblin",
@@ -6795,6 +7220,7 @@
    "source": "custom",
    "apworld": "three_goblin_wobblin.apworld",
    "world_version": "0.0.1",
+   "guides": "guides/three-goblin-wobblin.json",
    "sheet": {
     "game": "Three Goblin Wobblin'",
     "stability": "Unstable"
@@ -6816,7 +7242,8 @@
    "file": "games/timespinner.json",
    "source": "core",
    "apworld": null,
-   "world_version": "1.38.1"
+   "world_version": "1.38.1",
+   "guides": "guides/timespinner.json"
   },
   {
    "game": "TimeSplitters 2",
@@ -6824,6 +7251,7 @@
    "source": "custom",
    "apworld": "timesplitters_2.apworld",
    "world_version": "1.0.1",
+   "guides": "guides/timesplitters-2.json",
    "sheet": {
     "game": "Timesplitters 2",
     "stability": "Unstable"
@@ -6835,6 +7263,7 @@
    "source": "custom",
    "apworld": "timesplitters_future_perfect.apworld",
    "world_version": "1.1.0",
+   "guides": "guides/timesplitters-future-perfect.json",
    "sheet": {
     "game": "TimeSplitters: Future Perfect",
     "stability": "Unstable",
@@ -6859,6 +7288,7 @@
    "source": "custom",
    "apworld": "toem.apworld",
    "world_version": "2.1.0",
+   "guides": "guides/toem-a-photo-adventure.json",
    "sheet": {
     "game": "TOEM: A Photo Adventure",
     "stability": "Stable"
@@ -6870,6 +7300,7 @@
    "source": "custom",
    "apworld": "tomba.apworld",
    "world_version": "1.6.0",
+   "guides": "guides/tomba.json",
    "sheet": {
     "game": "Tomba!",
     "stability": "Unstable"
@@ -6881,6 +7312,7 @@
    "source": "custom",
    "apworld": "thaw.apworld",
    "world_version": "0.0.1",
+   "guides": "guides/tony-hawk-s-american-wasteland.json",
    "sheet": {
     "game": "Tony Hawk's American Wasteland",
     "stability": "Unstable"
@@ -6941,6 +7373,7 @@
    "source": "custom",
    "apworld": "toystory2.apworld",
    "world_version": "2.3.3",
+   "guides": "guides/toy-story-2.json",
    "sheet": {
     "game": "Toy Story 2 (PS1)",
     "stability": "Unstable"
@@ -6963,6 +7396,7 @@
    "source": "custom",
    "apworld": "trackmania.apworld",
    "world_version": "1.3.2",
+   "guides": "guides/trackmania.json",
    "sheet": {
     "game": "Trackmania",
     "stability": "Stable",
@@ -6975,6 +7409,7 @@
    "source": "custom",
    "apworld": "beyondthehorizon.apworld",
    "world_version": "0.1.2",
+   "guides": "guides/trails-beyond-the-horizon.json",
    "sheet": {
     "game": "The Legend of Heroes: Trails Beyond the Horizon",
     "stability": "Unstable",
@@ -6998,7 +7433,8 @@
    "file": "games/tunic.json",
    "source": "core",
    "apworld": null,
-   "world_version": "5.0.2"
+   "world_version": "5.0.2",
+   "guides": "guides/tunic.json"
   },
   {
    "game": "TurnipBoy",
@@ -7017,6 +7453,7 @@
    "source": "custom",
    "apworld": "turok2.apworld",
    "world_version": "0.6.0",
+   "guides": "guides/turok-2.json",
    "sheet": {
     "game": "Turok 2",
     "stability": "Unstable"
@@ -7028,6 +7465,7 @@
    "source": "custom",
    "apworld": "twilight_princess.apworld",
    "world_version": "0.4.0",
+   "guides": "guides/twilight-princess.json",
    "sheet": {
     "game": "The Legend of Zelda: Twilight Princess",
     "stability": "Stable"
@@ -7039,6 +7477,7 @@
    "source": "custom",
    "apworld": "twistycube.apworld",
    "world_version": "1.0.0",
+   "guides": "guides/twisty-cube.json",
    "sheet": {
     "game": "Twisty Cube",
     "stability": "Stable"
@@ -7083,6 +7522,7 @@
    "source": "custom",
    "apworld": "tyrian.apworld",
    "world_version": "1.0.5",
+   "guides": "guides/tyrian.json",
    "sheet": {
     "game": "Tyrian / Tyrian 2000",
     "stability": "Stable"
@@ -7094,6 +7534,7 @@
    "source": "custom",
    "apworld": "ufo50.apworld",
    "world_version": "0.3.0",
+   "guides": "guides/ufo-50.json",
    "sheet": {
     "game": "UFO 50",
     "stability": "Stable",
@@ -7117,6 +7558,7 @@
    "source": "custom",
    "apworld": "ultrakill.apworld",
    "world_version": "3.5.6",
+   "guides": "guides/ultrakill.json",
    "sheet": {
     "game": "ULTRAKILL",
     "stability": "Stable",
@@ -7129,6 +7571,7 @@
    "source": "custom",
    "apworld": "unbeatable_arcade.apworld",
    "world_version": "0.8.0",
+   "guides": "guides/unbeatable-arcade.json",
    "sheet": {
     "game": "UNBEATABLE",
     "stability": "Unstable"
@@ -7140,6 +7583,7 @@
    "source": "custom",
    "apworld": "ucg.apworld",
    "world_version": "1.4.1",
+   "guides": "guides/uncanny-cat-golf.json",
    "sheet": {
     "game": "Uncanny Cat Golf",
     "stability": "Stable",
@@ -7151,7 +7595,8 @@
    "file": "games/undertale.json",
    "source": "core",
    "apworld": null,
-   "world_version": null
+   "world_version": null,
+   "guides": "guides/undertale.json"
   },
   {
    "game": "Undertale Yellow",
@@ -7182,6 +7627,7 @@
    "source": "custom",
    "apworld": "untitled_goose_game.apworld",
    "world_version": "1.2.1",
+   "guides": "guides/untitled-goose-game.json",
    "sheet": {
     "game": "Untitled Goose Game",
     "stability": "Unstable"
@@ -7193,6 +7639,7 @@
    "source": "custom",
    "apworld": "vrising.apworld",
    "world_version": null,
+   "guides": "guides/v-rising.json",
    "sheet": {
     "game": "V Rising",
     "stability": "Unstable"
@@ -7204,6 +7651,7 @@
    "source": "custom",
    "apworld": "vsim.apworld",
    "world_version": "0.0.5",
+   "guides": "guides/vacation-simulator.json",
    "sheet": {
     "game": "Vacation Simulator",
     "stability": "Unstable"
@@ -7237,6 +7685,7 @@
    "source": "custom",
    "apworld": "vardrain--.apworld",
    "world_version": null,
+   "guides": "guides/vardrain.json",
    "sheet": {
     "game": "vardrain--",
     "stability": "Unstable"
@@ -7259,6 +7708,7 @@
    "source": "custom",
    "apworld": "vertical_drop_heroes.apworld",
    "world_version": "0.4.0",
+   "guides": "guides/vertical-drop-heroes-hd.json",
    "sheet": {
     "game": "Vertical Drop Heroes HD",
     "stability": "Unstable",
@@ -7317,6 +7767,7 @@
    "source": "custom",
    "apworld": "void_sols.apworld",
    "world_version": null,
+   "guides": "guides/void-sols.json",
    "sheet": {
     "game": "Void Sols",
     "stability": "Stable",
@@ -7340,6 +7791,7 @@
    "source": "custom",
    "apworld": "voidloop.apworld",
    "world_version": "0.0.1",
+   "guides": "guides/voidloop.json",
    "sheet": {
     "game": "Voidloop",
     "stability": "Unstable",
@@ -7363,6 +7815,7 @@
    "source": "custom",
    "apworld": "vrchat.apworld",
    "world_version": "0.0.2",
+   "guides": "guides/vrchat.json",
    "sheet": {
     "game": "VRChat",
     "stability": "Unstable"
@@ -7373,7 +7826,8 @@
    "file": "games/vvvvvv.json",
    "source": "core",
    "apworld": null,
-   "world_version": null
+   "world_version": null,
+   "guides": "guides/vvvvvv.json"
   },
   {
    "game": "Warcraft 3",
@@ -7381,6 +7835,7 @@
    "source": "custom",
    "apworld": "wc3.apworld",
    "world_version": null,
+   "guides": "guides/warcraft-3.json",
    "sheet": {
     "game": "Warcraft 3",
     "stability": "Unstable"
@@ -7391,7 +7846,8 @@
    "file": "games/wargroove.json",
    "source": "core",
    "apworld": null,
-   "world_version": "1.0.0"
+   "world_version": "1.0.0",
+   "guides": "guides/wargroove.json"
   },
   {
    "game": "Wargroove 2",
@@ -7399,6 +7855,7 @@
    "source": "custom",
    "apworld": "wargroove2.apworld",
    "world_version": "1.1.5",
+   "guides": "guides/wargroove-2.json",
    "sheet": {
     "game": "Wargroove 2",
     "stability": "Stable",
@@ -7417,6 +7874,7 @@
     "file": "Wario Land - Super Mario Land 3 (World).gb",
     "description": "Wario Land ROM File"
    },
+   "guides": "guides/wario-land.json",
    "sheet": {
     "game": "Wario Land 1",
     "stability": "Stable"
@@ -7440,6 +7898,7 @@
    "source": "custom",
    "apworld": "wl4.apworld",
    "world_version": "3.4.0",
+   "guides": "guides/wario-land-4.json",
    "sheet": {
     "game": "Wario Land 4",
     "stability": "Stable",
@@ -7452,6 +7911,7 @@
    "source": "custom",
    "apworld": "wario_ware_inc.apworld",
    "world_version": "1.1.2",
+   "guides": "guides/warioware-inc-mega-microgame.json",
    "sheet": {
     "game": "WarioWare, Inc. - Mega Microgame$!",
     "stability": "Unstable"
@@ -7463,6 +7923,7 @@
    "source": "custom",
    "apworld": "waterywords.apworld",
    "world_version": null,
+   "guides": "guides/watery-words.json",
    "sheet": {
     "game": "Watery Words",
     "stability": "Stable"
@@ -7564,6 +8025,7 @@
    "source": "custom",
    "apworld": "wordipelago.apworld",
    "world_version": "1.0.1",
+   "guides": "guides/wordipelago.json",
    "sheet": {
     "game": "Wordipelago",
     "stability": "Stable"
@@ -7575,6 +8037,7 @@
    "source": "custom",
    "apworld": "wordsearch.apworld",
    "world_version": null,
+   "guides": "guides/wordsearch.json",
    "sheet": {
     "game": "Word Search",
     "stability": "Unstable"
@@ -7586,6 +8049,7 @@
    "source": "custom",
    "apworld": "wynncraft.apworld",
    "world_version": "0.4.7",
+   "guides": "guides/wynncraft.json",
    "sheet": {
     "game": "Wynncraft (Minecraft Server)",
     "stability": "Stable"
@@ -7597,6 +8061,7 @@
    "source": "custom",
    "apworld": "x2wotc.apworld",
    "world_version": "1.0.0",
+   "guides": "guides/xcom-2-war-of-the-chosen.json",
    "sheet": {
     "game": "XCOM 2: War of the Chosen",
     "stability": "Stable"
@@ -7608,6 +8073,7 @@
    "source": "custom",
    "apworld": "xenobladex.apworld",
    "world_version": "0.2.10",
+   "guides": "guides/xenoblade-x.json",
    "sheet": {
     "game": "Xenoblade Chronicles X",
     "stability": "Unstable"
@@ -7618,7 +8084,8 @@
    "file": "games/yacht-dice.json",
    "source": "core",
    "apworld": null,
-   "world_version": "2.1.4"
+   "world_version": "2.1.4",
+   "guides": "guides/yacht-dice.json"
   },
   {
    "game": "Yacht Dice Bliss",
@@ -7626,6 +8093,7 @@
    "source": "custom",
    "apworld": "yachtdicebliss.apworld",
    "world_version": "2.3.4",
+   "guides": "guides/yacht-dice-bliss.json",
    "sheet": {
     "game": "Yacht Dice Bliss",
     "stability": "Stable"
@@ -7637,6 +8105,7 @@
    "source": "custom",
    "apworld": "yarg.apworld",
    "world_version": "1.3.0",
+   "guides": "guides/yarg.json",
    "sheet": {
     "game": "Yet Another Rhythm Game (YARG)",
     "stability": "Unstable"
@@ -7648,6 +8117,7 @@
    "source": "custom",
    "apworld": "YARGGuitarHero1.apworld",
    "world_version": "26.9.17",
+   "guides": "guides/yargguitarhero1.json",
    "sheet": {
     "game": "YARG (Guitar Hero/Rockband)",
     "stability": "Unstable"
@@ -7672,6 +8142,7 @@
    "source": "custom",
    "apworld": "yayarg.apworld",
    "world_version": "2.5.0",
+   "guides": "guides/yayarg.json",
    "sheet": {
     "game": "YAYARG (YARG Custom Songs)",
     "stability": "Unstable"
@@ -7683,6 +8154,7 @@
    "source": "custom",
    "apworld": "yellowtaxi.apworld",
    "world_version": "0.8.0",
+   "guides": "guides/yellow-taxi-goes-vroom.json",
    "sheet": {
     "game": "Yellow Taxi Goes Vroom",
     "stability": "Stable"
@@ -7694,6 +8166,7 @@
    "source": "custom",
    "apworld": "yohane_deepblue.apworld",
    "world_version": "0.2.5",
+   "guides": "guides/yohane-the-parhelion-blaze-in-the-deepblue.json",
    "sheet": {
     "game": "YOHANE THE PARHELION -BLAZE in the DEEPBLUE-",
     "stability": "Unstable"
@@ -7705,6 +8178,7 @@
    "source": "custom",
    "apworld": "yooka_replaylee.apworld",
    "world_version": "0.0.3",
+   "guides": "guides/yooka-replaylee.json",
    "sheet": {
     "game": "Yooka-Replaylee",
     "stability": "Unstable"
@@ -7721,7 +8195,8 @@
     "setting": "rom_file",
     "file": "Super Mario World 2 - Yoshi's Island (U).sfc",
     "description": "Yoshi's Island ROM File"
-   }
+   },
+   "guides": "guides/yoshi-s-island.json"
   },
   {
    "game": "You Have to Win the Game",
@@ -7729,6 +8204,7 @@
    "source": "custom",
    "apworld": "yhtwtg.apworld",
    "world_version": "1.1.0",
+   "guides": "guides/you-have-to-win-the-game.json",
    "sheet": {
     "game": "You Have to Win the Game",
     "stability": "Unstable"
@@ -7740,6 +8216,7 @@
    "source": "custom",
    "apworld": "ys_origin.apworld",
    "world_version": "2.1.1",
+   "guides": "guides/ys-origin.json",
    "sheet": {
     "game": "Ys Origin",
     "stability": "Unstable"
@@ -7750,7 +8227,8 @@
    "file": "games/yu-gi-oh-2006.json",
    "source": "core",
    "apworld": null,
-   "world_version": null
+   "world_version": null,
+   "guides": "guides/yu-gi-oh-2006.json"
   },
   {
    "game": "Yu-Gi-Oh! Dungeon Dice Monsters",
@@ -7758,6 +8236,7 @@
    "source": "custom",
    "apworld": "yugiohddm.apworld",
    "world_version": "0.3.4",
+   "guides": "guides/yu-gi-oh-dungeon-dice-monsters.json",
    "sheet": {
     "game": "Yu-Gi-Oh! Dungeon Dice Monsters",
     "stability": "Stable"
@@ -7791,6 +8270,7 @@
    "source": "custom",
    "apworld": "zagdx.apworld",
    "world_version": "0.1.0",
+   "guides": "guides/zelda-s-adventure-gdx.json",
    "sheet": {
     "game": "Zelda's Adventure GDX",
     "stability": "Unstable"
@@ -7801,7 +8281,8 @@
    "file": "games/zillion.json",
    "source": "core",
    "apworld": null,
-   "world_version": null
+   "world_version": null,
+   "guides": "guides/zillion.json"
   },
   {
    "game": "Zoominoes",
@@ -7809,6 +8290,7 @@
    "source": "custom",
    "apworld": "zoominoes.apworld",
    "world_version": "0.1.2",
+   "guides": "guides/zoominoes.json",
    "sheet": {
     "game": "Zoominoes",
     "stability": "Unstable"
@@ -7820,6 +8302,7 @@
    "source": "custom",
    "apworld": "zork_grand_inquisitor.apworld",
    "world_version": "3.0.0",
+   "guides": "guides/zork-grand-inquisitor.json",
    "sheet": {
     "game": "Zork: Grand Inquisitor",
     "stability": "Stable",
@@ -7832,6 +8315,7 @@
    "source": "custom",
    "apworld": "zuma_deluxe.apworld",
    "world_version": "0.1.9",
+   "guides": "guides/zuma-deluxe.json",
    "sheet": {
     "game": "Zuma Deluxe",
     "stability": "Unstable"
