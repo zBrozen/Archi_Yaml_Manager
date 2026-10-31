@@ -42,7 +42,7 @@ function placement(line, names, single) {
 }
 
 export function parseSpoiler(text) {
-  const lines = text.replace(/^﻿/, "").split(/\r?\n/);
+  const lines = text.replace(/^\uFEFF/, "").split(/\r?\n/);
   const head = /^Archipelago Version (\S+)\s+-\s+Seed: (\S+)/.exec(lines[0] || "");
   if (!head) throw new Error("Ce fichier n'est pas un spoiler d'Archipelago (fichier AP_…_Spoiler.txt).");
   const players = []; // { slot, name, game } ; name null pour une partie à un seul joueur
@@ -276,14 +276,73 @@ const KINDS = {
 const formatDate = (ms) => new Date(ms).toLocaleString("fr-FR", { day: "numeric", month: "long", hour: "2-digit", minute: "2-digit" });
 const pct = (a, b) => (b ? Math.floor((a / b) * 100) : 0);
 
-export function AdvancementView({ room, online, tracker }) {
+// L'hôte : son spoiler (génération en ligne ou fichier déposé) et le choix des joueurs qui voient l'onglet.
+// Un joueur à qui l'hôte l'a ouvert : la copie envoyée par l'hôte.
+export function AdvancementView({ room, online, tracker, data, setData, admin }) {
+  return admin
+    ? html`<${HostAdvancement} room=${room} online=${online} tracker=${tracker} data=${data} setData=${setData} />`
+    : html`<${PlayerAdvancement} room=${room} online=${online} tracker=${tracker} shared=${data.shared_spoiler} />`;
+}
+
+function HostAdvancement({ room, online, tracker, data, setData }) {
   const spoiler = useSpoiler(room);
-  const [hide, setHide] = useSetting("spoilerHide", false);
+  const busy = spoiler.action.busy;
+  const picker = (label, cls = "button ghost small") => html`<label class=${cls}>
+    <input type="file" accept=".txt,.zip" hidden disabled=${busy} onChange=${(e) => { spoiler.load(e.target.files[0]); e.target.value = ""; }} />${label}</label>`;
+  const { file } = spoiler;
+  return html`<${Advancement} room=${room} online=${online} tracker=${tracker} file=${file}
+    intro="Réservé à l'hôte, et aux joueurs à qui vous l'ouvrez : le spoiler de la génération, croisé avec le tracker d'archipelago.gg, montre où en est le chemin de victoire et qui peut le faire avancer."
+    source=${(parsed) => html`
+      ${file === undefined && html`<p class="hint">Lecture du spoiler…</p>`}
+      ${file && html`<div class="row full">
+        <span class="grow">Spoiler : <strong>${file.name}</strong> <span class="hint">${file.source === "room"
+          ? `(génération en ligne du ${formatDate(file.at)})` : `(déposé le ${formatDate(file.at)})`}
+          ${parsed?.spoiler ? ` · Archipelago ${parsed.spoiler.version}` : ""} · gardé dans ce navigateur</span></span>
+        ${picker("Utiliser un autre spoiler")}
+        ${file.source === "file" && html`<button type="button" class="ghost small" disabled=${busy} onClick=${spoiler.forget}>
+          ${spoiler.generated ? "Revenir à celui de la génération" : "Oublier"}</button>`}
+      </div>`}
+      ${file === null && html`<${SpoilerDrop} spoiler=${spoiler} />`}
+      ${spoiler.action.error && html`<div class="notice error full">${spoiler.action.error}</div>`}
+      <${SpoilerSharing} room=${room} data=${data} setData=${setData} file=${parsed?.spoiler ? file : null} />`} />`;
+}
+
+// Copie du spoiler partagé par l'hôte, lue une fois par version le temps de la visite.
+const sharedTexts = new Map();
+function PlayerAdvancement({ room, online, tracker, shared }) {
+  const [state, setState] = useState({ file: undefined, error: null });
+  const key = shared ? `${room.code}@${shared.at}` : null;
+  useEffect(() => {
+    if (!shared) { setState({ file: null, error: null }); return undefined; }
+    let alive = true;
+    if (!sharedTexts.has(key)) {
+      sharedTexts.set(key, api.sharedSpoiler(room.code).then(({ blob }) => blob.text())
+        .catch((e) => { sharedTexts.delete(key); throw e; }));
+    }
+    setState({ file: undefined, error: null });
+    sharedTexts.get(key).then(
+      (text) => alive && setState({ file: { text, name: shared.name, at: shared.at }, error: null }),
+      (e) => alive && setState({ file: null, error: e.message }),
+    );
+    return () => { alive = false; };
+  }, [key]);
+  return html`<${Advancement} room=${room} online=${online} tracker=${tracker} file=${state.file} player
+    intro="L'hôte vous a ouvert cet onglet : le spoiler de la partie, croisé avec le tracker d'archipelago.gg, montre où en est le chemin de victoire et qui peut le faire avancer. Il dit où sont les objets de tous les joueurs, les vôtres compris : ils restent masqués tant que vous ne décochez pas la case."
+    source=${() => html`
+      ${state.file === undefined && html`<p class="hint">Lecture du spoiler…</p>`}
+      ${state.file === null && !state.error && html`<div class="notice full">L'hôte n'a pas encore envoyé le spoiler de la partie.</div>`}
+      ${state.error && html`<div class="notice error full">${state.error}</div>`}`} />`;
+}
+
+// Partie commune : lecture du spoiler, analyse et affichage. `source(parsed)` : d'où vient le spoiler.
+// Un joueur commence objets et lieux masqués : le spoiler dit aussi où sont les siens.
+function Advancement({ room, online, tracker, file, intro, source, player = false }) {
+  const [hide, setHide] = useSetting(player ? "spoilerHidePlayer" : "spoilerHide", player);
   const { status } = online;
   const parsed = useMemo(() => {
-    if (!spoiler.file) return null;
-    try { return { spoiler: parseSpoiler(spoiler.file.text) }; } catch (e) { return { error: e.message }; }
-  }, [spoiler.file]);
+    if (!file) return null;
+    try { return { spoiler: parseSpoiler(file.text) }; } catch (e) { return { error: e.message }; }
+  }, [file]);
   const games = status ? [...new Set(status.slots.map((s) => s.game))].sort() : [];
   const packages = usePackages(status?.origin, tracker.data?.fixed, tracker.data ? games : []);
   const loading = games.some((g) => !packages.loaded[g]) && !packages.error;
@@ -291,37 +350,66 @@ export function AdvancementView({ room, online, tracker }) {
     ? analyze(parsed.spoiler, status, tracker.data.live, tracker.data.fixed, packages.loaded) : null),
   [status, parsed, tracker.data, loading, packages.loaded]);
 
-  const busy = spoiler.action.busy;
-  const picker = (label, cls = "button ghost small") => html`<label class=${cls}>
-    <input type="file" accept=".txt,.zip" hidden disabled=${busy} onChange=${(e) => { spoiler.load(e.target.files[0]); e.target.value = ""; }} />${label}</label>`;
-  const file = spoiler.file;
-
   return html`<section class="card stack">
     <div class="row full">
       <h2 class="grow">Avancement de la partie</h2>
       <label class="check"><input type="checkbox" checked=${hide} onChange=${(e) => setHide(e.target.checked)} />
         Masquer les objets et les lieux</label>
     </div>
-    <p class="hint">Réservé à l'hôte : le spoiler de la génération, croisé avec le tracker d'archipelago.gg, montre où en est
-      le chemin de victoire et qui peut le faire avancer. En stream, masquez les objets et les lieux : seuls restent
-      les joueurs et les nombres de checks.</p>
-    ${file === undefined && html`<p class="hint">Lecture du spoiler…</p>`}
-    ${file && html`<div class="row full">
-      <span class="grow">Spoiler : <strong>${file.name}</strong> <span class="hint">${file.source === "room"
-        ? `(génération en ligne du ${formatDate(file.at)})` : `(déposé le ${formatDate(file.at)})`}
-        ${parsed?.spoiler ? ` · Archipelago ${parsed.spoiler.version}` : ""} · gardé dans ce navigateur</span></span>
-      ${picker("Utiliser un autre spoiler")}
-      ${file.source === "file" && html`<button type="button" class="ghost small" disabled=${busy} onClick=${spoiler.forget}>
-        ${spoiler.generated ? "Revenir à celui de la génération" : "Oublier"}</button>`}
-    </div>`}
-    ${file === null && html`<${SpoilerDrop} spoiler=${spoiler} />`}
-    ${spoiler.action.error && html`<div class="notice error full">${spoiler.action.error}</div>`}
+    <p class="hint">${intro} En stream, masquez les objets et les lieux : seuls restent les joueurs et les nombres de checks.</p>
+    ${source(parsed)}
     ${parsed?.error && html`<div class="notice error full">${parsed.error}</div>`}
     ${parsed?.spoiler && !parsed.spoiler.playthrough && html`<div class="notice warn full">Ce spoiler n'a pas de chemin de
       victoire (niveau de spoiler 1) : générez la partie avec un spoiler complet (niveau 2, celui par défaut d'Archipelago).</div>`}
   </section>
   ${parsed?.spoiler?.playthrough && html`<${Report} report=${report} spoiler=${parsed.spoiler} status=${status} online=${online}
     tracker=${tracker} loading=${loading} packagesError=${packages.error} hide=${hide} mode=${room.mode} />`}`;
+}
+
+// Joueurs à qui l'hôte ouvre l'onglet. Le service garde une copie du spoiler de l'hôte (renvoyée quand il change :
+// nouvelle génération, autre fichier), retirée quand l'hôte décoche le dernier joueur.
+function SpoilerSharing({ room, data, setData, file }) {
+  const action = useAction();
+  const shared = data.shared_spoiler;
+  const players = data.players.filter((p) => p.id !== data.me?.id);
+  const allowed = players.filter((p) => p.spoiler_access);
+  const current = !!file && !!shared && shared.at === file.at && shared.name === file.name;
+  const upload = async () => {
+    const result = await api.shareSpoiler(room.code, file);
+    setData((d) => ({ ...d, shared_spoiler: result.shared_spoiler }));
+  };
+  useEffect(() => {
+    if (file && allowed.length && !current && !action.busy && !action.error) action.run(upload);
+  }, [file, current, allowed.length, action.busy]);
+
+  const toggle = (player, on) => action.run(async () => {
+    if (on && !current) await upload();
+    if (!on && allowed.every((p) => p.id === player.id)) {
+      await api.unshareSpoiler(room.code); // retire aussi l'accès de tous
+      setData((d) => ({ ...d, shared_spoiler: null, players: d.players.map((p) => ({ ...p, spoiler_access: false })) }));
+      return;
+    }
+    await api.setSpoilerAccess(room.code, player.id, on);
+    setData((d) => ({ ...d, players: d.players.map((p) => (p.id === player.id ? { ...p, spoiler_access: on } : p)) }));
+  });
+
+  return html`<details class="group full" open=${allowed.length > 0}>
+    <summary>Ouvrir l'onglet à des joueurs${allowed.length ? ` (${allowed.length})` : ""}</summary>
+    <div class="group-body stack spoiler-share">
+      <p class="hint">Les joueurs cochés voient cet onglet dans la room. Ils reçoivent tout le spoiler : où sont les objets de
+        chacun, les leurs compris (la case « Masquer » ne cache que l'affichage). Le service en garde une copie tant qu'un
+        joueur y a accès.</p>
+      ${!players.length ? html`<p class="hint">Personne n'a encore rejoint la room.</p>`
+        : html`<div class="items-players-list">${players.map((p) => html`<label class=${`player-check ${p.spoiler_access ? "on" : ""}`}>
+          <input type="checkbox" checked=${!!p.spoiler_access} disabled=${action.busy || (!file && !p.spoiler_access)}
+            onChange=${(e) => toggle(p, e.target.checked)} />
+          <span><strong>${p.pseudo}</strong>${p.slots?.length ? html` <span class="hint">${p.slots.map((s) => s.name).join(", ")}</span>` : ""}</span>
+        </label>`)}</div>`}
+      ${!file && html`<p class="hint">Chargez d'abord un spoiler pour l'ouvrir à des joueurs.</p>`}
+      ${allowed.length > 0 && file && !current && html`<p class="hint">Envoi du spoiler à jour aux joueurs…</p>`}
+      ${action.error && html`<div class="notice error">${action.error}</div>`}
+    </div>
+  </details>`;
 }
 
 function SpoilerDrop({ spoiler }) {

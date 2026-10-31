@@ -549,6 +549,7 @@ a.button.small, label.button.small { padding: .25rem .7rem; font-size: .875rem; 
 .sphere summary .progress { display: inline-block; width: 8rem; }
 .sphere details[open] > summary { margin-bottom: .6rem; }
 .adv-table td { vertical-align: top; }
+.spoiler-share { padding: .9rem 1.25rem 1.1rem; }
 /* Objets reçus : groupes aérés, un objet par étiquette, puis la liste des derniers arrivés */
 .items-card { scroll-margin-top: 4rem; }
 /* Objets reçus : joueurs cochés (case + nom, pas la couleur seule) et recherche commune */

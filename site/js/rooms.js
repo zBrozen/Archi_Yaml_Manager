@@ -313,7 +313,7 @@ export function RoomPage({ index, code, onCreate, onEdit }) {
     ["apercu", "Aperçu"],
     ...(!room.direct ? [["yaml", me ? `Mes YAML (${mine.length})` : "Rejoindre"], ["joueurs", `Joueurs (${players.length})`]]
       : me ? [] : [["yaml", "Rejoindre"]]),
-    ...(room.ap_room_url ? [["partie", "Progression"], ...(admin ? [["avancement", "Avancement"]] : []), ["wishlist", notices.fresh.length ? `Wishlist (♥ ${notices.fresh.length})` : "Wishlist"],
+    ...(room.ap_room_url ? [["partie", "Progression"], ...(admin || me?.spoiler_access ? [["avancement", "Avancement"]] : []), ["wishlist", notices.fresh.length ? `Wishlist (♥ ${notices.fresh.length})` : "Wishlist"],
       ["client", "Client texte"]] : []),
     ...(data.screens && (me || admin) ? [["ecrans", "Écrans"]] : []),
     ...(admin ? [["hote", "Hôte"]] : []),
@@ -346,7 +346,8 @@ export function RoomPage({ index, code, onCreate, onEdit }) {
     ${active === "yaml" && yaml}
     ${active === "joueurs" && html`<${PlayersList} room=${room} players=${players} me=${me} admin=${admin} refresh=${refresh} />`}
     ${active === "partie" && html`<${GameView} room=${room} online=${online} tracker=${tracker} mine=${mine} />`}
-    ${active === "avancement" && html`<${AdvancementView} room=${room} online=${online} tracker=${tracker} />`}
+    ${active === "avancement" && html`<${AdvancementView} room=${room} online=${online} tracker=${tracker}
+      data=${data} setData=${setData} admin=${admin} />`}
     ${active === "wishlist" && (online.status
       ? html`<${WishlistView} room=${room} status=${online.status} tracker=${tracker} lists=${wishes} mine=${mine} admin=${admin}
           wishlists=${data.wishlists} onSaved=${savedWishlist} notices=${notices} />`

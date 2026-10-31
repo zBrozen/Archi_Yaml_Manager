@@ -210,6 +210,10 @@ leur nom dans la partie, qui sert à retrouver leurs fichiers.
    Pour chaque joueur : ses checks requis restants, les objets requis qu'il attend et de qui, ou s'il a déjà tout
    reçu pour finir. Le spoiler reste dans le navigateur de l'hôte (IndexedDB) ; un spoiler d'une autre génération
    est repéré en comparant les objets déjà reçus. Une case masque objets et lieux pour un stream.
+   L'hôte peut ouvrir l'onglet à des joueurs (« Ouvrir l'onglet à des joueurs », une case par joueur) : son
+   navigateur envoie alors au service une copie du spoiler (KV, clé `CODE/shared-spoiler`, renvoyée quand l'hôte
+   change de spoiler), lisible par ces joueurs seulement, et retirée quand il décoche le dernier. Ces joueurs
+   reçoivent tout le spoiler ; l'onglet leur masque d'abord objets et lieux.
 7. Pour un stream, les joueurs peuvent partager la fenêtre de leur jeu, et l'hôte l'afficher dans OBS
    (voir « Écrans des joueurs » ci-dessous).
 

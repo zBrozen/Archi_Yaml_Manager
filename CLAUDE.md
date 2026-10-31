@@ -50,7 +50,9 @@
   d'archipelago.gg, noms lus dans les datapackages ; le tracker est lu une fois par `RoomPage` pour tous les onglets.
   Avancement (`spoiler.js`, onglet de l'hôte) : lecture du spoiler au format de `Spoiler.to_file` (BaseClasses.py,
   niveau 2 au moins pour le « Playthrough »), lieux reliés aux checks du tracker par les datapackages (un lieu sans
-  numéro est un événement, non suivi). Le spoiler ne quitte pas le navigateur de l'hôte (IndexedDB `room-spoilers`).
+  numéro est un événement, non suivi). Le spoiler reste dans le navigateur de l'hôte (IndexedDB `room-spoilers`), sauf
+  s'il ouvre l'onglet à des joueurs (`players.spoiler_access`) : copie dans le KV (`CODE/shared-spoiler`,
+  `rooms.shared_spoiler`), lue par `GET /spoiler` (hôte ou joueur autorisé), supprimée au dernier joueur décoché.
 - Trackers (`#/tracker`, section « Trackers » du README) : packs PopTracker relevés par `tools/fetch_trackers.py`
   (`site/data/trackers.json`, page HTML du tableur car l'export xlsx perd les liens multiples d'une cellule),
   téléchargés par le relais `/api/packs` du Worker. `tracker-engine.js` reproduit le format des packs d'après la

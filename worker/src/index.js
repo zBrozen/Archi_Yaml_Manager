@@ -261,7 +261,7 @@ async function getRoom(request, env, room) {
   const [admin, me, players, slots, wishes] = await Promise.all([
     isAdmin(request, room),
     currentPlayer(request, env, room),
-    env.DB.prepare("SELECT id, pseudo, created_at FROM players WHERE room_code = ? ORDER BY created_at").bind(room.code).all(),
+    env.DB.prepare("SELECT id, pseudo, spoiler_access, created_at FROM players WHERE room_code = ? ORDER BY created_at").bind(room.code).all(),
     env.DB.prepare("SELECT id, player_id, name, game, filename, issues, updated_at FROM slots WHERE room_code = ? ORDER BY created_at")
       .bind(room.code).all(),
     env.DB.prepare("SELECT slot, items FROM wishlists WHERE room_code = ?").bind(room.code).all(),
@@ -274,10 +274,13 @@ async function getRoom(request, env, room) {
     ...(admin ? { overlay_layouts: JSON.parse(room.overlay_layouts || "[]"), overlay_links: await overlayLinks(env, room) } : {}),
     ...(me ? { shared_overlays: await sharedOverlays(env, room) } : {}),
     apworlds: await roomApworlds(env, room.code),
-    me: me ? { id: me.id, pseudo: me.pseudo } : null,
+    me: me ? { id: me.id, pseudo: me.pseudo, spoiler_access: !!me.spoiler_access } : null,
+    // Copie du spoiler (onglet « Avancement ») : pour l'hôte et les joueurs à qui il l'a ouvert.
+    ...(admin || me?.spoiler_access ? { shared_spoiler: JSON.parse(room.shared_spoiler || "null") } : {}),
     wishlists: Object.fromEntries(wishes.results.map((w) => [w.slot, JSON.parse(w.items)])),
-    players: players.results.map((p) => ({
+    players: players.results.map(({ spoiler_access, ...p }) => ({
       ...p,
+      ...(admin ? { spoiler_access: !!spoiler_access } : {}),
       slots: slots.results.filter((s) => s.player_id === p.id).map(({ player_id, issues: list, ...s }) => ({ ...s, issues: JSON.parse(list) })),
     })),
   });
@@ -307,9 +310,12 @@ async function deleteFiles(env, code) {
   if (env.FILES) await Promise.all(FILE_KINDS.map((kind) => env.FILES.delete(`${code}/${kind}`)));
 }
 
+const sharedSpoilerKey = (code) => `${code}/shared-spoiler`;
+
 // Fichiers et lignes d'une room supprimée (par l'hôte ou faute d'activité).
 async function purgeRoom(env, code) {
   await deleteFiles(env, code);
+  if (env.FILES) await env.FILES.delete(sharedSpoilerKey(code));
   await Promise.all((await roomApworlds(env, code)).map((a) => deleteApworldFiles(env, code, a.file)));
   await env.DB.batch([
     env.DB.prepare("DELETE FROM slots WHERE room_code = ?").bind(code),
@@ -353,6 +359,19 @@ async function resetPlayerToken(request, env, room, playerId) {
   const token = newToken();
   await env.DB.prepare("UPDATE players SET token_hash = ? WHERE id = ?").bind(await sha256(token), player.id).run();
   return json({ player, token });
+}
+
+// Réglages d'un joueur par l'hôte : `spoiler_access`, accès à l'onglet « Avancement » (copie du spoiler).
+async function updatePlayer(request, env, room, playerId) {
+  await requireAdmin(request, room);
+  const body = await readJson(request);
+  const player = await env.DB.prepare("SELECT id FROM players WHERE room_code = ? AND id = ?").bind(room.code, playerId).first();
+  if (!player) throw new HttpError(404, "Ce joueur n'est plus dans la room.");
+  if ("spoiler_access" in body) {
+    if (body.spoiler_access && !room.shared_spoiler) throw new HttpError(409, "Envoyez d'abord le spoiler à partager.");
+    await env.DB.prepare("UPDATE players SET spoiler_access = ? WHERE id = ?").bind(body.spoiler_access ? 1 : 0, player.id).run();
+  }
+  return json({ ok: true });
 }
 
 async function removePlayer(request, env, room, playerId) {
@@ -466,6 +485,45 @@ async function exportSlots(request, env, room) {
      FROM slots s JOIN players p ON p.id = s.player_id WHERE s.room_code = ? ORDER BY s.created_at`,
   ).bind(room.code).all();
   return json({ slots: results.map((s) => ({ ...s, issues: JSON.parse(s.issues) })) });
+}
+
+// --- Spoiler partagé (onglet « Avancement ») ------------------------------------------
+// L'hôte envoie le spoiler qu'il utilise (celui de la génération en ligne ou un fichier généré chez lui) ; les
+// joueurs à qui il ouvre l'onglet le lisent. La copie est retirée par l'hôte quand plus personne n'y a accès.
+
+async function shareSpoiler(request, env, room) {
+  await requireAdmin(request, room);
+  if (!env.FILES) throw new HttpError(501, "Le partage du spoiler n'est pas configuré sur ce serveur.");
+  const params = new URL(request.url).searchParams;
+  const name = text(params.get("name"), "nom du fichier", LIMITS.filename);
+  const at = Number(params.get("at"));
+  if (!Number.isFinite(at)) throw new HttpError(400, "Date du spoiler invalide.");
+  const data = await request.text();
+  if (!data || data.length > MAX_FILE_SIZE) throw new HttpError(413, "Spoiler vide ou trop gros (25 Mo au maximum).");
+  if (!data.replace(/^\uFEFF/, "").startsWith("Archipelago Version ")) throw new HttpError(400, "Ce fichier n'est pas un spoiler d'Archipelago.");
+  const shared = JSON.stringify({ name, at, size: data.length });
+  await env.FILES.put(sharedSpoilerKey(room.code), data);
+  await env.DB.prepare("UPDATE rooms SET shared_spoiler = ? WHERE code = ?").bind(shared, room.code).run();
+  return json({ shared_spoiler: JSON.parse(shared) });
+}
+
+async function unshareSpoiler(request, env, room) {
+  await requireAdmin(request, room);
+  if (env.FILES) await env.FILES.delete(sharedSpoilerKey(room.code));
+  await env.DB.batch([
+    env.DB.prepare("UPDATE rooms SET shared_spoiler = NULL WHERE code = ?").bind(room.code),
+    env.DB.prepare("UPDATE players SET spoiler_access = 0 WHERE room_code = ?").bind(room.code),
+  ]);
+  return json({ shared_spoiler: null });
+}
+
+async function getSharedSpoiler(request, env, room) {
+  if (!(await isAdmin(request, room)) && !(await requirePlayer(request, env, room)).spoiler_access) {
+    throw new HttpError(403, "L'hôte ne vous a pas ouvert l'onglet « Avancement ».");
+  }
+  const file = room.shared_spoiler && env.FILES ? await env.FILES.get(sharedSpoilerKey(room.code), "stream") : null;
+  if (!file) throw new HttpError(404, "L'hôte n'a pas partagé de spoiler.");
+  return new Response(file, { headers: { "Content-Type": "text/plain; charset=utf-8", ...CORS } });
 }
 
 // --- Partie hébergée -----------------------------------------------------------------
@@ -1103,12 +1161,17 @@ async function route(request, env) {
   } else if (sub === "players") {
     if (!id && method === "POST") return joinRoom(request, env, room);
     if (id && !parts[5] && method === "DELETE") return removePlayer(request, env, room, id);
+    if (id && !parts[5] && method === "PATCH") return updatePlayer(request, env, room, id);
     if (id && parts[5] === "token" && method === "POST") return resetPlayerToken(request, env, room, id);
   } else if (sub === "slots") {
     if (!id && method === "POST") return addSlot(request, env, room);
     if (id && method === "GET") return getSlot(request, env, room, id);
     if (id && method === "PUT") return replaceSlot(request, env, room, id);
     if (id && method === "DELETE") return deleteSlot(request, env, room, id);
+  } else if (sub === "spoiler" && !id) {
+    if (method === "GET") return getSharedSpoiler(request, env, room);
+    if (method === "PUT") return shareSpoiler(request, env, room);
+    if (method === "DELETE") return unshareSpoiler(request, env, room);
   } else if (sub === "wishlists" && id && method === "PUT") {
     return saveWishlist(request, env, room, id);
   } else if (sub === "export" && method === "GET") {

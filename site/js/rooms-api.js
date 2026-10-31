@@ -103,6 +103,11 @@ export const api = {
   updateOverlayLink: (code, id, patch) => call("PATCH", at(code, `/screens/links/${id}`), { code, body: patch }),
   deleteOverlayLink: (code, id) => call("DELETE", at(code, `/screens/links/${id}`), { code }),
   saveLayouts: (code, layouts) => call("PUT", at(code, "/screens/layouts"), { code, body: { layouts } }),
+  setSpoilerAccess: (code, id, on) => call("PATCH", at(code, `/players/${id}`), { code, body: { spoiler_access: on } }),
+  shareSpoiler: (code, { name, at: when, text }) => call("PUT", at(code, `/spoiler?name=${encodeURIComponent(name)}&at=${when}`),
+    { code, body: new Blob([text], { type: "text/plain" }) }),
+  unshareSpoiler: (code) => call("DELETE", at(code, "/spoiler"), { code }),
+  sharedSpoiler: (code) => call("GET", at(code, "/spoiler"), { code, file: true }),
   saveWishlist: (code, slot, items) => call("PUT", at(code, `/wishlists/${encodeURIComponent(slot)}`), { code, body: { items } }),
 };
 
