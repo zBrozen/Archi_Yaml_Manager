@@ -274,8 +274,8 @@ Onglet « Écrans » de la room :
   (migration 0010) apparaît dans l'onglet « Écrans » de chaque joueur inscrit, sous « Overlays de l'hôte » : un
   co-streamer copie lui-même l'adresse pour son OBS, en grille automatique ou avec une disposition de l'hôte, sans
   que l'hôte ait à la lui envoyer. Les autres liens restent réservés à l'hôte. Les écrans partagés s'y placent seuls en grille,
-  aussi grands que possible, et les **messages de la partie** (objets envoyés, objectifs atteints, release et
-  collect) défilent à côté. Les réglages choisis sur la page sont ajoutés au lien copié : nombre d'écrans
+  aussi grands que possible, et les **messages de la partie** (objets envoyés, indices obtenus, objectifs atteints,
+  release et collect) défilent à côté. Les réglages choisis sur la page sont ajoutés au lien copié : nombre d'écrans
   (`max`, 4 par défaut, de 0 = messages seuls à 6), place des messages (`console=droite|bas|non`) et objets
   montrés (`objets=tous|importants` : progression, utiles et pièges). Les objets de progression et les pièges
   sont marqués ★ et ⚠, en plus de leur couleur. 3 overlays affichant des écrans au maximum par room, car chaque joueur envoie son image à chacun.
@@ -283,6 +283,10 @@ Onglet « Écrans » de la room :
 Les messages viennent du serveur de la partie sur archipelago.gg, une fois son lien collé dans la room : l'overlay
 s'y connecte comme client texte du premier joueur (comme le client texte de la room, avec
 [archipelago.js](https://github.com/ThePhar/archipelago.js)), qui apparaît donc connecté une fois de plus.
+Le serveur n'envoie le message d'un indice qu'aux deux joueurs concernés : l'overlay lit donc les indices de tous
+les joueurs dans le stockage de la partie (clés `_read_hints_<équipe>_<joueur>`, avec notification) et affiche
+chaque nouvel indice une fois, au format du serveur (`[Hint]: … is at … in …'s World.`). Les indices obtenus
+avant l'ouverture de l'overlay ne sont pas affichés.
 
 **Dispositions.** Pour placer chaque élément soi-même, l'hôte crée des dispositions dans l'éditeur de l'onglet
 « Écrans » (jusqu'à 12 par room, 40 éléments chacune), en partant d'un modèle (grille, écrans avec messages et

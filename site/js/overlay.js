@@ -7,7 +7,7 @@
 // Les images arrivent directement du navigateur de chaque joueur (WebRTC) ; les messages et la progression
 // viennent du serveur de la partie sur archipelago.gg (client texte du premier joueur, API du tracker).
 import { html, useState, useEffect, useRef } from "../vendor/preact-htm.js";
-import { Client } from "../vendor/archipelago.js";
+import { Client, Hint } from "../vendor/archipelago.js";
 import { MessagePart, progressRows, wishHit, wishIndex } from "./room-live.js";
 import { api, apRoomStatus } from "./rooms-api.js";
 import { ICE_SERVERS, serial, signaling } from "./screens-net.js";
@@ -213,8 +213,22 @@ async function onlineGame(code) {
   return room.ap_room_url ? apRoomStatus(code, room.ap_room_url) : null;
 }
 
-// Objets envoyés, objectifs atteints, release et collect, reçus en client texte du premier joueur.
-// `important` sur chaque ligne : objet de progression, utile ou piège, ou événement d'un joueur.
+// Indice sous la forme du message du serveur (« [Hint]: … is at … in …'s World. »), à partir de son entrée dans
+// le stockage de la partie.
+function hintNodes(client, raw) {
+  const hint = new Hint(client, raw);
+  const { item } = hint;
+  const player = (p) => ({ type: "player", text: p.alias || p.name, player: p });
+  return [
+    { type: "text", text: "[Hint]: " }, player(item.receiver), { type: "text", text: "'s " },
+    { type: "item", text: item.name, item }, { type: "text", text: " is at " },
+    { type: "location", text: item.locationName }, { type: "text", text: " in " }, player(item.sender),
+    { type: "text", text: `'s World${hint.entrance !== "Vanilla" ? ` (${hint.entrance})` : ""}.${hint.found ? " (found)" : ""}` },
+  ];
+}
+
+// Objets envoyés, objectifs atteints, release et collect, reçus en client texte du premier joueur, et indices.
+// `important` sur chaque ligne : objet de progression, utile ou piège, indice, ou événement d'un joueur.
 function useGameFeed(code, enabled) {
   const [feed, setFeed] = useState({ state: "loading", message: null, lines: [] });
   useEffect(() => {
@@ -247,6 +261,20 @@ function useGameFeed(code, enabled) {
         });
         client = next;
         await next.login(`wss://${status.host}:${status.port}`, status.slots[0].name, undefined, { slotData: false, tags: ["TextOnly"] });
+        // Indices : le serveur n'en envoie le message qu'aux deux joueurs concernés, mais le stockage de la partie
+        // les donne pour tous (une liste par joueur, mise à jour à chaque nouvel indice). Ceux d'avant la connexion
+        // ne sont pas affichés ; un indice est dans la liste de celui qui le trouve et de celui qui le reçoit.
+        const seen = new Set();
+        const hintId = (raw) => `${raw.finding_player}:${raw.location}`;
+        const team = next.players.self.team;
+        const known = await next.storage.notify(status.slots.map((s) => `_read_hints_${team}_${s.slot}`), (key, hints) => {
+          for (const raw of hints || []) {
+            if (seen.has(hintId(raw))) continue;
+            seen.add(hintId(raw));
+            if (client === next) push(hintNodes(next, raw), true);
+          }
+        });
+        for (const hints of Object.values(known || {})) for (const raw of hints || []) seen.add(hintId(raw));
         update({ state: "live", message: null });
       } catch (e) {
         if (!alive) return;
@@ -288,9 +316,9 @@ function useWishlists(code, enabled) {
 
 const FEED_STATES = {
   loading: "Connexion à la partie…",
-  waiting: "La partie n'est pas encore en ligne : les objets envoyés s'afficheront ici.",
+  waiting: "La partie n'est pas encore en ligne : les objets envoyés et les indices s'afficheront ici.",
   retrying: "Connexion à la partie perdue, nouvelle tentative…",
-  live: "Connecté à la partie : les objets envoyés s'afficheront ici.",
+  live: "Connecté à la partie : les objets envoyés et les indices s'afficheront ici.",
 };
 
 // `important` : seulement les objets de progression, utiles et les pièges (et les événements des joueurs),
