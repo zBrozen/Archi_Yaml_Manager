@@ -766,6 +766,7 @@ details.items-group > summary h3, details.items-group > summary h4 { display: in
 .sound-options > legend { padding: 0; margin-bottom: .5rem; }
 .sound-options label.check { display: flex; align-items: baseline; gap: .5rem; }
 .sound-source { margin-left: 1.6rem; gap: .6rem; }
+.mic-reveal { justify-self: start; }
 .sound-meter { display: flex; align-items: center; gap: .75rem; flex-wrap: wrap; }
 .sound-bar { flex: 1 1 12rem; max-width: 24rem; height: .8rem; border: 1px solid var(--border); border-radius: 999px; background: var(--surface-2); overflow: hidden; }
 .sound-bar > span { display: block; height: 100%; background: var(--accent); transition: width .1s linear; }

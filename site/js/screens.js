@@ -697,8 +697,25 @@ function ShareScreen({ room, games = [] }) {
     if (!cameraSupported) return undefined;
     refreshCameras();
     navigator.mediaDevices.addEventListener?.("devicechange", refreshCameras);
-    return () => navigator.mediaDevices.removeEventListener?.("devicechange", refreshCameras);
+    // Micro autorisé depuis l'icône à gauche de l'adresse : les noms des entrées deviennent lisibles.
+    let permission = null;
+    navigator.permissions?.query({ name: "microphone" }).then((p) => { permission = p; p.onchange = refreshCameras; }).catch(() => {});
+    return () => {
+      navigator.mediaDevices.removeEventListener?.("devicechange", refreshCameras);
+      if (permission) permission.onchange = null;
+    };
   }, []);
+  // Le navigateur ne donne le nom des entrées audio qu'une fois le micro autorisé : on le demande, sans rien garder.
+  const revealMics = async () => {
+    setSoundError(null);
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+      for (const track of stream.getTracks()) track.stop();
+      refreshCameras();
+    } catch (e) {
+      setSoundError(audioText(e));
+    }
+  };
 
   // Mesure de ce qui part, tant qu'un overlay affiche le jeu.
   const watched = !!view?.viewers;
@@ -894,7 +911,11 @@ function ShareScreen({ room, games = [] }) {
               <option value="">Celle par défaut de l'ordinateur</option>
               ${mics.map((m) => html`<option value=${m.deviceId}>${m.label}</option>`)}
             </select>
-            ${!mics.length && html`<span class="hint">Les noms des entrées apparaissent après la première autorisation du micro.</span>`}</label>
+            </label>
+          ${!mics.length && html`<div class="stack span-all">
+            <span class="hint">Le navigateur ne donne la liste des entrées qu'une fois le micro autorisé pour ce site.</span>
+            <button type="button" class="ghost small mic-reveal" onClick=${revealMics}>Autoriser le micro pour voir les entrées</button>
+          </div>`}
           <${Volume} value=${micVolume} onChange=${(v) => changeVolume("micro", v)} />
           <label class="check span-all"><input type="checkbox" checked=${micClean} onChange=${(e) => pickMic(micId, e.target.checked)} />
             Réduire le bruit et l'écho (pour un micro ; à décocher pour un câble audio virtuel)</label>
