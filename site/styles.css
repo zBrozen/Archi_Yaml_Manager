@@ -767,6 +767,10 @@ details.items-group > summary h3, details.items-group > summary h4 { display: in
 .sound-options label.check { display: flex; align-items: baseline; gap: .5rem; }
 .sound-source { margin-left: 1.6rem; gap: .6rem; }
 .mic-reveal { justify-self: start; }
+/* Guide du son du jeu seul : étapes numérotées, chacune marquée « ✓ Fait » ou « À faire » */
+.cable-steps { margin: 0; padding-left: 1.4rem; display: grid; gap: .9rem; }
+.cable-steps > li > .stack { margin-top: .4rem; gap: .5rem; }
+.cable-steps > li:last-child { list-style: none; margin-left: -1.4rem; }
 .sound-meter { display: flex; align-items: center; gap: .75rem; flex-wrap: wrap; }
 .sound-bar { flex: 1 1 12rem; max-width: 24rem; height: .8rem; border: 1px solid var(--border); border-radius: 999px; background: var(--surface-2); overflow: hidden; }
 .sound-bar > span { display: block; height: 100%; background: var(--accent); transition: width .1s linear; }

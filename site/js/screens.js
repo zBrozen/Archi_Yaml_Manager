@@ -194,8 +194,8 @@ class AudioMix {
   }
 }
 
-// Le son capté tel quel : sans les traitements prévus pour la voix, qui abîment la musique d'un jeu.
-const RAW_AUDIO = { echoCancellation: false, noiseSuppression: false, autoGainControl: false };
+// Le son capté tel quel, en stéréo : sans les traitements prévus pour la voix, qui abîment la musique d'un jeu.
+const RAW_AUDIO = { echoCancellation: false, noiseSuppression: false, autoGainControl: false, channelCount: { ideal: 2 } };
 // Son de l'ordinateur demandé à la capture d'écran. `windowAudio` (Chrome récent) : le son est aussi proposé pour
 // une fenêtre ; les navigateurs qui ne le connaissent pas l'ignorent.
 const DISPLAY_AUDIO = { audio: RAW_AUDIO, systemAudio: "include", windowAudio: "system", suppressLocalAudioPlayback: false };
@@ -224,6 +224,86 @@ async function captureMic(deviceId, clean) {
     return (await navigator.mediaDevices.getUserMedia({ video: false, audio: processing })).getAudioTracks()[0];
   }
 }
+
+// --- Son du jeu seul, par un câble audio virtuel ----------------------------------------------
+// Le navigateur ne sait capter que le son de tout l'ordinateur (Discord, musique…). Pour le jeu seul, le joueur envoie
+// la sortie du jeu dans un câble audio virtuel (VB-Cable…) depuis le mélangeur de volume de Windows, et le site lit
+// l'autre bout du câble comme une entrée audio. Il le rejoue sur la sortie habituelle (sinon le joueur n'entend plus
+// son jeu) et le mesure, dès que l'option est choisie, avant même le partage.
+
+// Bout « enregistrement » des câbles connus, et leur bout « lecture » (sortie par défaut à ne pas prendre : boucle).
+const CABLE_INPUT = /cable output|vb-audio|voicemeeter out|virtual audio cable|line \d+ \(virtual|blackhole/i;
+const CABLE_OUTPUT = /cable input|vb-audio|voicemeeter in|virtual audio cable|blackhole/i;
+const findCable = (inputs) => inputs.find((d) => CABLE_INPUT.test(d.label) && d.deviceId !== "default" && d.deviceId !== "communications") || null;
+const VB_CABLE_URL = "https://vb-audio.com/Cable/";
+const WINDOWS_MIXER = "ms-settings:apps-volume"; // Paramètres de Windows → Son → Mélangeur de volume
+
+// Gardé hors des composants, comme le partage : le joueur continue d'entendre son jeu sur les autres pages du site.
+class GameSound {
+  constructor() {
+    this.track = null;
+    this.deviceId = null;
+    this.ctx = null;
+    this.analyser = null;
+    this.samples = null;
+    this.monitor = null; // gain de l'écoute sur ce PC
+    this.loop = false; // la sortie par défaut est le câble : pas d'écoute, elle reviendrait dans le câble
+    this.heard = false; // du son est déjà passé par le câble
+    this.listeners = new Set();
+  }
+
+  changed() { for (const listener of this.listeners) listener(); }
+
+  get running() { return !!this.track && this.track.readyState === "live"; }
+
+  async start(deviceId, listen) {
+    if (this.running && this.deviceId === deviceId) return this.setListen(listen);
+    this.stop();
+    const stream = await navigator.mediaDevices.getUserMedia({ video: false, audio: { ...RAW_AUDIO, deviceId: { exact: deviceId } } });
+    this.track = stream.getAudioTracks()[0];
+    this.deviceId = deviceId;
+    this.heard = false;
+    this.track.addEventListener("ended", () => { this.stop(); });
+    this.ctx = new AudioContext({ latencyHint: "interactive" });
+    this.ctx.resume?.().catch(() => {});
+    const source = this.ctx.createMediaStreamSource(stream);
+    this.analyser = this.ctx.createAnalyser();
+    this.analyser.fftSize = 1024;
+    this.samples = new Float32Array(this.analyser.fftSize);
+    this.monitor = this.ctx.createGain();
+    source.connect(this.analyser);
+    source.connect(this.monitor).connect(this.ctx.destination);
+    const outputs = (await navigator.mediaDevices.enumerateDevices()).filter((d) => d.kind === "audiooutput");
+    this.loop = CABLE_OUTPUT.test(outputs.find((d) => d.deviceId === "default")?.label || "");
+    this.setListen(listen);
+  }
+
+  setListen(listen) {
+    if (this.monitor) this.monitor.gain.value = listen && !this.loop ? 1 : 0;
+    this.changed();
+  }
+
+  level() {
+    if (!this.analyser) return 0;
+    this.analyser.getFloatTimeDomainData(this.samples);
+    let peak = 0;
+    for (const v of this.samples) peak = Math.max(peak, Math.abs(v));
+    if (peak > 0.01 && !this.heard) { this.heard = true; this.changed(); }
+    return Math.min(1, peak);
+  }
+
+  // Copie de la piste pour le mélangeur du partage : arrêter le partage ne coupe pas l'écoute.
+  clone() { return this.running ? this.track.clone() : null; }
+
+  stop() {
+    if (!this.track && !this.ctx) return;
+    this.track?.stop();
+    this.ctx?.close().catch(() => {});
+    Object.assign(this, { track: null, deviceId: null, ctx: null, analyser: null, monitor: null, loop: false });
+    this.changed();
+  }
+}
+const gameSound = new GameSound();
 
 const AUDIO_ERRORS = {
   NoAudioError: "Le son de l'ordinateur n'a pas été partagé : dans la fenêtre de choix, prenez l'écran entier et cochez « Partager aussi l'audio du système ».",
@@ -624,8 +704,8 @@ function SentInfo({ sent, quality, camera }) {
 const audioText = (e) => AUDIO_ERRORS[e?.name] || `Son impossible à capter : ${e?.message || e}`;
 const cancelled = (e) => e?.name === "NotAllowedError" || e?.name === "AbortError"; // fenêtre de choix fermée
 
-// Niveau du son qui part vers les overlays, pour vérifier que le bon son est capté.
-function SoundMeter({ mix }) {
+// Niveau d'un son (`source.level()` : mélangeur du partage ou câble du jeu), pour vérifier que le bon son est capté.
+function SoundMeter({ source: mix, label = "Son envoyé" }) {
   const [level, setLevel] = useState(0);
   useEffect(() => {
     let shown = 0;
@@ -634,14 +714,70 @@ function SoundMeter({ mix }) {
   }, [mix]);
   const percent = Math.round(Math.sqrt(level) * 100); // échelle proche de l'oreille
   return html`<div class="sound-meter full">
-    <span>Son envoyé</span>
-    <span class="sound-bar" role="meter" aria-label="Niveau du son envoyé" aria-valuemin="0" aria-valuemax="100" aria-valuenow=${percent}>
+    <span>${label}</span>
+    <span class="sound-bar" role="meter" aria-label=${`Niveau : ${label.toLowerCase()}`} aria-valuemin="0" aria-valuemax="100" aria-valuenow=${percent}>
       <span style=${{ width: `${percent}%` }}></span></span>
     <span class="hint">${level < 0.005 ? "silence" : "son capté"}</span>
   </div>`;
 }
 
-const Volume = ({ value, disabled, onChange }) => html`<label><span>Volume : ${value} %</span>
+// Son du jeu envoyé avec l'image.
+const GAME_AUDIO = {
+  aucun: { label: "Pas de son", text: "Seulement l'image." },
+  jeu: { label: "Le son du jeu seul", text: "Sans Discord ni musique. Un câble audio virtuel gratuit, installé une fois : le site vous guide." },
+  pc: { label: "Tout le son de l'ordinateur", text: "Sans installation, mais Discord, la musique et les notifications partent aussi." },
+};
+
+function useGameSound() {
+  const [, setTick] = useState(0);
+  useEffect(() => {
+    const listener = () => setTick((n) => n + 1);
+    gameSound.listeners.add(listener);
+    return () => gameSound.listeners.delete(listener);
+  }, []);
+}
+
+const Step = ({ done, title, children }) => html`<li class=${done ? "done" : ""}>
+  <strong>${title}</strong>${" "}<span class=${`badge ${done ? "ok" : ""}`}>${done ? "✓ Fait" : "À faire"}</span>
+  ${children && html`<div class="stack">${children}</div>`}
+</li>`;
+
+// Les trois étapes du son du jeu seul, cochées au fur et à mesure : câble trouvé, son du jeu reçu, écoute réglée.
+// `permitted` : le micro est autorisé (sinon le navigateur cache le nom des entrées, et donc le câble).
+function CableGuide({ cable, permitted, onReveal, listen, onListen }) {
+  const running = gameSound.running;
+  return html`<ol class="cable-steps">
+    <${Step} done=${!!cable} title="Installer le câble audio virtuel (une seule fois)">
+      ${cable ? html`<span class="hint">Câble trouvé : ${cable.label}.</span>`
+        : !permitted ? html`<span class="hint">Le site cherche le câble parmi les entrées audio de l'ordinateur : le navigateur
+            demande d'abord l'autorisation du micro (rien n'est enregistré).</span>
+          <button type="button" class="small mic-reveal" onClick=${onReveal}>Chercher le câble</button>`
+        : html`<ol class="tips hint">
+            <li>Téléchargez <a href=${VB_CABLE_URL} target="_blank" rel="noopener">VB-Cable</a> (gratuit, Windows ; sur Mac : BlackHole).</li>
+            <li>Décompressez le fichier, clic droit sur <strong>VBCABLE_Setup_x64</strong> → <strong>Exécuter en tant
+              qu'administrateur</strong> → <strong>Install Driver</strong>.</li>
+            <li>Redémarrez l'ordinateur et revenez ici : le site trouvera le câble tout seul.</li>
+          </ol>`}
+    </${Step}>
+    <${Step} done=${gameSound.heard} title="Envoyer le son du jeu dans le câble">
+      <span class="hint">Lancez le jeu, puis ouvrez le <a href=${WINDOWS_MIXER}>mélangeur de volume de Windows</a> (Paramètres →
+        Système → Son → Mélangeur de volume). À la ligne du jeu ou de l'émulateur, choisissez la sortie${" "}
+        <strong>CABLE Input</strong>. Ne touchez pas à la sortie par défaut : Discord et le reste restent sur votre casque.</span>
+      ${running && !gameSound.heard && html`<span class="hint">En attente du son du jeu : faites du bruit dans le jeu.</span>`}
+    </${Step}>
+    <${Step} done=${running && gameSound.heard} title="Vérifier et entendre le jeu">
+      ${running && html`<${SoundMeter} source=${gameSound} label="Son du jeu" />`}
+      <label class="check"><input type="checkbox" checked=${listen} onChange=${(e) => onListen(e.target.checked)} />
+        Entendre le jeu sur ce PC (le site vous le renvoie tant que cet onglet est ouvert)</label>
+      ${gameSound.loop && html`<div class="notice warn full">La sortie par défaut de Windows est le câble lui-même : le site ne
+        vous renvoie pas le son, il y reviendrait. Remettez votre casque ou vos haut-parleurs comme sortie par défaut ; seul
+        le jeu va dans le câble.</div>`}
+    </${Step}>
+    <li class="hint">Après la partie, remettez la sortie du jeu sur <strong>Par défaut</strong> dans le mélangeur.</li>
+  </ol>`;
+}
+
+const Volume = ({ value, disabled, onChange, label = "Volume" }) => html`<label><span>${label} : ${value} %</span>
   <input type="range" min="0" max="200" step="5" value=${value} disabled=${disabled} onInput=${(e) => onChange(Number(e.target.value))} /></label>`;
 
 // `games` : jeux des YAML du joueur, dont il choisit celui affiché à côté de son nom.
@@ -661,8 +797,13 @@ function ShareScreen({ room, games = [] }) {
   const shownGame = gameName === "aucun" || games.includes(gameName) ? gameName : "";
   const pickGame = (next) => { setGameName(next); live()?.setGame(next); };
   const [cameras, setCameras] = useState([]); // caméras dont le nom est connu (après une première autorisation)
-  // Son : celui de l'ordinateur et/ou un micro (ou une entrée audio), chacun avec son volume en %.
-  const [pcOn, setPcOn] = useSetting("screenAudioPc", false);
+  // Son : celui du jeu (voir GAME_AUDIO) et/ou un micro (ou une entrée audio), chacun avec son volume en %.
+  const [gameAudioName, setGameAudio] = useSetting("screenGameAudio", "aucun");
+  const gameAudio = gameAudioName in GAME_AUDIO ? gameAudioName : "aucun";
+  const pcOn = gameAudio === "pc";
+  const cableOn = gameAudio === "jeu";
+  const [listen, setListen] = useSetting("screenGameListen", true);
+  const [gameVolume, setGameVolume] = useSetting("screenVolumeGame", 100);
   const [micOn, setMicOn] = useSetting("screenAudioMic", false);
   const [micId, setMicId] = useSetting("screenAudioDevice", "");
   const [micClean, setMicClean] = useSetting("screenAudioClean", true);
@@ -671,6 +812,8 @@ function ShareScreen({ room, games = [] }) {
   const [mics, setMics] = useState([]);
   const [soundError, setSoundError] = useState(null);
   const mix = current?.mix || null;
+  useGameSound();
+  const cable = findCable(mics);
   const [sent, setSent] = useState(null);
   const preview = useRef(null);
   const windowSupported = !!navigator.mediaDevices?.getDisplayMedia;
@@ -717,6 +860,16 @@ function ShareScreen({ room, games = [] }) {
     }
   };
 
+  // Son du jeu seul : le câble est lu dès qu'il est trouvé (écoute et mesure avant le partage), et sa copie rejoint
+  // le partage en cours.
+  useEffect(() => {
+    if (!cableOn || !cable) return;
+    gameSound.start(cable.deviceId, listen).catch((e) => setSoundError(audioText(e)));
+  }, [cableOn, cable?.deviceId]);
+  useEffect(() => {
+    if (cableOn && gameSound.running && mix && !mix.has("jeu")) mix.set("jeu", gameSound.clone(), gameVolume / 100);
+  });
+
   // Mesure de ce qui part, tant qu'un overlay affiche le jeu.
   const watched = !!view?.viewers;
   useEffect(() => {
@@ -761,12 +914,19 @@ function ShareScreen({ room, games = [] }) {
       if (!cancelled(e)) setSoundError(audioText(e));
     }
   };
-  // Pendant le partage, chaque réglage du son s'applique tout de suite.
-  const togglePc = (on) => {
-    setPcOn(on);
+  // Pendant le partage, chaque réglage du son s'applique tout de suite (le son du jeu seul : voir les effets plus haut).
+  const pickGameAudio = (next) => {
+    setGameAudio(next);
+    setSoundError(null);
+    if (next !== "jeu") gameSound.stop();
     if (!live()) return;
-    if (on) addPc();
-    else live().mix.remove("pc");
+    if (next !== "pc") live().mix.remove("pc");
+    if (next !== "jeu") live().mix.remove("jeu");
+    if (next === "pc") addPc();
+  };
+  const pickListen = (on) => {
+    setListen(on);
+    gameSound.setListen(on);
   };
   const toggleMic = (on) => {
     setMicOn(on);
@@ -780,7 +940,7 @@ function ShareScreen({ room, games = [] }) {
     if (live() && micOn) openMic(live().mix, id, clean);
   };
   const changeVolume = (name, value) => {
-    (name === "pc" ? setPcVolume : setMicVolume)(value);
+    ({ pc: setPcVolume, jeu: setGameVolume, micro: setMicVolume })[name](value);
     live()?.mix.volume(name, value / 100);
   };
 
@@ -819,6 +979,7 @@ function ShareScreen({ room, games = [] }) {
         stopSharing(); // partage d'une autre room
         const mixer = new AudioMix();
         if (pcTrack) mixer.set("pc", pcTrack, pcVolume / 100);
+        if (cableOn && gameSound.running) mixer.set("jeu", gameSound.clone(), gameVolume / 100);
         if (micOn) await openMic(mixer);
         setSharing(new Broadcast(room.code, savedAccess(room.code).player, stream, mixer, quality, priority, onBroadcast, shownGame), room.code);
       }
@@ -862,7 +1023,7 @@ function ShareScreen({ room, games = [] }) {
       <h2 class="grow">Montrer mon jeu dans le stream</h2>
       ${view && html`<span class="badge ok">● En partage</span>`}
     </div>
-    <p>${pcOn || micOn ? "Votre image et le son choisi vont" : "Votre image (sans le son) va"} directement aux overlays des
+    <p>${gameAudio !== "aucun" || micOn ? "Votre image et le son choisi vont" : "Votre image (sans le son) va"} directement aux overlays des
       streamers de la room. Le site ne les enregistre pas.</p>
     ${!windowSupported && !cameraSupported && html`<div class="notice warn full">Ce navigateur ne peut pas partager d'image :
       ouvrez la room dans Chrome, Edge ou Firefox, sur l'ordinateur où vous jouez.</div>`}
@@ -893,17 +1054,24 @@ function ShareScreen({ room, games = [] }) {
       <span class="hint">Se change pendant le partage.</span></label></div>`}
     <fieldset class="plain-fieldset stack full sound-options">
       <legend><strong>Son envoyé avec l'image</strong></legend>
-      <label class="check"><input type="checkbox" checked=${pcOn} disabled=${busy} onChange=${(e) => togglePc(e.target.checked)} />
-        <span><strong>Le son de l'ordinateur</strong> <span class="hint">: tout ce que vous entendez (jeu, musique, Discord…)</span></span></label>
+      <div class="start-choice full">
+        ${Object.entries(GAME_AUDIO).map(([name, a]) => html`<label class=${`start-option ${gameAudio === name ? "selected" : ""}`}>
+          <input type="radio" name="game-audio" value=${name} checked=${gameAudio === name} disabled=${busy} onChange=${() => pickGameAudio(name)} />
+          <span><strong>${a.label}</strong><span class="hint">${a.text}</span></span>
+        </label>`)}
+      </div>
+      ${cableOn && html`<div class="sound-source stack">
+        <${CableGuide} cable=${cable} permitted=${mics.length > 0} onReveal=${revealMics} listen=${listen} onListen=${pickListen} />
+        ${gameSound.running && html`<div class="fields"><${Volume} label="Volume du jeu envoyé" value=${gameVolume} onChange=${(v) => changeVolume("jeu", v)} /></div>`}
+      </div>`}
       ${pcOn && html`<div class="sound-source stack">
         <p class="hint">${camera
           ? "Une fenêtre de choix s'ouvre d'abord pour le son : prenez l'écran entier et cochez « Partager aussi l'audio du système »."
-          : "Dans la fenêtre de choix, cochez la case du partage de l'audio. Si elle manque pour une fenêtre, le site vous proposera de choisir le son à part."}${" "}
-          Les voix de Discord partent aussi : pour n'envoyer que le jeu, passez par un câble audio virtuel (entrée audio ci-dessous).</p>
+          : "Dans la fenêtre de choix, cochez la case du partage de l'audio. Si elle manque pour une fenêtre, le site vous proposera de choisir le son à part."}</p>
         <div class="fields"><${Volume} value=${pcVolume} onChange=${(v) => changeVolume("pc", v)} /></div>
       </div>`}
       <label class="check"><input type="checkbox" checked=${micOn} disabled=${busy} onChange=${(e) => toggleMic(e.target.checked)} />
-        <span><strong>Un micro ou une entrée audio</strong> <span class="hint">: votre voix, ou le jeu seul par un câble audio virtuel (VB-Cable…)</span></span></label>
+        <span><strong>Ma voix (micro)</strong> <span class="hint">: en plus du jeu, ou une autre entrée audio</span></span></label>
       ${micOn && html`<div class="sound-source stack">
         <div class="fields">
           <label><span>Entrée</span>
@@ -918,7 +1086,7 @@ function ShareScreen({ room, games = [] }) {
           </div>`}
           <${Volume} value=${micVolume} onChange=${(v) => changeVolume("micro", v)} />
           <label class="check span-all"><input type="checkbox" checked=${micClean} onChange=${(e) => pickMic(micId, e.target.checked)} />
-            Réduire le bruit et l'écho (pour un micro ; à décocher pour un câble audio virtuel)</label>
+            Réduire le bruit et l'écho (à décocher pour une entrée qui porte de la musique)</label>
         </div>
       </div>`}
     </fieldset>
@@ -935,7 +1103,7 @@ function ShareScreen({ room, games = [] }) {
       <button type="button" class="ghost small" onClick=${addPc}>Choisir le son de l'ordinateur</button>
     </div>`}
     ${soundError && html`<div class="notice error full">${soundError}</div>`}
-    ${mix?.active && html`<${SoundMeter} mix=${mix} />`}
+    ${mix?.active && html`<${SoundMeter} source=${mix} />`}
     ${view && html`<video class="screen-preview" ref=${preview} autoplay muted playsinline aria-label="Aperçu de votre partage"></video>`}
     <${SentInfo} sent=${sent} quality=${quality} camera=${camera} />
     ${(windowSupported || cameraSupported) && html`<details class="more">

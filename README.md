@@ -307,9 +307,12 @@ Streamlabs, XSplit…).
   repart de ce joueur. Le goal est lu dans le YAML de chaque joueur (`slotGoal` : option `goal` ou proche, ou
   celle qui a le plus de poids), donc absent dans une room de partie déjà hébergée.
 
-  **Son** : chaque joueur peut envoyer avec son image le son de l'ordinateur (case de la fenêtre de choix du
-  navigateur, ou une capture de l'écran à part avec la caméra d'OBS) et/ou un micro ou une entrée audio (câble
-  audio virtuel), mélangés avec un volume chacun (Opus stéréo, 128 kbit/s). L'overlay ne fait entendre qu'un joueur
+  **Son** : chaque joueur peut envoyer avec son image le son du jeu seul, tout le son de l'ordinateur (case de la
+  fenêtre de choix du navigateur, ou une capture de l'écran à part avec la caméra d'OBS) et/ou son micro, mélangés avec
+  un volume chacun (Opus stéréo, 128 kbit/s). Le navigateur ne sait pas isoler le son d'une fenêtre : pour le jeu seul,
+  un guide fait installer un câble audio virtuel (VB-Cable) et y envoyer le jeu depuis le mélangeur de volume de
+  Windows ; le site trouve le câble parmi les entrées audio, rejoue le son du jeu sur la sortie du joueur (sauf si
+  cette sortie est le câble lui-même) et vérifie que le son arrive. L'overlay ne fait entendre qu'un joueur
   à la fois : celui choisi en direct dans la vue « Overlay » (colonne `sound` : un joueur, `vedette` ou aucun), ou
   d'un clic sur le haut-parleur d'un écran (dans OBS : « Interagir »), jusqu'au prochain choix depuis la room. Pour
   régler le volume dans OBS, cocher « Contrôler l'audio via OBS » dans la source Navigateur.
