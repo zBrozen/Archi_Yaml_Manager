@@ -311,8 +311,9 @@ Streamlabs, XSplit…).
   fenêtre de choix du navigateur, ou une capture de l'écran à part avec la caméra d'OBS) et/ou son micro, mélangés avec
   un volume chacun (Opus stéréo, 128 kbit/s). Le navigateur ne sait pas isoler le son d'une fenêtre : pour le jeu seul,
   un guide fait installer un câble audio virtuel (VB-Cable) et y envoyer le jeu depuis le mélangeur de volume de
-  Windows ; le site trouve le câble parmi les entrées audio, rejoue le son du jeu sur la sortie du joueur (sauf si
-  cette sortie est le câble lui-même) et vérifie que le son arrive. L'overlay ne fait entendre qu'un joueur
+  Windows ; le site trouve le câble parmi les entrées audio, rejoue le son du jeu sur le casque du joueur (choisi, ou
+  trouvé seul quand Windows a pris le câble comme sortie par défaut) et vérifie que le son arrive. Il signale un câble
+  devenu haut-parleur ou micro par défaut (fréquent à l'installation) et explique comment tout remettre comme avant. L'overlay ne fait entendre qu'un joueur
   à la fois : celui choisi en direct dans la vue « Overlay » (colonne `sound` : un joueur, `vedette` ou aucun), ou
   d'un clic sur le haut-parleur d'un écran (dans OBS : « Interagir »), jusqu'au prochain choix depuis la room. Pour
   régler le volume dans OBS, cocher « Contrôler l'audio via OBS » dans la source Navigateur.

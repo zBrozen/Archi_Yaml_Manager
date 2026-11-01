@@ -769,7 +769,13 @@ details.items-group > summary h3, details.items-group > summary h4 { display: in
 .mic-reveal { justify-self: start; }
 /* Guide du son du jeu seul : étapes numérotées, chacune marquée « ✓ Fait » ou « À faire » */
 .cable-steps { margin: 0; padding-left: 1.4rem; display: grid; gap: .9rem; }
-.cable-steps > li > .stack { margin-top: .4rem; gap: .5rem; }.sound-meter { display: flex; align-items: center; gap: .75rem; flex-wrap: wrap; }
+.cable-steps > li > .stack { margin-top: .4rem; gap: .5rem; }
+/* « Revenir à un son comme avant » : encadré non numéroté, toujours visible sous les étapes */
+.cable-steps > li.cable-undo {
+  list-style: none; margin-left: -1.4rem; padding: .8rem 1rem; display: grid; gap: .4rem;
+  border: 1px solid var(--border); border-radius: 10px; background: var(--surface-2);
+}
+.cable-defaults .tips { margin: 0; }.sound-meter { display: flex; align-items: center; gap: .75rem; flex-wrap: wrap; }
 .sound-bar { flex: 1 1 12rem; max-width: 24rem; height: .8rem; border: 1px solid var(--border); border-radius: 999px; background: var(--surface-2); overflow: hidden; }
 .sound-bar > span { display: block; height: 100%; background: var(--accent); transition: width .1s linear; }
 /* Écrans : choix entre partager son jeu et streamer la partie */

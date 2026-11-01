@@ -237,6 +237,20 @@ const CABLE_OUTPUT = /cable input|vb-audio|voicemeeter in|virtual audio cable|bl
 const findCable = (inputs) => inputs.find((d) => CABLE_INPUT.test(d.label) && d.deviceId !== "default" && d.deviceId !== "communications") || null;
 const VB_CABLE_URL = "https://vb-audio.com/Cable/";
 const WINDOWS_MIXER = "ms-settings:apps-volume"; // Paramètres de Windows → Son → Mélangeur de volume
+const WINDOWS_SOUND = "ms-settings:sound"; // Paramètres de Windows → Son (sortie et entrée par défaut)
+const isAlias = (d) => d.deviceId === "default" || d.deviceId === "communications";
+
+// Sorties et entrées par défaut de Windows (l'installation de VB-Cable les met souvent sur le câble), et sorties où
+// rejouer le son du jeu (tout sauf le câble).
+async function audioDevices() {
+  const all = await navigator.mediaDevices.enumerateDevices();
+  const label = (kind) => all.find((d) => d.kind === kind && d.deviceId === "default")?.label || "";
+  return {
+    outputs: all.filter((d) => d.kind === "audiooutput" && d.label && !isAlias(d) && !CABLE_OUTPUT.test(d.label)),
+    cableOutput: CABLE_OUTPUT.test(label("audiooutput")),
+    cableInput: CABLE_INPUT.test(label("audioinput")),
+  };
+}
 
 // Gardé hors des composants, comme le partage : le joueur continue d'entendre son jeu sur les autres pages du site.
 class GameSound {
@@ -247,7 +261,8 @@ class GameSound {
     this.analyser = null;
     this.samples = null;
     this.monitor = null; // gain de l'écoute sur ce PC
-    this.loop = false; // la sortie par défaut est le câble : pas d'écoute, elle reviendrait dans le câble
+    this.sink = ""; // sortie de l'écoute ("" : celle par défaut de Windows)
+    this.loop = false; // la sortie de l'écoute est le câble : pas d'écoute, elle reviendrait dans le câble
     this.heard = false; // du son est déjà passé par le câble
     this.listeners = new Set();
   }
@@ -256,8 +271,9 @@ class GameSound {
 
   get running() { return !!this.track && this.track.readyState === "live"; }
 
-  async start(deviceId, listen) {
-    if (this.running && this.deviceId === deviceId) return this.setListen(listen);
+  // `listen` : rejouer le son sur `sink` (voir setOutput).
+  async start(deviceId, listen, sink) {
+    if (this.running && this.deviceId === deviceId) return this.setOutput(listen, sink);
     this.stop();
     const stream = await navigator.mediaDevices.getUserMedia({ video: false, audio: { ...RAW_AUDIO, deviceId: { exact: deviceId } } });
     this.track = stream.getAudioTracks()[0];
@@ -272,13 +288,22 @@ class GameSound {
     this.samples = new Float32Array(this.analyser.fftSize);
     this.monitor = this.ctx.createGain();
     source.connect(this.analyser);
+    this.monitor.gain.value = 0;
     source.connect(this.monitor).connect(this.ctx.destination);
-    const outputs = (await navigator.mediaDevices.enumerateDevices()).filter((d) => d.kind === "audiooutput");
-    this.loop = CABLE_OUTPUT.test(outputs.find((d) => d.deviceId === "default")?.label || "");
-    this.setListen(listen);
+    await this.setOutput(listen, sink);
   }
 
-  setListen(listen) {
+  // Écoute sur `sink` (identifiant d'une sortie, "" : celle par défaut de Windows). Le casque peut être choisi même
+  // si Windows a pris le câble comme sortie par défaut ; les navigateurs sans choix de sortie gardent celle par défaut.
+  async setOutput(listen, sink = "") {
+    if (!this.ctx) return;
+    let target = sink;
+    if (this.ctx.setSinkId) {
+      try { await this.ctx.setSinkId(sink); } catch { target = ""; }
+    } else target = "";
+    this.sink = target;
+    const outputs = (await navigator.mediaDevices.enumerateDevices()).filter((d) => d.kind === "audiooutput");
+    this.loop = CABLE_OUTPUT.test(outputs.find((d) => d.deviceId === (target || "default"))?.label || "");
     if (this.monitor) this.monitor.gain.value = listen && !this.loop ? 1 : 0;
     this.changed();
   }
@@ -299,7 +324,7 @@ class GameSound {
     if (!this.track && !this.ctx) return;
     this.track?.stop();
     this.ctx?.close().catch(() => {});
-    Object.assign(this, { track: null, deviceId: null, ctx: null, analyser: null, monitor: null, loop: false });
+    Object.assign(this, { track: null, deviceId: null, ctx: null, analyser: null, monitor: null, sink: "", loop: false });
     this.changed();
   }
 }
@@ -775,7 +800,49 @@ const CableRouting = () => html`<div class="stack">
     dans le mélangeur (ou <strong>Réinitialiser</strong> en bas de la page, pour toutes).</span>
 </div>`;
 
-function CableGuide({ cable, permitted, onReveal, listen, onListen }) {
+// Remettre son casque (ou ses haut-parleurs) comme sortie par défaut de Windows.
+const DefaultOutputHelp = () => html`<ul class="tips">
+  <li><strong>Windows 11</strong> : cliquez sur l'icône du haut-parleur en bas à droite de l'écran, puis sur la flèche${" "}
+    <strong>›</strong> à droite de la barre de volume, et choisissez votre casque ou vos haut-parleurs (pas « CABLE Input »).</li>
+  <li><strong>Windows 10</strong> : cliquez sur l'icône du haut-parleur en bas à droite, puis sur le nom de l'appareil
+    au-dessus du volume, et choisissez votre casque ou vos haut-parleurs.</li>
+  <li>Ou : <a href=${WINDOWS_SOUND}>Paramètres de son de Windows</a> → <strong>Sortie</strong>.</li>
+</ul>`;
+
+// Windows a pris le câble comme haut-parleur ou micro par défaut (fréquent juste après l'installation de VB-Cable) :
+// tout le son de l'ordinateur part dans le stream et le joueur n'entend plus rien, ou ses amis entendent le jeu au
+// lieu de sa voix. Affiché quel que soit le son choisi.
+function CableDefaults({ devices }) {
+  if (!devices.cableOutput && !devices.cableInput) return null;
+  return html`<div class="notice warn full stack cable-defaults" role="alert">
+    ${devices.cableOutput && html`<div class="stack">
+      <strong>Windows a pris le câble comme haut-parleur par défaut.</strong>
+      <span>Ça arrive souvent juste après l'installation de VB-Cable. Résultat : vous n'entendez plus rien dans votre casque,
+        et tout le son de l'ordinateur (Discord compris) part dans le câble, donc dans le stream. Remettez votre casque :</span>
+      <${DefaultOutputHelp} />
+    </div>`}
+    ${devices.cableInput && html`<div class="stack">
+      <strong>Le câble est aussi votre micro par défaut.</strong>
+      <span>Discord et les autres applications entendraient le jeu au lieu de votre voix. Dans les${" "}
+        <a href=${WINDOWS_SOUND}>paramètres de son de Windows</a> → <strong>Entrée</strong>, choisissez votre vrai micro
+        (pas « CABLE Output »).</span>
+    </div>`}
+    <span class="hint">Ce message disparaît tout seul une fois corrigé.</span>
+  </div>`;
+}
+
+// Tout remettre comme avant l'installation : affiché en clair dans le guide, et replié quand le joueur n'utilise plus le câble.
+const CableUndo = () => html`<ol class="tips">
+  <li><strong>Haut-parleur par défaut</strong> : votre casque ou vos haut-parleurs, pas « CABLE Input ».<${DefaultOutputHelp} /></li>
+  <li><strong>Micro par défaut</strong> : votre micro, pas « CABLE Output » (<a href=${WINDOWS_SOUND}>paramètres de son</a>${" "}
+    → <strong>Entrée</strong>).</li>
+  <li><strong>Applications</strong> : dans le <a href=${WINDOWS_MIXER}>mélangeur de volume</a>, bouton${" "}
+    <strong>Réinitialiser</strong> en bas de la page (toutes les applications reviennent sur « Par défaut »).</li>
+  <li><strong>Désinstaller le câble (facultatif)</strong> : relancez <strong>VBCABLE_Setup_x64</strong> en administrateur
+    → <strong>Remove Driver</strong>, puis redémarrez l'ordinateur.</li>
+</ol>`;
+
+function CableGuide({ cable, permitted, onReveal, listen, onListen, outputs, sink, onSink }) {
   const running = gameSound.running;
   return html`<ol class="cable-steps">
     <${Step} done=${!!cable} title="Installer le câble audio virtuel (une seule fois)">
@@ -796,10 +863,20 @@ function CableGuide({ cable, permitted, onReveal, listen, onListen }) {
       ${running && html`<${SoundMeter} source=${gameSound} label="Son du jeu" />`}
       <label class="check"><input type="checkbox" checked=${listen} onChange=${(e) => onListen(e.target.checked)} />
         Entendre le jeu sur ce PC (le site vous le renvoie tant que cet onglet est ouvert)</label>
-      ${gameSound.loop && html`<div class="notice warn full">La sortie par défaut de Windows est le câble lui-même : le site ne
-        vous renvoie pas le son, il y reviendrait. Remettez votre casque ou vos haut-parleurs comme sortie par défaut ; seul
-        le jeu va dans le câble.</div>`}
+      ${listen && outputs.length > 0 && !!window.AudioContext?.prototype.setSinkId && html`<div class="fields"><label><span>Entendre le jeu sur</span>
+        <select value=${sink} onChange=${(e) => onSink(e.target.value)}>
+          <option value="">La sortie par défaut de Windows</option>
+          ${outputs.map((d) => html`<option value=${d.deviceId}>${d.label}</option>`)}
+        </select></label></div>`}
+      ${listen && gameSound.loop && html`<div class="notice warn full">Le site ne peut pas vous renvoyer le son du jeu : la
+        sortie choisie est le câble lui-même, il y reviendrait. Choisissez votre casque ci-dessus, ou remettez-le comme
+        sortie par défaut de Windows.</div>`}
     </${Step}>
+    <li class="cable-undo">
+      <strong>Revenir à un son comme avant</strong>
+      <span class="hint">Pour arrêter de partager le son du jeu, ou si quelque chose ne marche plus :</span>
+      <${CableUndo} />
+    </li>
   </ol>`;
 }
 
@@ -829,6 +906,12 @@ function ShareScreen({ room, games = [] }) {
   const pcOn = gameAudio === "pc";
   const cableOn = gameAudio === "jeu";
   const [listen, setListen] = useSetting("screenGameListen", true);
+  const [sinkName, setSink] = useSetting("screenGameSink", "");
+  const [devices, setDevices] = useState({ outputs: [], cableOutput: false, cableInput: false });
+  // Sortie de l'écoute : celle choisie, sinon celle de Windows, sauf si c'est le câble (le premier casque ou
+  // haut-parleur trouvé, pour que le joueur entende son jeu en attendant de remettre son casque par défaut).
+  const sink = devices.outputs.some((d) => d.deviceId === sinkName) ? sinkName
+    : devices.cableOutput ? devices.outputs[0]?.deviceId || "" : "";
   const [gameVolume, setGameVolume] = useSetting("screenVolumeGame", 100);
   const [micOn, setMicOn] = useSetting("screenAudioMic", false);
   const [micId, setMicId] = useSetting("screenAudioDevice", "");
@@ -860,17 +943,21 @@ function ShareScreen({ room, games = [] }) {
   // Liste des caméras et des entrées audio, tenue à jour quand on en branche ou qu'OBS démarre sa caméra virtuelle.
   const refreshCameras = () => {
     listCameras().then((list) => setCameras(list.filter((d) => d.label))).catch(() => {});
-    listMics().then((list) => setMics(list.filter((d) => d.label && d.deviceId !== "default" && d.deviceId !== "communications"))).catch(() => {});
+    listMics().then((list) => setMics(list.filter((d) => d.label && !isAlias(d)))).catch(() => {});
+    audioDevices().then(setDevices).catch(() => {});
   };
   useEffect(() => {
     if (!cameraSupported) return undefined;
     refreshCameras();
     navigator.mediaDevices.addEventListener?.("devicechange", refreshCameras);
+    // Retour sur la page après un réglage de Windows (sortie ou entrée par défaut changée).
+    window.addEventListener("focus", refreshCameras);
     // Micro autorisé depuis l'icône à gauche de l'adresse : les noms des entrées deviennent lisibles.
     let permission = null;
     navigator.permissions?.query({ name: "microphone" }).then((p) => { permission = p; p.onchange = refreshCameras; }).catch(() => {});
     return () => {
       navigator.mediaDevices.removeEventListener?.("devicechange", refreshCameras);
+      window.removeEventListener("focus", refreshCameras);
       if (permission) permission.onchange = null;
     };
   }, []);
@@ -890,8 +977,9 @@ function ShareScreen({ room, games = [] }) {
   // le partage en cours.
   useEffect(() => {
     if (!cableOn || !cable) return;
-    gameSound.start(cable.deviceId, listen).catch((e) => setSoundError(audioText(e)));
+    gameSound.start(cable.deviceId, listen, sink).catch((e) => setSoundError(audioText(e)));
   }, [cableOn, cable?.deviceId]);
+  useEffect(() => { if (gameSound.running) gameSound.setOutput(listen, sink); }, [listen, sink]);
   useEffect(() => {
     if (cableOn && gameSound.running && mix && !mix.has("jeu")) mix.set("jeu", gameSound.clone(), gameVolume / 100);
   });
@@ -949,10 +1037,6 @@ function ShareScreen({ room, games = [] }) {
     if (next !== "pc") live().mix.remove("pc");
     if (next !== "jeu") live().mix.remove("jeu");
     if (next === "pc") addPc();
-  };
-  const pickListen = (on) => {
-    setListen(on);
-    gameSound.setListen(on);
   };
   const toggleMic = (on) => {
     setMicOn(on);
@@ -1080,6 +1164,7 @@ function ShareScreen({ room, games = [] }) {
       <span class="hint">Se change pendant le partage.</span></label></div>`}
     <fieldset class="plain-fieldset stack full sound-options">
       <legend><strong>Son envoyé avec l'image</strong></legend>
+      <${CableDefaults} devices=${devices} />
       <div class="start-choice full">
         ${Object.entries(GAME_AUDIO).map(([name, a]) => html`<label class=${`start-option ${gameAudio === name ? "selected" : ""}`}>
           <input type="radio" name="game-audio" value=${name} checked=${gameAudio === name} disabled=${busy} onChange=${() => pickGameAudio(name)} />
@@ -1087,9 +1172,12 @@ function ShareScreen({ room, games = [] }) {
         </label>`)}
       </div>
       ${cableOn && html`<div class="sound-source stack">
-        <${CableGuide} cable=${cable} permitted=${mics.length > 0} onReveal=${revealMics} listen=${listen} onListen=${pickListen} />
+        <${CableGuide} cable=${cable} permitted=${mics.length > 0} onReveal=${revealMics} listen=${listen} onListen=${setListen}
+          outputs=${devices.outputs} sink=${sink} onSink=${setSink} />
         ${gameSound.running && html`<div class="fields"><${Volume} label="Volume du jeu envoyé" value=${gameVolume} onChange=${(v) => changeVolume("jeu", v)} /></div>`}
       </div>`}
+      ${!cableOn && cable && html`<details class="more"><summary>Le câble audio virtuel est installé : revenir à un son comme avant</summary>
+        <${CableUndo} /></details>`}
       ${pcOn && html`<div class="sound-source stack">
         <p class="hint">${camera
           ? "Une fenêtre de choix s'ouvre d'abord pour le son : prenez l'écran entier et cochez « Partager aussi l'audio du système »."
