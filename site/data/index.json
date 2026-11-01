@@ -1,6 +1,6 @@
 {
  "ap_version": "0.6.8",
- "generated_at": "2026-10-31T14:43:28+00:00",
+ "generated_at": "2026-11-01T11:46:37+00:00",
  "games": [
   {
    "game": "2048",
@@ -216,7 +216,7 @@
    "file": "games/animal-crossing.json",
    "source": "custom",
    "apworld": "animal_crossing.apworld",
-   "world_version": "0.5.4",
+   "world_version": "0.5.5",
    "guides": "guides/animal-crossing.json",
    "sheet": {
     "game": "Animal Crossing (GameCube)",
@@ -679,6 +679,18 @@
    "guides": "guides/blockupelago.json",
    "sheet": {
     "game": "Blockupelago",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Bloodstained: Ritual of the Night",
+   "file": "games/bloodstained-ritual-of-the-night.json",
+   "source": "custom",
+   "apworld": "bloodstained_rotn.apworld",
+   "world_version": null,
+   "guides": "guides/bloodstained-ritual-of-the-night.json",
+   "sheet": {
+    "game": "Bloodstained: Ritual of the Night",
     "stability": "Unstable"
    }
   },
@@ -1363,7 +1375,7 @@
    "file": "games/crab-champions.json",
    "source": "custom",
    "apworld": "crabchampions.apworld",
-   "world_version": "1.4.0",
+   "world_version": null,
    "guides": "guides/crab-champions.json",
    "sheet": {
     "game": "Crab Champions",
@@ -1460,7 +1472,7 @@
    "file": "games/crypt-of-the-necrodancer.json",
    "source": "custom",
    "apworld": "cotnd.apworld",
-   "world_version": "0.8.4",
+   "world_version": "0.8.5",
    "guides": "guides/crypt-of-the-necrodancer.json",
    "sheet": {
     "game": "Crypt of the NecroDancer",
@@ -2022,7 +2034,7 @@
    "file": "games/dungeon-defenders.json",
    "source": "custom",
    "apworld": "dungeon_defenders.apworld",
-   "world_version": "0.8.1",
+   "world_version": "0.8.2",
    "guides": "guides/dungeon-defenders.json",
    "sheet": {
     "game": "Dungeon Defenders",
@@ -3805,7 +3817,7 @@
    "file": "games/manic-miners.json",
    "source": "custom",
    "apworld": "manicminers.apworld",
-   "world_version": "1.6.0",
+   "world_version": "1.6.1",
    "guides": "guides/manic-miners.json",
    "sheet": {
     "game": "LEGO Rock Raiders/Manic Miners",
@@ -5319,7 +5331,7 @@
    "file": "games/pokemon-snap.json",
    "source": "custom",
    "apworld": "pokemon_snap.apworld",
-   "world_version": "0.8.0",
+   "world_version": "0.9.0",
    "guides": "guides/pokemon-snap.json",
    "sheet": {
     "game": "Pokémon Snap",
@@ -5892,7 +5904,7 @@
    "file": "games/saints-row-2.json",
    "source": "custom",
    "apworld": "saints_row_2.apworld",
-   "world_version": "0.4.0",
+   "world_version": "0.4.1",
    "guides": "guides/saints-row-2.json",
    "sheet": {
     "game": "Saints Row 2",
@@ -6205,7 +6217,7 @@
    "file": "games/silver-daze.json",
    "source": "custom",
    "apworld": "silverdaze.apworld",
-   "world_version": null,
+   "world_version": "0.7.5",
    "guides": "guides/silver-daze.json",
    "sheet": {
     "game": "Silver Daze",

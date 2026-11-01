@@ -278,7 +278,7 @@
  },
  {
   "game": "Animal Crossing",
-  "version": "0.5.4",
+  "version": "0.5.5",
   "authors": [
    "haloopdy"
   ],
@@ -294,8 +294,8 @@
    "game": "Animal Crossing (GameCube)",
    "stability": "Stable"
   },
-  "download": "https://github.com/randomouscrap98/AP_ACGC_PC/releases/download/v0.5.4/animal_crossing.apworld",
-  "release": "https://github.com/randomouscrap98/AP_ACGC_PC/releases/tag/v0.5.4",
+  "download": "https://github.com/randomouscrap98/AP_ACGC_PC/releases/download/v0.5.5/animal_crossing.apworld",
+  "release": "https://github.com/randomouscrap98/AP_ACGC_PC/releases/tag/v0.5.5",
   "links": [
    "https://github.com/randomouscrap98/AP_ACGC_PC/releases"
   ]
@@ -623,8 +623,8 @@
    "game": "Ark: Survival Evolved",
    "stability": "Unstable"
   },
-  "download": "https://github.com/Jbaker16163/Ark-Survival-Archipelago/releases/download/v0.3.2/ark_ase.apworld",
-  "release": "https://github.com/Jbaker16163/Ark-Survival-Archipelago/releases/tag/v0.3.2",
+  "download": "https://github.com/Jbaker16163/Ark-Survival-Archipelago/releases/download/v0.3.3/ark_ase.apworld",
+  "release": "https://github.com/Jbaker16163/Ark-Survival-Archipelago/releases/tag/v0.3.3",
   "links": [
    "https://github.com/Jbaker16163/Ark-Survival-Archipelago/releases/latest"
   ]
@@ -1165,6 +1165,32 @@
   "release": "https://github.com/StefanDucharme/blockupelago/releases/tag/v2.2",
   "links": [
    "https://github.com/StefanDucharme/blockupelago/releases"
+  ]
+ },
+ {
+  "game": "Bloodstained: Ritual of the Night",
+  "version": "1.0.2",
+  "authors": [
+   "VGFreak95"
+  ],
+  "file": "bloodstained_rotn.apworld",
+  "source": "https://github.com/vgfreak95/BloodstainedAP",
+  "license": "MIT",
+  "license_url": "https://github.com/vgfreak95/BloodstainedAP/blob/HEAD/LICENSE",
+  "copyright": [
+   "Copyright (c) 2017 LLCoolDave",
+   "Copyright (c) 2025 Berserker66",
+   "Copyright (c) 2022 CaitSith2",
+   "Copyright (c) 2021 LegendaryLinux"
+  ],
+  "sheet": {
+   "game": "Bloodstained: Ritual of the Night",
+   "stability": "Unstable"
+  },
+  "download": "https://github.com/vgfreak95/BloodstainedAP/releases/download/1.0.4/bloodstained_rotn.apworld",
+  "release": "https://github.com/vgfreak95/BloodstainedAP/releases/tag/1.0.4",
+  "links": [
+   "https://github.com/vgfreak95/BloodstainedAP/releases"
   ]
  },
  {
@@ -1879,8 +1905,8 @@
    "game": "Chants of Sennaar",
    "stability": null
   },
-  "download": "https://github.com/syn-aesthesis/ChantsOfSennaarAP/releases/download/0.2.0/chants_of_sennaar.apworld",
-  "release": "https://github.com/syn-aesthesis/ChantsOfSennaarAP/releases/tag/0.2.0",
+  "download": "https://github.com/syn-aesthesis/ChantsOfSennaarAP/releases/download/0.2.1/chants_of_sennaar.apworld",
+  "release": "https://github.com/syn-aesthesis/ChantsOfSennaarAP/releases/tag/0.2.1",
   "links": [
    "https://github.com/syn-aesthesis/ChantsOfSennaarAP/releases"
   ]
@@ -2323,7 +2349,7 @@
  },
  {
   "game": "Crab Champions",
-  "version": "1.4.0",
+  "version": "2.0.0",
   "authors": [
    "Str8UpWHITE64"
   ],
@@ -2336,8 +2362,8 @@
    "game": "Crab Champions",
    "stability": "Unstable"
   },
-  "download": "https://github.com/Str8UpWHITE64/CrabChampionsAP/releases/download/1.4.0/crabchampions.apworld",
-  "release": "https://github.com/Str8UpWHITE64/CrabChampionsAP/releases/tag/1.4.0",
+  "download": "https://github.com/Str8UpWHITE64/CrabChampionsAP/releases/download/2.0.0/crabchampions.apworld",
+  "release": "https://github.com/Str8UpWHITE64/CrabChampionsAP/releases/tag/2.0.0",
   "links": [
    "https://github.com/Str8UpWHITE64/CrabChampionsAP/releases"
   ]
@@ -2510,7 +2536,7 @@
  },
  {
   "game": "Crypt of the NecroDancer",
-  "version": "0.8.4",
+  "version": "0.8.5",
   "authors": [
    "lastingParadox"
   ],
@@ -2528,8 +2554,8 @@
    "game": "Crypt of the NecroDancer",
    "stability": "Stable"
   },
-  "download": "https://github.com/lastingParadox/Archipelago-CotND/releases/download/v0.8.4/cotnd.apworld",
-  "release": "https://github.com/lastingParadox/Archipelago-CotND/releases/tag/v0.8.4",
+  "download": "https://github.com/lastingParadox/Archipelago-CotND/releases/download/v0.8.5/cotnd.apworld",
+  "release": "https://github.com/lastingParadox/Archipelago-CotND/releases/tag/v0.8.5",
   "links": [
    "https://github.com/lastingParadox/Archipelago-CotND/releases/latest"
   ]
@@ -3529,8 +3555,8 @@
    "game": "Dungeon Defenders",
    "stability": "Unstable"
   },
-  "download": "https://github.com/Haywire32/DD1-AP/releases/download/v0.8.1/dungeon_defenders.apworld",
-  "release": "https://github.com/Haywire32/DD1-AP/releases/tag/v0.8.1",
+  "download": "https://github.com/Haywire32/DD1-AP/releases/download/v0.8.2/dungeon_defenders.apworld",
+  "release": "https://github.com/Haywire32/DD1-AP/releases/tag/v0.8.2",
   "links": [
    "https://github.com/Haywire32/DD1-AP/releases"
   ]
@@ -6688,7 +6714,7 @@
  },
  {
   "game": "Manic Miners",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "authors": [
    "fogmike"
   ],
@@ -6706,8 +6732,8 @@
    "game": "LEGO Rock Raiders/Manic Miners",
    "stability": "Unstable"
   },
-  "download": "https://github.com/fogmike/Archipelago_ManicMiners/releases/download/v1.6.0/manicminers.apworld",
-  "release": "https://github.com/fogmike/Archipelago_ManicMiners/releases/tag/v1.6.0",
+  "download": "https://github.com/fogmike/Archipelago_ManicMiners/releases/download/v1.6.1/manicminers.apworld",
+  "release": "https://github.com/fogmike/Archipelago_ManicMiners/releases/tag/v1.6.1",
   "links": [
    "https://github.com/fogmike/Archipelago_ManicMiners/releases"
   ]
@@ -9512,7 +9538,7 @@
  },
  {
   "game": "Pokemon Snap",
-  "version": "0.8.0",
+  "version": "0.9.0",
   "authors": [
    "ArsonAssassin",
    "SomeJakeGuy",
@@ -9532,8 +9558,8 @@
    "game": "Pokémon Snap",
    "stability": "Unstable"
   },
-  "download": "https://github.com/nielrenned/PokemonSnap_Archipelago/releases/download/v0.8.0/pokemon_snap.apworld",
-  "release": "https://github.com/nielrenned/PokemonSnap_Archipelago/releases/tag/v0.8.0",
+  "download": "https://github.com/nielrenned/PokemonSnap_Archipelago/releases/download/v0.9.0/pokemon_snap.apworld",
+  "release": "https://github.com/nielrenned/PokemonSnap_Archipelago/releases/tag/v0.9.0",
   "links": [
    "https://github.com/nielrenned/PokemonSnap_Archipelago/releases/latest"
   ]
@@ -10155,8 +10181,8 @@
    "game": "Refunct",
    "stability": "Stable"
   },
-  "download": "https://github.com/spinerak/refunct-tas-archipelago/releases/download/v1.8.0c/refunct.apworld",
-  "release": "https://github.com/spinerak/refunct-tas-archipelago/releases/tag/v1.8.0c",
+  "download": "https://github.com/spinerak/refunct-tas-archipelago/releases/download/v1.8.0d/refunct.apworld",
+  "release": "https://github.com/spinerak/refunct-tas-archipelago/releases/tag/v1.8.0d",
   "links": [
    "https://github.com/spinerak/refunct-tas-archipelago/releases"
   ]
@@ -10545,7 +10571,7 @@
  },
  {
   "game": "Saints Row 2",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "authors": [
    "hoxi"
   ],
@@ -10562,8 +10588,8 @@
    "pr_status": "Not PRing",
    "adult": true
   },
-  "download": "https://github.com/hoXyy/SaintsRow2Archipelago/releases/download/0.4.0/saints_row_2.apworld",
-  "release": "https://github.com/hoXyy/SaintsRow2Archipelago/releases/tag/0.4.0",
+  "download": "https://github.com/hoXyy/SaintsRow2Archipelago/releases/download/0.4.1/saints_row_2.apworld",
+  "release": "https://github.com/hoXyy/SaintsRow2Archipelago/releases/tag/0.4.1",
   "links": [
    "https://github.com/hoXyy/SaintsRow2Archipelago/releases/"
   ]
@@ -11107,9 +11133,11 @@
   ]
  },
  {
-  "game": "silverdaze",
-  "version": null,
-  "authors": [],
+  "game": "Silver Daze",
+  "version": "0.7.5",
+  "authors": [
+   "Sawyer Friend"
+  ],
   "file": "silverdaze.apworld",
   "source": "https://github.com/udime123/Silver-Daze-APWorld",
   "license": "MIT",
@@ -11124,8 +11152,8 @@
    "game": "Silver Daze",
    "stability": "Unstable"
   },
-  "download": "https://github.com/udime123/Silver-Daze-APWorld/releases/download/0.7.4/silverdaze.apworld",
-  "release": "https://github.com/udime123/Silver-Daze-APWorld/releases/tag/0.7.4",
+  "download": "https://github.com/udime123/Silver-Daze-APWorld/releases/download/0.7.5/silverdaze.apworld",
+  "release": "https://github.com/udime123/Silver-Daze-APWorld/releases/tag/0.7.5",
   "links": [
    "https://github.com/udime123/Silver-Daze-APWorld/releases/"
   ]
@@ -12546,8 +12574,8 @@
    "game": "Super Smash Bros. Brawl - The Subspace Emissary",
    "stability": "Unstable"
   },
-  "download": "https://github.com/kenniky/ArchipelagoSSE/releases/download/v0.3.0/ssbb_sse.apworld",
-  "release": "https://github.com/kenniky/ArchipelagoSSE/releases/tag/v0.3.0",
+  "download": "https://github.com/kenniky/ArchipelagoSSE/releases/download/v0.3.1/ssbb_sse.apworld",
+  "release": "https://github.com/kenniky/ArchipelagoSSE/releases/tag/v0.3.1",
   "links": [
    "https://github.com/kenniky/ArchipelagoSSE/releases"
   ]
