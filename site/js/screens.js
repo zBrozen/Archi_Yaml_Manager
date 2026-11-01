@@ -277,6 +277,56 @@ class Broadcast {
   }
 }
 
+// Partage en cours, gardé hors des composants : aller sur une autre page du site (tracker…) ne le coupe pas,
+// seule la fermeture de l'onglet ou « Arrêter le partage » le fait. Un seul à la fois, pour une room.
+const sharing = { broadcast: null, code: null, refused: null, listeners: new Set() };
+
+function shareChanged() {
+  for (const listener of sharing.listeners) listener();
+}
+
+function setSharing(broadcast, code) {
+  sharing.broadcast = broadcast;
+  sharing.code = code;
+  shareChanged();
+}
+
+function onBroadcast(broadcast) {
+  if (broadcast !== sharing.broadcast) return;
+  if (broadcast.state === "refused") {
+    sharing.refused = { code: sharing.code, message: broadcast.message };
+    setSharing(null, null);
+  } else shareChanged();
+}
+
+export function stopSharing() {
+  sharing.broadcast?.stop();
+  setSharing(null, null);
+}
+
+function useSharing() {
+  const [, setTick] = useState(0);
+  useEffect(() => {
+    const listener = () => setTick((n) => n + 1);
+    sharing.listeners.add(listener);
+    return () => sharing.listeners.delete(listener);
+  }, []);
+  return sharing;
+}
+
+// Bandeau des autres pages pendant un partage : `code` est la room affichée, où le partage se voit déjà.
+export function SharingBanner({ code }) {
+  const { broadcast, code: shared } = useSharing();
+  if (!broadcast || shared === code) return null;
+  const viewers = broadcast.state === "ready" ? broadcast.viewers : 0;
+  return html`<div class="notice ok row sharing-banner" role="status">
+    <span><strong>● Partage d'écran en cours</strong> (room ${shared})${viewers ? `, affiché dans ${plural(viewers, "overlay")}` : ""}. Gardez cet onglet ouvert.</span>
+    <span class="spacer"></span>
+    <a class="button ghost small" href=${`#/room/${shared}`}>Voir</a>
+    <button type="button" class="ghost small" onClick=${stopSharing}>Arrêter le partage</button>
+  </div>`;
+}
+
 async function captureWindow(quality, priority) {
   const stream = await navigator.mediaDevices.getDisplayMedia({
     video: { ...captureConstraints(quality), displaySurface: "window" }, // propose d'abord les fenêtres, pas l'écran entier
@@ -412,8 +462,12 @@ function SentInfo({ sent, quality }) {
 
 // `games` : jeux des YAML du joueur, dont il choisit celui affiché à côté de son nom.
 function ShareScreen({ room, games = [] }) {
-  const [view, setView] = useState(null); // { state, message, viewers } pendant le partage
-  const [error, setError] = useState(null);
+  useSharing();
+  const live = () => (sharing.code === room.code ? sharing.broadcast : null);
+  const current = live();
+  const view = current && { state: current.state, viewers: current.viewers };
+  const [ownError, setError] = useState(null);
+  const error = ownError || (sharing.refused?.code === room.code ? sharing.refused.message : null);
   const [busy, setBusy] = useState(false);
   const [qualityName, setQualityName] = useSetting("screenQuality", DEFAULT_QUALITY);
   const [priorityName, setPriorityName] = useSetting("screenPriority", DEFAULT_PRIORITY);
@@ -421,10 +475,9 @@ function ShareScreen({ room, games = [] }) {
   const [cameraId, setCameraId] = useSetting("screenCamera", "");
   const [gameName, setGameName] = useSetting(`screenGame:${room.code}`, "");
   const shownGame = gameName === "aucun" || games.includes(gameName) ? gameName : "";
-  const pickGame = (next) => { setGameName(next); live.current?.setGame(next); };
+  const pickGame = (next) => { setGameName(next); live()?.setGame(next); };
   const [cameras, setCameras] = useState([]); // caméras dont le nom est connu (après une première autorisation)
   const [sent, setSent] = useState(null);
-  const live = useRef(null);
   const preview = useRef(null);
   const windowSupported = !!navigator.mediaDevices?.getDisplayMedia;
   const cameraSupported = !!navigator.mediaDevices?.getUserMedia;
@@ -434,13 +487,10 @@ function ShareScreen({ room, games = [] }) {
   const priority = priorityOf(priorityName);
 
   const stop = () => {
-    live.current?.stop();
-    live.current = null;
-    setView(null);
+    if (live()) stopSharing();
   };
-  useEffect(() => () => live.current?.stop(), []);
   useEffect(() => {
-    const stream = live.current?.stream || null;
+    const stream = live()?.stream || null;
     if (preview.current && preview.current.srcObject !== stream) preview.current.srcObject = stream;
   });
 
@@ -462,7 +512,7 @@ function ShareScreen({ room, games = [] }) {
     let alive = true;
     let previous = null;
     const read = async () => {
-      const next = await live.current?.sending(previous).catch(() => null);
+      const next = await live()?.sending(previous).catch(() => null);
       if (!alive) return;
       previous = next;
       setSent(next);
@@ -472,26 +522,16 @@ function ShareScreen({ room, games = [] }) {
     return () => { alive = false; clearInterval(timer); };
   }, [watched]);
 
-  const update = (broadcast) => {
-    if (broadcast !== live.current) return;
-    if (broadcast.state === "refused") {
-      live.current = null;
-      setView(null);
-      setError(broadcast.message);
-      return;
-    }
-    setView({ state: broadcast.state, viewers: broadcast.viewers });
-  };
-
   const choose = (nextQuality, nextPriority) => {
     setQualityName(nextQuality);
     setPriorityName(nextPriority);
-    live.current?.configure(qualityOf(nextQuality), priorityOf(nextPriority));
+    live()?.configure(qualityOf(nextQuality), priorityOf(nextPriority));
   };
 
   // Démarre le partage, ou remplace l'image en cours (autre fenêtre, autre caméra, autre source).
   const share = async (nextSource = source, nextCamera = cameraId) => {
     setError(null);
+    sharing.refused = null;
     setBusy(true);
     try {
       const stream = nextSource === "camera"
@@ -502,11 +542,11 @@ function ShareScreen({ room, games = [] }) {
         refreshCameras();
       }
       // Partage arrêté depuis le bandeau du navigateur, ou caméra débranchée.
-      stream.getVideoTracks()[0]?.addEventListener("ended", () => { if (live.current?.stream === stream) stop(); });
-      if (live.current) live.current.replace(stream);
+      stream.getVideoTracks()[0]?.addEventListener("ended", () => { if (sharing.broadcast?.stream === stream) stopSharing(); });
+      if (live()) live().replace(stream);
       else {
-        live.current = new Broadcast(room.code, savedAccess(room.code).player, stream, quality, priority, update, shownGame);
-        update(live.current);
+        stopSharing(); // partage d'une autre room
+        setSharing(new Broadcast(room.code, savedAccess(room.code).player, stream, quality, priority, onBroadcast, shownGame), room.code);
       }
     } catch (e) {
       if (nextSource === "camera") {
@@ -522,18 +562,18 @@ function ShareScreen({ room, games = [] }) {
 
   const pickSource = (next) => {
     setSourceName(next);
-    if (live.current) share(next);
+    if (live()) share(next);
   };
   const pickCamera = (next) => {
     setCameraId(next);
-    if (live.current) share("camera", next);
+    if (live()) share("camera", next);
   };
 
   const status = !view ? null
     : view.state === "retrying" ? "Connexion perdue, nouvelle tentative…"
     : view.state === "connecting" ? "Connexion…"
-    : view.viewers ? `Votre jeu est affiché dans le stream (${plural(view.viewers, "overlay")}). Gardez cette page ouverte.`
-    : "Prêt : votre jeu apparaîtra dès qu'un streamer ouvrira son overlay. Gardez cette page ouverte.";
+    : view.viewers ? `Votre jeu est affiché dans le stream (${plural(view.viewers, "overlay")}). Gardez cet onglet ouvert.`
+    : "Prêt : votre jeu apparaîtra dès qu'un streamer ouvrira son overlay. Gardez cet onglet ouvert.";
   const camera = source === "camera";
   const startLabel = busy ? (camera ? "Ouverture de la caméra…" : "Choix de la fenêtre…")
     : camera ? "Partager la caméra d'OBS" : "Partager la fenêtre de mon jeu";
@@ -605,7 +645,7 @@ function ShareScreen({ room, games = [] }) {
         ${!camera && html`<li>Choisissez une <strong>fenêtre</strong> plutôt que l'écran entier : seul le jeu sera visible.</li>
           <li>Image noire ou figée : le jeu est en plein écran exclusif. Passez-le en fenêtré, ou partagez la caméra d'OBS.</li>`}
         <li>Image floue : avec plusieurs écrans dans le stream, chacun est petit ; le 1080p ne sert qu'avec peu d'écrans.</li>
-        <li>Les autres onglets de la room n'arrêtent pas le partage ; fermer cette page, si.</li>
+        <li>Les autres onglets de la room et les autres pages du site (tracker…) n'arrêtent pas le partage ; fermer l'onglet du navigateur, si.</li>
       </ul>
     </details>`}
   </section>`;

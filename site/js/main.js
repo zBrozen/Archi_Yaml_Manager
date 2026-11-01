@@ -8,6 +8,7 @@ import { useSetting, download, plural, SheetBadges, GamePicker, loadCredits } fr
 import { versionProblem, checkText, nameProblem } from "./check.js";
 import { RoomsHome, RoomPage, shareApworlds } from "./rooms.js";
 import { ScreensOverlay } from "./overlay.js";
+import { SharingBanner } from "./screens.js";
 import { GuidesPage, guideLink } from "./guides.js";
 import { ForecastCard } from "./forecast.js";
 import { api as roomsApi, normalizeCode, roomsEnabled, saveAccess } from "./rooms-api.js";
@@ -651,7 +652,8 @@ function App() {
   }
 
   return html`<${Header} page=${route.page} advanced=${advanced} setAdvanced=${setAdvanced}
-    docLanguage=${docLanguage} setDocLanguage=${setDocLanguageSetting} theme=${theme} setTheme=${setTheme} />${body}<${Footer} />`;
+    docLanguage=${docLanguage} setDocLanguage=${setDocLanguageSetting} theme=${theme} setTheme=${setTheme} />
+    <${SharingBanner} code=${route.page === "room" ? route.code : null} />${body}<${Footer} />`;
 }
 
 function Footer() {

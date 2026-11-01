@@ -475,6 +475,8 @@ input[type="url"], input[type="datetime-local"] {
 .room-notes { white-space: pre-line; background: var(--surface-2); border-radius: 8px; padding: .6rem .8rem; }
 .badge.ok { background: color-mix(in srgb, var(--ok) 16%, transparent); color: var(--ok); }
 .notice.ok { background: color-mix(in srgb, var(--ok) 14%, transparent); color: var(--ok); }
+/* Partage d'écran en cours, en haut des autres pages du site (screens.js). */
+.sharing-banner { width: calc(100% - 32px); max-width: 1100px; margin: 1rem auto 0; box-sizing: border-box; flex-wrap: wrap; }
 .room-list, .slot-list { list-style: none; margin: 0; padding: 0; display: grid; gap: .6rem; }
 .room-list li { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; }
 .slot-list li {
