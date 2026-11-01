@@ -38,22 +38,29 @@ const captureConstraints = (q) => ({ width: { max: q.width }, height: { max: q.h
 const cameraConstraints = (q) => ({ width: { ideal: q.width, max: q.width }, height: { ideal: q.height, max: q.height }, frameRate: { ideal: q.fps, max: q.fps } });
 const isCamera = (track) => !track.getSettings().displaySurface; // une capture d'écran indique sa surface, pas une caméra
 
+// Son : stéréo et débit d'Opus (par défaut, Chrome l'envoie en mono vers 32 kbit/s, trop peu pour la musique d'un jeu).
+const AUDIO_BITRATE = 128_000;
+const OPUS_EXTRA = `stereo=1;sprop-stereo=1;maxaveragebitrate=${AUDIO_BITRATE}`;
+
 // Débits de la qualité ajoutés aux codecs vidéo de la réponse de l'overlay (paramètres x-google-*, lus par Chrome
-// pour l'envoi, ignorés par les autres navigateurs). Un codec sans ligne a=fmtp (VP8) en reçoit une.
+// pour l'envoi, ignorés par les autres navigateurs), et stéréo du son. Un codec sans ligne a=fmtp (VP8) en reçoit une.
 function withBitrates(sdp, quality) {
   const extra = [`x-google-start-bitrate=${quality.start}`, `x-google-max-bitrate=${quality.bitrate / 1000}`]
     .concat(quality.floor ? [`x-google-min-bitrate=${quality.floor}`] : []).join(";");
   const lines = sdp.split("\r\n");
   const codecs = new Set();
+  const opus = new Set();
   let video = false;
   for (const line of lines) {
     if (line.startsWith("m=")) video = line.startsWith("m=video");
-    const rtpmap = video && /^a=rtpmap:(\d+) ([\w-]+)\//.exec(line);
-    if (rtpmap && !/^(rtx|red|ulpfec|flexfec)/i.test(rtpmap[2])) codecs.add(rtpmap[1]);
+    const rtpmap = /^a=rtpmap:(\d+) ([\w-]+)\//.exec(line);
+    if (rtpmap && video && !/^(rtx|red|ulpfec|flexfec)/i.test(rtpmap[2])) codecs.add(rtpmap[1]);
+    if (rtpmap && !video && /^opus$/i.test(rtpmap[2])) opus.add(rtpmap[1]);
   }
   const hasFmtp = new Set(lines.map((line) => /^a=fmtp:(\d+) /.exec(line)?.[1]).filter((pt) => codecs.has(pt)));
   return lines.flatMap((line) => {
     const fmtp = /^a=fmtp:(\d+) /.exec(line);
+    if (fmtp && opus.has(fmtp[1])) return [`${line.replace(/;?(stereo|sprop-stereo|maxaveragebitrate)=[^;]*/g, "")};${OPUS_EXTRA}`];
     if (fmtp && codecs.has(fmtp[1])) return [`${line};${extra}`];
     const rtpmap = /^a=rtpmap:(\d+) /.exec(line);
     if (rtpmap && codecs.has(rtpmap[1]) && !hasFmtp.has(rtpmap[1])) return [line, `a=fmtp:${rtpmap[1]} ${extra}`];
@@ -118,12 +125,121 @@ function preferCodec(transceiver, codec) {
 
 const MAX_VIEWERS = 3; // overlays auxquels un joueur envoie son image ; les suivants reçoivent « busy »
 
+// --- Son envoyé avec l'image -------------------------------------------------------------
+// Le son de l'ordinateur (capture d'écran du navigateur) et un micro ou une entrée audio (câble audio virtuel…)
+// passent par un mélangeur : la piste envoyée aux overlays ne change jamais, on y branche et débranche les sources
+// sans refaire les connexions. Sans source, elle envoie du silence et l'overlay n'affiche pas de haut-parleur.
+
+class AudioMix {
+  constructor() {
+    this.ctx = new AudioContext();
+    this.ctx.resume?.().catch(() => {});
+    this.out = this.ctx.createMediaStreamDestination();
+    this.sum = this.ctx.createGain();
+    this.analyser = this.ctx.createAnalyser();
+    this.analyser.fftSize = 1024;
+    this.sum.connect(this.out);
+    this.sum.connect(this.analyser);
+    this.samples = new Float32Array(this.analyser.fftSize);
+    this.inputs = new Map(); // "pc" ou "micro" → { track, source, gain }
+    this.onChange = null;
+  }
+
+  get track() { return this.out.stream.getAudioTracks()[0]; }
+
+  get active() { return this.inputs.size > 0; }
+
+  has(name) { return this.inputs.has(name); }
+
+  // `volume` : 1 = tel quel. La piste remplacée est arrêtée.
+  set(name, track, volume = 1) {
+    this.remove(name, false);
+    const source = this.ctx.createMediaStreamSource(new MediaStream([track]));
+    const gain = this.ctx.createGain();
+    gain.gain.value = volume;
+    source.connect(gain).connect(this.sum);
+    this.inputs.set(name, { track, source, gain });
+    // Partage du son arrêté depuis le bandeau du navigateur, ou micro débranché.
+    track.addEventListener("ended", () => { if (this.inputs.get(name)?.track === track) this.remove(name); });
+    this.onChange?.();
+  }
+
+  volume(name, volume) {
+    const input = this.inputs.get(name);
+    if (input) input.gain.gain.value = volume;
+  }
+
+  remove(name, notify = true) {
+    const input = this.inputs.get(name);
+    if (!input) return;
+    this.inputs.delete(name);
+    input.source.disconnect();
+    input.gain.disconnect();
+    input.track.stop();
+    if (notify) this.onChange?.();
+  }
+
+  // Niveau du son envoyé, de 0 à 1 (crête des derniers instants).
+  level() {
+    this.analyser.getFloatTimeDomainData(this.samples);
+    let peak = 0;
+    for (const v of this.samples) peak = Math.max(peak, Math.abs(v));
+    return Math.min(1, peak);
+  }
+
+  stop() {
+    this.onChange = null;
+    for (const name of [...this.inputs.keys()]) this.remove(name);
+    this.ctx.close().catch(() => {});
+  }
+}
+
+// Le son capté tel quel : sans les traitements prévus pour la voix, qui abîment la musique d'un jeu.
+const RAW_AUDIO = { echoCancellation: false, noiseSuppression: false, autoGainControl: false };
+// Son de l'ordinateur demandé à la capture d'écran. `windowAudio` (Chrome récent) : le son est aussi proposé pour
+// une fenêtre ; les navigateurs qui ne le connaissent pas l'ignorent.
+const DISPLAY_AUDIO = { audio: RAW_AUDIO, systemAudio: "include", windowAudio: "system", suppressLocalAudioPlayback: false };
+
+// Son de l'ordinateur seul (partage par la caméra d'OBS, ou son oublié à la capture de la fenêtre) : une capture de
+// l'écran entier dont on ne garde que le son.
+async function capturePcAudio() {
+  const stream = await navigator.mediaDevices.getDisplayMedia({ video: { displaySurface: "monitor" }, ...DISPLAY_AUDIO, selfBrowserSurface: "exclude" });
+  for (const track of stream.getVideoTracks()) track.stop();
+  const [track] = stream.getAudioTracks();
+  if (!track) throw Object.assign(new Error("son non partagé"), { name: "NoAudioError" });
+  return track;
+}
+
+const listMics = async () => (await navigator.mediaDevices.enumerateDevices()).filter((d) => d.kind === "audioinput");
+
+// `clean` : réduction du bruit et de l'écho, pour un vrai micro (pas pour un câble audio virtuel qui porte le jeu).
+async function captureMic(deviceId, clean) {
+  const processing = clean ? { echoCancellation: true, noiseSuppression: true, autoGainControl: true } : RAW_AUDIO;
+  const device = deviceId ? { deviceId: { exact: deviceId } } : {};
+  try {
+    return (await navigator.mediaDevices.getUserMedia({ video: false, audio: { ...processing, ...device } })).getAudioTracks()[0];
+  } catch (e) {
+    if (e.name !== "OverconstrainedError" || !deviceId) throw e;
+    // Entrée mémorisée débranchée : celle par défaut.
+    return (await navigator.mediaDevices.getUserMedia({ video: false, audio: processing })).getAudioTracks()[0];
+  }
+}
+
+const AUDIO_ERRORS = {
+  NoAudioError: "Le son de l'ordinateur n'a pas été partagé : dans la fenêtre de choix, prenez l'écran entier et cochez « Partager aussi l'audio du système ».",
+  NotAllowedError: "Accès au micro refusé : autorisez le micro pour ce site (icône à gauche de l'adresse), puis réessayez.",
+  NotReadableError: "Le micro ne répond pas : il est peut-être utilisé par une autre application.",
+  NotFoundError: "Aucun micro ni entrée audio trouvé sur cet ordinateur.",
+};
+
 // --- Joueur : partage de la fenêtre du jeu ---------------------------------------------
 
 // `game` : jeu affiché à côté du nom sur les overlays ("" : tous ses jeux, "aucun" : aucun).
+// `mix` : son envoyé (AudioMix), arrêté avec le partage.
 class Broadcast {
-  constructor(code, token, stream, quality, priority, onChange, game = "") {
+  constructor(code, token, stream, mix, quality, priority, onChange, game = "") {
     this.stream = stream;
+    this.mix = mix;
     this.quality = quality;
     this.priority = priority;
     this.peers = new Map(); // overlay → RTCPeerConnection
@@ -132,7 +248,8 @@ class Broadcast {
     this.onChange = onChange;
     const queue = serial();
     // Présentation renvoyée à chaque reconnexion : elle garde le dernier jeu choisi.
-    this.hello = { type: "hello", role: "player", token, game };
+    this.hello = { type: "hello", role: "player", token, game, audio: mix.active };
+    mix.onChange = () => this.audioChanged();
     this.signal = signaling(code, this.hello, (msg) => queue(() => this.receive(msg)), (state, message) => {
       this.state = state;
       this.message = message || null;
@@ -146,6 +263,15 @@ class Broadcast {
   setGame(game) {
     this.hello.game = game;
     this.signal.send({ type: "game", game });
+  }
+
+  // Les overlays n'affichent le haut-parleur que si le joueur envoie vraiment du son.
+  audioChanged() {
+    if (this.hello.audio !== this.mix.active) {
+      this.hello.audio = this.mix.active;
+      this.signal.send({ type: "audio", audio: this.mix.active });
+    }
+    this.changed();
   }
 
   get viewers() { return [...this.peers.values()].filter((pc) => pc.connectionState === "connected").length; }
@@ -181,6 +307,7 @@ class Broadcast {
       sendEncodings: [{ maxBitrate: this.quality.bitrate, maxFramerate: this.quality.fps }],
     }));
     for (const transceiver of transceivers) preferCodec(transceiver, codec);
+    pc.addTransceiver(this.mix.track, { direction: "sendonly", streams: [this.stream], sendEncodings: [{ maxBitrate: AUDIO_BITRATE }] });
     const offer = await pc.createOffer();
     await pc.setLocalDescription(offer);
     await Promise.all(transceivers.map((transceiver) => this.tune(transceiver.sender)));
@@ -291,6 +418,7 @@ class Broadcast {
     this.signal.close();
     this.closePeers();
     this.stopTracks();
+    this.mix.stop();
   }
 }
 
@@ -344,10 +472,11 @@ export function SharingBanner({ code }) {
   </div>`;
 }
 
-async function captureWindow(quality, priority) {
+// `audio` : demande aussi le son de l'ordinateur (case à cocher de la fenêtre de choix).
+async function captureWindow(quality, priority, audio) {
   const stream = await navigator.mediaDevices.getDisplayMedia({
     video: { ...captureConstraints(quality), displaySurface: "window" }, // propose d'abord les fenêtres, pas l'écran entier
-    audio: false,
+    ...(audio ? DISPLAY_AUDIO : { audio: false }),
     selfBrowserSurface: "exclude",
   });
   const [track] = stream.getVideoTracks();
@@ -492,6 +621,29 @@ function SentInfo({ sent, quality, camera }) {
   </div>`;
 }
 
+const audioText = (e) => AUDIO_ERRORS[e?.name] || `Son impossible à capter : ${e?.message || e}`;
+const cancelled = (e) => e?.name === "NotAllowedError" || e?.name === "AbortError"; // fenêtre de choix fermée
+
+// Niveau du son qui part vers les overlays, pour vérifier que le bon son est capté.
+function SoundMeter({ mix }) {
+  const [level, setLevel] = useState(0);
+  useEffect(() => {
+    let shown = 0;
+    const timer = setInterval(() => { shown = Math.max(mix.level(), shown * 0.8); setLevel(shown); }, 100);
+    return () => clearInterval(timer);
+  }, [mix]);
+  const percent = Math.round(Math.sqrt(level) * 100); // échelle proche de l'oreille
+  return html`<div class="sound-meter full">
+    <span>Son envoyé</span>
+    <span class="sound-bar" role="meter" aria-label="Niveau du son envoyé" aria-valuemin="0" aria-valuemax="100" aria-valuenow=${percent}>
+      <span style=${{ width: `${percent}%` }}></span></span>
+    <span class="hint">${level < 0.005 ? "silence" : "son capté"}</span>
+  </div>`;
+}
+
+const Volume = ({ value, disabled, onChange }) => html`<label><span>Volume : ${value} %</span>
+  <input type="range" min="0" max="200" step="5" value=${value} disabled=${disabled} onInput=${(e) => onChange(Number(e.target.value))} /></label>`;
+
 // `games` : jeux des YAML du joueur, dont il choisit celui affiché à côté de son nom.
 function ShareScreen({ room, games = [] }) {
   useSharing();
@@ -509,6 +661,16 @@ function ShareScreen({ room, games = [] }) {
   const shownGame = gameName === "aucun" || games.includes(gameName) ? gameName : "";
   const pickGame = (next) => { setGameName(next); live()?.setGame(next); };
   const [cameras, setCameras] = useState([]); // caméras dont le nom est connu (après une première autorisation)
+  // Son : celui de l'ordinateur et/ou un micro (ou une entrée audio), chacun avec son volume en %.
+  const [pcOn, setPcOn] = useSetting("screenAudioPc", false);
+  const [micOn, setMicOn] = useSetting("screenAudioMic", false);
+  const [micId, setMicId] = useSetting("screenAudioDevice", "");
+  const [micClean, setMicClean] = useSetting("screenAudioClean", true);
+  const [pcVolume, setPcVolume] = useSetting("screenVolumePc", 100);
+  const [micVolume, setMicVolume] = useSetting("screenVolumeMic", 100);
+  const [mics, setMics] = useState([]);
+  const [soundError, setSoundError] = useState(null);
+  const mix = current?.mix || null;
   const [sent, setSent] = useState(null);
   const preview = useRef(null);
   const windowSupported = !!navigator.mediaDevices?.getDisplayMedia;
@@ -526,10 +688,11 @@ function ShareScreen({ room, games = [] }) {
     if (preview.current && preview.current.srcObject !== stream) preview.current.srcObject = stream;
   });
 
-  // Liste des caméras, tenue à jour quand on en branche ou qu'OBS démarre sa caméra virtuelle.
-  const refreshCameras = () => listCameras()
-    .then((list) => setCameras(list.filter((d) => d.label)))
-    .catch(() => {});
+  // Liste des caméras et des entrées audio, tenue à jour quand on en branche ou qu'OBS démarre sa caméra virtuelle.
+  const refreshCameras = () => {
+    listCameras().then((list) => setCameras(list.filter((d) => d.label))).catch(() => {});
+    listMics().then((list) => setMics(list.filter((d) => d.label && d.deviceId !== "default" && d.deviceId !== "communications"))).catch(() => {});
+  };
   useEffect(() => {
     if (!cameraSupported) return undefined;
     refreshCameras();
@@ -560,27 +723,91 @@ function ShareScreen({ room, games = [] }) {
     live()?.configure(qualityOf(nextQuality), priorityOf(nextPriority));
   };
 
+  // Micro ou entrée audio branché sur le mélangeur (remplace le précédent).
+  const openMic = async (mixer, id = micId, clean = micClean) => {
+    setSoundError(null);
+    try {
+      mixer.set("micro", await captureMic(id, clean), micVolume / 100);
+      refreshCameras();
+    } catch (e) {
+      setSoundError(audioText(e));
+    }
+  };
+  // Son de l'ordinateur ajouté au partage en cours : sa propre fenêtre de choix, ouverte par ce clic.
+  const addPc = async () => {
+    setSoundError(null);
+    try {
+      const track = await capturePcAudio();
+      if (live()) live().mix.set("pc", track, pcVolume / 100);
+      else track.stop();
+    } catch (e) {
+      if (!cancelled(e)) setSoundError(audioText(e));
+    }
+  };
+  // Pendant le partage, chaque réglage du son s'applique tout de suite.
+  const togglePc = (on) => {
+    setPcOn(on);
+    if (!live()) return;
+    if (on) addPc();
+    else live().mix.remove("pc");
+  };
+  const toggleMic = (on) => {
+    setMicOn(on);
+    if (!live()) return;
+    if (on) openMic(live().mix);
+    else live().mix.remove("micro");
+  };
+  const pickMic = (id, clean = micClean) => {
+    setMicId(id);
+    setMicClean(clean);
+    if (live() && micOn) openMic(live().mix, id, clean);
+  };
+  const changeVolume = (name, value) => {
+    (name === "pc" ? setPcVolume : setMicVolume)(value);
+    live()?.mix.volume(name, value / 100);
+  };
+
   // Démarre le partage, ou remplace l'image en cours (autre fenêtre, autre caméra, autre source).
   const share = async (nextSource = source, nextCamera = cameraId) => {
     setError(null);
+    setSoundError(null);
     sharing.refused = null;
     setBusy(true);
+    let pcTrack = null; // son de l'ordinateur capté par ce clic, pas encore branché
     try {
+      // Avec la caméra d'OBS, le son de l'ordinateur a sa propre fenêtre de choix : ouverte d'abord, tant que le
+      // clic l'autorise encore. Fermée sans rien choisir, le partage démarre sans ce son.
+      if (nextSource === "camera" && pcOn && !live()?.mix.has("pc")) {
+        pcTrack = await capturePcAudio().catch((e) => { if (!cancelled(e)) setSoundError(audioText(e)); return null; });
+      }
       const stream = nextSource === "camera"
         ? await captureCamera(quality, priority, nextCamera)
-        : await captureWindow(quality, priority);
+        : await captureWindow(quality, priority, pcOn);
+      // Le son de la capture va au mélangeur : `stream` ne garde que l'image.
+      for (const track of stream.getAudioTracks()) {
+        stream.removeTrack(track);
+        pcTrack?.stop();
+        pcTrack = track;
+      }
       if (nextSource === "camera") {
         setCameraId(stream.getVideoTracks()[0]?.getSettings().deviceId || "");
         refreshCameras();
       }
       // Partage arrêté depuis le bandeau du navigateur, ou caméra débranchée.
       stream.getVideoTracks()[0]?.addEventListener("ended", () => { if (sharing.broadcast?.stream === stream) stopSharing(); });
-      if (live()) live().replace(stream);
-      else {
+      if (live()) {
+        live().replace(stream);
+        if (pcTrack) live().mix.set("pc", pcTrack, pcVolume / 100);
+      } else {
         stopSharing(); // partage d'une autre room
-        setSharing(new Broadcast(room.code, savedAccess(room.code).player, stream, quality, priority, onBroadcast, shownGame), room.code);
+        const mixer = new AudioMix();
+        if (pcTrack) mixer.set("pc", pcTrack, pcVolume / 100);
+        if (micOn) await openMic(mixer);
+        setSharing(new Broadcast(room.code, savedAccess(room.code).player, stream, mixer, quality, priority, onBroadcast, shownGame), room.code);
       }
+      pcTrack = null;
     } catch (e) {
+      pcTrack?.stop();
       if (nextSource === "camera") {
         setError(CAMERA_ERRORS[e?.name]
           || html`<${CameraHelp} error=${e} seen=${await listCameras().catch(() => [])} />`);
@@ -618,7 +845,8 @@ function ShareScreen({ room, games = [] }) {
       <h2 class="grow">Montrer mon jeu dans le stream</h2>
       ${view && html`<span class="badge ok">● En partage</span>`}
     </div>
-    <p>Votre image (sans le son) va directement aux overlays des streamers de la room. Le site ne l'enregistre pas.</p>
+    <p>${pcOn || micOn ? "Votre image et le son choisi vont" : "Votre image (sans le son) va"} directement aux overlays des
+      streamers de la room. Le site ne les enregistre pas.</p>
     ${!windowSupported && !cameraSupported && html`<div class="notice warn full">Ce navigateur ne peut pas partager d'image :
       ouvrez la room dans Chrome, Edge ou Firefox, sur l'ordinateur où vous jouez.</div>`}
     ${(windowSupported || cameraSupported) && html`
@@ -646,6 +874,33 @@ function ShareScreen({ room, games = [] }) {
         <option value="aucun">Aucun (seulement mon nom)</option>
       </select>
       <span class="hint">Se change pendant le partage.</span></label></div>`}
+    <fieldset class="plain-fieldset stack full sound-options">
+      <legend><strong>Son envoyé avec l'image</strong></legend>
+      <label class="check"><input type="checkbox" checked=${pcOn} disabled=${busy} onChange=${(e) => togglePc(e.target.checked)} />
+        <span><strong>Le son de l'ordinateur</strong> <span class="hint">: tout ce que vous entendez (jeu, musique, Discord…)</span></span></label>
+      ${pcOn && html`<div class="sound-source stack">
+        <p class="hint">${camera
+          ? "Une fenêtre de choix s'ouvre d'abord pour le son : prenez l'écran entier et cochez « Partager aussi l'audio du système »."
+          : "Dans la fenêtre de choix, cochez la case du partage de l'audio. Si elle manque pour une fenêtre, le site vous proposera de choisir le son à part."}${" "}
+          Les voix de Discord partent aussi : pour n'envoyer que le jeu, passez par un câble audio virtuel (entrée audio ci-dessous).</p>
+        <div class="fields"><${Volume} value=${pcVolume} onChange=${(v) => changeVolume("pc", v)} /></div>
+      </div>`}
+      <label class="check"><input type="checkbox" checked=${micOn} disabled=${busy} onChange=${(e) => toggleMic(e.target.checked)} />
+        <span><strong>Un micro ou une entrée audio</strong> <span class="hint">: votre voix, ou le jeu seul par un câble audio virtuel (VB-Cable…)</span></span></label>
+      ${micOn && html`<div class="sound-source stack">
+        <div class="fields">
+          <label><span>Entrée</span>
+            <select value=${mics.some((m) => m.deviceId === micId) ? micId : ""} onChange=${(e) => pickMic(e.target.value)}>
+              <option value="">Celle par défaut de l'ordinateur</option>
+              ${mics.map((m) => html`<option value=${m.deviceId}>${m.label}</option>`)}
+            </select>
+            ${!mics.length && html`<span class="hint">Les noms des entrées apparaissent après la première autorisation du micro.</span>`}</label>
+          <${Volume} value=${micVolume} onChange=${(v) => changeVolume("micro", v)} />
+          <label class="check span-all"><input type="checkbox" checked=${micClean} onChange=${(e) => pickMic(micId, e.target.checked)} />
+            Réduire le bruit et l'écho (pour un micro ; à décocher pour un câble audio virtuel)</label>
+        </div>
+      </div>`}
+    </fieldset>
     <div class="row">
       ${view
         ? html`${!camera && html`<button type="button" class="ghost" disabled=${busy} onClick=${() => share()}>Changer de fenêtre</button>`}
@@ -654,6 +909,12 @@ function ShareScreen({ room, games = [] }) {
     </div>`}
     ${status && html`<p role="status"><strong>${status}</strong></p>`}
     ${error && (typeof error === "string" ? html`<div class="notice error full">${error}</div>` : error)}
+    ${pcOn && mix && !mix.has("pc") && html`<div class="notice warn row full">
+      <span class="grow">Le son de l'ordinateur ne part pas : la fenêtre de choix ne l'a pas partagé.</span>
+      <button type="button" class="ghost small" onClick=${addPc}>Choisir le son de l'ordinateur</button>
+    </div>`}
+    ${soundError && html`<div class="notice error full">${soundError}</div>`}
+    ${mix?.active && html`<${SoundMeter} mix=${mix} />`}
     ${view && html`<video class="screen-preview" ref=${preview} autoplay muted playsinline aria-label="Aperçu de votre partage"></video>`}
     <${SentInfo} sent=${sent} quality=${quality} camera=${camera} />
     ${(windowSupported || cameraSupported) && html`<details class="more">
@@ -799,6 +1060,26 @@ function FeaturedControl({ room, link, players, rotation, onLinks }) {
   </section>`;
 }
 
+// Son entendu sur l'overlay, changé en direct comme l'écran en vedette : un seul joueur à la fois, pour ne pas mélanger
+// tous les sons. Sur l'overlay, le haut-parleur de chaque écran fait la même chose (OBS : « Interagir »).
+function SoundControl({ room, link, players, featured, onLinks }) {
+  const action = useAction();
+  const pick = (player) => action.run(async () => onLinks((await api.setSound(room.code, link.id, player)).links));
+  const choices = [[null, "Aucun son"], ...(featured ? [["vedette", "Celui de l'écran en vedette"]] : []), ...players.map((p) => [p.id, p.pseudo])];
+  const current = link.sound || null;
+  return html`<section class="card stack">
+    <h2>En direct : son de l'overlay</h2>
+    <p class="hint">Un seul joueur entendu à la fois, parmi ceux qui envoient leur son. Dans OBS, cochez
+      <strong>Contrôler l'audio via OBS</strong> dans les propriétés de la source Navigateur, pour régler son volume dans le mixeur.</p>
+    <div class="items-players-list">
+      ${choices.map(([id, label]) => html`<button type="button" class=${`player-check ${current === id ? "on" : ""}`}
+        aria-pressed=${current === id} disabled=${action.busy} onClick=${() => pick(id)}>
+        ${current === id ? "✓ " : ""}${id && id !== "vedette" ? html`<strong>${label}</strong>` : label}</button>`)}
+    </div>
+    ${action.error && html`<div class="notice error full">${action.error}</div>`}
+  </section>`;
+}
+
 function OverlayPanel({ room, data, setData, me, admin, linkId, onLink, onBack }) {
   const action = useAction();
   const links = data.overlay_links || [];
@@ -889,7 +1170,9 @@ function OverlayPanel({ room, data, setData, me, admin, linkId, onLink, onBack }
     </details>
   </section>
   ${manage && spaceUses(spaceOf(link.config), "vedette") && html`<${FeaturedControl} room=${room} link=${link} players=${players}
-    rotation=${spaceOf(link.config).rotation} onLinks=${onLinks} />`}`;
+    rotation=${spaceOf(link.config).rotation} onLinks=${onLinks} />`}
+  ${manage && html`<${SoundControl} room=${room} link=${link} players=${players}
+    featured=${spaceUses(spaceOf(link.config), "vedette")} onLinks=${onLinks} />`}`;
 }
 
 // Trois vues : partager son jeu (joueurs), les espaces de partage (liste commune, lien à copier pour OBS), et

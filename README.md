@@ -307,6 +307,13 @@ Streamlabs, XSplit…).
   repart de ce joueur. Le goal est lu dans le YAML de chaque joueur (`slotGoal` : option `goal` ou proche, ou
   celle qui a le plus de poids), donc absent dans une room de partie déjà hébergée.
 
+  **Son** : chaque joueur peut envoyer avec son image le son de l'ordinateur (case de la fenêtre de choix du
+  navigateur, ou une capture de l'écran à part avec la caméra d'OBS) et/ou un micro ou une entrée audio (câble
+  audio virtuel), mélangés avec un volume chacun (Opus stéréo, 128 kbit/s). L'overlay ne fait entendre qu'un joueur
+  à la fois : celui choisi en direct dans la vue « Overlay » (colonne `sound` : un joueur, `vedette` ou aucun), ou
+  d'un clic sur le haut-parleur d'un écran (dans OBS : « Interagir »), jusqu'au prochain choix depuis la room. Pour
+  régler le volume dans OBS, cocher « Contrôler l'audio via OBS » dans la source Navigateur.
+
   Les objets de progression et les pièges sont marqués ★ et ⚠, en plus de leur couleur. Dans les messages, les objets
   reçus ou envoyés par les joueurs montrés de l'espace (sinon par son créateur) sont surlignés, sauf les objets sans
   importance. Chaque joueur envoie son

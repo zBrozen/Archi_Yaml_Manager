@@ -105,6 +105,7 @@ export const api = {
   deleteOverlayLink: (code, id) => call("DELETE", at(code, `/screens/links/${id}`), { code }),
   saveSpaceConfig: (code, id, config) => call("PUT", at(code, `/screens/links/${id}/config`), { code, body: { config } }),
   setFeatured: (code, id, player) => call("PUT", at(code, `/screens/links/${id}/featured`), { code, body: { player } }),
+  setSound: (code, id, player) => call("PUT", at(code, `/screens/links/${id}/sound`), { code, body: { player } }),
   saveLayouts: (code, layouts) => call("PUT", at(code, "/screens/layouts"), { code, body: { layouts } }),
   setSpoilerAccess: (code, id, on) => call("PATCH", at(code, `/players/${id}`), { code, body: { spoiler_access: on } }),
   shareSpoiler: (code, { name, at: when, text }) => call("PUT", at(code, `/spoiler?name=${encodeURIComponent(name)}&at=${when}`),

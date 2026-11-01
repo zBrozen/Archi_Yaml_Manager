@@ -762,6 +762,13 @@ details.items-group > summary h3, details.items-group > summary h4 { display: in
   object-fit: contain;
 }
 .tips { margin: 0; padding-left: 1.2rem; display: grid; gap: .35rem; }
+/* Son envoyé avec l'image : sources cochées, réglages de chacune en retrait, niveau du son pendant le partage */
+.sound-options > legend { padding: 0; margin-bottom: .5rem; }
+.sound-options label.check { display: flex; align-items: baseline; gap: .5rem; }
+.sound-source { margin-left: 1.6rem; gap: .6rem; }
+.sound-meter { display: flex; align-items: center; gap: .75rem; flex-wrap: wrap; }
+.sound-bar { flex: 1 1 12rem; max-width: 24rem; height: .8rem; border: 1px solid var(--border); border-radius: 999px; background: var(--surface-2); overflow: hidden; }
+.sound-bar > span { display: block; height: 100%; background: var(--accent); transition: width .1s linear; }
 /* Écrans : choix entre partager son jeu et streamer la partie */
 .room-panel > .segmented { justify-self: start; max-width: 100%; }
 .room-panel > .segmented button { padding: .55rem 1.1rem; font-size: 1rem; }
@@ -795,6 +802,20 @@ html.overlay-page body { background: transparent; overflow: hidden; }
 .screen-tile figcaption strong { font-weight: 700; }
 .screen-game { font-size: .8em; color: #c9ced6; }
 .screen-flag { margin-left: .6em; font-size: .65em; padding: .1em .45em; border-radius: 4px; background: #ffc864; color: #1c1f25; font-weight: 700; }
+/* Haut-parleur d'un écran qui envoie son son : barré et discret quand il est coupé, clair avec « Son » quand on l'entend */
+.screen-sound {
+  position: absolute; top: .3em; right: .3em; display: inline-flex; align-items: center; gap: .3em;
+  min-height: 0; padding: .2em .45em; border: 2px solid #eef0f3; border-radius: 6px;
+  background: rgb(28 31 37 / 85%); color: #eef0f3; font: inherit; font-size: .8em; font-weight: 700; line-height: 1; cursor: pointer;
+}
+.screen-sound svg { width: 1.3em; height: 1.3em; flex: none; }
+.screen-sound:not(.on) { opacity: .8; border-color: transparent; }
+.screen-sound.on { background: #eef0f3; color: #1c1f25; }
+.screen-sound:hover, .screen-sound:focus-visible { opacity: 1; outline: 3px solid #ffc864; outline-offset: 1px; }
+.sound-blocked {
+  position: fixed; left: 50%; bottom: 16px; transform: translateX(-50%); max-width: calc(100vw - 32px);
+  padding: .7rem 1.2rem; border: 2px solid #ffc864; border-radius: 10px; background: #1c1f25; color: #eef0f3; font-size: 1.2rem; font-weight: 700;
+}
 .screen-wait { position: absolute; inset: 0 0 2em; display: grid; place-items: center; padding: 1em; text-align: center; font-size: .75em; color: #c9ced6; }
 .overlay-message {
   max-width: min(36rem, calc(100vw - 32px)); padding: 1rem 1.4rem; border-radius: 10px;

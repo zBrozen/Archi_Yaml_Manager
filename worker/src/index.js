@@ -906,7 +906,7 @@ const OVERLAY_LINKS = { count: 10, perPlayer: 3, name: 40 };
 
 // Tous les espaces de la room, avec le pseudo de leur créateur (`by`, null pour l'hôte).
 const overlayLinks = async (env, room) => (await env.DB.prepare(
-  `SELECT l.id, l.name, l.key, l.created_at, l.player_id, l.config, l.featured, p.pseudo AS by FROM overlay_links l
+  `SELECT l.id, l.name, l.key, l.created_at, l.player_id, l.config, l.featured, l.sound, p.pseudo AS by FROM overlay_links l
    LEFT JOIN players p ON p.id = l.player_id WHERE l.room_code = ? ORDER BY l.created_at`,
 ).bind(room.code).all()).results.map((l) => ({ ...l, config: JSON.parse(l.config || "null") }));
 
@@ -1079,14 +1079,16 @@ function spaceConfig(value) {
   return saved;
 }
 
-// Ce que l'overlay d'un espace reçoit : ses réglages, l'écran en vedette, et son créateur (`owner`, null pour l'hôte),
-// dont les objets sont surlignés dans les messages quand l'espace ne choisit pas ses joueurs.
-const spaceOf = (row) => ({ config: JSON.parse(row.config || "null"), featured: row.featured || null, owner: row.player_id || null });
+// Ce que l'overlay d'un espace reçoit : ses réglages, l'écran en vedette, le son entendu (`sound`, voir setSound), et
+// son créateur (`owner`, null pour l'hôte), dont les objets sont surlignés dans les messages quand l'espace ne choisit pas ses joueurs.
+const spaceOf = (row) => ({
+  config: JSON.parse(row.config || "null"), featured: row.featured || null, sound: row.sound || null, owner: row.player_id || null,
+});
 
 // Les overlays ouverts avec cet espace suivent tout de suite ses réglages et son écran en vedette.
 async function pushSpace(env, room, linkId) {
   if (!env.SCREENS) return;
-  const row = await env.DB.prepare("SELECT config, featured, player_id FROM overlay_links WHERE room_code = ? AND id = ?").bind(room.code, linkId).first();
+  const row = await env.DB.prepare("SELECT config, featured, sound, player_id FROM overlay_links WHERE room_code = ? AND id = ?").bind(room.code, linkId).first();
   if (!row) return;
   await screens(env, room).fetch(`https://screens/space?link=${encodeURIComponent(linkId)}`, { method: "POST", body: JSON.stringify(spaceOf(row)) });
 }
@@ -1105,6 +1107,16 @@ async function setFeatured(request, env, room, linkId) {
   const { player } = await readJson(request);
   const featured = player == null ? null : layoutId(player);
   await env.DB.prepare("UPDATE overlay_links SET featured = ? WHERE room_code = ? AND id = ?").bind(featured, room.code, linkId).run();
+  await pushSpace(env, room, linkId);
+  return json({ links: await overlayLinks(env, room) });
+}
+
+// `player` : joueur dont l'overlay fait entendre le son, "vedette" (celui de l'écran en vedette) ou null (aucun son).
+async function setSound(request, env, room, linkId) {
+  await ownedLink(request, env, room, linkId);
+  const { player } = await readJson(request);
+  const sound = player == null ? null : player === "vedette" ? "vedette" : layoutId(player);
+  await env.DB.prepare("UPDATE overlay_links SET sound = ? WHERE room_code = ? AND id = ?").bind(sound, room.code, linkId).run();
   await pushSpace(env, room, linkId);
   return json({ links: await overlayLinks(env, room) });
 }
@@ -1128,11 +1140,12 @@ const sendTo = (ws, message) => {
 // Protocole (messages JSON) :
 //   client → service : { type: "hello", role: "player", token } ou { type: "hello", role: "overlay", key },
 //                      puis { type: "signal", to, data } (relayé à un joueur s'il vient d'un overlay, et inversement),
-//                      et pour un joueur { type: "game", game } (jeu affiché à côté de son nom, voir shownGames).
+//                      et pour un joueur { type: "game", game } (jeu affiché à côté de son nom, voir shownGames)
+//                      et { type: "audio", audio } (son envoyé ou non avec l'image ; aussi dans « hello »).
 //   service → client : { type: "welcome", id }, { type: "error", message } (puis fermeture),
 //                      { type: "signal", from, data }, { type: "left", id } (aux joueurs : un overlay est parti),
-//                      { type: "streams", list: [{ id, player, label, games }] } (aux overlays : joueurs qui partagent),
-//                      { type: "space", space: { config, featured, owner } } (aux overlays d'un espace : ses réglages ont changé).
+//                      { type: "streams", list: [{ id, player, label, games, audio }] } (aux overlays : joueurs qui partagent),
+//                      { type: "space", space: { config, featured, sound, owner } } (aux overlays d'un espace : ses réglages ont changé).
 // Un joueur connecté est un joueur qui partage son écran : arrêter le partage ferme la connexion.
 export class ScreenRoom extends DurableObject {
   constructor(ctx, env) {
@@ -1192,8 +1205,8 @@ export class ScreenRoom extends DurableObject {
   // Liste des joueurs qui partagent, envoyée à tous les overlays (ou à un seul, qui vient d'arriver).
   publish(except = null, only = null) {
     const list = this.sockets("player", except).map((ws) => {
-      const { id, player, label, games } = ws.deserializeAttachment();
-      return { id, player, label, games };
+      const { id, player, label, games, audio } = ws.deserializeAttachment();
+      return { id, player, label, games, audio: !!audio };
     });
     for (const ws of only ? [only] : this.sockets("overlay", except)) sendTo(ws, { type: "streams", list });
   }
@@ -1207,6 +1220,11 @@ export class ScreenRoom extends DurableObject {
     if (!me.role) return this.hello(ws, me, msg);
     if (msg.type === "game" && me.role === "player") {
       me.games = shownGames(me.allGames || [], msg.game);
+      ws.serializeAttachment(me);
+      return this.publish();
+    }
+    if (msg.type === "audio" && me.role === "player") {
+      me.audio = msg.audio === true;
       ws.serializeAttachment(me);
       return this.publish();
     }
@@ -1224,7 +1242,7 @@ export class ScreenRoom extends DurableObject {
       if (msg.role === "overlay") {
         // Un lien de la liste, ou l'ancienne clé unique tant qu'elle n'y a pas été reprise.
         const link = typeof msg.key === "string"
-          ? await this.env.DB.prepare("SELECT id, config, featured, player_id FROM overlay_links WHERE room_code = ? AND key = ?").bind(room.code, msg.key).first()
+          ? await this.env.DB.prepare("SELECT id, config, featured, sound, player_id FROM overlay_links WHERE room_code = ? AND key = ?").bind(room.code, msg.key).first()
           : null;
         const legacy = !link && typeof msg.key === "string" && !!room.overlay_hash && (await sha256(msg.key)) === room.overlay_hash;
         if (!link && !legacy) {
@@ -1246,7 +1264,7 @@ export class ScreenRoom extends DurableObject {
           if (other.deserializeAttachment().player === player.id) this.refuse(other, "Partage repris depuis une autre page.");
         }
         const allGames = [...new Set(results.map((r) => r.game))];
-        Object.assign(me, { role: "player", player: player.id, label: player.pseudo, allGames, games: shownGames(allGames, msg.game) });
+        Object.assign(me, { role: "player", player: player.id, label: player.pseudo, allGames, games: shownGames(allGames, msg.game), audio: msg.audio === true });
       } else {
         throw new HttpError(400, "Rôle inconnu.");
       }
@@ -1390,6 +1408,7 @@ async function route(request, env) {
     if (id === "links" && linkId && !parts[6] && method === "PATCH") return updateOverlayLink(request, env, room, linkId);
     if (id === "links" && linkId && parts[6] === "config" && method === "PUT") return saveSpaceConfig(request, env, room, linkId);
     if (id === "links" && linkId && parts[6] === "featured" && method === "PUT") return setFeatured(request, env, room, linkId);
+    if (id === "links" && linkId && parts[6] === "sound" && method === "PUT") return setSound(request, env, room, linkId);
     if (id === "links" && linkId && !parts[6] && method === "DELETE") return deleteOverlayLink(request, env, room, linkId);
     if (id === "layouts" && method === "PUT") return saveLayouts(request, env, room);
   } else if (sub === "generator") {

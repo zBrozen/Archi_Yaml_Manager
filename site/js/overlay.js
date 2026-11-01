@@ -167,8 +167,14 @@ const TILE_STATES = {
   busy: "Ce joueur envoie déjà son écran à trop d'overlays.",
 };
 
-// Écran d'un joueur. `font` : taille du texte en px ; `label` : nom du joueur et jeu en bas à gauche.
-function Tile({ tile, style, font, label = true }) {
+// Haut-parleur, barré quand le son de l'écran est coupé (la forme change, pas seulement la couleur).
+const SpeakerIcon = ({ on }) => html`<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2"
+  stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor" />
+  ${on ? html`<path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12" />` : html`<path d="M17 9l5 6M22 9l-5 6" />`}</svg>`;
+
+// Écran d'un joueur. `font` : taille du texte en px ; `label` : nom du joueur et jeu en bas à gauche. `onSound(player)` :
+// clic sur le haut-parleur (écrans qui envoient leur son) ; `tile.heard` : c'est ce son qu'on entend.
+function Tile({ tile, style, font, label = true, onSound }) {
   const video = useRef(null);
   useEffect(() => {
     if (video.current && video.current.srcObject !== tile.stream) video.current.srcObject = tile.stream;
@@ -177,6 +183,12 @@ function Tile({ tile, style, font, label = true }) {
     ${tile.stream
       ? html`<video ref=${video} autoplay muted playsinline></video>`
       : html`<div class="screen-wait">${TILE_STATES[tile.state] || TILE_STATES.connecting}</div>`}
+    ${tile.audio && onSound && html`<button type="button" class=${`screen-sound ${tile.heard ? "on" : ""}`} aria-pressed=${!!tile.heard}
+      title=${tile.heard ? `Couper le son de ${tile.label}` : `Écouter ${tile.label} (coupe les autres)`}
+      onClick=${() => onSound(tile.heard ? null : tile.player)}>
+      <${SpeakerIcon} on=${tile.heard} />${tile.heard && html`<span>Son</span>`}
+      <span class="sr-only">${tile.heard ? `Son de ${tile.label} entendu` : `Son de ${tile.label} coupé`}</span>
+    </button>`}
     ${label && html`<figcaption>
       <strong>${tile.label}</strong>${tile.games.length > 0 && html`<span class="screen-game"> · ${tile.games.join(", ")}</span>`}
       ${tile.state === "unstable" && html`<span class="screen-flag">Connexion instable</span>`}
@@ -184,17 +196,21 @@ function Tile({ tile, style, font, label = true }) {
   </figure>`;
 }
 
-const tileOf = (stream, view) => ({ ...stream, state: view.peers[stream.id]?.state || "connecting", stream: view.peers[stream.id]?.stream || null });
+// `heard` : joueur dont on entend le son.
+const tileOf = (stream, view, heard) => ({
+  ...stream, heard: !!stream.audio && stream.player === heard,
+  state: view.peers[stream.id]?.state || "connecting", stream: view.peers[stream.id]?.stream || null,
+});
 
 // Écrans en grille dans une zone de `width` × `height` px, aussi grands que possible quel que soit leur nombre.
 // `scale` : taille du nom des joueurs par rapport à la taille moyenne.
-function ScreenGrid({ tiles, width, height, label = true, scale = 1 }) {
+function ScreenGrid({ tiles, width, height, label = true, scale = 1, onSound }) {
   const grid = gridLayout(tiles.length, width, height, GAP);
   if (!tiles.length || !grid.width) return null;
   // Texte proportionnel à l'écran, jamais trop petit pour être lu dans un stream.
   const font = Math.round(Math.min(40, Math.max(20, grid.width / 34)) * scale);
   return html`<div class="overlay-grid" style=${{ width: `${grid.columns * grid.width + (grid.columns - 1) * GAP}px`, gap: `${GAP}px` }}>
-    ${tiles.map((tile) => html`<${Tile} key=${tile.id} tile=${tile} font=${font} label=${label}
+    ${tiles.map((tile) => html`<${Tile} key=${tile.id} tile=${tile} font=${font} label=${label} onSound=${onSound}
       style=${{ width: `${grid.width}px`, height: `${grid.height}px` }} />`)}
   </div>`;
 }
@@ -425,8 +441,8 @@ function ProgressBox({ progress, style, plain, goal = false }) {
 const boxStyle = (item) => ({ left: `${item.x}%`, top: `${item.y}%`, width: `${item.w}%`, height: `${item.h}%` });
 
 // `items` : éléments à afficher ; `streams` : joueurs montrés ; `featured` : joueur en vedette. `empty` : message
-// affiché dans l'élément principal (`main`) quand aucun joueur montré ne partage.
-function LayoutView({ items, view, streams, featured, feed, wishes, mine, progress, empty = null }) {
+// affiché dans l'élément principal (`main`) quand aucun joueur montré ne partage. `heard`, `onSound` : voir Tile.
+function LayoutView({ items, view, streams, featured, feed, wishes, mine, progress, heard, onSound, empty = null }) {
   const [ref, size] = useElementSize();
   const unit = size.height / 100; // 1 % de la hauteur de la page
   const assigned = assignScreens(items, streams, featured);
@@ -436,12 +452,12 @@ function LayoutView({ items, view, streams, featured, feed, wishes, mine, progre
     const nobody = item.main && empty && html`<div class="overlay-zone"><p class="overlay-message">${empty}</p></div>`;
     if (item.type === "screen") {
       const stream = assigned.get(item.id);
-      return stream ? html`<${Tile} tile=${tileOf(stream, view)} label=${item.label} font=${Math.round(unit * TEXT_SIZES[item.size].unit)}
-        style=${{ width: "100%", height: "100%" }} />` : nobody;
+      return stream ? html`<${Tile} tile=${tileOf(stream, view, heard)} label=${item.label} font=${Math.round(unit * TEXT_SIZES[item.size].unit)}
+        style=${{ width: "100%", height: "100%" }} onSound=${onSound} />` : nobody;
     }
     if (item.type === "screens") {
-      const tiles = (assigned.get(item.id) || []).map((s) => tileOf(s, view));
-      return tiles.length > 0 ? html`<div class="overlay-zone"><${ScreenGrid} tiles=${tiles} label=${item.label}
+      const tiles = (assigned.get(item.id) || []).map((s) => tileOf(s, view, heard));
+      return tiles.length > 0 ? html`<div class="overlay-zone"><${ScreenGrid} tiles=${tiles} label=${item.label} onSound=${onSound}
         width=${(size.width * item.w) / 100} height=${(size.height * item.h) / 100}
         scale=${TEXT_SIZES[item.size].unit / TEXT_SIZES.m.unit} /></div>` : nobody;
     }
@@ -476,6 +492,22 @@ function useFeatured(chosen, rotation, players) {
   return featured;
 }
 
+// Son du joueur entendu, joué à part de l'image : les vidéos restent muettes (un navigateur met en pause une vidéo dont
+// on rétablit le son sans clic). OBS joue le son sans clic ; un navigateur peut attendre un clic sur la page.
+function SoundPlayer({ stream }) {
+  const audio = useRef(null);
+  const [blocked, setBlocked] = useState(false);
+  const play = () => audio.current?.play().then(() => setBlocked(false)).catch((e) => setBlocked(e?.name === "NotAllowedError"));
+  useEffect(() => {
+    if (!audio.current) return;
+    audio.current.srcObject = stream;
+    if (stream) play();
+    else setBlocked(false);
+  }, [stream]);
+  return html`<audio ref=${audio} autoplay></audio>
+    ${blocked && stream && html`<button type="button" class="sound-blocked" onClick=${play}>Le navigateur bloque le son : cliquez ici pour l'activer</button>`}`;
+}
+
 // `params` : anciens réglages dans l'adresse (voir spaceFromParams), et `disposition` pour une disposition de l'hôte.
 export function ScreensOverlay({ code, overlayKey, params }) {
   const layoutId = params.disposition || null;
@@ -495,6 +527,14 @@ export function ScreensOverlay({ code, overlayKey, params }) {
   // Objets surlignés : ceux des joueurs montrés par l'espace, sinon ceux de son créateur (le streamer).
   const mine = slotNames(info, config.joueurs.length ? config.joueurs : [view?.space?.owner].filter(Boolean));
   const progress = useProgress(code, uses("progress"));
+  // Son entendu : celui choisi depuis la room (`sound` de l'espace : un joueur, "vedette" ou aucun), ou par un clic sur
+  // un haut-parleur de l'overlay, jusqu'au prochain choix depuis la room.
+  const [clicked, setClicked] = useState(undefined);
+  useEffect(() => setClicked(undefined), [view?.space]);
+  const sound = clicked !== undefined ? clicked : view?.space?.sound || null;
+  const heard = sound === "vedette" ? featured || streams[0]?.player || null : sound;
+  const heardStream = streams.find((s) => s.audio && s.player === heard);
+  const soundStream = (heardStream && view?.peers[heardStream.id]?.stream) || null;
 
   // Joueurs dont l'overlay demande l'image : relu à chaque changement des réglages ou de l'écran en vedette.
   const select = useRef(null);
@@ -521,12 +561,14 @@ export function ScreensOverlay({ code, overlayKey, params }) {
   if (layoutId) {
     if (!view?.layouts) return view?.state === "retrying" ? message("Connexion au serveur des rooms perdue, nouvelle tentative…") : null;
     if (!layout) return message("Cette disposition n'existe plus : copiez le lien d'un espace depuis la room (onglet « Écrans »).");
-    return html`<${LayoutView} items=${layout.items} view=${view} streams=${streams} featured=${featured} feed=${feed} wishes=${wishes} mine=${mine} progress=${progress} />`;
+    return html`<${LayoutView} items=${layout.items} view=${view} streams=${streams} featured=${featured} feed=${feed} wishes=${wishes} mine=${mine} progress=${progress}
+      heard=${heard} onSound=${setClicked} /><${SoundPlayer} stream=${soundStream} />`;
   }
   if (!known) return view?.state === "retrying" ? message("Connexion au serveur des rooms perdue, nouvelle tentative…") : null;
   if (config.mode === "manuel" && !config.variants.length) return message("Cet espace n'a pas encore de disposition : réglez-la dans la room (onglet « Écrans », vue « Overlay »).");
   const empty = view?.state !== "ready" ? "Connexion au serveur des rooms…"
     : `Room ${code} : ${config.joueurs.length ? "les joueurs choisis ne partagent pas" : "aucun joueur ne partage"} leur écran pour l'instant.`;
   return html`<${LayoutView} items=${items} view=${view} streams=${streams} featured=${featured} feed=${feed} wishes=${wishes}
-    mine=${mine} progress=${progress} empty=${streams.length ? null : empty} />`;
+    mine=${mine} progress=${progress} heard=${heard} onSound=${setClicked} empty=${streams.length ? null : empty} />
+    <${SoundPlayer} stream=${soundStream} />`;
 }
