@@ -758,6 +758,8 @@ function PlayersList({ room, players, me, admin, refresh }) {
     try { setDone(await uploadYaml(room, files, player, player.id === me?.id)); } finally { refresh(); }
   });
   const manage = admin && room.open; // dépôts fermés : plus aucun retrait ni ajout
+  // Un nouveau lien personnel reste possible dépôts fermés ou room clôturée (joueur qui change d'appareil).
+  const links = admin;
 
   return html`
   ${manage && html`<${AddPlayer} room=${room} onAdded=${(player, token) => {
@@ -767,7 +769,7 @@ function PlayersList({ room, players, me, admin, refresh }) {
   <section class="card stack">
     <h2>Joueurs et jeux</h2>
     ${link && html`<div class="notice player-link full" role="status">
-      <p><strong>Lien personnel de ${link.pseudo}</strong> : envoyez-le-lui, il y retrouvera ses YAML et pourra les modifier.
+      <p><strong>Lien personnel de ${link.pseudo}</strong> : envoyez-le-lui, il y retrouvera ses YAML${room.open ? " et pourra les modifier" : " et sa place dans la room"}.${link.added ? "" : " L'ancien lien ne marche plus."}
         ${link.added ? " Vous pouvez aussi déposer ses YAML vous-même (« Déposer un YAML » sur sa ligne)." : ""}</p>
       <div class="row full">
         <code class="grow">${link.url}</code>
@@ -777,19 +779,19 @@ function PlayersList({ room, players, me, admin, refresh }) {
     </div>`}
     ${players.length === 0 && html`<p class="hint">Personne n'a encore rejoint la room. Partagez le code !</p>`}
     ${players.length > 0 && html`<div class="table-wrap full"><table class="room-table">
-      <thead><tr><th>Joueur</th><th>Nom dans la partie</th><th>Jeu</th>${manage && html`<th></th>`}</tr></thead>
+      <thead><tr><th>Joueur</th><th>Nom dans la partie</th><th>Jeu</th>${(manage || links) && html`<th></th>`}</tr></thead>
       <tbody>${players.map((p) => (p.slots.length ? p.slots : [null]).map((slot, i) => html`<tr class=${i === 0 ? "first" : ""}>
         <td>${i === 0 && html`<strong>${p.pseudo}</strong>${me?.id === p.id && html` <span class="hint">(vous)</span>`}`}</td>
         <td>${slot ? slot.name : html`<span class="hint">aucun YAML</span>`}</td>
         <td>${slot && html`${slot.game} <${GameBadges} game=${slot.game} />`}</td>
-        ${manage && html`<td class="actions">
-          ${slot && html`<button type="button" class="icon" title="Retirer ce YAML" onClick=${() => removeSlot(slot)}>✕</button>`}
+        ${(manage || links) && html`<td class="actions">
+          ${manage && slot && html`<button type="button" class="icon" title="Retirer ce YAML" onClick=${() => removeSlot(slot)}>✕</button>`}
           ${i === 0 && html`<span class="player-actions">
-            ${p.slots.length < room.max_slots && html`<label class="button ghost small" title=${`Déposer des YAML pour ${p.pseudo}`}>
+            ${manage && p.slots.length < room.max_slots && html`<label class="button ghost small" title=${`Déposer des YAML pour ${p.pseudo}`}>
               <input type="file" accept=".yaml,.yml,.txt" multiple hidden disabled=${action.busy}
                 onChange=${(e) => { depositFor(p, e.target.files); e.target.value = ""; }} />Déposer un YAML</label>`}
             ${me?.id !== p.id && html`<button type="button" class="ghost small" onClick=${() => newLink(p)}>Lien personnel</button>`}
-            <button type="button" class="link" onClick=${() => kick(p)}>Retirer le joueur</button>
+            ${manage && html`<button type="button" class="link" onClick=${() => kick(p)}>Retirer le joueur</button>`}
           </span>`}
         </td>`}
       </tr>`))}</tbody>
