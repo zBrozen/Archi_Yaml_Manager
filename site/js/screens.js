@@ -744,26 +744,53 @@ const Step = ({ done, title, children }) => html`<li class=${done ? "done" : ""}
 
 // Les trois étapes du son du jeu seul, cochées au fur et à mesure : câble trouvé, son du jeu reçu, écoute réglée.
 // `permitted` : le micro est autorisé (sinon le navigateur cache le nom des entrées, et donc le câble).
+// Installation du câble : affichée tant qu'il manque, puis repliée (pour la revoir ou l'expliquer à un autre joueur).
+const CableInstall = () => html`<ol class="tips hint">
+  <li>Téléchargez <a href=${VB_CABLE_URL} target="_blank" rel="noopener">VB-Cable</a> (gratuit, Windows ; sur Mac : BlackHole).</li>
+  <li>Décompressez le fichier, clic droit sur <strong>VBCABLE_Setup_x64</strong> → <strong>Exécuter en tant
+    qu'administrateur</strong> → <strong>Install Driver</strong>.</li>
+  <li>Redémarrez l'ordinateur et revenez ici : le site trouvera le câble tout seul.</li>
+</ol>`;
+
+// Choisir les applications entendues dans le stream : le tutoriel reste affiché une fois le câble installé, puisqu'il
+// sert à chaque partie (et pour chaque nouvelle application).
+const CableRouting = () => html`<div class="stack">
+  <span class="hint">Seules les applications envoyées dans le câble s'entendent dans le stream ; les autres restent sur votre
+    casque, comme d'habitude.</span>
+  <ol class="tips hint">
+    <li>Lancez le jeu (ou l'émulateur) et faites-lui jouer du son : Windows ne liste que les applications qui en jouent.</li>
+    <li>Ouvrez le <a href=${WINDOWS_MIXER}>mélangeur de volume de Windows</a>. Le navigateur demande s'il peut ouvrir
+      Paramètres : acceptez. Sinon : clic droit sur le haut-parleur de la barre des tâches → <strong>Ouvrir le mélangeur
+      de volume</strong> (Windows 11) ou <strong>Ouvrir les paramètres de son</strong> → <strong>Volume des applications
+      et préférences des périphériques</strong> (Windows 10).</li>
+    <li>À la ligne de l'application (Windows 11 : cliquez dessus pour la déplier), réglez <strong>Périphérique de
+      sortie</strong> sur <strong>CABLE Input</strong>.</li>
+    <li>Recommencez pour chaque application à faire entendre : le jeu et son émulateur, un client Archipelago qui joue des
+      sons, la musique si vous voulez la partager…</li>
+  </ol>
+  <span class="hint">À ne pas mettre dans le câble : Discord (sinon les voix partent dans le stream) et le navigateur où
+    cette page est ouverte (le site y renvoie le son du jeu : il tournerait en boucle). Pour un jeu dans le navigateur,
+    ouvrez-le dans un autre navigateur (Edge, Firefox…) et mettez celui-là dans le câble.</span>
+  <span class="hint">Windows retient le choix pour chaque application. Pour arrêter, remettez-la sur <strong>Par défaut</strong>
+    dans le mélangeur (ou <strong>Réinitialiser</strong> en bas de la page, pour toutes).</span>
+</div>`;
+
 function CableGuide({ cable, permitted, onReveal, listen, onListen }) {
   const running = gameSound.running;
   return html`<ol class="cable-steps">
     <${Step} done=${!!cable} title="Installer le câble audio virtuel (une seule fois)">
-      ${cable ? html`<span class="hint">Câble trouvé : ${cable.label}.</span>`
+      ${cable ? html`<span class="hint">Câble trouvé : ${cable.label}.</span>
+          <details class="more"><summary>Revoir l'installation</summary><${CableInstall} /></details>`
         : !permitted ? html`<span class="hint">Le site cherche le câble parmi les entrées audio de l'ordinateur : le navigateur
             demande d'abord l'autorisation du micro (rien n'est enregistré).</span>
-          <button type="button" class="small mic-reveal" onClick=${onReveal}>Chercher le câble</button>`
-        : html`<ol class="tips hint">
-            <li>Téléchargez <a href=${VB_CABLE_URL} target="_blank" rel="noopener">VB-Cable</a> (gratuit, Windows ; sur Mac : BlackHole).</li>
-            <li>Décompressez le fichier, clic droit sur <strong>VBCABLE_Setup_x64</strong> → <strong>Exécuter en tant
-              qu'administrateur</strong> → <strong>Install Driver</strong>.</li>
-            <li>Redémarrez l'ordinateur et revenez ici : le site trouvera le câble tout seul.</li>
-          </ol>`}
+          <button type="button" class="small mic-reveal" onClick=${onReveal}>Chercher le câble</button>
+          <details class="more"><summary>Comment l'installer</summary><${CableInstall} /></details>`
+        : html`<${CableInstall} />`}
     </${Step}>
-    <${Step} done=${gameSound.heard} title="Envoyer le son du jeu dans le câble">
-      <span class="hint">Lancez le jeu, puis ouvrez le <a href=${WINDOWS_MIXER}>mélangeur de volume de Windows</a> (Paramètres →
-        Système → Son → Mélangeur de volume). À la ligne du jeu ou de l'émulateur, choisissez la sortie${" "}
-        <strong>CABLE Input</strong>. Ne touchez pas à la sortie par défaut : Discord et le reste restent sur votre casque.</span>
-      ${running && !gameSound.heard && html`<span class="hint">En attente du son du jeu : faites du bruit dans le jeu.</span>`}
+    <${Step} done=${gameSound.heard} title="Choisir les applications entendues dans le stream">
+      <${CableRouting} />
+      ${running && !gameSound.heard && html`<span class="hint"><strong>En attente du son :</strong> faites du bruit dans le jeu.
+        Toujours rien ? Vérifiez que sa sortie est bien CABLE Input dans le mélangeur.</span>`}
     </${Step}>
     <${Step} done=${running && gameSound.heard} title="Vérifier et entendre le jeu">
       ${running && html`<${SoundMeter} source=${gameSound} label="Son du jeu" />`}
@@ -773,7 +800,6 @@ function CableGuide({ cable, permitted, onReveal, listen, onListen }) {
         vous renvoie pas le son, il y reviendrait. Remettez votre casque ou vos haut-parleurs comme sortie par défaut ; seul
         le jeu va dans le câble.</div>`}
     </${Step}>
-    <li class="hint">Après la partie, remettez la sortie du jeu sur <strong>Par défaut</strong> dans le mélangeur.</li>
   </ol>`;
 }
 
