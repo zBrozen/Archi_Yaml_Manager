@@ -324,6 +324,12 @@ export function RoomPage({ index, code, onCreate, onEdit }) {
     return () => clearInterval(timer);
   }, []);
 
+  // Lien personnel ou d'hôte collé dans l'adresse alors que la room est déjà ouverte : main.js mémorise le jeton, on recharge.
+  useEffect(() => {
+    window.addEventListener("hashchange", refresh);
+    return () => window.removeEventListener("hashchange", refresh);
+  }, []);
+
   useRoomApworlds(code, data?.apworlds);
   const online = useApStatus(data?.room);
   // Tracker lu ici une fois pour tous les onglets : progression, wishlists et leur bandeau.
@@ -484,9 +490,12 @@ function JoinForm({ room, admin, refresh }) {
     });
   };
   if (!room.open) {
-    return html`<section class="card"><p>Les dépôts sont fermés : cette room n'accepte plus de nouveaux joueurs${admin ? " (rouvrez-les pour jouer aussi)" : ""}.</p></section>`;
+    return html`<section class="card stack">
+      <p>Les dépôts sont fermés : cette room n'accepte plus de nouveaux joueurs${admin ? " (rouvrez-les pour jouer aussi)" : ""}.</p>
+      <${ReclaimForm} room=${room} refresh=${refresh} />
+    </section>`;
   }
-  return html`<form class="card stack" onSubmit=${submit}>
+  return html`<div class="stack"><form class="card stack" onSubmit=${submit}>
     <h2>${admin ? "Jouer aussi dans cette room" : "Rejoindre la room"}</h2>
     <div class="row full">
       <input type="text" class="grow" required maxLength="32" placeholder=${room.direct ? "Votre nom dans la partie" : "Votre pseudo"}
@@ -496,7 +505,46 @@ function JoinForm({ room, admin, refresh }) {
     ${join.error && html`<div class="notice error full">${join.error}</div>`}
     ${room.direct && html`<p class="hint">Avec votre nom dans la partie, la room met en avant vos fichiers et votre progression ;
       rejoindre permet aussi de partager votre écran pour le stream.</p>`}
-    <p class="hint">Déjà inscrit sur un autre appareil ? Ouvrez plutôt votre lien personnel.</p>
+  </form>
+  <section class="card"><${ReclaimForm} room=${room} refresh=${refresh} /></section></div>`;
+}
+
+// Retrouver son accès sur un autre appareil, quel que soit l'état de la room : on colle son lien personnel ou son
+// lien d'hôte (#/room/CODE/p/JETON ou #/room/CODE/h/JETON). Un lien que la room ne reconnaît pas est oublié.
+function ReclaimForm({ room, refresh }) {
+  const [link, setLink] = useState("");
+  const reclaim = useAction();
+  const submit = (e) => {
+    e.preventDefault();
+    reclaim.run(async () => {
+      const found = /#\/room\/([A-Za-z0-9]+)\/([ph])\/([A-Za-z0-9_-]+)/.exec(link.trim());
+      if (!found) throw new Error("Collez le lien complet : il contient …/room/CODE/p/… (joueur) ou …/room/CODE/h/… (hôte).");
+      if (normalizeCode(found[1]) !== room.code) throw new Error(`Ce lien est celui de la room ${normalizeCode(found[1])}, pas de celle-ci.`);
+      const host = found[2] === "h";
+      const before = savedAccess(room.code);
+      const field = host ? "admin" : "player";
+      saveAccess(room.code, { [field]: found[3] });
+      let result;
+      try { result = await api.get(room.code); } catch (err) { saveAccess(room.code, { [field]: before[field] ?? null }); throw err; }
+      if (host ? !result.admin : !result.me) {
+        saveAccess(room.code, { [field]: before[field] ?? null });
+        throw new Error(host ? "Ce lien d'hôte n'est pas reconnu par la room."
+          : "Ce lien personnel n'est plus valable : l'hôte peut vous en créer un nouveau depuis la liste des joueurs.");
+      }
+      setLink("");
+      refresh();
+    });
+  };
+  return html`<form class="stack" onSubmit=${submit}>
+    <h3>Déjà inscrit sur un autre appareil ?</h3>
+    <div class="row full">
+      <input type="text" class="grow" placeholder="Collez votre lien personnel ou votre lien d'hôte" value=${link}
+        onInput=${(e) => setLink(e.target.value)} autocomplete="off" aria-label="Lien personnel ou lien d'hôte" />
+      <button type="submit" class="ghost" disabled=${reclaim.busy || !link.trim()}>Retrouver mon accès</button>
+    </div>
+    ${reclaim.error && html`<div class="notice error full">${reclaim.error}</div>`}
+    <p class="hint">Copiez-le depuis l'appareil où vous vous étiez inscrit (bouton « Lien personnel » de vos YAML, ou « Lien d'hôte »
+      de l'onglet Hôte), ou demandez à l'hôte un nouveau lien personnel.</p>
   </form>`;
 }
 
