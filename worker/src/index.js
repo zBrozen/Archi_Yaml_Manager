@@ -1133,6 +1133,12 @@ async function saveLayouts(request, env, room) {
 // Jeu affiché à côté du nom d'un joueur qui partage : celui qu'il choisit parmi ses jeux, aucun ("aucun"), ou tous.
 const shownGames = (all, game) => (game === "aucun" ? [] : all.includes(game) ? [game] : all);
 
+// Pistes de son d'un joueur qui en portent ({ jeu, voix }, null sans son). `true` des anciennes versions : le jeu.
+function audioFlags(audio) {
+  const flags = audio === true ? { jeu: true, voix: false } : { jeu: audio?.jeu === true, voix: audio?.voix === true };
+  return flags.jeu || flags.voix ? flags : null;
+}
+
 const sendTo = (ws, message) => {
   try { ws.send(JSON.stringify(message)); } catch { /* connexion déjà fermée */ }
 };
@@ -1141,7 +1147,7 @@ const sendTo = (ws, message) => {
 //   client → service : { type: "hello", role: "player", token } ou { type: "hello", role: "overlay", key },
 //                      puis { type: "signal", to, data } (relayé à un joueur s'il vient d'un overlay, et inversement),
 //                      et pour un joueur { type: "game", game } (jeu affiché à côté de son nom, voir shownGames)
-//                      et { type: "audio", audio } (son envoyé ou non avec l'image ; aussi dans « hello »).
+//                      et { type: "audio", audio } (pistes de son qui en portent : { jeu, voix } ; aussi dans « hello »).
 //   service → client : { type: "welcome", id }, { type: "error", message } (puis fermeture),
 //                      { type: "signal", from, data }, { type: "left", id } (aux joueurs : un overlay est parti),
 //                      { type: "streams", list: [{ id, player, label, games, audio }] } (aux overlays : joueurs qui partagent),
@@ -1206,7 +1212,7 @@ export class ScreenRoom extends DurableObject {
   publish(except = null, only = null) {
     const list = this.sockets("player", except).map((ws) => {
       const { id, player, label, games, audio } = ws.deserializeAttachment();
-      return { id, player, label, games, audio: !!audio };
+      return { id, player, label, games, audio: audio || null };
     });
     for (const ws of only ? [only] : this.sockets("overlay", except)) sendTo(ws, { type: "streams", list });
   }
@@ -1224,7 +1230,7 @@ export class ScreenRoom extends DurableObject {
       return this.publish();
     }
     if (msg.type === "audio" && me.role === "player") {
-      me.audio = msg.audio === true;
+      me.audio = audioFlags(msg.audio);
       ws.serializeAttachment(me);
       return this.publish();
     }
@@ -1264,7 +1270,7 @@ export class ScreenRoom extends DurableObject {
           if (other.deserializeAttachment().player === player.id) this.refuse(other, "Partage repris depuis une autre page.");
         }
         const allGames = [...new Set(results.map((r) => r.game))];
-        Object.assign(me, { role: "player", player: player.id, label: player.pseudo, allGames, games: shownGames(allGames, msg.game), audio: msg.audio === true });
+        Object.assign(me, { role: "player", player: player.id, label: player.pseudo, allGames, games: shownGames(allGames, msg.game), audio: audioFlags(msg.audio) });
       } else {
         throw new HttpError(400, "Rôle inconnu.");
       }

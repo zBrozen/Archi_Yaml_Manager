@@ -49,7 +49,8 @@
   inutilisée). Réglages de l'overlay d'un espace dans `config` (`spaceConfig` du Worker et `DEFAULT_SPACE` de
   `overlay-layout.js`, mêmes valeurs : mode auto ou dispositions par nombre d'écrans ; écrans superposés permis, signalés par l'éditeur),
   écran en vedette dans `featured`, son entendu dans `sound` (un seul joueur ; `AudioMix` de `screens.js` côté joueur,
-  piste audio toujours négociée, drapeau `audio` du joueur relayé par le Durable Object), poussés aux overlays ouverts par le Durable Object (message `space`) ; `rooms.overlay_hash` n'est plus que l'ancienne clé unique, reprise
+  deux pistes audio toujours négociées, jeu puis voix dans l'ordre d'`AUDIO_CHANNELS` de `screens-net.js`, drapeau
+  `audio` `{ jeu, voix }` du joueur relayé par le Durable Object), poussés aux overlays ouverts par le Durable Object (message `space`) ; `rooms.overlay_hash` n'est plus que l'ancienne clé unique, reprise
   dans la liste à la réouverture par l'hôte.
   Wishlists (`wishlist.js`, table `wishlists`, par nom de joueur dans la partie) : objets reçus d'après le tracker
   d'archipelago.gg, noms lus dans les datapackages ; le tracker est lu une fois par `RoomPage` pour tous les onglets.

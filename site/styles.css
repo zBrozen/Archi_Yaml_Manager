@@ -812,8 +812,9 @@ html.overlay-page body { background: transparent; overflow: hidden; }
 .screen-game { font-size: .8em; color: #c9ced6; }
 .screen-flag { margin-left: .6em; font-size: .65em; padding: .1em .45em; border-radius: 4px; background: #ffc864; color: #1c1f25; font-weight: 700; }
 /* Haut-parleur d'un écran qui envoie son son : barré et discret quand il est coupé, clair avec « Son » quand on l'entend */
+.screen-audio { position: absolute; top: .3em; right: .3em; display: grid; justify-items: end; gap: .3em; max-width: calc(100% - .6em); }
 .screen-sound {
-  position: absolute; top: .3em; right: .3em; display: inline-flex; align-items: center; gap: .3em;
+  display: inline-flex; align-items: center; gap: .3em;
   min-height: 0; padding: .2em .45em; border: 2px solid #eef0f3; border-radius: 6px;
   background: rgb(28 31 37 / 85%); color: #eef0f3; font: inherit; font-size: .8em; font-weight: 700; line-height: 1; cursor: pointer;
 }
@@ -821,6 +822,24 @@ html.overlay-page body { background: transparent; overflow: hidden; }
 .screen-sound:not(.on) { opacity: .8; border-color: transparent; }
 .screen-sound.on { background: #eef0f3; color: #1c1f25; }
 .screen-sound:hover, .screen-sound:focus-visible { opacity: 1; outline: 3px solid #ffc864; outline-offset: 1px; }
+/* Jeu et voix d'un écran : coupure et volume, affichés seulement au survol (OBS : « Interagir ») ou au clavier */
+.screen-audio-panel {
+  display: none; grid-template-columns: auto minmax(4em, 7em) auto; align-items: center; gap: .35em .5em;
+  padding: .45em .55em; border-radius: 6px; background: rgb(28 31 37 / 94%); color: #eef0f3; font-size: .7em;
+}
+.screen-audio-panel:empty { display: none !important; }
+.screen-tile:hover .screen-audio-panel, .screen-audio:focus-within .screen-audio-panel { display: grid; }
+.screen-audio-row { display: contents; }
+.screen-channel {
+  display: inline-flex; align-items: center; gap: .3em; min-height: 0; padding: .2em .45em; border: 2px solid #eef0f3;
+  border-radius: 6px; background: transparent; color: #eef0f3; font: inherit; font-weight: 700; line-height: 1; cursor: pointer;
+}
+.screen-channel svg { width: 1.2em; height: 1.2em; }
+.screen-channel.on { background: #eef0f3; color: #1c1f25; }
+.screen-channel:not(.on) { text-decoration: line-through; }
+.screen-channel:focus-visible, .screen-audio-panel input:focus-visible { outline: 3px solid #ffc864; outline-offset: 1px; }
+.screen-audio-panel input[type="range"] { width: 100%; margin: 0; accent-color: #ffc864; }
+.screen-audio-value { min-width: 3.2em; text-align: right; font-variant-numeric: tabular-nums; }
 .sound-blocked {
   position: fixed; left: 50%; bottom: 16px; transform: translateX(-50%); max-width: calc(100vw - 32px);
   padding: .7rem 1.2rem; border: 2px solid #ffc864; border-radius: 10px; background: #1c1f25; color: #eef0f3; font-size: 1.2rem; font-weight: 700;

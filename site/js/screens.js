@@ -8,7 +8,7 @@
 import { html, useState, useEffect, useRef } from "../vendor/preact-htm.js";
 import { CopyButton, plural, useAction, useSetting } from "./ui.js";
 import { api, overlayLink, saveAccess, savedAccess } from "./rooms-api.js";
-import { ICE_SERVERS, serial, signaling } from "./screens-net.js";
+import { AUDIO_CHANNELS, ICE_SERVERS, serial, signaling } from "./screens-net.js";
 import { CONSOLE_PLACES, FEED_CHECKS, ITEM_FILTERS, PROGRESS_MODES, ROTATIONS, SCREEN_MODES, spaceOf, spaceUses } from "./overlay-layout.js";
 import { SpaceLayouts } from "./overlay-editor.js";
 
@@ -126,28 +126,41 @@ function preferCodec(transceiver, codec) {
 const MAX_VIEWERS = 3; // overlays auxquels un joueur envoie son image ; les suivants reçoivent « busy »
 
 // --- Son envoyé avec l'image -------------------------------------------------------------
-// Le son de l'ordinateur (capture d'écran du navigateur) et un micro ou une entrée audio (câble audio virtuel…)
-// passent par un mélangeur : la piste envoyée aux overlays ne change jamais, on y branche et débranche les sources
-// sans refaire les connexions. Sans source, elle envoie du silence et l'overlay n'affiche pas de haut-parleur.
+// Le son du jeu (celui de l'ordinateur, ou le câble audio virtuel) et la voix (micro ou autre entrée audio) passent par
+// un mélangeur à deux pistes, envoyées à part pour que l'overlay coupe l'une sans l'autre. Les pistes envoyées ne
+// changent jamais : on y branche et débranche les sources sans refaire les connexions. Sans source, une piste envoie
+// du silence et l'overlay ne propose pas de l'écouter.
+
+// Piste de chaque source (pistes dans l'ordre d'AUDIO_CHANNELS, voir screens-net.js).
+const AUDIO_BUS = { pc: "jeu", jeu: "jeu", micro: "voix" };
 
 class AudioMix {
   constructor() {
     this.ctx = new AudioContext();
     this.ctx.resume?.().catch(() => {});
-    this.out = this.ctx.createMediaStreamDestination();
-    this.sum = this.ctx.createGain();
     this.analyser = this.ctx.createAnalyser();
     this.analyser.fftSize = 1024;
-    this.sum.connect(this.out);
-    this.sum.connect(this.analyser);
     this.samples = new Float32Array(this.analyser.fftSize);
-    this.inputs = new Map(); // "pc" ou "micro" → { track, source, gain }
+    this.buses = Object.fromEntries(AUDIO_CHANNELS.map((name) => {
+      const sum = this.ctx.createGain();
+      const out = this.ctx.createMediaStreamDestination();
+      sum.connect(out);
+      sum.connect(this.analyser);
+      return [name, { sum, out }];
+    }));
+    this.inputs = new Map(); // "pc", "jeu" ou "micro" → { track, source, gain }
     this.onChange = null;
   }
 
-  get track() { return this.out.stream.getAudioTracks()[0]; }
+  track(channel) { return this.buses[channel].out.stream.getAudioTracks()[0]; }
 
   get active() { return this.inputs.size > 0; }
+
+  // Pistes qui portent du son, annoncées aux overlays : { jeu, voix }.
+  get channels() {
+    const used = new Set([...this.inputs.keys()].map((name) => AUDIO_BUS[name]));
+    return Object.fromEntries(AUDIO_CHANNELS.map((c) => [c, used.has(c)]));
+  }
 
   has(name) { return this.inputs.has(name); }
 
@@ -157,7 +170,7 @@ class AudioMix {
     const source = this.ctx.createMediaStreamSource(new MediaStream([track]));
     const gain = this.ctx.createGain();
     gain.gain.value = volume;
-    source.connect(gain).connect(this.sum);
+    source.connect(gain).connect(this.buses[AUDIO_BUS[name]].sum);
     this.inputs.set(name, { track, source, gain });
     // Partage du son arrêté depuis le bandeau du navigateur, ou micro débranché.
     track.addEventListener("ended", () => { if (this.inputs.get(name)?.track === track) this.remove(name); });
@@ -353,7 +366,7 @@ class Broadcast {
     this.onChange = onChange;
     const queue = serial();
     // Présentation renvoyée à chaque reconnexion : elle garde le dernier jeu choisi.
-    this.hello = { type: "hello", role: "player", token, game, audio: mix.active };
+    this.hello = { type: "hello", role: "player", token, game, audio: mix.channels };
     mix.onChange = () => this.audioChanged();
     this.signal = signaling(code, this.hello, (msg) => queue(() => this.receive(msg)), (state, message) => {
       this.state = state;
@@ -370,11 +383,12 @@ class Broadcast {
     this.signal.send({ type: "game", game });
   }
 
-  // Les overlays n'affichent le haut-parleur que si le joueur envoie vraiment du son.
+  // Les overlays ne proposent d'écouter que les pistes qui portent vraiment du son.
   audioChanged() {
-    if (this.hello.audio !== this.mix.active) {
-      this.hello.audio = this.mix.active;
-      this.signal.send({ type: "audio", audio: this.mix.active });
+    const audio = this.mix.channels;
+    if (AUDIO_CHANNELS.some((c) => audio[c] !== this.hello.audio[c])) {
+      this.hello.audio = audio;
+      this.signal.send({ type: "audio", audio });
     }
     this.changed();
   }
@@ -412,7 +426,9 @@ class Broadcast {
       sendEncodings: [{ maxBitrate: this.quality.bitrate, maxFramerate: this.quality.fps }],
     }));
     for (const transceiver of transceivers) preferCodec(transceiver, codec);
-    pc.addTransceiver(this.mix.track, { direction: "sendonly", streams: [this.stream], sendEncodings: [{ maxBitrate: AUDIO_BITRATE }] });
+    for (const channel of AUDIO_CHANNELS) {
+      pc.addTransceiver(this.mix.track(channel), { direction: "sendonly", streams: [this.stream], sendEncodings: [{ maxBitrate: AUDIO_BITRATE }] });
+    }
     const offer = await pc.createOffer();
     await pc.setLocalDescription(offer);
     await Promise.all(transceivers.map((transceiver) => this.tune(transceiver.sender)));
@@ -838,6 +854,8 @@ const CableUndo = () => html`<ol class="tips">
     → <strong>Entrée</strong>).</li>
   <li><strong>Applications</strong> : dans le <a href=${WINDOWS_MIXER}>mélangeur de volume</a>, bouton${" "}
     <strong>Réinitialiser</strong> en bas de la page (toutes les applications reviennent sur « Par défaut »).</li>
+  <li><strong>Écoute par Windows</strong>, si vous l'aviez activée : <strong>mmsys.cpl</strong> → <strong>Enregistrement</strong>
+    → <strong>CABLE Output</strong> → <strong>Écouter</strong>, décochez <strong>Écouter ce périphérique</strong>.</li>
   <li><strong>Désinstaller le câble (facultatif)</strong> : relancez <strong>VBCABLE_Setup_x64</strong> en administrateur
     → <strong>Remove Driver</strong>, puis redémarrez l'ordinateur.</li>
 </ol>`;
@@ -871,6 +889,23 @@ function CableGuide({ cable, permitted, onReveal, listen, onListen, outputs, sin
       ${listen && gameSound.loop && html`<div class="notice warn full">Le site ne peut pas vous renvoyer le son du jeu : la
         sortie choisie est le câble lui-même, il y reviendrait. Choisissez votre casque ci-dessus, ou remettez-le comme
         sortie par défaut de Windows.</div>`}
+      <details class="more">
+        <summary>Entendre le jeu sans le site (même onglet fermé)</summary>
+        <div class="stack">
+          <span class="hint">Windows peut renvoyer lui-même le câble vers votre casque, une fois pour toutes :</span>
+          <ol class="tips hint">
+            <li>Touche Windows + R, tapez <strong>mmsys.cpl</strong> puis Entrée (ancien panneau Son).</li>
+            <li>Onglet <strong>Enregistrement</strong>, double-clic sur <strong>CABLE Output</strong>.</li>
+            <li>Onglet <strong>Écouter</strong> : cochez <strong>Écouter ce périphérique</strong>.</li>
+            <li>Dans <strong>Lecture sur ce périphérique</strong>, choisissez votre casque (pas « Périphérique de lecture par
+              défaut » : si Windows remettait le câble par défaut, le son y retournerait), puis <strong>OK</strong>.</li>
+          </ol>
+          <div class="notice warn full">Décochez alors « Entendre le jeu sur ce PC » ci-dessus : sinon vous entendrez le jeu deux
+            fois, légèrement décalé (écho).</div>
+          <span class="hint">Un jeu dont on change la sortie en cours de route laisse parfois passer un bout de son sur l'ancienne :
+            réglez le mélangeur, puis relancez le jeu.</span>
+        </div>
+      </details>
     </${Step}>
     <li class="cable-undo">
       <strong>Revenir à un son comme avant</strong>

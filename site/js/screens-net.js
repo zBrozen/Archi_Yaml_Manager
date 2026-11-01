@@ -6,6 +6,11 @@ import { screensSocketUrl } from "./rooms-api.js";
 // (NAT strict, 4G, réseaux d'entreprise) ne passent pas : l'overlay l'indique sur l'écran du joueur.
 export const ICE_SERVERS = [{ urls: ["stun:stun.cloudflare.com:3478", "stun:stun.l.google.com:19302"] }];
 
+// Pistes de son d'un joueur, dans l'ordre où il les propose à l'overlay (qui les reconnaît à cet ordre) : le son du jeu,
+// puis sa voix. Le joueur annonce celles qui portent du son ({ jeu, voix } ; `true` des anciennes versions : le jeu).
+export const AUDIO_CHANNELS = ["jeu", "voix"];
+export const audioChannels = (audio) => (audio === true ? { jeu: true, voix: false } : { jeu: !!audio?.jeu, voix: !!audio?.voix });
+
 // Connexion au service, reprise seule après une coupure. `onState(state, message)` : connecting, ready,
 // retrying, ou refused (accès refusé par le service : pas de nouvelle tentative). Le message de bienvenue
 // passe aussi par `onMessage` (il porte les dispositions pour un overlay).
