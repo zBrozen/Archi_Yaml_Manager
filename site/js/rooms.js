@@ -868,8 +868,10 @@ function HostPanel({ room, setData, data }) {
     <div class="row full">
       <h2 class="grow">Espace de l'hôte</h2>
       <${CopyButton} text=${hostLink(room.code, savedAccess(room.code).admin)} label="Lien d'hôte" />
+      ${savedAccess(room.code).player && html`<${CopyButton} text=${playerLink(room.code, savedAccess(room.code).player)} label="Lien joueur" />`}
     </div>
-    <p class="hint">Le lien d'hôte donne accès à cet espace depuis un autre appareil : gardez-le pour vous.</p>
+    <p class="hint">Le lien d'hôte donne accès à cet espace depuis un autre appareil : gardez-le pour vous.
+      ${savedAccess(room.code).player && " Vous jouez aussi : le lien joueur vous redonne votre place de joueur dans la room."}</p>
 
     <details class="group full" open=${changed}>
       <summary>Réglages de la room</summary>
@@ -1299,6 +1301,11 @@ function Overview({ room, me, admin, mine, players, online, tracker, join, go })
         ? html`<ul class="summary-list full">${mine.map((s) => html`<li><strong>${s.name}</strong> <span class="hint">${s.game}</span> <${GameBadges} game=${s.game} />
           ${inBase(s.game) && html`<a class="small" href=${guideLink(s.game)} target="_blank" rel="noopener">Installer le jeu</a>`}</li>`)}</ul>`
         : html`<p class="hint">Aucun YAML déposé${room.open ? " pour l'instant." : "."}</p>`}
+    </section>`}
+    ${me && room.direct && html`<section class="card stack">
+      <div class="row full"><h2 class="grow">Votre accès <span class="hint">(${me.pseudo})</span></h2>
+        <${CopyButton} text=${playerLink(room.code, savedAccess(room.code).player)} label="Lien personnel" /></div>
+      <p class="hint">Le lien personnel permet de reprendre depuis un autre appareil ; ne le partagez pas.</p>
     </section>`}
     ${!room.direct && html`<section class="card stack">
       <div class="row full"><h2 class="grow">Joueurs</h2>
