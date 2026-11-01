@@ -15,10 +15,14 @@ async function start(id) {
   status("Installation des modules Python…");
   await py.loadPackage(["pyyaml", "jinja2", "ssl", "setuptools"]);
   status("Chargement d'Archipelago…");
+  // GitHub Pages répond parfois 503 un court instant (pendant une publication) : on relance deux fois.
   const get = async (path) => {
-    const response = await fetch(new URL(path, self.location));
-    if (!response.ok) throw new Error(`${path} introuvable (${response.status})`);
-    return response;
+    for (let attempt = 0; ; attempt++) {
+      const response = await fetch(new URL(path, self.location));
+      if (response.ok) return response;
+      if (response.status < 500 || attempt >= 2) throw new Error(`${path} introuvable (${response.status})`);
+      await new Promise((resolve) => setTimeout(resolve, 2000 * (attempt + 1)));
+    }
   };
   const [core, entry, extract, ut] = await Promise.all([
     get("../data/ap-core.zip"), get("../py/browser_entry.py"), get("../py/ap_extract.py"), get("../py/ut_core.py"),
