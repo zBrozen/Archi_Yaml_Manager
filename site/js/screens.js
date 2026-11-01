@@ -63,24 +63,37 @@ function withBitrates(sdp, quality) {
 
 // Codec encodé par la carte graphique, s'il y en a un pour cette qualité : meilleure image à débit égal, et le
 // processeur reste libre pour le jeu. Proposé en premier ; l'overlay en prend un autre s'il ne sait pas le lire.
+// Chaque variante proposée par le navigateur est essayée (profils H.264 surtout : une carte graphique peut encoder
+// le profil « high » sans le « baseline »), sinon une variante par codec.
 const HARDWARE_CODECS = [
-  ["video/AV1", "video/AV1"],
-  ["video/VP9", "video/VP9"],
-  ["video/H264", "video/H264;level-asymmetry-allowed=1;packetization-mode=1;profile-level-id=42e01f"],
+  { mimeType: "video/AV1" },
+  { mimeType: "video/VP9" },
+  { mimeType: "video/H264", sdpFmtpLine: "level-asymmetry-allowed=1;packetization-mode=1;profile-level-id=42e01f" },
 ];
 const hardwareChoices = new Map();
+
+function codecCandidates() {
+  const offered = RTCRtpSender.getCapabilities?.("video")?.codecs || [];
+  return HARDWARE_CODECS.flatMap((fallback) => {
+    const variants = offered.filter((c) => c.mimeType === fallback.mimeType);
+    if (!variants.length) return [fallback];
+    const seen = new Set();
+    return variants.filter((c) => !seen.has(c.sdpFmtpLine || "") && seen.add(c.sdpFmtpLine || ""));
+  });
+}
 
 function hardwareCodec(quality) {
   if (!hardwareChoices.has(quality)) {
     hardwareChoices.set(quality, (async () => {
       if (!navigator.mediaCapabilities?.encodingInfo) return null;
-      for (const [mime, contentType] of HARDWARE_CODECS) {
+      for (const codec of codecCandidates()) {
+        const contentType = codec.sdpFmtpLine ? `${codec.mimeType};${codec.sdpFmtpLine}` : codec.mimeType;
         try {
           const info = await navigator.mediaCapabilities.encodingInfo({
             type: "webrtc",
             video: { contentType, width: quality.width, height: quality.height, bitrate: quality.bitrate, framerate: quality.fps },
           });
-          if (info.supported && info.powerEfficient) return mime;
+          if (info.supported && info.powerEfficient) return codec;
         } catch { /* codec inconnu de ce navigateur */ }
       }
       return null;
@@ -89,13 +102,15 @@ function hardwareCodec(quality) {
   return hardwareChoices.get(quality);
 }
 
-function preferCodec(transceiver, mime) {
-  if (!mime || !transceiver.setCodecPreferences) return;
+// Ordre des codecs proposés à l'overlay : la variante trouvée, puis les autres du même codec, puis le reste.
+function preferCodec(transceiver, codec) {
+  if (!codec || !transceiver.setCodecPreferences) return;
+  const rank = (c) => (c.mimeType !== codec.mimeType ? 2 : (c.sdpFmtpLine || "") === (codec.sdpFmtpLine || "") ? 0 : 1);
   for (const source of [RTCRtpSender, RTCRtpReceiver]) {
     const codecs = source.getCapabilities?.("video")?.codecs || [];
-    if (!codecs.some((c) => c.mimeType === mime)) continue;
+    if (!codecs.some((c) => c.mimeType === codec.mimeType)) continue;
     try {
-      transceiver.setCodecPreferences([...codecs.filter((c) => c.mimeType === mime), ...codecs.filter((c) => c.mimeType !== mime)]);
+      transceiver.setCodecPreferences([0, 1, 2].flatMap((r) => codecs.filter((c) => rank(c) === r)));
       return;
     } catch { /* liste refusée : essai avec l'autre */ }
   }
@@ -230,6 +245,8 @@ class Broadcast {
       width: out.frameWidth,
       height: out.frameHeight,
       fps: out.framesPerSecond,
+      // Images fournies par la capture (fenêtre ou caméra), avant l'encodeur.
+      captured: stats.get(out.mediaSourceId)?.framesPerSecond ?? null,
       bytes: out.bytesSent,
       at: out.timestamp,
       bitrate: elapsed > 0 && out.bytesSent >= previous.bytes ? ((out.bytesSent - previous.bytes) * 8000) / elapsed : null,
@@ -424,7 +441,9 @@ const LOSSY = 0.02; // au-delà de 2 % de paquets perdus, la limite vient vraime
 // capacité de la connexion : il la monte tant que rien ne se perd, et une image immobile la fait peu monter.
 function limitText(sent, quality) {
   if (sent.limit === "cpu") {
-    return `Image réduite : l'encodage est trop lourd pour l'ordinateur.${sent.hardware === false ? " Il se fait par le processeur (aucun codec de la carte graphique n'a été trouvé pour cette qualité)." : ""}
+    return `Image réduite : l'encodage est trop lourd pour l'ordinateur.${sent.hardware === false ? ` Il se fait par le processeur (aucun codec de la carte graphique n'a été trouvé pour cette qualité) :
+      vérifiez que « Utiliser l'accélération graphique » est activé dans les paramètres du navigateur (Système).
+      Chrome et Edge encodent plus souvent par la carte graphique que Firefox.` : ""}
       Choisissez une qualité plus basse, ou moins d'images par seconde.`;
   }
   if (sent.limit !== "bandwidth") return null;
@@ -440,9 +459,21 @@ function limitText(sent, quality) {
       ne se perd ; une image presque immobile (menu, pause, autre fenêtre) le fait monter moins vite.`;
 }
 
-function SentInfo({ sent, quality }) {
+// Peu d'images envoyées sans que l'encodeur soit en cause : la capture n'en fournit pas plus.
+function captureText(sent, quality, camera) {
+  if (sent.limit === "cpu" || sent.captured == null || sent.captured >= quality.fps * 0.75) return null;
+  const fps = `${Math.round(sent.captured)} images/s`;
+  return camera
+    ? `La caméra ne fournit que ${fps} : c'est elle qui limite, pas l'encodage. Avec la caméra virtuelle d'OBS,
+      vérifiez ses images par seconde (Paramètres → Vidéo) et que l'aperçu d'OBS est fluide.`
+    : `La capture de la fenêtre ne fournit que ${fps} : c'est elle qui limite, pas l'encodage. Une image immobile
+      en donne moins, c'est normal ; si le jeu bouge, essayez l'écran entier ou la caméra virtuelle d'OBS.`;
+}
+
+function SentInfo({ sent, quality, camera }) {
   if (!sent?.width) return null;
   const encoder = sent.codec && `${sent.codec}${sent.hardware === true ? " (carte graphique)" : sent.hardware === false ? " (processeur)" : ""}`;
+  const capture = captureText(sent, quality, camera);
   const network = [
     sent.available != null && `le navigateur s'autorise ${decimal(sent.available / 1e6)} Mb/s`,
     sent.rtt != null && `latence ${Math.round(sent.rtt * 1000)} ms`,
@@ -454,8 +485,9 @@ function SentInfo({ sent, quality }) {
     ${limit && html`<div class="notice warn full">${limit}</div>`}
     <details class="more">
       <summary>Ce qui part vers l'overlay</summary>
-      <p class="hint" role="status">${sent.width} × ${sent.height}${sent.fps ? `, ${Math.round(sent.fps)} images/s` : ""}${sent.bitrate != null ? `, ${decimal(sent.bitrate / 1e6)} Mb/s` : ""}${encoder ? `, encodé en ${encoder}` : ""}.</p>
+      <p class="hint" role="status">${sent.width} × ${sent.height}${sent.fps ? `, ${Math.round(sent.fps)} images/s` : ""}${sent.captured != null ? ` (${Math.round(sent.captured)} capturées)` : ""}${sent.bitrate != null ? `, ${decimal(sent.bitrate / 1e6)} Mb/s` : ""}${encoder ? `, encodé en ${encoder}` : ""}.</p>
       ${network.length > 0 && html`<p class="hint">Réseau : ${network.join(" · ")}.</p>`}
+      ${capture && html`<p class="hint">${capture}</p>`}
     </details>
   </div>`;
 }
@@ -623,7 +655,7 @@ function ShareScreen({ room, games = [] }) {
     ${status && html`<p role="status"><strong>${status}</strong></p>`}
     ${error && (typeof error === "string" ? html`<div class="notice error full">${error}</div>` : error)}
     ${view && html`<video class="screen-preview" ref=${preview} autoplay muted playsinline aria-label="Aperçu de votre partage"></video>`}
-    <${SentInfo} sent=${sent} quality=${quality} />
+    <${SentInfo} sent=${sent} quality=${quality} camera=${camera} />
     ${(windowSupported || cameraSupported) && html`<details class="more">
       <summary>Qualité de l'image <span class="hint">(${QUALITIES[qualityKey].label}, ${PRIORITIES[priorityKey].label.toLowerCase()})</span></summary>
       <div class="fields full">
