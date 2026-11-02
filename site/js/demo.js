@@ -1,9 +1,7 @@
 // Exemple animé de l'accueil : quatre joueurs, quatre jeux. « Ouvrir un coffre » (ou toutes les quelques secondes,
 // tant que l'exemple est à l'écran) fait un check chez un joueur : la pièce vole jusqu'au joueur dont c'est l'objet,
-// une croix se tamponne sur son île, la ligne s'écrit dans le journal de bord et la notification des rooms
-// (item-toasts.js) s'affiche. Tout est inventé et reste dans la page.
+// une croix se tamponne sur son île et la ligne s'écrit dans le journal de bord. Tout est inventé et reste dans la page.
 import { html, useState, useEffect, useRef } from "../vendor/preact-htm.js";
-import { ItemToasts, KINDS } from "./item-toasts.js";
 import { Chest, Cross, Flag, Ship } from "./art.js";
 
 const PLAYERS = [
@@ -12,6 +10,12 @@ const PLAYERS = [
   { name: "Lou", game: "Stardew Valley", color: "#5f9e4a", items: ["Progressive Hoe", "Greenhouse", "Golden Scythe"], got: 140, all: 240 },
   { name: "Max", game: "Ocarina of Time", color: "#c8553d", items: ["Megaton Hammer", "Fairy Ocarina", "Iron Boots"], got: 41, all: 196 },
 ];
+// Type d'un objet : le symbole double la couleur.
+const KINDS = {
+  progression: { label: "Progression", mark: "★" },
+  useful: { label: "Utile", mark: "◆" },
+  filler: { label: "Sans importance", mark: "●" },
+};
 const WEIGHTS = [["progression", 5], ["useful", 3], ["filler", 2]];
 const FIRST_LOG = [
   { id: -1, from: 0, to: 1, item: "Hookshot", kind: "progression" },
@@ -32,7 +36,6 @@ function pickKind() {
 export function ChestDemo() {
   const [got, setGot] = useState(() => PLAYERS.map((p) => p.got));
   const [log, setLog] = useState(FIRST_LOG);
-  const [toasts, setToasts] = useState([]);
   const section = useRef(null);
   const tiles = useRef(null);
   const flight = useRef(null);
@@ -73,7 +76,6 @@ export function ChestDemo() {
     const arrive = () => {
       stamp(to);
       setLog((all) => [entry, ...all].slice(0, 4));
-      setToasts((all) => [...all, { id, receiver: PLAYERS[to].name, sender: PLAYERS[from].name, item: entry.item, kind: entry.kind }].slice(-3));
     };
     if (reduced()) { arrive(); return; }
 
@@ -155,8 +157,6 @@ export function ChestDemo() {
         </li>`)}</ol>
       </div>
     </div>
-    <p class="hint">Exemple fictif. Dans une vraie partie, le serveur d'Archipelago fait ce travail de facteur, et la page de
-      votre room affiche les mêmes notifications quand vos joueurs reçoivent un objet.</p>
-    <${ItemToasts} toasts=${toasts} dismiss=${(id) => setToasts((all) => all.filter((t) => t.id !== id))} />
+    <p class="hint">Exemple fictif. Dans une vraie partie, c'est le serveur d'Archipelago qui fait ce travail de facteur.</p>
   </section>`;
 }

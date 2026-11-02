@@ -1276,34 +1276,8 @@ html.overlay-page body { background: transparent; overflow: hidden; }
 .overlay-zone { display: flex; align-items: center; justify-content: center; overflow: hidden; }
 .layout-item.type-screens { background: rgb(127 176 255 / 14%); border-color: #7fb0ff; border-style: dashed; }
 
-/* Notifications d'objets reçus (item-toasts.js) : une bouteille à la mer en bas à droite de la room.
-   Elle monte en se redressant et repart plus vite ; le type d'objet est écrit, pas seulement coloré. */
-.item-toasts {
-  position: fixed; z-index: 40; right: max(16px, env(safe-area-inset-right, 0px)); bottom: max(16px, env(safe-area-inset-bottom, 0px));
-  width: min(24rem, calc(100vw - 32px)); display: flex; flex-direction: column; gap: .6rem; pointer-events: none;
-}
-.item-toast {
-  pointer-events: auto; display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: start; gap: .75rem;
-  padding: .8rem .6rem .8rem .9rem; color: var(--text); font-size: 1rem;
-  background: var(--grain), var(--surface); border: 1px solid var(--accent); border-radius: var(--radius);
-  box-shadow: inset 0 0 24px var(--burn), 0 14px 30px -12px var(--shadow-color);
-  transition: transform 420ms var(--ease-out), opacity 420ms var(--ease-out);
-  @starting-style { transform: translateY(115%) rotate(-3deg); opacity: 0; }
-}
-.item-toast.out { transform: translateY(8px) scale(.97); opacity: 0; transition-duration: 200ms; }
-.item-toast-icon { width: 2.2rem; height: 2.2rem; color: var(--accent); }
-.item-toast-text { display: grid; gap: .25rem; margin: 0; overflow-wrap: anywhere; line-height: 1.35; }
-.item-toast-meta { display: flex; flex-wrap: wrap; align-items: baseline; gap: .2rem .7rem; font-size: .88rem; }
-.item-toast-close { font-size: 1rem; padding: .2rem .45rem; }
+/* Type d'un objet, écrit en toutes lettres avec son symbole (journal de l'exemple de l'accueil). */
 .item-kind { font-size: .78rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; white-space: nowrap; }
 .item-kind.progression { color: var(--mark); }
 .item-kind.useful { color: var(--accent); }
-.item-kind.trap { color: var(--warn); }
 .item-kind.filler { color: var(--muted); }
-.item-kind.wished { color: var(--ok); }
-.toast-settings { border-top: 1px dashed var(--border); padding-top: .9rem; gap: .45rem; }
-.toast-settings label.check { display: inline-flex; align-items: center; gap: .4rem; font-size: .92rem; }
-@media (prefers-reduced-motion: reduce) {
-  .item-toast { @starting-style { transform: none; opacity: 0; } }
-  .item-toast.out { transform: none; }
-}
