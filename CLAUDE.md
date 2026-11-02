@@ -11,6 +11,12 @@
   Détails dans la section « Jeux non officiels » du README.
 - Navigation : menu latéral (`Sidebar` dans `main.js`, barre « Menu » en haut sous 900 px, réglages repliés en bas).
   Accueil `#/` (`welcome.js`) : ce qu'est Archipelago, pour qui n'y a jamais joué ; l'éditeur est sur `#/editeur`.
+- DA « Carte de l'Archipel » (`styles.css`) : pages sur une feuille de parchemin (`.sheet`, `--bg`), cartes en feuillets
+  (`--surface`), menu en planche de bois (`--wood*`), titres en Grenze Gotisch, texte en Lexend. Jour = clair, nuit =
+  sombre (parchemin à la lanterne). Fond : la mer en canvas (`sea.js`, îles dans les marges libres autour de `.sheet`,
+  réglage « Fond animé », figée si mouvement réduit), jamais sur l'overlay OBS. Dessins communs dans `art.js`.
+- Notifications d'objets reçus dans une room (`item-toasts.js`) : écart entre deux lectures du tracker de `RoomPage`
+  (pas de connexion à la partie), réglage `roomToasts` dans l'onglet Progression (vos joueurs, tous, aucune).
 - Page « Installer un jeu » (`#/installer?game=…`, `guides.js`) : liens d'installation des crédits (`download`,
   `release`, `links`, relevés par `fetch_apworlds.py`) et guides du jeu (`site/data/guides/`, relevés par
   `extract_options.py` dans `docs/` du monde, plus README du dépôt et notes de release passés par

@@ -11,6 +11,8 @@ import { ScreensOverlay } from "./overlay.js";
 import { SharingBanner } from "./screens.js";
 import { GuidesPage, guideLink } from "./guides.js";
 import { Welcome } from "./welcome.js";
+import { Sea } from "./sea.js";
+import { Compass } from "./art.js";
 import { ForecastCard } from "./forecast.js";
 import { api as roomsApi, normalizeCode, roomsEnabled, saveAccess } from "./rooms-api.js";
 
@@ -529,7 +531,7 @@ const NavIcon = ({ name }) => html`<svg class="nav-icon" viewBox="0 0 24 24" ari
 // Menu latéral : navigation, puis les réglages repliés en bas. En fenêtre étroite (≤ 900 px), il devient une barre en
 // haut avec un bouton « Menu » ; sa hauteur place en dessous les barres collantes (--header-h). Sur grand écran, il est à
 // gauche et ne recouvre rien (--header-h à 0).
-function Sidebar({ page, advanced, setAdvanced, docLanguage, setDocLanguage, theme, setTheme }) {
+function Sidebar({ page, advanced, setAdvanced, docLanguage, setDocLanguage, theme, setTheme, seaMotion, setSeaMotion }) {
   const [open, setOpen] = useState(false);
   const ref = useRef(null);
   useEffect(() => {
@@ -557,7 +559,7 @@ function Sidebar({ page, advanced, setAdvanced, docLanguage, setDocLanguage, the
   ];
   return html`<aside class=${`site-side ${open ? "open" : ""}`} ref=${ref}>
     <div class="side-top">
-      <a class="brand" href="#/"><span class="logo" aria-hidden="true">◆</span> Archipelago YAML Manager</a>
+      <a class="brand" href="#/"><${Compass} class="logo" /> Archipelago YAML Manager</a>
       <button type="button" class="ghost side-toggle" aria-expanded=${open} aria-controls="site-menu"
         onClick=${() => setOpen((o) => !o)}>${open ? "Fermer" : "Menu"}</button>
     </div>
@@ -584,6 +586,10 @@ function Sidebar({ page, advanced, setAdvanced, docLanguage, setDocLanguage, the
               <option value="light">Clair</option>
               <option value="dark">Sombre</option>
             </select></label>
+          <label class="switch" title="La mer derrière la page : vagues, navire, mouettes ou phare">
+            <input type="checkbox" checked=${seaMotion} onChange=${(e) => setSeaMotion(e.target.checked)} />
+            <span class="track"></span> Fond animé
+          </label>
         </div>
       </details>
     </div>
@@ -624,6 +630,7 @@ function App() {
   const [route, setRoute] = useState(readRoute);
   const [advanced, setAdvanced] = useSetting("advanced", false);
   const [theme, setTheme] = useSetting("theme", "auto");
+  const [seaMotion, setSeaMotion] = useSetting("seaMotion", true);
   const [docLanguage, setDocLanguageSetting] = useSetting("docLanguage", "en");
   setDocLanguage(docLanguage); // lu par les éditeurs pendant ce rendu
 
@@ -687,12 +694,14 @@ function App() {
     body = html`<${Welcome} index=${index} />`;
   }
 
-  return html`<div class="app-shell">
+  return html`<${Sea} motion=${seaMotion} />
+  <div class="app-shell">
     <${Sidebar} page=${route.page} advanced=${advanced} setAdvanced=${setAdvanced}
-      docLanguage=${docLanguage} setDocLanguage=${setDocLanguageSetting} theme=${theme} setTheme=${setTheme} />
-    <div class="app-main">
+      docLanguage=${docLanguage} setDocLanguage=${setDocLanguageSetting} theme=${theme} setTheme=${setTheme}
+      seaMotion=${seaMotion} setSeaMotion=${setSeaMotion} />
+    <div class="app-main"><div class="sheet">
       <${SharingBanner} code=${route.page === "room" ? route.code : null} />${body}<${Footer} />
-    </div>
+    </div></div>
   </div>`;
 }
 

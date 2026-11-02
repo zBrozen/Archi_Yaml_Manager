@@ -13,6 +13,7 @@ import { ItemsPanel, ProgressPanel, TextClient, defaultItemSlots, useTracker } f
 import { ScreensTab } from "./screens.js";
 import { AdvancementView } from "./spoiler.js";
 import { WishNotice, WishlistView, useWishNotices, useWishState } from "./wishlist.js";
+import { ItemToasts, ToastSettings, TOAST_DEFAULTS, useItemToasts } from "./item-toasts.js";
 import {
   api, apRoomStatus, forgetAccess, hostLink, inviteLink, knownRooms, normalizeCode, playerLink,
   roomsEnabled, saveAccess, savedAccess,
@@ -337,6 +338,9 @@ export function RoomPage({ index, code, onCreate, onEdit }) {
   const mine = mineOf(data);
   const wishes = useWishState(online.status, tracker, data?.wishlists);
   const notices = useWishNotices(code, wishes, mine);
+  const [storedToasts, setToastPrefs] = useSetting("roomToasts", TOAST_DEFAULTS);
+  const toastPrefs = { ...TOAST_DEFAULTS, ...storedToasts };
+  const toasts = useItemToasts(online.status, tracker, mine, data?.wishlists, toastPrefs);
 
   if (error && !data) {
     return html`<main class="home">
@@ -391,7 +395,8 @@ export function RoomPage({ index, code, onCreate, onEdit }) {
       online=${online} tracker=${tracker} join=${!me && yaml} go=${go} />`}
     ${active === "joueurs" && html`${yaml}
       <${PlayersList} room=${room} players=${players} me=${me} admin=${admin} refresh=${refresh} />`}
-    ${active === "partie" && html`<${GameView} room=${room} online=${online} tracker=${tracker} mine=${mine} />`}
+    ${active === "partie" && html`<${GameView} room=${room} online=${online} tracker=${tracker} mine=${mine}
+      toastPrefs=${toastPrefs} setToastPrefs=${setToastPrefs} />`}
     ${active === "avancement" && html`<${AdvancementView} room=${room} online=${online} tracker=${tracker}
       data=${data} setData=${setData} admin=${admin} />`}
     ${active === "wishlist" && (online.status
@@ -403,6 +408,7 @@ export function RoomPage({ index, code, onCreate, onEdit }) {
     ${screens && (screensSeen || active === "ecrans") && html`<div class="room-panel" hidden=${active !== "ecrans"}>
       <${ScreensTab} room=${room} me=${me} admin=${admin} data=${data} setData=${setData} /></div>`}
     ${active === "hote" && html`<${HostPanel} room=${room} setData=${setData} data=${data} />`}
+    <${ItemToasts} ...${toasts} />
   </main>`;
 }
 
@@ -1375,7 +1381,7 @@ function OnlineSummary({ room, online, tracker, mine, go }) {
   </section>`;
 }
 
-function GameView({ room, online, tracker, mine }) {
+function GameView({ room, online, tracker, mine, toastPrefs, setToastPrefs }) {
   const { status, error } = online;
   // Joueurs cochés dans « Objets reçus », mémorisés par room dans ce navigateur.
   const [itemSlots, setItemSlots] = useSetting(`itemPlayers:${room.code}`, null);
@@ -1388,6 +1394,7 @@ function GameView({ room, online, tracker, mine }) {
   };
   return html`<section class="card stack">
     <${ProgressPanel} status=${status} tracker=${tracker} mode=${room.mode} mine=${mine} code=${room.code} onItems=${showItems} />
+    ${tracker.trackerId && html`<${ToastSettings} prefs=${toastPrefs} setPrefs=${setToastPrefs} mine=${mine} />`}
   </section>
   ${tracker.trackerId && html`<section class="card stack items-card" ref=${itemsCard}>
     <${ItemsPanel} status=${status} tracker=${tracker} mine=${mine} selected=${selected} onSelected=${setItemSlots}

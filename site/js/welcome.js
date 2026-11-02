@@ -2,6 +2,7 @@
 // jamais joué. Les outils du site (éditeur, rooms, installation) sont sur leurs propres pages.
 import { html } from "../vendor/preact-htm.js";
 import { roomsEnabled } from "./rooms-api.js";
+import { Compass } from "./art.js";
 
 const AP_SITE = "https://archipelago.gg";
 
@@ -43,6 +44,7 @@ export function Welcome({ index }) {
   const custom = index.games.filter((g) => g.source !== "core").length;
   return html`<main class="welcome">
     <section class="welcome-hero">
+      <${Compass} class="welcome-compass" />
       <h1>Archipelago, c'est quoi ?</h1>
       <p class="lead">Un randomizer à plusieurs : chacun joue à <strong>son propre jeu</strong>, mais les objets de tous les jeux
         sont <strong>mélangés entre les joueurs</strong>. L'objet qui vous manque se trouve peut-être dans le jeu d'un ami, et ce
