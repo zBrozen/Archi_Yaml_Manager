@@ -10,6 +10,7 @@ import { RoomsHome, RoomPage, shareApworlds } from "./rooms.js";
 import { ScreensOverlay } from "./overlay.js";
 import { SharingBanner } from "./screens.js";
 import { GuidesPage, guideLink } from "./guides.js";
+import { Welcome } from "./welcome.js";
 import { ForecastCard } from "./forecast.js";
 import { api as roomsApi, normalizeCode, roomsEnabled, saveAccess } from "./rooms-api.js";
 
@@ -114,7 +115,7 @@ function ApworldDrop({ game, onLoaded }) {
 
 // --- Accueil -------------------------------------------------------------------
 
-function Home({ index, onOpen, onCreate }) {
+function EditorHome({ index, onOpen, onCreate }) {
   const [errors, setErrors] = useState([]);
   const [hover, setHover] = useState(false);
   const [game, setGame] = useState("");
@@ -464,21 +465,21 @@ function Editor({ index, file, setFile, onClose, advanced, onSend }) {
             : "Fermer ce fichier ? Les modifications non téléchargées seront perdues.")) && onClose()}>←</button>
         <strong class="file-name">${file.name || "Nouveau YAML"}</strong>
         ${room && html`<span class="badge accent">Room ${room.code}</span>`}
-        <span class="spacer"></span>
-        ${advanced && html`<button type="button" class="ghost" onClick=${() => setPreview(exported())}>Aperçu</button>`}
-        <button type="button" class="ghost" disabled=${!!blocked} title=${blocked || ""} onClick=${copy}>${copied ? "Copié ✓" : "Copier"}</button>
-        <button type="button" class=${room ? "ghost" : ""} disabled=${!!blocked} title=${blocked || ""} onClick=${() => download(fileName(), exported())}>Télécharger</button>
-        ${room && html`<button type="button" disabled=${!!(blocked || roomBlocked) || sending} title=${blocked || roomBlocked || ""}
-          onClick=${send}>${sending ? "Envoi…" : room.slotId ? "Mettre à jour dans la room" : "Envoyer dans la room"}</button>`}
-      </div>
-      ${room && (sendError || roomBlocked) && html`<div class="notice error">${sendError || roomBlocked}</div>`}
-      <div class="toolbar-row">
-        <input type="search" class="search" placeholder="Rechercher une option…" value=${search} onInput=${(e) => setSearch(e.target.value)} />
+        <input type="search" class="search" placeholder="Rechercher une option…" aria-label="Rechercher une option" value=${search}
+          onInput=${(e) => setSearch(e.target.value)} />
         <div class="segmented">
           <button type="button" class=${filter === "all" ? "active" : ""} onClick=${() => setFilter("all")}>Toutes</button>
           <button type="button" class=${filter === "changed" ? "active" : ""} onClick=${() => setFilter("changed")}>Modifiées</button>
         </div>
+        <div class="toolbar-actions">
+          ${advanced && html`<button type="button" class="ghost" onClick=${() => setPreview(exported())}>Aperçu</button>`}
+          <button type="button" class="ghost" disabled=${!!blocked} title=${blocked || ""} onClick=${copy}>${copied ? "Copié ✓" : "Copier"}</button>
+          <button type="button" class=${room ? "ghost" : ""} disabled=${!!blocked} title=${blocked || ""} onClick=${() => download(fileName(), exported())}>Télécharger</button>
+          ${room && html`<button type="button" disabled=${!!(blocked || roomBlocked) || sending} title=${blocked || roomBlocked || ""}
+            onClick=${send}>${sending ? "Envoi…" : room.slotId ? "Mettre à jour dans la room" : "Envoyer dans la room"}</button>`}
+        </div>
       </div>
+      ${room && (sendError || roomBlocked) && html`<div class="notice error">${sendError || roomBlocked}</div>`}
       ${file.docs.length > 1 && html`<div class="toolbar-row tabs">${file.docs.map((d, i) => html`<button type="button"
         class=${i === active ? "active" : ""} onClick=${() => setActive(i)}>${d.js.name || `Joueur ${i + 1}`}</button>`)}</div>`}
     </div>
@@ -515,50 +516,82 @@ function newDocument(index, game, name = "Joueur{number}") {
   };
 }
 
-function Header({ page, advanced, setAdvanced, docLanguage, setDocLanguage, theme, setTheme }) {
-  // L'en-tête reste visible, et sa hauteur (qui change quand il passe sur plusieurs lignes) place
-  // en dessous les barres collantes (--header-h). En fenêtre étroite, les réglages passent au-dessus
-  // du titre et défilent avec la page (--header-hidden) : seuls le titre et la navigation restent.
+// Icônes du menu (traits, couleur du texte).
+const NAV_ICONS = {
+  home: "M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z",
+  editor: "M4 20h4L19 9l-4-4L4 16z",
+  installer: "M12 4v11M7 10l5 5 5-5M4 20h16",
+  rooms: "M9 11.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5M17 11.5a2.5 2.5 0 1 0 0-5M17 14.5c2.4 0 4 1.5 4.5 4",
+  tracker: "M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14",
+};
+const NavIcon = ({ name }) => html`<svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d=${NAV_ICONS[name]} /></svg>`;
+
+// Menu latéral : navigation, puis les réglages repliés en bas. En fenêtre étroite (≤ 900 px), il devient une barre en
+// haut avec un bouton « Menu » ; sa hauteur place en dessous les barres collantes (--header-h). Sur grand écran, il est à
+// gauche et ne recouvre rien (--header-h à 0).
+function Sidebar({ page, advanced, setAdvanced, docLanguage, setDocLanguage, theme, setTheme }) {
+  const [open, setOpen] = useState(false);
   const ref = useRef(null);
   useEffect(() => {
-    const header = ref.current, root = document.documentElement.style;
-    const tools = header.querySelector(".header-tools"), brand = header.querySelector(".brand");
-    const observer = new ResizeObserver(() => {
-      const above = brand.offsetTop >= tools.offsetTop + tools.offsetHeight;
-      const hidden = above ? brand.offsetTop - tools.offsetTop : 0;
-      root.setProperty("--header-hidden", `${hidden}px`);
-      root.setProperty("--header-h", `${header.offsetHeight - hidden}px`);
-    });
-    observer.observe(header);
-    return () => { observer.disconnect(); root.removeProperty("--header-h"); root.removeProperty("--header-hidden"); };
+    const close = () => setOpen(false);
+    window.addEventListener("hashchange", close);
+    return () => window.removeEventListener("hashchange", close);
   }, []);
-  return html`<header class="site-header" ref=${ref}>
-    <a class="brand" href="#/"><span class="logo" aria-hidden="true">◆</span> Archipelago YAML Manager</a>
-    <nav class="site-nav">
-      <a href="#/" class=${page === "home" ? "active" : ""}>Éditeur</a>
-      <a href="#/installer" class=${page === "installer" ? "active" : ""}>Installer un jeu</a>
-      ${roomsEnabled() && html`<a href="#/rooms" class=${["rooms", "room", "tracker"].includes(page) ? "active" : ""}>Rooms</a>`}
-    </nav>
-    <div class="header-tools">
-      <label class="switch" title="Affiche les tirages au sort, les poids et le YAML brut">
-        <input type="checkbox" checked=${advanced} onChange=${(e) => setAdvanced(e.target.checked)} />
-        <span class="track"></span> Mode avancé
-      </label>
-      <select class="theme" value=${docLanguage} onChange=${(e) => setDocLanguage(e.target.value)} aria-label="Langue des descriptions"
-        title="Les descriptions des options sont traduites automatiquement depuis l'anglais">
-        <option value="fr">Descriptions FR</option>
-        <option value="en">Descriptions EN</option>
-      </select>
-      <select class="theme" value=${theme} onChange=${(e) => setTheme(e.target.value)} aria-label="Thème">
-        <option value="auto">Thème auto</option>
-        <option value="light">Clair</option>
-        <option value="dark">Sombre</option>
-      </select>
+  useEffect(() => {
+    const side = ref.current, root = document.documentElement.style;
+    const narrow = matchMedia("(max-width: 900px)");
+    const measure = () => root.setProperty("--header-h", narrow.matches ? `${side.querySelector(".side-top").offsetHeight}px` : "0px");
+    const observer = new ResizeObserver(measure);
+    observer.observe(side);
+    narrow.addEventListener("change", measure);
+    return () => { observer.disconnect(); narrow.removeEventListener("change", measure); root.removeProperty("--header-h"); };
+  }, []);
+  const links = [
+    ["home", "#/", "Accueil", page === "home"],
+    ["editor", "#/editeur", "Éditeur", page === "editor"],
+    ["installer", "#/installer", "Installer un jeu", page === "installer"],
+    ...(roomsEnabled() ? [
+      ["rooms", "#/rooms", "Rooms", page === "rooms" || page === "room"],
+      ["tracker", "#/tracker", "Trackers", page === "tracker"],
+    ] : []),
+  ];
+  return html`<aside class=${`site-side ${open ? "open" : ""}`} ref=${ref}>
+    <div class="side-top">
+      <a class="brand" href="#/"><span class="logo" aria-hidden="true">◆</span> Archipelago YAML Manager</a>
+      <button type="button" class="ghost side-toggle" aria-expanded=${open} aria-controls="site-menu"
+        onClick=${() => setOpen((o) => !o)}>${open ? "Fermer" : "Menu"}</button>
     </div>
-  </header>`;
+    <div class="side-menu" id="site-menu">
+      <nav class="site-nav" aria-label="Principale">${links.map(([id, href, label, active]) => html`<a href=${href}
+        class=${active ? "active" : ""} aria-current=${active ? "page" : undefined}><${NavIcon} name=${id} />${label}</a>`)}
+      </nav>
+      <details class="side-settings">
+        <summary>Réglages</summary>
+        <div class="stack">
+          <label class="switch" title="Affiche les tirages au sort, les poids et le YAML brut">
+            <input type="checkbox" checked=${advanced} onChange=${(e) => setAdvanced(e.target.checked)} />
+            <span class="track"></span> Mode avancé
+          </label>
+          <label class="side-field"><span class="hint">Descriptions des options</span>
+            <select value=${docLanguage} onChange=${(e) => setDocLanguage(e.target.value)}
+              title="Les descriptions des options sont traduites automatiquement depuis l'anglais">
+              <option value="fr">Français</option>
+              <option value="en">Anglais</option>
+            </select></label>
+          <label class="side-field"><span class="hint">Thème</span>
+            <select value=${theme} onChange=${(e) => setTheme(e.target.value)}>
+              <option value="auto">Auto</option>
+              <option value="light">Clair</option>
+              <option value="dark">Sombre</option>
+            </select></label>
+        </div>
+      </details>
+    </div>
+  </aside>`;
 }
 
-// Adresse de la page : #/ (éditeur), #/installer?game=… (guide d'installation), #/rooms, #/room/CODE. Les liens personnels
+// Adresse de la page : #/ (accueil : ce qu'est Archipelago), #/editeur (éditeur), #/installer?game=… (guide
+// d'installation), #/rooms, #/room/CODE. Les liens personnels
 // (#/room/CODE/p/JETON, #/room/CODE/h/JETON) sont mémorisés puis retirés de l'adresse.
 // #/overlay/CODE/CLÉ?max=…&console=…&objets=… : écrans des joueurs et messages de la partie pour OBS,
 // page à part (ni en-tête ni pied de page).
@@ -566,6 +599,7 @@ function Header({ page, advanced, setAdvanced, docLanguage, setDocLanguage, them
 function readRoute() {
   const [path, query = ""] = location.hash.replace(/^#\/?/, "").split("?");
   const parts = path.split("/").filter(Boolean);
+  if (parts[0] === "editeur") return { page: "editor" };
   if (parts[0] === "rooms") return { page: "rooms" };
   if (parts[0] === "installer") return { page: "installer", game: new URLSearchParams(query).get("game") || "" };
   if (parts[0] === "tracker") return { page: "tracker", params: Object.fromEntries(new URLSearchParams(query)) };
@@ -646,14 +680,20 @@ function App() {
   } else if (route.page === "room") {
     body = html`<${RoomPage} key=${route.code} index=${index} code=${route.code}
       onCreate=${(game, name, playerId) => createForRoom(route.code, game, name, playerId)} onEdit=${(slot) => openFromRoom(route.code, slot)} />`;
-  } else {
-    body = html`<${Home} index=${index} onOpen=${setFile}
+  } else if (route.page === "editor") {
+    body = html`<${EditorHome} index=${index} onOpen=${setFile}
       onCreate=${(game) => setFile({ name: null, original: null, docs: [{ source: 0, js: newDocument(index, game), original: {}, dirty: [] }] })} />`;
+  } else {
+    body = html`<${Welcome} index=${index} />`;
   }
 
-  return html`<${Header} page=${route.page} advanced=${advanced} setAdvanced=${setAdvanced}
-    docLanguage=${docLanguage} setDocLanguage=${setDocLanguageSetting} theme=${theme} setTheme=${setTheme} />
-    <${SharingBanner} code=${route.page === "room" ? route.code : null} />${body}<${Footer} />`;
+  return html`<div class="app-shell">
+    <${Sidebar} page=${route.page} advanced=${advanced} setAdvanced=${setAdvanced}
+      docLanguage=${docLanguage} setDocLanguage=${setDocLanguageSetting} theme=${theme} setTheme=${setTheme} />
+    <div class="app-main">
+      <${SharingBanner} code=${route.page === "room" ? route.code : null} />${body}<${Footer} />
+    </div>
+  </div>`;
 }
 
 function Footer() {

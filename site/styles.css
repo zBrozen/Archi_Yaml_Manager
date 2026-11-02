@@ -179,24 +179,33 @@ button.link:hover { background: none; text-decoration: underline; }
   padding: 1.1rem 1.25rem;
 }
 
-/* En-tête */
-.site-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  flex-wrap: wrap;
-  padding: .6rem 16px;
+/* Menu latéral (Sidebar dans main.js) : à gauche sur grand écran, barre en haut avec « Menu » en fenêtre étroite. */
+.app-shell { display: flex; min-height: 100vh; }
+.app-main { flex: 1; min-width: 0; }
+.site-side {
+  flex: 0 0 15.5rem;
+  position: sticky; top: 0; height: 100vh; overflow-y: auto;
+  display: flex; flex-direction: column; gap: 1.5rem;
+  padding: 1.25rem .9rem;
   background: var(--surface);
-  border-bottom: 1px solid var(--border);
-  position: sticky;
-  top: calc(-1 * var(--header-hidden, 0px));
+  border-right: 1px solid var(--border);
   z-index: 15;
 }
-.brand { font-family: var(--font-title); font-weight: 400; font-size: 1.25rem; letter-spacing: .01em; }
+.side-top { display: flex; align-items: center; justify-content: space-between; gap: .75rem; }
+.side-toggle { display: none; }
+.side-menu { display: flex; flex-direction: column; gap: 1.5rem; flex: 1; }
+.brand { font-family: var(--font-title); font-weight: 400; font-size: 1.25rem; line-height: 1.2; letter-spacing: .01em; padding: 0 .4rem; }
 .logo { color: var(--accent); }
-.header-tools { display: flex; align-items: center; gap: 1rem; }
-.header-tools .theme { width: auto; padding: .3rem .5rem; font-size: .875rem; }
+.side-settings { margin-top: auto; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--bg); }
+.side-settings summary { cursor: pointer; padding: .6rem .9rem; font-weight: 600; }
+.side-settings > .stack { padding: .25rem .9rem .9rem; gap: .8rem; }
+.side-field { display: grid; gap: .2rem; justify-self: stretch; }
+@media (max-width: 900px) {
+  .app-shell { flex-direction: column; }
+  .site-side { flex: none; height: auto; max-height: 100vh; padding: .6rem 16px; gap: 1rem; border-right: none; border-bottom: 1px solid var(--border); }
+  .side-toggle { display: inline-block; }
+  .site-side:not(.open) .side-menu { display: none; }
+}
 
 .switch { display: inline-flex; align-items: center; gap: .5rem; cursor: pointer; font-size: .9rem; font-weight: 600; user-select: none; }
 .switch input { position: absolute; opacity: 0; width: 1px; height: 1px; }
@@ -253,13 +262,15 @@ button.link:hover { background: none; text-decoration: underline; }
   display: grid;
   gap: .5rem;
 }
-.toolbar-row { display: flex; gap: .5rem; align-items: center; flex-wrap: wrap; max-width: 920px; margin: 0 auto; width: 100%; }
+.toolbar-row { display: flex; gap: .5rem; align-items: center; flex-wrap: wrap; max-width: 1040px; margin: 0 auto; width: 100%; }
+/* Boutons du fichier : ensemble à droite, passent à la ligne d'un bloc quand la place manque. */
+.toolbar-actions { display: flex; gap: .5rem; flex-wrap: wrap; margin-left: auto; }
 .file-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
-.search { flex: 1; min-width: 10rem; width: auto; }
+.search { flex: 1 1 12rem; min-width: 10rem; width: auto; }
 .tabs button { background: transparent; color: var(--muted); border-color: transparent; font-weight: 600; }
 .tabs button.active { background: var(--accent-soft); color: var(--accent); }
 
-.content { max-width: 920px; margin: 1.25rem auto 4rem; padding: 0 16px; display: grid; gap: 1.25rem; }
+.content { max-width: 1040px; margin: 1.25rem auto 4rem; padding: 0 16px; display: grid; gap: 1.25rem; }
 
 .player .fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: .9rem 1.25rem; }
 .player .span-all { grid-column: 1 / -1; }
@@ -427,8 +438,6 @@ table.compact td { padding: .15rem .6rem .15rem 0; }
   .search { flex-basis: 100%; }
   .game-head .stats { margin-left: 0; width: 100%; }
   .weights select, .weights input[type="text"] { width: 9.5rem; }
-  .header-tools { width: 100%; justify-content: space-between; flex-wrap: wrap; gap: .5rem; order: -1; }
-  .header-tools .switch { flex-basis: 100%; }
 }
 
 .site-footer { max-width: 680px; margin: 3rem auto 1.5rem; padding: 0 16px; text-align: center; line-height: 1.5; }
@@ -461,10 +470,47 @@ table.compact td { padding: .15rem .6rem .15rem 0; }
 
 /* Navigation */
 a.brand { color: inherit; text-decoration: none; }
-.site-nav { display: flex; gap: .25rem; margin-right: auto; }
-.site-nav a { color: var(--muted); text-decoration: none; font-weight: 600; font-size: .92rem; padding: .3rem .7rem; border-radius: var(--radius-sm); }
+.site-nav { display: grid; gap: .2rem; }
+.site-nav a {
+  display: flex; align-items: center; gap: .75rem; min-height: 2.75rem; padding: 0 .8rem;
+  color: var(--muted); text-decoration: none; font-weight: 500; border-radius: var(--radius-sm);
+}
 .site-nav a:hover { background: var(--surface-2); color: var(--text); }
-.site-nav a.active { background: var(--accent-soft); color: var(--accent); }
+.site-nav a.active { background: var(--accent-soft); color: var(--text); font-weight: 700; }
+.site-nav a.active .nav-icon { stroke: var(--accent); }
+.nav-icon { width: 1.35rem; height: 1.35rem; flex: none; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+/* Accueil (welcome.js) : ce qu'est Archipelago */
+.welcome { max-width: 960px; margin: 2.5rem auto; padding: 0 16px; display: grid; gap: 2.5rem; }
+.welcome h1 { font-size: clamp(2.2rem, 5vw, 3.2rem); line-height: 1.1; }
+.welcome h2 { font-size: 1.7rem; margin-bottom: 1rem; }
+.welcome-hero { display: grid; gap: 1.1rem; }
+.welcome-hero .lead { font-size: 1.2rem; line-height: 1.65; max-width: 46rem; }
+.welcome-example ol { margin: 0; padding-left: 1.4rem; display: grid; gap: .5rem; font-size: 1.05rem; }
+.welcome-steps { list-style: none; margin: 0; padding: 0; display: grid; gap: .9rem; counter-reset: step; }
+.welcome-steps li { counter-increment: step; display: grid; grid-template-columns: 2.6rem minmax(0, 1fr); column-gap: 1rem; row-gap: .2rem; }
+.welcome-steps li::before {
+  content: counter(step); grid-row: span 2; display: grid; place-items: center; width: 2.6rem; height: 2.6rem; border-radius: 50%;
+  background: var(--accent-soft); color: var(--accent); font-family: var(--font-title); font-size: 1.3rem;
+}
+.welcome-steps strong { font-size: 1.1rem; }
+.welcome-steps p { color: var(--muted); }
+.welcome-words { margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr)); gap: .9rem; }
+.welcome-words dt { font-weight: 700; font-size: 1.05rem; }
+.welcome-words dd { margin: .2rem 0 0; color: var(--muted); }
+.welcome-notes { margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr)); gap: .9rem 1.5rem; }
+.welcome-notes li { display: grid; gap: .15rem; }
+.welcome-notes span { color: var(--muted); }
+.welcome a:not(.button) { color: var(--accent); }
+
+/* Lien en forme de bouton */
+a.button {
+  display: inline-flex; align-items: center; min-height: 2.75rem; padding: 0 1.2rem; border-radius: var(--radius-sm);
+  background: var(--accent); color: var(--on-accent); border: 1px solid var(--accent); font-weight: 600; text-decoration: none;
+}
+a.button:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
+a.button.ghost { background: var(--surface); color: var(--text); border-color: var(--border); }
+a.button.ghost:hover { background: var(--surface-2); }
 
 /* Rooms */
 .room { max-width: 900px; margin: 2rem auto; padding: 0 16px; display: grid; gap: 1.5rem; }
