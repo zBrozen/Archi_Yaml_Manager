@@ -71,7 +71,7 @@
   "download": "https://github.com/Happyhappyism/Archipelago/releases/download/apraiser_v134/actraiser.apworld",
   "release": "https://github.com/Happyhappyism/Archipelago/releases/tag/apraiser_v134",
   "links": [
-   "https://github.com/Happyhappyism/Archipelago/releases?q=%22ActRaiser%22&expanded=true"
+   "https://github.com/Happyhappyism/Bomberman-Hero-Archipelago/releases"
   ]
  },
  {
@@ -1274,6 +1274,29 @@
   ]
  },
  {
+  "game": "Bomberman Hero",
+  "version": "0.2.5",
+  "authors": [
+   "Happyhappyism"
+  ],
+  "file": "bomberman_hero.apworld",
+  "source": "https://github.com/Happyhappyism/Bomberman-Hero-Archipelago",
+  "license": "MIT",
+  "license_url": "https://github.com/Happyhappyism/Bomberman-Hero-Archipelago/blob/HEAD/LICENSE",
+  "copyright": [
+   "Copyright (c) 2026 Happyhappyism"
+  ],
+  "sheet": {
+   "game": "Bomberman Hero",
+   "stability": "Stable"
+  },
+  "download": "https://github.com/Happyhappyism/Bomberman-Hero-Archipelago/releases/download/bomberman_hero_v0.2.5/bomberman_hero.apworld",
+  "release": "https://github.com/Happyhappyism/Bomberman-Hero-Archipelago/releases/tag/bomberman_hero_v0.2.5",
+  "links": [
+   "https://github.com/Happyhappyism/Bomberman-Hero-Archipelago/releases?q=Bomberman+Hero&expanded=true"
+  ]
+ },
+ {
   "game": "Bomberman Quest",
   "version": "0.1.2",
   "authors": [
@@ -2253,7 +2276,7 @@
  },
  {
   "game": "Cooking Mama 3",
-  "version": "1.1.1",
+  "version": "1.1.3",
   "authors": [
    "laxbby"
   ],
@@ -2271,8 +2294,8 @@
    "game": "Cooking Mama 3",
    "stability": "Unstable"
   },
-  "download": "https://github.com/Laxbby/ArchipelagoCM3/releases/download/1.1.1/cookingmama3.apworld",
-  "release": "https://github.com/Laxbby/ArchipelagoCM3/releases/tag/1.1.1",
+  "download": "https://github.com/Laxbby/ArchipelagoCM3/releases/download/1.1.3/cookingmama3.apworld",
+  "release": "https://github.com/Laxbby/ArchipelagoCM3/releases/tag/1.1.3",
   "links": [
    "https://github.com/Laxbby/ArchipelagoCM3/releases/latest"
   ]
@@ -3181,7 +3204,7 @@
  },
  {
   "game": "Donkey Kong 64",
-  "version": "2.0.5",
+  "version": "2.0.7",
   "authors": [
    "2dos",
    "AlmostSeagull",
@@ -3203,8 +3226,8 @@
    "game": "Donkey Kong 64",
    "stability": "Stable"
   },
-  "download": "https://github.com/2dos/DK64-Randomizer-Dev/releases/download/v2.0.5/dk64.apworld",
-  "release": "https://github.com/2dos/DK64-Randomizer-Dev/releases/tag/v2.0.5",
+  "download": "https://github.com/2dos/DK64-Randomizer-Dev/releases/download/v2.0.7/dk64.apworld",
+  "release": "https://github.com/2dos/DK64-Randomizer-Dev/releases/tag/v2.0.7",
   "links": [
    "https://github.com/2dos/DK64-Randomizer-Dev/releases/latest"
   ]
@@ -3343,8 +3366,8 @@
    "stability": "Unstable",
    "pr_status": "Not PRing"
   },
-  "download": "https://github.com/CaptainBoscar/Archipelago-DOTA2/releases/download/v0.1.0-beta.2/dota_2.apworld",
-  "release": "https://github.com/CaptainBoscar/Archipelago-DOTA2/releases/tag/v0.1.0-beta.2",
+  "download": "https://github.com/CaptainBoscar/Archipelago-DOTA2/releases/download/v0.1.0/dota_2.apworld",
+  "release": "https://github.com/CaptainBoscar/Archipelago-DOTA2/releases/tag/v0.1.0",
   "links": [
    "https://github.com/CaptainBoscar/Archipelago-DOTA2/releases/latest"
   ]
@@ -4348,6 +4371,30 @@
   ]
  },
  {
+  "game": "FTL: Faster Than Light",
+  "version": "0.5.0",
+  "authors": [
+   "TheLiloji"
+  ],
+  "file": "ftl.apworld",
+  "source": "https://github.com/TheLiloji/FTLArchipelago",
+  "license": "MIT",
+  "license_url": null,
+  "copyright": [
+   "Copyright (c) 2026 TheLiloji"
+  ],
+  "license_file": "ftl/LICENSE.md",
+  "sheet": {
+   "game": "FTL: Faster Than Light",
+   "stability": "Unstable"
+  },
+  "download": "https://github.com/TheLiloji/FTLArchipelago/releases/download/v0.5.0/ftl.apworld",
+  "release": "https://github.com/TheLiloji/FTLArchipelago/releases/tag/v0.5.0",
+  "links": [
+   "https://github.com/TheLiloji/FTLArchipelago/releases"
+  ]
+ },
+ {
   "game": "Funi Raccoon Game",
   "version": "1.8.1",
   "authors": [
@@ -5227,7 +5274,7 @@
  },
  {
   "game": "Hollow Knight: Silksong",
-  "version": "0.5.3",
+  "version": "0.5.4",
   "authors": [
    "BatAtVideoGames"
   ],
@@ -5242,8 +5289,8 @@
    "game": "Hollow Knight: Silksong (Batsong)",
    "stability": "Unstable"
   },
-  "download": "https://github.com/Batatvideogames/silksong-archipelago-randomizer/releases/download/v0.5.3/silksong.apworld",
-  "release": "https://github.com/Batatvideogames/silksong-archipelago-randomizer/releases/tag/v0.5.3",
+  "download": "https://github.com/Batatvideogames/silksong-archipelago-randomizer/releases/download/v0.5.4/silksong.apworld",
+  "release": "https://github.com/Batatvideogames/silksong-archipelago-randomizer/releases/tag/v0.5.4",
   "links": [
    "https://github.com/Batatvideogames/silksong-archipelago-randomizer/releases/"
   ]
@@ -6320,8 +6367,8 @@
    "game": "LEGO Batman: The Video Game",
    "stability": "Unstable"
   },
-  "download": "https://github.com/ZAPaDASH04/LEGO-Batman-APworld/releases/download/v1.0.0/lego_batman_1.apworld",
-  "release": "https://github.com/ZAPaDASH04/LEGO-Batman-APworld/releases/tag/v1.0.0",
+  "download": "https://github.com/ZAPaDASH04/LEGO-Batman-APworld/releases/download/v1.0.1/lego_batman_1.apworld",
+  "release": "https://github.com/ZAPaDASH04/LEGO-Batman-APworld/releases/tag/v1.0.1",
   "links": [
    "https://github.com/ZAPaDASH04/LEGO-Batman-APworld/releases/latest"
   ]
@@ -8293,8 +8340,8 @@
    "game": "The Legend Zelda: Ocarina of Time (Updated, not Ship)",
    "stability": "Unstable"
   },
-  "download": "https://github.com/TreZc0/OoTR-APWorld/releases/download/v9.1.0-release8/oot.apworld",
-  "release": "https://github.com/TreZc0/OoTR-APWorld/releases/tag/v9.1.0-release8",
+  "download": "https://github.com/TreZc0/OoTR-APWorld/releases/download/v9.1.0-release9/oot.apworld",
+  "release": "https://github.com/TreZc0/OoTR-APWorld/releases/tag/v9.1.0-release9",
   "links": [
    "https://github.com/TreZc0/OoTR-APWorld/releases"
   ]
@@ -9311,7 +9358,7 @@
  },
  {
   "game": "Pokemon Black and White",
-  "version": "0.4.3",
+  "version": "0.4.4",
   "authors": [
    "BlastSlimey"
   ],
@@ -9325,8 +9372,8 @@
    "game": "Pokémon Black and White",
    "stability": "Stable"
   },
-  "download": "https://github.com/BlastSlimey/PokemonBWAP/releases/download/0.4.3/pokemon_bw.apworld",
-  "release": "https://github.com/BlastSlimey/PokemonBWAP/releases/tag/0.4.3",
+  "download": "https://github.com/BlastSlimey/PokemonBWAP/releases/download/0.4.4/pokemon_bw.apworld",
+  "release": "https://github.com/BlastSlimey/PokemonBWAP/releases/tag/0.4.4",
   "links": [
    "https://github.com/BlastSlimey/PokemonBWAP/releases/latest"
   ]
@@ -9538,7 +9585,7 @@
  },
  {
   "game": "Pokemon Snap",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "authors": [
    "ArsonAssassin",
    "SomeJakeGuy",
@@ -9558,8 +9605,8 @@
    "game": "Pokémon Snap",
    "stability": "Unstable"
   },
-  "download": "https://github.com/nielrenned/PokemonSnap_Archipelago/releases/download/v0.9.0/pokemon_snap.apworld",
-  "release": "https://github.com/nielrenned/PokemonSnap_Archipelago/releases/tag/v0.9.0",
+  "download": "https://github.com/nielrenned/PokemonSnap_Archipelago/releases/download/v0.9.1/pokemon_snap.apworld",
+  "release": "https://github.com/nielrenned/PokemonSnap_Archipelago/releases/tag/v0.9.1",
   "links": [
    "https://github.com/nielrenned/PokemonSnap_Archipelago/releases/latest"
   ]
@@ -9827,7 +9874,7 @@
  },
  {
   "game": "Puzzle Bobble 4",
-  "version": "0.8.0",
+  "version": "1.0.0",
   "authors": [
    "Hish"
   ],
@@ -9842,8 +9889,8 @@
    "game": "Puzzle Bobble 4",
    "stability": "Unstable"
   },
-  "download": "https://github.com/HishLeo/PuzzleBobble4forArchipelago/releases/download/v0.1.0/puzzlebobble4.apworld",
-  "release": "https://github.com/HishLeo/PuzzleBobble4forArchipelago/releases/tag/v0.1.0",
+  "download": "https://github.com/HishLeo/PuzzleBobble4forArchipelago/releases/download/v1.0.0/puzzlebobble4.apworld",
+  "release": "https://github.com/HishLeo/PuzzleBobble4forArchipelago/releases/tag/v1.0.0",
   "links": [
    "https://github.com/HishLeo/PuzzleBobble4forArchipelago/releases/latest"
   ]
@@ -10571,7 +10618,7 @@
  },
  {
   "game": "Saints Row 2",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "authors": [
    "hoxi"
   ],
@@ -10588,8 +10635,8 @@
    "pr_status": "Not PRing",
    "adult": true
   },
-  "download": "https://github.com/hoXyy/SaintsRow2Archipelago/releases/download/0.4.1/saints_row_2.apworld",
-  "release": "https://github.com/hoXyy/SaintsRow2Archipelago/releases/tag/0.4.1",
+  "download": "https://github.com/hoXyy/SaintsRow2Archipelago/releases/download/0.4.2/saints_row_2.apworld",
+  "release": "https://github.com/hoXyy/SaintsRow2Archipelago/releases/tag/0.4.2",
   "links": [
    "https://github.com/hoXyy/SaintsRow2Archipelago/releases/"
   ]
@@ -11102,8 +11149,8 @@
    "game": "Shovel Knight Pocket Dungeon",
    "stability": "Unstable"
   },
-  "download": "https://github.com/Mitchell1711/Archipelago/releases/download/v1.0.0/pocket_dungeon.apworld",
-  "release": "https://github.com/Mitchell1711/Archipelago/releases/tag/v1.0.0",
+  "download": "https://github.com/Mitchell1711/Archipelago/releases/download/v1.0.1/pocket_dungeon.apworld",
+  "release": "https://github.com/Mitchell1711/Archipelago/releases/tag/v1.0.1",
   "links": [
    "https://github.com/Mitchell1711/Archipelago/releases"
   ]
@@ -12686,7 +12733,7 @@
  },
  {
   "game": "Team Fortress 2 Mann vs Machine",
-  "version": "1.18.5",
+  "version": "1.18.7",
   "authors": [
    "mathis"
   ],
@@ -12701,8 +12748,8 @@
    "game": "Team Fortress 2 (Mann vs Machine)",
    "stability": "Unstable"
   },
-  "download": "https://github.com/m-this/tf2-archipelago/releases/download/v1.18.5/tf2_mvm.apworld",
-  "release": "https://github.com/m-this/tf2-archipelago/releases/tag/v1.18.5",
+  "download": "https://github.com/m-this/tf2-archipelago/releases/download/v1.18.7/tf2_mvm.apworld",
+  "release": "https://github.com/m-this/tf2-archipelago/releases/tag/v1.18.7",
   "links": [
    "https://github.com/m-this/tf2-archipelago/releases/latest"
   ]
@@ -12869,7 +12916,7 @@
  },
  {
   "game": "The Grinch",
-  "version": "1.6.3",
+  "version": "1.6.4",
   "authors": [
    "MarioSpore",
    "SomeJakeGuy"
@@ -12888,8 +12935,8 @@
    "game": "The Grinch",
    "stability": "Stable"
   },
-  "download": "https://github.com/MarioSpore/Grinch-AP/releases/download/v1.6.3/grinch.apworld",
-  "release": "https://github.com/MarioSpore/Grinch-AP/releases/tag/v1.6.3",
+  "download": "https://github.com/MarioSpore/Grinch-AP/releases/download/v1.6.4/grinch.apworld",
+  "release": "https://github.com/MarioSpore/Grinch-AP/releases/tag/v1.6.4",
   "links": [
    "https://github.com/MarioSpore/Grinch-AP/releases/latest"
   ]
@@ -13069,7 +13116,7 @@
   "download": "https://github.com/Dinopony/ArchipelagoOoS/releases/download/oos-20.1.13/tloz_oos.apworld",
   "release": "https://github.com/Dinopony/ArchipelagoOoS/releases/tag/oos-20.1.13",
   "links": [
-   "https://github.com/Dinopony/Archipelago/releases/latest"
+   "https://github.com/Ishigh1/Oracle-of-Seasons-apworld/releases"
   ]
  },
  {
@@ -13465,7 +13512,7 @@
  },
  {
   "game": "Total War Warhammer III",
-  "version": "0.11.3",
+  "version": "0.10.18",
   "authors": [
    "jordansds"
   ],
@@ -13483,8 +13530,8 @@
    "game": "Total War: Warhammer III",
    "stability": "Unstable"
   },
-  "download": "https://github.com/jordansds/Archipelago_TWW3_Alt/releases/download/v0.11.2.1/tww3.apworld",
-  "release": "https://github.com/jordansds/Archipelago_TWW3_Alt/releases/tag/v0.11.2.1",
+  "download": "https://github.com/jordansds/Archipelago_TWW3_Alt/releases/download/v0.10.19/tww3.apworld",
+  "release": "https://github.com/jordansds/Archipelago_TWW3_Alt/releases/tag/v0.10.19",
   "links": [
    "https://github.com/jordansds/Archipelago_TWW3_Alt"
   ]
@@ -13588,7 +13635,7 @@
  },
  {
   "game": "Toy Story 2",
-  "version": "2.3.3",
+  "version": "3.0.0",
   "authors": [
    "imklubb"
   ],
@@ -13601,8 +13648,8 @@
    "game": "Toy Story 2 (PS1)",
    "stability": "Unstable"
   },
-  "download": "https://github.com/imklubb/Archipelago-Toy-Story-2/releases/download/2.3.3/toystory2.apworld",
-  "release": "https://github.com/imklubb/Archipelago-Toy-Story-2/releases/tag/2.3.3",
+  "download": "https://github.com/imklubb/Archipelago-Toy-Story-2/releases/download/3.0.0/toystory2.apworld",
+  "release": "https://github.com/imklubb/Archipelago-Toy-Story-2/releases/tag/3.0.0",
   "links": [
    "https://github.com/imklubb/Archipelago-Toy-Story-2/releases/latest"
   ]
@@ -14478,8 +14525,8 @@
    "game": "V Rising",
    "stability": "Unstable"
   },
-  "download": "https://github.com/dghalfor/V-Rising-APWorld/releases/download/0.3.3/vrising.apworld",
-  "release": "https://github.com/dghalfor/V-Rising-APWorld/releases/tag/0.3.3",
+  "download": "https://github.com/dghalfor/V-Rising-APWorld/releases/download/0.3.4/vrising.apworld",
+  "release": "https://github.com/dghalfor/V-Rising-APWorld/releases/tag/0.3.4",
   "links": [
    "https://github.com/dghalfor/V-Rising-APWorld/releases/latest"
   ]
@@ -14507,11 +14554,12 @@
  },
  {
   "game": "Wargroove 2",
-  "version": "1.1.5",
+  "version": "1.1.11",
   "authors": [
    "Fly Hyping",
    "Magnemania",
-   "Akblabla"
+   "Akblabla",
+   "Luminary Lytra"
   ],
   "file": "wargroove2.apworld",
   "source": "https://github.com/FlySniper/Archipelago",
@@ -14528,15 +14576,41 @@
    "stability": "Stable",
    "pr_status": "In Review"
   },
-  "download": "https://github.com/FlySniper/Archipelago/releases/download/wargroove2-1.1.6/wargroove2.apworld",
-  "release": "https://github.com/FlySniper/Archipelago/releases/tag/wargroove2-1.1.6",
+  "download": "https://github.com/FlySniper/Archipelago/releases/download/wargroove2-1.1.11/wargroove2.apworld",
+  "release": "https://github.com/FlySniper/Archipelago/releases/tag/wargroove2-1.1.11",
   "links": [
    "https://github.com/FlySniper/Archipelago/releases"
   ]
  },
  {
+  "game": "Wario Land",
+  "version": "1.3.0",
+  "authors": [
+   "Rando"
+  ],
+  "file": "wl.apworld",
+  "source": "https://github.com/randomcodegen/Archipelago",
+  "license": "MIT",
+  "license_url": "https://github.com/randomcodegen/Archipelago/blob/HEAD/LICENSE",
+  "copyright": [
+   "Copyright (c) 2017 LLCoolDave",
+   "Copyright (c) 2025 Berserker66",
+   "Copyright (c) 2022 CaitSith2",
+   "Copyright (c) 2021 LegendaryLinux"
+  ],
+  "sheet": {
+   "game": "Wario Land 1",
+   "stability": "Stable"
+  },
+  "download": "https://github.com/randomcodegen/Archipelago/releases/download/1.3.0/wl.apworld",
+  "release": "https://github.com/randomcodegen/Archipelago/releases/tag/1.3.0",
+  "links": [
+   "https://github.com/randomcodegen/Archipelago/releases"
+  ]
+ },
+ {
   "game": "Wario Land 4",
-  "version": "3.4.0",
+  "version": "3.5.1",
   "authors": [
    "lil David"
   ],
@@ -14552,8 +14626,8 @@
    "stability": "Stable",
    "pr_status": "In Review"
   },
-  "download": "https://github.com/lilDavid/Archipelago-Wario-Land-4/releases/download/3.4.0/wl4.apworld",
-  "release": "https://github.com/lilDavid/Archipelago-Wario-Land-4/releases/tag/3.4.0",
+  "download": "https://github.com/lilDavid/Archipelago-Wario-Land-4/releases/download/3.5.1/wl4.apworld",
+  "release": "https://github.com/lilDavid/Archipelago-Wario-Land-4/releases/tag/3.5.1",
   "links": [
    "https://github.com/lilDavid/Archipelago-Wario-Land-4/releases"
   ]
@@ -14668,8 +14742,8 @@
    "stability": "Stable",
    "pr_status": "Not PRing"
   },
-  "download": "https://github.com/TylerJG92/WOLAP/releases/download/v0.3.5-alpha/westofloathing.apworld",
-  "release": "https://github.com/TylerJG92/WOLAP/releases/tag/v0.3.5-alpha",
+  "download": "https://github.com/TylerJG92/WOLAP/releases/download/v0.3.6-alpha/westofloathing.apworld",
+  "release": "https://github.com/TylerJG92/WOLAP/releases/tag/v0.3.6-alpha",
   "links": [
    "https://github.com/TylerJG92/WOLAP/releases/latest"
   ]
@@ -14784,30 +14858,6 @@
   "release": "https://github.com/Skelrin/WoLArchipelago/releases/tag/v1.1.0",
   "links": [
    "https://github.com/Skelrin/WoLArchipelago/releases"
-  ]
- },
- {
-  "game": "wl",
-  "version": null,
-  "authors": [],
-  "file": "wl.apworld",
-  "source": "https://github.com/randomcodegen/Archipelago",
-  "license": "MIT",
-  "license_url": "https://github.com/randomcodegen/Archipelago/blob/HEAD/LICENSE",
-  "copyright": [
-   "Copyright (c) 2017 LLCoolDave",
-   "Copyright (c) 2025 Berserker66",
-   "Copyright (c) 2022 CaitSith2",
-   "Copyright (c) 2021 LegendaryLinux"
-  ],
-  "sheet": {
-   "game": "Wario Land 1",
-   "stability": "Stable"
-  },
-  "download": "https://github.com/randomcodegen/Archipelago/releases/download/1.2.6/wl.apworld",
-  "release": "https://github.com/randomcodegen/Archipelago/releases/tag/1.2.6",
-  "links": [
-   "https://github.com/randomcodegen/Archipelago/releases"
   ]
  },
  {

@@ -1,6 +1,6 @@
 {
  "ap_version": "0.6.8",
- "generated_at": "2026-11-01T11:46:37+00:00",
+ "generated_at": "2026-11-02T13:12:07+00:00",
  "games": [
   {
    "game": "2048",
@@ -740,6 +740,18 @@
    "guides": "guides/bomb-rush-cyberfunk.json"
   },
   {
+   "game": "Bomberman Hero",
+   "file": "games/bomberman-hero.json",
+   "source": "custom",
+   "apworld": "bomberman_hero.apworld",
+   "world_version": "0.2.5",
+   "guides": "guides/bomberman-hero.json",
+   "sheet": {
+    "game": "Bomberman Hero",
+    "stability": "Stable"
+   }
+  },
+  {
    "game": "Bomberman Quest",
    "file": "games/bomberman-quest.json",
    "source": "custom",
@@ -1325,7 +1337,7 @@
    "file": "games/cooking-mama-3.json",
    "source": "custom",
    "apworld": "cookingmama3.apworld",
-   "world_version": "1.1.1",
+   "world_version": "1.1.3",
    "guides": "guides/cooking-mama-3.json",
    "sheet": {
     "game": "Cooking Mama 3",
@@ -1821,7 +1833,7 @@
    "file": "games/donkey-kong-64.json",
    "source": "custom",
    "apworld": "dk64.apworld",
-   "world_version": "2.0.5",
+   "world_version": "2.0.7",
    "guides": "guides/donkey-kong-64.json",
    "sheet": {
     "game": "Donkey Kong 64",
@@ -2486,6 +2498,18 @@
    }
   },
   {
+   "game": "FTL: Faster Than Light",
+   "file": "games/ftl-faster-than-light.json",
+   "source": "custom",
+   "apworld": "ftl.apworld",
+   "world_version": "0.5.0",
+   "guides": "guides/ftl-faster-than-light.json",
+   "sheet": {
+    "game": "FTL: Faster Than Light",
+    "stability": "Unstable"
+   }
+  },
+  {
    "game": "Funi Raccoon Game",
    "file": "games/funi-raccoon-game.json",
    "source": "custom",
@@ -2972,7 +2996,7 @@
    "file": "games/hollow-knight-silksong.json",
    "source": "custom",
    "apworld": "silksong.apworld",
-   "world_version": "0.5.3",
+   "world_version": "0.5.4",
    "guides": "guides/hollow-knight-silksong.json",
    "sheet": {
     "game": "Hollow Knight: Silksong (Batsong)",
@@ -5218,7 +5242,7 @@
    "file": "games/pokemon-black-and-white.json",
    "source": "custom",
    "apworld": "pokemon_bw.apworld",
-   "world_version": "0.4.3",
+   "world_version": "0.4.4",
    "guides": "guides/pokemon-black-and-white.json",
    "sheet": {
     "game": "Pokémon Black and White",
@@ -5331,7 +5355,7 @@
    "file": "games/pokemon-snap.json",
    "source": "custom",
    "apworld": "pokemon_snap.apworld",
-   "world_version": "0.9.0",
+   "world_version": "0.9.1",
    "guides": "guides/pokemon-snap.json",
    "sheet": {
     "game": "Pokémon Snap",
@@ -5488,7 +5512,7 @@
    "file": "games/puzzle-bobble-4.json",
    "source": "custom",
    "apworld": "puzzlebobble4.apworld",
-   "world_version": "0.8.0",
+   "world_version": "1.0.0",
    "guides": "guides/puzzle-bobble-4.json",
    "sheet": {
     "game": "Puzzle Bobble 4",
@@ -5904,7 +5928,7 @@
    "file": "games/saints-row-2.json",
    "source": "custom",
    "apworld": "saints_row_2.apworld",
-   "world_version": "0.4.1",
+   "world_version": "0.4.2",
    "guides": "guides/saints-row-2.json",
    "sheet": {
     "game": "Saints Row 2",
@@ -7089,7 +7113,7 @@
    "file": "games/team-fortress-2-mann-vs-machine.json",
    "source": "custom",
    "apworld": "tf2_mvm.apworld",
-   "world_version": "1.18.5",
+   "world_version": "1.18.7",
    "guides": "guides/team-fortress-2-mann-vs-machine.json",
    "sheet": {
     "game": "Team Fortress 2 (Mann vs Machine)",
@@ -7194,7 +7218,7 @@
    "file": "games/the-grinch.json",
    "source": "custom",
    "apworld": "grinch.apworld",
-   "world_version": "1.6.3",
+   "world_version": "1.6.4",
    "guides": "guides/the-grinch.json",
    "sheet": {
     "game": "The Grinch",
@@ -7585,7 +7609,7 @@
    "file": "games/toy-story-2.json",
    "source": "custom",
    "apworld": "toystory2.apworld",
-   "world_version": "2.3.3",
+   "world_version": "3.0.0",
    "guides": "guides/toy-story-2.json",
    "sheet": {
     "game": "Toy Story 2 (PS1)",
@@ -8084,7 +8108,7 @@
    "file": "games/wargroove-2.json",
    "source": "custom",
    "apworld": "wargroove2.apworld",
-   "world_version": "1.1.5",
+   "world_version": "1.1.11",
    "guides": "guides/wargroove-2.json",
    "sheet": {
     "game": "Wargroove 2",
@@ -8097,7 +8121,7 @@
    "file": "games/wario-land.json",
    "source": "custom",
    "apworld": "wl.apworld",
-   "world_version": null,
+   "world_version": "1.3.0",
    "rom": {
     "section": "wl_options",
     "setting": "rom_file",
@@ -8128,7 +8152,7 @@
    "file": "games/wario-land-4.json",
    "source": "custom",
    "apworld": "wl4.apworld",
-   "world_version": "3.4.0",
+   "world_version": "3.5.1",
    "guides": "guides/wario-land-4.json",
    "sheet": {
     "game": "Wario Land 4",
