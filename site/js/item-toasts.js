@@ -12,7 +12,7 @@ const SHOWN = 3; // au-delà, les objets arrivés ensemble tiennent dans une der
 const LIFE = 8000; // durée d'affichage, en pause tant que la souris ou le clavier est dessus
 
 // Drapeaux d'un objet (NetworkItem) : progression 1, utile 2, piège 4. Le symbole double la couleur.
-const KINDS = {
+export const KINDS = {
   progression: { label: "Progression", mark: "★" },
   useful: { label: "Utile", mark: "◆" },
   trap: { label: "Piège", mark: "⚠" },

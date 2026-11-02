@@ -11,6 +11,7 @@
   Détails dans la section « Jeux non officiels » du README.
 - Navigation : menu latéral (`Sidebar` dans `main.js`, barre « Menu » en haut sous 900 px, réglages repliés en bas).
   Accueil `#/` (`welcome.js`) : ce qu'est Archipelago, pour qui n'y a jamais joué ; l'éditeur est sur `#/editeur`.
+  Son exemple animé (`demo.js`, bouton « Ouvrir un coffre ») est fictif et reprend les notifications des rooms.
 - DA « Carte de l'Archipel » (`styles.css`) : pages sur une feuille de parchemin (`.sheet`, `--bg`), cartes en feuillets
   (`--surface`), menu en planche de bois (`--wood*`), titres en Grenze Gotisch, texte en Lexend. Jour = clair, nuit =
   sombre (parchemin à la lanterne). Fond : la mer en canvas (`sea.js`, îles dans les marges libres autour de `.sheet`,

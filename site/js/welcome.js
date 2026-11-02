@@ -3,6 +3,7 @@
 import { html } from "../vendor/preact-htm.js";
 import { roomsEnabled } from "./rooms-api.js";
 import { Compass } from "./art.js";
+import { ChestDemo } from "./demo.js";
 
 const AP_SITE = "https://archipelago.gg";
 
@@ -56,15 +57,7 @@ export function Welcome({ index }) {
       </div>
     </section>
 
-    <section class="card welcome-example" aria-labelledby="exemple">
-      <h2 id="exemple">Un exemple</h2>
-      <ol>
-        <li>Alex joue à <strong>Hollow Knight</strong>, Sam à <strong>A Link to the Past</strong>.</li>
-        <li>Alex ouvre un coffre dans Hollow Knight… et c'est le <strong>grappin de Sam</strong> qui en sort.</li>
-        <li>Sam le reçoit aussitôt dans son jeu et peut atteindre une zone jusque-là bloquée.</li>
-        <li>Plus tard, Sam trouve une capacité d'Alex : chacun avance grâce à l'autre.</li>
-      </ol>
-    </section>
+    <${ChestDemo} />
 
     <section aria-labelledby="deroule">
       <h2 id="deroule">Comment se déroule une partie</h2>

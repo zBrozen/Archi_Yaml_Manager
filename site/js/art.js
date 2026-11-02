@@ -21,3 +21,29 @@ export const Bottle = ({ class: cls }) => html`<svg class=${cls} viewBox="0 0 64
     <path d="M27 37h10M27 41h7" stroke="currentColor" stroke-width="1.6" />
   </g>
 </svg>`;
+
+// Navire de profil, sur ses vagues (avancement d'un joueur vers sa croix).
+export const Ship = ({ class: cls }) => html`<svg class=${cls} viewBox="0 0 64 64" aria-hidden="true">
+  <path d="M8 42h48l-7 11H15z" fill="currentColor" />
+  <path d="M32 8v34" stroke="currentColor" stroke-width="2.5" />
+  <path d="M34 12c13 6 13 20 0 26z" fill="currentColor" opacity=".55" />
+  <path d="M30 16c-10 5-10 15 0 20z" fill="currentColor" opacity=".35" />
+  <path d="M32 8l9 3-9 3z" fill="var(--mark)" />
+</svg>`;
+
+// Croix du trésor (objectif, objet arrivé).
+export const Cross = ({ class: cls }) => html`<svg class=${cls} viewBox="0 0 64 64" aria-hidden="true">
+  <path d="M16 16l32 32M48 16L16 48" stroke="currentColor" stroke-width="8" stroke-linecap="round" />
+</svg>`;
+
+// Drapeau d'un joueur, à sa couleur (--pc).
+export const Flag = ({ class: cls }) => html`<svg class=${cls} viewBox="0 0 40 40" aria-hidden="true">
+  <path d="M10 4v34" stroke="currentColor" stroke-width="3" stroke-linecap="round" />
+  <path d="M11 6c6-3 10 3 17 0s6 0 8 0v13c-2 0-2-2-8 0s-11-3-17 0z" fill="var(--pc)" stroke="currentColor" stroke-width="1.6" />
+</svg>`;
+
+export const Chest = ({ class: cls }) => html`<svg class=${cls} viewBox="0 0 64 64" aria-hidden="true">
+  <path d="M10 30h44v24H10z" fill="currentColor" opacity=".8" />
+  <path d="M10 30c0-12 9-18 22-18s22 6 22 18z" fill="currentColor" />
+  <rect x="27" y="26" width="10" height="12" rx="2" fill="var(--gold)" />
+</svg>`;
