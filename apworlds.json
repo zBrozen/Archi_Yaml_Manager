@@ -242,6 +242,7 @@
     {"game": "Freedom Planet 2", "stability": "Unstable"},
     {"game": "Friday Night Funkin'", "stability": "Unstable"},
     {"game": "Frogmonster", "stability": "Stable", "pr_status": "Not PRing"},
+    {"game": "FTL: Faster Than Light", "stability": "Unstable"},
     {"game": "Funi Raccoon Game", "stability": "Stable", "pr_status": "Not PRing"},
     {"game": "Garfield Kart: Furious Racing", "stability": "Stable", "pr_status": "Not PRing"},
     {"game": "Garry's Mod (apAdventure)", "stability": "Unstable", "pr_status": "Not PRing", "adult": true},
