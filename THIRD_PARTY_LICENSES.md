@@ -12,6 +12,8 @@ Le code propre au projet est sous licence MIT (voir [`LICENSE`](LICENSE)). Il r�
 | [Archipelago](https://github.com/ArchipelagoMW/Archipelago) | `site/data/ap-core.zip`, données extraites dans `site/data/games/`, jeux officiels publiés dans `site/data/worlds/` | MIT (texte ci-dessous) |
 | [Preact](https://github.com/preactjs/preact) + [htm](https://github.com/developit/htm) | `site/vendor/preact-htm.js` | MIT |
 | [yaml](https://github.com/eemeli/yaml) | `site/vendor/yaml.js` | ISC |
+| [Lexend](https://github.com/googlefonts/lexend) (police du texte) | `site/vendor/fonts/lexend-*.woff2`, licence dans `site/vendor/fonts/Lexend-OFL.txt` | SIL OFL 1.1 |
+| [Lilita One](https://fonts.google.com/specimen/Lilita+One) (police des titres) | `site/vendor/fonts/lilita-one-*.woff2`, licence dans `site/vendor/fonts/LilitaOne-OFL.txt` | SIL OFL 1.1 |
 | [archipelago.js](https://github.com/ThePhar/archipelago.js) | `site/vendor/archipelago.js` (client texte des rooms) | MIT |
 | [wasmoon](https://github.com/ceifa/wasmoon) + [Lua](https://www.lua.org) | `site/vendor/wasmoon.js`, `site/vendor/wasmoon.wasm` (packs PopTracker) | MIT |
 | [Pyodide](https://github.com/pyodide/pyodide) | chargé depuis jsDelivr par `site/js/apworld-worker.js` | MPL-2.0 |
