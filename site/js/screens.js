@@ -134,9 +134,13 @@ const MAX_VIEWERS = 3; // overlays auxquels un joueur envoie son image ; les sui
 // Piste de chaque source (pistes dans l'ordre d'AUDIO_CHANNELS, voir screens-net.js).
 const AUDIO_BUS = { pc: "jeu", jeu: "jeu", micro: "voix" };
 
+// Contexte audio qui ne joue rien sur l'ordinateur : sans sortie ouverte (`type: "none"`, ignoré des navigateurs qui ne
+// le connaissent pas), le site ne touche pas aux haut-parleurs ni au casque quand il n'a rien à y jouer.
+const silentContext = (options = {}) => new AudioContext({ ...options, sinkId: { type: "none" } });
+
 class AudioMix {
   constructor() {
-    this.ctx = new AudioContext();
+    this.ctx = silentContext();
     this.ctx.resume?.().catch(() => {});
     this.analyser = this.ctx.createAnalyser();
     this.analyser.fftSize = 1024;
@@ -255,13 +259,17 @@ const isAlias = (d) => d.deviceId === "default" || d.deviceId === "communication
 
 // Sorties et entrées par défaut de Windows (l'installation de VB-Cable les met souvent sur le câble), et sorties où
 // rejouer le son du jeu (tout sauf le câble).
+// Windows a aussi un périphérique « de communication » par défaut (alias `communications` de Chrome) : le câble y
+// fait passer sa lecture pour un appel, et Windows dégrade alors tout le son de l'ordinateur.
 async function audioDevices() {
   const all = await navigator.mediaDevices.enumerateDevices();
-  const label = (kind) => all.find((d) => d.kind === kind && d.deviceId === "default")?.label || "";
+  const label = (kind, alias = "default") => all.find((d) => d.kind === kind && d.deviceId === alias)?.label || "";
   return {
     outputs: all.filter((d) => d.kind === "audiooutput" && d.label && !isAlias(d) && !CABLE_OUTPUT.test(d.label)),
     cableOutput: CABLE_OUTPUT.test(label("audiooutput")),
     cableInput: CABLE_INPUT.test(label("audioinput")),
+    commOutput: CABLE_OUTPUT.test(label("audiooutput", "communications")),
+    commInput: CABLE_INPUT.test(label("audioinput", "communications")),
   };
 }
 
@@ -293,7 +301,7 @@ class GameSound {
     this.deviceId = deviceId;
     this.heard = false;
     this.track.addEventListener("ended", () => { this.stop(); });
-    this.ctx = new AudioContext({ latencyHint: "interactive" });
+    this.ctx = silentContext({ latencyHint: "interactive" }); // sortie ouverte seulement pour l'écoute (setOutput)
     this.ctx.resume?.().catch(() => {});
     const source = this.ctx.createMediaStreamSource(stream);
     this.analyser = this.ctx.createAnalyser();
@@ -308,8 +316,18 @@ class GameSound {
 
   // Écoute sur `sink` (identifiant d'une sortie, "" : celle par défaut de Windows). Le casque peut être choisi même
   // si Windows a pris le câble comme sortie par défaut ; les navigateurs sans choix de sortie gardent celle par défaut.
+  // Sans écoute, aucune sortie n'est ouverte (`type: "none"`) : le site ne joue rien sur le casque, même en silence.
   async setOutput(listen, sink = "") {
     if (!this.ctx) return;
+    if (!listen && this.ctx.setSinkId) {
+      try {
+        await this.ctx.setSinkId({ type: "none" });
+        Object.assign(this, { sink: "", loop: false });
+        if (this.monitor) this.monitor.gain.value = 0;
+        this.changed();
+        return;
+      } catch { /* option inconnue : sortie gardée, au volume zéro */ }
+    }
     let target = sink;
     if (this.ctx.setSinkId) {
       try { await this.ctx.setSinkId(sink); } catch { target = ""; }
@@ -825,11 +843,22 @@ const DefaultOutputHelp = () => html`<ul class="tips">
   <li>Ou : <a href=${WINDOWS_SOUND}>Paramètres de son de Windows</a> → <strong>Sortie</strong>.</li>
 </ul>`;
 
+// Périphériques de communication par défaut : réglables seulement dans l'ancien panneau Son.
+const CommDeviceHelp = () => html`<ol class="tips">
+  <li>Touche Windows + R, tapez <strong>mmsys.cpl</strong> puis Entrée.</li>
+  <li>Onglet <strong>Lecture</strong> : clic droit sur votre casque ou vos haut-parleurs → <strong>Définir comme périphérique
+    de communication par défaut</strong>.</li>
+  <li>Onglet <strong>Enregistrement</strong> : clic droit sur votre micro → <strong>Définir comme périphérique de
+    communication par défaut</strong>.</li>
+  <li>Le câble ne doit plus porter la mention « Périphérique de communication par défaut ». <strong>OK</strong>, puis
+    fermez et rouvrez cet onglet du site.</li>
+</ol>`;
+
 // Windows a pris le câble comme haut-parleur ou micro par défaut (fréquent juste après l'installation de VB-Cable) :
 // tout le son de l'ordinateur part dans le stream et le joueur n'entend plus rien, ou ses amis entendent le jeu au
 // lieu de sa voix. Affiché quel que soit le son choisi.
 function CableDefaults({ devices }) {
-  if (!devices.cableOutput && !devices.cableInput) return null;
+  if (!devices.cableOutput && !devices.cableInput && !devices.commOutput && !devices.commInput) return null;
   return html`<div class="notice warn full stack cable-defaults" role="alert">
     ${devices.cableOutput && html`<div class="stack">
       <strong>Windows a pris le câble comme haut-parleur par défaut.</strong>
@@ -843,19 +872,60 @@ function CableDefaults({ devices }) {
         <a href=${WINDOWS_SOUND}>paramètres de son de Windows</a> → <strong>Entrée</strong>, choisissez votre vrai micro
         (pas « CABLE Output »).</span>
     </div>`}
+    ${(devices.commOutput || devices.commInput) && html`<div class="stack">
+      <strong>Le câble est votre périphérique « de communication » par défaut.</strong>
+      <span>Windows croit alors à un appel dès que le site lit le câble, et dégrade tout le son de l'ordinateur (qualité
+        et volume, Discord compris). Remettez votre casque et votre micro :</span>
+      <${CommDeviceHelp} />
+    </div>`}
     <span class="hint">Ce message disparaît tout seul une fois corrigé.</span>
   </div>`;
 }
+
+// Windows baisse les autres sons quand une application ouvre un micro (« communications ») : le site lit le câble comme
+// un micro, donc le jeu devient presque inaudible dans le casque (écouté par Windows ou par le site) tant qu'il est ouvert.
+const DuckingHelp = () => html`<ol class="tips">
+  <li>Touche Windows + R, tapez <strong>mmsys.cpl</strong> puis Entrée.</li>
+  <li>Onglet <strong>Communications</strong> (le dernier) : choisissez <strong>Ne rien faire</strong>, puis <strong>OK</strong>.</li>
+  <li>Fermez et rouvrez cet onglet du site.</li>
+</ol>`;
+
+// Casque Bluetooth passé en mode « mains libres » (qualité téléphone) dès qu'une entrée audio est ouverte, même le câble.
+// Windows 11 n'ouvre plus « Périphériques et imprimantes » par `control printers` : on y passe par les Paramètres, et le
+// panneau Son sert de solution de secours (désactiver les appareils « mains libres » du casque).
+const HandsFreeHelp = () => html`<ol class="tips">
+  <li>Ouvrez <a href="ms-settings:devices">Paramètres → Bluetooth et appareils → Appareils</a>, puis tout en bas
+    <strong>Plus de paramètres de périphériques et d'imprimantes</strong>.</li>
+  <li>Dans la fenêtre qui s'ouvre, double-clic sur votre casque → onglet <strong>Services</strong>.</li>
+  <li>Décochez <strong>Téléphonie mains libres</strong> (ou <strong>Handsfree Telephony</strong>), puis <strong>OK</strong>.</li>
+  <li>Éteignez et rallumez le casque, puis fermez et rouvrez cet onglet du site.</li>
+</ol>
+<span class="hint"><strong>Pas d'onglet Services ?</strong> Touche Windows + R, <strong>mmsys.cpl</strong>, Entrée. Dans
+  <strong>Lecture</strong> puis dans <strong>Enregistrement</strong>, clic droit sur chaque appareil du casque dont le nom
+  contient <strong>Mains libres</strong> ou <strong>Hands-Free</strong> → <strong>Désactiver</strong>. (Clic droit dans le
+  vide → <strong>Afficher les périphériques désactivés</strong> pour les retrouver.)</span>
+<span class="hint">Le micro du casque ne marchera plus (Discord compris) tant que c'est coupé : utilisez un autre micro, ou
+  réactivez-le après le stream.</span>`;
 
 // Tout remettre comme avant l'installation : affiché en clair dans le guide, et replié quand le joueur n'utilise plus le câble.
 const CableUndo = () => html`<ol class="tips">
   <li><strong>Haut-parleur par défaut</strong> : votre casque ou vos haut-parleurs, pas « CABLE Input ».<${DefaultOutputHelp} /></li>
   <li><strong>Micro par défaut</strong> : votre micro, pas « CABLE Output » (<a href=${WINDOWS_SOUND}>paramètres de son</a>${" "}
     → <strong>Entrée</strong>).</li>
+  <li><strong>Périphériques de communication</strong> : dans <strong>mmsys.cpl</strong>, ni « CABLE Input » ni « CABLE Output »
+    ne doivent être « Périphérique de communication par défaut » (clic droit sur votre casque, puis sur votre micro →
+    <strong>Définir comme périphérique de communication par défaut</strong>).</li>
   <li><strong>Applications</strong> : dans le <a href=${WINDOWS_MIXER}>mélangeur de volume</a>, bouton${" "}
     <strong>Réinitialiser</strong> en bas de la page (toutes les applications reviennent sur « Par défaut »).</li>
   <li><strong>Écoute par Windows</strong>, si vous l'aviez activée : <strong>mmsys.cpl</strong> → <strong>Enregistrement</strong>
     → <strong>CABLE Output</strong> → <strong>Écouter</strong>, décochez <strong>Écouter ce périphérique</strong>.</li>
+  <li><strong>Micro du casque Bluetooth</strong>, si vous l'aviez coupé : <a href="ms-settings:devices">Bluetooth et
+    appareils</a> → <strong>Plus de paramètres de périphériques et d'imprimantes</strong> → double-clic sur le casque →
+    <strong>Services</strong>, recochez <strong>Téléphonie mains libres</strong>. Ou dans <strong>mmsys.cpl</strong>, clic
+    droit → <strong>Afficher les périphériques désactivés</strong>, puis clic droit sur les appareils « Mains libres » →
+    <strong>Activer</strong>.</li>
+  <li><strong>Baisse du son pendant les appels</strong>, si vous l'aviez désactivée : <strong>mmsys.cpl</strong> → onglet
+    <strong>Communications</strong> → <strong>Réduire le volume des autres sons de 80 %</strong> (le réglage d'origine de Windows).</li>
   <li><strong>Désinstaller le câble (facultatif)</strong> : relancez <strong>VBCABLE_Setup_x64</strong> en administrateur
     → <strong>Remove Driver</strong>, puis redémarrez l'ordinateur.</li>
 </ol>`;
@@ -906,6 +976,22 @@ function CableGuide({ cable, permitted, onReveal, listen, onListen, outputs, sin
             réglez le mélangeur, puis relancez le jeu.</span>
         </div>
       </details>
+      <div class="notice full stack">
+        <strong>Son faible ou étouffé dans votre casque quand ce site est ouvert ?</strong>
+        <span>Le site lit le câble comme une entrée audio, et Windows réagit comme à un appel. Le stream, lui, reçoit le son
+          normalement. Deux causes possibles :</span>
+        <div class="stack">
+          <strong>Casque Bluetooth : son de téléphone (mono, étouffé)</strong>
+          <span>Dès qu'une application ouvre une entrée audio, Windows peut passer le casque en mode « mains libres », de
+            qualité téléphone. Si vous n'utilisez pas le micro du casque :</span>
+          <${HandsFreeHelp} />
+        </div>
+        <div class="stack">
+          <strong>Son baissé d'un coup</strong>
+          <span>Windows baisse les autres sons de 80 % pendant les « appels ». Pour l'en empêcher :</span>
+          <${DuckingHelp} />
+        </div>
+      </div>
     </${Step}>
     <li class="cable-undo">
       <strong>Revenir à un son comme avant</strong>
