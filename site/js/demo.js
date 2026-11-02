@@ -1,7 +1,7 @@
-// Exemple animé de l'accueil : quatre joueurs, quatre jeux. « Ouvrir un coffre » (ou toutes les quelques secondes,
-// tant que l'exemple est à l'écran) fait un check chez un joueur : la pièce vole jusqu'au joueur dont c'est l'objet,
-// une croix se tamponne sur son île et la ligne s'écrit dans le journal de bord. Tout est inventé et reste dans la page.
-import { html, useState, useEffect, useRef } from "../vendor/preact-htm.js";
+// Exemple animé de l'accueil : quatre joueurs, quatre jeux. Chaque appui sur « Ouvrir un coffre » fait un check chez un
+// joueur : la pièce vole jusqu'au joueur dont c'est l'objet, une croix se tamponne sur son île et la ligne s'écrit dans le
+// journal de bord. Rien ne s'ouvre tout seul. Tout est inventé et reste dans la page.
+import { html, useState, useRef } from "../vendor/preact-htm.js";
 import { Chest, Cross, Flag, Ship } from "./art.js";
 
 const PLAYERS = [
@@ -22,7 +22,6 @@ const FIRST_LOG = [
   { id: -2, from: 2, to: 3, item: "Iron Boots", kind: "useful" },
   { id: -3, from: 1, to: 0, item: "Mantis Claw", kind: "progression" },
 ];
-const AUTO = 6000;
 const FLIGHT = { duration: 760, easing: "cubic-bezier(0.77, 0, 0.175, 1)" };
 const pick = (list) => list[Math.floor(Math.random() * list.length)];
 const reduced = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -36,13 +35,10 @@ function pickKind() {
 export function ChestDemo() {
   const [got, setGot] = useState(() => PLAYERS.map((p) => p.got));
   const [log, setLog] = useState(FIRST_LOG);
-  const section = useRef(null);
   const tiles = useRef(null);
   const flight = useRef(null);
   const lastFrom = useRef(-1);
   const nextId = useRef(0);
-  const auto = useRef(0);
-  const visible = useRef(false);
 
   // Centre d'un élément dans la zone des îles (où volent les pièces).
   const center = (node) => {
@@ -102,27 +98,14 @@ export function ChestDemo() {
     coin.animate(path, { ...FLIGHT, fill: "forwards" }).onfinish = () => { coin.remove(); arrive(); };
   }
 
-  // Envoi automatique toutes les quelques secondes, seulement quand l'exemple est visible (et sans mouvement réduit).
-  const restart = () => {
-    clearInterval(auto.current);
-    if (reduced()) return;
-    auto.current = setInterval(() => visible.current && !document.hidden && send(), AUTO);
-  };
-  useEffect(() => {
-    const watch = new IntersectionObserver(([e]) => { visible.current = e.isIntersecting; });
-    watch.observe(section.current);
-    restart();
-    return () => { watch.disconnect(); clearInterval(auto.current); };
-  }, []);
-
-  return html`<section class="demo" ref=${section} aria-labelledby="exemple">
+  return html`<section class="demo" aria-labelledby="exemple">
     <div class="demo-head">
       <div class="demo-intro">
         <h2 id="exemple">Un exemple, en direct</h2>
         <p>Quatre amis, quatre jeux. Ouvrez un coffre : l'objet qui en sort appartient souvent au jeu d'un autre joueur,
           qui le reçoit aussitôt.</p>
       </div>
-      <button type="button" class="demo-open" onClick=${() => { send(); restart(); }}><${Chest} class="demo-chest" /> Ouvrir un coffre</button>
+      <button type="button" class="demo-open" onClick=${send}><${Chest} class="demo-chest" /> Ouvrir un coffre</button>
     </div>
     <div class="demo-grid">
       <div class="card demo-isles">
