@@ -542,9 +542,26 @@ function Sidebar({ page, advanced, setAdvanced, docLanguage, setDocLanguage, the
   useEffect(() => {
     const side = ref.current, root = document.documentElement.style;
     const narrow = matchMedia("(max-width: 900px)");
-    const measure = () => root.setProperty("--header-h", narrow.matches ? `${side.querySelector(".side-top").offsetHeight}px` : "0px");
+    const top = side.querySelector(".side-top"), settings = side.querySelector(".side-settings");
+    // Lattes du bois (styles.css, --plank) : la première commence au premier lien, et les réglages du bas remontent
+    // jusqu'à la latte la plus proche (leur cadre est en retrait de 5 px dans la latte, comme la pastille des liens).
+    const alignPlanks = () => {
+      const link = side.querySelector(".site-nav a");
+      if (narrow.matches || !link?.offsetHeight) { side.style.removeProperty("--plank-y"); side.style.removeProperty("--settings-lift"); return; }
+      const plank = link.offsetHeight, start = link.offsetTop;
+      side.style.setProperty("--plank-y", `${start}px`);
+      const lift = parseFloat(side.style.getPropertyValue("--settings-lift")) || 0;
+      const natural = settings.offsetTop + lift - 5;
+      const wanted = start + Math.floor((natural - start) / plank) * plank;
+      side.style.setProperty("--settings-lift", `${Math.max(0, natural - wanted)}px`);
+    };
+    const measure = () => {
+      root.setProperty("--header-h", narrow.matches ? `${top.offsetHeight}px` : "0px");
+      alignPlanks();
+    };
+    // Le titre change de hauteur quand sa police arrive, les réglages quand on les ouvre : tout est observé.
     const observer = new ResizeObserver(measure);
-    observer.observe(side);
+    for (const node of [side, top, settings]) observer.observe(node);
     narrow.addEventListener("change", measure);
     return () => { observer.disconnect(); narrow.removeEventListener("change", measure); root.removeProperty("--header-h"); };
   }, []);
