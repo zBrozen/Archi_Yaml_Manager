@@ -35,6 +35,7 @@ from fetch_apworlds import normalize, warn
 API = "https://www.wikidata.org/w/api.php"
 USER_AGENT = "archi-yaml-manager/1.0 (https://github.com/zBrozen/Archi_Yaml_Manager)"
 RETRY_DAYS = 30
+BATCH = 25  # jeux par lot enregistré
 # « Instance de » acceptées : jeu vidéo, épisode, remake, remaster, extension, jeu indépendant…
 VIDEO_GAME = {"Q7889", "Q21125433", "Q65963104", "Q1066707", "Q209163", "Q4393107", "Q16070115", "Q111223304",
               "Q61996773", "Q64170203", "Q865493"}
@@ -136,6 +137,25 @@ def site_genres(labels: list[str]) -> list[str]:
     return [key for key in GENRES if key in found]
 
 
+def save(out: Path, games: dict) -> None:
+    result = {"genres": GENRES, "games": dict(sorted(games.items(), key=lambda kv: normalize(kv[0])))}
+    out.write_text(json.dumps(result, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+
+
+def progress(done: int, total: int, games: dict, names: set, started: float) -> None:
+    """Barre d'avancement : réécrite sur place dans un terminal, une ligne par lot sinon (journal de la CI)."""
+    share = done / total if total else 1
+    bar = "#" * round(share * 30)
+    with_genre = sum(1 for g in games.values() if g["genres"])
+    elapsed = time.monotonic() - started
+    left = f", encore ~{round(elapsed / done * (total - done) / 60)} min" if done and done < total else ""
+    line = f"[{bar:<30}] {done}/{total} jeux cherchés ({share:.0%}), {with_genre}/{len(names)} avec un genre{left}"
+    if sys.stdout.isatty():
+        print(f"\r{line}   ", end="", flush=True)
+    else:
+        print(line, flush=True)
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--index", default="site/data/index.json")
@@ -163,30 +183,6 @@ def main() -> int:
 
     wikidata = Wikidata(time.monotonic() + args.max_minutes * 60)
     games = {n: previous[n] for n in names if n in previous}
-    found: dict[str, tuple[str | None, list[str]]] = {}
-    try:
-        for name in todo:
-            if isinstance(overrides.get(name), str):
-                qid = overrides[name]
-                claims = wikidata.entities([qid], "claims").get(qid, {}).get("claims", {})
-                found[name] = (qid, sorted(values(claims, "P136")))
-            else:
-                found[name] = wikidata.find(name)
-    except TimeoutError:
-        warn(f"Genres : temps écoulé, {len(todo) - len(found)} jeux restent pour le prochain passage")
-    except (urllib.error.URLError, OSError) as ex:
-        warn(f"Genres : Wikidata injoignable ({ex}), {len(todo) - len(found)} jeux restent pour le prochain passage")
-
-    # Libellés des genres Wikidata, lus en une fois pour tous les jeux trouvés.
-    qids = sorted({g for _, genres in found.values() for g in genres})
-    labels = {}
-    try:
-        labels = {q: e.get("labels", {}).get("en", {}).get("value", "") for q, e in wikidata.entities(qids, "labels").items()}
-    except (TimeoutError, urllib.error.URLError, OSError):
-        warn("Genres : libellés non lus, les jeux trouvés ce passage seront recherchés de nouveau")
-        found = {}
-    for name, (qid, genres) in found.items():
-        games[name] = {"genres": site_genres([labels.get(g, "") for g in genres]), "wikidata": qid, "checked": today.isoformat()}
     for name, genres in overrides.items():
         if isinstance(genres, list) and name in names:
             games[name] = {"genres": [g for g in GENRES if g in genres], "wikidata": None, "checked": today.isoformat()}
@@ -194,10 +190,37 @@ def main() -> int:
             if unknown:
                 warn(f"Genres de {name} inconnus dans apworlds.json : {', '.join(sorted(unknown))}")
 
-    result = {"genres": GENRES, "games": dict(sorted(games.items(), key=lambda kv: normalize(kv[0])))}
-    out.write_text(json.dumps(result, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+    # Par lots : chaque lot est enregistré, un relevé interrompu ne perd que le lot en cours.
+    labels: dict[str, str] = {}
+    done = 0
+    started = time.monotonic()
+    progress(0, len(todo), games, names, started)
+    try:
+        for i in range(0, len(todo), BATCH):
+            found: dict[str, tuple[str | None, list[str]]] = {}
+            for name in todo[i:i + BATCH]:
+                if isinstance(overrides.get(name), str):
+                    qid = overrides[name]
+                    claims = wikidata.entities([qid], "claims").get(qid, {}).get("claims", {})
+                    found[name] = (qid, sorted(values(claims, "P136")))
+                else:
+                    found[name] = wikidata.find(name)
+            # Libellés des genres Wikidata pas encore lus.
+            missing = sorted({g for _, genres in found.values() for g in genres} - labels.keys())
+            labels |= {q: e.get("labels", {}).get("en", {}).get("value", "") for q, e in wikidata.entities(missing, "labels").items()}
+            for name, (qid, genres) in found.items():
+                games[name] = {"genres": site_genres([labels.get(g, "") for g in genres]), "wikidata": qid, "checked": today.isoformat()}
+            done += len(found)
+            save(out, games)
+            progress(done, len(todo), games, names, started)
+    except TimeoutError:
+        warn(f"Genres : temps écoulé, {len(todo) - done} jeux restent pour le prochain passage")
+    except (urllib.error.URLError, OSError) as ex:
+        warn(f"Genres : Wikidata injoignable ({ex}), {len(todo) - done} jeux restent pour le prochain passage")
+
+    save(out, games)
     with_genre = sum(1 for g in games.values() if g["genres"])
-    print(f"{len(found)} jeux cherchés, {with_genre} jeux sur {len(names)} ont un genre")
+    print(f"\n{done} jeux cherchés, {with_genre} jeux sur {len(names)} ont un genre")
     return 0
 
 
