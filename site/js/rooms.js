@@ -383,6 +383,7 @@ export function RoomPage({ index, code, onCreate, onEdit }) {
 
   return html`<main class="room">
     <${RoomHeader} room=${room} online=${online} />
+    <${AccessBar} room=${room} me=${me} admin=${admin} refresh=${refresh} />
     <nav class="room-tabs" role="tablist" aria-label="Vues de la room">${tabs.map(([id, label]) => html`<button type="button"
       role="tab" aria-selected=${active === id} class=${active === id ? "active" : ""} onClick=${() => go(id)}>${label}</button>`)}
     </nav>
@@ -476,6 +477,31 @@ function ServerAddress({ room, online }) {
     <span class="spacer"></span>
     <a class="button ghost small" href=${room.ap_room_url} target="_blank" rel="noopener">Page de la room</a>
   </div>`;
+}
+
+// Accès de cet appareil à la room (hôte, joueur, simple visiteur) : on peut s'en défaire sans rien supprimer dans la
+// room (un lien d'hôte ouvert par erreur, l'appareil d'un ami…), ou en prendre un autre avec un lien.
+function AccessBar({ room, me, admin, refresh }) {
+  const [switching, setSwitching] = useState(false);
+  const access = savedAccess(room.code);
+  const who = [admin && "hôte", me && `joueur « ${me.pseudo} »`].filter(Boolean).join(" et ");
+  const drop = (field) => {
+    const link = field === "admin" ? hostLink(room.code, access.admin) : playerLink(room.code, access.player);
+    const what = field === "admin" ? "l'accès d'hôte" : `l'accès de ${me.pseudo}`;
+    if (!confirm(`Retirer ${what} de cet appareil ? Rien n'est supprimé dans la room ; le lien suivant le redonne :\n\n${link}`)) return;
+    saveAccess(room.code, field === "admin" ? { admin: null } : { player: null, pseudo: null });
+    refresh();
+  };
+  return html`<section class="card stack access-bar">
+    <div class="row full">
+      <span class="grow">Sur cet appareil, vous êtes <strong>${who || "visiteur"}</strong>.</span>
+      ${admin && html`<button type="button" class="ghost small" onClick=${() => drop("admin")}>Ne plus être hôte ici</button>`}
+      ${me && html`<button type="button" class="ghost small" onClick=${() => drop("player")}>Se déconnecter de ${me.pseudo}</button>`}
+      <button type="button" class="ghost small" aria-expanded=${switching}
+        onClick=${() => setSwitching(!switching)}>${switching ? "Fermer" : "Utiliser un autre lien"}</button>
+    </div>
+    ${switching && html`<${ReclaimForm} room=${room} refresh=${() => { setSwitching(false); refresh(); }} />`}
+  </section>`;
 }
 
 function JoinForm({ room, admin, refresh }) {
