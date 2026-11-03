@@ -2837,7 +2837,7 @@
  },
  {
   "game": "Dead Cells",
-  "version": "0.1.10",
+  "version": "0.2.0",
   "authors": [
    "Max_lamenace572",
    "OnlyLeafeon",
@@ -2852,8 +2852,8 @@
    "game": "Dead Cells",
    "stability": "Unstable"
   },
-  "download": "https://github.com/Maxlamenace572/DeadCellsArchipelago/releases/download/0.1.10/dead_cells.apworld",
-  "release": "https://github.com/Maxlamenace572/DeadCellsArchipelago/releases/tag/0.1.10",
+  "download": "https://github.com/Maxlamenace572/DeadCellsArchipelago/releases/download/0.2.0/dead_cells.apworld",
+  "release": "https://github.com/Maxlamenace572/DeadCellsArchipelago/releases/tag/0.2.0",
   "links": [
    "https://github.com/Maxlamenace572/DeadCellsArchipelago/releases"
   ]
@@ -3285,7 +3285,7 @@
  },
  {
   "game": "DOOM Eternal",
-  "version": "0.7.1",
+  "version": "0.7.3",
   "authors": [
    "snowzzrra"
   ],
@@ -3299,8 +3299,8 @@
    "stability": "Unstable",
    "adult": true
   },
-  "download": "https://github.com/snowzzrra/DoomEternal-AP-Mod/releases/download/0.7.2/doometernal.apworld",
-  "release": "https://github.com/snowzzrra/DoomEternal-AP-Mod/releases/tag/0.7.2",
+  "download": "https://github.com/snowzzrra/DoomEternal-AP-Mod/releases/download/0.7.3/doometernal.apworld",
+  "release": "https://github.com/snowzzrra/DoomEternal-AP-Mod/releases/tag/0.7.3",
   "links": [
    "https://github.com/snowzzrra/DoomEternal-AP-Mod/releases/latest"
   ]
