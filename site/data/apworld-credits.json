@@ -327,7 +327,7 @@
  },
  {
   "game": "Anno 1800",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "authors": [
    "DarkListener"
   ],
@@ -345,8 +345,8 @@
    "game": "Anno 1800",
    "stability": "Stable"
   },
-  "download": "https://github.com/Dark-Listener/ArchipelagoA1800/releases/download/release/v1.5.0/a1800.apworld",
-  "release": "https://github.com/Dark-Listener/ArchipelagoA1800/releases/tag/release/v1.5.0",
+  "download": "https://github.com/Dark-Listener/ArchipelagoA1800/releases/download/release/v1.5.1/a1800.apworld",
+  "release": "https://github.com/Dark-Listener/ArchipelagoA1800/releases/tag/release/v1.5.1",
   "links": [
    "https://github.com/Dark-Listener/ArchipelagoA1800/releases/latest"
   ]
@@ -1370,7 +1370,7 @@
  },
  {
   "game": "Brotato",
-  "version": "0.17.2",
+  "version": "0.18.0",
   "authors": [
    "Rampaging Hippy"
   ],
@@ -1385,8 +1385,8 @@
    "game": "Brotato",
    "stability": "Stable"
   },
-  "download": "https://github.com/SpenserHaddad/Brotato-ArchipelagoClient/releases/download/v0.17.2/brotato.apworld",
-  "release": "https://github.com/SpenserHaddad/Brotato-ArchipelagoClient/releases/tag/v0.17.2",
+  "download": "https://github.com/SpenserHaddad/Brotato-ArchipelagoClient/releases/download/v0.18.0/brotato.apworld",
+  "release": "https://github.com/SpenserHaddad/Brotato-ArchipelagoClient/releases/tag/v0.18.0",
   "links": [
    "https://github.com/SpenserHaddad/Brotato-ArchipelagoClient/releases/latest"
   ]
@@ -1772,8 +1772,8 @@
    "pr_status": "Not PRing",
    "adult": true
   },
-  "download": "https://github.com/Nichologeam/CUAP/releases/download/v0.12.1/casualtiesunknown.apworld",
-  "release": "https://github.com/Nichologeam/CUAP/releases/tag/v0.12.1",
+  "download": "https://github.com/Nichologeam/CUAP/releases/download/v0.12.2/casualtiesunknown.apworld",
+  "release": "https://github.com/Nichologeam/CUAP/releases/tag/v0.12.2",
   "links": [
    "https://github.com/Nichologeam/CUAP/releases/"
   ]
@@ -1972,8 +1972,8 @@
    "game": "Chibi Robo! Plug into Adventure",
    "stability": "Unstable"
   },
-  "download": "https://github.com/EverydaySimpleDev/Archipelago/releases/download/1.3.2/chibi_robo.apworld",
-  "release": "https://github.com/EverydaySimpleDev/Archipelago/releases/tag/1.3.2",
+  "download": "https://github.com/EverydaySimpleDev/Archipelago/releases/download/chibi-robo-1.3.3/chibi_robo.apworld",
+  "release": "https://github.com/EverydaySimpleDev/Archipelago/releases/tag/chibi-robo-1.3.3",
   "links": [
    "https://www.google.com/url?q=https://github.com/EverydaySimpleDev/Archipelago/releases/latest&sa=D&source=editors&ust=1775868658026799&usg=AOvVaw1WZsRUC4dI218hv86GwQuU"
   ]
@@ -3586,7 +3586,7 @@
  },
  {
   "game": "Dwarf Fortress",
-  "version": "2.1.2",
+  "version": "2.1.3",
   "authors": [
    "Dwarfipelago Contributors"
   ],
@@ -3599,8 +3599,8 @@
    "game": "Dwarf Fortress",
    "stability": "Unstable"
   },
-  "download": "https://github.com/EthanTheBrave/Dwarfipelago/releases/download/2.1.2/dwarf_fortress.apworld",
-  "release": "https://github.com/EthanTheBrave/Dwarfipelago/releases/tag/2.1.2",
+  "download": "https://github.com/EthanTheBrave/Dwarfipelago/releases/download/2.1.3/dwarf_fortress.apworld",
+  "release": "https://github.com/EthanTheBrave/Dwarfipelago/releases/tag/2.1.3",
   "links": [
    "https://github.com/EthanTheBrave/Dwarfipelago/releases"
   ]
@@ -3896,7 +3896,7 @@
  },
  {
   "game": "Factorio: Platformer",
-  "version": "0.4.6",
+  "version": "0.5.0",
   "authors": [],
   "file": "factorio_platformer.apworld",
   "source": "https://github.com/lepideble/factorio-apworld",
@@ -3910,8 +3910,8 @@
    "game": "Factorio Platformer",
    "stability": "Unstable"
   },
-  "download": "https://github.com/lepideble/factorio-apworld/releases/download/platformer-0.4.6/factorio_platformer.apworld",
-  "release": "https://github.com/lepideble/factorio-apworld/releases/tag/platformer-0.4.6",
+  "download": "https://github.com/lepideble/factorio-apworld/releases/download/platformer-0.5.0/factorio_platformer.apworld",
+  "release": "https://github.com/lepideble/factorio-apworld/releases/tag/platformer-0.5.0",
   "links": [
    "https://github.com/lepideble/factorio-apworld/releases"
   ]
@@ -6597,6 +6597,27 @@
   ]
  },
  {
+  "game": "Loddlenaut",
+  "version": "0.1.1",
+  "authors": [
+   "SW_CreeperKing"
+  ],
+  "file": "loddlenaut.apworld",
+  "source": "https://github.com/SWCreeperKing/Loddlepelago",
+  "license": null,
+  "license_url": null,
+  "copyright": [],
+  "sheet": {
+   "game": "Loddlenaut",
+   "stability": "Unstable"
+  },
+  "download": "https://github.com/SWCreeperKing/Loddlepelago/releases/download/v0.1.1/loddlenaut.apworld",
+  "release": "https://github.com/SWCreeperKing/Loddlepelago/releases/tag/v0.1.1",
+  "links": [
+   "https://github.com/SWCreeperKing/Loddlepelago/releases/latest"
+  ]
+ },
+ {
   "game": "Look Outside",
   "version": null,
   "authors": [],
@@ -8121,20 +8142,23 @@
    "josephwhite"
   ],
   "file": "nodebuster.apworld",
-  "source": "https://github.com/josephwhite/Emerlads-Nodebuster_AP_Mod",
+  "source": "https://github.com/AzuriCaelum2/Archipelago-Nodebuster",
   "license": "MIT",
-  "license_url": "https://github.com/josephwhite/Emerlads-Nodebuster_AP_Mod/blob/HEAD/LICENSE",
+  "license_url": "https://github.com/AzuriCaelum2/Archipelago-Nodebuster/blob/HEAD/LICENSE",
   "copyright": [
-   "Copyright (c) 2025 emeraldkid835"
+   "Copyright (c) 2017 LLCoolDave",
+   "Copyright (c) 2025 Berserker66",
+   "Copyright (c) 2022 CaitSith2",
+   "Copyright (c) 2021 LegendaryLinux"
   ],
   "sheet": {
    "game": "Nodebuster",
    "stability": "Unstable"
   },
-  "download": "https://github.com/josephwhite/Emerlads-Nodebuster_AP_Mod/releases/download/v0.1.3/nodebuster.apworld",
-  "release": "https://github.com/josephwhite/Emerlads-Nodebuster_AP_Mod/releases/tag/v0.1.3",
+  "download": "https://github.com/AzuriCaelum2/Archipelago-Nodebuster/releases/download/0.1.4d/nodebuster.apworld",
+  "release": "https://github.com/AzuriCaelum2/Archipelago-Nodebuster/releases/tag/0.1.4d",
   "links": [
-   "https://github.com/josephwhite/Emerlads-Nodebuster_AP_Mod/releases"
+   "https://github.com/AzuriCaelum2/Archipelago-Nodebuster/releases/latest"
   ]
  },
  {
@@ -8631,7 +8655,7 @@
  },
  {
   "game": "Outer Wilds",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "authors": [],
   "file": "outer_wilds.apworld",
   "source": "https://github.com/Ixrec/OuterWildsArchipelagoRandomizer",
@@ -8645,8 +8669,8 @@
    "stability": "Stable",
    "pr_status": "Not PRing"
   },
-  "download": "https://github.com/Ixrec/OuterWildsArchipelagoRandomizer/releases/download/v1.4.0/outer_wilds.apworld",
-  "release": "https://github.com/Ixrec/OuterWildsArchipelagoRandomizer/releases/tag/v1.4.0",
+  "download": "https://github.com/Ixrec/OuterWildsArchipelagoRandomizer/releases/download/v1.4.1/outer_wilds.apworld",
+  "release": "https://github.com/Ixrec/OuterWildsArchipelagoRandomizer/releases/tag/v1.4.1",
   "links": [
    "https://github.com/Ixrec/OuterWildsArchipelagoRandomizer/releases/latest"
   ]
@@ -10188,6 +10212,30 @@
   ]
  },
  {
+  "game": "Recettear: An Item Shop's Tale",
+  "version": "0.1.0",
+  "authors": [
+   "AurelicButter"
+  ],
+  "file": "recettear.apworld",
+  "source": "https://github.com/AurelicButter/Recettear-Archipelago",
+  "license": "MIT",
+  "license_url": null,
+  "copyright": [
+   "Copyright (c) 2026 Frederick Katsura"
+  ],
+  "license_file": "recettear/LICENSE",
+  "sheet": {
+   "game": "Recettear: An Item Shop's Tale",
+   "stability": "Unstable"
+  },
+  "download": "https://github.com/AurelicButter/Recettear-Archipelago/releases/download/v0.1.0/recettear.apworld",
+  "release": "https://github.com/AurelicButter/Recettear-Archipelago/releases/tag/v0.1.0",
+  "links": [
+   "https://github.com/AurelicButter/Recettear-Archipelago/releases/latest"
+  ]
+ },
+ {
   "game": "Red Faction: Guerrilla Re-Mars-tered",
   "version": "0.6.5",
   "authors": [
@@ -10236,7 +10284,7 @@
  },
  {
   "game": "R.E.P.O",
-  "version": "0.4.4",
+  "version": "0.4.5",
   "authors": [
    "Automagic"
   ],
@@ -10249,8 +10297,8 @@
    "game": "R.E.P.O",
    "stability": "Unstable"
   },
-  "download": "https://github.com/Automagic00/R.E.P.O.-Archipelago-Client-Mod/releases/download/0.4.4/repo.apworld",
-  "release": "https://github.com/Automagic00/R.E.P.O.-Archipelago-Client-Mod/releases/tag/0.4.4",
+  "download": "https://github.com/Automagic00/R.E.P.O.-Archipelago-Client-Mod/releases/download/0.4.5/repo.apworld",
+  "release": "https://github.com/Automagic00/R.E.P.O.-Archipelago-Client-Mod/releases/tag/0.4.5",
   "links": [
    "https://github.com/Automagic00/R.E.P.O.-Archipelago-Client-Mod/releases/latest"
   ]
@@ -11362,7 +11410,7 @@
  },
  {
   "game": "Slay the Spire II",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "authors": [
    "Kirbyfanner",
    "Platano Bailando",
@@ -11379,8 +11427,8 @@
    "game": "Slay the Spire 2",
    "stability": "Unstable"
   },
-  "download": "https://github.com/dlueben1/Slay-the-Spire-2-Archipelago/releases/download/2.0.0/spire2.apworld",
-  "release": "https://github.com/dlueben1/Slay-the-Spire-2-Archipelago/releases/tag/2.0.0",
+  "download": "https://github.com/dlueben1/Slay-the-Spire-2-Archipelago/releases/download/2.0.1/spire2.apworld",
+  "release": "https://github.com/dlueben1/Slay-the-Spire-2-Archipelago/releases/tag/2.0.1",
   "links": [
    "https://github.com/dlueben1/Slay-the-Spire-2-Archipelago/releases"
   ]
@@ -11680,7 +11728,7 @@
  },
  {
   "game": "Sonic Colours (Wii)",
-  "version": "0.6.0",
+  "version": "0.2.0",
   "authors": [
    "Luma"
   ],
@@ -11698,8 +11746,8 @@
    "game": "Sonic Colors (Wii)",
    "stability": "Unstable"
   },
-  "download": "https://github.com/mariokirby1703/Lumas-Archipelago/releases/download/sonic_colours_v0.1.0/sonic_colours_wii.apworld",
-  "release": "https://github.com/mariokirby1703/Lumas-Archipelago/releases/tag/sonic_colours_v0.1.0",
+  "download": "https://github.com/mariokirby1703/Lumas-Archipelago/releases/download/sonic_colours_v0.2.0/sonic_colours_wii.apworld",
+  "release": "https://github.com/mariokirby1703/Lumas-Archipelago/releases/tag/sonic_colours_v0.2.0",
   "links": [
    "https://github.com/mariokirby1703/Lumas-Archipelago/releases?q=Sonic+Colours&expanded=true"
   ]
@@ -12621,8 +12669,8 @@
    "game": "Super Smash Bros. Brawl - The Subspace Emissary",
    "stability": "Unstable"
   },
-  "download": "https://github.com/kenniky/ArchipelagoSSE/releases/download/v0.3.1/ssbb_sse.apworld",
-  "release": "https://github.com/kenniky/ArchipelagoSSE/releases/tag/v0.3.1",
+  "download": "https://github.com/kenniky/ArchipelagoSSE/releases/download/v0.3.1.1/ssbb_sse.apworld",
+  "release": "https://github.com/kenniky/ArchipelagoSSE/releases/tag/v0.3.1.1",
   "links": [
    "https://github.com/kenniky/ArchipelagoSSE/releases"
   ]
@@ -13646,7 +13694,7 @@
   "copyright": [],
   "sheet": {
    "game": "Toy Story 2 (PS1)",
-   "stability": "Unstable"
+   "stability": "Stable"
   },
   "download": "https://github.com/imklubb/Archipelago-Toy-Story-2/releases/download/3.0.0/toystory2.apworld",
   "release": "https://github.com/imklubb/Archipelago-Toy-Story-2/releases/tag/3.0.0",
@@ -14554,7 +14602,7 @@
  },
  {
   "game": "Wargroove 2",
-  "version": "1.1.11",
+  "version": "1.1.14",
   "authors": [
    "Fly Hyping",
    "Magnemania",
@@ -14576,8 +14624,8 @@
    "stability": "Stable",
    "pr_status": "In Review"
   },
-  "download": "https://github.com/FlySniper/Archipelago/releases/download/wargroove2-1.1.11/wargroove2.apworld",
-  "release": "https://github.com/FlySniper/Archipelago/releases/tag/wargroove2-1.1.11",
+  "download": "https://github.com/FlySniper/Archipelago/releases/download/wargroove2-1.1.13/wargroove2.apworld",
+  "release": "https://github.com/FlySniper/Archipelago/releases/tag/wargroove2-1.1.13",
   "links": [
    "https://github.com/FlySniper/Archipelago/releases"
   ]

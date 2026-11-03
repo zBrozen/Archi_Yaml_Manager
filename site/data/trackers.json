@@ -1117,9 +1117,9 @@
    {
     "page": "https://github.com/Swiftmane/Ror2-AP-tracker/releases/latest",
     "repo": "Swiftmane/Ror2-AP-tracker",
-    "tag": "v1.6.0",
+    "tag": "v1.6.1",
     "asset": "Ror2-AP-tracker.zip",
-    "url": "https://github.com/Swiftmane/Ror2-AP-tracker/releases/download/v1.6.0/Ror2-AP-tracker.zip"
+    "url": "https://github.com/Swiftmane/Ror2-AP-tracker/releases/download/v1.6.1/Ror2-AP-tracker.zip"
    }
   ],
   "Satisfactory": [
@@ -1568,6 +1568,15 @@
    {
     "page": "https://github.com/Nepley/pcb-poptracker/releases",
     "repo": "Nepley/pcb-poptracker"
+   }
+  ],
+  "Toy Story 2 (PS1)": [
+   {
+    "page": "https://github.com/imklubb/Toy-Story-2-Poptracker/releases/latest",
+    "repo": "imklubb/Toy-Story-2-Poptracker",
+    "tag": "3.0.0",
+    "asset": "toystory2_ap_3.0.0.zip",
+    "url": "https://github.com/imklubb/Toy-Story-2-Poptracker/releases/download/3.0.0/toystory2_ap_3.0.0.zip"
    }
   ],
   "TUNIC": [
