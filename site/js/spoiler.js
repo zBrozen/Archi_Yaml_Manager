@@ -168,12 +168,15 @@ export function analyze(spoiler, status, live, fixed, packages) {
   const pending = spheres.flatMap((s) => s.entries.filter((e) => !e.event && !e.unknown && !e.done));
   const frontier = spheres.find((s) => s.done < s.total) || null;
   const now = frontier ? pending.filter((e) => e.sphere === frontier.n) : [];
+  // Lieu réalisable : son joueur a reçu tous les objets du chemin qui lui reviennent dans les sphères d'avant (les
+  // événements, non suivis, sont supposés faits), même si d'autres joueurs n'ont pas fini ces sphères.
+  const reachable = (e) => !pending.some((p) => p.receiver === e.finder && p.sphere < e.sphere);
 
   const players = status.slots.map((s) => {
     const row = rows.get(s.slot);
     const own = pending.filter((e) => e.finder === s.slot);
     const incoming = pending.filter((e) => e.receiver === s.slot);
-    const ready = now.filter((e) => e.finder === s.slot);
+    const ready = own.filter(reachable);
     const first = incoming[0];
     const waitingOn = first ? [...new Set(incoming.filter((e) => e.sphere === first.sphere).map((e) => e.finder))] : [];
     const idle = !row?.finished && (row?.last ? Date.now() - row.last > IDLE_WARNING : true);
@@ -491,7 +494,8 @@ function Report({ report, spoiler, status, online, tracker, loading, packagesErr
       </tr>`)}</tbody>
     </table></div>
     <p class="hint">« Peut finir » : le joueur a reçu tous les objets du chemin qui lui reviennent ; « En attente » : il lui en
-      manque un que d'autres doivent encore trouver ; « À lui de jouer » : un de ses checks requis est accessible.</p>
+      manque un que d'autres doivent encore trouver avant de pouvoir faire ses checks requis ; « À lui de jouer » : un de
+      ses checks requis est réalisable (il a reçu les objets du chemin qui y mènent), quelle que soit la sphère en cours.</p>
   </section>
 
   <section class="card stack">
