@@ -1,6 +1,6 @@
 {
  "ap_version": "0.6.8",
- "generated_at": "2026-11-02T13:12:07+00:00",
+ "generated_at": "2026-11-03T12:45:06+00:00",
  "games": [
   {
    "game": "2048",
@@ -241,7 +241,7 @@
    "file": "games/anno-1800.json",
    "source": "custom",
    "apworld": "a1800.apworld",
-   "world_version": "1.5.0",
+   "world_version": "1.5.1",
    "guides": "guides/anno-1800.json",
    "sheet": {
     "game": "Anno 1800",
@@ -794,7 +794,7 @@
    "file": "games/brotato.json",
    "source": "custom",
    "apworld": "brotato.apworld",
-   "world_version": "0.17.2",
+   "world_version": "0.18.0",
    "guides": "guides/brotato.json",
    "sheet": {
     "game": "Brotato",
@@ -2058,7 +2058,7 @@
    "file": "games/dwarf-fortress.json",
    "source": "custom",
    "apworld": "dwarf_fortress.apworld",
-   "world_version": "2.1.2",
+   "world_version": "2.1.3",
    "guides": "guides/dwarf-fortress.json",
    "sheet": {
     "game": "Dwarf Fortress",
@@ -2246,7 +2246,7 @@
    "file": "games/factorio-platformer.json",
    "source": "custom",
    "apworld": "factorio_platformer.apworld",
-   "world_version": "0.4.6",
+   "world_version": "0.5.0",
    "guides": "guides/factorio-platformer.json",
    "sheet": {
     "game": "Factorio Platformer",
@@ -3737,6 +3737,18 @@
    }
   },
   {
+   "game": "Loddlenaut",
+   "file": "games/loddlenaut.json",
+   "source": "custom",
+   "apworld": "loddlenaut.apworld",
+   "world_version": "0.1.1",
+   "guides": "guides/loddlenaut.json",
+   "sheet": {
+    "game": "Loddlenaut",
+    "stability": "Unstable"
+   }
+  },
+  {
    "game": "Look Outside",
    "file": "games/look-outside.json",
    "source": "custom",
@@ -4868,7 +4880,7 @@
    "file": "games/outer-wilds.json",
    "source": "custom",
    "apworld": "outer_wilds.apworld",
-   "world_version": "1.4.0",
+   "world_version": "1.4.1",
    "guides": "guides/outer-wilds.json",
    "sheet": {
     "game": "Outer Wilds",
@@ -5563,7 +5575,7 @@
    "file": "games/r-e-p-o.json",
    "source": "custom",
    "apworld": "repo.apworld",
-   "world_version": "0.4.4",
+   "world_version": "0.4.5",
    "guides": "guides/r-e-p-o.json",
    "sheet": {
     "game": "R.E.P.O",
@@ -5697,6 +5709,18 @@
    "guides": "guides/re-run.json",
    "sheet": {
     "game": "RE:RUN",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Recettear: An Item Shop's Tale",
+   "file": "games/recettear-an-item-shop-s-tale.json",
+   "source": "custom",
+   "apworld": "recettear.apworld",
+   "world_version": "0.1.0",
+   "guides": "guides/recettear-an-item-shop-s-tale.json",
+   "sheet": {
+    "game": "Recettear: An Item Shop's Tale",
     "stability": "Unstable"
    }
   },
@@ -6329,7 +6353,7 @@
    "file": "games/slay-the-spire-ii.json",
    "source": "custom",
    "apworld": "spire2.apworld",
-   "world_version": "1.2.0",
+   "world_version": "1.2.1",
    "guides": "guides/slay-the-spire-ii.json",
    "sheet": {
     "game": "Slay the Spire 2",
@@ -6501,7 +6525,7 @@
    "file": "games/sonic-colours-wii.json",
    "source": "custom",
    "apworld": "sonic_colours_wii.apworld",
-   "world_version": "0.6.0",
+   "world_version": "0.2.0",
    "guides": "guides/sonic-colours-wii.json",
    "sheet": {
     "game": "Sonic Colors (Wii)",
@@ -7613,7 +7637,7 @@
    "guides": "guides/toy-story-2.json",
    "sheet": {
     "game": "Toy Story 2 (PS1)",
-    "stability": "Unstable"
+    "stability": "Stable"
    }
   },
   {
@@ -8108,7 +8132,7 @@
    "file": "games/wargroove-2.json",
    "source": "custom",
    "apworld": "wargroove2.apworld",
-   "world_version": "1.1.11",
+   "world_version": "1.1.14",
    "guides": "guides/wargroove-2.json",
    "sheet": {
     "game": "Wargroove 2",
