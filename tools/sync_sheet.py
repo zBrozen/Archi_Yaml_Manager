@@ -3,7 +3,7 @@
 Seule la clé "games" est réécrite : un jeu par ligne de la feuille « Playable Worlds », avec sa
 stabilité, son statut de PR et l'indication 18+. Sont ignorés les jeux déjà intégrés à Archipelago
 (statut « Core ») et ceux sans lien GitHub ou GitLab (apworld publié sur Discord, itch.io…).
-Les réglages faits à la main ("options", "exclude", "github", "sheet") sont conservés.
+Les réglages faits à la main ("options", "exclude", "github", "sheet", "genres") sont conservés.
 
 Usage :
     python tools/sync_sheet.py --config apworlds.json

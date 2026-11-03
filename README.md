@@ -71,6 +71,15 @@ Les options ne sont pas recopiées à la main. Le workflow GitHub
    les apworlds des joueurs ([`tools/build_ap_core.py`](tools/build_ap_core.py)) ;
 6. si quelque chose a changé, il enregistre les données et republie le site.
 
+Le genre des jeux (filtre « Genre » du choix du jeu) vient de [Wikidata](https://www.wikidata.org)
+([`tools/fetch_genres.py`](tools/fetch_genres.py), dans `site/data/genres.json`) : un jeu n'y est retenu que si
+son nom ou un alias est exactement celui du jeu, et ses genres sont ramenés à une vingtaine de genres du site.
+Wikidata limitant fort les requêtes, chaque passage ne cherche que les jeux nouveaux (un jeu non trouvé est
+recherché de nouveau un mois plus tard), pendant dix minutes au plus. Les jeux faits pour Archipelago n'y sont
+souvent pas : on corrige à la main dans `apworlds.json`, clé `"genres"`, par nom de jeu, avec une liste de genres
+du site (`"APQuest": ["puzzle"]`) ou l'élément Wikidata du jeu (`"Nom du jeu": "Q…"`). Les favoris
+(étoile sur un jeu) restent dans le navigateur.
+
 On peut aussi le lancer à la main depuis l'onglet **Actions** de GitHub (« Mettre à jour les options »),
 éventuellement en indiquant une version précise d'Archipelago.
 

@@ -51,14 +51,19 @@ jobs:
         run: |
           python tools/fetch_trackers.py --out site/data/trackers.json || echo "::warning::Packs PopTracker non relevés, liste inchangée"
 
+      # Genres des jeux pour le choix du jeu (Wikidata, quelques minutes par passage : la suite au suivant).
+      - name: Relever les genres des jeux
+        run: |
+          python tools/fetch_genres.py --index site/data/index.json --config apworlds.json --out site/data/genres.json --max-minutes 10 || echo "::warning::Genres des jeux non relevés, liste inchangée"
+
       - name: Enregistrer la liste
         id: save
         run: |
-          git add apworlds.json site/data/trackers.json 2>/dev/null || git add apworlds.json
+          git add apworlds.json site/data/trackers.json site/data/genres.json 2>/dev/null || git add apworlds.json
           if ! git diff --cached --quiet; then
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git commit -m "Jeux non officiels : liste du tableur"
+            git commit -m "Jeux : liste du tableur, packs PopTracker et genres"
             git push
             echo "changed=true" >> "$GITHUB_OUTPUT"
           fi

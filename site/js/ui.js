@@ -1,5 +1,5 @@
 // Composants et petits outils partagés par l'éditeur et les rooms.
-import { html, useState } from "../vendor/preact-htm.js";
+import { html, useEffect, useState } from "../vendor/preact-htm.js";
 
 export const plural = (n, word) => `${n} ${word}${n > 1 ? "s" : ""}`;
 
@@ -62,16 +62,26 @@ export function SheetBadges({ sheet }) {
 }
 
 // Liste des jeux avec recherche et filtres : le tableur en compte des centaines, trop pour un menu déroulant.
+// Favoris (étoile) gardés dans le navigateur, genres relevés sur Wikidata (tools/fetch_genres.py).
 export function GamePicker({ core, custom, imported, value, onChange, onCreate }) {
   const [search, setSearch] = useState("");
-  const [kind, setKind] = useSetting("pickerKind", "all");
+  const [savedKind, setKind] = useSetting("pickerKind", "all");
+  const [genre, setGenre] = useSetting("pickerGenre", "");
   const [showAdult, setShowAdult] = useSetting("pickerAdult", false);
   const [showBroken, setShowBroken] = useSetting("pickerBroken", false);
+  const [favorites, setFavorites] = useFavorites();
+  const genres = useGenres();
+  const genresOf = (g) => genres?.games[g.game]?.genres ?? [];
   const needle = search.trim().toLowerCase();
-  const keep = (g) => (!needle || g.game.toLowerCase().includes(needle))
+  const visible = (g) => (!needle || g.game.toLowerCase().includes(needle))
     && (showAdult || !g.sheet?.adult)
     && (showBroken || g.sheet?.stability !== "Broken on Main");
+  const keep = (g) => visible(g) && (!genre || (genre === "none" ? !genresOf(g).length : genresOf(g).includes(genre)));
+  const everything = [...imported, ...core, ...custom];
+  const starred = everything.filter((g, i) => favorites.includes(g.game) && everything.findIndex((o) => o.game === g.game) === i);
+  const kind = (savedKind === "favorites" && !starred.length) || (savedKind === "imported" && !imported.length) ? "all" : savedKind;
   const sections = [
+    ["favorites", "★ Favoris", starred],
     ["imported", "Ajoutés avec un apworld", imported],
     ["core", "Jeux officiels", core],
     ...customGroups(custom).map(([label, games]) => ["custom", label, games]),
@@ -79,8 +89,14 @@ export function GamePicker({ core, custom, imported, value, onChange, onCreate }
     .map(([k, label, games]) => [label, games.filter(keep)])
     .filter(([, games]) => games.length);
   const total = sections.reduce((n, [, games]) => n + games.length, 0);
-  const kinds = [["all", "Tous"], ["core", `Officiels (${core.length})`], ["custom", `Non officiels (${custom.length})`],
+  const kinds = [["all", "Tous"], ...(starred.length ? [["favorites", `★ Favoris (${starred.length})`]] : []),
+    ["core", `Officiels (${core.length})`], ["custom", `Non officiels (${custom.length})`],
     ...(imported.length ? [["imported", `Ajoutés (${imported.length})`]] : [])];
+  // Nombre de jeux par genre parmi ceux qu'affichent les autres filtres.
+  const pool = (kind === "all" ? everything : kind === "favorites" ? starred
+    : kind === "core" ? core : kind === "custom" ? custom : imported).filter(visible);
+  const count = (key) => pool.filter((g) => (key === "none" ? !genresOf(g).length : genresOf(g).includes(key))).length;
+  const toggleFavorite = (game) => setFavorites(favorites.includes(game) ? favorites.filter((f) => f !== game) : [...favorites, game]);
 
   return html`<div class="picker">
     <div class="row full">
@@ -89,6 +105,12 @@ export function GamePicker({ core, custom, imported, value, onChange, onCreate }
     </div>
     <div class="row picker-filters">
       <div class="chips-row">${kinds.map(([k, label]) => html`<button type="button" class=${`chip-btn ${kind === k ? "active" : ""}`} onClick=${() => setKind(k)}>${label}</button>`)}</div>
+      ${genres && html`<label class="picker-genre">Genre
+        <select value=${genre} onChange=${(e) => setGenre(e.target.value)}>
+          <option value="">Tous les genres</option>
+          ${Object.entries(genres.genres).map(([key, label]) => html`<option value=${key}>${label} (${count(key)})</option>`)}
+          <option value="none">Genre inconnu (${count("none")})</option>
+        </select></label>`}
       <label class="check"><input type="checkbox" checked=${showBroken} onChange=${(e) => setShowBroken(e.target.checked)} /> Jeux cassés</label>
       <label class="check"><input type="checkbox" checked=${showAdult} onChange=${(e) => setShowAdult(e.target.checked)} /> Jeux 18+</label>
     </div>
@@ -96,15 +118,61 @@ export function GamePicker({ core, custom, imported, value, onChange, onCreate }
       ${total === 0 && html`<p class="hint">Aucun jeu ne correspond.</p>`}
       ${sections.map(([label, games]) => html`<div class="game-section">
         <h3>${label} <span class="hint">${games.length}</span></h3>
-        <div class="game-grid">${games.map((g) => html`<button type="button" role="option" aria-selected=${value === g.game}
-          class=${`game-tile ${value === g.game ? "selected" : ""}`} title=${g.game}
-          onClick=${() => onChange(g.game)} onDblClick=${() => onCreate(g.game)}>
-          <span class="game-name">${g.game}</span>
-          ${g.sheet && html`<span class="game-badges"><${SheetBadges} sheet=${g.sheet} /></span>`}
-        </button>`)}</div>
+        <div class="game-grid">${games.map((g) => {
+          const starredGame = favorites.includes(g.game);
+          const labels = genresOf(g).map((k) => genres.genres[k]).filter(Boolean);
+          return html`<div class="game-cell">
+            <button type="button" role="option" aria-selected=${value === g.game}
+              class=${`game-tile ${value === g.game ? "selected" : ""}`} title=${labels.length ? `${g.game} · ${labels.join(", ")}` : g.game}
+              onClick=${() => onChange(g.game)} onDblClick=${() => onCreate(g.game)}>
+              <span class="game-name" lang="en">${g.game}</span>
+              ${labels.length > 0 && html`<span class="game-genres">${labels.join(" · ")}</span>`}
+              ${g.sheet && html`<span class="game-badges"><${SheetBadges} sheet=${g.sheet} /></span>`}
+            </button>
+            <button type="button" class=${`icon game-star ${starredGame ? "on" : ""}`} aria-pressed=${starredGame}
+              aria-label=${starredGame ? `Retirer ${g.game} des favoris` : `Ajouter ${g.game} aux favoris`}
+              title=${starredGame ? "Retirer des favoris" : "Ajouter aux favoris"}
+              onClick=${() => toggleFavorite(g.game)}>${starredGame ? "★" : "☆"}</button>
+          </div>`;
+        })}</div>
       </div>`)}
     </div>
   </div>`;
+}
+
+// Jeux favoris, partagés par tous les choix de jeu ouverts (accueil, room, guides).
+const favoriteListeners = new Set();
+function useFavorites() {
+  const [favorites, setFavorites] = useState(readFavorites);
+  useEffect(() => {
+    favoriteListeners.add(setFavorites);
+    return () => favoriteListeners.delete(setFavorites);
+  }, []);
+  const update = (next) => {
+    try { localStorage.setItem("favoriteGames", JSON.stringify(next)); } catch { /* stockage indisponible */ }
+    for (const listener of favoriteListeners) listener(next);
+  };
+  return [favorites, update];
+}
+
+function readFavorites() {
+  try {
+    const saved = JSON.parse(localStorage.getItem("favoriteGames"));
+    return Array.isArray(saved) ? saved : [];
+  } catch { return []; }
+}
+
+// Genres des jeux (site/data/genres.json), chargés une seule fois.
+let genresData = null;
+function useGenres() {
+  const [genres, setGenres] = useState(null);
+  useEffect(() => {
+    genresData ??= fetch("data/genres.json", { cache: "no-cache" })
+      .then((r) => (r.ok ? r.json() : null))
+      .catch(() => null);
+    genresData.then(setGenres);
+  }, []);
+  return genres;
 }
 
 function customGroups(custom) {

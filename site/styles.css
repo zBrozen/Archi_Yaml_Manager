@@ -554,21 +554,35 @@ table.compact td { padding: .15rem .6rem .15rem 0; }
 .picker { display: grid; gap: .6rem; }
 .picker-filters { flex-wrap: wrap; gap: .5rem 1rem; align-items: center; }
 .picker .check { display: inline-flex; align-items: center; gap: .35rem; font-size: .85rem; color: var(--muted); }
-.game-list { max-height: 26rem; overflow-y: auto; border: 1px solid var(--border); border-radius: var(--radius); padding: .6rem; background: var(--bg); }
+.picker-genre { display: inline-flex; align-items: center; gap: .4rem; font-size: .85rem; color: var(--muted); }
+.picker-genre select { width: auto; font-size: .85rem; padding: .2rem .5rem; }
+.game-list { max-height: min(34rem, 65vh); overflow-y: auto; border: 1px solid var(--border); border-radius: var(--radius); padding: .6rem; background: var(--bg); }
 .game-section + .game-section { margin-top: .9rem; }
 .game-section h3 { font-size: .85rem; margin: 0 0 .4rem; position: sticky; top: -.6rem; background: var(--bg); padding: .2rem 0; z-index: 1; }
-.game-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr)); gap: .4rem; }
+.game-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr)); gap: .4rem; }
+.game-cell { position: relative; display: grid; min-width: 0; }
 .game-tile {
-  display: flex; flex-direction: column; align-items: flex-start; gap: .25rem; text-align: left;
+  display: flex; flex-direction: column; align-items: flex-start; gap: .2rem; text-align: left;
   background: var(--surface); color: var(--text); border: 1px solid var(--border); border-radius: var(--radius-sm);
-  padding: .45rem .6rem; font-weight: 500; min-width: 0;
+  padding: .45rem 1.7rem .45rem .6rem; font-weight: 500; min-width: 0; white-space: normal;
 }
 .game-tile:hover:not(:disabled) { background: var(--surface-2); border-color: var(--accent); }
 .game-tile.selected { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
-.game-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%; }
+/* Nom sur deux lignes au plus : les colonnes étroites coupent moins de titres. */
+.game-name { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; overflow: hidden; overflow-wrap: break-word; hyphens: auto; max-width: 100%; line-height: 1.3; }
+.game-genres { font-size: .72rem; color: var(--muted); font-weight: 400; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%; }
+.game-tile.selected .game-genres { color: inherit; }
 .game-badges { display: flex; flex-wrap: wrap; gap: .25rem; }
 .game-badges .badge { font-size: .68rem; }
-@media (max-width: 600px) { .game-grid { grid-template-columns: 1fr 1fr; } }
+button.icon.game-star { position: absolute; top: .2rem; right: .2rem; font-size: 1.05rem; line-height: 1; padding: .2rem .3rem; border-radius: 6px; }
+button.icon.game-star.on { color: var(--gold); }
+button.icon.game-star:not(.on) { opacity: .55; }
+.game-cell:hover button.icon.game-star, button.icon.game-star:focus-visible { opacity: 1; }
+@media (max-width: 600px) {
+  .game-grid { grid-template-columns: 1fr 1fr; }
+  .game-tile { font-size: .85rem; padding: .4rem 1.45rem .4rem .5rem; }
+  button.icon.game-star { top: .1rem; right: .1rem; }
+}
 
 /* Navigation */
 a.brand { color: inherit; text-decoration: none; }
@@ -1270,6 +1284,7 @@ html.overlay-page body { background: transparent; overflow: hidden; }
 
 /* Installer un jeu : étapes, liens de l'auteur et guide du jeu (Markdown des docs/ du monde) */
 .home.guides { max-width: 860px; }
+.home.editor-home { max-width: 1000px; }
 .guide-links { display: flex; flex-wrap: wrap; align-items: baseline; gap: .35rem 1rem; }
 .guide-links a { overflow-wrap: anywhere; }
 .guide-doc { display: grid; gap: .75rem; border-top: 1px solid var(--border); padding-top: 1rem; min-width: 0; }

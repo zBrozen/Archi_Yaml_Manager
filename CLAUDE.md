@@ -9,6 +9,10 @@
   `site/data/apworld-credits.json` (auteurs, source, licence, infos du tableur). `extract_options.py`
   recopie les infos du tableur (stabilité, PR, 18+) dans `index.json` (`sheet`), que le site affiche.
   Détails dans la section « Jeux non officiels » du README.
+- Choix du jeu (`GamePicker` dans `ui.js`) : favoris (étoile, `localStorage` `favoriteGames`, partagés entre les
+  choix ouverts) et filtre par genre. Genres dans `site/data/genres.json`, relevés sur Wikidata par
+  `tools/fetch_genres.py` (job `sync`, nom exact exigé, quelques minutes par passage) ; corrections dans
+  `apworlds.json`, clé `"genres"`. Pas de source d'avis des joueurs sur les apworlds : ne pas inventer de note.
 - Navigation : menu latéral (`Sidebar` dans `main.js`, barre « Menu » en haut sous 900 px, réglages repliés en bas).
   Accueil `#/` (`welcome.js`) : ce qu'est Archipelago, pour qui n'y a jamais joué ; l'éditeur est sur `#/editeur`.
   Son exemple animé (`demo.js`, bouton « Ouvrir un coffre ») est fictif.

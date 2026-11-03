@@ -155,7 +155,7 @@ function EditorHome({ index, onOpen, onCreate }) {
     onOpen({ name: file.name, original: text, docs: result.docs });
   };
 
-  return html`<main class="home">
+  return html`<main class="home editor-home">
     <div class="intro">
       <h1>Modifier un YAML Archipelago</h1>
       <p>Déposez votre fichier : chaque option s'affiche avec son explication et un réglage simple.</p>
