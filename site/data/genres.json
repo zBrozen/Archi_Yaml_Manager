@@ -1,0 +1,4958 @@
+{
+ "genres": {
+  "action": "Action",
+  "aventure": "Aventure",
+  "plateforme": "Plateforme",
+  "metroidvania": "Metroidvania",
+  "rpg": "RPG",
+  "roguelike": "Roguelike",
+  "puzzle": "Réflexion",
+  "tir": "Tir",
+  "combat": "Combat",
+  "course": "Course",
+  "rythme": "Rythme",
+  "strategie": "Stratégie",
+  "simulation": "Simulation",
+  "survie": "Survie",
+  "horreur": "Horreur",
+  "sport": "Sport",
+  "cartes": "Cartes",
+  "bac-a-sable": "Bac à sable"
+ },
+ "games": {
+  "2048": {
+   "genres": [],
+   "wikidata": "Q141480290",
+   "checked": "2026-11-03"
+  },
+  "7 Days To Die": {
+   "genres": [
+    "survie",
+    "horreur"
+   ],
+   "wikidata": "Q14753828",
+   "checked": "2026-11-03"
+  },
+  "Actraiser": {
+   "genres": [
+    "action",
+    "plateforme",
+    "simulation"
+   ],
+   "wikidata": "Q343033",
+   "checked": "2026-11-03"
+  },
+  "A Dance of Fire and Ice": {
+   "genres": [
+    "rythme"
+   ],
+   "wikidata": "Q104762097",
+   "checked": "2026-11-03"
+  },
+  "A Difficult Game About Climbing": {
+   "genres": [
+    "plateforme"
+   ],
+   "wikidata": "Q125505094",
+   "checked": "2026-11-03"
+  },
+  "Adventure": {
+   "genres": [
+    "action",
+    "aventure"
+   ],
+   "wikidata": "Q379915",
+   "checked": "2026-11-03"
+  },
+  "AEMinecraft": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Against the Storm": {
+   "genres": [
+    "simulation"
+   ],
+   "wikidata": "Q111962863",
+   "checked": "2026-11-03"
+  },
+  "Age Of Empires II: Definitive Edition": {
+   "genres": [
+    "strategie"
+   ],
+   "wikidata": "Q63463133",
+   "checked": "2026-11-03"
+  },
+  "Age Of Mythology Retold": {
+   "genres": [
+    "strategie"
+   ],
+   "wikidata": "Q114858023",
+   "checked": "2026-11-03"
+  },
+  "A Hat in Time": {
+   "genres": [
+    "action",
+    "aventure",
+    "plateforme"
+   ],
+   "wikidata": "Q15934711",
+   "checked": "2026-11-03"
+  },
+  "Air Delivery": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Alabaster Dawn": {
+   "genres": [
+    "action",
+    "rpg"
+   ],
+   "wikidata": "Q128790132",
+   "checked": "2026-11-03"
+  },
+  "A Link Between Worlds": {
+   "genres": [
+    "action",
+    "aventure"
+   ],
+   "wikidata": "Q11300470",
+   "checked": "2026-11-03"
+  },
+  "A Link to the Past": {
+   "genres": [
+    "action",
+    "aventure",
+    "rpg"
+   ],
+   "wikidata": "Q370055",
+   "checked": "2026-11-03"
+  },
+  "Angband": {
+   "genres": [
+    "roguelike"
+   ],
+   "wikidata": "Q244140",
+   "checked": "2026-11-03"
+  },
+  "Animal Crossing": {
+   "genres": [
+    "simulation"
+   ],
+   "wikidata": "Q5345827",
+   "checked": "2026-11-03"
+  },
+  "ANIMAL WELL": {
+   "genres": [
+    "plateforme",
+    "metroidvania",
+    "puzzle"
+   ],
+   "wikidata": "Q116149653",
+   "checked": "2026-11-03"
+  },
+  "Anno 1800": {
+   "genres": [
+    "strategie",
+    "simulation"
+   ],
+   "wikidata": "Q52432849",
+   "checked": "2026-11-03"
+  },
+  "Anodyne": {
+   "genres": [
+    "action",
+    "aventure"
+   ],
+   "wikidata": "Q16267613",
+   "checked": "2026-11-03"
+  },
+  "Another Crabs Treasure": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "An Untitled Story": {
+   "genres": [
+    "metroidvania"
+   ],
+   "wikidata": "Q108896537",
+   "checked": "2026-11-03"
+  },
+  "Ape Escape": {
+   "genres": [
+    "plateforme"
+   ],
+   "wikidata": "Q960773",
+   "checked": "2026-11-03"
+  },
+  "Ape Escape 2": {
+   "genres": [
+    "plateforme"
+   ],
+   "wikidata": "Q618121",
+   "checked": "2026-11-03"
+  },
+  "Ape Escape 3": {
+   "genres": [
+    "plateforme"
+   ],
+   "wikidata": "Q2316722",
+   "checked": "2026-11-03"
+  },
+  "APQuest": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "AP-Rummy": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "AP Tombola": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Aquaria": {
+   "genres": [
+    "metroidvania"
+   ],
+   "wikidata": "Q623111",
+   "checked": "2026-11-03"
+  },
+  "ArchipelaCode": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Archipeladoku": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Archipela-Go!": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Arkham Horror The Card Game": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "ARK Survival Evolved": {
+   "genres": [
+    "action",
+    "aventure",
+    "survie"
+   ],
+   "wikidata": "Q20031747",
+   "checked": "2026-11-03"
+  },
+  "Armored Core": {
+   "genres": [
+    "action",
+    "tir",
+    "simulation"
+   ],
+   "wikidata": "Q2450661",
+   "checked": "2026-11-03"
+  },
+  "Armored Core 3": {
+   "genres": [
+    "action",
+    "tir"
+   ],
+   "wikidata": "Q2452892",
+   "checked": "2026-11-03"
+  },
+  "Arzette: The Jewel of Faramore": {
+   "genres": [
+    "aventure"
+   ],
+   "wikidata": "Q120646886",
+   "checked": "2026-11-03"
+  },
+  "A Short Hike": {
+   "genres": [
+    "aventure"
+   ],
+   "wikidata": "Q66035140",
+   "checked": "2026-11-03"
+  },
+  "Astalon": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Autopelago": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Axiom Verge": {
+   "genres": [
+    "action",
+    "aventure",
+    "metroidvania"
+   ],
+   "wikidata": "Q4830546",
+   "checked": "2026-11-03"
+  },
+  "Baba Is You": {
+   "genres": [
+    "puzzle"
+   ],
+   "wikidata": "Q62061666",
+   "checked": "2026-11-03"
+  },
+  "Balatro": {
+   "genres": [
+    "roguelike",
+    "cartes"
+   ],
+   "wikidata": "Q124357469",
+   "checked": "2026-11-03"
+  },
+  "Baldur's Gate 3": {
+   "genres": [
+    "rpg"
+   ],
+   "wikidata": "Q64441774",
+   "checked": "2026-11-03"
+  },
+  "Baldur's Gate 3 - ToT": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Banjo-Tooie": {
+   "genres": [
+    "action",
+    "aventure",
+    "plateforme"
+   ],
+   "wikidata": "Q806598",
+   "checked": "2026-11-03"
+  },
+  "Bat to the Heavens": {
+   "genres": [
+    "action",
+    "aventure"
+   ],
+   "wikidata": "Q135056529",
+   "checked": "2026-11-03"
+  },
+  "Bayonetta": {
+   "genres": [
+    "action",
+    "aventure",
+    "tir"
+   ],
+   "wikidata": "Q791569",
+   "checked": "2026-11-03"
+  },
+  "Beat Saber": {
+   "genres": [
+    "rythme"
+   ],
+   "wikidata": "Q53998035",
+   "checked": "2026-11-03"
+  },
+  "Bits & Bops": {
+   "genres": [
+    "rythme"
+   ],
+   "wikidata": "Q130731893",
+   "checked": "2026-11-03"
+  },
+  "Bitty Buddies": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "BKSimulator": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Black Market of Bulletphilia ~ 100th Black Market": {
+   "genres": [],
+   "wikidata": "Q113195313",
+   "checked": "2026-11-03"
+  },
+  "Black Ops 3 - Zombies": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Blasphemous": {
+   "genres": [
+    "plateforme",
+    "metroidvania"
+   ],
+   "wikidata": "Q67317244",
+   "checked": "2026-11-03"
+  },
+  "Blender": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Blockupelago": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Bloodstained: Ritual of the Night": {
+   "genres": [
+    "action",
+    "aventure",
+    "metroidvania"
+   ],
+   "wikidata": "Q20190033",
+   "checked": "2026-11-03"
+  },
+  "Bloons TD6": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Blue Fire": {
+   "genres": [
+    "action",
+    "plateforme",
+    "metroidvania"
+   ],
+   "wikidata": "Q105324796",
+   "checked": "2026-11-03"
+  },
+  "Blue Prince": {
+   "genres": [
+    "puzzle"
+   ],
+   "wikidata": "Q125131501",
+   "checked": "2026-11-03"
+  },
+  "Bomberman Hero": {
+   "genres": [
+    "plateforme"
+   ],
+   "wikidata": "Q690394",
+   "checked": "2026-11-03"
+  },
+  "Bomberman Quest": {
+   "genres": [
+    "action",
+    "rpg"
+   ],
+   "wikidata": "Q2710825",
+   "checked": "2026-11-03"
+  },
+  "Bomb Rush Cyberfunk": {
+   "genres": [],
+   "wikidata": "Q98841938",
+   "checked": "2026-11-03"
+  },
+  "Borderlands 2": {
+   "genres": [
+    "action",
+    "rpg",
+    "tir"
+   ],
+   "wikidata": "Q893422",
+   "checked": "2026-11-03"
+  },
+  "Brave Fencer Musashi": {
+   "genres": [
+    "rpg"
+   ],
+   "wikidata": "Q2426211",
+   "checked": "2026-11-03"
+  },
+  "Brotato": {
+   "genres": [],
+   "wikidata": "Q114770253",
+   "checked": "2026-11-03"
+  },
+  "Bubble Bobble": {
+   "genres": [
+    "plateforme"
+   ],
+   "wikidata": "Q88759",
+   "checked": "2026-11-03"
+  },
+  "Buckshot Roulette": {
+   "genres": [
+    "strategie",
+    "horreur"
+   ],
+   "wikidata": "Q124254764",
+   "checked": "2026-11-03"
+  },
+  "Bugs Bunny Lost in Time": {
+   "genres": [
+    "plateforme"
+   ],
+   "wikidata": "Q2603276",
+   "checked": "2026-11-03"
+  },
+  "Bugsnax": {
+   "genres": [
+    "aventure"
+   ],
+   "wikidata": "Q96240054",
+   "checked": "2026-11-03"
+  },
+  "Build a Jetpack": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Bumper Stickers": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Burger Shop": {
+   "genres": [
+    "simulation"
+   ],
+   "wikidata": "Q114290370",
+   "checked": "2026-11-03"
+  },
+  "Burnout 3": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Candy Box 2": {
+   "genres": [
+    "rpg"
+   ],
+   "wikidata": "Q76690686",
+   "checked": "2026-11-03"
+  },
+  "Carnival Games MiniGolf": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Cash cleaner simulator": {
+   "genres": [
+    "simulation"
+   ],
+   "wikidata": "Q134577890",
+   "checked": "2026-11-03"
+  },
+  "Cassette Beasts": {
+   "genres": [
+    "rpg"
+   ],
+   "wikidata": "Q118111562",
+   "checked": "2026-11-03"
+  },
+  "Castlevania 64": {
+   "genres": [
+    "action",
+    "aventure"
+   ],
+   "wikidata": "Q2453573",
+   "checked": "2026-11-03"
+  },
+  "Castlevania - Circle of the Moon": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Castlevania: Legacy of Darkness": {
+   "genres": [
+    "action",
+    "aventure",
+    "plateforme"
+   ],
+   "wikidata": "Q2553121",
+   "checked": "2026-11-03"
+  },
+  "Castlevania: Lords of Shadow": {
+   "genres": [
+    "action",
+    "aventure"
+   ],
+   "wikidata": "Q940664",
+   "checked": "2026-11-03"
+  },
+  "Castlevania: Order of Ecclesia": {
+   "genres": [
+    "metroidvania"
+   ],
+   "wikidata": "Q2452886",
+   "checked": "2026-11-03"
+  },
+  "Casualties: Unknown": {
+   "genres": [
+    "survie"
+   ],
+   "wikidata": "Q140325241",
+   "checked": "2026-11-03"
+  },
+  "Cavern of Dreams": {
+   "genres": [
+    "plateforme"
+   ],
+   "wikidata": "Q127272747",
+   "checked": "2026-11-03"
+  },
+  "Caves of Qud": {
+   "genres": [
+    "roguelike"
+   ],
+   "wikidata": "Q68208636",
+   "checked": "2026-11-03"
+  },
+  "Cave Story": {
+   "genres": [
+    "plateforme",
+    "metroidvania",
+    "tir"
+   ],
+   "wikidata": "Q1051853",
+   "checked": "2026-11-03"
+  },
+  "C&C Reloaded": {
+   "genres": [],
+   "wikidata": "Q121082968",
+   "checked": "2026-11-03"
+  },
+  "Celeste 64": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Celeste Classic": {
+   "genres": [
+    "plateforme"
+   ],
+   "wikidata": "Q99593577",
+   "checked": "2026-11-03"
+  },
+  "Celeste (Open World)": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Chained Echoes": {
+   "genres": [
+    "rpg"
+   ],
+   "wikidata": "Q112190822",
+   "checked": "2026-11-03"
+  },
+  "Chants of Sennaar": {
+   "genres": [
+    "aventure",
+    "puzzle"
+   ],
+   "wikidata": "Q122234668",
+   "checked": "2026-11-03"
+  },
+  "ChecksFinder": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "ChecksMate": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Chibi Robo": {
+   "genres": [
+    "action",
+    "aventure",
+    "plateforme"
+   ],
+   "wikidata": "Q2556701",
+   "checked": "2026-11-03"
+  },
+  "Children of Morta": {
+   "genres": [
+    "action",
+    "aventure",
+    "roguelike"
+   ],
+   "wikidata": "Q67103636",
+   "checked": "2026-11-03"
+  },
+  "Choo-Choo Charles": {
+   "genres": [
+    "horreur"
+   ],
+   "wikidata": "Q115651971",
+   "checked": "2026-11-03"
+  },
+  "Chrono Trigger Rando-Dalton Imperial": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Civilization IV": {
+   "genres": [
+    "strategie"
+   ],
+   "wikidata": "Q2377",
+   "checked": "2026-11-03"
+  },
+  "Civilization V": {
+   "genres": [
+    "strategie"
+   ],
+   "wikidata": "Q2385",
+   "checked": "2026-11-03"
+  },
+  "Civilization VI": {
+   "genres": [
+    "strategie"
+   ],
+   "wikidata": "Q24050047",
+   "checked": "2026-11-03"
+  },
+  "Clair Obscur Expedition 33": {
+   "genres": [
+    "rpg"
+   ],
+   "wikidata": "Q126462072",
+   "checked": "2026-11-03"
+  },
+  "CloverPit": {
+   "genres": [
+    "roguelike",
+    "horreur"
+   ],
+   "wikidata": "Q133857864",
+   "checked": "2026-11-03"
+  },
+  "ClusterTruck": {
+   "genres": [
+    "plateforme"
+   ],
+   "wikidata": "Q22674105",
+   "checked": "2026-11-03"
+  },
+  "Cobalt Core": {
+   "genres": [
+    "strategie"
+   ],
+   "wikidata": "Q123404035",
+   "checked": "2026-11-03"
+  },
+  "Codeforces": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Commander Keen": {
+   "genres": [
+    "plateforme"
+   ],
+   "wikidata": "Q938360",
+   "checked": "2026-11-03"
+  },
+  "Conbunn Cardboard": {
+   "genres": [
+    "aventure"
+   ],
+   "wikidata": "Q122343147",
+   "checked": "2026-11-03"
+  },
+  "Content Warning": {
+   "genres": [
+    "horreur"
+   ],
+   "wikidata": "Q125261138",
+   "checked": "2026-11-03"
+  },
+  "Control": {
+   "genres": [
+    "action",
+    "aventure",
+    "tir"
+   ],
+   "wikidata": "Q54935655",
+   "checked": "2026-11-03"
+  },
+  "Cookie Clicker": {
+   "genres": [],
+   "wikidata": "Q15103408",
+   "checked": "2026-11-03"
+  },
+  "Cooking Mama 3": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Corn Kidz 64": {
+   "genres": [
+    "plateforme"
+   ],
+   "wikidata": "Q123404310",
+   "checked": "2026-11-03"
+  },
+  "CorruObserver": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Cowtastic Cafe": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Crab Champions": {
+   "genres": [
+    "roguelike"
+   ],
+   "wikidata": "Q117769073",
+   "checked": "2026-11-03"
+  },
+  "Crash Bandicoot 3: Warped": {
+   "genres": [
+    "plateforme"
+   ],
+   "wikidata": "Q840308",
+   "checked": "2026-11-03"
+  },
+  "Crash Bandicoot N. Sane Trilogy": {
+   "genres": [
+    "plateforme"
+   ],
+   "wikidata": "Q26698531",
+   "checked": "2026-11-03"
+  },
+  "Crash Bash": {
+   "genres": [],
+   "wikidata": "Q597808",
+   "checked": "2026-11-03"
+  },
+  "Crash Team Racing": {
+   "genres": [
+    "course"
+   ],
+   "wikidata": "Q834872",
+   "checked": "2026-11-03"
+  },
+  "Create": {
+   "genres": [],
+   "wikidata": "Q5183429",
+   "checked": "2026-11-03"
+  },
+  "CrossCode": {
+   "genres": [
+    "action",
+    "aventure",
+    "rpg"
+   ],
+   "wikidata": "Q30632190",
+   "checked": "2026-11-03"
+  },
+  "Crossword": {
+   "genres": [
+    "puzzle"
+   ],
+   "wikidata": "Q17201035",
+   "checked": "2026-11-03"
+  },
+  "Crypt of the NecroDancer": {
+   "genres": [
+    "action",
+    "roguelike",
+    "rythme",
+    "strategie"
+   ],
+   "wikidata": "Q16259371",
+   "checked": "2026-11-03"
+  },
+  "Crystalis": {
+   "genres": [
+    "action",
+    "aventure",
+    "rpg"
+   ],
+   "wikidata": "Q5191424",
+   "checked": "2026-11-03"
+  },
+  "Crystal Project": {
+   "genres": [
+    "metroidvania",
+    "rpg"
+   ],
+   "wikidata": "Q111444166",
+   "checked": "2026-11-03"
+  },
+  "Cult of the Lamb": {
+   "genres": [
+    "action",
+    "aventure",
+    "roguelike",
+    "simulation"
+   ],
+   "wikidata": "Q108273566",
+   "checked": "2026-11-03"
+  },
+  "Cuphead": {
+   "genres": [
+    "plateforme",
+    "tir"
+   ],
+   "wikidata": "Q18149495",
+   "checked": "2026-11-03"
+  },
+  "Cursed Mario 64": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Custom Robo": {
+   "genres": [
+    "action",
+    "rpg"
+   ],
+   "wikidata": "Q5196403",
+   "checked": "2026-11-03"
+  },
+  "Cyber Hook": {
+   "genres": [
+    "plateforme"
+   ],
+   "wikidata": "Q106804268",
+   "checked": "2026-11-03"
+  },
+  "Cyberpunk 2077": {
+   "genres": [
+    "action",
+    "rpg"
+   ],
+   "wikidata": "Q3182559",
+   "checked": "2026-11-03"
+  },
+  "Dark Cloud 1": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Dark Souls II": {
+   "genres": [
+    "action",
+    "rpg"
+   ],
+   "wikidata": "Q3702740",
+   "checked": "2026-11-03"
+  },
+  "Dark Souls III": {
+   "genres": [
+    "action",
+    "rpg"
+   ],
+   "wikidata": "Q20112508",
+   "checked": "2026-11-03"
+  },
+  "Dark Souls Remastered": {
+   "genres": [
+    "action",
+    "rpg"
+   ],
+   "wikidata": "Q55728812",
+   "checked": "2026-11-03"
+  },
+  "Dead Cells": {
+   "genres": [
+    "plateforme",
+    "metroidvania",
+    "roguelike"
+   ],
+   "wikidata": "Q30639210",
+   "checked": "2026-11-03"
+  },
+  "Deadlock": {
+   "genres": [
+    "tir"
+   ],
+   "wikidata": "Q126042383",
+   "checked": "2026-11-03"
+  },
+  "Dead Rising Deluxe Remaster": {
+   "genres": [
+    "action",
+    "aventure"
+   ],
+   "wikidata": "Q126963191",
+   "checked": "2026-11-03"
+  },
+  "Deathbulge": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Death Road to Canada": {
+   "genres": [
+    "action",
+    "rpg"
+   ],
+   "wikidata": "Q56739352",
+   "checked": "2026-11-03"
+  },
+  "Death's Door": {
+   "genres": [
+    "action",
+    "aventure"
+   ],
+   "wikidata": "Q107376501",
+   "checked": "2026-11-03"
+  },
+  "Deep Rock Galactic": {
+   "genres": [
+    "tir"
+   ],
+   "wikidata": "Q55381944",
+   "checked": "2026-11-03"
+  },
+  "Delivering Hope": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "DELTARUNE": {
+   "genres": [
+    "rpg"
+   ],
+   "wikidata": "Q58045522",
+   "checked": "2026-11-03"
+  },
+  "Devil May Cry 3": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Dicey Dungeons": {
+   "genres": [
+    "rpg",
+    "roguelike",
+    "cartes"
+   ],
+   "wikidata": "Q66311564",
+   "checked": "2026-11-03"
+  },
+  "Diddy Kong Racing": {
+   "genres": [
+    "course"
+   ],
+   "wikidata": "Q545072",
+   "checked": "2026-11-03"
+  },
+  "Divinity Original Sin 2": {
+   "genres": [
+    "rpg"
+   ],
+   "wikidata": "Q20899735",
+   "checked": "2026-11-03"
+  },
+  "DLCQuest": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Dome Keeper": {
+   "genres": [
+    "strategie"
+   ],
+   "wikidata": "Q111509850",
+   "checked": "2026-11-03"
+  },
+  "Donkey Kong 64": {
+   "genres": [
+    "aventure",
+    "plateforme"
+   ],
+   "wikidata": "Q774773",
+   "checked": "2026-11-03"
+  },
+  "Don't Starve Together": {
+   "genres": [
+    "survie"
+   ],
+   "wikidata": "Q22344573",
+   "checked": "2026-11-03"
+  },
+  "Donut County": {
+   "genres": [
+    "aventure"
+   ],
+   "wikidata": "Q19627412",
+   "checked": "2026-11-03"
+  },
+  "DOOM 1993": {
+   "genres": [
+    "tir",
+    "horreur"
+   ],
+   "wikidata": "Q189784",
+   "checked": "2026-11-03"
+  },
+  "DOOM Eternal": {
+   "genres": [
+    "tir",
+    "horreur"
+   ],
+   "wikidata": "Q55662649",
+   "checked": "2026-11-03"
+  },
+  "DOOM II": {
+   "genres": [
+    "action",
+    "tir",
+    "horreur"
+   ],
+   "wikidata": "Q755186",
+   "checked": "2026-11-03"
+  },
+  "Door to Door Door Salesman": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "DORONKO WANKO": {
+   "genres": [
+    "action",
+    "simulation"
+   ],
+   "wikidata": "Q125262489",
+   "checked": "2026-11-03"
+  },
+  "DOTA 2": {
+   "genres": [
+    "action",
+    "strategie"
+   ],
+   "wikidata": "Q771541",
+   "checked": "2026-11-03"
+  },
+  "Dracomino": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Dragon Ball Z Budokai 3": {
+   "genres": [
+    "combat"
+   ],
+   "wikidata": "Q3038707",
+   "checked": "2026-11-03"
+  },
+  "Dragon Ball Z Budokai Tenkaichi 2": {
+   "genres": [
+    "combat"
+   ],
+   "wikidata": "Q2712053",
+   "checked": "2026-11-03"
+  },
+  "Dragon Quest III HD-2D Remake": {
+   "genres": [
+    "rpg"
+   ],
+   "wikidata": "Q126723301",
+   "checked": "2026-11-03"
+  },
+  "Dragon Warrior": {
+   "genres": [
+    "rpg"
+   ],
+   "wikidata": "Q2313869",
+   "checked": "2026-11-03"
+  },
+  "DREDGE": {
+   "genres": [
+    "aventure",
+    "simulation",
+    "horreur"
+   ],
+   "wikidata": "Q113647971",
+   "checked": "2026-11-03"
+  },
+  "Drehmal": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "DuckGame": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Duck Life 4": {
+   "genres": [
+    "rpg",
+    "course",
+    "sport"
+   ],
+   "wikidata": "Q134990590",
+   "checked": "2026-11-03"
+  },
+  "Duke Nukem 3D": {
+   "genres": [
+    "tir"
+   ],
+   "wikidata": "Q728061",
+   "checked": "2026-11-03"
+  },
+  "Dungeon Defenders": {
+   "genres": [
+    "rpg",
+    "strategie"
+   ],
+   "wikidata": "Q766077",
+   "checked": "2026-11-03"
+  },
+  "Dwarf Fortress": {
+   "genres": [
+    "aventure",
+    "roguelike",
+    "simulation",
+    "survie",
+    "bac-a-sable"
+   ],
+   "wikidata": "Q248810",
+   "checked": "2026-11-03"
+  },
+  "EarthBound": {
+   "genres": [
+    "rpg"
+   ],
+   "wikidata": "Q2529000",
+   "checked": "2026-11-03"
+  },
+  "Easy Delivery Co.": {
+   "genres": [
+    "aventure"
+   ],
+   "wikidata": "Q134120345",
+   "checked": "2026-11-03"
+  },
+  "EldenRing": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Elden Ring Nightreign": {
+   "genres": [
+    "rpg",
+    "roguelike"
+   ],
+   "wikidata": "Q131435228",
+   "checked": "2026-11-03"
+  },
+  "Elder Scrolls Online": {
+   "genres": [
+    "rpg"
+   ],
+   "wikidata": "Q1188904",
+   "checked": "2026-11-03"
+  },
+  "Elementipelago": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Ender Magnolia": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Enter The Gungeon": {
+   "genres": [
+    "roguelike",
+    "tir"
+   ],
+   "wikidata": "Q23759338",
+   "checked": "2026-11-03"
+  },
+  "Equilinox": {
+   "genres": [
+    "simulation"
+   ],
+   "wikidata": "Q62141521",
+   "checked": "2026-11-03"
+  },
+  "Etrian Odyssey": {
+   "genres": [
+    "rpg"
+   ],
+   "wikidata": "Q2463432",
+   "checked": "2026-11-03"
+  },
+  "Everhood 2": {
+   "genres": [
+    "rpg"
+   ],
+   "wikidata": "Q131755719",
+   "checked": "2026-11-03"
+  },
+  "Evolve": {
+   "genres": [
+    "action",
+    "tir"
+   ],
+   "wikidata": "Q16267814",
+   "checked": "2026-11-03"
+  },
+  "Factorio": {
+   "genres": [
+    "action",
+    "strategie",
+    "simulation",
+    "survie",
+    "bac-a-sable"
+   ],
+   "wikidata": "Q16972008",
+   "checked": "2026-11-03"
+  },
+  "Factorio Modpacks": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Factorio: Platformer": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Factorio - Space Age Without Space": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Fakutori": {
+   "genres": [
+    "simulation"
+   ],
+   "wikidata": "Q134990578",
+   "checked": "2026-11-03"
+  },
+  "Fall Guys": {
+   "genres": [
+    "plateforme"
+   ],
+   "wikidata": "Q85760410",
+   "checked": "2026-11-03"
+  },
+  "Fantastic Fist": {
+   "genres": [
+    "action",
+    "aventure"
+   ],
+   "wikidata": "Q126694102",
+   "checked": "2026-11-03"
+  },
+  "Faxanadu": {
+   "genres": [
+    "action",
+    "rpg"
+   ],
+   "wikidata": "Q1398972",
+   "checked": "2026-11-03"
+  },
+  "Feeding Frenzy 2": {
+   "genres": [],
+   "wikidata": "Q5441239",
+   "checked": "2026-11-03"
+  },
+  "FF1 Pixel Remaster": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Final Fantasy": {
+   "genres": [
+    "rpg"
+   ],
+   "wikidata": "Q1415970",
+   "checked": "2026-11-03"
+  },
+  "Final Fantasy 12 Open World": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Final Fantasy 1 PSP": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Final Fantasy Crystal Chronicles": {
+   "genres": [
+    "rpg"
+   ],
+   "wikidata": "Q1470373",
+   "checked": "2026-11-03"
+  },
+  "Final Fantasy Mystic Quest": {
+   "genres": [
+    "rpg"
+   ],
+   "wikidata": "Q1249187",
+   "checked": "2026-11-03"
+  },
+  "Final Fantasy Tactics Ivalice Island": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Final Fantasy VII": {
+   "genres": [
+    "rpg"
+   ],
+   "wikidata": "Q214232",
+   "checked": "2026-11-03"
+  },
+  "Final Fantasy X": {
+   "genres": [
+    "rpg"
+   ],
+   "wikidata": "Q223381",
+   "checked": "2026-11-03"
+  },
+  "Final Fantasy XIII-2": {
+   "genres": [
+    "rpg"
+   ],
+   "wikidata": "Q1416043",
+   "checked": "2026-11-03"
+  },
+  "Fire Emblem Sacred Stones": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Flipwitch Forbidden Sex Hex": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "FNaFW": {
+   "genres": [
+    "rpg"
+   ],
+   "wikidata": "Q21296963",
+   "checked": "2026-11-03"
+  },
+  "Forager": {
+   "genres": [
+    "action",
+    "aventure",
+    "simulation"
+   ],
+   "wikidata": "Q63386191",
+   "checked": "2026-11-03"
+  },
+  "Forged Curse": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Frogmonster": {
+   "genres": [
+    "action",
+    "aventure"
+   ],
+   "wikidata": "Q126694227",
+   "checked": "2026-11-03"
+  },
+  "FTL: Faster Than Light": {
+   "genres": [
+    "roguelike",
+    "strategie",
+    "simulation"
+   ],
+   "wikidata": "Q4308783",
+   "checked": "2026-11-03"
+  },
+  "Funi Raccoon Game": {
+   "genres": [
+    "action",
+    "aventure"
+   ],
+   "wikidata": "Q135077436",
+   "checked": "2026-11-03"
+  },
+  "Garfield Kart - Furious Racing": {
+   "genres": [
+    "course"
+   ],
+   "wikidata": "Q91060982",
+   "checked": "2026-11-03"
+  },
+  "Gato Roboto": {
+   "genres": [
+    "metroidvania"
+   ],
+   "wikidata": "Q64222306",
+   "checked": "2026-11-03"
+  },
+  "Gato Roboto B-Side": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Gauntlet Legends": {
+   "genres": [
+    "action"
+   ],
+   "wikidata": "Q2007458",
+   "checked": "2026-11-03"
+  },
+  "GBAPQuest": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "GemCraft: Frostborn Wrath": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Geometry Dash": {
+   "genres": [
+    "plateforme",
+    "rythme"
+   ],
+   "wikidata": "Q16190030",
+   "checked": "2026-11-03"
+  },
+  "Getting Over It": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Glover": {
+   "genres": [
+    "plateforme"
+   ],
+   "wikidata": "Q3099937",
+   "checked": "2026-11-03"
+  },
+  "GLYPHS": {
+   "genres": [
+    "aventure"
+   ],
+   "wikidata": "Q135077836",
+   "checked": "2026-11-03"
+  },
+  "GMod - apAdventure": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Gnosia": {
+   "genres": [
+    "aventure",
+    "rpg"
+   ],
+   "wikidata": "Q106624394",
+   "checked": "2026-11-03"
+  },
+  "GoldenEye 007": {
+   "genres": [
+    "tir"
+   ],
+   "wikidata": "Q2708114",
+   "checked": "2026-11-03"
+  },
+  "Golden Sun The Lost Age": {
+   "genres": [
+    "rpg"
+   ],
+   "wikidata": "Q2342264",
+   "checked": "2026-11-03"
+  },
+  "Grandia": {
+   "genres": [
+    "rpg"
+   ],
+   "wikidata": "Q13462475",
+   "checked": "2026-11-03"
+  },
+  "Grand Theft Auto III": {
+   "genres": [
+    "action",
+    "aventure"
+   ],
+   "wikidata": "Q149106",
+   "checked": "2026-11-03"
+  },
+  "Grand Theft Auto: San Andreas": {
+   "genres": [
+    "action",
+    "aventure",
+    "tir"
+   ],
+   "wikidata": "Q83265",
+   "checked": "2026-11-03"
+  },
+  "Grapple Dog": {
+   "genres": [
+    "plateforme"
+   ],
+   "wikidata": "Q115216602",
+   "checked": "2026-11-03"
+  },
+  "Grim Dawn": {
+   "genres": [
+    "action",
+    "rpg"
+   ],
+   "wikidata": "Q5609186",
+   "checked": "2026-11-03"
+  },
+  "Grunn": {
+   "genres": [
+    "horreur"
+   ],
+   "wikidata": "Q131826609",
+   "checked": "2026-11-03"
+  },
+  "GTFO (Vanilla)": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Hacknet": {
+   "genres": [
+    "aventure",
+    "simulation"
+   ],
+   "wikidata": "Q23783496",
+   "checked": "2026-11-03"
+  },
+  "Hades": {
+   "genres": [
+    "action",
+    "rpg",
+    "roguelike"
+   ],
+   "wikidata": "Q59756366",
+   "checked": "2026-11-03"
+  },
+  "Hades2Rogue": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Half-Life": {
+   "genres": [
+    "tir"
+   ],
+   "wikidata": "Q279744",
+   "checked": "2026-11-03"
+  },
+  "Half-Life (Sven Co-op)": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Halo The Master Chief Collection": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Hammerwatch": {
+   "genres": [
+    "action"
+   ],
+   "wikidata": "Q14596095",
+   "checked": "2026-11-03"
+  },
+  "Haste": {
+   "genres": [
+    "action",
+    "aventure",
+    "course"
+   ],
+   "wikidata": "Q133818615",
+   "checked": "2026-11-03"
+  },
+  "Hatsune Miku Project Diva Mega Mix+": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Here Comes Niko!": {
+   "genres": [
+    "plateforme"
+   ],
+   "wikidata": "Q115626378",
+   "checked": "2026-11-03"
+  },
+  "Heretic": {
+   "genres": [
+    "tir"
+   ],
+   "wikidata": "Q936016",
+   "checked": "2026-11-03"
+  },
+  "Hero Core": {
+   "genres": [
+    "tir"
+   ],
+   "wikidata": "Q5742646",
+   "checked": "2026-11-03"
+  },
+  "Heroes of the Storm": {
+   "genres": [
+    "action",
+    "strategie"
+   ],
+   "wikidata": "Q15139655",
+   "checked": "2026-11-03"
+  },
+  "Hexcells Infinite": {
+   "genres": [
+    "puzzle"
+   ],
+   "wikidata": "Q70829063",
+   "checked": "2026-11-03"
+  },
+  "Hi-Fi RUSH": {
+   "genres": [
+    "action",
+    "rythme"
+   ],
+   "wikidata": "Q116439515",
+   "checked": "2026-11-03"
+  },
+  "High Roller": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "HITMAN World of Assassination": {
+   "genres": [],
+   "wikidata": "Q116680138",
+   "checked": "2026-11-03"
+  },
+  "Hollow Knight": {
+   "genres": [
+    "plateforme",
+    "metroidvania"
+   ],
+   "wikidata": "Q29300592",
+   "checked": "2026-11-03"
+  },
+  "Hollow Knight: Silksong": {
+   "genres": [
+    "action",
+    "aventure",
+    "plateforme",
+    "metroidvania"
+   ],
+   "wikidata": "Q63294487",
+   "checked": "2026-11-03"
+  },
+  "holo8": {
+   "genres": [],
+   "wikidata": "Q135071234",
+   "checked": "2026-11-03"
+  },
+  "Hololive Treasure Mountain": {
+   "genres": [
+    "puzzle"
+   ],
+   "wikidata": "Q127570416",
+   "checked": "2026-11-03"
+  },
+  "Horse Magnifier": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Hot Lava": {
+   "genres": [
+    "action",
+    "aventure"
+   ],
+   "wikidata": "Q28452061",
+   "checked": "2026-11-03"
+  },
+  "Hungry Pumkin": {
+   "genres": [],
+   "wikidata": "Q125572485",
+   "checked": "2026-11-03"
+  },
+  "Hunie Cam Studio": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Hunie Pop": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Hunie Pop 2": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Hylics 2": {
+   "genres": [
+    "rpg"
+   ],
+   "wikidata": "Q104161892",
+   "checked": "2026-11-03"
+  },
+  "Hyperdimension Neptunia Re;Birth3 V GENERATION": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Hyperrogue": {
+   "genres": [
+    "roguelike"
+   ],
+   "wikidata": "Q30636895",
+   "checked": "2026-11-03"
+  },
+  "hytale": {
+   "genres": [
+    "aventure",
+    "rpg",
+    "bac-a-sable"
+   ],
+   "wikidata": "Q60187866",
+   "checked": "2026-11-03"
+  },
+  "IAmYourBeast": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "ICEwall": {
+   "genres": [
+    "action"
+   ],
+   "wikidata": "Q122265730",
+   "checked": "2026-11-03"
+  },
+  "Idle Loops": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "I Hate You, Please Suffer": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Iji": {
+   "genres": [
+    "plateforme",
+    "metroidvania"
+   ],
+   "wikidata": "Q13596262",
+   "checked": "2026-11-03"
+  },
+  "Inscryption": {
+   "genres": [
+    "roguelike",
+    "cartes"
+   ],
+   "wikidata": "Q109051201",
+   "checked": "2026-11-03"
+  },
+  "Into the Breach": {
+   "genres": [
+    "strategie"
+   ],
+   "wikidata": "Q30591391",
+   "checked": "2026-11-03"
+  },
+  "Isles Of Sea And Sky": {
+   "genres": [
+    "aventure"
+   ],
+   "wikidata": "Q126694722",
+   "checked": "2026-11-03"
+  },
+  "Isles of Trials": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Ittle Dew 2": {
+   "genres": [
+    "action",
+    "aventure"
+   ],
+   "wikidata": "Q55614715",
+   "checked": "2026-11-03"
+  },
+  "I Was a Teenage Exocolonist": {
+   "genres": [
+    "rpg"
+   ],
+   "wikidata": "Q113622732",
+   "checked": "2026-11-03"
+  },
+  "Jak 3": {
+   "genres": [
+    "plateforme"
+   ],
+   "wikidata": "Q960458",
+   "checked": "2026-11-03"
+  },
+  "Jak and Daxter: The Precursor Legacy": {
+   "genres": [
+    "plateforme"
+   ],
+   "wikidata": "Q1784103",
+   "checked": "2026-11-03"
+  },
+  "Jak II": {
+   "genres": [
+    "plateforme"
+   ],
+   "wikidata": "Q526700",
+   "checked": "2026-11-03"
+  },
+  "Jigsaw": {
+   "genres": [
+    "aventure"
+   ],
+   "wikidata": "Q6192387",
+   "checked": "2026-11-03"
+  },
+  "Johnny Upgrade": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Jurassic Park": {
+   "genres": [
+    "action",
+    "aventure"
+   ],
+   "wikidata": "Q2742161",
+   "checked": "2026-11-03"
+  },
+  "Keep Talking and Nobody Explodes": {
+   "genres": [
+    "puzzle"
+   ],
+   "wikidata": "Q19879485",
+   "checked": "2026-11-03"
+  },
+  "Kerbal Space Program 1": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "KeyWe": {
+   "genres": [
+    "puzzle"
+   ],
+   "wikidata": "Q106513307",
+   "checked": "2026-11-03"
+  },
+  "Kindergarten 2": {
+   "genres": [
+    "aventure"
+   ],
+   "wikidata": "Q122308347",
+   "checked": "2026-11-03"
+  },
+  "Kingdom Hearts": {
+   "genres": [
+    "action",
+    "rpg"
+   ],
+   "wikidata": "Q225912",
+   "checked": "2026-11-03"
+  },
+  "Kingdom Hearts 2": {
+   "genres": [
+    "action",
+    "rpg"
+   ],
+   "wikidata": "Q626802",
+   "checked": "2026-11-03"
+  },
+  "Kingdom Hearts Birth by Sleep": {
+   "genres": [
+    "action",
+    "rpg"
+   ],
+   "wikidata": "Q281110",
+   "checked": "2026-11-03"
+  },
+  "Kingdom Hearts Chain of Memories": {
+   "genres": [
+    "action",
+    "rpg",
+    "cartes"
+   ],
+   "wikidata": "Q843205",
+   "checked": "2026-11-03"
+  },
+  "Kingdom Hearts Dream Drop Distance": {
+   "genres": [
+    "action",
+    "rpg"
+   ],
+   "wikidata": "Q2301369",
+   "checked": "2026-11-03"
+  },
+  "Kingdom Hearts RE Chain of Memories": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Kirby Air Ride": {
+   "genres": [
+    "course"
+   ],
+   "wikidata": "Q2181182",
+   "checked": "2026-11-03"
+  },
+  "Kirby: Planet Robobot": {
+   "genres": [
+    "action",
+    "plateforme"
+   ],
+   "wikidata": "Q23011263",
+   "checked": "2026-11-03"
+  },
+  "Kirby's Dream Land 3": {
+   "genres": [
+    "plateforme"
+   ],
+   "wikidata": "Q1202713",
+   "checked": "2026-11-03"
+  },
+  "Kirby Squeak Squad": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Kirby Super Star Ultra": {
+   "genres": [
+    "action",
+    "plateforme"
+   ],
+   "wikidata": "Q1132456",
+   "checked": "2026-11-03"
+  },
+  "Kirby & The Amazing Mirror": {
+   "genres": [
+    "metroidvania"
+   ],
+   "wikidata": "Q2306443",
+   "checked": "2026-11-03"
+  },
+  "K-On! After School Live!!": {
+   "genres": [
+    "rythme"
+   ],
+   "wikidata": "Q860047",
+   "checked": "2026-11-03"
+  },
+  "Laika: Aged Through Blood": {
+   "genres": [
+    "action",
+    "aventure",
+    "metroidvania"
+   ],
+   "wikidata": "Q119853219",
+   "checked": "2026-11-03"
+  },
+  "La-Mulana 2": {
+   "genres": [
+    "action"
+   ],
+   "wikidata": "Q60995966",
+   "checked": "2026-11-03"
+  },
+  "Landstalker - The Treasures of King Nole": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Layer8Problem": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "League of Legends": {
+   "genres": [],
+   "wikidata": "Q223341",
+   "checked": "2026-11-03"
+  },
+  "Lego Batman The Video Game": {
+   "genres": [
+    "action",
+    "aventure"
+   ],
+   "wikidata": "Q74545",
+   "checked": "2026-11-03"
+  },
+  "LEGO Star Wars III: The Clone Wars": {
+   "genres": [
+    "action",
+    "aventure",
+    "plateforme"
+   ],
+   "wikidata": "Q55228",
+   "checked": "2026-11-03"
+  },
+  "Lego Star Wars: The Complete Saga": {
+   "genres": [
+    "action",
+    "aventure"
+   ],
+   "wikidata": "Q55214",
+   "checked": "2026-11-03"
+  },
+  "Lethal Company": {
+   "genres": [
+    "action",
+    "aventure",
+    "horreur"
+   ],
+   "wikidata": "Q123404756",
+   "checked": "2026-11-03"
+  },
+  "Lethal Crisis": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Librarian Tidy Up the Arcane Library": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Library of Babel": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Lies Of P": {
+   "genres": [
+    "action",
+    "rpg"
+   ],
+   "wikidata": "Q109820884",
+   "checked": "2026-11-03"
+  },
+  "Lingo": {
+   "genres": [
+    "puzzle"
+   ],
+   "wikidata": "Q134699352",
+   "checked": "2026-11-03"
+  },
+  "Links Awakening DX": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Little Witch Nobeta": {
+   "genres": [
+    "action"
+   ],
+   "wikidata": "Q96748263",
+   "checked": "2026-11-03"
+  },
+  "Lobotomy Corporation": {
+   "genres": [
+    "simulation"
+   ],
+   "wikidata": "Q65050157",
+   "checked": "2026-11-03"
+  },
+  "Look Outside": {
+   "genres": [
+    "aventure",
+    "rpg",
+    "survie",
+    "horreur"
+   ],
+   "wikidata": "Q130723337",
+   "checked": "2026-11-03"
+  },
+  "Loonyland": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Lost Kingdoms II": {
+   "genres": [
+    "rpg"
+   ],
+   "wikidata": "Q6684088",
+   "checked": "2026-11-03"
+  },
+  "Lufia II Ancient Cave": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Luigi's Mansion": {
+   "genres": [
+    "action",
+    "aventure"
+   ],
+   "wikidata": "Q984029",
+   "checked": "2026-11-03"
+  },
+  "Lunacid": {
+   "genres": [
+    "action",
+    "rpg"
+   ],
+   "wikidata": "Q114758227",
+   "checked": "2026-11-03"
+  },
+  "Madou Monogatari Hanamaru Daiyouchienji": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Majora's Mask Recompiled": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Manic Miners": {
+   "genres": [
+    "strategie"
+   ],
+   "wikidata": "Q124067784",
+   "checked": "2026-11-03"
+  },
+  "Manual_FreedomPlanet2_Knuxfan24": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Marble It Up! Ultra": {
+   "genres": [
+    "action",
+    "course"
+   ],
+   "wikidata": "Q133275246",
+   "checked": "2026-11-03"
+  },
+  "Marbles! Balance Challenge": {
+   "genres": [
+    "puzzle"
+   ],
+   "wikidata": "Q6755218",
+   "checked": "2026-11-03"
+  },
+  "Mario and Luigi Dream Team": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Mario is Missing": {
+   "genres": [],
+   "wikidata": "Q2517563",
+   "checked": "2026-11-03"
+  },
+  "Mario Kart 64": {
+   "genres": [
+    "course"
+   ],
+   "wikidata": "Q1046604",
+   "checked": "2026-11-03"
+  },
+  "Mario Kart Double Dash": {
+   "genres": [
+    "course"
+   ],
+   "wikidata": "Q5721431",
+   "checked": "2026-11-03"
+  },
+  "Mario & Luigi Superstar Saga": {
+   "genres": [
+    "rpg"
+   ],
+   "wikidata": "Q1797550",
+   "checked": "2026-11-03"
+  },
+  "Mario Party Advance": {
+   "genres": [],
+   "wikidata": "Q1206503",
+   "checked": "2026-11-03"
+  },
+  "Mario Sports Mix": {
+   "genres": [
+    "sport"
+   ],
+   "wikidata": "Q2706730",
+   "checked": "2026-11-03"
+  },
+  "Mario Super Sluggers": {
+   "genres": [
+    "sport"
+   ],
+   "wikidata": "Q920103",
+   "checked": "2026-11-03"
+  },
+  "Mario Tennis GBC": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Medievil": {
+   "genres": [
+    "action",
+    "aventure"
+   ],
+   "wikidata": "Q942390",
+   "checked": "2026-11-03"
+  },
+  "Medievil 2": {
+   "genres": [
+    "action",
+    "aventure"
+   ],
+   "wikidata": "Q944463",
+   "checked": "2026-11-03"
+  },
+  "Mega Man 2": {
+   "genres": [
+    "action"
+   ],
+   "wikidata": "Q2014882",
+   "checked": "2026-11-03"
+  },
+  "Mega Man 3": {
+   "genres": [
+    "action",
+    "plateforme"
+   ],
+   "wikidata": "Q2014874",
+   "checked": "2026-11-03"
+  },
+  "MegaMan Battle Network 3": {
+   "genres": [
+    "rpg",
+    "strategie"
+   ],
+   "wikidata": "Q3091513",
+   "checked": "2026-11-03"
+  },
+  "MegaMan Battle Network 6": {
+   "genres": [
+    "rpg",
+    "strategie"
+   ],
+   "wikidata": "Q3180498",
+   "checked": "2026-11-03"
+  },
+  "Mega Man X2": {
+   "genres": [
+    "action",
+    "aventure",
+    "plateforme"
+   ],
+   "wikidata": "Q100096",
+   "checked": "2026-11-03"
+  },
+  "Mega Man X4": {
+   "genres": [
+    "action"
+   ],
+   "wikidata": "Q1203511",
+   "checked": "2026-11-03"
+  },
+  "Mega Man X Command Mission": {
+   "genres": [
+    "rpg"
+   ],
+   "wikidata": "Q56939",
+   "checked": "2026-11-03"
+  },
+  "Mega Man Zero 3": {
+   "genres": [
+    "action"
+   ],
+   "wikidata": "Q3042524",
+   "checked": "2026-11-03"
+  },
+  "Mega Man ZX": {
+   "genres": [
+    "action"
+   ],
+   "wikidata": "Q2319030",
+   "checked": "2026-11-03"
+  },
+  "Melatonin": {
+   "genres": [
+    "rythme"
+   ],
+   "wikidata": "Q112442607",
+   "checked": "2026-11-03"
+  },
+  "Memories in Orbit": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Mental Omega": {
+   "genres": [],
+   "wikidata": "Q121083119",
+   "checked": "2026-11-03"
+  },
+  "Meritous": {
+   "genres": [
+    "action",
+    "roguelike"
+   ],
+   "wikidata": "Q116873120",
+   "checked": "2026-11-03"
+  },
+  "Metal Gear Solid": {
+   "genres": [
+    "action",
+    "aventure"
+   ],
+   "wikidata": "Q6582527",
+   "checked": "2026-11-03"
+  },
+  "Metal: Hellsinger": {
+   "genres": [
+    "tir",
+    "rythme"
+   ],
+   "wikidata": "Q96252758",
+   "checked": "2026-11-03"
+  },
+  "MetroCUBEvania": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Metroid Fusion": {
+   "genres": [
+    "metroidvania"
+   ],
+   "wikidata": "Q2478949",
+   "checked": "2026-11-03"
+  },
+  "Metroid Prime": {
+   "genres": [
+    "metroidvania",
+    "tir"
+   ],
+   "wikidata": "Q1765733",
+   "checked": "2026-11-03"
+  },
+  "Metroid: Samus Returns": {
+   "genres": [
+    "metroidvania"
+   ],
+   "wikidata": "Q30325600",
+   "checked": "2026-11-03"
+  },
+  "Metroid: Zero Mission": {
+   "genres": [
+    "metroidvania"
+   ],
+   "wikidata": "Q2012171",
+   "checked": "2026-11-03"
+  },
+  "MGS: Masala Garden Salad": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Mina The Hollower": {
+   "genres": [
+    "action",
+    "aventure"
+   ],
+   "wikidata": "Q112228333",
+   "checked": "2026-11-03"
+  },
+  "Minecraft": {
+   "genres": [
+    "action",
+    "aventure",
+    "simulation",
+    "survie",
+    "bac-a-sable"
+   ],
+   "wikidata": "Q49740",
+   "checked": "2026-11-03"
+  },
+  "Minecraft Dig": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Minecraft Fabric": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Mini Metro": {
+   "genres": [
+    "strategie",
+    "simulation"
+   ],
+   "wikidata": "Q16267881",
+   "checked": "2026-11-03"
+  },
+  "Minishoot Adventures": {
+   "genres": [
+    "action",
+    "aventure",
+    "rpg"
+   ],
+   "wikidata": "Q126695337",
+   "checked": "2026-11-03"
+  },
+  "Minit": {
+   "genres": [
+    "action",
+    "aventure",
+    "puzzle"
+   ],
+   "wikidata": "Q30612124",
+   "checked": "2026-11-03"
+  },
+  "Modded Minecraft": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Momodora 4 - Reverie Under the Moonlight": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Momodora Moonlit Farewell": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Monster Hunter Freedom Unite": {
+   "genres": [
+    "action",
+    "rpg"
+   ],
+   "wikidata": "Q378928",
+   "checked": "2026-11-03"
+  },
+  "Monster Hunter Rise": {
+   "genres": [
+    "action",
+    "rpg"
+   ],
+   "wikidata": "Q99441852",
+   "checked": "2026-11-03"
+  },
+  "Monster Hunter World": {
+   "genres": [
+    "action",
+    "rpg"
+   ],
+   "wikidata": "Q30252256",
+   "checked": "2026-11-03"
+  },
+  "Monster Sanctuary": {
+   "genres": [
+    "aventure",
+    "rpg"
+   ],
+   "wikidata": "Q68207044",
+   "checked": "2026-11-03"
+  },
+  "Moonlighter": {
+   "genres": [
+    "action",
+    "rpg",
+    "roguelike",
+    "simulation"
+   ],
+   "wikidata": "Q55641138",
+   "checked": "2026-11-03"
+  },
+  "Mortal Kombat: Shaolin Monks": {
+   "genres": [
+    "action",
+    "aventure"
+   ],
+   "wikidata": "Q1313975",
+   "checked": "2026-11-03"
+  },
+  "Mount And Blade Bannerlord": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Muck": {
+   "genres": [
+    "action",
+    "aventure",
+    "roguelike",
+    "survie"
+   ],
+   "wikidata": "Q107303071",
+   "checked": "2026-11-03"
+  },
+  "Muse Dash": {
+   "genres": [
+    "rythme"
+   ],
+   "wikidata": "Q55332309",
+   "checked": "2026-11-03"
+  },
+  "Naruto Clash of Ninja 2": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Neon White": {
+   "genres": [
+    "plateforme",
+    "tir"
+   ],
+   "wikidata": "Q105552404",
+   "checked": "2026-11-03"
+  },
+  "NEO: The World Ends with You": {
+   "genres": [
+    "action",
+    "rpg"
+   ],
+   "wikidata": "Q102356256",
+   "checked": "2026-11-03"
+  },
+  "New Super Mario Bros. DS": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Nicktoons: Battle for Volcano Island": {
+   "genres": [
+    "action",
+    "aventure"
+   ],
+   "wikidata": "Q7028543",
+   "checked": "2026-11-03"
+  },
+  "Nine Sols": {
+   "genres": [
+    "aventure",
+    "puzzle"
+   ],
+   "wikidata": "Q112662958",
+   "checked": "2026-11-03"
+  },
+  "Nodebuster": {
+   "genres": [
+    "strategie",
+    "simulation"
+   ],
+   "wikidata": "Q135058598",
+   "checked": "2026-11-03"
+  },
+  "Noita": {
+   "genres": [
+    "action",
+    "aventure",
+    "roguelike"
+   ],
+   "wikidata": "Q68680176",
+   "checked": "2026-11-03"
+  },
+  "Noita-Killsanity": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Nonograhmm": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Nonopelagram": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Northgard": {
+   "genres": [
+    "strategie"
+   ],
+   "wikidata": "Q28837221",
+   "checked": "2026-11-03"
+  },
+  "Nova Lands": {
+   "genres": [
+    "aventure",
+    "strategie",
+    "simulation"
+   ],
+   "wikidata": "Q120670215",
+   "checked": "2026-11-03"
+  },
+  "Nubby's Number Factory": {
+   "genres": [
+    "strategie"
+   ],
+   "wikidata": "Q133449253",
+   "checked": "2026-11-03"
+  },
+  "Nuclear Throne": {
+   "genres": [
+    "action",
+    "roguelike",
+    "tir"
+   ],
+   "wikidata": "Q21775834",
+   "checked": "2026-11-03"
+  },
+  "Oblivion Remastered": {
+   "genres": [
+    "action",
+    "rpg"
+   ],
+   "wikidata": "Q133882515",
+   "checked": "2026-11-03"
+  },
+  "Ocarina of Time": {
+   "genres": [
+    "action",
+    "aventure"
+   ],
+   "wikidata": "Q213911",
+   "checked": "2026-11-03"
+  },
+  "Oh So Hero!": {
+   "genres": [
+    "action",
+    "aventure",
+    "metroidvania"
+   ],
+   "wikidata": "Q126688531",
+   "checked": "2026-11-03"
+  },
+  "Okami HD": {
+   "genres": [
+    "action"
+   ],
+   "wikidata": "Q92203821",
+   "checked": "2026-11-03"
+  },
+  "Old School Runescape": {
+   "genres": [
+    "rpg"
+   ],
+   "wikidata": "Q44695301",
+   "checked": "2026-11-03"
+  },
+  "Once Upon a Katamari": {
+   "genres": [
+    "puzzle"
+   ],
+   "wikidata": "Q135527261",
+   "checked": "2026-11-03"
+  },
+  "One Must Fall: 2097": {
+   "genres": [
+    "combat"
+   ],
+   "wikidata": "Q1923697",
+   "checked": "2026-11-03"
+  },
+  "OpenRCT2": {
+   "genres": [
+    "simulation"
+   ],
+   "wikidata": "Q42005828",
+   "checked": "2026-11-03"
+  },
+  "OpenTTD": {
+   "genres": [
+    "simulation"
+   ],
+   "wikidata": "Q725120",
+   "checked": "2026-11-03"
+  },
+  "OpenTTD Cargolock": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Operation Octo": {
+   "genres": [
+    "action",
+    "strategie"
+   ],
+   "wikidata": "Q134965130",
+   "checked": "2026-11-03"
+  },
+  "Ori and the Blind Forest": {
+   "genres": [
+    "action",
+    "aventure",
+    "plateforme",
+    "metroidvania"
+   ],
+   "wikidata": "Q17513672",
+   "checked": "2026-11-03"
+  },
+  "Ori and the Will of the Wisps": {
+   "genres": [
+    "action",
+    "aventure",
+    "plateforme",
+    "metroidvania"
+   ],
+   "wikidata": "Q30325568",
+   "checked": "2026-11-03"
+  },
+  "osu!": {
+   "genres": [
+    "rythme"
+   ],
+   "wikidata": "Q307441",
+   "checked": "2026-11-03"
+  },
+  "Our Ascent": {
+   "genres": [
+    "aventure",
+    "rpg",
+    "strategie"
+   ],
+   "wikidata": "Q135061435",
+   "checked": "2026-11-03"
+  },
+  "Outer Wilds": {
+   "genres": [
+    "action",
+    "aventure"
+   ],
+   "wikidata": "Q19631660",
+   "checked": "2026-11-03"
+  },
+  "Outward: Definitive Edition": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Overcooked! 2": {
+   "genres": [
+    "simulation"
+   ],
+   "wikidata": "Q55713667",
+   "checked": "2026-11-03"
+  },
+  "Oxygen Not Included": {
+   "genres": [
+    "simulation",
+    "survie"
+   ],
+   "wikidata": "Q28232693",
+   "checked": "2026-11-03"
+  },
+  "Pac-Man World 2 Re-Pac": {
+   "genres": [
+    "plateforme"
+   ],
+   "wikidata": "Q135528850",
+   "checked": "2026-11-03"
+  },
+  "Paint": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Paper Mario": {
+   "genres": [
+    "plateforme",
+    "rpg"
+   ],
+   "wikidata": "Q149998",
+   "checked": "2026-11-03"
+  },
+  "Paper Mario: The Thousand-Year Door": {
+   "genres": [
+    "rpg"
+   ],
+   "wikidata": "Q1075255",
+   "checked": "2026-11-03"
+  },
+  "Paquerette Down The Bunburrows": {
+   "genres": [
+    "puzzle"
+   ],
+   "wikidata": "Q121141865",
+   "checked": "2026-11-03"
+  },
+  "Parkitect": {
+   "genres": [
+    "simulation"
+   ],
+   "wikidata": "Q21850283",
+   "checked": "2026-11-03"
+  },
+  "Path of Exile": {
+   "genres": [
+    "action",
+    "rpg"
+   ],
+   "wikidata": "Q3790509",
+   "checked": "2026-11-03"
+  },
+  "PAYDAY 2: Criminal Dawn": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "PEAK": {
+   "genres": [
+    "action",
+    "aventure",
+    "simulation"
+   ],
+   "wikidata": "Q135075109",
+   "checked": "2026-11-03"
+  },
+  "Peggle Deluxe": {
+   "genres": [
+    "puzzle"
+   ],
+   "wikidata": "Q2550114",
+   "checked": "2026-11-03"
+  },
+  "Peggle Nights": {
+   "genres": [
+    "puzzle"
+   ],
+   "wikidata": "Q512672",
+   "checked": "2026-11-03"
+  },
+  "Perfect Dark": {
+   "genres": [
+    "action",
+    "tir"
+   ],
+   "wikidata": "Q1408723",
+   "checked": "2026-11-03"
+  },
+  "Persona 5 Royal": {
+   "genres": [
+    "rpg"
+   ],
+   "wikidata": "Q63385672",
+   "checked": "2026-11-03"
+  },
+  "Phantasy Star II": {
+   "genres": [
+    "rpg"
+   ],
+   "wikidata": "Q721001",
+   "checked": "2026-11-03"
+  },
+  "Phoenotopia: Awakening": {
+   "genres": [
+    "metroidvania"
+   ],
+   "wikidata": "Q115038652",
+   "checked": "2026-11-03"
+  },
+  "Pikmin": {
+   "genres": [
+    "strategie"
+   ],
+   "wikidata": "Q1198484",
+   "checked": "2026-11-03"
+  },
+  "Pikmin 2": {
+   "genres": [
+    "strategie"
+   ],
+   "wikidata": "Q1196801",
+   "checked": "2026-11-03"
+  },
+  "Pikuniku": {
+   "genres": [
+    "puzzle"
+   ],
+   "wikidata": "Q60774329",
+   "checked": "2026-11-03"
+  },
+  "Pipistrello and the Cursed Yoyo": {
+   "genres": [
+    "action",
+    "aventure"
+   ],
+   "wikidata": "Q133272773",
+   "checked": "2026-11-03"
+  },
+  "PixelDraw": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Pizza Tower": {
+   "genres": [
+    "action",
+    "plateforme"
+   ],
+   "wikidata": "Q116590057",
+   "checked": "2026-11-03"
+  },
+  "Placid Plastic Duck Simulator": {
+   "genres": [
+    "simulation"
+   ],
+   "wikidata": "Q113434032",
+   "checked": "2026-11-03"
+  },
+  "Planet Zoo": {
+   "genres": [
+    "simulation"
+   ],
+   "wikidata": "Q63339904",
+   "checked": "2026-11-03"
+  },
+  "Plants vs. Zombies": {
+   "genres": [
+    "strategie"
+   ],
+   "wikidata": "Q379128",
+   "checked": "2026-11-03"
+  },
+  "PlateUp": {
+   "genres": [
+    "roguelike",
+    "simulation"
+   ],
+   "wikidata": "Q113468034",
+   "checked": "2026-11-03"
+  },
+  "Plok": {
+   "genres": [
+    "plateforme"
+   ],
+   "wikidata": "Q1807798",
+   "checked": "2026-11-03"
+  },
+  "Poco": {
+   "genres": [
+    "aventure"
+   ],
+   "wikidata": "Q135073807",
+   "checked": "2026-11-03"
+  },
+  "Pokémon Battle Revolution": {
+   "genres": [
+    "rpg",
+    "strategie"
+   ],
+   "wikidata": "Q765972",
+   "checked": "2026-11-03"
+  },
+  "Pokemon Black and White": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Pokemon Crystal": {
+   "genres": [
+    "rpg"
+   ],
+   "wikidata": "Q2351827",
+   "checked": "2026-11-03"
+  },
+  "Pokemon Emerald": {
+   "genres": [
+    "rpg"
+   ],
+   "wikidata": "Q2045645",
+   "checked": "2026-11-03"
+  },
+  "Pokemon FireRed and LeafGreen": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Pokemon HeartGold": {
+   "genres": [
+    "rpg"
+   ],
+   "wikidata": "Q50277131",
+   "checked": "2026-11-03"
+  },
+  "Pokemon Mystery Dungeon Explorers of Sky": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Pokemon Pinball Ruby & Sapphire": {
+   "genres": [],
+   "wikidata": "Q2517463",
+   "checked": "2026-11-03"
+  },
+  "Pokemon Platinum": {
+   "genres": [
+    "rpg"
+   ],
+   "wikidata": "Q1154227",
+   "checked": "2026-11-03"
+  },
+  "Pokemon Ranger (Quest)": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Pokemon Red and Blue": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Pokemon Snap": {
+   "genres": [
+    "tir"
+   ],
+   "wikidata": "Q1705294",
+   "checked": "2026-11-03"
+  },
+  "Pokemon Stadium": {
+   "genres": [
+    "strategie"
+   ],
+   "wikidata": "Q2034425",
+   "checked": "2026-11-03"
+  },
+  "Pokemon Trozei": {
+   "genres": [
+    "puzzle"
+   ],
+   "wikidata": "Q1113003",
+   "checked": "2026-11-03"
+  },
+  "Pokemon XD Gale of Darkness": {
+   "genres": [
+    "rpg"
+   ],
+   "wikidata": "Q2088354",
+   "checked": "2026-11-03"
+  },
+  "PokePark": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Pokepelago": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Portal 2": {
+   "genres": [
+    "puzzle",
+    "tir"
+   ],
+   "wikidata": "Q279446",
+   "checked": "2026-11-03"
+  },
+  "Powerwash Simulator": {
+   "genres": [
+    "simulation"
+   ],
+   "wikidata": "Q107303968",
+   "checked": "2026-11-03"
+  },
+  "Prisma Road": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Prodigal": {
+   "genres": [
+    "aventure",
+    "rpg"
+   ],
+   "wikidata": "Q114904663",
+   "checked": "2026-11-03"
+  },
+  "Pseudoregalia": {
+   "genres": [
+    "plateforme",
+    "metroidvania"
+   ],
+   "wikidata": "Q121141860",
+   "checked": "2026-11-03"
+  },
+  "Psychonauts": {
+   "genres": [
+    "aventure",
+    "plateforme"
+   ],
+   "wikidata": "Q1277009",
+   "checked": "2026-11-03"
+  },
+  "Puzzle Bobble 4": {
+   "genres": [
+    "puzzle"
+   ],
+   "wikidata": "Q2742912",
+   "checked": "2026-11-03"
+  },
+  "Quake 1": {
+   "genres": [
+    "tir"
+   ],
+   "wikidata": "Q217423",
+   "checked": "2026-11-03"
+  },
+  "Quest 64 Recompiled": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Q-UP": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Rabbit and Steel": {
+   "genres": [
+    "roguelike"
+   ],
+   "wikidata": "Q126013056",
+   "checked": "2026-11-03"
+  },
+  "Rabi-Ribi": {
+   "genres": [
+    "metroidvania"
+   ],
+   "wikidata": "Q60991351",
+   "checked": "2026-11-03"
+  },
+  "Raft": {
+   "genres": [
+    "aventure",
+    "simulation",
+    "survie"
+   ],
+   "wikidata": "Q55084497",
+   "checked": "2026-11-03"
+  },
+  "Rain World": {
+   "genres": [
+    "plateforme",
+    "metroidvania",
+    "survie"
+   ],
+   "wikidata": "Q24877479",
+   "checked": "2026-11-03"
+  },
+  "Ratchet and Clank": {
+   "genres": [
+    "plateforme",
+    "tir"
+   ],
+   "wikidata": "Q170003",
+   "checked": "2026-11-03"
+  },
+  "Ratchet and Clank 3": {
+   "genres": [
+    "plateforme",
+    "tir"
+   ],
+   "wikidata": "Q2292483",
+   "checked": "2026-11-03"
+  },
+  "Ratchet & Clank 2": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Ratchet & Clank: Size Matters": {
+   "genres": [
+    "plateforme"
+   ],
+   "wikidata": "Q2035941",
+   "checked": "2026-11-03"
+  },
+  "Rayman 2": {
+   "genres": [],
+   "wikidata": "Q104054000",
+   "checked": "2026-11-03"
+  },
+  "RE3Remake": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Red Faction: Guerrilla Re-Mars-tered": {
+   "genres": [
+    "tir"
+   ],
+   "wikidata": "Q62000428",
+   "checked": "2026-11-03"
+  },
+  "Refunct": {
+   "genres": [
+    "aventure",
+    "plateforme"
+   ],
+   "wikidata": "Q30071170",
+   "checked": "2026-11-03"
+  },
+  "R.E.P.O": {
+   "genres": [
+    "action"
+   ],
+   "wikidata": "Q133247101",
+   "checked": "2026-11-03"
+  },
+  "RE:RUN": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Resident Evil 2 Remake": {
+   "genres": [
+    "survie",
+    "horreur"
+   ],
+   "wikidata": "Q54920200",
+   "checked": "2026-11-03"
+  },
+  "Resident Evil 7": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Return of the Obra Dinn": {
+   "genres": [
+    "aventure",
+    "puzzle"
+   ],
+   "wikidata": "Q48987695",
+   "checked": "2026-11-03"
+  },
+  "Rhythm Tengoku": {
+   "genres": [
+    "rythme"
+   ],
+   "wikidata": "Q3108764",
+   "checked": "2026-11-03"
+  },
+  "Rift of the Necrodancer": {
+   "genres": [
+    "rythme"
+   ],
+   "wikidata": "Q113713963",
+   "checked": "2026-11-03"
+  },
+  "Rift Wizard": {
+   "genres": [
+    "roguelike"
+   ],
+   "wikidata": "Q122373055",
+   "checked": "2026-11-03"
+  },
+  "Rimworld": {
+   "genres": [
+    "simulation"
+   ],
+   "wikidata": "Q19581568",
+   "checked": "2026-11-03"
+  },
+  "Risk of Rain": {
+   "genres": [
+    "metroidvania",
+    "roguelike"
+   ],
+   "wikidata": "Q16267832",
+   "checked": "2026-11-03"
+  },
+  "Risk of Rain 2": {
+   "genres": [
+    "roguelike",
+    "tir"
+   ],
+   "wikidata": "Q62569141",
+   "checked": "2026-11-03"
+  },
+  "Road Trip Adventure": {
+   "genres": [
+    "course"
+   ],
+   "wikidata": "Q3434084",
+   "checked": "2026-11-03"
+  },
+  "Rogue Legacy": {
+   "genres": [
+    "plateforme",
+    "metroidvania",
+    "rpg",
+    "roguelike"
+   ],
+   "wikidata": "Q13752449",
+   "checked": "2026-11-03"
+  },
+  "Rogue Legacy 2": {
+   "genres": [
+    "plateforme",
+    "roguelike"
+   ],
+   "wikidata": "Q105047819",
+   "checked": "2026-11-03"
+  },
+  "Rune Factory 4": {
+   "genres": [
+    "action",
+    "rpg",
+    "simulation"
+   ],
+   "wikidata": "Q7379808",
+   "checked": "2026-11-03"
+  },
+  "Running with Rifles": {
+   "genres": [
+    "action"
+   ],
+   "wikidata": "Q19816285",
+   "checked": "2026-11-03"
+  },
+  "Rusted Moss": {
+   "genres": [
+    "action",
+    "metroidvania",
+    "tir"
+   ],
+   "wikidata": "Q122354136",
+   "checked": "2026-11-03"
+  },
+  "RWBY Grimm Eclipse": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Saints Row 2": {
+   "genres": [
+    "action",
+    "aventure"
+   ],
+   "wikidata": "Q2006628",
+   "checked": "2026-11-03"
+  },
+  "Santa": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Satisfactory": {
+   "genres": [
+    "tir",
+    "simulation"
+   ],
+   "wikidata": "Q62049495",
+   "checked": "2026-11-03"
+  },
+  "Saving Princess": {
+   "genres": [],
+   "wikidata": "Q131619560",
+   "checked": "2026-11-03"
+  },
+  "Sayonara Wild Hearts": {
+   "genres": [
+    "rythme"
+   ],
+   "wikidata": "Q76122450",
+   "checked": "2026-11-03"
+  },
+  "Schedule I": {
+   "genres": [
+    "simulation"
+   ],
+   "wikidata": "Q133695442",
+   "checked": "2026-11-03"
+  },
+  "Scooby-Doo! Night of 100 Frights": {
+   "genres": [
+    "plateforme"
+   ],
+   "wikidata": "Q2186477",
+   "checked": "2026-11-03"
+  },
+  "Scorpion Swamp": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Secret of Evermore": {
+   "genres": [
+    "action",
+    "rpg"
+   ],
+   "wikidata": "Q958761",
+   "checked": "2026-11-03"
+  },
+  "Seedling": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Sekiro: Shadows Die Twice": {
+   "genres": [
+    "action",
+    "aventure"
+   ],
+   "wikidata": "Q54906424",
+   "checked": "2026-11-03"
+  },
+  "Sentinels of the Multiverse": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "SEUM Speedrunners from Hell": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Severed Soul": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Severed Steel": {
+   "genres": [
+    "tir"
+   ],
+   "wikidata": "Q111974077",
+   "checked": "2026-11-03"
+  },
+  "Shadowgate 64": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Shadow Generations": {
+   "genres": [
+    "action",
+    "aventure",
+    "plateforme"
+   ],
+   "wikidata": "Q124395880",
+   "checked": "2026-11-03"
+  },
+  "Shadow The Hedgehog": {
+   "genres": [
+    "tir"
+   ],
+   "wikidata": "Q1140411",
+   "checked": "2026-11-03"
+  },
+  "shapez": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "shapez 2": {
+   "genres": [
+    "puzzle",
+    "simulation"
+   ],
+   "wikidata": "Q124262235",
+   "checked": "2026-11-03"
+  },
+  "Shellipelago": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Shining in the Darkness": {
+   "genres": [
+    "rpg"
+   ],
+   "wikidata": "Q2628345",
+   "checked": "2026-11-03"
+  },
+  "Ship of Harkinian": {
+   "genres": [
+    "aventure"
+   ],
+   "wikidata": "Q122235824",
+   "checked": "2026-11-03"
+  },
+  "Shivers": {
+   "genres": [
+    "aventure"
+   ],
+   "wikidata": "Q499257",
+   "checked": "2026-11-03"
+  },
+  "Shovel Knight Pocket Dungeon": {
+   "genres": [
+    "action",
+    "aventure",
+    "puzzle"
+   ],
+   "wikidata": "Q110082454",
+   "checked": "2026-11-03"
+  },
+  "Signalis": {
+   "genres": [
+    "tir",
+    "survie",
+    "horreur"
+   ],
+   "wikidata": "Q109828410",
+   "checked": "2026-11-03"
+  },
+  "Silver Daze": {
+   "genres": [
+    "aventure",
+    "rpg"
+   ],
+   "wikidata": "Q135052120",
+   "checked": "2026-11-03"
+  },
+  "Simon Tatham's Portable Puzzle Collection": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Simpsons Hit and Run": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Skul: The Hero Slayer": {
+   "genres": [
+    "action",
+    "plateforme",
+    "roguelike"
+   ],
+   "wikidata": "Q104882978",
+   "checked": "2026-11-03"
+  },
+  "Skyward Sword": {
+   "genres": [
+    "action",
+    "aventure"
+   ],
+   "wikidata": "Q861205",
+   "checked": "2026-11-03"
+  },
+  "Slay The Princess": {
+   "genres": [
+    "aventure",
+    "puzzle",
+    "horreur"
+   ],
+   "wikidata": "Q117472689",
+   "checked": "2026-11-03"
+  },
+  "Slay the Spire": {
+   "genres": [
+    "roguelike",
+    "cartes"
+   ],
+   "wikidata": "Q48078440",
+   "checked": "2026-11-03"
+  },
+  "Slay the Spire II": {
+   "genres": [
+    "roguelike",
+    "cartes"
+   ],
+   "wikidata": "Q125419457",
+   "checked": "2026-11-03"
+  },
+  "Slime Rancher": {
+   "genres": [
+    "action",
+    "aventure",
+    "puzzle",
+    "simulation"
+   ],
+   "wikidata": "Q22344828",
+   "checked": "2026-11-03"
+  },
+  "Slime Rancher 2": {
+   "genres": [
+    "aventure",
+    "puzzle",
+    "simulation"
+   ],
+   "wikidata": "Q107215354",
+   "checked": "2026-11-03"
+  },
+  "Sly 2: Band of Thieves": {
+   "genres": [
+    "plateforme"
+   ],
+   "wikidata": "Q1584849",
+   "checked": "2026-11-03"
+  },
+  "Sly 3: Honor Among Thieves": {
+   "genres": [
+    "plateforme"
+   ],
+   "wikidata": "Q1265969",
+   "checked": "2026-11-03"
+  },
+  "Sly Cooper and the Thievius Raccoonus": {
+   "genres": [
+    "plateforme"
+   ],
+   "wikidata": "Q40627",
+   "checked": "2026-11-03"
+  },
+  "SM64: Spicy Mycena 64": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Smushi Come Home": {
+   "genres": [
+    "aventure"
+   ],
+   "wikidata": "Q124801974",
+   "checked": "2026-11-03"
+  },
+  "SMZ3": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Sneak King": {
+   "genres": [],
+   "wikidata": "Q7547453",
+   "checked": "2026-11-03"
+  },
+  "Sonic Advance 2": {
+   "genres": [
+    "plateforme"
+   ],
+   "wikidata": "Q2748684",
+   "checked": "2026-11-03"
+  },
+  "Sonic Adventure 2 Battle": {
+   "genres": [
+    "plateforme"
+   ],
+   "wikidata": "Q12220750",
+   "checked": "2026-11-03"
+  },
+  "Sonic Adventure DX": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Sonic Battle": {
+   "genres": [
+    "aventure",
+    "combat"
+   ],
+   "wikidata": "Q610923",
+   "checked": "2026-11-03"
+  },
+  "Sonic Colours (DS)": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Sonic Colours (Wii)": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Sonic Dreams Collection": {
+   "genres": [],
+   "wikidata": "Q20899594",
+   "checked": "2026-11-03"
+  },
+  "Sonic Frontiers": {
+   "genres": [
+    "action",
+    "aventure",
+    "plateforme"
+   ],
+   "wikidata": "Q109502429",
+   "checked": "2026-11-03"
+  },
+  "Sonic Heroes": {
+   "genres": [
+    "plateforme"
+   ],
+   "wikidata": "Q1068962",
+   "checked": "2026-11-03"
+  },
+  "Sonic Riders": {
+   "genres": [
+    "course"
+   ],
+   "wikidata": "Q683373",
+   "checked": "2026-11-03"
+  },
+  "Sonic Rush": {
+   "genres": [
+    "action",
+    "plateforme"
+   ],
+   "wikidata": "Q1863895",
+   "checked": "2026-11-03"
+  },
+  "Sonic the Hedgehog 1": {
+   "genres": [
+    "plateforme"
+   ],
+   "wikidata": "Q37123",
+   "checked": "2026-11-03"
+  },
+  "Soul Blazer": {
+   "genres": [
+    "action",
+    "rpg"
+   ],
+   "wikidata": "Q162562",
+   "checked": "2026-11-03"
+  },
+  "Spark the Electric Jester 3": {
+   "genres": [
+    "action",
+    "plateforme"
+   ],
+   "wikidata": "Q116690710",
+   "checked": "2026-11-03"
+  },
+  "Spelunky 2": {
+   "genres": [
+    "roguelike"
+   ],
+   "wikidata": "Q98168943",
+   "checked": "2026-11-03"
+  },
+  "Spinball": {
+   "genres": [],
+   "wikidata": "Q122347359",
+   "checked": "2026-11-03"
+  },
+  "Spirit Island": {
+   "genres": [
+    "strategie"
+   ],
+   "wikidata": "Q113404591",
+   "checked": "2026-11-03"
+  },
+  "Spirit Tracks": {
+   "genres": [
+    "action",
+    "aventure"
+   ],
+   "wikidata": "Q868545",
+   "checked": "2026-11-03"
+  },
+  "Spirit Valley": {
+   "genres": [
+    "aventure",
+    "rpg",
+    "strategie"
+   ],
+   "wikidata": "Q132732692",
+   "checked": "2026-11-03"
+  },
+  "Splasher": {
+   "genres": [
+    "plateforme"
+   ],
+   "wikidata": "Q29962229",
+   "checked": "2026-11-03"
+  },
+  "Spyro 2": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Spyro 3": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Spyro: A Hero's Tail": {
+   "genres": [
+    "plateforme"
+   ],
+   "wikidata": "Q943546",
+   "checked": "2026-11-03"
+  },
+  "Stacklands": {
+   "genres": [
+    "strategie",
+    "simulation",
+    "cartes"
+   ],
+   "wikidata": "Q111536196",
+   "checked": "2026-11-03"
+  },
+  "Starcraft 2": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Stardew Valley": {
+   "genres": [
+    "rpg",
+    "simulation"
+   ],
+   "wikidata": "Q23013817",
+   "checked": "2026-11-03"
+  },
+  "Star Fox 64": {
+   "genres": [
+    "tir"
+   ],
+   "wikidata": "Q1141963",
+   "checked": "2026-11-03"
+  },
+  "Star Fox Adventures": {
+   "genres": [
+    "action",
+    "aventure"
+   ],
+   "wikidata": "Q2578717",
+   "checked": "2026-11-03"
+  },
+  "Starship Titanic": {
+   "genres": [
+    "aventure"
+   ],
+   "wikidata": "Q1065955",
+   "checked": "2026-11-03"
+  },
+  "Star Wars Episode I Racer": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "SteamWorld Dig 2": {
+   "genres": [
+    "metroidvania"
+   ],
+   "wikidata": "Q30632960",
+   "checked": "2026-11-03"
+  },
+  "Stella": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Sternly Worded Adventures": {
+   "genres": [
+    "rpg",
+    "strategie"
+   ],
+   "wikidata": "Q130731798",
+   "checked": "2026-11-03"
+  },
+  "Stick Ranger": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Stray": {
+   "genres": [
+    "aventure",
+    "puzzle"
+   ],
+   "wikidata": "Q96247255",
+   "checked": "2026-11-03"
+  },
+  "Streets of Rage": {
+   "genres": [
+    "action"
+   ],
+   "wikidata": "Q1143285",
+   "checked": "2026-11-03"
+  },
+  "Streets of Rogue": {
+   "genres": [
+    "action",
+    "aventure",
+    "rpg",
+    "roguelike"
+   ],
+   "wikidata": "Q31625385",
+   "checked": "2026-11-03"
+  },
+  "Subnautica": {
+   "genres": [
+    "action",
+    "aventure",
+    "survie"
+   ],
+   "wikidata": "Q21039915",
+   "checked": "2026-11-03"
+  },
+  "Suikapelago": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Super Cat Planet": {
+   "genres": [
+    "plateforme"
+   ],
+   "wikidata": "Q125911114",
+   "checked": "2026-11-03"
+  },
+  "Super Hexagon": {
+   "genres": [
+    "action"
+   ],
+   "wikidata": "Q218568",
+   "checked": "2026-11-03"
+  },
+  "SUPERHOT": {
+   "genres": [
+    "tir"
+   ],
+   "wikidata": "Q16267745",
+   "checked": "2026-11-03"
+  },
+  "Super Junkoid": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Super Mario 64": {
+   "genres": [
+    "plateforme"
+   ],
+   "wikidata": "Q216995",
+   "checked": "2026-11-03"
+  },
+  "Super Mario Galaxy": {
+   "genres": [
+    "plateforme"
+   ],
+   "wikidata": "Q170489",
+   "checked": "2026-11-03"
+  },
+  "Super Mario Land": {
+   "genres": [
+    "plateforme"
+   ],
+   "wikidata": "Q647249",
+   "checked": "2026-11-03"
+  },
+  "Super Mario Land 2": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Super Mario Sunshine": {
+   "genres": [
+    "plateforme"
+   ],
+   "wikidata": "Q639955",
+   "checked": "2026-11-03"
+  },
+  "Super Mario World": {
+   "genres": [
+    "plateforme"
+   ],
+   "wikidata": "Q853143",
+   "checked": "2026-11-03"
+  },
+  "Supermarket Simulator": {
+   "genres": [],
+   "wikidata": "Q122821665",
+   "checked": "2026-11-03"
+  },
+  "Super Meat Boy": {
+   "genres": [
+    "plateforme"
+   ],
+   "wikidata": "Q1784048",
+   "checked": "2026-11-03"
+  },
+  "Super Metroid": {
+   "genres": [
+    "action",
+    "aventure",
+    "metroidvania",
+    "tir"
+   ],
+   "wikidata": "Q1194825",
+   "checked": "2026-11-03"
+  },
+  "Super Smash Bros. Brawl - The Subspace Emissary": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Symphony of the Night": {
+   "genres": [
+    "action",
+    "metroidvania",
+    "rpg"
+   ],
+   "wikidata": "Q2007022",
+   "checked": "2026-11-03"
+  },
+  "Symphony of the Night (Recomp)": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Taz Wanted": {
+   "genres": [
+    "action",
+    "aventure"
+   ],
+   "wikidata": "Q671185",
+   "checked": "2026-11-03"
+  },
+  "TCG Card Shop Simulator": {
+   "genres": [
+    "simulation"
+   ],
+   "wikidata": "Q130320278",
+   "checked": "2026-11-03"
+  },
+  "Team Fortress 2 Mann vs Machine": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Teardown": {
+   "genres": [
+    "action",
+    "puzzle",
+    "bac-a-sable"
+   ],
+   "wikidata": "Q82791936",
+   "checked": "2026-11-03"
+  },
+  "TerraNil": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Terraria": {
+   "genres": [
+    "action",
+    "aventure",
+    "rpg",
+    "bac-a-sable"
+   ],
+   "wikidata": "Q332697",
+   "checked": "2026-11-03"
+  },
+  "Tetris Attack": {
+   "genres": [
+    "puzzle"
+   ],
+   "wikidata": "Q2316943",
+   "checked": "2026-11-03"
+  },
+  "Tevi": {
+   "genres": [
+    "metroidvania"
+   ],
+   "wikidata": "Q118137183",
+   "checked": "2026-11-03"
+  },
+  "The Binding of Isaac Repentance": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "The Escapists 2": {
+   "genres": [
+    "rpg",
+    "strategie",
+    "simulation"
+   ],
+   "wikidata": "Q43154153",
+   "checked": "2026-11-03"
+  },
+  "The Forest's End": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "The Grinch": {
+   "genres": [
+    "action",
+    "aventure"
+   ],
+   "wikidata": "Q7738299",
+   "checked": "2026-11-03"
+  },
+  "The Guardian Legend": {
+   "genres": [
+    "action",
+    "aventure",
+    "tir"
+   ],
+   "wikidata": "Q1950716",
+   "checked": "2026-11-03"
+  },
+  "The Henry Stickmin Collection": {
+   "genres": [
+    "aventure"
+   ],
+   "wikidata": "Q98323514",
+   "checked": "2026-11-03"
+  },
+  "The Legend of Dragoon": {
+   "genres": [
+    "rpg"
+   ],
+   "wikidata": "Q2562250",
+   "checked": "2026-11-03"
+  },
+  "The Legend of Zelda": {
+   "genres": [
+    "action",
+    "aventure"
+   ],
+   "wikidata": "Q12395",
+   "checked": "2026-11-03"
+  },
+  "The Legend of Zelda: A Link to the Past": {
+   "genres": [
+    "action",
+    "aventure",
+    "rpg"
+   ],
+   "wikidata": "Q370055",
+   "checked": "2026-11-03"
+  },
+  "The Legend of Zelda: Four Swords Adventures": {
+   "genres": [
+    "action",
+    "aventure"
+   ],
+   "wikidata": "Q964997",
+   "checked": "2026-11-03"
+  },
+  "The Legend of Zelda - Oracle of Ages": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "The Legend of Zelda - Oracle of Seasons": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "The Legend of Zelda - Phantom Hourglass": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "The Magical Quest Starring Mickey Mouse": {
+   "genres": [],
+   "wikidata": "Q97656421",
+   "checked": "2026-11-03"
+  },
+  "The Messenger": {
+   "genres": [
+    "aventure"
+   ],
+   "wikidata": "Q3264078",
+   "checked": "2026-11-03"
+  },
+  "The Minish Cap": {
+   "genres": [
+    "rpg"
+   ],
+   "wikidata": "Q474798",
+   "checked": "2026-11-03"
+  },
+  "The Murder of Sonic the Hedgehog": {
+   "genres": [
+    "aventure"
+   ],
+   "wikidata": "Q117353776",
+   "checked": "2026-11-03"
+  },
+  "The Sims 4": {
+   "genres": [
+    "simulation"
+   ],
+   "wikidata": "Q12579896",
+   "checked": "2026-11-03"
+  },
+  "The Talos Principle Reawakened": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "The WereCleaner": {
+   "genres": [
+    "action",
+    "strategie"
+   ],
+   "wikidata": "Q126278198",
+   "checked": "2026-11-03"
+  },
+  "The Wind Waker": {
+   "genres": [
+    "action",
+    "aventure"
+   ],
+   "wikidata": "Q852563",
+   "checked": "2026-11-03"
+  },
+  "The Wind Waker HD": {
+   "genres": [
+    "action",
+    "aventure"
+   ],
+   "wikidata": "Q14900378",
+   "checked": "2026-11-03"
+  },
+  "The Witness": {
+   "genres": [
+    "puzzle"
+   ],
+   "wikidata": "Q1711359",
+   "checked": "2026-11-03"
+  },
+  "Three Goblin Wobblin": {
+   "genres": [
+    "action",
+    "aventure"
+   ],
+   "wikidata": "Q126697272",
+   "checked": "2026-11-03"
+  },
+  "Time Rifters": {
+   "genres": [
+    "action"
+   ],
+   "wikidata": "Q124074997",
+   "checked": "2026-11-03"
+  },
+  "Timespinner": {
+   "genres": [
+    "action",
+    "aventure",
+    "metroidvania"
+   ],
+   "wikidata": "Q61613573",
+   "checked": "2026-11-03"
+  },
+  "TimeSplitters 2": {
+   "genres": [
+    "tir"
+   ],
+   "wikidata": "Q282008",
+   "checked": "2026-11-03"
+  },
+  "TimeSplitters Future Perfect": {
+   "genres": [
+    "tir"
+   ],
+   "wikidata": "Q2528180",
+   "checked": "2026-11-03"
+  },
+  "ToeJam and Earl": {
+   "genres": [
+    "action",
+    "aventure"
+   ],
+   "wikidata": "Q3107412",
+   "checked": "2026-11-03"
+  },
+  "TOEM: A Photo Adventure": {
+   "genres": [],
+   "wikidata": "Q110468743",
+   "checked": "2026-11-03"
+  },
+  "Tomba!": {
+   "genres": [
+    "metroidvania"
+   ],
+   "wikidata": "Q2713506",
+   "checked": "2026-11-03"
+  },
+  "Tony Hawk's American Wasteland": {
+   "genres": [
+    "sport"
+   ],
+   "wikidata": "Q2005546",
+   "checked": "2026-11-03"
+  },
+  "Touhou Eiyashou ~ Imperishable Night": {
+   "genres": [
+    "tir"
+   ],
+   "wikidata": "Q1042155",
+   "checked": "2026-11-03"
+  },
+  "Touhou Fuujinroku ~ Mountain of Faith": {
+   "genres": [
+    "tir"
+   ],
+   "wikidata": "Q1045759",
+   "checked": "2026-11-03"
+  },
+  "Touhou Koumakyou ~ the Embodiment of Scarlet Devil": {
+   "genres": [],
+   "wikidata": "Q1075123",
+   "checked": "2026-11-03"
+  },
+  "Touhou Youyoumu ~ Perfect Cherry Blossom": {
+   "genres": [],
+   "wikidata": "Q1042119",
+   "checked": "2026-11-03"
+  },
+  "Toy Story 2": {
+   "genres": [],
+   "wikidata": "Q113793937",
+   "checked": "2026-11-03"
+  },
+  "Toy Story Racer": {
+   "genres": [
+    "course"
+   ],
+   "wikidata": "Q2447854",
+   "checked": "2026-11-03"
+  },
+  "Trackmania": {
+   "genres": [
+    "course"
+   ],
+   "wikidata": "Q3997141",
+   "checked": "2026-11-03"
+  },
+  "Trails Beyond the Horizon": {
+   "genres": [
+    "rpg"
+   ],
+   "wikidata": "Q123975105",
+   "checked": "2026-11-03"
+  },
+  "Trails in the Sky the 3rd": {
+   "genres": [
+    "rpg"
+   ],
+   "wikidata": "Q18154328",
+   "checked": "2026-11-03"
+  },
+  "TUNIC": {
+   "genres": [
+    "action",
+    "aventure"
+   ],
+   "wikidata": "Q55636303",
+   "checked": "2026-11-03"
+  },
+  "TurnipBoy": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Turok 2": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Twilight Princess": {
+   "genres": [
+    "action",
+    "aventure"
+   ],
+   "wikidata": "Q735613",
+   "checked": "2026-11-03"
+  },
+  "Twisty Cube": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Tyrian": {
+   "genres": [
+    "tir"
+   ],
+   "wikidata": "Q1152304",
+   "checked": "2026-11-03"
+  },
+  "Ty the Tasmanian Tiger": {
+   "genres": [
+    "plateforme"
+   ],
+   "wikidata": "Q2645302",
+   "checked": "2026-11-03"
+  },
+  "Ty the Tasmanian Tiger 2": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Ty the Tasmanian Tiger 3": {
+   "genres": [
+    "action",
+    "aventure"
+   ],
+   "wikidata": "Q134965606",
+   "checked": "2026-11-03"
+  },
+  "UFO 50": {
+   "genres": [],
+   "wikidata": "Q116986156",
+   "checked": "2026-11-03"
+  },
+  "Ultimate Custom Night": {
+   "genres": [
+    "survie",
+    "horreur"
+   ],
+   "wikidata": "Q55251580",
+   "checked": "2026-11-03"
+  },
+  "ULTRAKILL": {
+   "genres": [
+    "tir"
+   ],
+   "wikidata": "Q107921253",
+   "checked": "2026-11-03"
+  },
+  "UNBEATABLE Arcade": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Uncanny Cat Golf": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Undertale": {
+   "genres": [
+    "rpg",
+    "puzzle"
+   ],
+   "wikidata": "Q21039924",
+   "checked": "2026-11-03"
+  },
+  "Undertale Yellow": {
+   "genres": [
+    "rpg"
+   ],
+   "wikidata": "Q123755676",
+   "checked": "2026-11-03"
+  },
+  "Unfair Flips": {
+   "genres": [
+    "simulation"
+   ],
+   "wikidata": "Q136432292",
+   "checked": "2026-11-03"
+  },
+  "Untitled Goose Game": {
+   "genres": [
+    "puzzle"
+   ],
+   "wikidata": "Q59618073",
+   "checked": "2026-11-03"
+  },
+  "Vacation Simulator": {
+   "genres": [
+    "simulation"
+   ],
+   "wikidata": "Q86835751",
+   "checked": "2026-11-03"
+  },
+  "Valheim": {
+   "genres": [
+    "survie"
+   ],
+   "wikidata": "Q105100327",
+   "checked": "2026-11-03"
+  },
+  "Vampire Survivors": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "vardrain--": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Vault Hunters": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Vertical Drop Heroes HD": {
+   "genres": [
+    "action",
+    "rpg"
+   ],
+   "wikidata": "Q65113176",
+   "checked": "2026-11-03"
+  },
+  "Very Very Valet": {
+   "genres": [],
+   "wikidata": "Q106967452",
+   "checked": "2026-11-03"
+  },
+  "Vespadian": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Viscera Cleanup Detail": {
+   "genres": [
+    "simulation"
+   ],
+   "wikidata": "Q17049411",
+   "checked": "2026-11-03"
+  },
+  "Vision Soft Reset": {
+   "genres": [
+    "action",
+    "aventure"
+   ],
+   "wikidata": "Q122377340",
+   "checked": "2026-11-03"
+  },
+  "Voidloop": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Void Sols": {
+   "genres": [
+    "action",
+    "aventure",
+    "rpg"
+   ],
+   "wikidata": "Q135047081",
+   "checked": "2026-11-03"
+  },
+  "Void Stranger": {
+   "genres": [
+    "puzzle"
+   ],
+   "wikidata": "Q122234645",
+   "checked": "2026-11-03"
+  },
+  "Voltorb Flip": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "VRChat": {
+   "genres": [],
+   "wikidata": "Q47044629",
+   "checked": "2026-11-03"
+  },
+  "V Rising": {
+   "genres": [
+    "survie"
+   ],
+   "wikidata": "Q112055534",
+   "checked": "2026-11-03"
+  },
+  "VVVVVV": {
+   "genres": [
+    "plateforme",
+    "puzzle"
+   ],
+   "wikidata": "Q5766",
+   "checked": "2026-11-03"
+  },
+  "Warcraft 3": {
+   "genres": [
+    "strategie"
+   ],
+   "wikidata": "Q207948",
+   "checked": "2026-11-03"
+  },
+  "Wargroove": {
+   "genres": [],
+   "wikidata": "Q30321596",
+   "checked": "2026-11-03"
+  },
+  "Wargroove 2": {
+   "genres": [
+    "strategie"
+   ],
+   "wikidata": "Q117230309",
+   "checked": "2026-11-03"
+  },
+  "Wario Land": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Wario Land 3": {
+   "genres": [
+    "plateforme",
+    "metroidvania"
+   ],
+   "wikidata": "Q2135136",
+   "checked": "2026-11-03"
+  },
+  "Wario Land 4": {
+   "genres": [
+    "plateforme"
+   ],
+   "wikidata": "Q2357489",
+   "checked": "2026-11-03"
+  },
+  "WarioWare, Inc. - Mega Microgame$!": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Watery Words": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "WEBFISHING": {
+   "genres": [
+    "simulation"
+   ],
+   "wikidata": "Q130558780",
+   "checked": "2026-11-03"
+  },
+  "We Love Katamari Reroll": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "West of Loathing": {
+   "genres": [
+    "rpg"
+   ],
+   "wikidata": "Q37627210",
+   "checked": "2026-11-03"
+  },
+  "White Knuckle": {
+   "genres": [
+    "aventure",
+    "plateforme",
+    "roguelike",
+    "horreur"
+   ],
+   "wikidata": "Q130723450",
+   "checked": "2026-11-03"
+  },
+  "Widget Inc": {
+   "genres": [
+    "strategie",
+    "simulation"
+   ],
+   "wikidata": "Q135061180",
+   "checked": "2026-11-03"
+  },
+  "Wikipelago": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Witchspring R": {
+   "genres": [
+    "aventure",
+    "rpg"
+   ],
+   "wikidata": "Q123244352",
+   "checked": "2026-11-03"
+  },
+  "Wizard of Legend": {
+   "genres": [
+    "action",
+    "rpg",
+    "roguelike"
+   ],
+   "wikidata": "Q53709702",
+   "checked": "2026-11-03"
+  },
+  "Wordipelago": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "WordSearch": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Wynncraft": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "XCOM 2 War of the Chosen": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Xenoblade X": {
+   "genres": [
+    "action",
+    "rpg"
+   ],
+   "wikidata": "Q15614860",
+   "checked": "2026-11-03"
+  },
+  "Yacht Dice": {
+   "genres": [
+    "strategie",
+    "simulation"
+   ],
+   "wikidata": "Q122347808",
+   "checked": "2026-11-03"
+  },
+  "Yacht Dice Bliss": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "YARG": {
+   "genres": [
+    "action"
+   ],
+   "wikidata": "Q122312183",
+   "checked": "2026-11-03"
+  },
+  "YARGGuitarHero1": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Yarimono": {
+   "genres": [
+    "aventure",
+    "rpg"
+   ],
+   "wikidata": "Q135045993",
+   "checked": "2026-11-03"
+  },
+  "YAYARG": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Yellow Taxi Goes Vroom": {
+   "genres": [
+    "plateforme"
+   ],
+   "wikidata": "Q124713823",
+   "checked": "2026-11-03"
+  },
+  "YOHANE THE PARHELION -BLAZE in the DEEPBLUE-": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Yooka-Replaylee": {
+   "genres": [
+    "plateforme"
+   ],
+   "wikidata": "Q130638485",
+   "checked": "2026-11-03"
+  },
+  "Yoshi's Island": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "You Have to Win the Game": {
+   "genres": [
+    "plateforme"
+   ],
+   "wikidata": "Q73293579",
+   "checked": "2026-11-03"
+  },
+  "Ys Origin": {
+   "genres": [
+    "action",
+    "rpg"
+   ],
+   "wikidata": "Q843090",
+   "checked": "2026-11-03"
+  },
+  "Yu-Gi-Oh! 2006": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Yu-Gi-Oh! Dungeon Dice Monsters": {
+   "genres": [],
+   "wikidata": "Q3573059",
+   "checked": "2026-11-03"
+  },
+  "Yu-Gi-Oh! Forbidden Memories": {
+   "genres": [
+    "strategie"
+   ],
+   "wikidata": "Q2568028",
+   "checked": "2026-11-03"
+  },
+  "Yu-Gi-Oh! World Championship 2008": {
+   "genres": [
+    "cartes"
+   ],
+   "wikidata": "Q3573070",
+   "checked": "2026-11-03"
+  },
+  "Zelda's Adventure GDX": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Zillion": {
+   "genres": [
+    "metroidvania"
+   ],
+   "wikidata": "Q3282959",
+   "checked": "2026-11-03"
+  },
+  "Zoominoes": {
+   "genres": [
+    "strategie"
+   ],
+   "wikidata": "Q135064433",
+   "checked": "2026-11-03"
+  },
+  "Zork Grand Inquisitor": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Zuma Deluxe": {
+   "genres": [
+    "puzzle"
+   ],
+   "wikidata": "Q605842",
+   "checked": "2026-11-03"
+  }
+ }
+}
