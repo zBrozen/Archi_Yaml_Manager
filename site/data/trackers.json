@@ -464,10 +464,7 @@
   "Final Fantasy Mystic Quest": [
    {
     "page": "https://github.com/D-Skye/ffmq-ap-poptracker/releases/latest",
-    "repo": "D-Skye/ffmq-ap-poptracker",
-    "tag": "v0.6.0",
-    "asset": "ffmq-ap.zip",
-    "url": "https://github.com/D-Skye/ffmq-ap-poptracker/releases/download/v0.6.0/ffmq-ap.zip"
+    "repo": "D-Skye/ffmq-ap-poptracker"
    }
   ],
   "Final Fantasy X": [

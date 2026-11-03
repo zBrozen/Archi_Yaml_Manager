@@ -2180,6 +2180,14 @@
    "wikidata": "Q65050157",
    "checked": "2026-11-03"
   },
+  "Loddlenaut": {
+   "genres": [
+    "aventure",
+    "simulation"
+   ],
+   "wikidata": "Q124050111",
+   "checked": "2026-11-03"
+  },
   "Look Outside": {
    "genres": [
     "aventure",
@@ -3302,6 +3310,14 @@
   "RE3Remake": {
    "genres": [],
    "wikidata": null,
+   "checked": "2026-11-03"
+  },
+  "Recettear: An Item Shop's Tale": {
+   "genres": [
+    "rpg",
+    "simulation"
+   ],
+   "wikidata": "Q5962782",
    "checked": "2026-11-03"
   },
   "Red Faction: Guerrilla Re-Mars-tered": {
