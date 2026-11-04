@@ -1,6 +1,6 @@
 {
  "ap_version": "0.6.8",
- "generated_at": "2026-11-03T18:56:37+00:00",
+ "generated_at": "2026-11-04T12:53:41+00:00",
  "games": [
   {
    "game": "2048",
@@ -912,7 +912,7 @@
    "file": "games/candy-box-2.json",
    "source": "custom",
    "apworld": "candybox2.apworld",
-   "world_version": "1.20260822.1",
+   "world_version": "1.20261104.1",
    "guides": "guides/candy-box-2.json",
    "sheet": {
     "game": "Candy Box 2",
@@ -1013,7 +1013,7 @@
    "file": "games/casualties-unknown.json",
    "source": "custom",
    "apworld": "casualtiesunknown.apworld",
-   "world_version": "0.12.1",
+   "world_version": "0.12.3",
    "guides": "guides/casualties-unknown.json",
    "sheet": {
     "game": "Casualties: Unknown (Scav Prototype Demo)",
@@ -1460,7 +1460,7 @@
    "file": "games/crosscode.json",
    "source": "custom",
    "apworld": "crosscode.apworld",
-   "world_version": "0.9.8",
+   "world_version": "0.10.0",
    "guides": "guides/crosscode.json",
    "sheet": {
     "game": "CrossCode",
@@ -1961,7 +1961,7 @@
    "file": "games/dragon-quest-iii-hd-2d-remake.json",
    "source": "custom",
    "apworld": "dq3.apworld",
-   "world_version": "0.4.1",
+   "world_version": "0.5.0",
    "guides": "guides/dragon-quest-iii-hd-2d-remake.json",
    "sheet": {
     "game": "Dragon Quest III HD-2D Remake",
@@ -2882,7 +2882,7 @@
    "file": "games/hatsune-miku-project-diva-mega-mix.json",
    "source": "custom",
    "apworld": "megamix.apworld",
-   "world_version": "1.5.3",
+   "world_version": "1.5.4",
    "guides": "guides/hatsune-miku-project-diva-mega-mix.json",
    "sheet": {
     "game": "Hatsune Miku: Project Diva Megamix+",
@@ -4473,7 +4473,7 @@
    "file": "games/mortal-kombat-shaolin-monks.json",
    "source": "custom",
    "apworld": "mksm.apworld",
-   "world_version": "1.1.1",
+   "world_version": "1.2.0",
    "guides": "guides/mortal-kombat-shaolin-monks.json",
    "sheet": {
     "game": "Mortal Kombat: Shaolin Monks",
@@ -4774,6 +4774,18 @@
    "guides": "guides/one-must-fall-2097.json",
    "sheet": {
     "game": "One Must Fall: 2097",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "One Step From Eden",
+   "file": "games/one-step-from-eden.json",
+   "source": "custom",
+   "apworld": "osfe.apworld",
+   "world_version": "0.1.0",
+   "guides": "guides/one-step-from-eden.json",
+   "sheet": {
+    "game": "One Step From Eden",
     "stability": "Unstable"
    }
   },
@@ -6823,7 +6835,7 @@
    "file": "games/steamworld-dig-2.json",
    "source": "custom",
    "apworld": "swd2.apworld",
-   "world_version": "0.2.0",
+   "world_version": "0.3.0",
    "guides": "guides/steamworld-dig-2.json",
    "sheet": {
     "game": "SteamWorld Dig 2",
@@ -6859,7 +6871,7 @@
    "file": "games/stick-ranger.json",
    "source": "custom",
    "apworld": "stick_ranger.apworld",
-   "world_version": "1.8.12",
+   "world_version": "1.8.13",
    "guides": "guides/stick-ranger.json",
    "sheet": {
     "game": "Stick Ranger",
@@ -7100,7 +7112,7 @@
    "file": "games/symphony-of-the-night-recomp.json",
    "source": "custom",
    "apworld": "sotn_recomp.apworld",
-   "world_version": "0.3.3",
+   "world_version": "0.5.3",
    "guides": "guides/symphony-of-the-night-recomp.json",
    "sheet": {
     "game": "Castlevania: Symphony of the Night (SymphonyRecomp)",
@@ -7354,7 +7366,7 @@
    "file": "games/the-legend-of-zelda-four-swords-adventures.json",
    "source": "custom",
    "apworld": "ZeldaFSA.apworld",
-   "world_version": "0.0.10",
+   "world_version": "0.1.0",
    "guides": "guides/the-legend-of-zelda-four-swords-adventures.json",
    "sheet": {
     "game": "The Legend of Zelda: Four Swords Adventure",
@@ -7633,7 +7645,7 @@
    "file": "games/toy-story-2.json",
    "source": "custom",
    "apworld": "toystory2.apworld",
-   "world_version": "3.0.0",
+   "world_version": "3.1.1",
    "guides": "guides/toy-story-2.json",
    "sheet": {
     "game": "Toy Story 2 (PS1)",
@@ -8453,7 +8465,7 @@
    "file": "games/yohane-the-parhelion-blaze-in-the-deepblue.json",
    "source": "custom",
    "apworld": "yohane_deepblue.apworld",
-   "world_version": "0.2.5",
+   "world_version": "0.2.6",
    "guides": "guides/yohane-the-parhelion-blaze-in-the-deepblue.json",
    "sheet": {
     "game": "YOHANE THE PARHELION -BLAZE in the DEEPBLUE-",
