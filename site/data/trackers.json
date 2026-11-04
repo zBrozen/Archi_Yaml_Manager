@@ -464,7 +464,10 @@
   "Final Fantasy Mystic Quest": [
    {
     "page": "https://github.com/D-Skye/ffmq-ap-poptracker/releases/latest",
-    "repo": "D-Skye/ffmq-ap-poptracker"
+    "repo": "D-Skye/ffmq-ap-poptracker",
+    "tag": "v0.6.0",
+    "asset": "ffmq-ap.zip",
+    "url": "https://github.com/D-Skye/ffmq-ap-poptracker/releases/download/v0.6.0/ffmq-ap.zip"
    }
   ],
   "Final Fantasy X": [
@@ -585,9 +588,9 @@
    {
     "page": "https://github.com/culk/Kingdom-Hearts-FM-AP-Tracker/releases",
     "repo": "culk/Kingdom-Hearts-FM-AP-Tracker",
-    "tag": "v1.5.2",
+    "tag": "v1.6.0",
     "asset": "kh1_ap_tracker.zip",
-    "url": "https://github.com/culk/Kingdom-Hearts-FM-AP-Tracker/releases/download/v1.5.2/kh1_ap_tracker.zip"
+    "url": "https://github.com/culk/Kingdom-Hearts-FM-AP-Tracker/releases/download/v1.6.0/kh1_ap_tracker.zip"
    }
   ],
   "Kingdom Hearts 2": [
@@ -1063,9 +1066,9 @@
    {
     "page": "https://github.com/SomeLazyGamer/RaC-AP-Poptracker/releases",
     "repo": "SomeLazyGamer/RaC-AP-Poptracker",
-    "tag": "1.2.1",
-    "asset": "RaC1_Tracker_SLG_1.2.1.zip",
-    "url": "https://github.com/SomeLazyGamer/RaC-AP-Poptracker/releases/download/1.2.1/RaC1_Tracker_SLG_1.2.1.zip"
+    "tag": "1.2.2",
+    "asset": "RaC1_Tracker_SLG_1.2.2.zip",
+    "url": "https://github.com/SomeLazyGamer/RaC-AP-Poptracker/releases/download/1.2.2/RaC1_Tracker_SLG_1.2.2.zip"
    }
   ],
   "Ratchet & Clank 2: Going Commando": [
@@ -1081,9 +1084,9 @@
    {
     "page": "https://github.com/SomeLazyGamer/RaC-3-UYA-AP-Poptracker",
     "repo": "SomeLazyGamer/RaC-3-UYA-AP-Poptracker",
-    "tag": "1.6.9",
-    "asset": "RaC3_Tracker_SLG_1.6.9.zip",
-    "url": "https://github.com/SomeLazyGamer/RaC-3-UYA-AP-Poptracker/releases/download/1.6.9/RaC3_Tracker_SLG_1.6.9.zip"
+    "tag": "1.8.0",
+    "asset": "RaC3_Tracker_SLG_1.8.0.zip",
+    "url": "https://github.com/SomeLazyGamer/RaC-3-UYA-AP-Poptracker/releases/download/1.8.0/RaC3_Tracker_SLG_1.8.0.zip"
    }
   ],
   "Ratchet & Clank: Size Matters": [
@@ -1114,9 +1117,9 @@
    {
     "page": "https://github.com/Swiftmane/Ror2-AP-tracker/releases/latest",
     "repo": "Swiftmane/Ror2-AP-tracker",
-    "tag": "v1.6.1",
+    "tag": "v1.6.2",
     "asset": "Ror2-AP-tracker.zip",
-    "url": "https://github.com/Swiftmane/Ror2-AP-tracker/releases/download/v1.6.1/Ror2-AP-tracker.zip"
+    "url": "https://github.com/Swiftmane/Ror2-AP-tracker/releases/download/v1.6.2/Ror2-AP-tracker.zip"
    }
   ],
   "Satisfactory": [
@@ -1571,9 +1574,9 @@
    {
     "page": "https://github.com/imklubb/Toy-Story-2-Poptracker/releases/latest",
     "repo": "imklubb/Toy-Story-2-Poptracker",
-    "tag": "3.0.0",
-    "asset": "toystory2_ap_3.0.0.zip",
-    "url": "https://github.com/imklubb/Toy-Story-2-Poptracker/releases/download/3.0.0/toystory2_ap_3.0.0.zip"
+    "tag": "3.1.1",
+    "asset": "toystory2_ap_3.1.1.zip",
+    "url": "https://github.com/imklubb/Toy-Story-2-Poptracker/releases/download/3.1.1/toystory2_ap_3.1.1.zip"
    }
   ],
   "TUNIC": [

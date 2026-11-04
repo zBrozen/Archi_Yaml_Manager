@@ -437,6 +437,7 @@
     {"game": "Okami HD", "stability": "Unstable"},
     {"game": "Once Upon a Katamari", "stability": "Unstable"},
     {"game": "One Must Fall: 2097", "stability": "Unstable"},
+    {"game": "One Step From Eden", "stability": "Unstable"},
     {"game": "OpenRCT2", "stability": "Stable", "pr_status": "In Review"},
     {"game": "OpenTTD", "stability": "Unstable"},
     {"game": "OpenTTD Cargolock", "stability": "Unstable"},
