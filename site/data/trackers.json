@@ -701,9 +701,9 @@
    {
     "page": "https://github.com/culk/lost-kingdoms-2-poptracker-pack/releases",
     "repo": "culk/lost-kingdoms-2-poptracker-pack",
-    "tag": "v1.3.1",
+    "tag": "v1.3.2",
     "asset": "lost_kingdoms_2_ap_tracker.zip",
-    "url": "https://github.com/culk/lost-kingdoms-2-poptracker-pack/releases/download/v1.3.1/lost_kingdoms_2_ap_tracker.zip"
+    "url": "https://github.com/culk/lost-kingdoms-2-poptracker-pack/releases/download/v1.3.2/lost_kingdoms_2_ap_tracker.zip"
    }
   ],
   "Luigi's Mansion": [
@@ -1057,9 +1057,9 @@
    {
     "page": "https://github.com/jdmccork/Rain-World-PopTracker/releases/latest",
     "repo": "jdmccork/Rain-World-PopTracker",
-    "tag": "v0.7.5",
-    "asset": "Rain-World-PopTracker-0.7.5.zip",
-    "url": "https://github.com/jdmccork/Rain-World-PopTracker/releases/download/v0.7.5/Rain-World-PopTracker-0.7.5.zip"
+    "tag": "v0.7.6",
+    "asset": "Rain-World-PopTracker-0.7.6.zip",
+    "url": "https://github.com/jdmccork/Rain-World-PopTracker/releases/download/v0.7.6/Rain-World-PopTracker-0.7.6.zip"
    }
   ],
   "Ratchet & Clank": [
@@ -1538,9 +1538,9 @@
    {
     "page": "https://github.com/culk/toem-poptracker-pack/releases/latest",
     "repo": "culk/toem-poptracker-pack",
-    "tag": "v1.1.2",
+    "tag": "v1.1.3",
     "asset": "toem_ap_tracker.zip",
-    "url": "https://github.com/culk/toem-poptracker-pack/releases/download/v1.1.2/toem_ap_tracker.zip"
+    "url": "https://github.com/culk/toem-poptracker-pack/releases/download/v1.1.3/toem_ap_tracker.zip"
    }
   ],
   "Tomba!": [
