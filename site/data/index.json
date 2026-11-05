@@ -1,6 +1,6 @@
 {
  "ap_version": "0.6.8",
- "generated_at": "2026-11-04T12:53:41+00:00",
+ "generated_at": "2026-11-05T13:03:18+00:00",
  "games": [
   {
    "game": "2048",
@@ -989,7 +989,7 @@
    "file": "games/castlevania-lords-of-shadow.json",
    "source": "custom",
    "apworld": "los.apworld",
-   "world_version": "0.7.4",
+   "world_version": "0.7.6",
    "guides": "guides/castlevania-lords-of-shadow.json",
    "sheet": {
     "game": "Castlevania: Lords of Shadow",
@@ -1108,7 +1108,7 @@
    "guides": "guides/chants-of-sennaar.json",
    "sheet": {
     "game": "Chants of Sennaar",
-    "stability": null
+    "stability": "Unstable"
    }
   },
   {
@@ -1412,7 +1412,7 @@
    "file": "games/crash-bandicoot-n-sane-trilogy.json",
    "source": "custom",
    "apworld": "crash_nst.apworld",
-   "world_version": "1.0.7",
+   "world_version": null,
    "guides": "guides/crash-bandicoot-n-sane-trilogy.json",
    "sheet": {
     "game": "Crash Bandicoot N. Sane Trilogy",
@@ -3024,6 +3024,18 @@
    "guides": "guides/hololive-treasure-mountain.json",
    "sheet": {
     "game": "Hololive Treasure Mountain",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Homura-Hime",
+   "file": "games/homura-hime.json",
+   "source": "custom",
+   "apworld": "homura_hime.apworld",
+   "world_version": "0.4.1",
+   "guides": "guides/homura-hime.json",
+   "sheet": {
+    "game": "Homura-Hime",
     "stability": "Unstable"
    }
   },
@@ -4758,7 +4770,7 @@
    "file": "games/once-upon-a-katamari.json",
    "source": "custom",
    "apworld": "ouakatamari.apworld",
-   "world_version": "0.3.0",
+   "world_version": "0.4.0",
    "guides": "guides/once-upon-a-katamari.json",
    "sheet": {
     "game": "Once Upon a Katamari",
@@ -5379,7 +5391,7 @@
    "file": "games/pokemon-snap.json",
    "source": "custom",
    "apworld": "pokemon_snap.apworld",
-   "world_version": "0.9.1",
+   "world_version": "0.10.0",
    "guides": "guides/pokemon-snap.json",
    "sheet": {
     "game": "Pokémon Snap",
@@ -5427,7 +5439,7 @@
    "file": "games/pokepark.json",
    "source": "custom",
    "apworld": "pokepark.apworld",
-   "world_version": "1.2.8",
+   "world_version": "1.2.9",
    "guides": "guides/pokepark.json",
    "sheet": {
     "game": "PokéPark Wii: Pikachu's Adventure",
@@ -6871,7 +6883,7 @@
    "file": "games/stick-ranger.json",
    "source": "custom",
    "apworld": "stick_ranger.apworld",
-   "world_version": "1.8.13",
+   "world_version": "2.0.0",
    "guides": "guides/stick-ranger.json",
    "sheet": {
     "game": "Stick Ranger",
@@ -7318,7 +7330,7 @@
    "file": "games/the-legend-of-zelda-oracle-of-ages.json",
    "source": "custom",
    "apworld": "tloz_ooa.apworld",
-   "world_version": "2.0.0",
+   "world_version": "2.0.1",
    "guides": "guides/the-legend-of-zelda-oracle-of-ages.json",
    "sheet": {
     "game": "The Legend of Zelda: Oracle of Ages",
@@ -7682,7 +7694,7 @@
    "file": "games/trails-beyond-the-horizon.json",
    "source": "custom",
    "apworld": "beyondthehorizon.apworld",
-   "world_version": "0.1.2",
+   "world_version": "0.1.3",
    "guides": "guides/trails-beyond-the-horizon.json",
    "sheet": {
     "game": "The Legend of Heroes: Trails Beyond the Horizon",
@@ -8453,7 +8465,7 @@
    "file": "games/yellow-taxi-goes-vroom.json",
    "source": "custom",
    "apworld": "yellowtaxi.apworld",
-   "world_version": "0.8.0",
+   "world_version": "0.8.1",
    "guides": "guides/yellow-taxi-goes-vroom.json",
    "sheet": {
     "game": "Yellow Taxi Goes Vroom",
