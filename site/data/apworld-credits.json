@@ -2747,7 +2747,7 @@
  },
  {
   "game": "Cyberpunk 2077",
-  "version": "0.7.0",
+  "version": "0.7.4",
   "authors": [
    "247Tossing"
   ],
@@ -2762,8 +2762,8 @@
    "pr_status": "Not PRing",
    "adult": true
   },
-  "download": "https://github.com/247Tossing/cyberpunk_archipelago/releases/download/0.7.3/cyberpunk2077.apworld",
-  "release": "https://github.com/247Tossing/cyberpunk_archipelago/releases/tag/0.7.3",
+  "download": "https://github.com/247Tossing/cyberpunk_archipelago/releases/download/0.7.4/cyberpunk2077.apworld",
+  "release": "https://github.com/247Tossing/cyberpunk_archipelago/releases/tag/0.7.4",
   "links": [
    "https://github.com/247Tossing/cyberpunk_archipelago/releases/latest"
   ]
@@ -2966,8 +2966,8 @@
    "game": "Death's Door",
    "stability": "Unstable"
   },
-  "download": "https://github.com/Chris-Is-Awesome/DDArchipelagoRandomizer/releases/download/v0.4.2/deaths_door.apworld",
-  "release": "https://github.com/Chris-Is-Awesome/DDArchipelagoRandomizer/releases/tag/v0.4.2",
+  "download": "https://github.com/Chris-Is-Awesome/DDArchipelagoRandomizer/releases/download/v0.4.3/deaths_door.apworld",
+  "release": "https://github.com/Chris-Is-Awesome/DDArchipelagoRandomizer/releases/tag/v0.4.3",
   "links": [
    "https://github.com/Chris-Is-Awesome/DDArchipelagoRandomizer/releases"
   ]
@@ -3760,31 +3760,6 @@
   ]
  },
  {
-  "game": "enter_the_gungeon",
-  "version": null,
-  "authors": [],
-  "file": "enter_the_gungeon.apworld",
-  "source": "https://github.com/MaoBoulve/ArchipelaGunAPWorld",
-  "license": "MIT",
-  "license_url": "https://github.com/MaoBoulve/ArchipelaGunAPWorld/blob/HEAD/LICENSE",
-  "copyright": [
-   "Copyright (c) 2017 LLCoolDave",
-   "Copyright (c) 2025 Berserker66",
-   "Copyright (c) 2022 CaitSith2",
-   "Copyright (c) 2021 LegendaryLinux"
-  ],
-  "sheet": {
-   "game": "Enter the Gungeon",
-   "stability": "Unstable",
-   "pr_status": "Not PRing"
-  },
-  "download": "https://github.com/MaoBoulve/ArchipelaGunAPWorld/releases/download/v0.1.1/enter_the_gungeon.apworld",
-  "release": "https://github.com/MaoBoulve/ArchipelaGunAPWorld/releases/tag/v0.1.1",
-  "links": [
-   "https://github.com/MaoBoulve/ArchipelaGunAPWorld/releases"
-  ]
- },
- {
   "game": "Equilinox",
   "version": "0.0.1",
   "authors": [
@@ -3991,7 +3966,7 @@
  },
  {
   "game": "Fantastic Fist",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "authors": [
    "WaluigiGoesWa"
   ],
@@ -4006,8 +3981,8 @@
    "game": "Fantastic Fist",
    "stability": "Unstable"
   },
-  "download": "https://github.com/DannySchultzDev/Fantastic-Fist-Archipelago-Client/releases/download/V0.0.6/fantastic_fist.apworld",
-  "release": "https://github.com/DannySchultzDev/Fantastic-Fist-Archipelago-Client/releases/tag/V0.0.6",
+  "download": "https://github.com/DannySchultzDev/Fantastic-Fist-Archipelago-Client/releases/download/V0.0.7/fantastic_fist.apworld",
+  "release": "https://github.com/DannySchultzDev/Fantastic-Fist-Archipelago-Client/releases/tag/V0.0.7",
   "links": [
    "https://github.com/DannySchultzDev/Fantastic-Fist-Archipelago-Client/releases"
   ]
@@ -6304,7 +6279,7 @@
  },
  {
   "game": "La-Mulana 2",
-  "version": "1.1.2",
+  "version": "1.1.3",
   "authors": [
    "Crownmuri",
    "Coookie93"
@@ -6323,8 +6298,8 @@
    "game": "La-Mulana 2",
    "stability": "Unstable"
   },
-  "download": "https://github.com/Crownmuri/Archipelago/releases/download/v1.1.2/lamulana2.apworld",
-  "release": "https://github.com/Crownmuri/Archipelago/releases/tag/v1.1.2",
+  "download": "https://github.com/Crownmuri/Archipelago/releases/download/v1.1.3/lamulana2.apworld",
+  "release": "https://github.com/Crownmuri/Archipelago/releases/tag/v1.1.3",
   "links": [
    "https://github.com/Crownmuri/Archipelago/releases/latest"
   ]
@@ -6392,8 +6367,8 @@
    "game": "LEGO Batman: The Video Game",
    "stability": "Unstable"
   },
-  "download": "https://github.com/ZAPaDASH04/LEGO-Batman-APworld/releases/download/v1.0.1/lego_batman_1.apworld",
-  "release": "https://github.com/ZAPaDASH04/LEGO-Batman-APworld/releases/tag/v1.0.1",
+  "download": "https://github.com/ZAPaDASH04/LEGO-Batman-APworld/releases/download/v1.0.2/lego_batman_1.apworld",
+  "release": "https://github.com/ZAPaDASH04/LEGO-Batman-APworld/releases/tag/v1.0.2",
   "links": [
    "https://github.com/ZAPaDASH04/LEGO-Batman-APworld/releases/latest"
   ]
@@ -8254,31 +8229,8 @@
   ]
  },
  {
-  "game": "Northgard",
-  "version": "2026.10.25",
-  "authors": [
-   "Chakraa"
-  ],
-  "file": "northgard.apworld",
-  "source": "https://github.com/ChakraaThePanda/Archipelago-Northgard",
-  "license": "MIT",
-  "license_url": "https://github.com/ChakraaThePanda/Archipelago-Northgard/blob/HEAD/LICENSE",
-  "copyright": [
-   "Copyright (c) 2026 ChakraaThePanda"
-  ],
-  "sheet": {
-   "game": "Northgard",
-   "stability": "Unstable"
-  },
-  "download": "https://github.com/ChakraaThePanda/Archipelago-Northgard/releases/download/2026.10.25/northgard.apworld",
-  "release": "https://github.com/ChakraaThePanda/Archipelago-Northgard/releases/tag/2026.10.25",
-  "links": [
-   "https://github.com/ChakraaThePanda/Archipelago-Northgard/releases"
-  ]
- },
- {
   "game": "Nova Lands",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "authors": [
    "Gott"
   ],
@@ -8293,8 +8245,8 @@
    "game": "Nova Lands",
    "stability": "Unstable"
   },
-  "download": "https://github.com/Foxolotl713/NovaLandsMods/releases/download/ap0.2.0/novalands.apworld",
-  "release": "https://github.com/Foxolotl713/NovaLandsMods/releases/tag/ap0.2.0",
+  "download": "https://github.com/Foxolotl713/NovaLandsMods/releases/download/ap0.2.1/novalands.apworld",
+  "release": "https://github.com/Foxolotl713/NovaLandsMods/releases/tag/ap0.2.1",
   "links": [
    "https://github.com/Foxolotl713/NovaLandsMods/releases?q=ap&expanded=true"
   ]
@@ -8447,7 +8399,7 @@
  },
  {
   "game": "Once Upon a Katamari",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "authors": [
    "Seafoamy"
   ],
@@ -8460,8 +8412,8 @@
    "game": "Once Upon a Katamari",
    "stability": "Unstable"
   },
-  "download": "https://github.com/ItsSeafoamy/Once-Upon-an-Archipelago/releases/download/v0.4.0/ouakatamari.apworld",
-  "release": "https://github.com/ItsSeafoamy/Once-Upon-an-Archipelago/releases/tag/v0.4.0",
+  "download": "https://github.com/ItsSeafoamy/Once-Upon-an-Archipelago/releases/download/v0.4.1/ouakatamari.apworld",
+  "release": "https://github.com/ItsSeafoamy/Once-Upon-an-Archipelago/releases/tag/v0.4.1",
   "links": [
    "https://github.com/ItsSeafoamy/Once-Upon-an-Archipelago/releases"
   ]
@@ -11779,7 +11731,7 @@
  },
  {
   "game": "Sonic Colours (Wii)",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "authors": [
    "Luma"
   ],
@@ -11797,8 +11749,8 @@
    "game": "Sonic Colors (Wii)",
    "stability": "Unstable"
   },
-  "download": "https://github.com/mariokirby1703/Lumas-Archipelago/releases/download/sonic_colours_v0.2.0/sonic_colours_wii.apworld",
-  "release": "https://github.com/mariokirby1703/Lumas-Archipelago/releases/tag/sonic_colours_v0.2.0",
+  "download": "https://github.com/mariokirby1703/Lumas-Archipelago/releases/download/sonic_colours_v0.2.1/sonic_colours_wii.apworld",
+  "release": "https://github.com/mariokirby1703/Lumas-Archipelago/releases/tag/sonic_colours_v0.2.1",
   "links": [
    "https://github.com/mariokirby1703/Lumas-Archipelago/releases?q=Sonic+Colours&expanded=true"
   ]
@@ -12296,8 +12248,8 @@
    "stability": "Unstable",
    "pr_status": "Not PRing"
   },
-  "download": "https://github.com/rescheer/Starship-Titanic-AP/releases/download/v1.0.0/starship_titanic.apworld",
-  "release": "https://github.com/rescheer/Starship-Titanic-AP/releases/tag/v1.0.0",
+  "download": "https://github.com/rescheer/Starship-Titanic-AP/releases/download/v1.0.1/starship_titanic.apworld",
+  "release": "https://github.com/rescheer/Starship-Titanic-AP/releases/tag/v1.0.1",
   "links": [
    "https://github.com/rescheer/Starship-Titanic-AP/releases"
   ]
@@ -12365,8 +12317,8 @@
    "game": "Stella",
    "stability": "Unstable"
   },
-  "download": "https://github.com/giovannialayan/oigArchipelago/releases/download/1.0.2/stella.apworld",
-  "release": "https://github.com/giovannialayan/oigArchipelago/releases/tag/1.0.2",
+  "download": "https://github.com/giovannialayan/oigArchipelago/releases/download/1.0.3/stella.apworld",
+  "release": "https://github.com/giovannialayan/oigArchipelago/releases/tag/1.0.3",
   "links": [
    "https://github.com/giovannialayan/oigArchipelago/releases/latest"
   ]
@@ -12577,7 +12529,7 @@
  },
  {
   "game": "Super Mario Galaxy",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "authors": [
    "squidy",
    "Demorck",
@@ -12600,8 +12552,8 @@
    "game": "Super Mario Galaxy",
    "stability": "Unstable"
   },
-  "download": "https://github.com/Joethepic/Archipelago/releases/download/smg-V0.0.2/smgalaxy.apworld",
-  "release": "https://github.com/Joethepic/Archipelago/releases/tag/smg-V0.0.2",
+  "download": "https://github.com/Joethepic/Archipelago/releases/download/smg-V0.0.3/smgalaxy.apworld",
+  "release": "https://github.com/Joethepic/Archipelago/releases/tag/smg-V0.0.3",
   "links": [
    "https://github.com/Joethepic/Archipelago/releases?q=Super+Mario+Galaxy&expanded=true"
   ]
@@ -15305,7 +15257,7 @@
  },
  {
   "game": "You Have to Win the Game",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "authors": [
    "blitzashspear"
   ],
@@ -15320,8 +15272,8 @@
    "game": "You Have to Win the Game",
    "stability": "Unstable"
   },
-  "download": "https://github.com/blitzashspear/ap-yhtwtg/releases/download/release-1.1.0/yhtwtg.apworld",
-  "release": "https://github.com/blitzashspear/ap-yhtwtg/releases/tag/release-1.1.0",
+  "download": "https://github.com/blitzashspear/ap-yhtwtg/releases/download/release-1.1.1/yhtwtg.apworld",
+  "release": "https://github.com/blitzashspear/ap-yhtwtg/releases/tag/release-1.1.1",
   "links": [
    "https://github.com/blitzashspear/ap-yhtwtg/releases/latest"
   ]

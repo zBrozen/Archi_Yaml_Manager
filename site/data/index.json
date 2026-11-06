@@ -1,6 +1,6 @@
 {
  "ap_version": "0.6.8",
- "generated_at": "2026-11-05T13:03:18+00:00",
+ "generated_at": "2026-11-06T12:50:02+00:00",
  "games": [
   {
    "game": "2048",
@@ -1581,7 +1581,7 @@
    "file": "games/cyberpunk-2077.json",
    "source": "custom",
    "apworld": "cyberpunk2077.apworld",
-   "world_version": "0.7.0",
+   "world_version": "0.7.4",
    "guides": "guides/cyberpunk-2077.json",
    "sheet": {
     "game": "Cyberpunk 2077",
@@ -2149,19 +2149,6 @@
    }
   },
   {
-   "game": "Enter The Gungeon",
-   "file": "games/enter-the-gungeon.json",
-   "source": "custom",
-   "apworld": "enter_the_gungeon.apworld",
-   "world_version": null,
-   "guides": "guides/enter-the-gungeon.json",
-   "sheet": {
-    "game": "Enter the Gungeon",
-    "stability": "Unstable",
-    "pr_status": "Not PRing"
-   }
-  },
-  {
    "game": "Equilinox",
    "file": "games/equilinox.json",
    "source": "custom",
@@ -2282,7 +2269,7 @@
    "file": "games/fantastic-fist.json",
    "source": "custom",
    "apworld": "fantastic_fist.apworld",
-   "world_version": "0.0.6",
+   "world_version": "0.0.7",
    "guides": "guides/fantastic-fist.json",
    "sheet": {
     "game": "Fantastic Fist",
@@ -3557,7 +3544,7 @@
    "file": "games/la-mulana-2.json",
    "source": "custom",
    "apworld": "lamulana2.apworld",
-   "world_version": "1.1.2",
+   "world_version": "1.1.3",
    "guides": "guides/la-mulana-2.json",
    "sheet": {
     "game": "La-Mulana 2",
@@ -4656,23 +4643,11 @@
    }
   },
   {
-   "game": "Northgard",
-   "file": "games/northgard.json",
-   "source": "custom",
-   "apworld": "northgard.apworld",
-   "world_version": "2026.10.25",
-   "guides": "guides/northgard.json",
-   "sheet": {
-    "game": "Northgard",
-    "stability": "Unstable"
-   }
-  },
-  {
    "game": "Nova Lands",
    "file": "games/nova-lands.json",
    "source": "custom",
    "apworld": "novalands.apworld",
-   "world_version": "0.2.0",
+   "world_version": "0.2.1",
    "guides": "guides/nova-lands.json",
    "sheet": {
     "game": "Nova Lands",
@@ -4770,7 +4745,7 @@
    "file": "games/once-upon-a-katamari.json",
    "source": "custom",
    "apworld": "ouakatamari.apworld",
-   "world_version": "0.4.0",
+   "world_version": "0.4.1",
    "guides": "guides/once-upon-a-katamari.json",
    "sheet": {
     "game": "Once Upon a Katamari",
@@ -6549,7 +6524,7 @@
    "file": "games/sonic-colours-wii.json",
    "source": "custom",
    "apworld": "sonic_colours_wii.apworld",
-   "world_version": "0.2.0",
+   "world_version": "0.2.1",
    "guides": "guides/sonic-colours-wii.json",
    "sheet": {
     "game": "Sonic Colors (Wii)",
@@ -6998,7 +6973,7 @@
    "file": "games/super-mario-galaxy.json",
    "source": "custom",
    "apworld": "smgalaxy.apworld",
-   "world_version": "0.0.1",
+   "world_version": "0.0.3",
    "guides": "guides/super-mario-galaxy.json",
    "sheet": {
     "game": "Super Mario Galaxy",
@@ -8515,7 +8490,7 @@
    "file": "games/you-have-to-win-the-game.json",
    "source": "custom",
    "apworld": "yhtwtg.apworld",
-   "world_version": "1.1.0",
+   "world_version": "1.1.1",
    "guides": "guides/you-have-to-win-the-game.json",
    "sheet": {
     "game": "You Have to Win the Game",
