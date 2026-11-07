@@ -22,6 +22,14 @@ export function parseRandomRange(value) {
   return { bias: match[1] || null, min: Math.min(a, b), max: Math.max(a, b) };
 }
 
+// Valeur d'un compteur tirée au sort (« random », « random-range-1-500 »…), écrite comme pour une Range.
+// Le OptionCounter d'Archipelago ne l'accepte pas : seulement les apworlds qui le permettent (random_values).
+export function isCounterRandom(option, value) {
+  if (!option.random_values || typeof value !== "string") return false;
+  const text = value.toLowerCase();
+  return text in RANDOM_LABELS || !!parseRandomRange(text);
+}
+
 export function isWeightedValue(option, value) {
   return option.weighted && isPlainObject(value);
 }
@@ -129,8 +137,16 @@ export function checkValue(option, value, game) {
     if (unknown.length) problems.push(`Clés inconnues : ${unknown.join(", ")}`);
     if (option.kind === "counter") {
       for (const [key, count] of Object.entries(value)) {
-        if (!Number.isInteger(count)) problems.push(`« ${key} » doit avoir un nombre entier.`);
-        else if (option.min != null && count < option.min) problems.push(`« ${key} » : minimum ${option.min}.`);
+        if (isCounterRandom(option, count)) {
+          const range = parseRandomRange(count.toLowerCase());
+          if (range && ((option.min != null && range.min < option.min) || (option.max != null && range.max > option.max))) {
+            problems.push(`« ${key} » : le tirage doit rester entre ${option.min ?? "…"} et ${option.max ?? "…"}.`);
+          }
+        } else if (!Number.isInteger(count)) {
+          problems.push(option.random_values
+            ? `« ${key} » doit avoir un nombre entier ou un tirage au sort (random, random-range-1-500…).`
+            : `« ${key} » doit avoir un nombre entier.`);
+        } else if (option.min != null && count < option.min) problems.push(`« ${key} » : minimum ${option.min}.`);
         else if (option.max != null && count > option.max) problems.push(`« ${key} » : maximum ${option.max}.`);
       }
     }

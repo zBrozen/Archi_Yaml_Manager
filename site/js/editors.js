@@ -7,7 +7,7 @@ import { isPlainObject, toYamlSnippet, parseSnippet } from "./yaml-model.js";
 import {
   RANDOM_LABELS, COMMON_TEXT, parseRandomRange, keyUniverse, toggleState, resolveChoice,
   checkValue, sameAsDefault, defaultValue, describeDefault, describeScalar,
-  keyForValue, valueForKey, singleValue, writeSingle, optionDoc,
+  keyForValue, valueForKey, singleValue, writeSingle, optionDoc, isCounterRandom,
 } from "./options.js";
 
 let idCounter = 0;
@@ -303,20 +303,65 @@ function SetEditor({ option, value, game, onChange }) {
   </div>`;
 }
 
-function DictEditor({ option, value, game, onChange }) {
+// Valeur d'un compteur : un nombre, ou, si l'apworld l'accepte (random_values), un tirage au sort écrit comme
+// pour une Range. Les tirages se choisissent en mode avancé, comme pour les autres options.
+function CounterValue({ option, name, value, fallback, advanced, onChange }) {
+  const toNumber = (v) => clamp(Math.round(Number(v)) || 0, option.min, option.max);
+  const numberInput = (v, set, label) => html`<input type="number" class="num" aria-label=${label}
+    min=${option.min ?? undefined} max=${option.max ?? undefined} value=${v}
+    onChange=${(e) => e.target.value !== "" && set(toNumber(e.target.value))} />`;
+  const random = isCounterRandom(option, value);
+  if (!random && !(advanced && option.random_values)) return numberInput(value, onChange, name);
+  if (!advanced) {
+    return html`<div class="counter-value">
+      <span class="value-text">${describeScalar(option, value)}</span>
+      <button type="button" class="small ghost" onClick=${() => onChange(fallback)}>Valeur précise</button>
+    </div>`;
+  }
+  const text = random ? value.toLowerCase() : "";
+  const range = parseRandomRange(text);
+  const mode = RANDOM_WORDS.includes(text) ? text : range ? "random-range" : "value";
+  const low = option.min ?? 0;
+  const high = option.max ?? Math.max(low, Number.isInteger(fallback) ? fallback * 2 : 100);
+  return html`<div class="counter-value">
+    <select aria-label=${`${name} : type de valeur`} value=${mode} onChange=${(e) => {
+      const m = e.target.value;
+      if (m === "value") onChange(fallback);
+      else if (m === "random-range") onChange(`random-range-${low}-${high}`);
+      else onChange(m);
+    }}>
+      <option value="value">Valeur précise</option>
+      ${RANDOM_WORDS.map((w) => html`<option value=${w}>${RANDOM_LABELS[w]}</option>`)}
+      <option value="random-range">Aléatoire entre deux valeurs…</option>
+    </select>
+    ${mode === "value" && numberInput(value, onChange, name)}
+    ${mode === "random-range" && html`<span class="counter-range">
+      <span>de</span>
+      ${numberInput(range.min, (n) => onChange(`random-range-${Math.min(n, range.max)}-${range.max}`), `${name} : minimum du tirage`)}
+      <span>à</span>
+      ${numberInput(range.max, (n) => onChange(`random-range-${range.min}-${Math.max(n, range.min)}`), `${name} : maximum du tirage`)}
+    </span>`}
+  </div>`;
+}
+
+function DictEditor({ option, value, game, advanced, onChange }) {
   const universe = useMemo(() => keyUniverse(option, game), [option, game]);
   const known = useMemo(() => new Set(universe), [universe]);
   const numeric = option.kind === "counter";
   const entries = Object.entries(value);
   const used = new Set(entries.map(([k]) => k));
   const setEntry = (key, v) => onChange({ ...value, [key]: v });
+  const fallback = (key) => {
+    const d = isPlainObject(option.default) ? option.default[key] : undefined;
+    return Number.isInteger(d) ? d : Math.max(1, option.min ?? 1);
+  };
   return html`<div class="dict-editor">
     ${entries.length > 0 && html`<table><tbody>
       ${entries.map(([key, v]) => html`<tr>
         <td class=${known.size && !known.has(key) ? "unknown" : ""}>${key}</td>
         <td>${numeric
-          ? html`<input type="number" class="num" min=${option.min ?? undefined} max=${option.max ?? undefined} value=${v}
-              onChange=${(e) => setEntry(key, clamp(Math.round(Number(e.target.value)) || 0, option.min, option.max))} />`
+          ? html`<${CounterValue} option=${option} name=${key} value=${v} fallback=${fallback(key)} advanced=${advanced}
+              onChange=${(n) => setEntry(key, n)} />`
           : html`<input type="text" value=${v ?? ""} onChange=${(e) => setEntry(key, e.target.value)} />`}</td>
         <td><button type="button" class="icon" title="Retirer"
           onClick=${() => { const copy = { ...value }; delete copy[key]; onChange(copy); }}>✕</button></td>
@@ -324,7 +369,7 @@ function DictEditor({ option, value, game, onChange }) {
     </tbody></table>`}
     <${Suggest} items=${universe} exclude=${used}
       placeholder=${universe.length ? "Ajouter… (tapez pour chercher)" : "Nouvelle clé puis Entrée"}
-      onPick=${(k) => !used.has(k) && setEntry(k, numeric ? Math.max(1, option.min ?? 1) : "")} />
+      onPick=${(k) => !used.has(k) && setEntry(k, numeric ? fallback(k) : "")} />
   </div>`;
 }
 
@@ -402,10 +447,11 @@ export function OptionRow({ option, value, original, game, advanced, onChange })
   } else if ((option.kind === "set" || option.kind === "list") && Array.isArray(shown) && shown.every(scalarOnly)) {
     wide = true;
     control = html`<${SetEditor} option=${option} value=${shown} game=${game} onChange=${onChange} />`;
-  } else if ((option.kind === "counter" && isPlainObject(shown) && Object.values(shown).every(Number.isInteger))
+  } else if ((option.kind === "counter" && isPlainObject(shown)
+        && Object.values(shown).every((v) => Number.isInteger(v) || isCounterRandom(option, v)))
       || (option.kind === "dict" && isPlainObject(shown) && Object.values(shown).every(scalarOnly))) {
     wide = true;
-    control = html`<${DictEditor} option=${option} value=${shown} game=${game} onChange=${onChange} />`;
+    control = html`<${DictEditor} option=${option} value=${shown} game=${game} advanced=${advanced} onChange=${onChange} />`;
   } else {
     wide = true;
     control = advanced ? html`<${RawEditor} value=${shown} onChange=${onChange} />` : locked(summarize(option, shown));

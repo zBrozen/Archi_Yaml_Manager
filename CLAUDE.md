@@ -13,6 +13,9 @@
   choix ouverts) et filtre par genre. Genres dans `site/data/genres.json`, relevés sur Wikidata par
   `tools/fetch_genres.py` (job `sync`, nom exact exigé, quelques minutes par passage) ; corrections dans
   `apworlds.json`, clé `"genres"`. Pas de source d'avis des joueurs sur les apworlds : ne pas inventer de note.
+- Compteurs (`OptionCounter`) : le cœur n'accepte que des entiers, mais certains apworlds le sous-classent pour
+  accepter `random`, `random-range-1-500`… par clé (Super Mario Galaxy). `ap_extract.py` l'essaie sur la classe et
+  note `random_values` ; l'éditeur (`CounterValue` dans `editors.js`) propose alors ces tirages en mode avancé.
 - Navigation : menu latéral (`Sidebar` dans `main.js`, barre « Menu » en haut sous 900 px, réglages repliés en bas).
   Accueil `#/` (`welcome.js`) : ce qu'est Archipelago, pour qui n'y a jamais joué ; l'éditeur est sur `#/editeur`.
   Son exemple animé (`demo.js`, bouton « Ouvrir un coffre ») est fictif.

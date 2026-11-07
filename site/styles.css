@@ -475,6 +475,9 @@ table.compact td { padding: .15rem .6rem .15rem 0; }
 .weights select, .weights input[type="text"] { width: 14rem; max-width: 50vw; }
 .dict-editor { display: grid; gap: .5rem; }
 .dict-editor td:first-child { overflow-wrap: anywhere; }
+.counter-value, .counter-range { display: flex; flex-wrap: wrap; gap: .4rem .6rem; align-items: center; }
+.dict-editor td:first-child:has(+ td .counter-value) { min-width: 7rem; }
+.counter-value select { width: 11rem; max-width: 100%; }
 .dict-editor .suggest, .set-editor .suggest { max-width: 420px; }
 .set-editor { display: grid; gap: .5rem; }
 

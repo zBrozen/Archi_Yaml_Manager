@@ -134,7 +134,33 @@ def describe_option(Options, world, key: str, option) -> dict[str, Any]:
     if kind == "counter":
         data["min"] = getattr(option, "min", None)
         data["max"] = getattr(option, "max", None)
+        if counter_accepts_random(option, data["min"], data["max"]):
+            data["random_values"] = True
     return data
+
+
+def counter_accepts_random(option, low, high) -> bool:
+    """Vrai si les valeurs du compteur peuvent s'écrire comme une Range (« random », « random-range-1-500 »).
+
+    Le OptionCounter d'Archipelago n'accepte que des entiers (TypeError sinon), mais certains apworlds le
+    sous-classent pour tirer chaque valeur au sort (Super Mario Galaxy). On essaie donc la classe elle-même."""
+    import contextlib
+    import io
+    keys = sorted(str(k) for k in (getattr(option, "valid_keys", None) or option.default or {}))
+    if not keys:
+        return False
+    tests = ["random"]
+    if isinstance(low, int) and isinstance(high, int) and low <= high:
+        tests.append(f"random-range-{low}-{high}")
+    try:
+        with contextlib.redirect_stdout(io.StringIO()):
+            for text in tests:
+                value = option.from_any({keys[0]: text}).value
+                if not all(isinstance(v, int) and not isinstance(v, bool) for v in value.values()):
+                    return False
+    except Exception:
+        return False
+    return True
 
 
 def world_source(worlds_module, world) -> tuple[str, str | None]:
