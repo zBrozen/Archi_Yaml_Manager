@@ -2278,7 +2278,7 @@
  },
  {
   "game": "Cooking Mama 3",
-  "version": "1.1.3",
+  "version": "1.1.4",
   "authors": [
    "laxbby"
   ],
@@ -2296,8 +2296,8 @@
    "game": "Cooking Mama 3",
    "stability": "Unstable"
   },
-  "download": "https://github.com/Laxbby/ArchipelagoCM3/releases/download/1.1.3/cookingmama3.apworld",
-  "release": "https://github.com/Laxbby/ArchipelagoCM3/releases/tag/1.1.3",
+  "download": "https://github.com/Laxbby/ArchipelagoCM3/releases/download/1.1.4/cookingmama3.apworld",
+  "release": "https://github.com/Laxbby/ArchipelagoCM3/releases/tag/1.1.4",
   "links": [
    "https://github.com/Laxbby/ArchipelagoCM3/releases/latest"
   ]
@@ -2747,7 +2747,7 @@
  },
  {
   "game": "Cyberpunk 2077",
-  "version": "0.7.4",
+  "version": "0.7.5",
   "authors": [
    "247Tossing"
   ],
@@ -2762,8 +2762,8 @@
    "pr_status": "Not PRing",
    "adult": true
   },
-  "download": "https://github.com/247Tossing/cyberpunk_archipelago/releases/download/0.7.4/cyberpunk2077.apworld",
-  "release": "https://github.com/247Tossing/cyberpunk_archipelago/releases/tag/0.7.4",
+  "download": "https://github.com/247Tossing/cyberpunk_archipelago/releases/download/v0.7.5/cyberpunk2077.apworld",
+  "release": "https://github.com/247Tossing/cyberpunk_archipelago/releases/tag/v0.7.5",
   "links": [
    "https://github.com/247Tossing/cyberpunk_archipelago/releases/latest"
   ]
@@ -2964,7 +2964,8 @@
   "license_file": "deaths_door/LICENSE",
   "sheet": {
    "game": "Death's Door",
-   "stability": "Unstable"
+   "stability": "Unstable",
+   "pr_status": "Not PRing"
   },
   "download": "https://github.com/Chris-Is-Awesome/DDArchipelagoRandomizer/releases/download/v0.4.3/deaths_door.apworld",
   "release": "https://github.com/Chris-Is-Awesome/DDArchipelagoRandomizer/releases/tag/v0.4.3",
@@ -3966,7 +3967,7 @@
  },
  {
   "game": "Fantastic Fist",
-  "version": "0.0.7",
+  "version": "1.0.0",
   "authors": [
    "WaluigiGoesWa"
   ],
@@ -3981,8 +3982,8 @@
    "game": "Fantastic Fist",
    "stability": "Unstable"
   },
-  "download": "https://github.com/DannySchultzDev/Fantastic-Fist-Archipelago-Client/releases/download/V0.0.7/fantastic_fist.apworld",
-  "release": "https://github.com/DannySchultzDev/Fantastic-Fist-Archipelago-Client/releases/tag/V0.0.7",
+  "download": "https://github.com/DannySchultzDev/Fantastic-Fist-Archipelago-Client/releases/download/V1.0.0/fantastic_fist.apworld",
+  "release": "https://github.com/DannySchultzDev/Fantastic-Fist-Archipelago-Client/releases/tag/V1.0.0",
   "links": [
    "https://github.com/DannySchultzDev/Fantastic-Fist-Archipelago-Client/releases"
   ]
@@ -5316,7 +5317,7 @@
  },
  {
   "game": "Homura-Hime",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "authors": [
    "Kevin Anderson"
   ],
@@ -5331,8 +5332,8 @@
    "game": "Homura-Hime",
    "stability": "Unstable"
   },
-  "download": "https://github.com/Kevanderson97/homura-hime-archipelago/releases/download/v0.4.1/homura_hime.apworld",
-  "release": "https://github.com/Kevanderson97/homura-hime-archipelago/releases/tag/v0.4.1",
+  "download": "https://github.com/Kevanderson97/homura-hime-archipelago/releases/download/v0.4.2/homura_hime.apworld",
+  "release": "https://github.com/Kevanderson97/homura-hime-archipelago/releases/tag/v0.4.2",
   "links": [
    "https://github.com/Kevanderson97/homura-hime-archipelago/releases"
   ]
@@ -6215,7 +6216,7 @@
  },
  {
   "game": "Kirby & The Amazing Mirror",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "authors": [
    "Harrison Sherwin"
   ],
@@ -6231,8 +6232,8 @@
    "game": "Kirby & The Amazing Mirror",
    "stability": "Unstable"
   },
-  "download": "https://github.com/hasherwi/Archipelago-kirbyam/releases/download/kirbyam-v0.4.1/kirbyam.apworld",
-  "release": "https://github.com/hasherwi/Archipelago-kirbyam/releases/tag/kirbyam-v0.4.1",
+  "download": "https://github.com/hasherwi/Archipelago-kirbyam/releases/download/kirbyam-v0.5.0/kirbyam.apworld",
+  "release": "https://github.com/hasherwi/Archipelago-kirbyam/releases/tag/kirbyam-v0.5.0",
   "links": [
    "https://github.com/hasherwi/Archipelago-kirbyam/releases/latest"
   ]
@@ -7525,8 +7526,8 @@
    "game": "Mina the Hollower",
    "stability": "Stable"
   },
-  "download": "https://github.com/FyreDay/Archipelago-MinaTheHollower/releases/download/v1.1.2/mina_the_hollower.apworld",
-  "release": "https://github.com/FyreDay/Archipelago-MinaTheHollower/releases/tag/v1.1.2",
+  "download": "https://github.com/Minapelago/world/releases/download/v1.1.2/mina_the_hollower.apworld",
+  "release": "https://github.com/Minapelago/world/releases/tag/v1.1.2",
   "links": [
    "https://github.com/FyreDay/Archipelago-MinaTheHollower/releases"
   ]
@@ -8017,7 +8018,7 @@
  },
  {
   "game": "Neon White",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "authors": [
    "Badhamknibbs",
    "stxticOVFL"
@@ -8037,8 +8038,8 @@
    "stability": "Unstable",
    "pr_status": "Not PRing"
   },
-  "download": "https://github.com/Badhamknibbs/ArchipelagoNeonWhite/releases/download/v0.1.1/neonwhite.apworld",
-  "release": "https://github.com/Badhamknibbs/ArchipelagoNeonWhite/releases/tag/v0.1.1",
+  "download": "https://github.com/Badhamknibbs/ArchipelagoNeonWhite/releases/download/v0.2.0/neonwhite.apworld",
+  "release": "https://github.com/Badhamknibbs/ArchipelagoNeonWhite/releases/tag/v0.2.0",
   "links": [
    "https://github.com/Badhamknibbs/ArchipelagoNeonWhite/releases"
   ]
@@ -9901,7 +9902,7 @@
  },
  {
   "game": "Puzzle Bobble 4",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "authors": [
    "Hish"
   ],
@@ -9916,8 +9917,8 @@
    "game": "Puzzle Bobble 4",
    "stability": "Unstable"
   },
-  "download": "https://github.com/HishLeo/PuzzleBobble4forArchipelago/releases/download/v1.0.0/puzzlebobble4.apworld",
-  "release": "https://github.com/HishLeo/PuzzleBobble4forArchipelago/releases/tag/v1.0.0",
+  "download": "https://github.com/HishLeo/PuzzleBobble4forArchipelago/releases/download/v1.2.0/puzzlebobble4.apworld",
+  "release": "https://github.com/HishLeo/PuzzleBobble4forArchipelago/releases/tag/v1.2.0",
   "links": [
    "https://github.com/HishLeo/PuzzleBobble4forArchipelago/releases/latest"
   ]
@@ -14753,6 +14754,30 @@
   ]
  },
  {
+  "game": "Well Dweller",
+  "version": "0.2.2",
+  "authors": [
+   "Soffocles"
+  ],
+  "file": "well_dweller.apworld",
+  "source": "https://github.com/OSoffocles/Well-Dweller-APWorld",
+  "license": "MIT",
+  "license_url": "https://github.com/OSoffocles/Well-Dweller-APWorld/blob/HEAD/LICENSE",
+  "copyright": [
+   "Copyright (c) 2026 Soffocles"
+  ],
+  "sheet": {
+   "game": "Well Dweller",
+   "stability": "Unstable",
+   "pr_status": "Not PRing"
+  },
+  "download": "https://github.com/OSoffocles/Well-Dweller-APWorld/releases/download/v0.2.2-alpha/well_dweller.apworld",
+  "release": "https://github.com/OSoffocles/Well-Dweller-APWorld/releases/tag/v0.2.2-alpha",
+  "links": [
+   "https://github.com/OSoffocles/Well-Dweller-APWorld/releases/latest"
+  ]
+ },
+ {
   "game": "We Love Katamari Reroll",
   "version": "0.1.0",
   "authors": [
@@ -15033,7 +15058,7 @@
  },
  {
   "game": "Xenoblade X",
-  "version": "0.2.10",
+  "version": "0.3.0",
   "authors": [
    "Maragon",
    "Nina"
@@ -15052,8 +15077,8 @@
    "game": "Xenoblade Chronicles X",
    "stability": "Unstable"
   },
-  "download": "https://github.com/MaragonMH/Archipelago/releases/download/XenoX0.2.10/xenobladex.apworld",
-  "release": "https://github.com/MaragonMH/Archipelago/releases/tag/XenoX0.2.10",
+  "download": "https://github.com/MaragonMH/Archipelago/releases/download/XenoX0.3.0/xenobladex.apworld",
+  "release": "https://github.com/MaragonMH/Archipelago/releases/tag/XenoX0.3.0",
   "links": [
    "https://github.com/MaragonMH/Archipelago/releases"
   ]

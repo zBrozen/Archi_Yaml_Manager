@@ -1,6 +1,6 @@
 {
  "ap_version": "0.6.8",
- "generated_at": "2026-11-06T12:50:02+00:00",
+ "generated_at": "2026-11-07T11:37:04+00:00",
  "games": [
   {
    "game": "2048",
@@ -1337,7 +1337,7 @@
    "file": "games/cooking-mama-3.json",
    "source": "custom",
    "apworld": "cookingmama3.apworld",
-   "world_version": "1.1.3",
+   "world_version": "1.1.4",
    "guides": "guides/cooking-mama-3.json",
    "sheet": {
     "game": "Cooking Mama 3",
@@ -1581,7 +1581,7 @@
    "file": "games/cyberpunk-2077.json",
    "source": "custom",
    "apworld": "cyberpunk2077.apworld",
-   "world_version": "0.7.4",
+   "world_version": "0.7.5",
    "guides": "guides/cyberpunk-2077.json",
    "sheet": {
     "game": "Cyberpunk 2077",
@@ -1694,7 +1694,8 @@
    "guides": "guides/death-s-door.json",
    "sheet": {
     "game": "Death's Door",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "pr_status": "Not PRing"
    }
   },
   {
@@ -2269,7 +2270,7 @@
    "file": "games/fantastic-fist.json",
    "source": "custom",
    "apworld": "fantastic_fist.apworld",
-   "world_version": "0.0.7",
+   "world_version": "1.0.0",
    "guides": "guides/fantastic-fist.json",
    "sheet": {
     "game": "Fantastic Fist",
@@ -3019,7 +3020,7 @@
    "file": "games/homura-hime.json",
    "source": "custom",
    "apworld": "homura_hime.apworld",
-   "world_version": "0.4.1",
+   "world_version": "0.4.2",
    "guides": "guides/homura-hime.json",
    "sheet": {
     "game": "Homura-Hime",
@@ -3476,7 +3477,7 @@
    "file": "games/kirby-the-amazing-mirror.json",
    "source": "custom",
    "apworld": "kirbyam.apworld",
-   "world_version": "0.4.1",
+   "world_version": "0.5.0",
    "guides": "guides/kirby-the-amazing-mirror.json",
    "sheet": {
     "game": "Kirby & The Amazing Mirror",
@@ -4541,7 +4542,7 @@
    "file": "games/neon-white.json",
    "source": "custom",
    "apworld": "neonwhite.apworld",
-   "world_version": "0.1.1",
+   "world_version": "0.2.0",
    "guides": "guides/neon-white.json",
    "sheet": {
     "game": "Neon White",
@@ -5523,7 +5524,7 @@
    "file": "games/puzzle-bobble-4.json",
    "source": "custom",
    "apworld": "puzzlebobble4.apworld",
-   "world_version": "1.0.0",
+   "world_version": "1.2.0",
    "guides": "guides/puzzle-bobble-4.json",
    "sheet": {
     "game": "Puzzle Bobble 4",
@@ -8232,6 +8233,19 @@
    }
   },
   {
+   "game": "Well Dweller",
+   "file": "games/well-dweller.json",
+   "source": "custom",
+   "apworld": "well_dweller.apworld",
+   "world_version": null,
+   "guides": "guides/well-dweller.json",
+   "sheet": {
+    "game": "Well Dweller",
+    "stability": "Unstable",
+    "pr_status": "Not PRing"
+   }
+  },
+  {
    "game": "West of Loathing",
    "file": "games/west-of-loathing.json",
    "source": "custom",
@@ -8358,7 +8372,7 @@
    "file": "games/xenoblade-x.json",
    "source": "custom",
    "apworld": "xenobladex.apworld",
-   "world_version": "0.2.10",
+   "world_version": "0.3.0",
    "guides": "guides/xenoblade-x.json",
    "sheet": {
     "game": "Xenoblade Chronicles X",
