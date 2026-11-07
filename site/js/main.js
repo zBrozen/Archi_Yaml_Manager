@@ -189,7 +189,7 @@ function EditorHome({ index, onOpen, onCreate }) {
     </section>
 
     ${failed.length > 0 && html`<details class="notice warn">
-      <summary>${plural(failed.length, "jeu")} du serveur n'ont pas pu être chargés</summary>
+      <summary>${plural(failed.length, "jeu", "jeux")} du serveur ${failed.length > 1 ? "n'ont pas pu être chargés" : "n'a pas pu être chargé"}</summary>
       <ul>${failed.map(([name, reason]) => html`<li><strong>${name}</strong> : ${reason}</li>`)}</ul>
     </details>`}
 

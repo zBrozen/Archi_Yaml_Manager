@@ -1,7 +1,8 @@
 // Composants et petits outils partagés par l'éditeur et les rooms.
 import { html, useEffect, useState } from "../vendor/preact-htm.js";
 
-export const plural = (n, word) => `${n} ${word}${n > 1 ? "s" : ""}`;
+// `many` : forme du pluriel quand elle ne prend pas de « s » (jeu → jeux).
+export const plural = (n, word, many = `${word}s`) => `${n} ${n > 1 ? many : word}`;
 
 // Préférence mémorisée dans le navigateur (si le stockage est disponible).
 export function useSetting(name, initial) {
