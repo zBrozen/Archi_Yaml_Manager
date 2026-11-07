@@ -163,8 +163,9 @@ def extract(upload: str) -> str:
     import Options
     worlds = importlib.import_module("worlds")
     from worlds.AutoWorld import AutoWorldRegister
-    from ap_extract import describe_world, world_source
+    from ap_extract import describe_world, restore_world_versions, world_source
 
+    restore_world_versions(AutoWorldRegister.world_types)
     games, errors = [], {}
     for game, world in AutoWorldRegister.world_types.items():
         if world.hidden or world_source(worlds, world)[0] != "custom":

@@ -33,9 +33,13 @@ import threading
 import urllib.error
 import urllib.request
 import zipfile
+from inspect import getsource
 from pathlib import Path
 
 from fetch_apworlds import apworld_problem
+
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "site" / "py"))
+from ap_extract import restore_world_versions  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
 GENERATION_TIMEOUT = 25 * 60
@@ -56,11 +60,15 @@ settings.no_gui = True  # une ROM manquante est une erreur, pas une fenêtre « 
 server = settings.get_settings().server_options
 for key in ("release_mode", "collect_mode", "remaining_mode", "hint_cost"):
     setattr(server, key, type(getattr(server, key))(options[key]))
+# Version des apworlds dont le manifeste vise un Archipelago plus récent (voir ap_extract.restore_world_versions).
+from worlds import AutoWorldRegister
+restore_world_versions(AutoWorldRegister.world_types)
 sys.argv = ["Generate.py", *sys.argv[2:]]
 import Generate, Main
 erargs, seed = Generate.main()
 Main.main(erargs, seed)
 """
+WRAPPER = WRAPPER.replace("import settings\n", "import settings\n" + getsource(restore_world_versions), 1)
 
 
 class Failure(Exception):

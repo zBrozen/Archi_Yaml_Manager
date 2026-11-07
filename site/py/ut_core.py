@@ -124,6 +124,8 @@ def reload_worlds() -> str:
         del sys.modules[name]
     zipimport._zip_directory_cache.clear()
     worlds = importlib.import_module("worlds")
+    from ap_extract import restore_world_versions
+    restore_world_versions(worlds.AutoWorldRegister.world_types)  # sinon requires.game du YAML refusé
     failed = {name: (reason.strip().splitlines() or ["échec"])[-1] for name, reason in worlds.failed_world_loads.items()}
     return json.dumps({"games": sorted(worlds.AutoWorldRegister.world_types), "failed": failed})
 

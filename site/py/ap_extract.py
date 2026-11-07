@@ -5,6 +5,7 @@ qui l'exécute avec Pyodide pour lire un apworld déposé par un joueur (voir br
 """
 from __future__ import annotations
 
+import json
 import os
 from inspect import cleandoc
 from textwrap import dedent
@@ -145,6 +146,36 @@ def world_source(worlds_module, world) -> tuple[str, str | None]:
             file = os.path.basename(source.path) if source.is_zip else None
             return ("core" if source.relative else "custom"), file
     return "core", None
+
+
+def restore_world_versions(world_types: dict[str, Any]) -> list[str]:
+    """Remet la version des apworlds dont Archipelago a refusé le manifeste, et renvoie leurs jeux.
+
+    Un manifeste écrit pour un Archipelago plus récent (`compatible_version` plus grand que celui que la
+    version du site connaît) est refusé avec un simple message : le monde se charge quand même, mais en
+    version 0.0.0, et tout YAML qui demande une version du jeu (`requires.game`) est alors rejeté par
+    Generate.roll_settings. Seule la version est relue ici, comme le ferait un Archipelago plus récent."""
+    import re
+    import zipfile
+    from Utils import tuplize_version
+    restored = []
+    for game, world in world_types.items():
+        path = getattr(world, "zip_path", None)
+        if not path or any(getattr(world, "world_version", ()) or ()):
+            continue
+        try:
+            with zipfile.ZipFile(path) as archive:
+                names = sorted((n for n in archive.namelist() if n.endswith("archipelago.json")), key=lambda n: n.count("/"))
+                manifest = json.loads(archive.read(names[0])) if names else {}
+        except Exception:
+            continue
+        if not isinstance(manifest, dict):
+            continue
+        version = manifest.get("world_version")
+        if manifest.get("game") == game and isinstance(version, str) and re.fullmatch(r"\d+\.\d+\.\d+", version):
+            world.world_version = tuplize_version(version)
+            restored.append(game)
+    return restored
 
 
 def valid_groups(groups: dict[str, Any], names: Any) -> list[str]:

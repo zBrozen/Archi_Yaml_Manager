@@ -29,7 +29,7 @@ from typing import Any
 
 # Fonctions partagées avec le site (exécutées aussi dans le navigateur).
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "site" / "py"))
-from ap_extract import describe_world  # noqa: E402
+from ap_extract import describe_world, restore_world_versions  # noqa: E402
 
 TRANSLATED_FIELDS = ("doc_fr", "doc_html_fr")
 # Guides gardés : anglais et français (toutes les langues si le jeu n'a ni l'un ni l'autre).
@@ -135,6 +135,7 @@ def worker(ap_dir: Path, folder: Path, result: Path) -> int:
     import Options
     import worlds
     from worlds.AutoWorld import AutoWorldRegister
+    restore_world_versions(AutoWorldRegister.world_types)
 
     games, errors = [], {}
     for game, world in AutoWorldRegister.world_types.items():
