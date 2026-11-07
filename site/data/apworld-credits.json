@@ -3402,7 +3402,7 @@
  },
  {
   "game": "Dragon Quest III HD-2D Remake",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "authors": [
    "ZigzagAwaka"
   ],
@@ -3415,8 +3415,8 @@
    "game": "Dragon Quest III HD-2D Remake",
    "stability": "Stable"
   },
-  "download": "https://github.com/ZigzagAwaka/DQ3AP/releases/download/v0.5.0/dq3.apworld",
-  "release": "https://github.com/ZigzagAwaka/DQ3AP/releases/tag/v0.5.0",
+  "download": "https://github.com/ZigzagAwaka/DQ3AP/releases/download/v0.5.1/dq3.apworld",
+  "release": "https://github.com/ZigzagAwaka/DQ3AP/releases/tag/v0.5.1",
   "links": [
    "https://github.com/ZigzagAwaka/DQ3AP/releases/latest"
   ]
@@ -3967,7 +3967,7 @@
  },
  {
   "game": "Fantastic Fist",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "authors": [
    "WaluigiGoesWa"
   ],
@@ -3982,8 +3982,8 @@
    "game": "Fantastic Fist",
    "stability": "Unstable"
   },
-  "download": "https://github.com/DannySchultzDev/Fantastic-Fist-Archipelago-Client/releases/download/V1.0.0/fantastic_fist.apworld",
-  "release": "https://github.com/DannySchultzDev/Fantastic-Fist-Archipelago-Client/releases/tag/V1.0.0",
+  "download": "https://github.com/DannySchultzDev/Fantastic-Fist-Archipelago-Client/releases/download/V1.1.0/fantastic_fist.apworld",
+  "release": "https://github.com/DannySchultzDev/Fantastic-Fist-Archipelago-Client/releases/tag/V1.1.0",
   "links": [
    "https://github.com/DannySchultzDev/Fantastic-Fist-Archipelago-Client/releases"
   ]
@@ -4214,7 +4214,7 @@
  },
  {
   "game": "Final Fantasy XIII-2",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "authors": [],
   "file": "ff132.apworld",
   "source": "https://github.com/MLSTRM/ArchipelagoFF132",
@@ -4230,8 +4230,8 @@
    "game": "Final Fantasy XIII-2",
    "stability": "Unstable"
   },
-  "download": "https://github.com/MLSTRM/ArchipelagoFF132/releases/download/ff132/0.3.0/ff132.apworld",
-  "release": "https://github.com/MLSTRM/ArchipelagoFF132/releases/tag/ff132/0.3.0",
+  "download": "https://github.com/MLSTRM/ArchipelagoFF132/releases/download/ff132/0.3.1/ff132.apworld",
+  "release": "https://github.com/MLSTRM/ArchipelagoFF132/releases/tag/ff132/0.3.1",
   "links": [
    "https://github.com/MLSTRM/ArchipelagoFF132/releases/latest"
   ]
@@ -4729,7 +4729,7 @@
  },
  {
   "game": "Grand Theft Auto: San Andreas",
-  "version": "0.9.0",
+  "version": "1.0.0",
   "authors": [
    "awaken"
   ],
@@ -4744,8 +4744,8 @@
    "pr_status": "Not PRing",
    "adult": true
   },
-  "download": "https://github.com/awakenbad/SanAndreasAP/releases/download/v0.9.0/gta_sa.apworld",
-  "release": "https://github.com/awakenbad/SanAndreasAP/releases/tag/v0.9.0",
+  "download": "https://github.com/awakenbad/SanAndreasAP/releases/download/v1.0.0/gta_sa.apworld",
+  "release": "https://github.com/awakenbad/SanAndreasAP/releases/tag/v1.0.0",
   "links": [
    "https://github.com/awakenbad/SanAndreasAP/releases/latest"
   ]
@@ -5729,8 +5729,8 @@
    "stability": "Stable",
    "pr_status": "Not PRing"
   },
-  "download": "https://github.com/NyanMC/ap-islesoftrials/releases/download/0.2.0d/isles_of_trials.apworld",
-  "release": "https://github.com/NyanMC/ap-islesoftrials/releases/tag/0.2.0d",
+  "download": "https://github.com/NyanMC/ap-islesoftrials/releases/download/0.2.0e/isles_of_trials.apworld",
+  "release": "https://github.com/NyanMC/ap-islesoftrials/releases/tag/0.2.0e",
   "links": [
    "https://github.com/NyanMC/ap-islesoftrials/releases/latest"
   ]
@@ -7214,7 +7214,7 @@
  },
  {
   "game": "Mega Man ZX",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "authors": [
    "Nekusen"
   ],
@@ -7230,8 +7230,8 @@
    "game": "Mega Man ZX",
    "stability": "Unstable"
   },
-  "download": "https://github.com/Nekusen/Archipelago-MegaManZX/releases/download/v0.2.1/mmzx.apworld",
-  "release": "https://github.com/Nekusen/Archipelago-MegaManZX/releases/tag/v0.2.1",
+  "download": "https://github.com/Nekusen/Archipelago-MegaManZX/releases/download/v0.3.0/mmzx.apworld",
+  "release": "https://github.com/Nekusen/Archipelago-MegaManZX/releases/tag/v0.3.0",
   "links": [
    "https://github.com/Nekusen/Archipelago-MegaManZX/releases/latest"
   ]
@@ -8342,8 +8342,8 @@
    "game": "The Legend Zelda: Ocarina of Time (Updated, not Ship)",
    "stability": "Unstable"
   },
-  "download": "https://github.com/TreZc0/OoTR-APWorld/releases/download/v9.1.0-release9/oot.apworld",
-  "release": "https://github.com/TreZc0/OoTR-APWorld/releases/tag/v9.1.0-release9",
+  "download": "https://github.com/TreZc0/OoTR-APWorld/releases/download/v9.1.0-release10/oot.apworld",
+  "release": "https://github.com/TreZc0/OoTR-APWorld/releases/tag/v9.1.0-release10",
   "links": [
    "https://github.com/TreZc0/OoTR-APWorld/releases"
   ]
@@ -8373,7 +8373,7 @@
  },
  {
   "game": "Okami HD",
-  "version": "0.5.4",
+  "version": "0.5.5",
   "authors": [
    "Axertin",
    "Ragmoa"
@@ -8392,8 +8392,8 @@
    "game": "Okami HD",
    "stability": "Unstable"
   },
-  "download": "https://github.com/Ragmoa/Archipelago/releases/download/0.5.4/okamihd.apworld",
-  "release": "https://github.com/Ragmoa/Archipelago/releases/tag/0.5.4",
+  "download": "https://github.com/Ragmoa/Archipelago/releases/download/0.5.5/okamihd.apworld",
+  "release": "https://github.com/Ragmoa/Archipelago/releases/tag/0.5.5",
   "links": [
    "https://github.com/Ragmoa/Archipelago/releases/latest"
   ]
@@ -10762,7 +10762,7 @@
  },
  {
   "game": "Scooby-Doo! Night of 100 Frights",
-  "version": "1.4.2",
+  "version": "1.4.3",
   "authors": [
    "vgm5"
   ],
@@ -10778,8 +10778,8 @@
    "stability": "Stable",
    "pr_status": "In Review"
   },
-  "download": "https://github.com/vgm5/Night_Of_100_Frights_ap_world/releases/download/Release_1_4_2/no100f.apworld",
-  "release": "https://github.com/vgm5/Night_Of_100_Frights_ap_world/releases/tag/Release_1_4_2",
+  "download": "https://github.com/vgm5/Night_Of_100_Frights_ap_world/releases/download/Release_1_4_3/no100f.apworld",
+  "release": "https://github.com/vgm5/Night_Of_100_Frights_ap_world/releases/tag/Release_1_4_3",
   "links": [
    "https://github.com/vgm5/Night_Of_100_Frights_ap_world/releases/latest"
   ]
@@ -13067,7 +13067,7 @@
  },
  {
   "game": "The Legend of Zelda: A Link to the Past",
-  "version": "1.7.0",
+  "version": "1.8.0",
   "authors": [
    "aurabot"
   ],
@@ -13085,8 +13085,8 @@
    "game": "The Legend of Zelda: A Link to the Past OWR",
    "stability": "Unstable"
   },
-  "download": "https://github.com/aurabot24/Archipelago-ALttPR/releases/download/v1.7.0/alttpr.apworld",
-  "release": "https://github.com/aurabot24/Archipelago-ALttPR/releases/tag/v1.7.0",
+  "download": "https://github.com/aurabot24/Archipelago-ALttPR/releases/download/v1.8.0/alttpr.apworld",
+  "release": "https://github.com/aurabot24/Archipelago-ALttPR/releases/tag/v1.8.0",
   "links": [
    "https://github.com/aurabot24/Archipelago-ALttPR/releases/latest"
   ]
