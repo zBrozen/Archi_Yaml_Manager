@@ -1270,14 +1270,6 @@
    "wikidata": null,
    "checked": "2026-11-03"
   },
-  "Enter The Gungeon": {
-   "genres": [
-    "roguelike",
-    "tir"
-   ],
-   "wikidata": "Q23759338",
-   "checked": "2026-11-03"
-  },
   "Equilinox": {
    "genres": [
     "simulation"
@@ -1770,6 +1762,13 @@
    ],
    "wikidata": "Q127570416",
    "checked": "2026-11-03"
+  },
+  "Homura-Hime": {
+   "genres": [
+    "action"
+   ],
+   "wikidata": "Q128790292",
+   "checked": "2026-11-06"
   },
   "Horse Magnifier": {
    "genres": [],
@@ -2703,13 +2702,6 @@
    "wikidata": null,
    "checked": "2026-11-03"
   },
-  "Northgard": {
-   "genres": [
-    "strategie"
-   ],
-   "wikidata": "Q28837221",
-   "checked": "2026-11-03"
-  },
   "Nova Lands": {
    "genres": [
     "aventure",
@@ -2787,6 +2779,14 @@
    ],
    "wikidata": "Q1923697",
    "checked": "2026-11-03"
+  },
+  "One Step From Eden": {
+   "genres": [
+    "action",
+    "strategie"
+   ],
+   "wikidata": "Q104161838",
+   "checked": "2026-11-05"
   },
   "OpenRCT2": {
    "genres": [
