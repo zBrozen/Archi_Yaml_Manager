@@ -1,6 +1,6 @@
 {
  "ap_version": "0.6.8",
- "generated_at": "2026-11-07T11:37:04+00:00",
+ "generated_at": "2026-11-07T19:24:35+00:00",
  "games": [
   {
    "game": "2048",
@@ -119,7 +119,7 @@
    "file": "games/aeminecraft.json",
    "source": "custom",
    "apworld": "minecraft_aem.apworld",
-   "world_version": null,
+   "world_version": "0.6.2",
    "guides": "guides/aeminecraft.json",
    "sheet": {
     "game": "Minecraft [AEM]",
@@ -687,7 +687,7 @@
    "file": "games/bloodstained-ritual-of-the-night.json",
    "source": "custom",
    "apworld": "bloodstained_rotn.apworld",
-   "world_version": null,
+   "world_version": "1.0.2",
    "guides": "guides/bloodstained-ritual-of-the-night.json",
    "sheet": {
     "game": "Bloodstained: Ritual of the Night",
@@ -768,7 +768,7 @@
    "file": "games/borderlands-2.json",
    "source": "custom",
    "apworld": "borderlands2.apworld",
-   "world_version": null,
+   "world_version": "0.5.5",
    "guides": "guides/borderlands-2.json",
    "sheet": {
     "game": "Borderlands 2",
@@ -830,7 +830,7 @@
    "file": "games/bugs-bunny-lost-in-time.json",
    "source": "custom",
    "apworld": "bugsbunnylit.apworld",
-   "world_version": null,
+   "world_version": "2.0.0",
    "guides": "guides/bugs-bunny-lost-in-time.json",
    "sheet": {
     "game": "Bugs Bunny Lost in Time",
@@ -875,7 +875,7 @@
    "file": "games/burger-shop.json",
    "source": "custom",
    "apworld": "burger_shop.apworld",
-   "world_version": null,
+   "world_version": "0.3.2",
    "guides": "guides/burger-shop.json",
    "sheet": {
     "game": "Burger Shop",
@@ -1051,7 +1051,7 @@
    "file": "games/caves-of-qud.json",
    "source": "custom",
    "apworld": "cavesofqud.apworld",
-   "world_version": null,
+   "world_version": "0.8.2",
    "guides": "guides/caves-of-qud.json",
    "sheet": {
     "game": "Caves of Qud",
@@ -1312,7 +1312,7 @@
    "file": "games/control.json",
    "source": "custom",
    "apworld": "control.apworld",
-   "world_version": null,
+   "world_version": "1.0.2",
    "guides": "guides/control.json",
    "sheet": {
     "game": "Control (Ultimate Edition)",
@@ -1373,7 +1373,7 @@
    "file": "games/cowtastic-cafe.json",
    "source": "custom",
    "apworld": "cowtastic_cafe.apworld",
-   "world_version": null,
+   "world_version": "1.0.2",
    "guides": "guides/cowtastic-cafe.json",
    "sheet": {
     "game": "Cowtastic Cafe",
@@ -1387,7 +1387,7 @@
    "file": "games/crab-champions.json",
    "source": "custom",
    "apworld": "crabchampions.apworld",
-   "world_version": null,
+   "world_version": "2.0.0",
    "guides": "guides/crab-champions.json",
    "sheet": {
     "game": "Crab Champions",
@@ -1412,7 +1412,7 @@
    "file": "games/crash-bandicoot-n-sane-trilogy.json",
    "source": "custom",
    "apworld": "crash_nst.apworld",
-   "world_version": null,
+   "world_version": "1.0.8",
    "guides": "guides/crash-bandicoot-n-sane-trilogy.json",
    "sheet": {
     "game": "Crash Bandicoot N. Sane Trilogy",
@@ -1424,7 +1424,7 @@
    "file": "games/crash-bash.json",
    "source": "custom",
    "apworld": "crashbash.apworld",
-   "world_version": null,
+   "world_version": "0.1.0",
    "guides": "guides/crash-bash.json",
    "sheet": {
     "game": "Crash Bash",
@@ -1557,7 +1557,7 @@
    "file": "games/custom-robo.json",
    "source": "custom",
    "apworld": "custom_robo.apworld",
-   "world_version": null,
+   "world_version": "1.0.0",
    "guides": "guides/custom-robo.json",
    "sheet": {
     "game": "Custom Robo",
@@ -1912,7 +1912,7 @@
    "file": "games/dota-2.json",
    "source": "custom",
    "apworld": "dota_2.apworld",
-   "world_version": null,
+   "world_version": "0.1.0",
    "guides": "guides/dota-2.json",
    "sheet": {
     "game": "DOTA 2",
@@ -1962,7 +1962,7 @@
    "file": "games/dragon-quest-iii-hd-2d-remake.json",
    "source": "custom",
    "apworld": "dq3.apworld",
-   "world_version": "0.5.0",
+   "world_version": "0.5.1",
    "guides": "guides/dragon-quest-iii-hd-2d-remake.json",
    "sheet": {
     "game": "Dragon Quest III HD-2D Remake",
@@ -2035,7 +2035,7 @@
    "file": "games/duke-nukem-3d.json",
    "source": "custom",
    "apworld": "duke3d.apworld",
-   "world_version": null,
+   "world_version": "0.0.7",
    "guides": "guides/duke-nukem-3d.json",
    "sheet": {
     "game": "Duke Nukem 3D",
@@ -2130,7 +2130,7 @@
    "file": "games/elementipelago.json",
    "source": "custom",
    "apworld": "elementipelago.apworld",
-   "world_version": null,
+   "world_version": "0.1.0",
    "guides": "guides/elementipelago.json",
    "sheet": {
     "game": "Elementipelago",
@@ -2154,7 +2154,7 @@
    "file": "games/equilinox.json",
    "source": "custom",
    "apworld": "equilinox.apworld",
-   "world_version": null,
+   "world_version": "0.0.1",
    "guides": "guides/equilinox.json",
    "sheet": {
     "game": "Equilinox",
@@ -2270,7 +2270,7 @@
    "file": "games/fantastic-fist.json",
    "source": "custom",
    "apworld": "fantastic_fist.apworld",
-   "world_version": "1.0.0",
+   "world_version": "1.1.0",
    "guides": "guides/fantastic-fist.json",
    "sheet": {
     "game": "Fantastic Fist",
@@ -2290,7 +2290,7 @@
    "file": "games/feeding-frenzy-2.json",
    "source": "custom",
    "apworld": "feeding_frenzy_2.apworld",
-   "world_version": null,
+   "world_version": "0.1.0",
    "guides": "guides/feeding-frenzy-2.json",
    "sheet": {
     "game": "Feeding Frenzy 2",
@@ -2403,7 +2403,7 @@
    "file": "games/final-fantasy-xiii-2.json",
    "source": "custom",
    "apworld": "ff132.apworld",
-   "world_version": "0.3.0",
+   "world_version": "0.3.1",
    "guides": "guides/final-fantasy-xiii-2.json",
    "sheet": {
     "game": "Final Fantasy XIII-2",
@@ -2528,7 +2528,7 @@
    "file": "games/gato-roboto.json",
    "source": "custom",
    "apworld": "gatoroboto.apworld",
-   "world_version": null,
+   "world_version": "0.1.0",
    "guides": "guides/gato-roboto.json",
    "sheet": {
     "game": "Gato Roboto",
@@ -2584,7 +2584,7 @@
    "file": "games/geometry-dash.json",
    "source": "custom",
    "apworld": "geometrydash.apworld",
-   "world_version": null,
+   "world_version": "1.0.0",
    "guides": "guides/geometry-dash.json",
    "sheet": {
     "game": "Geometry Dash",
@@ -2698,7 +2698,7 @@
    "file": "games/grand-theft-auto-san-andreas.json",
    "source": "custom",
    "apworld": "gta_sa.apworld",
-   "world_version": "0.9.0",
+   "world_version": "1.0.0",
    "guides": "guides/grand-theft-auto-san-andreas.json",
    "sheet": {
     "game": "Grand Theft Auto: San Andreas",
@@ -2950,7 +2950,7 @@
    "file": "games/high-roller.json",
    "source": "custom",
    "apworld": "high_roller.apworld",
-   "world_version": null,
+   "world_version": "1.3.0",
    "guides": "guides/high-roller.json",
    "sheet": {
     "game": "High Roller",
@@ -3044,7 +3044,7 @@
    "file": "games/hot-lava.json",
    "source": "custom",
    "apworld": "hot_lava.apworld",
-   "world_version": null,
+   "world_version": "0.1.0",
    "guides": "guides/hot-lava.json",
    "sheet": {
     "game": "Hot Lava",
@@ -3142,7 +3142,7 @@
    "file": "games/hytale.json",
    "source": "custom",
    "apworld": "hytale.apworld",
-   "world_version": null,
+   "world_version": "1.6.1",
    "guides": "guides/hytale.json",
    "sheet": {
     "game": "Hytale",
@@ -3154,7 +3154,7 @@
    "file": "games/i-hate-you-please-suffer.json",
    "source": "custom",
    "apworld": "ihyps.apworld",
-   "world_version": null,
+   "world_version": "0.1.0",
    "guides": "guides/i-hate-you-please-suffer.json",
    "sheet": {
     "game": "I Hate You, Please Suffer",
@@ -3178,7 +3178,7 @@
    "file": "games/iamyourbeast.json",
    "source": "custom",
    "apworld": "i_am_your_beast.apworld",
-   "world_version": null,
+   "world_version": "0.3.3",
    "guides": "guides/iamyourbeast.json",
    "sheet": {
     "game": "I am Your Beast",
@@ -3374,7 +3374,7 @@
    "file": "games/kerbal-space-program-1.json",
    "source": "custom",
    "apworld": "ksp1.apworld",
-   "world_version": null,
+   "world_version": "0.9.1",
    "guides": "guides/kerbal-space-program-1.json",
    "sheet": {
     "game": "Kerbal Space Program",
@@ -3428,7 +3428,7 @@
    "file": "games/kingdom-hearts-birth-by-sleep.json",
    "source": "custom",
    "apworld": "khbbs.apworld",
-   "world_version": null,
+   "world_version": "0.1.7",
    "guides": "guides/kingdom-hearts-birth-by-sleep.json",
    "sheet": {
     "game": "Kingdom Hearts: Birth by Sleep Final Mix",
@@ -3501,7 +3501,7 @@
    "file": "games/kirby-squeak-squad.json",
    "source": "custom",
    "apworld": "kirby_squeak_squad.apworld",
-   "world_version": null,
+   "world_version": "0.0.9",
    "guides": "guides/kirby-squeak-squad.json",
    "sheet": {
     "game": "Kirby Squeak Squad",
@@ -3765,7 +3765,7 @@
    "file": "games/loonyland.json",
    "source": "custom",
    "apworld": "loonyland.apworld",
-   "world_version": null,
+   "world_version": "0.2.5",
    "guides": "guides/loonyland.json",
    "sheet": {
     "game": "Loonyland: Halloween Hill",
@@ -3922,7 +3922,7 @@
    "file": "games/mario-is-missing.json",
    "source": "custom",
    "apworld": "mariomissing.apworld",
-   "world_version": null,
+   "world_version": "0.0.3",
    "rom": {
     "section": "mariomissing_options",
     "setting": "rom_file",
@@ -4109,7 +4109,7 @@
    "file": "games/mega-man-zx.json",
    "source": "custom",
    "apworld": "mmzx.apworld",
-   "world_version": null,
+   "world_version": "0.3.0",
    "guides": "guides/mega-man-zx.json",
    "sheet": {
     "game": "Mega Man ZX",
@@ -4192,7 +4192,7 @@
    "file": "games/metal-gear-solid.json",
    "source": "custom",
    "apworld": "mgs.apworld",
-   "world_version": null,
+   "world_version": "0.7.0",
    "guides": "guides/metal-gear-solid.json",
    "sheet": {
     "game": "Metal Gear Solid",
@@ -4206,7 +4206,7 @@
    "file": "games/metal-hellsinger.json",
    "source": "custom",
    "apworld": "metal_hellsinger.apworld",
-   "world_version": null,
+   "world_version": "1.1.3",
    "guides": "guides/metal-hellsinger.json",
    "sheet": {
     "game": "Metal Hellsinger",
@@ -4218,7 +4218,7 @@
    "file": "games/metrocubevania.json",
    "source": "custom",
    "apworld": "metrocubevania.apworld",
-   "world_version": null,
+   "world_version": "0.2.0",
    "guides": "guides/metrocubevania.json",
    "sheet": {
     "game": "MetroCUBEvania",
@@ -4279,7 +4279,7 @@
    "file": "games/mgs-masala-garden-salad.json",
    "source": "custom",
    "apworld": "mgsalad.apworld",
-   "world_version": null,
+   "world_version": "1.0.0",
    "guides": "guides/mgs-masala-garden-salad.json",
    "sheet": {
     "game": "Metal Gear Solid - Masala Garden Salad",
@@ -4401,7 +4401,7 @@
    "file": "games/momodora-moonlit-farewell.json",
    "source": "custom",
    "apworld": "momodoramoonlitfarewell.apworld",
-   "world_version": null,
+   "world_version": "1.8.1",
    "guides": "guides/momodora-moonlit-farewell.json",
    "sheet": {
     "game": "Momodora: Moonlit Farewell",
@@ -4712,7 +4712,7 @@
    "file": "games/oh-so-hero.json",
    "source": "custom",
    "apworld": "oh_so_hero.apworld",
-   "world_version": null,
+   "world_version": "0.3.0",
    "guides": "guides/oh-so-hero.json",
    "sheet": {
     "game": "Oh So Hero",
@@ -4726,7 +4726,7 @@
    "file": "games/okami-hd.json",
    "source": "custom",
    "apworld": "okamihd.apworld",
-   "world_version": "0.5.4",
+   "world_version": "0.5.5",
    "guides": "guides/okami-hd.json",
    "sheet": {
     "game": "Okami HD",
@@ -4819,7 +4819,7 @@
    "file": "games/operation-octo.json",
    "source": "custom",
    "apworld": "operationocto.apworld",
-   "world_version": null,
+   "world_version": "1.0.0",
    "guides": "guides/operation-octo.json",
    "sheet": {
     "game": "Operation Octo",
@@ -4983,7 +4983,7 @@
    "file": "games/parkitect.json",
    "source": "custom",
    "apworld": "parkitect.apworld",
-   "world_version": null,
+   "world_version": "1.7.0",
    "guides": "guides/parkitect.json",
    "sheet": {
     "game": "Parkitect",
@@ -5679,7 +5679,7 @@
    "file": "games/rayman-2.json",
    "source": "custom",
    "apworld": "rayman2.apworld",
-   "world_version": null,
+   "world_version": "1.4.0",
    "guides": "guides/rayman-2.json",
    "sheet": {
     "game": "Rayman 2: The Great Escape",
@@ -5783,7 +5783,7 @@
    "file": "games/return-of-the-obra-dinn.json",
    "source": "custom",
    "apworld": "obradinn.apworld",
-   "world_version": null,
+   "world_version": "1.0.0",
    "guides": "guides/return-of-the-obra-dinn.json",
    "sheet": {
     "game": "Return of the Obra Dinn",
@@ -6020,7 +6020,7 @@
    "file": "games/scooby-doo-night-of-100-frights.json",
    "source": "custom",
    "apworld": "no100f.apworld",
-   "world_version": "1.4.2",
+   "world_version": "1.4.3",
    "guides": "guides/scooby-doo-night-of-100-frights.json",
    "sheet": {
     "game": "Scooby-Doo! Night of 100 Frights",
@@ -6097,7 +6097,7 @@
    "file": "games/seum-speedrunners-from-hell.json",
    "source": "custom",
    "apworld": "seum.apworld",
-   "world_version": null,
+   "world_version": "1.0.0",
    "guides": "guides/seum-speedrunners-from-hell.json",
    "sheet": {
     "game": "SEUM: Speedrunners from Hell",
@@ -6770,7 +6770,7 @@
    "file": "games/star-fox-adventures.json",
    "source": "custom",
    "apworld": "sfa.apworld",
-   "world_version": null,
+   "world_version": "0.1.2",
    "guides": "guides/star-fox-adventures.json",
    "sheet": {
     "game": "Star Fox Adventures",
@@ -6810,7 +6810,7 @@
    "file": "games/starship-titanic.json",
    "source": "custom",
    "apworld": "starship_titanic.apworld",
-   "world_version": null,
+   "world_version": "1.0.0",
    "guides": "guides/starship-titanic.json",
    "sheet": {
     "game": "Starship Titanic",
@@ -7032,7 +7032,7 @@
    "file": "games/super-meat-boy.json",
    "source": "custom",
    "apworld": "super_meat_boy.apworld",
-   "world_version": null,
+   "world_version": "1.1.0",
    "guides": "guides/super-meat-boy.json",
    "sheet": {
     "game": "Super Meat Boy",
@@ -7268,7 +7268,7 @@
    "file": "games/the-henry-stickmin-collection.json",
    "source": "custom",
    "apworld": "henry.apworld",
-   "world_version": null,
+   "world_version": "1.0.0",
    "guides": "guides/the-henry-stickmin-collection.json",
    "sheet": {
     "game": "The Henry Stickmin Collection",
@@ -7342,7 +7342,7 @@
    "file": "games/the-legend-of-zelda-a-link-to-the-past.json",
    "source": "custom",
    "apworld": "alttpr.apworld",
-   "world_version": "1.7.0",
+   "world_version": "1.8.0",
    "guides": "guides/the-legend-of-zelda-a-link-to-the-past.json",
    "sheet": {
     "game": "The Legend of Zelda: A Link to the Past OWR",
@@ -7366,7 +7366,7 @@
    "file": "games/the-magical-quest-starring-mickey-mouse.json",
    "source": "custom",
    "apworld": "magical_quest.apworld",
-   "world_version": null,
+   "world_version": "0.1.0",
    "guides": "guides/the-magical-quest-starring-mickey-mouse.json",
    "sheet": {
     "game": "The Magical Quest starring Mickey Mouse",
@@ -7931,7 +7931,7 @@
    "file": "games/valheim.json",
    "source": "custom",
    "apworld": "valheim.apworld",
-   "world_version": null,
+   "world_version": "0.2.6",
    "guides": "guides/valheim.json",
    "sheet": {
     "game": "Valheim",
@@ -8112,7 +8112,7 @@
    "file": "games/warcraft-3.json",
    "source": "custom",
    "apworld": "wc3.apworld",
-   "world_version": null,
+   "world_version": "0.0.1",
    "guides": "guides/warcraft-3.json",
    "sheet": {
     "game": "Warcraft 3",
@@ -8237,7 +8237,7 @@
    "file": "games/well-dweller.json",
    "source": "custom",
    "apworld": "well_dweller.apworld",
-   "world_version": null,
+   "world_version": "0.2.2",
    "guides": "guides/well-dweller.json",
    "sheet": {
     "game": "Well Dweller",
@@ -8311,7 +8311,7 @@
    "file": "games/wizard-of-legend.json",
    "source": "custom",
    "apworld": "wizardoflegend.apworld",
-   "world_version": null,
+   "world_version": "1.1.0",
    "guides": "guides/wizard-of-legend.json",
    "sheet": {
     "game": "Wizard of Legende",
