@@ -6,6 +6,7 @@ on:
     branches: [main]
     paths:
       - "site/**"
+      - ".github/workflows/deploy.yml"
   workflow_dispatch:
   workflow_call:
 
@@ -44,9 +45,15 @@ jobs:
 
       - uses: actions/configure-pages@v5
 
+      # Un nom par tentative : « Re-run » garde les artefacts des tentatives précédentes du même run, et
+      # deploy-pages refuse de choisir entre deux artefacts du même nom.
       - uses: actions/upload-pages-artifact@v3
         with:
           path: site
+          name: github-pages-${{ github.run_attempt }}
 
       - id: deployment
         uses: actions/deploy-pages@v4
+        with:
+          artifact_name: github-pages-${{ github.run_attempt }}
+          timeout: 1200000 # 20 min : GitHub Pages dépasse parfois les 10 min par défaut
