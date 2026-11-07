@@ -378,6 +378,16 @@ button.link:hover { background: none; text-decoration: underline; }
 .player .span-all { grid-column: 1 / -1; }
 .player label, .label-like { display: grid; gap: .3rem; align-content: start; }
 .player label > span:first-child, .label-like > span:first-child { font-size: .875rem; font-weight: 600; }
+/* Jeu du YAML (éditeur) : bouton qui ouvre la liste des jeux, présenté comme un champ */
+.label-like > button.game-field {
+  display: flex; align-items: center; gap: .6rem; width: 100%; text-align: left; white-space: normal;
+  background: var(--surface); color: var(--text); border: 1px solid var(--border); border-radius: var(--radius-sm);
+  padding: .45rem .65rem; font-weight: 500; box-shadow: none;
+}
+.label-like > button.game-field:hover:not(:disabled) { background: var(--surface-2); border-color: var(--accent); }
+.label-like > button.game-field:active:not(:disabled) { transform: none; box-shadow: none; }
+.game-field-name { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.game-field-action { flex: none; font-size: .85rem; font-weight: 600; color: var(--accent); }
 .player .notice { margin-top: 1rem; }
 table.compact td { padding: .15rem .6rem .15rem 0; }
 
@@ -520,6 +530,14 @@ table.compact td { padding: .15rem .6rem .15rem 0; }
 }
 .suggest-list li { padding: .35rem .75rem; cursor: pointer; font-size: .92rem; }
 .suggest-list li:hover { background: var(--accent-soft); }
+/* Client texte : noms proposés pour !hint et !hint_location, au-dessus du champ comme dans un chat. Le nom choisi au
+   clavier est marqué d'un trait à gauche en plus du fond. */
+.command-input .suggest-list { top: auto; bottom: calc(100% + 2px); max-height: none; }
+.command-input .suggest-list li { display: flex; flex-wrap: wrap; align-items: baseline; gap: .1rem .6rem; font-size: 1rem; }
+.command-input .suggest-list li.active { background: var(--accent-soft); box-shadow: inset 4px 0 0 var(--accent); }
+.suggest-tag { color: var(--muted); font-size: .85rem; }
+.command-input .suggest-list li.suggest-help { cursor: default; color: var(--muted); font-size: .85rem; border-top: 1px solid var(--border); margin-top: .25rem; padding-top: .45rem; }
+.command-input .suggest-list li.suggest-help:hover { background: none; }
 
 .raw textarea { font-family: ui-monospace, "Cascadia Code", Consolas, monospace; font-size: .85rem; resize: vertical; }
 

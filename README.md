@@ -208,7 +208,10 @@ leur nom dans la partie, qui sert à retrouver leurs fichiers.
    (`/generic_tracker/…`, qui le compte avec les objets reçus) et le site en retire les objets reçus de l'API,
    seulement quand les deux lectures sont du même moment. Elle propose aussi un
    **client texte** : chat et commandes (`!hint`, `!remaining`…) depuis le navigateur, avec
-   [archipelago.js](https://github.com/ThePhar/archipelago.js) (`site/vendor/archipelago.js`). Les objets reçus ou
+   [archipelago.js](https://github.com/ThePhar/archipelago.js) (`site/vendor/archipelago.js`). Pendant la saisie de
+   `!hint` ou `!hint_location`, il propose les noms exacts (objets du jeu du joueur connecté, lieux de son monde dans
+   la partie), en signalant les objets déjà reçus, les lieux déjà faits et les indices déjà obtenus, et il affiche
+   les points d'indice du joueur et le coût d'un indice (`CommandInput` dans `room-live.js`). Les objets reçus ou
    envoyés par vos joueurs (et le joueur connecté) y sont surlignés, sauf les objets sans importance, et un aperçu
    épuré de l'inventaire du joueur choisi (progression, utiles, pièges, indices à trouver, inventaire de départ
    replié) s'affiche à côté. Des cases (gardées dans le navigateur) masquent le lieu des objets envoyés, ajoutent

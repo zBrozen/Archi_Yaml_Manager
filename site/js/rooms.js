@@ -1,12 +1,12 @@
 // Pages des rooms : créer ou rejoindre une room, déposer ses YAML, vérifier et préparer la génération (hôte),
 // puis retrouver la partie hébergée sur archipelago.gg (adresse, tracker, fichiers de chaque joueur).
 import { html, useState, useEffect, useRef } from "../vendor/preact-htm.js";
-import { apVersion, apworldFileOf, gameEntry, knownGames, localGameData, localGames, serverEntry, setRoomGames } from "./data.js";
+import { apVersion, apworldFileOf, gameEntry, knownGames, localGameData, serverEntry, setRoomGames } from "./data.js";
 import { useApworldLoader } from "./apworld.js";
 import { gamesOf, parseFile, splitFile } from "./yaml-model.js";
 import { checkText, nameProblem, MAX_NAME } from "./check.js";
 import { ForecastSummary, forecastRoom } from "./forecast.js";
-import { CopyButton, GamePicker, SheetBadges, download, loadCredits, plural, useAction, useSetting } from "./ui.js";
+import { CopyButton, GamePickerModal, SheetBadges, download, loadCredits, plural, useAction, useSetting } from "./ui.js";
 import { makeZip } from "./zip.js";
 import { guideLink } from "./guides.js";
 import { ItemsPanel, ProgressPanel, TextClient, defaultItemSlots, useTracker } from "./room-live.js";
@@ -742,22 +742,9 @@ function MySlots({ index, room, me, admin, players, slots, allSlots, apworlds, r
     ${action.error && html`<div class="notice error full">${action.error}</div>`}
     ${canEdit && html`<button type="button" class="link" onClick=${leave}>Quitter la room</button>`}
 
-    ${picking && html`<${PickerModal} index=${index} value=${game} onChange=${setGame} onClose=${() => setPicking(false)}
+    ${picking && html`<${GamePickerModal} index=${index} value=${game} onChange=${setGame} onClose=${() => setPicking(false)}
       onCreate=${(g) => onCreate(g, freeName(target.pseudo, allSlots), own ? null : target.id)} />`}
   </section>`;
-}
-
-function PickerModal({ index, value, onChange, onClose, onCreate }) {
-  const imported = localGames();
-  const all = index.games.filter((g) => !imported.some((i) => i.game === g.game));
-  return html`<div class="modal" onClick=${(e) => e.target === e.currentTarget && onClose()}>
-    <div class="modal-box">
-      <div class="toolbar-row"><strong>Choisir un jeu</strong><span class="spacer"></span>
-        <button type="button" class="ghost" onClick=${onClose}>Fermer</button></div>
-      <${GamePicker} core=${all.filter((g) => g.source === "core")} custom=${all.filter((g) => g.source !== "core")}
-        imported=${imported} value=${value} onChange=${onChange} onCreate=${onCreate} />
-    </div>
-  </div>`;
 }
 
 function IssueList({ issues }) {

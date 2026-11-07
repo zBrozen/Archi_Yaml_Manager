@@ -1,6 +1,6 @@
 // Partie en cours sur archipelago.gg : progression de chaque joueur (API publique du tracker) et client texte
 // dans le navigateur (archipelago.js), pour le chat et les commandes !hint, !remaining… sans lancer Archipelago.
-import { html, useState, useEffect, useRef } from "../vendor/preact-htm.js";
+import { html, useState, useEffect, useMemo, useRef } from "../vendor/preact-htm.js";
 import { Client } from "../vendor/archipelago.js";
 import { api, apRoomStatus } from "./rooms-api.js";
 import { plural, useSetting } from "./ui.js";
@@ -416,6 +416,7 @@ function PlayerItems({ slot, status, tracker, needle = "", search = "", titled, 
 
 const QUICK = [
   { text: "!hint ", label: "!hint", title: "Demander un indice : complétez avec le nom d'un objet", fill: true },
+  { text: "!hint_location ", label: "!hint_location", title: "Savoir ce que contient un lieu de votre monde : complétez avec son nom", fill: true },
   { text: "!remaining", label: "!remaining", title: "Objets qu'il vous reste à recevoir" },
   { text: "!release", label: "!release", title: "Envoyer vos objets restants aux autres (selon les réglages de la partie)",
     confirm: "Envoyer à tous les autres joueurs les objets qui restent dans votre monde ? C'est définitif." },
@@ -556,6 +557,115 @@ function MessageOptions({ options, onChange }) {
   </div>`;
 }
 
+// --- Saisie des commandes d'indice -------------------------------------------------------
+// Pendant la saisie de « !hint … » (objets du jeu du joueur connecté) ou de « !hint_location … » (lieux de son monde
+// dans cette partie), le client propose les noms exacts : le serveur refuse un nom mal écrit, ou le devine.
+const HINT_INPUT = /^(!hint_location|!hint)\s+(.*)$/i;
+const SUGGESTIONS = 8;
+
+// Rang d'un nom pour la recherche (plus petit : meilleur), -1 s'il ne correspond pas : nom exact, début du nom,
+// début d'un mot, ailleurs dans le nom, puis tous les mots cherchés présents, dans n'importe quel ordre.
+function matchRank(lower, needle) {
+  if (lower === needle) return 0;
+  let i = lower.indexOf(needle);
+  if (i === 0) return 1;
+  if (i > 0) {
+    for (; i > 0; i = lower.indexOf(needle, i + 1)) if (!/[\p{L}\p{N}]/u.test(lower[i - 1])) return 2;
+    return 3;
+  }
+  const words = needle.split(/\s+/).filter(Boolean);
+  return words.length > 1 && words.every((w) => lower.includes(w)) ? 4 : -1;
+}
+
+// `names` : [{ name, lower, tag, done }] ; `done` (objet déjà reçu, lieu déjà fait) passe après les autres.
+export function hintSuggestions(names, query, limit = SUGGESTIONS) {
+  const needle = query.trim().toLowerCase();
+  if (!needle) return { list: [], more: 0 };
+  const found = [];
+  for (const entry of names) {
+    const rank = matchRank(entry.lower, needle);
+    if (rank >= 0) found.push({ ...entry, rank });
+  }
+  found.sort((a, b) => a.rank - b.rank || Number(!!a.done) - Number(!!b.done) || a.name.localeCompare(b.name));
+  return { list: found.slice(0, limit), more: Math.max(0, found.length - limit) };
+}
+
+// Noms proposés au joueur `slot` (numéro) : objets de son jeu, avec ceux déjà reçus et déjà indiqués (tracker), et
+// lieux de son monde dans cette partie (`room` : état de la room du client connecté, lieux faits compris).
+export function hintTargets(pkg, slot, live, room) {
+  if (!pkg || slot === undefined) return { items: null, locations: null };
+  const received = new Map();
+  for (const i of receivedItems(live, slot)) received.set(i.item, (received.get(i.item) || 0) + 1);
+  const hints = playerHints(live, slot);
+  const hintedItems = new Set(hints.filter((h) => h.receiving_player === slot).map((h) => h.item));
+  const hintedPlaces = new Set(hints.filter((h) => h.finding_player === slot).map((h) => h.location));
+  const entry = (name, tags, done) => ({ name, lower: name.toLowerCase(), tag: tags.filter(Boolean).join(" · "), done });
+  const items = [...pkg.items].map(([id, name]) => {
+    const n = received.get(id) || 0;
+    return entry(name, [n > 1 ? `reçu ×${n}` : n && "reçu", hintedItems.has(id) && "indice déjà obtenu"], n > 0);
+  });
+  const checked = new Set(room?.checkedLocations || []);
+  const locations = (room?.allLocations || []).filter((id) => pkg.locations.has(id)).map((id) => entry(pkg.locations.get(id),
+    [checked.has(id) && "déjà fait", hintedPlaces.has(id) && "indice déjà obtenu"], checked.has(id)));
+  return { items, locations };
+}
+
+// Points d'indice du joueur connecté (état de la room d'archipelago.js : coût calculé sur le nombre de lieux de son monde).
+function hintPointsText(room) {
+  const { hintPoints: points, hintCost: cost, locationCheckPoints: perCheck } = room;
+  if (!cost) return "Indices gratuits dans cette partie.";
+  const afford = Math.floor(points / cost);
+  const checks = perCheck > 0 ? Math.ceil((cost - points) / perCheck) : 0;
+  const next = afford > 0 ? ` · de quoi en demander ${afford}` : checks > 0 ? ` · encore ${plural(checks, "check")} avant le prochain` : "";
+  return `Points d'indice : ${points} · un indice en coûte ${cost}${next}.`;
+}
+
+// Champ du client texte, avec la liste des noms proposés : ↑ ↓ pour choisir, Entrée ou Tab pour compléter, Échap pour
+// fermer la liste (Entrée envoie alors le texte tel quel).
+export function CommandInput({ value, onChange, inputRef, items, locations }) {
+  const [active, setActive] = useState(0);
+  const [closed, setClosed] = useState(false);
+  const typed = HINT_INPUT.exec(value);
+  const command = typed?.[1].toLowerCase();
+  const query = typed?.[2] ?? "";
+  const pool = command === "!hint" ? items : command === "!hint_location" ? locations : null;
+  const { list, more } = useMemo(() => (pool ? hintSuggestions(pool, query) : { list: [], more: 0 }), [pool, query]);
+  // Nom déjà complet (choisi dans la liste, ou tapé tel quel) : plus rien à proposer.
+  const open = !closed && list.length > 0 && list[0].name !== query.trim();
+  const index = Math.min(active, list.length - 1);
+  const pick = (entry) => {
+    onChange(`${command} ${entry.name}`);
+    setActive(0);
+  };
+  const onKeyDown = (e) => {
+    if (!open) return;
+    if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+      e.preventDefault();
+      setActive((index + (e.key === "ArrowDown" ? 1 : -1) + list.length) % list.length);
+    } else if (e.key === "Enter" || e.key === "Tab") {
+      e.preventDefault();
+      pick(list[index]);
+    } else if (e.key === "Escape") {
+      e.preventDefault();
+      setClosed(true);
+    }
+  };
+  return html`<div class="suggest grow command-input">
+    <input type="text" ref=${inputRef} placeholder="Message ou commande (!hint objet…)" value=${value} autocomplete="off"
+      spellcheck=${false} role="combobox" aria-autocomplete="list" aria-expanded=${open} aria-controls="hint-suggestions"
+      aria-activedescendant=${open ? `hint-suggestion-${index}` : undefined}
+      onInput=${(e) => { onChange(e.target.value); setActive(0); setClosed(false); }}
+      onKeyDown=${onKeyDown} onFocus=${() => setClosed(false)} onBlur=${() => setClosed(true)} />
+    ${open && html`<ul class="suggest-list" id="hint-suggestions" role="listbox" aria-label=${command === "!hint" ? "Objets" : "Lieux"}>
+      ${list.map((entry, i) => html`<li key=${entry.name} id=${`hint-suggestion-${i}`} role="option" aria-selected=${i === index}
+        class=${i === index ? "active" : ""} onMouseDown=${(e) => { e.preventDefault(); pick(entry); }} onMouseEnter=${() => setActive(i)}>
+        <span lang="en">${entry.name}</span>${entry.tag && html`<span class="suggest-tag">${entry.tag}</span>`}
+      </li>`)}
+      <li class="suggest-help" role="presentation">${more > 0 ? `${plural(more, "autre nom")} : précisez · ` : ""}Entrée ou Tab : compléter · Échap : fermer</li>
+    </ul>`}
+  </div>`;
+}
+
 // `tracker` : tracker de la partie (lu par la page de la room), pour l'inventaire du joueur choisi.
 export function TextClient({ room, status, mine, wishlists, tracker }) {
   const own = status.slots.filter((s) => mine.some((m) => m.name.toLowerCase() === s.name.toLowerCase()));
@@ -569,7 +679,9 @@ export function TextClient({ room, status, mine, wishlists, tracker }) {
   const options = { ...MESSAGE_OPTIONS, ...stored };
   const client = useRef(null);
   const log = useRef(null);
+  const field = useRef(null);
   const nextId = useRef(0);
+  const [roomVersion, setRoomVersion] = useState(0); // points d'indice ou lieux faits changés
 
   const wishes = wishIndex(wishlists);
   // Objets surlignés : ceux de vos joueurs, et du joueur dont le client est connecté.
@@ -579,6 +691,13 @@ export function TextClient({ room, status, mine, wishlists, tracker }) {
   const shown = displayLines(lines, options, wishes);
   useEffect(() => () => client.current?.socket.disconnect(), []);
   useEffect(() => { if (log.current) log.current.scrollTop = log.current.scrollHeight; }, [lines, stored]);
+
+  // Noms proposés pour !hint et !hint_location, et points d'indice : joueur connecté seulement.
+  const apRoom = client.current && state === "connected" ? client.current.room : null;
+  const { loaded } = usePackages(status.origin, tracker?.data?.fixed, shownSlot ? [shownSlot.game] : []);
+  const pkg = shownSlot && loaded[shownSlot.game];
+  const targets = useMemo(() => hintTargets(pkg, shownSlot?.slot, tracker?.data?.live, apRoom),
+    [pkg, shownSlot?.slot, tracker?.data?.live, apRoom, roomVersion]);
 
   const connect = async () => {
     setState("connecting");
@@ -590,6 +709,8 @@ export function TextClient({ room, status, mine, wishlists, tracker }) {
       if (!fresh.port) throw new Error("Le serveur de la partie ne répond pas encore : réessayez dans quelques secondes.");
       const next = new Client();
       next.messages.on("message", (text, nodes) => push({ nodes }));
+      const changed = () => { if (client.current === next) setRoomVersion((v) => v + 1); };
+      for (const event of ["hintPointsUpdated", "hintCostUpdated", "locationCheckPointsUpdated", "locationsChecked"]) next.room.on(event, changed);
       next.socket.on("disconnected", () => { if (client.current === next) setState("closed"); });
       client.current = next;
       push({ info: `Connexion à ${fresh.host}:${fresh.port} en tant que ${slot}…` });
@@ -643,13 +764,13 @@ export function TextClient({ room, status, mine, wishlists, tracker }) {
           : html`<${MessageLine} line=${line} options=${options} self=${slot} wishes=${wishes} mine=${mineNames} />`}</div>`)}
     </div>`}
     ${connected && html`<form class="row full" onSubmit=${(e) => { e.preventDefault(); send(input); }}>
-      <input type="text" class="grow" placeholder="Message ou commande (!hint objet…)" value=${input}
-        onInput=${(e) => setInput(e.target.value)} />
+      <${CommandInput} value=${input} onChange=${setInput} inputRef=${field} items=${targets.items} locations=${targets.locations} />
       <button type="submit" disabled=${!input.trim()}>Envoyer</button>
       <button type="button" class="ghost" onClick=${disconnect}>Se déconnecter</button>
     </form>
+    ${apRoom && html`<p class="hint">${hintPointsText(apRoom)}</p>`}
     <div class="chips-row">${QUICK.map((q) => html`<button type="button" class="chip-btn" title=${q.title}
-      onClick=${() => (q.fill ? setInput(q.text) : (!q.confirm || confirm(q.confirm)) && send(q.text))}>${q.label}</button>`)}</div>`}
+      onClick=${() => (q.fill ? (setInput(q.text), field.current?.focus()) : (!q.confirm || confirm(q.confirm)) && send(q.text))}>${q.label}</button>`)}</div>`}
     <${MessageOptions} options=${options} onChange=${setOptions} />
     ${lines.length > 0 && html`<p class="hint">Surlignés : les objets reçus ou envoyés par ${[...new Set([...own.map((s) => s.name), slot])].join(", ")}
       (sauf les objets sans importance).</p>`}

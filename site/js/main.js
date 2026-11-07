@@ -4,7 +4,7 @@ import { parseFile, exportFile, gamesOf, setIn, getIn, markDirty, isPlainObject,
 import { checkValue, sameAsDefault, yamlDefault, yamlComment, setDocLanguage, GROUP_NAMES } from "./options.js";
 import { useApworldLoader } from "./apworld.js";
 import { OptionRow, RawEditor } from "./editors.js";
-import { useSetting, download, plural, SheetBadges, GamePicker, loadCredits } from "./ui.js";
+import { useSetting, download, plural, SheetBadges, GamePicker, GamePickerModal, loadCredits } from "./ui.js";
 import { versionProblem, checkText, nameProblem } from "./check.js";
 import { RoomsHome, RoomPage, shareApworlds } from "./rooms.js";
 import { ScreensOverlay } from "./overlay.js";
@@ -248,8 +248,11 @@ function PlayerCard({ js, index, games, update }) {
   </section>`;
 }
 
+// Jeu du YAML : la liste complète des jeux (recherche, genres, favoris) s'ouvre dans une fenêtre, plutôt qu'un menu
+// déroulant de plusieurs centaines de jeux.
 function GameField({ value, index, onChange }) {
-  const names = [...new Set([...localGames(), ...index.games].map((g) => g.game))];
+  const [picking, setPicking] = useState(false);
+  const [choice, setChoice] = useState("");
   if (isPlainObject(value)) {
     return html`<div class="label-like">
       <span>Jeux (tirés au sort selon leur poids)</span>
@@ -260,13 +263,25 @@ function GameField({ value, index, onChange }) {
       </tr>`)}</tbody></table>
     </div>`;
   }
-  return html`<label>
+  const current = typeof value === "string" ? value : "";
+  const open = () => {
+    setChoice(current);
+    setPicking(true);
+  };
+  const choose = (game) => {
+    setPicking(false);
+    if (game && game !== current) onChange(game);
+  };
+  return html`<div class="label-like">
     <span>Jeu</span>
-    <select value=${value ?? ""} onChange=${(e) => onChange(e.target.value)}>
-      ${!names.includes(value) && html`<option value=${value ?? ""}>${value || "—"}</option>`}
-      ${names.map((n) => html`<option value=${n}>${n}</option>`)}
-    </select>
-  </label>`;
+    <button type="button" class="game-field" aria-label=${current ? `Jeu : ${current}. Changer de jeu` : "Choisir un jeu"} onClick=${open}>
+      <span class="game-field-name" lang="en">${current || "Choisir un jeu"}</span>
+      <span class="game-field-action" aria-hidden="true">Changer</span>
+    </button>
+    ${picking && html`<${GamePickerModal} index=${index} title="Changer de jeu" value=${choice} onChange=${setChoice}
+      onClose=${() => setPicking(false)} onCreate=${choose}
+      action=${(g) => (!g ? "Choisir un jeu" : g === current ? `Garder ${g}` : `Passer à ${g}`)} />`}
+  </div>`;
 }
 
 function matches(option, search) {

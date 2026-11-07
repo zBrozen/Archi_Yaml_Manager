@@ -1,5 +1,6 @@
 // Composants et petits outils partagés par l'éditeur et les rooms.
-import { html, useEffect, useState } from "../vendor/preact-htm.js";
+import { html, useEffect, useLayoutEffect, useRef, useState } from "../vendor/preact-htm.js";
+import { localGames } from "./data.js";
 
 // `many` : forme du pluriel quand elle ne prend pas de « s » (jeu → jeux).
 export const plural = (n, word, many = `${word}s`) => `${n} ${n > 1 ? many : word}`;
@@ -64,7 +65,9 @@ export function SheetBadges({ sheet }) {
 
 // Liste des jeux avec recherche et filtres : le tableur en compte des centaines, trop pour un menu déroulant.
 // Favoris (étoile) gardés dans le navigateur, genres relevés sur Wikidata (tools/fetch_genres.py).
-export function GamePicker({ core, custom, imported, value, onChange, onCreate }) {
+// `onCreate(jeu)` : bouton de validation et double-clic sur un jeu ; `action(jeu)` : texte du bouton (création d'un YAML
+// par défaut).
+export function GamePicker({ core, custom, imported, value, onChange, onCreate, action }) {
   const [search, setSearch] = useState("");
   const [savedKind, setKind] = useSetting("pickerKind", "all");
   const [genre, setGenre] = useSetting("pickerGenre", "");
@@ -102,7 +105,8 @@ export function GamePicker({ core, custom, imported, value, onChange, onCreate }
   return html`<div class="picker">
     <div class="row full">
       <input type="search" class="search" placeholder="Rechercher un jeu…" value=${search} onInput=${(e) => setSearch(e.target.value)} />
-      <button type="button" disabled=${!value} onClick=${() => onCreate(value)}>${value ? `Créer un YAML pour ${value}` : "Créer un YAML"}</button>
+      <button type="button" disabled=${!value} onClick=${() => onCreate(value)}>${action ? action(value)
+        : value ? `Créer un YAML pour ${value}` : "Créer un YAML"}</button>
     </div>
     <div class="row picker-filters">
       <div class="chips-row">${kinds.map(([k, label]) => html`<button type="button" class=${`chip-btn ${kind === k ? "active" : ""}`} onClick=${() => setKind(k)}>${label}</button>`)}</div>
@@ -137,6 +141,43 @@ export function GamePicker({ core, custom, imported, value, onChange, onCreate }
           </div>`;
         })}</div>
       </div>`)}
+    </div>
+  </div>`;
+}
+
+// La même liste dans une fenêtre (jeu d'un YAML de l'éditeur, YAML à créer dans une room) : les jeux de la base, et
+// ceux ajoutés avec un apworld dans ce navigateur. Échap ferme (après avoir vidé la recherche), le focus revient
+// ensuite où il était.
+export function GamePickerModal({ index, title = "Choisir un jeu", value, onChange, onClose, onCreate, action }) {
+  const box = useRef(null);
+  const close = useRef(onClose);
+  close.current = onClose;
+  // Avant l'affichage : les lettres tapées aussitôt la fenêtre ouverte vont déjà dans la recherche.
+  useLayoutEffect(() => {
+    const previous = document.activeElement;
+    box.current?.querySelector("input[type=search]")?.focus();
+    const onKey = (e) => {
+      if (e.key !== "Escape") return;
+      e.preventDefault();
+      if (e.target.matches?.("input[type=search]") && e.target.value) {
+        e.target.value = "";
+        e.target.dispatchEvent(new Event("input", { bubbles: true }));
+      } else close.current();
+    };
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      previous?.focus?.();
+    };
+  }, []);
+  const imported = localGames();
+  const all = index.games.filter((g) => !imported.some((i) => i.game === g.game));
+  return html`<div class="modal" onClick=${(e) => e.target === e.currentTarget && onClose()}>
+    <div class="modal-box" role="dialog" aria-modal="true" aria-label=${title} ref=${box}>
+      <div class="toolbar-row"><strong>${title}</strong><span class="spacer"></span>
+        <button type="button" class="ghost" onClick=${onClose}>Fermer</button></div>
+      <${GamePicker} core=${all.filter((g) => g.source === "core")} custom=${all.filter((g) => g.source !== "core")}
+        imported=${imported} value=${value} onChange=${onChange} onCreate=${onCreate} action=${action} />
     </div>
   </div>`;
 }
