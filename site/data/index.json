@@ -1,6 +1,6 @@
 {
  "ap_version": "0.6.8",
- "generated_at": "2026-11-07T19:24:35+00:00",
+ "generated_at": "2026-11-08T11:48:51+00:00",
  "games": [
   {
    "game": "2048",
@@ -724,7 +724,7 @@
    "file": "games/blue-prince.json",
    "source": "custom",
    "apworld": "blueprince.apworld",
-   "world_version": "0.1.3",
+   "world_version": "0.1.4",
    "guides": "guides/blue-prince.json",
    "sheet": {
     "game": "Blue Prince",
@@ -1521,7 +1521,7 @@
    "file": "games/cult-of-the-lamb.json",
    "source": "custom",
    "apworld": "cult_of_the_lamb.apworld",
-   "world_version": "0.9.5",
+   "world_version": "0.9.6",
    "guides": "guides/cult-of-the-lamb.json",
    "sheet": {
     "game": "Cult of the Lamb",
@@ -2346,7 +2346,7 @@
    "file": "games/final-fantasy-crystal-chronicles.json",
    "source": "custom",
    "apworld": "ffcc.apworld",
-   "world_version": "0.2.0",
+   "world_version": "0.3.0",
    "guides": "guides/final-fantasy-crystal-chronicles.json",
    "sheet": {
     "game": "Final Fantasy: Crystal Chronicles",
@@ -2540,7 +2540,7 @@
    "file": "games/gato-roboto-b-side.json",
    "source": "custom",
    "apworld": "gatoroboto_b_side.apworld",
-   "world_version": "0.8.1",
+   "world_version": "0.8.2",
    "guides": "guides/gato-roboto-b-side.json",
    "sheet": {
     "game": "Gato Roboto B-Side",
@@ -2660,7 +2660,7 @@
    "file": "games/golden-sun-the-lost-age.json",
    "source": "custom",
    "apworld": "gstla.apworld",
-   "world_version": "0.2.3",
+   "world_version": "0.2.4",
    "guides": "guides/golden-sun-the-lost-age.json",
    "sheet": {
     "game": "Golden Sun: The Lost Age",
@@ -4807,7 +4807,7 @@
    "file": "games/openttd-cargolock.json",
    "source": "custom",
    "apworld": "openttd_cargolock.apworld",
-   "world_version": "0.3.1",
+   "world_version": "0.4.0",
    "guides": "guides/openttd-cargolock.json",
    "sheet": {
     "game": "OpenTTD Cargolock",
