@@ -113,6 +113,7 @@ export const api = {
   unshareSpoiler: (code) => call("DELETE", at(code, "/spoiler"), { code }),
   sharedSpoiler: (code) => call("GET", at(code, "/spoiler"), { code, file: true }),
   saveWishlist: (code, slot, items) => call("PUT", at(code, `/wishlists/${encodeURIComponent(slot)}`), { code, body: { items } }),
+  saveFishing: (code, body) => call("PUT", at(code, "/fishing"), { code, body }),
 };
 
 // --- Partie hébergée sur archipelago.gg (ou un autre site Archipelago) ---------------

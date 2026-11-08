@@ -23,6 +23,23 @@
   (`--surface`), menu en planche de bois (`--wood*`), titres en Grenze Gotisch, texte en Lexend. Jour = clair, nuit =
   sombre (parchemin à la lanterne). Fond : la mer en canvas (`sea.js`, îles dans les marges libres autour de `.sheet`,
   réglage « Fond animé », figée si mouvement réduit), jamais sur l'overlay OBS. Dessins communs dans `art.js`.
+- Pêche au large (`fishing.js`, bouton « Aller pêcher » du menu) : jeu d'attente sur la mer, la feuille roulée
+  (`app-shell.fishing`, `.app-main` inerte, page gardée dessous). Chaque poisson porte une carte (`nextCard`, espèce
+  par rareté : `speciesFor`) : les checks de la room ouverte (`useFishingFeed` dans `RoomPage`, tracker et datapackages
+  déjà lus), sinon la démo (`DEMO_FEED`, `DEMO_CARDS`, catalogue « DEMO »). Pas de pièces ni de score : la seule
+  récompense est la carte ; l'adresse (« Parfait ! », combo) donne de la chance au tirage (`luckOf`, `drawCard`). Geste :
+  lancer, touches, ferrer (`createPond`) ; remontée sans échec possible (`REEL`), saut jusqu'au compteur (`jump`). La
+  pêche doit se voir et se sentir (canne, gerbes, secousse, sillage) ; mouvement réduit : ni gouttes, ni secousse, ni
+  saut, rien ne nage. Nouveaux checks : un banc (`banc`) les amène en premier. Jamais de spoiler, rien d'envoyé au
+  serveur, aucun avantage en jeu. Catalogue en cartes (`.tcard`, un onglet par joueur) ; modificateur `is-wish`, pas
+  `.wish` (pris par l'onglet Wishlist des rooms). Sauvegarde en `localStorage` (`fishing` : doublons ; `fishingAlbums` :
+  5 rooms au plus). Lieu de pêche : toute la partie ou une île (monde d'un joueur, `spot`) ; paliers argent (3 exemplaires)
+  et or (6) : `TIERS`. Cartes nouvelles rares exprès pour faire durer (`NEW_CHANCE`, `NEW_STEP`, `PITY`,
+  `TREASURE_PRICE`) : nouvelle ou double tiré d'abord, puis le type, pour qu'aucun poisson visible ne trahisse une carte
+  nouvelle. Collection partagée : `PUT /fishing` du Worker (table `fishing`, migration 0015, clés des cartes
+  seulement, une ligne par inscrit ou `host`), renvoyée par `GET` de la room (`fishing` : `fishingSummary`), affichée par
+  `FishingRoomCard` (collection commune, paliers de la room, classement) ; son bouton ouvre la pêche par l'événement
+  `fishing:open`. Jamais sur l'overlay OBS.
 - Page « Installer un jeu » (`#/installer?game=…`, `guides.js`) : liens d'installation des crédits (`download`,
   `release`, `links`, relevés par `fetch_apworlds.py`) et guides du jeu (`site/data/guides/`, relevés par
   `extract_options.py` dans `docs/` du monde, plus README du dépôt et notes de release passés par

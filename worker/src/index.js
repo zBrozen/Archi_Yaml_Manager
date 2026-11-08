@@ -29,6 +29,7 @@ const LIMITS = {
   maxSlots: 20,
   wishes: 100, // objets par wishlist
   wishName: 120,
+  fishingCards: 5000, // cartes pêchées gardées par inscrit
 };
 const ROOM_LIFETIME_DAYS = 90; // rooms sans activité supprimées par la tâche planifiée
 const ENDED_LIFETIME_DAYS = 7; // rooms clôturées supprimées par la tâche planifiée, une semaine après la clôture
@@ -289,13 +290,14 @@ function slotGoal(content) {
 }
 
 async function getRoom(request, env, room) {
-  const [admin, me, players, slots, wishes] = await Promise.all([
+  const [admin, me, players, slots, wishes, fishing] = await Promise.all([
     isAdmin(request, room),
     currentPlayer(request, env, room),
     env.DB.prepare("SELECT id, pseudo, spoiler_access, created_at FROM players WHERE room_code = ? ORDER BY created_at").bind(room.code).all(),
     env.DB.prepare("SELECT id, player_id, name, game, filename, issues, content, updated_at FROM slots WHERE room_code = ? ORDER BY created_at")
       .bind(room.code).all(),
     env.DB.prepare("SELECT slot, items FROM wishlists WHERE room_code = ?").bind(room.code).all(),
+    env.DB.prepare("SELECT who, cards, shiny, gold, updated_at FROM fishing WHERE room_code = ?").bind(room.code).all(),
   ]);
   return json({
     room: publicRoom(room),
@@ -313,6 +315,7 @@ async function getRoom(request, env, room) {
     // Copie du spoiler (onglet « Avancement ») : pour l'hôte et les joueurs à qui il l'a ouvert.
     ...(admin || me?.spoiler_access ? { shared_spoiler: JSON.parse(room.shared_spoiler || "null") } : {}),
     wishlists: Object.fromEntries(wishes.results.map((w) => [w.slot, JSON.parse(w.items)])),
+    fishing: fishingSummary(fishing.results, players.results),
     players: players.results.map(({ spoiler_access, ...p }) => ({
       ...p,
       ...(admin ? { spoiler_access: !!spoiler_access } : {}),
@@ -360,6 +363,7 @@ async function purgeRoom(env, code) {
     env.DB.prepare("DELETE FROM slots WHERE room_code = ?").bind(code),
     env.DB.prepare("DELETE FROM players WHERE room_code = ?").bind(code),
     env.DB.prepare("DELETE FROM wishlists WHERE room_code = ?").bind(code),
+    env.DB.prepare("DELETE FROM fishing WHERE room_code = ?").bind(code),
     env.DB.prepare("DELETE FROM overlay_links WHERE room_code = ?").bind(code),
     env.DB.prepare("DELETE FROM room_apworlds WHERE room_code = ?").bind(code),
     env.DB.prepare("DELETE FROM rooms WHERE code = ?").bind(code),
@@ -425,6 +429,7 @@ async function removePlayer(request, env, room, playerId) {
     env.DB.prepare("DELETE FROM overlay_links WHERE room_code = ? AND player_id = ?").bind(room.code, playerId),
     env.DB.prepare("DELETE FROM room_apworlds WHERE room_code = ? AND player_id = ?").bind(room.code, playerId),
     env.DB.prepare("DELETE FROM slots WHERE room_code = ? AND player_id = ?").bind(room.code, playerId),
+    env.DB.prepare("DELETE FROM fishing WHERE room_code = ? AND who = ?").bind(room.code, playerId),
     env.DB.prepare("DELETE FROM players WHERE room_code = ? AND id = ?").bind(room.code, playerId),
     touch(env, room),
   ]);
@@ -1341,6 +1346,37 @@ async function saveWishlist(request, env, room, slot) {
   return json({ slot: name, items });
 }
 
+// --- Pêche au large ---------------------------------------------------------------
+// Collection de cartes de chaque inscrit (site/js/fishing.js) : visible par toute la room, avec la collection commune
+// (toutes les cartes pêchées par quelqu'un). Rien de secret : les cartes sont des objets déjà envoyés dans la partie.
+function fishingSummary(rows, players) {
+  if (!rows.length) return null;
+  const union = new Set();
+  const list = rows.map((row) => {
+    const cards = row.cards ? row.cards.split(",") : [];
+    for (const key of cards) union.add(key);
+    const pseudo = row.who === "host" ? "Hôte" : players.find((p) => p.id === row.who)?.pseudo;
+    return pseudo && { pseudo, cards: cards.length, shiny: row.shiny, gold: row.gold, updated_at: row.updated_at };
+  }).filter(Boolean).sort((a, b) => b.cards - a.cards || b.gold - a.gold);
+  return { players: list, union: [...union] };
+}
+
+async function saveFishing(request, env, room) {
+  const admin = await isAdmin(request, room);
+  const player = admin ? null : await requirePlayer(request, env, room);
+  const body = await readJson(request);
+  if (!Array.isArray(body.cards)) throw new HttpError(400, "Liste de cartes attendue.");
+  const cards = [...new Set(body.cards.map(String))].filter((key) => /^\d{1,4}:\d{1,6}$/.test(key));
+  if (cards.length > LIMITS.fishingCards) throw new HttpError(400, `Au plus ${LIMITS.fishingCards} cartes.`);
+  const count = (value) => Math.min(cards.length, Math.max(0, Math.floor(Number(value) || 0)));
+  await env.DB.prepare(
+    `INSERT INTO fishing (room_code, who, cards, shiny, gold, updated_at) VALUES (?, ?, ?, ?, ?, ?)
+     ON CONFLICT (room_code, who) DO UPDATE SET cards = excluded.cards, shiny = excluded.shiny, gold = excluded.gold,
+       updated_at = excluded.updated_at`,
+  ).bind(room.code, player?.id || "host", cards.join(","), count(body.shiny), count(body.gold), Date.now()).run();
+  return json({ ok: true });
+}
+
 // --- Packs PopTracker ------------------------------------------------------------
 
 // Relais des packs PopTracker et des apworlds (releases GitHub, voir tools/fetch_trackers.py et les crédits
@@ -1391,6 +1427,8 @@ async function route(request, env) {
     if (method === "DELETE") return unshareSpoiler(request, env, room);
   } else if (sub === "wishlists" && id && method === "PUT") {
     return saveWishlist(request, env, room, id);
+  } else if (sub === "fishing" && !id && method === "PUT") {
+    return saveFishing(request, env, room);
   } else if (sub === "export" && method === "GET") {
     return exportSlots(request, env, room);
   } else if (sub === "ap-links" && !id && method === "GET") {

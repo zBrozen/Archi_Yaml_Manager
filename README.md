@@ -52,6 +52,25 @@ sans éditer le code à la main.
 - **Trackers** : les packs [PopTracker](https://github.com/black-sliver/PopTracker) des jeux s'ouvrent
   directement dans le site (objets, cartes, lieux accessibles), et la logique du jeu donne les lieux en logique,
   comme Universal Tracker, pour tous les jeux. Le tout suit la partie en direct. Voir la section « Trackers ».
+- **Pêche au large** (bouton « Aller pêcher » du menu, `site/js/fishing.js`) : un petit jeu d'attente pour un joueur
+  bloqué. La feuille se roule et laisse la mer. Chaque poisson porte une carte : un check de la room ouverte (sinon
+  d'une partie de démonstration, avec des cartes fictives). Son espèce et son étiquette disent la rareté de l'objet
+  (sardine : ordinaire ; rouget ou poisson-lanterne : utile ; raie, espadon ou kraken : progression ; murène : piège ;
+  poisson doré : objet d'une wishlist) ; plus la carte est précieuse, plus le poisson est rusé (méfiant, caché,
+  rapide, nocturne) et plus il résiste à la remontée. On lance la ligne près de celui qu'on veut, on ferre quand il
+  mord, on le remonte : il saute jusqu'au compteur et sa carte rejoint le catalogue (un onglet par joueur de la room,
+  cartes face visible ou de dos pour celles à pêcher). Les doubles donnent des doublons, qui achètent des cartes au
+  trésor (le prochain poisson porte une carte manquante de l'île choisie). On pêche dans toute la partie ou au large
+  d'une île (le monde d'un joueur) pour la compléter. Les cartes nouvelles sont rares exprès (8 % de chance, un peu
+  plus à chaque double d'affilée, certaine après 25 doubles ; carte au trésor à 40 doublons) : environ une prise sur
+  cinq ou six, soit un bon quart d'heure pour une île d'une douzaine de cartes. Une carte repêchée s'améliore :
+  argentée au 3ᵉ exemplaire, dorée au 6ᵉ. L'adresse paie en chance : un « Parfait ! » et les prises enchaînées rendent
+  les cartes rares, nouvelles et brillantes plus fréquentes. Chaque nouveau check de la partie amène un banc, qui
+  porte ces checks tout frais. Quand un objet de progression ou de wishlist arrive pour l'un de vos joueurs, le jeu
+  vous renvoie jouer. La collection est sauvegardée dans le navigateur ; celle d'un joueur inscrit (ou de l'hôte) est
+  aussi envoyée à la room (`PUT /api/rooms/CODE/fishing`, table `fishing`) : la page de la room montre la collection
+  commune (checks pêchés par quelqu'un), ses paliers (25, 50, 75 %, toute la partie) et le classement des pêcheurs.
+  Aucun spoiler : les cartes sont des objets déjà envoyés dans la partie. Jamais sur l'overlay.
 
 Hors rooms, tout se passe dans le navigateur : les fichiers des joueurs ne sont envoyés nulle part.
 

@@ -12,6 +12,7 @@ import { SharingBanner } from "./screens.js";
 import { GuidesPage, guideLink } from "./guides.js";
 import { Welcome } from "./welcome.js";
 import { Sea } from "./sea.js";
+import { FishingMode } from "./fishing.js";
 import { Compass } from "./art.js";
 import { ForecastCard } from "./forecast.js";
 import { api as roomsApi, normalizeCode, roomsEnabled, saveAccess } from "./rooms-api.js";
@@ -540,13 +541,14 @@ const NAV_ICONS = {
   installer: "M12 4v11M7 10l5 5 5-5M4 20h16",
   rooms: "M9 11.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5M17 11.5a2.5 2.5 0 1 0 0-5M17 14.5c2.4 0 4 1.5 4.5 4",
   tracker: "M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14",
+  fishing: "M2.5 12c2.6-3.6 7-5.4 10.6-3.5 1.5.8 2.6 2 3.3 3.5-.7 1.5-1.8 2.7-3.3 3.5-3.6 1.9-8 .1-10.6-3.5zM16.4 12l5.1-4v8zM8.5 11.5v.01",
 };
 const NavIcon = ({ name }) => html`<svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d=${NAV_ICONS[name]} /></svg>`;
 
 // Menu latéral : navigation, puis les réglages repliés en bas. En fenêtre étroite (≤ 900 px), il devient une barre en
 // haut avec un bouton « Menu » ; sa hauteur place en dessous les barres collantes (--header-h). Sur grand écran, il est à
 // gauche et ne recouvre rien (--header-h à 0).
-function Sidebar({ page, advanced, setAdvanced, docLanguage, setDocLanguage, theme, setTheme, seaMotion, setSeaMotion }) {
+function Sidebar({ page, advanced, setAdvanced, docLanguage, setDocLanguage, theme, setTheme, seaMotion, setSeaMotion, fishing, setFishing }) {
   const [open, setOpen] = useState(false);
   const ref = useRef(null);
   useEffect(() => {
@@ -599,6 +601,8 @@ function Sidebar({ page, advanced, setAdvanced, docLanguage, setDocLanguage, the
       <nav class="site-nav" aria-label="Principale">${links.map(([id, href, label, active]) => html`<a href=${href}
         class=${active ? "active" : ""} aria-current=${active ? "page" : undefined}><${NavIcon} name=${id} />${label}</a>`)}
       </nav>
+      <button type="button" class=${`side-fishing ${fishing ? "active" : ""}`} title="Petit jeu d'attente sur la mer, pendant qu'on est bloqué"
+        onClick=${() => { setOpen(false); setFishing(!fishing); }}><${NavIcon} name="fishing" />${fishing ? "Dérouler la carte" : "Aller pêcher"}</button>
       <details class="side-settings">
         <summary>Réglages</summary>
         <div class="stack">
@@ -664,11 +668,13 @@ function App() {
   const [theme, setTheme] = useSetting("theme", "auto");
   const [seaMotion, setSeaMotion] = useSetting("seaMotion", true);
   const [docLanguage, setDocLanguageSetting] = useSetting("docLanguage", "en");
+  // Pêche au large (fishing.js) : la feuille se roule et laisse la mer ; la page reste ouverte dessous (room suivie).
+  const [fishing, setFishing] = useState(false);
   setDocLanguage(docLanguage); // lu par les éditeurs pendant ce rendu
 
   useEffect(() => { loadIndex().then(setIndex).catch((e) => setError(e.message)); }, []);
   useEffect(() => {
-    const change = () => { setRoute(readRoute()); setFile(null); window.scrollTo(0, 0); };
+    const change = () => { setRoute(readRoute()); setFile(null); setFishing(false); window.scrollTo(0, 0); };
     window.addEventListener("hashchange", change);
     return () => window.removeEventListener("hashchange", change);
   }, []);
@@ -700,6 +706,15 @@ function App() {
     setFile(null);
   };
   useEffect(() => {
+    document.documentElement.classList.toggle("fishing-open", fishing);
+  }, [fishing]);
+  // « Aller pêcher » depuis la page d'une room (fishing.js, FishingRoomCard).
+  useEffect(() => {
+    const open = () => setFishing(true);
+    window.addEventListener("fishing:open", open);
+    return () => window.removeEventListener("fishing:open", open);
+  }, []);
+  useEffect(() => {
     if (theme === "auto") delete document.documentElement.dataset.theme;
     else document.documentElement.dataset.theme = theme;
   }, [theme]);
@@ -727,14 +742,15 @@ function App() {
   }
 
   return html`<${Sea} motion=${seaMotion} />
-  <div class="app-shell">
+  <div class=${`app-shell ${fishing ? "fishing" : ""}`}>
     <${Sidebar} page=${route.page} advanced=${advanced} setAdvanced=${setAdvanced}
       docLanguage=${docLanguage} setDocLanguage=${setDocLanguageSetting} theme=${theme} setTheme=${setTheme}
-      seaMotion=${seaMotion} setSeaMotion=${setSeaMotion} />
-    <div class="app-main"><div class="sheet">
+      seaMotion=${seaMotion} setSeaMotion=${setSeaMotion} fishing=${fishing} setFishing=${setFishing} />
+    <div class="app-main" inert=${fishing}><div class="sheet">
       <${SharingBanner} code=${route.page === "room" ? route.code : null} />${body}<${Footer} />
     </div></div>
-  </div>`;
+  </div>
+  ${fishing && html`<${FishingMode} onClose=${() => setFishing(false)} />`}`;
 }
 
 function Footer() {

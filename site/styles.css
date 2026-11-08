@@ -1342,3 +1342,272 @@ html.overlay-page body { background: transparent; overflow: hidden; }
 .item-kind.progression { color: var(--mark); }
 .item-kind.useful { color: var(--accent); }
 .item-kind.filler { color: var(--muted); }
+
+/* Pêche au large (fishing.js) : la feuille se roule vers le haut et laisse la mer, où passent poissons et bouteilles.
+   Le menu reste à sa place ; tableau de bord en haut, boutons en bas (clavier et doigt). Jamais sur l'overlay OBS. */
+html.fishing-open { overflow: hidden; }
+.sheet { transform-origin: 50% 0; transition: transform 420ms var(--ease-out), opacity 300ms ease; }
+.app-shell.fishing .sheet {
+  transform: scaleY(.03); opacity: 0; visibility: hidden;
+  transition: transform 420ms var(--ease-out), opacity 320ms ease 100ms, visibility 0s 420ms;
+}
+@media (prefers-reduced-motion: reduce) {
+  .sheet, .app-shell.fishing .sheet { transition: opacity 200ms ease, visibility 0s 200ms; }
+  .app-shell.fishing .sheet { transform: none; }
+}
+.side-fishing {
+  position: relative; isolation: isolate; display: flex; align-items: center; gap: .75rem; height: var(--plank);
+  padding: 0 .8rem; background: none; border: none; color: var(--wood-soft); font-weight: 500; text-align: left;
+}
+:is(.side-fishing, .side-fishing:hover:not(:disabled), .side-fishing:active:not(:disabled)) {
+  background: none; border: none; box-shadow: none;
+}
+.side-fishing::before {
+  content: ""; position: absolute; inset: 5px 0 7px; z-index: -1; border-radius: var(--radius-sm); transition: background-color 160ms ease;
+}
+.site-side .side-fishing:active:not(:disabled) { transform: scale(.97); box-shadow: none; }
+.side-fishing:hover:not(:disabled) { color: var(--wood-text); }
+.side-fishing:hover::before { background-color: rgb(255 255 255 / 9%); }
+.side-fishing:focus-visible { outline: 3px solid var(--wood-text); outline-offset: -3px; border-radius: var(--radius-sm); }
+.side-fishing.active { color: var(--text); font-weight: 700; }
+.side-fishing.active::before { background: var(--grain), var(--bg); box-shadow: inset 0 0 16px var(--burn), 0 2px 0 rgb(0 0 0 / 25%); }
+.side-fishing.active .nav-icon { stroke: var(--mark); }
+@media (max-width: 900px) { .side-fishing { height: 3rem; } }
+
+.fishing-pond { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 5; display: block; cursor: crosshair; touch-action: manipulation; }
+.fishing-ui, .fishing-actions {
+  position: fixed; left: 15.5rem; right: 0; z-index: 12; display: flex; justify-content: center; gap: .75rem;
+  flex-wrap: wrap; padding: 0 16px; pointer-events: none;
+}
+.fishing-ui { top: calc(var(--header-h, 0px) + 12px); }
+.fishing-actions { bottom: 16px; }
+.fishing-ui > *, .fishing-actions > * { pointer-events: auto; }
+@media (max-width: 900px) {
+  .fishing-ui, .fishing-actions { left: 0; padding: 0 10px; }
+  /* --header-h ne compte que le titre : la barre a en plus ses marges (.6rem en haut et en bas). */
+  .fishing-ui { top: calc(var(--header-h, 0px) + 1.2rem + 10px); }
+  .fishing-hud { padding: .6rem .8rem; }
+  .fishing-actions { bottom: 10px; }
+}
+.fishing-hud {
+  width: min(960px, 100%); display: flex; flex-wrap: wrap; align-items: center; gap: .4rem 1.25rem; padding: .75rem 1rem;
+  background: var(--grain), var(--bg); color: var(--text); border: 1px solid var(--border); border-radius: var(--radius);
+  box-shadow: inset 0 0 28px var(--burn), 0 10px 24px -14px var(--shadow-color);
+}
+.fishing-score { font-size: 1.1rem; font-weight: 600; font-variant-numeric: tabular-nums; }
+.fishing-score strong { font-family: var(--font-title); font-size: 1.7rem; margin-right: .25rem; }
+.fishing-count { font-size: 1rem; }
+.fishing-buttons { display: flex; flex-wrap: wrap; gap: .5rem; margin-left: auto; }
+.fishing-message { flex-basis: 100%; color: var(--muted); font-size: .95rem; min-height: 1.45em; }
+.fishing-alert {
+  flex-basis: 100%; display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 1rem; padding: .6rem .85rem;
+  border-radius: var(--radius-sm); background: var(--accent-soft); border: 1.5px solid var(--accent); font-size: 1.05rem;
+}
+.fishing-actions button { font-size: 1.1rem; padding: .7rem 1.4rem; }
+.fishing-actions button.ghost { background: var(--grain), var(--bg); }
+
+/* Fenêtres du jeu : moulinet, carte pêchée, carnet, améliorations */
+.fishing-modal .modal-box { grid-template-rows: none; align-content: start; }
+.fishing-reveal { width: min(440px, 100%); justify-items: center; text-align: center; gap: .8rem; overflow: auto; }
+.fishing-kind, .fishing-card-kind { display: inline-flex; align-items: center; gap: .5rem; font-weight: 700; }
+.fishing-tag {
+  display: inline-grid; place-items: center; flex: none; width: 1.7rem; height: 1.7rem; border-radius: 50%;
+  border: 1.5px solid rgb(20 14 6 / 75%); color: #24170a; font-weight: 700; font-size: .95rem; line-height: 1;
+}
+.fishing-tag.kind-progression { background: #f2c25b; }
+.fishing-tag.kind-useful { background: #9ec6e8; }
+.fishing-tag.kind-filler { background: #efe6cf; }
+.fishing-tag.kind-trap { background: #e07a5f; }
+.fishing-tag.is-wish { background: #ec9bbb; }
+.fishing-card {
+  width: 100%; display: grid; gap: .45rem; justify-items: center; padding: 1.1rem 1.2rem; text-align: center;
+  background: var(--grain), var(--surface); border: 2px solid var(--border); border-radius: var(--radius);
+  box-shadow: inset 0 0 24px var(--burn);
+}
+.fishing-card-name { font-family: var(--font-title); font-weight: 600; font-size: 1.6rem; line-height: 1.15; margin: 0; overflow-wrap: anywhere; }
+.fishing-card-state { font-weight: 700; color: var(--accent); }
+.fishing-card.kind-progression, .fishing-card.is-wish { border-color: var(--gold); box-shadow: inset 0 0 24px var(--burn), 0 0 0 4px rgb(242 194 91 / 35%); }
+.fishing-card.kind-trap { border-color: var(--error); border-style: dashed; }
+/* Carte brillante : bordure double dorée en plus de la mention « ✦ Brillante ». */
+.fishing-card.shiny { border: 4px double var(--gold); background: linear-gradient(135deg, rgb(242 194 91 / 18%), transparent 40%, rgb(242 194 91 / 14%)), var(--grain), var(--surface); }
+.fishing-gain { font-size: 1.2rem; font-weight: 700; }
+.fishing-single { width: 100%; }
+.fishing-modal .fishing-panel { width: min(760px, 100%); grid-template-rows: auto minmax(0, 1fr); overflow: hidden; }
+.fishing-panel .toolbar-row h2 { margin: 0; }
+.fishing-panel-body { overflow: auto; display: grid; align-content: start; gap: 1.25rem; padding-right: .25rem; }
+.fishing-panel-body .stack { justify-items: stretch; }
+.fishing-card-list { list-style: none; margin: 0; padding: 0; }
+.fishing-card-list { display: grid; gap: .35rem; }
+.fishing-card-list li { display: flex; flex-wrap: wrap; align-items: center; gap: .2rem .5rem; }
+.fishing-island { border-top: 1px solid var(--border); padding: .55rem 0; }
+.fishing-island summary { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: .25rem 1rem; cursor: pointer; font-weight: 600; }
+.fishing-island[open] summary { margin-bottom: .5rem; }
+.fishing-island > :not(summary) + * { margin-top: .5rem; }
+.fishing-island-count { font-variant-numeric: tabular-nums; }
+.fishing-meter-row { display: flex; align-items: center; gap: .6rem; }
+.fishing-meter { flex: 1; height: .9rem; border-radius: 99px; background: var(--surface-2); border: 1px solid var(--border); overflow: hidden; }
+.fishing-meter > span { display: block; height: 100%; background: var(--accent); }
+.fishing-meter-value { min-width: 3.2rem; text-align: right; font-weight: 700; font-variant-numeric: tabular-nums; }
+.fishing-time { font-weight: 600; }
+.fishing-doublons { font-family: var(--font-title); font-size: 1.4rem; }
+/* « Ferrer ! » : le texte du bouton change, avec un liseré rouge en plus (pas la couleur seule, pas d'animation). */
+.fishing-actions .fishing-action.bite { outline: 3px solid var(--mark); outline-offset: 3px; font-size: 1.25rem; }
+
+/* Catalogue de la pêche (fishing.js) : cartes à collectionner, une grille par joueur de la room. Rareté donnée par le
+   cadre, le symbole et le mot (Rare, Utile, Commune, Maudite, Wishlist), jamais par la couleur seule. L'emblème garde les
+   mêmes couleurs dans les deux thèmes, comme une vraie carte. */
+.fishing-modal .fishing-panel.xl { width: min(1080px, 100%); }
+.fishing-tabs { gap: .4rem; }
+.fishing-tabs .chip-btn { font-size: .95rem; padding: .3rem .8rem; }
+.tcard-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr)); gap: .75rem; }
+.tcard {
+  position: relative; display: grid; grid-template-rows: auto auto 1fr auto; grid-template-columns: minmax(0, 1fr); gap: .35rem;
+  aspect-ratio: 5 / 7; min-width: 0;
+  padding: .5rem; border-radius: 10px; border: 2px solid var(--border); background: var(--grain), var(--surface);
+  color: var(--text); text-align: left; overflow: hidden; box-shadow: 0 6px 12px -8px var(--shadow-color);
+}
+.tcard-grid button.tcard, .tcard-grid button.tcard:hover:not(:disabled), .tcard-grid button.tcard:active:not(:disabled) {
+  padding: .5rem; border-radius: 10px; background: var(--grain), var(--surface); color: var(--text);
+  font-weight: 400; white-space: normal; cursor: pointer; box-shadow: 0 6px 12px -8px var(--shadow-color);
+  transition: transform 160ms var(--ease-out), box-shadow 160ms var(--ease-out);
+}
+.tcard-grid button.tcard:hover:not(:disabled) { transform: translateY(-3px); box-shadow: 0 12px 18px -10px var(--shadow-color); }
+.tcard-grid button.tcard:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.tcard-top { display: flex; align-items: center; gap: .35rem; font-size: .74rem; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; }
+.tcard-top .fishing-tag { width: 1.4rem; height: 1.4rem; font-size: .8rem; }
+/* Le mot de rareté cède la place (le symbole reste) quand le palier et le nombre d'exemplaires s'ajoutent. */
+.tcard-top > span:nth-child(2) { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tcard-top > :not(:nth-child(2)) { flex-shrink: 0; }
+.tcard-count { margin-left: auto; padding: 0 .4rem; border-radius: 99px; background: var(--surface-2); font-variant-numeric: tabular-nums; }
+.tcard-art {
+  position: relative; display: grid; place-items: center; aspect-ratio: 4 / 3; border-radius: 6px; overflow: hidden;
+  background: radial-gradient(circle at 30% 25%, rgb(255 255 255 / 45%), transparent 55%),
+    linear-gradient(135deg, hsl(var(--hue) 46% 74%), hsl(calc(var(--hue) + 40) 46% 58%));
+  border: 1px solid rgb(20 14 6 / 40%);
+}
+.tcard-art > span { font-family: var(--font-title); font-size: 2.1rem; line-height: 1; color: #24170a; text-shadow: 0 1px 0 rgb(255 255 255 / 55%); }
+.tcard-art.big { width: min(14rem, 100%); aspect-ratio: 5 / 3; }
+.tcard-art.big > span { font-size: 3.2rem; }
+.tcard-name {
+  font-weight: 700; font-size: .9rem; line-height: 1.2; overflow-wrap: anywhere;
+  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+}
+.tcard-meta { font-size: .78rem; color: var(--muted); }
+/* Cadres de rareté */
+.tcard-grid .tcard.kind-progression, .tcard.kind-progression { border-color: var(--gold); box-shadow: 0 0 0 2px rgb(242 194 91 / 45%), 0 6px 12px -8px var(--shadow-color); }
+.tcard-grid .tcard.kind-useful, .tcard.kind-useful { border-color: #6f9cc4; }
+.tcard-grid .tcard.kind-trap, .tcard.kind-trap { border-color: var(--error); border-style: dashed; }
+.tcard-grid .tcard.is-wish, .tcard.is-wish { border-color: #d77fa6; }
+/* Brillante : bordure double et reflet sur l'emblème (le reflet glisse au survol, sauf mouvement réduit). */
+.tcard-grid .tcard.shiny, .tcard.shiny { border-style: double; border-width: 4px; }
+.shiny .tcard-art::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(115deg, transparent 25%, rgb(255 255 255 / 60%) 42%, rgb(255 226 150 / 45%) 50%, transparent 62%);
+  background-size: 260% 100%; background-position: 100% 0; transition: background-position 800ms var(--ease-out);
+}
+.tcard.shiny:hover .tcard-art::after, .fishing-card.shiny .tcard-art::after { background-position: 20% 0; }
+/* Dos de carte : connue, pas encore pêchée */
+.tcard.back, .tcard.pending {
+  grid-template-rows: auto 1fr auto; justify-items: center; text-align: center; color: var(--muted);
+  background: repeating-linear-gradient(45deg, transparent 0 10px, rgb(0 0 0 / 5%) 10px 20px), var(--surface-2);
+}
+.tcard.back .tcard-top { justify-self: stretch; }
+.tcard.pending { border-style: dashed; align-content: center; grid-template-rows: auto auto; }
+.tcard-back-mark { align-self: center; font-family: var(--font-title); font-size: 2.6rem; line-height: 1; color: var(--muted); }
+.fishing-card .tcard-art { justify-self: center; }
+@media (prefers-reduced-motion: reduce) {
+  .tcard-grid button.tcard, .shiny .tcard-art::after { transition: none; }
+  .tcard-grid button.tcard:hover:not(:disabled) { transform: none; }
+}
+@media (max-width: 560px) { .tcard-grid { grid-template-columns: repeat(auto-fill, minmax(7.5rem, 1fr)); gap: .5rem; } }
+.tcard-wish { color: #c2406f; font-size: 1rem; line-height: 1; }
+:root[data-theme="dark"] .tcard-wish { color: #f29bbd; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .tcard-wish { color: #f29bbd; } }
+
+/* Prise (fishing.js) : le compteur de pièces rebondit et un « +N » s'en envole quand un poisson y arrive. */
+.fishing-score { position: relative; }
+.fishing-score .fishing-owned { display: inline-block; animation: fishing-bump 340ms var(--ease-out); }
+@keyframes fishing-bump { 0% { transform: scale(1); } 35% { transform: scale(1.4); } 100% { transform: scale(1); } }
+@media (prefers-reduced-motion: reduce) {
+  .fishing-score .fishing-owned { animation: none; }
+}
+
+/* Rythme de la pêche (fishing.js) : combo et frénésie au-dessus des boutons, avec leur minuteur qui se vide (le temps
+   restant se lit aussi au texte qui disparaît à la fin) ; rang et expérience dans le tableau de bord ; grande annonce
+   au centre de la mer (frénésie, nouveau rang). */
+.fishing-rank { flex-basis: 100%; display: flex; flex-wrap: wrap; align-items: center; gap: .3rem .7rem; font-weight: 600; font-size: .95rem; }
+.fishing-xp { flex: 1 1 8rem; max-width: 18rem; height: .6rem; border-radius: 99px; background: var(--surface-2); border: 1px solid var(--border); overflow: hidden; }
+.fishing-xp > span { display: block; height: 100%; background: var(--gold); transition: width 420ms var(--ease-out); }
+.fishing-combo, .fishing-frenzy {
+  position: relative; overflow: hidden; display: inline-flex; align-items: baseline; gap: .5rem; margin: 0;
+  padding: .45rem 1rem .65rem; border-radius: 99px; background: var(--grain), var(--bg); color: var(--text);
+  border: 2px solid var(--accent); font-weight: 800; font-size: 1.15rem; box-shadow: 0 6px 14px -8px var(--shadow-color);
+  animation: fishing-bump 300ms var(--ease-out);
+}
+.fishing-frenzy { border-color: var(--gold); background: linear-gradient(90deg, rgb(242 194 91 / 40%), rgb(242 194 91 / 10%)), var(--bg); }
+.combo-timer {
+  position: absolute; left: 0; right: 0; bottom: 0; height: 4px; background: var(--accent); transform-origin: left center;
+  animation: combo-timer linear forwards;
+}
+.fishing-frenzy .combo-timer { background: var(--gold); }
+@keyframes combo-timer { from { transform: scaleX(1); } to { transform: scaleX(0); } }
+.fishing-toast {
+  position: fixed; z-index: 13; left: calc(50% + 7.75rem); top: 40%; margin: 0; pointer-events: none;
+  padding: .6rem 1.5rem; border-radius: var(--radius); background: var(--grain), var(--bg); color: var(--text);
+  border: 3px solid var(--gold); box-shadow: 0 16px 34px -14px var(--shadow-color);
+  font-family: var(--font-title); font-size: clamp(1.8rem, 5vw, 2.6rem); white-space: nowrap;
+  animation: fishing-toast 2300ms var(--ease-out) forwards;
+}
+@keyframes fishing-toast {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(.6); }
+  12% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+  22%, 80% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(1); }
+}
+@media (max-width: 900px) { .fishing-toast { left: 50%; } }
+@media (prefers-reduced-motion: reduce) {
+  .fishing-combo, .fishing-frenzy { animation: none; }
+  .fishing-toast { animation: fishing-toast-fade 2300ms linear forwards; transform: translate(-50%, -50%); }
+  .fishing-xp > span { transition: none; }
+}
+@keyframes fishing-toast-fade { 0%, 85% { opacity: 1; } 100% { opacity: 0; } }
+
+/* Carte tout juste pêchée (fishing.js) : elle glisse en bas à gauche un moment, sans interrompre la pêche ; un clic
+   l'ouvre en grand. */
+.fishing-catch {
+  position: fixed; z-index: 12; left: calc(15.5rem + 16px); bottom: 16px; width: 10rem; display: grid; gap: .35rem;
+  animation: fishing-catch 4000ms var(--ease-out) forwards;
+}
+.fishing-catch-state {
+  margin: 0; padding: .3rem .6rem; border-radius: 99px; text-align: center; font-weight: 800;
+  background: var(--grain), var(--bg); color: var(--text); border: 2px solid var(--accent); box-shadow: 0 6px 14px -8px var(--shadow-color);
+}
+.fishing-catch .tcard { width: 100%; }
+.fishing-stars { font-weight: 700; }
+@keyframes fishing-catch {
+  0% { opacity: 0; transform: translateY(30px) scale(.9); }
+  10% { opacity: 1; transform: translateY(0) scale(1.04); }
+  16%, 85% { opacity: 1; transform: none; }
+  100% { opacity: 0; transform: translateY(10px); }
+}
+@media (max-width: 900px) { .fishing-catch { left: 10px; bottom: 84px; width: 8.5rem; } }
+@media (prefers-reduced-motion: reduce) { .fishing-catch { animation: fishing-toast-fade 4000ms linear forwards; } }
+
+/* Cartes argentées et dorées (3ᵉ et 6ᵉ exemplaire) : cadre et mot « Argent » / « Or » (pas la couleur seule). */
+.tcard-tier {
+  display: inline-block; padding: 0 .4rem; border-radius: 99px; border: 1px solid currentColor; color: var(--text);
+  font-size: .7rem; font-weight: 700; text-transform: uppercase; letter-spacing: .04em;
+}
+.tcard-grid .tcard.tier-silver, .tcard.tier-silver, .fishing-card.tier-silver { border-color: #a9b4c2; box-shadow: 0 0 0 2px rgb(169 180 194 / 50%), 0 6px 12px -8px var(--shadow-color); }
+.tcard-grid .tcard.tier-gold, .tcard.tier-gold, .fishing-card.tier-gold {
+  border-color: #e0a526; border-width: 3px; box-shadow: 0 0 0 3px rgb(242 194 91 / 55%), 0 0 18px rgb(242 194 91 / 40%);
+}
+.tier-gold .tcard-art { background: radial-gradient(circle at 30% 25%, rgb(255 255 255 / 55%), transparent 55%), linear-gradient(135deg, #f7d77c, #d9a02b); }
+/* Lieu de pêche (île) dans le tableau de bord */
+.fishing-spot select { font-size: .95rem; padding: .25rem .5rem; max-width: 100%; }
+/* Pêche dans la room : collection commune et classement */
+.fishing-goals { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: .5rem; }
+.fishing-goals .badge { font-size: .85rem; padding: .15rem .6rem; }
+.fishing-board { margin: 0; padding-left: 1.5rem; display: grid; gap: .3rem; font-size: 1rem; }
+.fishing-board li::marker { font-weight: 700; }
+.fishing-board li span { margin-left: .35rem; }
