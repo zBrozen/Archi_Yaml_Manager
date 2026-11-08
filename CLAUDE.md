@@ -29,8 +29,12 @@
   déjà lus), sinon la démo (`DEMO_FEED`, `DEMO_CARDS`, catalogue « DEMO »). Pas de pièces ni de score : la seule
   récompense est la carte ; l'adresse (« Parfait ! », combo) donne de la chance au tirage (`luckOf`, `drawCard`). Geste :
   lancer, touches, ferrer (`createPond`) ; remontée sans échec possible (`REEL`), saut jusqu'au compteur (`jump`). La
-  pêche doit se voir et se sentir (canne, gerbes, secousse, sillage) ; mouvement réduit : ni gouttes, ni secousse, ni
-  saut, rien ne nage. Nouveaux checks : un banc (`banc`) les amène en premier. Jamais de spoiler, rien d'envoyé au
+  pêche doit se voir et se sentir (canne, gerbes, secousse, sillage, paillettes aux couleurs de la carte, ondes de choc,
+  arrêt sur image au « Parfait ! », fête au compteur selon la prise : `celebrate`, éclair doux et feu d'artifice pour un
+  événement, bords d'écran selon la situation : `edgeLayers`) ; mouvement réduit : ni gouttes, ni paillettes, ni éclair,
+  ni secousse, ni saut, rien ne nage. Décor dans `fishing-scene.js` : île du lieu de pêche (paysage tiré du nom et du jeu
+  du joueur, `biomeOf`), traversée quand on change de lieu (le monde glisse, les poissons suivent, rien n'apparaît ;
+  fondu si mouvement réduit), courants, objets à la dérive, ombres des nuages ; l'île prend la droite de la mer (`cut`). Nouveaux checks : un banc (`banc`) les amène en premier. Jamais de spoiler, rien d'envoyé au
   serveur, aucun avantage en jeu. Catalogue en cartes (`.tcard`, un onglet par joueur) ; modificateur `is-wish`, pas
   `.wish` (pris par l'onglet Wishlist des rooms). Sauvegarde en `localStorage` (`fishing` : doublons ; `fishingAlbums` :
   5 rooms au plus). Lieu de pêche : toute la partie ou une île (monde d'un joueur, `spot`) ; paliers argent (3 exemplaires)

@@ -61,16 +61,18 @@ sans éditer le code à la main.
   mord, on le remonte : il saute jusqu'au compteur et sa carte rejoint le catalogue (un onglet par joueur de la room,
   cartes face visible ou de dos pour celles à pêcher). Les doubles donnent des doublons, qui achètent des cartes au
   trésor (le prochain poisson porte une carte manquante de l'île choisie). On pêche dans toute la partie ou au large
-  d'une île (le monde d'un joueur) pour la compléter. Les cartes nouvelles sont rares exprès (8 % de chance, un peu
-  plus à chaque double d'affilée, certaine après 25 doubles ; carte au trésor à 40 doublons) : environ une prise sur
-  cinq ou six, soit un bon quart d'heure pour une île d'une douzaine de cartes. Une carte repêchée s'améliore :
-  argentée au 3ᵉ exemplaire, dorée au 6ᵉ. L'adresse paie en chance : un « Parfait ! » et les prises enchaînées rendent
-  les cartes rares, nouvelles et brillantes plus fréquentes. Chaque nouveau check de la partie amène un banc, qui
-  porte ces checks tout frais. Quand un objet de progression ou de wishlist arrive pour l'un de vos joueurs, le jeu
-  vous renvoie jouer. La collection est sauvegardée dans le navigateur ; celle d'un joueur inscrit (ou de l'hôte) est
-  aussi envoyée à la room (`PUT /api/rooms/CODE/fishing`, table `fishing`) : la page de la room montre la collection
-  commune (checks pêchés par quelqu'un), ses paliers (25, 50, 75 %, toute la partie) et le classement des pêcheurs.
-  Aucun spoiler : les cartes sont des objets déjà envoyés dans la partie. Jamais sur l'overlay.
+  d'une île (le monde d'un joueur) pour la compléter : changer de lieu, c'est une traversée, et chaque île a son
+  paysage (tropical, forêt, rochers et phare, volcan, glaces, ruines), tiré du nom du joueur et de son jeu. Les cartes
+  nouvelles sont rares exprès (8 % de chance, un peu plus à chaque double d'affilée, certaine après 25 doubles ; carte
+  au trésor à 200 doublons, soit environ une demi-heure de pêche) : environ une prise sur cinq ou six, soit un bon
+  quart d'heure pour une île d'une douzaine de cartes. Une carte repêchée s'améliore : argentée au 3ᵉ exemplaire,
+  dorée au 6ᵉ. L'adresse paie en chance : un « Parfait ! » et les prises enchaînées rendent les cartes rares,
+  nouvelles et brillantes plus fréquentes. Chaque nouveau check de la partie amène un banc, qui porte ces checks tout
+  frais. Quand un objet de progression ou de wishlist arrive pour l'un de vos joueurs, le jeu vous renvoie jouer. La
+  collection est sauvegardée dans le navigateur ; celle d'un joueur inscrit (ou de l'hôte) est aussi envoyée à la room
+  (`PUT /api/rooms/CODE/fishing`, table `fishing`) : la page de la room montre la collection commune (checks pêchés
+  par quelqu'un), ses paliers (25, 50, 75 %, toute la partie) et le classement des pêcheurs. Aucun spoiler : les
+  cartes sont des objets déjà envoyés dans la partie. Jamais sur l'overlay.
 
 Hors rooms, tout se passe dans le navigateur : les fichiers des joueurs ne sont envoyés nulle part.
 

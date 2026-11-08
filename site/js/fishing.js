@@ -12,6 +12,7 @@ import { html, useState, useEffect, useMemo, useRef } from "../vendor/preact-htm
 import { usePackages, wishIndex } from "./room-live.js";
 import { plural } from "./ui.js";
 import { api, savedAccess } from "./rooms-api.js";
+import { BIOMES, biomeOf, createScene, drawEdges } from "./fishing-scene.js";
 
 // --- Partie de la room ouverte ---------------------------------------------------------------
 // La page d'une room (rooms.js) publie ici sa partie (joueurs, tracker, wishlists, vos joueurs) tant qu'elle est ouverte.
@@ -107,7 +108,8 @@ const NEW_STEP = 0.015;
 const NEW_LUCK = 0.06; // au plus, combo maximal
 const PITY = 25;
 const SHINY = 1 / 40;
-const TREASURE_PRICE = 40; // doublons (un double en rapporte 1 à 4)
+// Carte au trésor : chère exprès, une récompense de longue pêche (environ 150 prises, une demi-heure).
+const TREASURE_PRICE = 200; // doublons (un double en rapporte 1 à 4)
 // Une carte pêchée plusieurs fois s'améliore : argentée au 3ᵉ exemplaire, dorée au 6ᵉ. Chaque double fait avancer.
 const TIERS = [["gold", 6, "Or"], ["silver", 3, "Argent"]];
 const tierOf = (n) => TIERS.find(([, at]) => n >= at)?.[0] || "";
@@ -266,6 +268,9 @@ const isDarkTheme = () => {
 // poisson tiré le long du fil en se débattant avec son sillage, puis qui saute jusqu'au compteur.
 // Mouvement réduit : rien ne nage ; les poissons apparaissent puis s'effacent sur place, un poisson attiré
 // apparaît près du bouchon, le bouchon ne plonge pas (son état est écrit).
+// Couleur des paillettes selon la carte (en plus du symbole et du mot, jamais seules à porter l'information).
+const GLINT = { progression: "255, 209, 102", useful: "158, 198, 232", filler: "255, 243, 207", trap: "150, 214, 110", wish: "255, 158, 199" };
+
 function createPond(canvas, hooks) {
   const ctx = canvas.getContext("2d");
   let w = 0, h = 0, dpr = 1, area = { x0: 0, y0: 0, x1: 0, y1: 0 };
@@ -275,6 +280,14 @@ function createPond(canvas, hooks) {
   const aim = { x: 0, y: 0, shown: false };
   let particles = []; // gouttes et écume : { x, y, vx, vy, start, life, r, foam }
   let shakeUntil = 0, shakePower = 0, bend = 0; // secousse de la mer ; canne qui plie (0 à 1)
+  // Paillettes : étoiles qui scintillent ({ x, y, vx, vy, start, life, size, color, rainbow, spin }) ; ondes de choc
+  // ({ x, y, start, life, r0, r1, color, width }) ; éclair bref sur la mer ; arrêt sur image à l'impact ; effets différés.
+  let glints = [], rings = [], later = [];
+  let flash = { until: 0, start: 0, color: "255, 236, 180", power: 0 };
+  let freezeUntil = 0;
+  // Décor (île, traversée, courants) et effets de bords d'écran : teintes durables et éclats ({ color, power, start, life }).
+  const scene = createScene();
+  let pulses = [], luck = 1, alertOn = false;
   let frenzyUntil = 0; // banc en cours
   const clock0 = performance.now();
   let night = false;
@@ -286,14 +299,16 @@ function createPond(canvas, hooks) {
       canvas.width = Math.round(w * dpr); canvas.height = Math.round(h * dpr);
     }
     area = hooks.area();
+    scene.resize(area, w, h, dpr);
     if (!aim.shown) { aim.x = (area.x0 + area.x1) / 2; aim.y = (area.y0 + area.y1) / 2; }
     clampAim();
   }
-  const inside = (x, y, margin = 0) => x >= area.x0 - margin && x <= area.x1 + margin && y >= area.y0 - margin && y <= area.y1 + margin;
+  const right = () => area.x1 - scene.cut(); // bord droit de la mer où l'on pêche (l'île prend le reste)
+  const inside = (x, y, margin = 0) => x >= area.x0 - margin && x <= right() + margin && y >= area.y0 - margin && y <= area.y1 + margin;
   const between = (a, b, margin) => a + margin + Math.random() * Math.max(1, b - a - 2 * margin);
   const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
   function clampAim() {
-    aim.x = clamp(aim.x, area.x0 + 12, area.x1 - 12);
+    aim.x = clamp(aim.x, area.x0 + 12, right() - 12);
     aim.y = clamp(aim.y, area.y0 + 12, area.y1 - 12);
   }
   // La canne est tenue en bas à droite de la mer ; le fil part de son scion, qui plie vers ce qui tire.
@@ -313,10 +328,10 @@ function createPond(canvas, hooks) {
     const fromLeft = Math.random() < 0.5;
     const item = { kind: "fish", data, card: content.card, shiny: content.shiny, treasure: content.treasure, t0: t,
       phase: Math.random() * 6, alpha: 0, y: between(area.y0, area.y1, 30), dir: fromLeft ? 1 : -1, mode: "cruise" };
-    if (reduced) Object.assign(item, { x: between(area.x0, area.x1, 50), vx: 0, life: 9000 + Math.random() * 6000 });
+    if (reduced) Object.assign(item, { x: between(area.x0, right(), 50), vx: 0, life: 9000 + Math.random() * 6000 });
     else {
-      Object.assign(item, { x: fromLeft ? area.x0 - 40 : area.x1 + 40, vx: item.dir * data.speed * (0.8 + Math.random() * 0.4), life: Infinity });
-      if (data.trait === "hidden") Object.assign(item, { x: between(area.x0, area.x1, 60), vx: item.dir * data.speed * 0.3 });
+      Object.assign(item, { x: fromLeft ? area.x0 - 40 : right() + 40, vx: item.dir * data.speed * (0.8 + Math.random() * 0.4), life: Infinity });
+      if (data.trait === "hidden") Object.assign(item, { x: between(area.x0, right(), 60), vx: item.dir * data.speed * 0.3 });
     }
     items.push(item);
   }
@@ -349,6 +364,28 @@ function createPond(canvas, hooks) {
     shakeUntil = performance.now() + ms;
     shakePower = power;
   }
+  // Gerbe de paillettes, de la couleur de la carte (arc-en-ciel si elle est brillante). Rien si le mouvement est réduit.
+  function sparkle(x, y, n, { color = GLINT.filler, rainbow = false, speed = 1, size = 1, up = 0, life = 1 } = {}) {
+    if (reduced) return;
+    const t = performance.now();
+    for (let k = 0; k < n; k++) {
+      const a = Math.random() * Math.PI * 2, v = (40 + Math.random() * 170) * speed;
+      glints.push({ x, y, vx: Math.cos(a) * v, vy: Math.sin(a) * v - up, start: t, life: (500 + Math.random() * 500) * life,
+        size: (4 + Math.random() * 5) * size, color, rainbow, hue: Math.random() * 360, spin: Math.random() * Math.PI });
+    }
+  }
+  function ring(x, y, { color = "255, 255, 255", r0 = 6, r1 = 60, life = 420, width = 4 } = {}) {
+    if (reduced) return;
+    rings.push({ x, y, start: performance.now(), life, r0, r1, color, width });
+  }
+  function flashSea(power, color = "255, 236, 180") {
+    if (reduced) return;
+    const t = performance.now();
+    flash = { start: t, until: t + 260, color, power };
+  }
+  const freeze = (ms) => { if (!reduced) freezeUntil = performance.now() + ms; };
+  const pulse = (color, power, life = 600) => { if (!reduced) pulses.push({ color, power, life, start: performance.now() }); };
+  const glintOf = (f) => (f.card.wish ? GLINT.wish : GLINT[f.card.kind] || GLINT.filler);
 
   function land(t) {
     splash(line.x, line.y, 10, 0.9);
@@ -393,8 +430,12 @@ function createPond(canvas, hooks) {
     if (night !== wasNight) hooks.night(night);
     const scared = t < scaredUntil;
     const frenzy = t < frenzyUntil;
+    const moved = scene.update(dt, t, reduced);
+    if (moved.dx) for (const i of items) if (i.mode !== "jump") { i.x -= moved.dx; if (i.fromX != null) i.fromX -= moved.dx; }
+    if (moved.arrived) { nextFish = t + 300; hooks.arrived(moved.arrived.island); }
+    pulses = pulses.filter((p) => t - p.start < p.life);
     const fishCount = items.filter((i) => i.mode !== "flee").length;
-    if (!scared && fishCount < MAX_FISH + (frenzy ? 6 : 0) && t >= nextFish) {
+    if (!scene.traveling() && !scared && fishCount < MAX_FISH + (frenzy ? 6 : 0) && t >= nextFish) {
       const content = hooks.nextCard();
       if (content) spawn(content, t);
       nextFish = t + (frenzy ? 250 : 900) * (0.6 + Math.random() * 0.8);
@@ -426,6 +467,7 @@ function createPond(canvas, hooks) {
         splash(line.x, line.y, 8, 0.8);
         flee(fish, line.x, line.y);
         setLine(null);
+        pulse("90, 100, 120", 0.35, 650); // raté : les bords se ternissent
         hooks.event("late", fish.data);
       }
     }
@@ -445,6 +487,13 @@ function createPond(canvas, hooks) {
       }
       if (scared && i.mode === "cruise") { flee(i); return true; }
       i.alpha = Math.min(1, age / 400);
+      // Une carte précieuse se devine : de petites étoiles s'échappent du poisson (souvent s'il est brillant).
+      const precious = i.shiny ? 0.12 : i.treasure || i.card.wish || i.card.kind === "progression" ? 0.05 : 0;
+      if (!reduced && precious && i.alpha > 0.5 && !(i.data.trait === "hidden" && i.mode === "cruise") && Math.random() < precious) {
+        glints.push({ x: i.x + (Math.random() - 0.5) * i.data.size * 1.6, y: i.y + (Math.random() - 0.5) * i.data.size,
+          vx: 0, vy: -18, start: t, life: 600, size: 2.5 + Math.random() * 2.5, color: glintOf(i), rainbow: i.shiny,
+          hue: Math.random() * 360, spin: Math.random() * Math.PI });
+      }
       if (i.mode === "approach" && line?.fish === i) {
         // Sa place : à côté du bouchon, tête vers lui.
         const tx = line.x - i.side * i.data.size * 0.9, ty = line.y;
@@ -477,6 +526,14 @@ function createPond(canvas, hooks) {
       if (!d.foam) d.vy += 220 * dt;
       return true;
     });
+    glints = glints.filter((g) => {
+      if (t - g.start > g.life) return false;
+      if (t < g.start) return true; // pas encore apparue (pluie de paillettes)
+      g.x += g.vx * dt; g.y += g.vy * dt;
+      g.vx *= 1 - Math.min(1, dt * 2.6); g.vy = g.vy * (1 - Math.min(1, dt * 2.6)) + 60 * dt; // freinées, puis retombent
+      return true;
+    });
+    later = later.filter((job) => (t >= job.at ? (job.run(), false) : true));
   }
 
   // Ferré : le poisson est tiré le long du fil vers la canne. Les petits viennent d'un coup ; les autres demandent
@@ -490,6 +547,9 @@ function createPond(canvas, hooks) {
     line.reel = { sx: fish.x, sy: fish.y, progress: 0, target: taps ? 0.12 : 1, floor: 0, taps, step: taps ? 0.85 / taps : 0, nextFoam: 0 };
     splash(fish.x, fish.y, 12, 1);
     shake(120, 3.5);
+    ring(fish.x, fish.y, { color: glintOf(fish), r1: 70, width: 5 });
+    pulse("255, 255, 255", 0.22, 380);
+    sparkle(fish.x, fish.y, 8, { color: glintOf(fish), rainbow: fish.shiny, speed: 0.8 });
     bend = 1;
     setLine(line);
     hooks.reel(taps);
@@ -502,6 +562,9 @@ function createPond(canvas, hooks) {
     r.floor = Math.max(0, r.target - r.step * 0.6); // il recule entre deux clics, mais jamais jusqu'au départ
     splash(line.fish.x, line.fish.y, 7, 0.8);
     shake(70, 2);
+    ring(line.fish.x, line.fish.y, { color: glintOf(line.fish), r1: 38 + (r.taps ? 0 : 30), life: 300, width: 3 });
+    sparkle(line.fish.x, line.fish.y, r.taps ? 4 : 12, { color: glintOf(line.fish), rainbow: line.fish.shiny, speed: 0.7 });
+    if (!r.taps) { freeze(60); pulse(glintOf(line.fish), 0.35, 450); }
     bend = 1;
     hooks.reel(r.taps);
     return r.taps;
@@ -542,13 +605,27 @@ function createPond(canvas, hooks) {
       return;
     }
     splash(fish.x, fish.y, 16, 1.3);
+    ring(fish.x, fish.y, { r1: 80, life: 480, width: 5 });
+    sparkle(fish.x, fish.y, 10, { color: glintOf(fish), rainbow: fish.shiny, up: 120 });
     const to = hooks.scoreAt() || { x: area.x0 + 60, y: area.y0 - 20 };
     fish.mode = "jump";
     fish.jump = { t0: t, x0: fish.x, y0: fish.y, x1: to.x, y1: to.y, a0: fish.angle, spin: (Math.random() < 0.5 ? -1 : 1) * Math.PI * 2 };
   }
   function flyToScore(fish, t) {
     const j = fish.jump, p = Math.min(1, (t - j.t0) / JUMP_MS);
-    if (p >= 1) { hooks.caught(fish); return false; }
+    if (p >= 1) {
+      ring(j.x1, j.y1, { color: glintOf(fish), r1: 44, life: 360, width: 4 });
+      sparkle(j.x1, j.y1, 10, { color: glintOf(fish), rainbow: fish.shiny, speed: 0.9, up: -40 });
+      hooks.caught(fish);
+      return false;
+    }
+    // Traînée de paillettes derrière lui (plus dense pour une carte précieuse).
+    const rich = fish.shiny || fish.card.wish || fish.card.kind === "progression" ? 2 : 1;
+    if (!reduced && Math.random() < 0.7 * rich) {
+      glints.push({ x: fish.x + (Math.random() - 0.5) * 14, y: fish.y + (Math.random() - 0.5) * 14, vx: (Math.random() - 0.5) * 40,
+        vy: 30 + Math.random() * 40, start: t, life: 450 + Math.random() * 300, size: 2.5 + Math.random() * 3 * rich,
+        color: glintOf(fish), rainbow: fish.shiny, hue: Math.random() * 360, spin: Math.random() * Math.PI });
+    }
     const e = 1 - (1 - p) * (1 - p);
     const cx = (j.x0 + j.x1) / 2, cy = Math.min(j.y0, j.y1) - 170;
     fish.x = (1 - e) * (1 - e) * j.x0 + 2 * (1 - e) * e * cx + e * e * j.x1;
@@ -577,6 +654,8 @@ function createPond(canvas, hooks) {
     line.dipUntil = line.until;
     splash(line.x, line.y, 14, 1.1);
     shake(140, 3);
+    ring(line.x, line.y, { r1: 46, life: 320, width: 3 });
+    pulse("200, 240, 255", 0.4, 520);
     setLine(line);
     hooks.event("bite", line.fish.data);
   }
@@ -762,6 +841,62 @@ function createPond(canvas, hooks) {
     }
   }
 
+  // Étoile à quatre branches, qui scintille et s'éteint ; les ondes de choc s'élargissent en s'amincissant.
+  function drawGlints(t) {
+    ctx.save();
+    ctx.globalCompositeOperation = "lighter";
+    for (const g of glints) {
+      if (t < g.start) continue;
+      // L'horodatage de l'image peut précéder de peu la création de la paillette : on borne.
+      const k = Math.min(1, Math.max(0, (t - g.start) / g.life)), a = (1 - k) * (0.65 + 0.35 * Math.sin(t / 60 + g.spin * 9));
+      const r = Math.max(0.1, g.size * (k < 0.1 ? k / 0.1 : 1 - k * 0.35));
+      const tint = (alpha) => (g.rainbow ? `hsla(${(g.hue + t / 4) % 360}, 95%, 72%, ${alpha})` : `rgba(${g.color}, ${alpha})`);
+      ctx.save(); ctx.translate(g.x, g.y);
+      ctx.fillStyle = tint(a * 0.22); // halo
+      ctx.beginPath(); ctx.arc(0, 0, r * 2.4, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = tint(a);
+      ctx.rotate(g.spin + k * 1.5);
+      ctx.beginPath();
+      ctx.moveTo(0, -r * 2); ctx.quadraticCurveTo(0, 0, r * 2, 0); ctx.quadraticCurveTo(0, 0, 0, r * 2);
+      ctx.quadraticCurveTo(0, 0, -r * 2, 0); ctx.quadraticCurveTo(0, 0, 0, -r * 2);
+      ctx.fill();
+      ctx.fillStyle = `rgba(255, 255, 255, ${a})`;
+      ctx.beginPath(); ctx.arc(0, 0, r * 0.45, 0, Math.PI * 2); ctx.fill();
+      ctx.restore();
+    }
+    ctx.restore();
+  }
+  function drawRings(t) {
+    rings = rings.filter((o) => {
+      const k = Math.max(0, (t - o.start) / o.life);
+      if (k >= 1) return false;
+      const e = 1 - (1 - k) ** 3;
+      ctx.strokeStyle = `rgba(${o.color}, ${0.9 * (1 - k)})`; ctx.lineWidth = Math.max(0.5, o.width * (1 - k));
+      ctx.beginPath(); ctx.arc(o.x, o.y, o.r0 + (o.r1 - o.r0) * e, 0, Math.PI * 2); ctx.stroke();
+      return true;
+    });
+  }
+
+  // Bords d'écran selon ce qui se passe (toujours avec un message écrit à côté) : nuit, banc, carte maudite, combo,
+  // objet arrivé pour vos joueurs, traversée, morsure, remontée qui tire, puis les éclats du moment.
+  function edgeLayers(t) {
+    const wave = (ms, lo = 0.6) => (reduced ? 1 : lo + (1 - lo) * (0.5 + 0.5 * Math.sin(t / ms)));
+    const layers = [];
+    if (night || dark) layers.push({ color: "4, 10, 32", alpha: night ? 0.45 : 0.25, size: 0.3 });
+    if (t < frenzyUntil) layers.push({ color: GLINT.progression, alpha: 0.4 * wave(160), size: 0.2 });
+    if (t < scaredUntil) layers.push({ color: "120, 60, 140", alpha: 0.45 * wave(420), size: 0.26 }, { color: GLINT.trap, alpha: 0.25 * wave(300), size: 0.12 });
+    if (luck > 1.01) layers.push({ color: "255, 170, 60", alpha: Math.min(0.32, (luck - 1) * 0.32) * wave(500, 0.75), size: 0.14 });
+    if (alertOn) layers.push({ color: GLINT.wish, alpha: 0.35 * wave(350, 0.4), size: 0.18 });
+    if (scene.traveling()) layers.push({ color: "8, 24, 48", alpha: 0.4 * Math.min(1, scene.speed() / 700), size: 0.22 });
+    if (line?.state === "bite") layers.push({ color: "200, 240, 255", alpha: 0.3 * wave(70, 0.3), size: 0.12 });
+    if (line?.state === "reel" && line.reel.taps > 0) layers.push({ color: "230, 90, 50", alpha: 0.12 + 0.22 * bend, size: 0.15 });
+    for (const p of pulses) {
+      const k = Math.max(0, (t - p.start) / p.life);
+      layers.push({ color: p.color, alpha: p.power * (1 - k) * (1 - k), size: 0.12 + 0.12 * k });
+    }
+    return layers;
+  }
+
   function drawBobber(x, y, under) {
     ctx.save();
     ctx.translate(x, y);
@@ -787,6 +922,7 @@ function createPond(canvas, hooks) {
   function draw(t) {
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.clearRect(0, 0, w, h);
+    scene.drawBack(ctx, t, { dark, night, reduced });
     if (t < frenzyUntil) { // banc : la mer se dore, un cadre doré qui pulse (fixe si le mouvement est réduit)
       const pulse = reduced ? 0.6 : 0.5 + 0.3 * Math.sin(t / 180);
       ctx.fillStyle = `rgba(255, 196, 70, ${0.1 * pulse})`;
@@ -806,8 +942,17 @@ function createPond(canvas, hooks) {
     drawRod();
     drawAim();
     drawParticles(t);
+    drawRings(t);
     for (const item of items) if (item.mode === "jump") drawFish(item, t); // le poisson qui saute passe par-dessus tout
+    drawGlints(t);
     ctx.restore();
+    if (t < flash.until) { // éclair bref et doux sur la mer (jamais si le mouvement est réduit)
+      const k = Math.max(0, (t - flash.start) / (flash.until - flash.start));
+      ctx.fillStyle = `rgba(${flash.color}, ${flash.power * (1 - k) * (1 - k)})`;
+      ctx.fillRect(area.x0, 0, area.x1 - area.x0, h);
+    }
+    scene.drawFront(ctx, t, { reduced });
+    drawEdges(ctx, w, h, edgeLayers(t));
     effects = effects.filter((e) => {
       const p = (t - e.start) / (e.text ? 900 : 700);
       if (p >= 1) return false;
@@ -835,7 +980,7 @@ function createPond(canvas, hooks) {
     const dt = Math.min(0.1, (t - (last || t)) / 1000);
     last = t;
     dark = isDarkTheme();
-    update(dt, t);
+    if (t >= freezeUntil) update(dt, t);
     draw(t);
   }
 
@@ -849,7 +994,7 @@ function createPond(canvas, hooks) {
     cast(x = aim.x, y = aim.y) {
       if (line) return false;
       const from = rod(), t = performance.now();
-      setLine({ x: clamp(x, area.x0 + 10, area.x1 - 10), y: clamp(y, area.y0 + 10, area.y1 - 10), fromX: from.x, fromY: from.y, t0: t, state: "flying", fish: null });
+      setLine({ x: clamp(x, area.x0 + 10, right() - 10), y: clamp(y, area.y0 + 10, area.y1 - 10), fromX: from.x, fromY: from.y, t0: t, state: "flying", fish: null });
       if (reduced) land(t);
       return true;
     },
@@ -862,12 +1007,20 @@ function createPond(canvas, hooks) {
       if (line.state === "bite") {
         const t = performance.now();
         const perfect = t - line.biteAt <= PERFECT * (line.until - line.biteAt);
-        if (perfect) effects.push({ x: line.x, y: line.y - 34, text: "Parfait !", gold: true, start: t });
+        if (perfect) {
+          effects.push({ x: line.x, y: line.y - 34, text: "Parfait !", gold: true, start: t });
+          freeze(90); // arrêt sur image : le coup porte
+          pulse(GLINT.progression, 0.5, 750);
+          ring(line.x, line.y, { color: GLINT.progression, r1: 110, life: 520, width: 7 });
+          sparkle(line.x, line.y, 22, { color: GLINT.progression, speed: 1.3, size: 1.2 });
+          shake(160, 5);
+        }
         startReel();
         return { type: "hooked", fish, taps: line.reel.taps, perfect };
       }
       if (line.state === "nibble") {
         splash(line.x, line.y, 6, 0.7);
+        pulse("90, 100, 120", 0.35, 650);
         flee(fish, line.x, line.y);
         setLine(null);
         return { type: "early", fish };
@@ -879,8 +1032,43 @@ function createPond(canvas, hooks) {
     moveAim(dx, dy) { aim.shown = true; aim.x += dx; aim.y += dy; clampAim(); },
     showAim() { aim.shown = true; },
     float(x, y, text) { effects.push({ x, y, text, start: performance.now() }); },
+    // Ce que vaut la prise, vu depuis la page : 0 double, 1 carte nouvelle, 2 événement (rare, brillante, palier, île).
+    celebrate(level, card, shiny) {
+      if (reduced || level < 1) return;
+      const at = hooks.scoreAt() || { x: area.x0 + 60, y: area.y0 + 20 };
+      const color = card.wish ? GLINT.wish : GLINT[card.kind] || GLINT.filler, t = performance.now();
+      pulse(color, level >= 2 ? 0.75 : 0.4, level >= 2 ? 1500 : 800);
+      ring(at.x, at.y, { color, r1: 90, life: 560, width: 6 });
+      sparkle(at.x, at.y, 26, { color, rainbow: shiny, speed: 1.3, size: 1.2, up: -80 });
+      if (level < 2) return;
+      flashSea(0.22, shiny ? "220, 235, 255" : color);
+      freeze(80);
+      // Feu d'artifice : trois gerbes sur la mer, puis une pluie de paillettes.
+      for (let k = 0; k < 3; k++) {
+        later.push({ at: t + 140 + k * 170, run: () => {
+          const x = between(area.x0, area.x1, 80), y = between(area.y0, (area.y0 + area.y1) / 2, 40);
+          ring(x, y, { color, r1: 120, life: 620, width: 6 });
+          sparkle(x, y, 30, { color, rainbow: shiny || k === 1, speed: 1.6, size: 1.3, life: 1.3 });
+        } });
+      }
+      for (let k = 0; k < 40; k++) {
+        glints.push({ x: between(area.x0, area.x1, 10), y: area.y0 - Math.random() * 120, vx: (Math.random() - 0.5) * 30,
+          vy: 90 + Math.random() * 120, start: t + Math.random() * 500, life: 1400 + Math.random() * 600,
+          size: 2.5 + Math.random() * 3.5, color, rainbow: shiny || Math.random() < 0.3, hue: Math.random() * 360, spin: Math.random() * Math.PI });
+      }
+    },
     scare(ms) { scaredUntil = performance.now() + ms; },
     spawnSoon() { nextFish = 0; },
+    setLuck(value) { luck = value; },
+    setAlert(on) { alertOn = on; },
+    // Île où l'on pêche : sur place (ouverture), ou en traversée (la ligne est ramenée, les poissons restent derrière).
+    place(island) { scene.place(island); },
+    travel(island) {
+      if (!scene.go(island, reduced)) return false;
+      if (line) { if (line.fish && line.fish.mode !== "reel") line.fish.mode = "cruise"; else if (line.fish) flee(line.fish); setLine(null); hooks.reel(0); }
+      return true;
+    },
+    isTraveling: () => scene.traveling(),
     banc(ms) { frenzyUntil = performance.now() + ms; nextFish = 0; },
   };
 }
@@ -1049,7 +1237,9 @@ function Treasure({ doublons, islands, onBuy }) {
       <button type="button" disabled=${doublons < TREASURE_PRICE} onClick=${() => onBuy(chosen.slot)}>
         Acheter · ${plural(TREASURE_PRICE, "doublon")}</button>
     </div>` : html`<p>Toutes les cartes connues sont au catalogue : il faut attendre de nouveaux checks.</p>`}
-    <p class="hint">Vous avez ${plural(doublons, "doublon")}. Chaque double pêché en donne (plus pour une carte rare).</p>
+    <${Meter} value=${Math.min(doublons, TREASURE_PRICE)} max=${TREASURE_PRICE} label="Doublons pour la prochaine carte au trésor" />
+    <p class="hint">${doublons >= TREASURE_PRICE ? `Vous avez ${plural(doublons, "doublon")} : de quoi en acheter une.`
+      : `${doublons} / ${TREASURE_PRICE} doublons. Chaque double pêché en donne (plus pour une carte rare ou brillante).`}</p>
   </section>`;
 }
 
@@ -1071,6 +1261,8 @@ export function FishingMode({ onClose }) {
   const [message, setMessage] = useState("");
   const [alert, setAlert] = useState(null); // clé de la carte arrivée pour l'un de vos joueurs
   const [spot, setSpot] = useState(""); // île où l'on pêche (numéro du joueur), ou toute la partie
+  const [place, setPlace] = useState(null); // annonce d'arrivée sur une île { id, title, sub }
+  const [sailing, setSailing] = useState(false); // traversée en cours
   // Fermer une carte ouverte rend la main à ce qui l'avait ouverte.
   const opener = useRef(null);
   const openDetail = (card) => { if (!card) return; opener.current = document.activeElement; setDetail(card); };
@@ -1099,7 +1291,7 @@ export function FishingMode({ onClose }) {
 
   // Nouveaux checks dans la partie : un banc les amène (ils sont portés par les prochains poissons) ; un objet de
   // progression ou de wishlist pour l'un de vos joueurs vous renvoie jouer.
-  useEffect(() => { seen.current = null; treasure.current = null; fresh.current = []; setSpot(""); }, [code]);
+  useEffect(() => { seen.current = null; treasure.current = null; fresh.current = []; setSpot(""); setSailing(false); pond.current?.place(null); }, [code]);
   const spotIsland = islands.find((i) => String(i.slot) === spot);
   const spotPool = spotIsland ? pool.filter((c) => c.fromSlot === spotIsland.slot) : pool;
 
@@ -1165,11 +1357,13 @@ export function FishingMode({ onClose }) {
   const catchFish = (fish) => {
     const card = pool.find((c) => c.key === fish.card.key) || fish.card; // noms relus (datapackages chargés depuis)
     const result = obtain({ card, shiny: fish.shiny });
-    setCatchCard({ id: performance.now(), result });
     const special = result.island ? `Île ${ofName(result.island)} complète !` : result.tierUp === "gold" ? "Carte dorée !"
       : result.tierUp === "silver" ? "Carte argentée !" : result.shiny ? "✦ Carte brillante !"
       : result.fresh && card.wish ? "♥ Carte de wishlist !" : result.fresh && card.kind === "progression" ? "★ Carte rare !" : "";
-    if (special) setToast({ id: performance.now(), text: special });
+    const level = special ? 2 : result.fresh ? 1 : 0;
+    setCatchCard({ id: performance.now(), result, level });
+    if (special) setToast({ id: performance.now(), text: special, level });
+    pond.current?.celebrate(level, card, result.shiny);
     if (card.kind === "trap") pond.current?.scare(SCARE_MS);
     setMessage(`${result.fresh ? `Nouvelle carte : ${card.name}.` : `Double : ${card.name}, +${plural(result.doublons, "doublon")}.`}`
       + `${card.kind === "trap" ? " Carte maudite : les poissons fuient un moment." : ""}`);
@@ -1189,6 +1383,7 @@ export function FishingMode({ onClose }) {
   const act = (x, y) => {
     const p = pond.current;
     if (!p || panel || detail) return;
+    if (p.isTraveling()) { setMessage("En mer : le bateau arrive bientôt."); return; }
     const result = p.strike();
     if (result.type === "none") { if (p.cast(x, y)) setMessage(""); return; }
     if (result.type === "hooked") {
@@ -1198,6 +1393,16 @@ export function FishingMode({ onClose }) {
     } else if (result.type === "yank") { if (!result.left) setMessage(""); }
     else if (result.type === "early") breakCombo("Trop tôt : il ne faisait que grignoter, et il a fui.");
     else setMessage("Ligne ramenée.");
+  };
+
+  // Changer de lieu de pêche : on met le cap sur l'île (traversée), ou sur le large.
+  const goTo = (value) => {
+    setSpot(value);
+    const isle = islands.find((i) => String(i.slot) === value);
+    if (pond.current?.travel(isle ? { slot: isle.slot, name: isle.name, game: isle.game } : null)) {
+      setSailing(true);
+      setMessage(isle ? `Cap sur l'île ${ofName(isle.name)}…` : "Cap sur le large…");
+    }
   };
 
   const buyTreasure = (slot) => {
@@ -1229,6 +1434,13 @@ export function FishingMode({ onClose }) {
       return draw && { ...draw, treasure: target != null && !room.cards[draw.card.key] && draw.card.fromSlot === target };
     },
     caught: (fish) => catchFish(fish),
+    arrived: (island) => {
+      setSailing(false);
+      const isle = island && islands.find((i) => i.slot === island.slot);
+      setPlace({ id: performance.now(), title: isle ? `Île ${ofName(isle.name)}` : "Le large",
+        sub: isle ? `${isle.game} · ${BIOMES[biomeOf(isle)].label} · ${isle.have}/${plural(isle.known, "carte")}` : "Toute la partie" });
+      setMessage(isle ? `Vous voici sur l'île ${ofName(isle.name)} : ses poissons portent ses cartes.` : "Vous voici au large : toutes les cartes de la partie.");
+    },
     lost: (fish) => { treasure.current = fish.card.fromSlot; },
     event: (type, species) => {
       if (type === "bite") setMessage("Ça mord ! Ferrez maintenant.");
@@ -1246,6 +1458,7 @@ export function FishingMode({ onClose }) {
       night: setNight,
       reel: setReelLeft,
       caught: (fish) => handlers.current.caught(fish),
+      arrived: (island) => handlers.current.arrived(island),
       // Le poisson saute vers le compteur du catalogue (juste sous le tableau de bord, qui passe par-dessus la mer).
       scoreAt: () => {
         const count = document.querySelector(".fishing-owned")?.getBoundingClientRect();
@@ -1270,6 +1483,8 @@ export function FishingMode({ onClose }) {
     };
   }, []);
   useEffect(() => { pond.current?.setReduced(reduced); }, [reduced]);
+  useEffect(() => { pond.current?.setLuck(luck); }, [luck]);
+  useEffect(() => { pond.current?.setAlert(!!alert); }, [alert]);
 
   // Clavier : flèches pour viser (Maj : plus fin), Échap pour fermer la fenêtre ouverte ou dérouler la carte.
   const onKey = useRef(null);
@@ -1312,7 +1527,7 @@ export function FishingMode({ onClose }) {
 
   const bancOn = bancUntil > Date.now();
   const alertCard = alert && cards.find((c) => c.key === alert);
-  const actionLabel = { none: "Lancer la ligne", flying: "…", waiting: "Ramener la ligne", nibble: "Ça touche… (attendez)", bite: "Ferrer !",
+  const actionLabel = sailing ? "En mer…" : { none: "Lancer la ligne", flying: "…", waiting: "Ramener la ligne", nibble: "Ça touche… (attendez)", bite: "Ferrer !",
     reel: reelLeft ? `Remonter ! (${reelLeft})` : "Ça remonte…" }[lineState];
   const help = lineState === "none" && !Object.keys(room.cards).length
     ? `Chaque poisson porte une carte : un check ${demo ? "(fictif, ici)" : "de la partie"}. Sa rareté se lit à l'étiquette (★ rare, ◆ utile,
@@ -1332,7 +1547,7 @@ export function FishingMode({ onClose }) {
           ${(save.doublons || 0) > 0 && html` · <strong class="fishing-doublons">${save.doublons}</strong> doublon${save.doublons > 1 ? "s" : ""}`}</p>
         <p class="fishing-time">${night ? "☾ Nuit" : "☀ Jour"}</p>
         <p class="fishing-rank"><label class="fishing-spot"><span class="sr-only">Lieu de pêche</span>
-            <select value=${spot} onChange=${(e) => { setSpot(e.target.value); pond.current?.spawnSoon(); }}>
+            <select value=${spot} onChange=${(e) => goTo(e.target.value)}>
               <option value="">${demo ? "Partie de démonstration" : `Toute la partie (room ${code})`}</option>
               ${islands.map((i) => html`<option value=${String(i.slot)}>Île ${ofName(i.name)} · ${i.have}/${i.known}${i.known && i.have === i.known ? " ✓" : ""}</option>`)}
             </select></label>
@@ -1357,7 +1572,8 @@ export function FishingMode({ onClose }) {
       </section>
     </div>
     ${toast && html`<p class="fishing-toast" key=${toast.id} role="status">${toast.text}</p>`}
-    ${shown && html`<div class="fishing-catch" key=${catchCard.id}>
+    ${place && html`<div class="fishing-place" key=${place.id} aria-hidden="true"><strong>${place.title}</strong><span>${place.sub}</span></div>`}
+    ${shown && html`<div class=${`fishing-catch level-${catchCard.level || 0}${shown.shiny ? " is-shiny" : ""}`} key=${catchCard.id}>
       <p class="fishing-catch-state">${shown.fresh ? "Nouvelle carte !" : `Double · +${plural(shown.doublons, "doublon")}`}</p>
       <${TradingCard} card=${{ ...shown.card, n: shown.n, s: shown.shiny ? 1 : 0 }}
         onOpen=${() => openDetail(room.cards[shown.card.key] && { ...room.cards[shown.card.key], key: shown.card.key })} />
