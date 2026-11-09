@@ -47,7 +47,9 @@ SPOILER_LEVEL = 2  # objets et chemin de victoire, sans le détail des trajets (
 
 # Lancé dans le dossier d'Archipelago : applique les réglages du serveur choisis par l'hôte
 # (ils sont enregistrés dans la partie générée), puis génère comme Generate.py.
-WRAPPER = """
+# Les annotations des fonctions recopiées (getsource) citent des noms absents d'ici (`Any`) : sans l'import
+# « __future__ », Python 3.12 les évalue à la définition et le script s'arrête sur un NameError.
+WRAPPER = """from __future__ import annotations
 import json, sys
 sys.path.insert(0, ".")
 options = json.loads(sys.argv[1])
