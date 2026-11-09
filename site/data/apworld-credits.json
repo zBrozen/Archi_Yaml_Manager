@@ -1248,7 +1248,7 @@
  },
  {
   "game": "Blue Prince",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "authors": [
    "deefdragon",
    "BatmenzDW"
@@ -1267,8 +1267,8 @@
    "game": "Blue Prince",
    "stability": "Unstable"
   },
-  "download": "https://github.com/BatmenzDW/Archipelago/releases/download/v0.1.3/blueprince.apworld",
-  "release": "https://github.com/BatmenzDW/Archipelago/releases/tag/v0.1.3",
+  "download": "https://github.com/BatmenzDW/Archipelago/releases/download/v0.1.4/blueprince.apworld",
+  "release": "https://github.com/BatmenzDW/Archipelago/releases/tag/v0.1.4",
   "links": [
    "https://github.com/BatmenzDW/Archipelago/releases"
   ]
@@ -2640,7 +2640,7 @@
  },
  {
   "game": "Cult of the Lamb",
-  "version": "0.9.5",
+  "version": "0.9.6",
   "authors": [
    "IanCichy"
   ],
@@ -2655,8 +2655,8 @@
    "game": "Cult of the Lamb",
    "stability": "Unstable"
   },
-  "download": "https://github.com/IanCichy/CultOfTheLamb_Archipelago/releases/download/v0.9.5/cult_of_the_lamb.apworld",
-  "release": "https://github.com/IanCichy/CultOfTheLamb_Archipelago/releases/tag/v0.9.5",
+  "download": "https://github.com/IanCichy/CultOfTheLamb_Archipelago/releases/download/v0.9.6/cult_of_the_lamb.apworld",
+  "release": "https://github.com/IanCichy/CultOfTheLamb_Archipelago/releases/tag/v0.9.6",
   "links": [
    "https://github.com/IanCichy/CultOfTheLamb_Archipelago/releases/latest"
   ]
@@ -4105,7 +4105,7 @@
  },
  {
   "game": "Final Fantasy Crystal Chronicles",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "authors": [
    "EverydaySimpleDev"
   ],
@@ -4123,8 +4123,8 @@
    "game": "Final Fantasy: Crystal Chronicles",
    "stability": "Unstable"
   },
-  "download": "https://github.com/EverydaySimpleDev/Archipelago/releases/download/ffcc-beta.0.2.0/ffcc.apworld",
-  "release": "https://github.com/EverydaySimpleDev/Archipelago/releases/tag/ffcc-beta.0.2.0",
+  "download": "https://github.com/EverydaySimpleDev/Archipelago/releases/download/ffcc-beta-0.3.0/ffcc.apworld",
+  "release": "https://github.com/EverydaySimpleDev/Archipelago/releases/tag/ffcc-beta-0.3.0",
   "links": [
    "https://github.com/EverydaySimpleDev/Archipelago/releases?q=Crystal+Chronicles&expanded=true"
   ]
@@ -4448,7 +4448,7 @@
  },
  {
   "game": "Gato Roboto B-Side",
-  "version": "0.8.1",
+  "version": "0.8.2",
   "authors": [
    "Nitroxy"
   ],
@@ -4464,8 +4464,8 @@
    "game": "Gato Roboto B-Side",
    "stability": "Stable"
   },
-  "download": "https://github.com/Nitroxyz/Gato-Roboto-B-Side-Archipelago/releases/download/0.8.1/gatoroboto_b_side.apworld",
-  "release": "https://github.com/Nitroxyz/Gato-Roboto-B-Side-Archipelago/releases/tag/0.8.1",
+  "download": "https://github.com/Nitroxyz/Gato-Roboto-B-Side-Archipelago/releases/download/0.8.2/gatoroboto_b_side.apworld",
+  "release": "https://github.com/Nitroxyz/Gato-Roboto-B-Side-Archipelago/releases/tag/0.8.2",
   "links": [
    "https://github.com/Nitroxyz/Gato-Roboto-B-Side-Archipelago/releases/latest"
   ]
@@ -4680,11 +4680,12 @@
  },
  {
   "game": "Golden Sun The Lost Age",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "authors": [
    "Dragion",
    "Platano Bailando",
-   "Karanum"
+   "Karanum",
+   "Dracador"
   ],
   "file": "gstla.apworld",
   "source": "https://github.com/cjmang/Archipelago",
@@ -4700,8 +4701,8 @@
    "game": "Golden Sun: The Lost Age",
    "stability": "Stable"
   },
-  "download": "https://github.com/cjmang/Archipelago/releases/download/0.2.3-beta/gstla.apworld",
-  "release": "https://github.com/cjmang/Archipelago/releases/tag/0.2.3-beta",
+  "download": "https://github.com/cjmang/Archipelago/releases/download/0.2.4-beta/gstla.apworld",
+  "release": "https://github.com/cjmang/Archipelago/releases/tag/0.2.4-beta",
   "links": [
    "https://github.com/cjmang/Archipelago/releases"
   ]
@@ -8038,8 +8039,8 @@
    "stability": "Unstable",
    "pr_status": "Not PRing"
   },
-  "download": "https://github.com/Badhamknibbs/ArchipelagoNeonWhite/releases/download/v0.2.0/neonwhite.apworld",
-  "release": "https://github.com/Badhamknibbs/ArchipelagoNeonWhite/releases/tag/v0.2.0",
+  "download": "https://github.com/Badhamknibbs/ArchipelagoNeonWhite/releases/download/v0.2.1/neonwhite.apworld",
+  "release": "https://github.com/Badhamknibbs/ArchipelagoNeonWhite/releases/tag/v0.2.1",
   "links": [
    "https://github.com/Badhamknibbs/ArchipelagoNeonWhite/releases"
   ]
@@ -8517,7 +8518,7 @@
  },
  {
   "game": "OpenTTD Cargolock",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "authors": [
    "kbab"
   ],
@@ -8530,8 +8531,8 @@
    "game": "OpenTTD Cargolock",
    "stability": "Unstable"
   },
-  "download": "https://github.com/kbab13reel/openttd-archipelago/releases/download/0.3.1/openttd_cargolock.apworld",
-  "release": "https://github.com/kbab13reel/openttd-archipelago/releases/tag/0.3.1",
+  "download": "https://github.com/kbab13reel/openttd-archipelago/releases/download/0.4.0/openttd_cargolock.apworld",
+  "release": "https://github.com/kbab13reel/openttd-archipelago/releases/tag/0.4.0",
   "links": [
    "https://github.com/kbab13reel/openttd-archipelago/releases/latest"
   ]
@@ -14299,8 +14300,8 @@
    "game": "vardrain--",
    "stability": "Unstable"
   },
-  "download": "https://github.com/flingoXD/Archipelago/releases/download/0.1.0/vardrain--.apworld",
-  "release": "https://github.com/flingoXD/Archipelago/releases/tag/0.1.0",
+  "download": "https://github.com/flingoXD/Archipelago/releases/download/0.1.1/vardrain--.apworld",
+  "release": "https://github.com/flingoXD/Archipelago/releases/tag/0.1.1",
   "links": [
    "https://github.com/flingoXD/Archipelago/releases"
   ]
@@ -14598,8 +14599,8 @@
    "game": "Warcraft 3",
    "stability": "Unstable"
   },
-  "download": "https://github.com/MatthewMarinets/war3-ap-maps/releases/download/0.0.1-release/wc3.apworld",
-  "release": "https://github.com/MatthewMarinets/war3-ap-maps/releases/tag/0.0.1-release",
+  "download": "https://github.com/MatthewMarinets/war3-ap-maps/releases/download/0.0.2-initial/wc3.apworld",
+  "release": "https://github.com/MatthewMarinets/war3-ap-maps/releases/tag/0.0.2-initial",
   "links": [
    "https://github.com/MatthewMarinets/war3-ap-maps/releases/tag/0.0.1-release"
   ]
