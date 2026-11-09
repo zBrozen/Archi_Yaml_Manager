@@ -657,7 +657,6 @@
     {"game": "The Guardian Legend", "stability": "Stable", "pr_status": "Not PRing", "adult": true},
     {"game": "The Henry Stickmin Collection", "stability": "Unstable"},
     {"game": "The Legend of Dragoon", "stability": "Unstable"},
-    {"game": "The Legend of Heroes: Trails Beyond the Horizon", "stability": "Unstable", "pr_status": "Not PRing", "adult": true},
     {"game": "The Legend of Heroes: Trails in the Sky the 3rd", "stability": "Unstable"},
     {"game": "The Legend of Spyro: Dawn of The Dragons", "stability": "Unstable"},
     {"game": "The Legend of Zelda: A Link Between Worlds", "stability": "Stable"},

@@ -360,9 +360,9 @@
    {
     "page": "https://github.com/pwkfisher/ap-dkc2-tracker/releases/latest",
     "repo": "pwkfisher/ap-dkc2-tracker",
-    "tag": "1.0",
-    "asset": "ap-dkc2-tracker-1.0.zip",
-    "url": "https://github.com/pwkfisher/ap-dkc2-tracker/releases/download/1.0/ap-dkc2-tracker-1.0.zip"
+    "tag": "1.1.0",
+    "asset": "ap-dkc2-tracker-1.1.0.zip",
+    "url": "https://github.com/pwkfisher/ap-dkc2-tracker/releases/download/1.1.0/ap-dkc2-tracker-1.1.0.zip"
    }
   ],
   "Donkey Kong Country 3": [
@@ -988,9 +988,9 @@
    {
     "page": "https://github.com/lighting8282/Pokemon-Snap-AP-Pop-Tracker/releases",
     "repo": "lighting8282/Pokemon-Snap-AP-Pop-Tracker",
-    "tag": "v1.8.0.0",
-    "asset": "SnapTracker-1.8.0.0.zip",
-    "url": "https://github.com/lighting8282/Pokemon-Snap-AP-Pop-Tracker/releases/download/v1.8.0.0/SnapTracker-1.8.0.0.zip"
+    "tag": "v1.8.0.2",
+    "asset": "SnapTracker-1.8.0.2.zip",
+    "url": "https://github.com/lighting8282/Pokemon-Snap-AP-Pop-Tracker/releases/download/v1.8.0.2/SnapTracker-1.8.0.2.zip"
    }
   ],
   "PokéPark Wii: Pikachu's Adventure": [
@@ -1048,9 +1048,9 @@
    {
     "page": "https://github.com/jdmccork/Rain-World-PopTracker/releases/latest",
     "repo": "jdmccork/Rain-World-PopTracker",
-    "tag": "v0.7.6",
-    "asset": "Rain-World-PopTracker-0.7.6.zip",
-    "url": "https://github.com/jdmccork/Rain-World-PopTracker/releases/download/v0.7.6/Rain-World-PopTracker-0.7.6.zip"
+    "tag": "v0.7.7",
+    "asset": "Rain-World-PopTracker-0.7.7.zip",
+    "url": "https://github.com/jdmccork/Rain-World-PopTracker/releases/download/v0.7.7/Rain-World-PopTracker-0.7.7.zip"
    }
   ],
   "Ratchet & Clank": [
