@@ -24,7 +24,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+      url: ${{ steps.deployment.outputs.page_url || steps.retry.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -52,8 +52,23 @@ jobs:
           path: site
           name: github-pages-${{ github.run_attempt }}
 
+      # GitHub Pages laisse parfois un déploiement « en cours » sans jamais le terminer, alors que le même
+      # artefact passe à l'essai suivant. deploy-pages n'attend pas plus de 10 min (délai plus long ignoré) et
+      # annule alors le déploiement : une seconde tentative, un peu plus tard, avec le même artefact.
       - id: deployment
+        continue-on-error: true
         uses: actions/deploy-pages@v4
         with:
           artifact_name: github-pages-${{ github.run_attempt }}
-          timeout: 1200000 # 20 min : GitHub Pages dépasse parfois les 10 min par défaut
+
+      - name: Attendre avant la seconde tentative
+        if: steps.deployment.outcome == 'failure'
+        run: |
+          echo "::warning::Premier déploiement sur GitHub Pages échoué, seconde tentative dans une minute"
+          sleep 60
+
+      - id: retry
+        if: steps.deployment.outcome == 'failure'
+        uses: actions/deploy-pages@v4
+        with:
+          artifact_name: github-pages-${{ github.run_attempt }}
