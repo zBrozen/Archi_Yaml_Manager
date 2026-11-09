@@ -308,6 +308,16 @@ Streamlabs, XSplit…).
   réellement (définition, images par seconde, débit, codec et encodeur), le débit que le navigateur
   s'autorise, la latence et les pertes, et explique ce qui réduit l'image : débit de la qualité choisie,
   estimation encore en train de monter, réseau qui perd des paquets ou encodage trop lourd.
+- **Photos des cartes** (`site/js/card-shots.js`, case à cocher de « Partager mon jeu », décochée par défaut) :
+  pendant le partage, le navigateur du joueur écoute la partie (connexion « TextOnly », comme l'overlay) ; quand il
+  trouve un objet important (progression, utile ou piège), il prend une image de son propre partage, la recadre (tout
+  l'écran, ou un cadre au format de la carte qu'il place et zoome sur l'aperçu, réglé pour chacun de ses jeux), la
+  réduit à 320 × 240 (WebP, ou JPEG, moins de 40 Ko) et l'envoie à la room (`PUT /api/rooms/CODE/shots/JOUEUR-LIEU`,
+  table `card_shots`, migration 0016, fichier dans le KV). La carte de ce check, dans la pêche, montre alors l'écran de
+  celui qui l'a trouvé. Seul l'inscrit qui joue ce joueur de la partie (ou l'hôte) l'envoie ; une photo par check,
+  jamais remplacée, 600 par room ; chacun supprime les siennes (« Supprimer mes photos de cette room »), et elles
+  partent avec le joueur ou la room. Une capture peut montrer plus que le jeu (notification, autre fenêtre) : d'où la
+  case à cocher, le cadre et le bouton « Essayer », qui montre la photo sans l'envoyer.
 - **Streamers** : « Créer un espace » donne une adresse secrète (`#/overlay/CODE/CLÉ`) à mettre en source
   **Navigateur** du logiciel de stream (1920 × 1080, fond transparent). L'hôte et chaque joueur créent leurs
   espaces (3 au plus par joueur). Tous les inscrits voient la liste et peuvent copier n'importe quel espace ;

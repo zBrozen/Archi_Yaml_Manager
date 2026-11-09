@@ -11,7 +11,7 @@
 import { html, useState, useEffect, useMemo, useRef } from "../vendor/preact-htm.js";
 import { usePackages, wishIndex } from "./room-live.js";
 import { plural } from "./ui.js";
-import { api, savedAccess } from "./rooms-api.js";
+import { api, savedAccess, shotUrl } from "./rooms-api.js";
 import { BIOMES, biomeOf, createScene, drawEdges } from "./fishing-scene.js";
 
 // --- Partie de la room ouverte ---------------------------------------------------------------
@@ -23,11 +23,14 @@ const publish = (next) => {
   for (const listener of feedListeners) listener(next);
 };
 
-export function useFishingFeed(code, status, tracker, mine, wishlists) {
+export function useFishingFeed(code, status, tracker, mine, wishlists, shots) {
   const names = mine.map((m) => String(m.name).toLowerCase()).join("\n");
+  const shotKey = (shots || []).join(",");
   useEffect(() => {
-    if (status && tracker?.data) publish({ code, status, data: tracker.data, mine: names ? names.split("\n") : [], wishlists: wishlists || {} });
-  }, [code, status, tracker?.data, names, wishlists]);
+    if (status && tracker?.data) {
+      publish({ code, status, data: tracker.data, mine: names ? names.split("\n") : [], wishlists: wishlists || {}, shots: shotKey ? shotKey.split(",") : [] });
+    }
+  }, [code, status, tracker?.data, names, wishlists, shotKey]);
   useEffect(() => () => { if (feed?.code === code) publish(null); }, [code]);
 }
 
@@ -153,7 +156,7 @@ function roomCards(current, loaded) {
       const from = slots.get(sender);
       const name = loaded[to.game]?.items.get(item) || "";
       cards.push({
-        key: `${entry.player}:${index}`, kind: kindOf(flags), name, game: to.game, to: to.name, fromSlot: sender,
+        key: `${entry.player}:${index}`, kind: kindOf(flags), name, game: to.game, to: to.name, fromSlot: sender, shot: `${sender}-${location}`,
         from: from?.name || `Joueur ${sender}`, place: (from && loaded[from.game]?.locations.get(location)) || "",
         wish: !!name && !!wishes.get(to.name.toLowerCase())?.has(name),
       });
@@ -1089,8 +1092,15 @@ function initials(name) {
   const words = String(name).replace(/[^\p{L}\p{N}]+/gu, " ").trim().split(" ").filter(Boolean);
   return (words.length > 1 ? words[0][0] + words[1][0] : (words[0] || "?").slice(0, 2)).toUpperCase();
 }
-const Art = ({ card, big = false }) => html`<span class=${`tcard-art ${big ? "big" : ""}`} style=${{ "--hue": hueOf(card.game) }} aria-hidden="true">
-  <span>${initials(card.name)}</span></span>`;
+// Photos de la room ouverte (card-shots.js) : la carte d'un check photographié montre l'écran de celui qui l'a trouvé.
+const photos = { code: null, set: new Set() };
+const photoOf = (card) => (card.shot && photos.code && photos.set.has(card.shot) ? shotUrl(photos.code, card.shot) : null);
+const Art = ({ card, big = false }) => {
+  const src = photoOf(card);
+  return html`<span class=${`tcard-art ${big ? "big" : ""} ${src ? "has-photo" : ""}`} style=${{ "--hue": hueOf(card.game) }} aria-hidden="true">
+    ${src ? html`<img class="tcard-photo" src=${src} alt="" loading="lazy" decoding="async" />` : html`<span>${initials(card.name)}</span>`}</span>`;
+};
+const photoText = (card) => photoOf(card) && html`<p class="hint">📷 Photo prise par ${card.from} au moment de la trouvaille.</p>`;
 const cardClass = (card, shiny) => `kind-${card.kind} ${card.wish ? "is-wish" : ""} ${shiny ? "shiny" : ""} ${card.n ? `tier-${tierOf(card.n)}` : ""}`;
 
 // Carte du catalogue (au classeur) : un clic l'ouvre en grand.
@@ -1129,6 +1139,7 @@ function CardFace({ result }) {
     <h3 class="fishing-card-name" lang="en">${card.name}</h3>
     <p>${routeText(card)}</p>
     ${placeText(card)}
+    ${photoText(card)}
     <p class="hint">Jeu : <span lang="en">${card.game}</span></p>
     <p class="fishing-gain">${fresh ? "Ajoutée au catalogue" : `+${plural(result.doublons, "doublon")}`}</p>
   </article>`;
@@ -1142,11 +1153,12 @@ function CardDetail({ card }) {
     <h3 class="fishing-card-name" lang="en">${card.name}</h3>
     <p>${routeText(card)}</p>
     ${placeText(card)}
+    ${photoText(card)}
     <p class="hint">Jeu : <span lang="en">${card.game}</span></p>
     <p class="fishing-card-state">${plural(card.n, "exemplaire")}${tierLabel(card.n) ? ` · carte ${tierLabel(card.n) === "Or" ? "dorée" : "argentée"}` : ""}
       ${card.s ? ` · ✦ ${plural(card.s, "brillante")}` : ""}</p>
-    ${nextTier(card.n) > 0 && html`<p class="hint">Encore ${plural(nextTier(card.n) - card.n, "exemplaire")} pour la carte
-      ${nextTier(card.n) === 3 ? "argentée" : "dorée"}.</p>`}
+    ${nextTier(card.n) > 0 && html`<p class="hint">Encore ${plural(nextTier(card.n) - card.n, "exemplaire")}${" "}
+      pour la carte ${nextTier(card.n) === 3 ? "argentée" : "dorée"}.</p>`}
   </article>`;
 }
 
@@ -1178,7 +1190,7 @@ function Catalogue({ demo, pool, room, islands, onOpen }) {
     const known = pool.filter((c) => c.fromSlot === island.slot);
     const byKind = (a, b) => KIND_ORDER.indexOf(a.kind) - KIND_ORDER.indexOf(b.kind);
     slots = [
-      ...known.filter((c) => owned[c.key]).map((c) => ({ key: c.key, kind: c.kind, card: { ...owned[c.key], key: c.key } })),
+      ...known.filter((c) => owned[c.key]).map((c) => ({ key: c.key, kind: c.kind, card: { ...owned[c.key], key: c.key, shot: c.shot } })),
       ...known.filter((c) => !owned[c.key]).map((c) => ({ key: c.key, kind: c.kind })),
     ].sort((a, b) => byKind(a, b) || Number(!a.card) - Number(!b.card) || (a.card?.name || "").localeCompare(b.card?.name || ""))
       .filter((slot) => (filter === "owned" ? slot.card : filter === "missing" ? !slot.card : filter === "shiny" ? slot.card?.s : true));
@@ -1277,6 +1289,8 @@ export function FishingMode({ onClose }) {
   const demo = !current;
   const feedNow = current || DEMO_FEED;
   const code = feedNow.code;
+  photos.code = demo ? null : code;
+  photos.set = new Set(current?.shots || []);
   const games = useMemo(() => [...new Set((current?.status.slots || []).map((s) => s.game))].sort(), [current?.status]);
   const { loaded } = usePackages(current?.status.origin, current?.data.fixed, games);
   const cards = useMemo(() => (current ? roomCards(current, loaded) : DEMO_CARDS), [current, loaded]);
@@ -1340,7 +1354,7 @@ export function FishingMode({ onClose }) {
       result = { card, shiny, fresh: false, doublons: gain, n: had.n + 1, tierUp };
     } else {
       const { name, game, to, from, fromSlot, place, kind } = card;
-      now[card.key] = { n: 1, s: shiny ? 1 : 0, name, game, to, from, fromSlot, place, kind, wish: card.wish };
+      now[card.key] = { n: 1, s: shiny ? 1 : 0, name, game, to, from, fromSlot, place, kind, wish: card.wish, shot: card.shot };
       dry = 0;
       result = { card, shiny, fresh: true, n: 1 };
     }
@@ -1576,7 +1590,7 @@ export function FishingMode({ onClose }) {
     ${shown && html`<div class=${`fishing-catch level-${catchCard.level || 0}${shown.shiny ? " is-shiny" : ""}`} key=${catchCard.id}>
       <p class="fishing-catch-state">${shown.fresh ? "Nouvelle carte !" : `Double · +${plural(shown.doublons, "doublon")}`}</p>
       <${TradingCard} card=${{ ...shown.card, n: shown.n, s: shown.shiny ? 1 : 0 }}
-        onOpen=${() => openDetail(room.cards[shown.card.key] && { ...room.cards[shown.card.key], key: shown.card.key })} />
+        onOpen=${() => openDetail(room.cards[shown.card.key] && { ...room.cards[shown.card.key], key: shown.card.key, shot: shown.card.shot })} />
     </div>`}
     <div class="fishing-actions">
       ${bancOn && html`<p class="fishing-frenzy" key=${bancUntil}>Banc ! <span class="hint">ils mordent tout de suite</span>

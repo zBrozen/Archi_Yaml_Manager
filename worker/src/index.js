@@ -30,6 +30,8 @@ const LIMITS = {
   wishes: 100, // objets par wishlist
   wishName: 120,
   fishingCards: 5000, // cartes pêchées gardées par inscrit
+  shots: 600, // photos des cartes par room
+  shotSize: 40 * 1024, // octets par photo (320 × 240 en WebP ou JPEG)
 };
 const ROOM_LIFETIME_DAYS = 90; // rooms sans activité supprimées par la tâche planifiée
 const ENDED_LIFETIME_DAYS = 7; // rooms clôturées supprimées par la tâche planifiée, une semaine après la clôture
@@ -290,7 +292,7 @@ function slotGoal(content) {
 }
 
 async function getRoom(request, env, room) {
-  const [admin, me, players, slots, wishes, fishing] = await Promise.all([
+  const [admin, me, players, slots, wishes, fishing, shots] = await Promise.all([
     isAdmin(request, room),
     currentPlayer(request, env, room),
     env.DB.prepare("SELECT id, pseudo, spoiler_access, created_at FROM players WHERE room_code = ? ORDER BY created_at").bind(room.code).all(),
@@ -298,6 +300,7 @@ async function getRoom(request, env, room) {
       .bind(room.code).all(),
     env.DB.prepare("SELECT slot, items FROM wishlists WHERE room_code = ?").bind(room.code).all(),
     env.DB.prepare("SELECT who, cards, shiny, gold, updated_at FROM fishing WHERE room_code = ?").bind(room.code).all(),
+    env.DB.prepare("SELECT shot FROM card_shots WHERE room_code = ?").bind(room.code).all(),
   ]);
   return json({
     room: publicRoom(room),
@@ -316,6 +319,7 @@ async function getRoom(request, env, room) {
     ...(admin || me?.spoiler_access ? { shared_spoiler: JSON.parse(room.shared_spoiler || "null") } : {}),
     wishlists: Object.fromEntries(wishes.results.map((w) => [w.slot, JSON.parse(w.items)])),
     fishing: fishingSummary(fishing.results, players.results),
+    shots: shots.results.map((r) => r.shot),
     players: players.results.map(({ spoiler_access, ...p }) => ({
       ...p,
       ...(admin ? { spoiler_access: !!spoiler_access } : {}),
@@ -358,12 +362,14 @@ const sharedSpoilerKey = (code) => `${code}/shared-spoiler`;
 async function purgeRoom(env, code) {
   await deleteFiles(env, code);
   if (env.FILES) await env.FILES.delete(sharedSpoilerKey(code));
+  await deleteShots(env, code, null);
   await Promise.all((await roomApworlds(env, code)).map((a) => deleteApworldFiles(env, code, a.file)));
   await env.DB.batch([
     env.DB.prepare("DELETE FROM slots WHERE room_code = ?").bind(code),
     env.DB.prepare("DELETE FROM players WHERE room_code = ?").bind(code),
     env.DB.prepare("DELETE FROM wishlists WHERE room_code = ?").bind(code),
     env.DB.prepare("DELETE FROM fishing WHERE room_code = ?").bind(code),
+    env.DB.prepare("DELETE FROM card_shots WHERE room_code = ?").bind(code),
     env.DB.prepare("DELETE FROM overlay_links WHERE room_code = ?").bind(code),
     env.DB.prepare("DELETE FROM room_apworlds WHERE room_code = ?").bind(code),
     env.DB.prepare("DELETE FROM rooms WHERE code = ?").bind(code),
@@ -424,6 +430,7 @@ async function removePlayer(request, env, room, playerId) {
   if (!room.direct) requireOpen(room); // retirer un joueur retire aussi ses YAML et ses apworlds
   const apworlds = (await roomApworlds(env, room.code)).filter((a) => a.player_id === playerId);
   await Promise.all(apworlds.map((a) => deleteApworldFiles(env, room.code, a.file)));
+  await deleteShots(env, room.code, playerId);
   const links = (await overlayLinks(env, room)).filter((l) => l.player_id === playerId);
   await env.DB.batch([
     env.DB.prepare("DELETE FROM overlay_links WHERE room_code = ? AND player_id = ?").bind(room.code, playerId),
@@ -1377,6 +1384,83 @@ async function saveFishing(request, env, room) {
   return json({ ok: true });
 }
 
+// --- Photos des cartes ------------------------------------------------------------
+// Image de l'écran partagé d'un joueur au moment où il trouve un objet important (site/js/screens.js). Envoyée par
+// l'inscrit qui joue ce joueur de la partie (ou l'hôte), lisible par qui a le code de la room, comme la carte qu'elle
+// illustre. Une photo par check, jamais remplacée ; chacun peut supprimer les siennes.
+const shotKey = (code, shot) => `${code}/shot/${shot}`;
+const shotId = (value) => {
+  if (!/^\d{1,4}-\d{1,12}$/.test(String(value))) throw new HttpError(400, "Photo inconnue.");
+  return String(value);
+};
+const isImage = (data) => (data[0] === 0xff && data[1] === 0xd8) // JPEG
+  || (String.fromCharCode(...data.slice(0, 4)) === "RIFF" && String.fromCharCode(...data.slice(8, 12)) === "WEBP");
+
+async function saveShot(request, env, room, shot) {
+  shot = shotId(shot);
+  if (!env.FILES) throw new HttpError(501, "Les photos ne sont pas configurées sur ce serveur.");
+  const admin = await isAdmin(request, room);
+  const player = admin ? null : await requirePlayer(request, env, room);
+  const name = text(new URL(request.url).searchParams.get("name"), "joueur", LIMITS.pseudo);
+  // Seul celui qui joue ce joueur de la partie photographie ses trouvailles.
+  if (player) {
+    const own = room.direct ? player.pseudo.toLowerCase() === name.toLowerCase()
+      : !!(await env.DB.prepare("SELECT 1 FROM slots WHERE room_code = ? AND player_id = ? AND name = ? COLLATE NOCASE")
+        .bind(room.code, player.id, name).first());
+    if (!own) throw new HttpError(403, "Seul ce joueur peut photographier ses trouvailles.");
+  }
+  const data = new Uint8Array(await request.arrayBuffer());
+  if (!data.length || data.length > LIMITS.shotSize) throw new HttpError(413, "Photo vide ou trop lourde (40 Ko au maximum).");
+  if (!isImage(data)) throw new HttpError(400, "Image WebP ou JPEG attendue.");
+  const known = await env.DB.prepare("SELECT 1 FROM card_shots WHERE room_code = ? AND shot = ?").bind(room.code, shot).first();
+  if (known) return json({ ok: true, kept: true });
+  const { count } = await env.DB.prepare("SELECT COUNT(*) AS count FROM card_shots WHERE room_code = ?").bind(room.code).first();
+  if (count >= LIMITS.shots) throw new HttpError(409, `${LIMITS.shots} photos au maximum par room.`);
+  await env.FILES.put(shotKey(room.code, shot), data, { metadata: { type: data[0] === 0xff ? "image/jpeg" : "image/webp" } });
+  await env.DB.prepare("INSERT INTO card_shots (room_code, shot, slot_name, player_id, size, created_at) VALUES (?, ?, ?, ?, ?, ?)")
+    .bind(room.code, shot, name, player?.id ?? null, data.length, Date.now()).run();
+  return json({ ok: true }, 201);
+}
+
+async function getShot(env, room, shot) {
+  shot = shotId(shot);
+  const file = env.FILES ? await env.FILES.getWithMetadata(shotKey(room.code, shot), "stream") : null;
+  if (!file?.value) throw new HttpError(404, "Photo introuvable.");
+  return new Response(file.value, {
+    headers: { "Content-Type": file.metadata?.type || "image/webp", "Cache-Control": "public, max-age=86400", ...CORS },
+  });
+}
+
+// `playerId` : les photos d'un inscrit ; null : toutes celles de la room.
+async function deleteShots(env, code, playerId) {
+  const query = playerId === null
+    ? env.DB.prepare("SELECT shot FROM card_shots WHERE room_code = ?").bind(code)
+    : env.DB.prepare("SELECT shot FROM card_shots WHERE room_code = ? AND player_id = ?").bind(code, playerId);
+  const { results } = await query.all();
+  if (env.FILES) await Promise.all(results.map((r) => env.FILES.delete(shotKey(code, r.shot))));
+  await (playerId === null
+    ? env.DB.prepare("DELETE FROM card_shots WHERE room_code = ?").bind(code)
+    : env.DB.prepare("DELETE FROM card_shots WHERE room_code = ? AND player_id = ?").bind(code, playerId)).run();
+  return results.length;
+}
+
+// Un joueur supprime les siennes ; l'hôte, celles qu'il a envoyées, ou toutes avec `?all=1`.
+async function removeShots(request, env, room) {
+  const admin = await isAdmin(request, room);
+  const player = admin ? null : await requirePlayer(request, env, room);
+  const all = admin && new URL(request.url).searchParams.get("all") === "1";
+  let removed;
+  if (all) removed = await deleteShots(env, room.code, null);
+  else if (player) removed = await deleteShots(env, room.code, player.id);
+  else {
+    const { results } = await env.DB.prepare("SELECT shot FROM card_shots WHERE room_code = ? AND player_id IS NULL").bind(room.code).all();
+    if (env.FILES) await Promise.all(results.map((r) => env.FILES.delete(shotKey(room.code, r.shot))));
+    await env.DB.prepare("DELETE FROM card_shots WHERE room_code = ? AND player_id IS NULL").bind(room.code).run();
+    removed = results.length;
+  }
+  return json({ ok: true, removed });
+}
+
 // --- Packs PopTracker ------------------------------------------------------------
 
 // Relais des packs PopTracker et des apworlds (releases GitHub, voir tools/fetch_trackers.py et les crédits
@@ -1429,6 +1513,10 @@ async function route(request, env) {
     return saveWishlist(request, env, room, id);
   } else if (sub === "fishing" && !id && method === "PUT") {
     return saveFishing(request, env, room);
+  } else if (sub === "shots") {
+    if (id && method === "PUT") return saveShot(request, env, room, id);
+    if (id && method === "GET") return getShot(env, room, id);
+    if (!id && method === "DELETE") return removeShots(request, env, room);
   } else if (sub === "export" && method === "GET") {
     return exportSlots(request, env, room);
   } else if (sub === "ap-links" && !id && method === "GET") {

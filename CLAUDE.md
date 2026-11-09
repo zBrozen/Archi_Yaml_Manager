@@ -43,7 +43,12 @@
   nouvelle. Collection partagée : `PUT /fishing` du Worker (table `fishing`, migration 0015, clés des cartes
   seulement, une ligne par inscrit ou `host`), renvoyée par `GET` de la room (`fishing` : `fishingSummary`), affichée par
   `FishingRoomCard` (collection commune, paliers de la room, classement) ; son bouton ouvre la pêche par l'événement
-  `fishing:open`. Jamais sur l'overlay OBS.
+  `fishing:open`. Photos des cartes (`card-shots.js`, réglage `cardShots`, décoché par défaut) : pendant le partage
+  d'écran, connexion « TextOnly » à la partie (`setShotWatch`, arrêtée par `stopSharing`) ; à un `itemSent` important
+  trouvé par l'un des joueurs de l'inscrit, image du partage recadrée (`shotRect`, cadres par jeu dans
+  `cardShotFrames`), 320 × 240 en WebP/JPEG < 40 Ko, envoyée par `PUT /shots/JOUEUR-LIEU` (table `card_shots`,
+  migration 0016, KV `CODE/shot/…`, liste `shots` avec la room) ; la carte (`shot` dans `roomCards`) la montre dans
+  `Art`. Une photo par check, jamais remplacée ; supprimées avec le joueur ou la room. Jamais sur l'overlay OBS.
 - Page « Installer un jeu » (`#/installer?game=…`, `guides.js`) : liens d'installation des crédits (`download`,
   `release`, `links`, relevés par `fetch_apworlds.py`) et guides du jeu (`site/data/guides/`, relevés par
   `extract_options.py` dans `docs/` du monde, plus README du dépôt et notes de release passés par

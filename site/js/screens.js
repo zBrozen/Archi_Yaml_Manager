@@ -11,6 +11,7 @@ import { api, overlayLink, saveAccess, savedAccess } from "./rooms-api.js";
 import { AUDIO_CHANNELS, ICE_SERVERS, serial, signaling } from "./screens-net.js";
 import { CONSOLE_PLACES, FEED_CHECKS, ITEM_FILTERS, PROGRESS_MODES, ROTATIONS, SCREEN_MODES, spaceOf, spaceUses } from "./overlay-layout.js";
 import { SpaceLayouts } from "./overlay-editor.js";
+import { ShotSettings, setShotWatch } from "./card-shots.js";
 
 // Qualité du partage, choisie par chaque joueur. `bitrate` : débit maximum envoyé à chaque overlay, en bit/s.
 // La connexion du joueur (envoi), son processeur (encodage) et la connexion du streamer (réception de tous les
@@ -579,12 +580,14 @@ function onBroadcast(broadcast) {
   if (broadcast !== sharing.broadcast) return;
   if (broadcast.state === "refused") {
     sharing.refused = { code: sharing.code, message: broadcast.message };
+    setShotWatch(null);
     setSharing(null, null);
   } else shareChanged();
 }
 
 export function stopSharing() {
   sharing.broadcast?.stop();
+  setShotWatch(null); // photos des cartes : plus de partage, plus d'écoute de la partie
   setSharing(null, null);
 }
 
@@ -1005,7 +1008,7 @@ const Volume = ({ value, disabled, onChange, label = "Volume" }) => html`<label>
   <input type="range" min="0" max="200" step="5" value=${value} disabled=${disabled} onInput=${(e) => onChange(Number(e.target.value))} /></label>`;
 
 // `games` : jeux des YAML du joueur, dont il choisit celui affiché à côté de son nom.
-function ShareScreen({ room, games = [] }) {
+function ShareScreen({ room, games = [], names = [] }) {
   useSharing();
   const live = () => (sharing.code === room.code ? sharing.broadcast : null);
   const current = live();
@@ -1340,6 +1343,8 @@ function ShareScreen({ room, games = [] }) {
     ${soundError && html`<div class="notice error full">${soundError}</div>`}
     ${mix?.active && html`<${SoundMeter} source=${mix} />`}
     ${view && html`<video class="screen-preview" ref=${preview} autoplay muted playsinline aria-label="Aperçu de votre partage"></video>`}
+    <${ShotSettings} room=${room} stream=${current?.stream || null} games=${games} names=${names}
+      getStream=${() => (sharing.code === room.code ? sharing.broadcast?.stream || null : null)} />
     <${SentInfo} sent=${sent} quality=${quality} camera=${camera} />
     ${(windowSupported || cameraSupported) && html`<details class="more">
       <summary>Qualité de l'image <span class="hint">(${QUALITIES[qualityKey].label}, ${PRIORITIES[priorityKey].label.toLowerCase()})</span></summary>
@@ -1612,7 +1617,8 @@ export function ScreensTab({ room, me, admin, data, setData }) {
     <div class="segmented" role="tablist" aria-label="Écrans">${views.map(([id, label]) => html`<button type="button" role="tab"
       aria-selected=${current === id} class=${current === id ? "active" : ""} onClick=${() => setView(id)}>${label}</button>`)}</div>
     ${me && html`<div class="room-panel" hidden=${current !== "share"}><${ShareScreen} room=${room}
-      games=${[...new Set((data.players || []).find((p) => p.id === me.id)?.slots.map((s) => s.game) || [])]} /></div>`}
+      games=${[...new Set((data.players || []).find((p) => p.id === me.id)?.slots.map((s) => s.game) || [])]}
+      names=${room.direct ? [me.pseudo] : (data.players || []).find((p) => p.id === me.id)?.slots.map((s) => s.name) || []} /></div>`}
     ${current === "spaces" && html`<${SpacesPanel} room=${room} data=${data} setData=${setData} me=${me} admin=${admin} onSettings=${openSettings} />`}
     ${current === "overlay" && html`<${OverlayPanel} room=${room} data=${data} setData=${setData} me=${me} admin=${admin}
       linkId=${linkId} onLink=${setLinkId} onBack=${() => setView("spaces")} />`}`;

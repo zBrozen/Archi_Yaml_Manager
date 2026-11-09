@@ -339,7 +339,7 @@ export function RoomPage({ index, code, onCreate, onEdit }) {
   const wishes = useWishState(online.status, tracker, data?.wishlists);
   const notices = useWishNotices(code, wishes, mine);
   // La partie en cours alimente les bouteilles de la pêche au large (fishing.js).
-  useFishingFeed(code, online.status, tracker, mine, data?.wishlists);
+  useFishingFeed(code, online.status, tracker, mine, data?.wishlists, data?.shots);
 
   if (error && !data) {
     return html`<main class="home">

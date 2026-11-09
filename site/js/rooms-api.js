@@ -114,7 +114,13 @@ export const api = {
   sharedSpoiler: (code) => call("GET", at(code, "/spoiler"), { code, file: true }),
   saveWishlist: (code, slot, items) => call("PUT", at(code, `/wishlists/${encodeURIComponent(slot)}`), { code, body: { items } }),
   saveFishing: (code, body) => call("PUT", at(code, "/fishing"), { code, body }),
+  // Photos des cartes : `shot` « joueur-lieu », `name` le joueur de la partie qui a trouvé l'objet.
+  saveShot: (code, shot, name, blob) => call("PUT", at(code, `/shots/${shot}?name=${encodeURIComponent(name)}`), { code, body: blob }),
+  deleteShots: (code) => call("DELETE", at(code, "/shots"), { code }),
 };
+
+// Adresse d'une photo de carte (lisible par qui a le code de la room, comme une image ordinaire).
+export const shotUrl = (code, shot) => `${ROOMS_API}/api/rooms/${encodeURIComponent(code)}/shots/${shot}`;
 
 // --- Partie hébergée sur archipelago.gg (ou un autre site Archipelago) ---------------
 
