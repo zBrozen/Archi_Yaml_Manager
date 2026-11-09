@@ -1,6 +1,6 @@
 {
  "ap_version": "0.6.8",
- "generated_at": "2026-11-08T11:48:51+00:00",
+ "generated_at": "2026-11-09T13:35:41+00:00",
  "games": [
   {
    "game": "2048",
@@ -794,7 +794,7 @@
    "file": "games/brotato.json",
    "source": "custom",
    "apworld": "brotato.apworld",
-   "world_version": "0.18.0",
+   "world_version": "0.18.1",
    "guides": "guides/brotato.json",
    "sheet": {
     "game": "Brotato",
@@ -2035,7 +2035,7 @@
    "file": "games/duke-nukem-3d.json",
    "source": "custom",
    "apworld": "duke3d.apworld",
-   "world_version": "0.0.7",
+   "world_version": null,
    "guides": "guides/duke-nukem-3d.json",
    "sheet": {
     "game": "Duke Nukem 3D",
@@ -2984,7 +2984,7 @@
    "file": "games/hollow-knight-silksong.json",
    "source": "custom",
    "apworld": "silksong.apworld",
-   "world_version": "0.5.4",
+   "world_version": "0.5.5",
    "guides": "guides/hollow-knight-silksong.json",
    "sheet": {
     "game": "Hollow Knight: Silksong (Batsong)",
@@ -4425,7 +4425,7 @@
    "file": "games/monster-hunter-rise.json",
    "source": "custom",
    "apworld": "mhrise.apworld",
-   "world_version": "0.5.3",
+   "world_version": "0.5.4",
    "guides": "guides/monster-hunter-rise.json",
    "sheet": {
     "game": "Monster Hunter Rise",
@@ -4648,7 +4648,7 @@
    "file": "games/nova-lands.json",
    "source": "custom",
    "apworld": "novalands.apworld",
-   "world_version": "0.2.1",
+   "world_version": "0.2.2",
    "guides": "guides/nova-lands.json",
    "sheet": {
     "game": "Nova Lands",
@@ -5717,7 +5717,7 @@
    "file": "games/recettear-an-item-shop-s-tale.json",
    "source": "custom",
    "apworld": "recettear.apworld",
-   "world_version": "0.1.0",
+   "world_version": "0.1.1",
    "guides": "guides/recettear-an-item-shop-s-tale.json",
    "sheet": {
     "game": "Recettear: An Item Shop's Tale",
@@ -7342,7 +7342,7 @@
    "file": "games/the-legend-of-zelda-a-link-to-the-past.json",
    "source": "custom",
    "apworld": "alttpr.apworld",
-   "world_version": "1.8.0",
+   "world_version": "1.8.1",
    "guides": "guides/the-legend-of-zelda-a-link-to-the-past.json",
    "sheet": {
     "game": "The Legend of Zelda: A Link to the Past OWR",
@@ -7366,7 +7366,7 @@
    "file": "games/the-magical-quest-starring-mickey-mouse.json",
    "source": "custom",
    "apworld": "magical_quest.apworld",
-   "world_version": "0.1.0",
+   "world_version": "0.2.0",
    "guides": "guides/the-magical-quest-starring-mickey-mouse.json",
    "sheet": {
     "game": "The Magical Quest starring Mickey Mouse",
@@ -7663,20 +7663,6 @@
     "game": "Trackmania",
     "stability": "Stable",
     "pr_status": "In Review"
-   }
-  },
-  {
-   "game": "Trails Beyond the Horizon",
-   "file": "games/trails-beyond-the-horizon.json",
-   "source": "custom",
-   "apworld": "beyondthehorizon.apworld",
-   "world_version": "0.1.3",
-   "guides": "guides/trails-beyond-the-horizon.json",
-   "sheet": {
-    "game": "The Legend of Heroes: Trails Beyond the Horizon",
-    "stability": "Unstable",
-    "pr_status": "Not PRing",
-    "adult": true
    }
   },
   {
