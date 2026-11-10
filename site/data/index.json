@@ -1,6 +1,6 @@
 {
  "ap_version": "0.6.8",
- "generated_at": "2026-11-09T13:46:47+00:00",
+ "generated_at": "2026-11-10T13:22:01+00:00",
  "games": [
   {
    "game": "2048",
@@ -899,7 +899,7 @@
    "file": "games/c-c-reloaded.json",
    "source": "custom",
    "apworld": "cnc_reloaded.apworld",
-   "world_version": "2.0.0",
+   "world_version": "2.1.0",
    "guides": "guides/c-c-reloaded.json",
    "sheet": {
     "game": "C&C Reloaded",
@@ -1834,11 +1834,24 @@
    "file": "games/donkey-kong-64.json",
    "source": "custom",
    "apworld": "dk64.apworld",
-   "world_version": "2.0.7",
+   "world_version": "2.0.8",
    "guides": "guides/donkey-kong-64.json",
    "sheet": {
     "game": "Donkey Kong 64",
     "stability": "Stable"
+   }
+  },
+  {
+   "game": "Donkey Kong Country 2",
+   "file": "games/donkey-kong-country-2.json",
+   "source": "custom",
+   "apworld": "dkc2.apworld",
+   "world_version": "3.1.5",
+   "guides": "guides/donkey-kong-country-2.json",
+   "sheet": {
+    "game": "Donkey Kong Country",
+    "stability": "Stable",
+    "pr_status": "Not PRing"
    }
   },
   {
@@ -3497,18 +3510,6 @@
    }
   },
   {
-   "game": "Kirby Squeak Squad",
-   "file": "games/kirby-squeak-squad.json",
-   "source": "custom",
-   "apworld": "kirby_squeak_squad.apworld",
-   "world_version": "0.0.9",
-   "guides": "guides/kirby-squeak-squad.json",
-   "sheet": {
-    "game": "Kirby Squeak Squad",
-    "stability": "Unstable"
-   }
-  },
-  {
    "game": "Kirby Super Star Ultra",
    "file": "games/kirby-super-star-ultra.json",
    "source": "custom",
@@ -3527,18 +3528,6 @@
    "apworld": null,
    "world_version": null,
    "guides": "guides/kirby-s-dream-land-3.json"
-  },
-  {
-   "game": "Kirby: Planet Robobot",
-   "file": "games/kirby-planet-robobot.json",
-   "source": "custom",
-   "apworld": "kirby_robobot.apworld",
-   "world_version": "0.1.0",
-   "guides": "guides/kirby-planet-robobot.json",
-   "sheet": {
-    "game": "Kirby Planet Robobot",
-    "stability": "Unstable"
-   }
   },
   {
    "game": "La-Mulana 2",
@@ -3967,6 +3956,18 @@
    }
   },
   {
+   "game": "Mario Kart Wii",
+   "file": "games/mario-kart-wii.json",
+   "source": "custom",
+   "apworld": "mkwii.apworld",
+   "world_version": "0.4.0",
+   "guides": "guides/mario-kart-wii.json",
+   "sheet": {
+    "game": "Mario Kart Wii",
+    "stability": "Unstable"
+   }
+  },
+  {
    "game": "Mario Party Advance",
    "file": "games/mario-party-advance.json",
    "source": "custom",
@@ -4171,7 +4172,7 @@
    "file": "games/mental-omega.json",
    "source": "custom",
    "apworld": "mental_omega.apworld",
-   "world_version": "0.6.10",
+   "world_version": "0.7.0",
    "guides": "guides/mental-omega.json",
    "sheet": {
     "game": "Command & Conquer: Mental Omega",
@@ -5254,7 +5255,7 @@
    "file": "games/pokemon-black-and-white.json",
    "source": "custom",
    "apworld": "pokemon_bw.apworld",
-   "world_version": "0.4.4",
+   "world_version": "0.4.5",
    "guides": "guides/pokemon-black-and-white.json",
    "sheet": {
     "game": "Pokémon Black and White",
@@ -5439,7 +5440,7 @@
    "file": "games/pok-mon-battle-revolution.json",
    "source": "custom",
    "apworld": "pokemon_revo.apworld",
-   "world_version": "0.1.1",
+   "world_version": "0.2.0",
    "guides": "guides/pok-mon-battle-revolution.json",
    "sheet": {
     "game": "Pokémon Battle Revolution",

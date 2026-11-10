@@ -1848,7 +1848,7 @@
  },
  {
   "game": "C&C Reloaded",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "authors": [
    "C&C Reloaded Randomizer contributors"
   ],
@@ -1864,8 +1864,8 @@
    "stability": "Unstable",
    "pr_status": "Not PRing"
   },
-  "download": "https://github.com/Heinki/Reloaded-Randomizer/releases/download/V2.0/cnc_reloaded.apworld",
-  "release": "https://github.com/Heinki/Reloaded-Randomizer/releases/tag/V2.0",
+  "download": "https://github.com/Heinki/Reloaded-Randomizer/releases/download/V2.1/cnc_reloaded.apworld",
+  "release": "https://github.com/Heinki/Reloaded-Randomizer/releases/tag/V2.1",
   "links": [
    "https://github.com/Heinki/Reloaded-Randomizer/releases"
   ]
@@ -3207,7 +3207,7 @@
  },
  {
   "game": "Donkey Kong 64",
-  "version": "2.0.7",
+  "version": "2.0.8",
   "authors": [
    "2dos",
    "AlmostSeagull",
@@ -3229,10 +3229,37 @@
    "game": "Donkey Kong 64",
    "stability": "Stable"
   },
-  "download": "https://github.com/2dos/DK64-Randomizer-Dev/releases/download/v2.0.7/dk64.apworld",
-  "release": "https://github.com/2dos/DK64-Randomizer-Dev/releases/tag/v2.0.7",
+  "download": "https://github.com/2dos/DK64-Randomizer-Dev/releases/download/v2.0.8/dk64.apworld",
+  "release": "https://github.com/2dos/DK64-Randomizer-Dev/releases/tag/v2.0.8",
   "links": [
    "https://github.com/2dos/DK64-Randomizer-Dev/releases/latest"
+  ]
+ },
+ {
+  "game": "Donkey Kong Country 2",
+  "version": "3.1.5",
+  "authors": [
+   "lx5"
+  ],
+  "file": "dkc2.apworld",
+  "source": "https://github.com/TheLX5/Archipelago",
+  "license": "MIT",
+  "license_url": "https://github.com/TheLX5/Archipelago/blob/HEAD/LICENSE",
+  "copyright": [
+   "Copyright (c) 2017 LLCoolDave",
+   "Copyright (c) 2025 Berserker66",
+   "Copyright (c) 2022 CaitSith2",
+   "Copyright (c) 2021 LegendaryLinux"
+  ],
+  "sheet": {
+   "game": "Donkey Kong Country",
+   "stability": "Stable",
+   "pr_status": "Not PRing"
+  },
+  "download": "https://github.com/TheLX5/Archipelago/releases/download/dkc2-v3.1.5/dkc2.apworld",
+  "release": "https://github.com/TheLX5/Archipelago/releases/tag/dkc2-v3.1.5",
+  "links": [
+   "https://github.com/TheLX5/Archipelago/releases?q=%22Donkey+Kong+Country+1%22&expanded=true"
   ]
  },
  {
@@ -6146,47 +6173,6 @@
   ]
  },
  {
-  "game": "Kirby: Planet Robobot",
-  "version": "0.1.0",
-  "authors": [],
-  "file": "kirby_robobot.apworld",
-  "source": "https://github.com/WindChill404/Kirby-Planet-Robobot-Archipelago",
-  "license": null,
-  "license_url": null,
-  "copyright": [],
-  "sheet": {
-   "game": "Kirby Planet Robobot",
-   "stability": "Unstable"
-  },
-  "download": "https://github.com/WindChill404/Kirby-Planet-Robobot-Archipelago/releases/download/v0.0.2/kirby_robobot.apworld",
-  "release": "https://github.com/WindChill404/Kirby-Planet-Robobot-Archipelago/releases/tag/v0.0.2",
-  "links": [
-   "https://github.com/WindChill404/Kirby-Planet-Robobot-Archipelago/releases/latest"
-  ]
- },
- {
-  "game": "Kirby Squeak Squad",
-  "version": "0.0.9",
-  "authors": [
-   "WindChill404",
-   "CalDrac"
-  ],
-  "file": "kirby_squeak_squad.apworld",
-  "source": "https://github.com/WindChill404/Kirby-Squeak-Squad-APWORLD",
-  "license": null,
-  "license_url": null,
-  "copyright": [],
-  "sheet": {
-   "game": "Kirby Squeak Squad",
-   "stability": "Unstable"
-  },
-  "download": "https://github.com/WindChill404/Kirby-Squeak-Squad-APWORLD/releases/download/v0.0.9/kirby_squeak_squad.apworld",
-  "release": "https://github.com/WindChill404/Kirby-Squeak-Squad-APWORLD/releases/tag/v0.0.9",
-  "links": [
-   "https://github.com/WindChill404/Kirby-Squeak-Squad-APWORLD/releases/latest"
-  ]
- },
- {
   "game": "Kirby Super Star Ultra",
   "version": "0.2.21",
   "authors": [
@@ -6948,6 +6934,32 @@
   ]
  },
  {
+  "game": "Mario Kart Wii",
+  "version": "0.4.0",
+  "authors": [
+   "toent"
+  ],
+  "file": "mkwii.apworld",
+  "source": "https://github.com/toent/Archipelago-MKWii",
+  "license": "MIT",
+  "license_url": "https://github.com/toent/Archipelago-MKWii/blob/HEAD/LICENSE",
+  "copyright": [
+   "Copyright (c) 2017 LLCoolDave",
+   "Copyright (c) 2025 Berserker66",
+   "Copyright (c) 2022 CaitSith2",
+   "Copyright (c) 2021 LegendaryLinux"
+  ],
+  "sheet": {
+   "game": "Mario Kart Wii",
+   "stability": "Unstable"
+  },
+  "download": "https://github.com/toent/Archipelago-MKWii/releases/download/v0.4.0/mkwii.apworld",
+  "release": "https://github.com/toent/Archipelago-MKWii/releases/tag/v0.4.0",
+  "links": [
+   "https://github.com/toent/Archipelago-MKWii/releases"
+  ]
+ },
+ {
   "game": "marioland",
   "version": null,
   "authors": [],
@@ -7283,7 +7295,7 @@
  },
  {
   "game": "Mental Omega",
-  "version": "0.6.10",
+  "version": "0.7.0",
   "authors": [
    "Mental Omega Randomizer contributors"
   ],
@@ -7299,8 +7311,8 @@
    "stability": "Unstable",
    "pr_status": "Not PRing"
   },
-  "download": "https://github.com/Heinki/Mental-Omega-Randomizer/releases/download/V1.47/mental_omega.apworld",
-  "release": "https://github.com/Heinki/Mental-Omega-Randomizer/releases/tag/V1.47",
+  "download": "https://github.com/Heinki/Mental-Omega-Randomizer/releases/download/V1.48/mental_omega.apworld",
+  "release": "https://github.com/Heinki/Mental-Omega-Randomizer/releases/tag/V1.48",
   "links": [
    "https://github.com/Heinki/Mental-Omega-Randomizer/releases/latest"
   ]
@@ -7397,8 +7409,8 @@
    "game": "Metroid Fusion",
    "stability": "Stable"
   },
-  "download": "https://github.com/StalledStorm/ArchipelagoMine/releases/download/v1.22.4/metroidfusion.apworld",
-  "release": "https://github.com/StalledStorm/ArchipelagoMine/releases/tag/v1.22.4",
+  "download": "https://github.com/StalledStorm/ArchipelagoMine/releases/download/v1.22.5/metroidfusion.apworld",
+  "release": "https://github.com/StalledStorm/ArchipelagoMine/releases/tag/v1.22.5",
   "links": [
    "https://github.com/StalledStorm/ArchipelagoMine/releases?q=Fusion&expanded=true"
   ]
@@ -8966,7 +8978,7 @@
   "download": "https://github.com/SerpentAI/Archipelago/releases/download/peggle-deluxe-v2.2.0/peggle_deluxe.apworld",
   "release": "https://github.com/SerpentAI/Archipelago/releases/tag/peggle-deluxe-v2.2.0",
   "links": [
-   "https://github.com/SerpentAI/Archipelago/releases?q=peggle+deluxe&expanded=true"
+   "https://github.com/SerpentAI/Archipelago/releases/tag/peggle-deluxe-v2.2.1"
   ]
  },
  {
@@ -9356,7 +9368,7 @@
  },
  {
   "game": "Pokémon Battle Revolution",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "authors": [
    "Axcel Snowpix",
    "HeckaBad",
@@ -9376,15 +9388,15 @@
    "game": "Pokémon Battle Revolution",
    "stability": "Unstable"
   },
-  "download": "https://github.com/Axcel-Snowpix/PokemonRevoAP/releases/download/v0.1.1/pokemon_revo.apworld",
-  "release": "https://github.com/Axcel-Snowpix/PokemonRevoAP/releases/tag/v0.1.1",
+  "download": "https://github.com/Axcel-Snowpix/PokemonRevoAP/releases/download/v0.2.0/pokemon_revo.apworld",
+  "release": "https://github.com/Axcel-Snowpix/PokemonRevoAP/releases/tag/v0.2.0",
   "links": [
    "https://github.com/Axcel-Snowpix/PokemonRevoAP/releases/latest"
   ]
  },
  {
   "game": "Pokemon Black and White",
-  "version": "0.4.4",
+  "version": "0.4.5",
   "authors": [
    "BlastSlimey"
   ],
@@ -9398,8 +9410,8 @@
    "game": "Pokémon Black and White",
    "stability": "Stable"
   },
-  "download": "https://github.com/BlastSlimey/PokemonBWAP/releases/download/0.4.4/pokemon_bw.apworld",
-  "release": "https://github.com/BlastSlimey/PokemonBWAP/releases/tag/0.4.4",
+  "download": "https://github.com/BlastSlimey/PokemonBWAP/releases/download/0.4.5/pokemon_bw.apworld",
+  "release": "https://github.com/BlastSlimey/PokemonBWAP/releases/tag/0.4.5",
   "links": [
    "https://github.com/BlastSlimey/PokemonBWAP/releases/latest"
   ]
@@ -12247,8 +12259,8 @@
    "stability": "Unstable",
    "pr_status": "Not PRing"
   },
-  "download": "https://github.com/rescheer/Starship-Titanic-AP/releases/download/v1.0.1/starship_titanic.apworld",
-  "release": "https://github.com/rescheer/Starship-Titanic-AP/releases/tag/v1.0.1",
+  "download": "https://github.com/rescheer/Starship-Titanic-AP/releases/download/v1.0.2/starship_titanic.apworld",
+  "release": "https://github.com/rescheer/Starship-Titanic-AP/releases/tag/v1.0.2",
   "links": [
    "https://github.com/rescheer/Starship-Titanic-AP/releases"
   ]
@@ -13819,8 +13831,8 @@
    "game": "The Legend of Zelda: Twilight Princess",
    "stability": "Stable"
   },
-  "download": "https://github.com/WritingHusky/Twilight_Princess_apworld/releases/download/v0.4.0/twilight_princess.apworld",
-  "release": "https://github.com/WritingHusky/Twilight_Princess_apworld/releases/tag/v0.4.0",
+  "download": "https://github.com/WritingHusky/Twilight_Princess_apworld/releases/download/v0.4.1/twilight_princess.apworld",
+  "release": "https://github.com/WritingHusky/Twilight_Princess_apworld/releases/tag/v0.4.1",
   "links": [
    "https://github.com/WritingHusky/Twilight_Princess_apworld/releases/"
   ]
