@@ -1,6 +1,6 @@
 {
  "ap_version": "0.6.8",
- "generated_at": "2026-11-10T13:22:01+00:00",
+ "generated_at": "2026-11-11T12:32:57+00:00",
  "games": [
   {
    "game": "2048",
@@ -989,7 +989,7 @@
    "file": "games/castlevania-lords-of-shadow.json",
    "source": "custom",
    "apworld": "los.apworld",
-   "world_version": "0.7.6",
+   "world_version": "0.7.7",
    "guides": "guides/castlevania-lords-of-shadow.json",
    "sheet": {
     "game": "Castlevania: Lords of Shadow",
@@ -1521,7 +1521,7 @@
    "file": "games/cult-of-the-lamb.json",
    "source": "custom",
    "apworld": "cult_of_the_lamb.apworld",
-   "world_version": "0.9.6",
+   "world_version": "0.9.7",
    "guides": "guides/cult-of-the-lamb.json",
    "sheet": {
     "game": "Cult of the Lamb",
@@ -2167,7 +2167,7 @@
    "file": "games/equilinox.json",
    "source": "custom",
    "apworld": "equilinox.apworld",
-   "world_version": "0.0.1",
+   "world_version": "0.2.0",
    "guides": "guides/equilinox.json",
    "sheet": {
     "game": "Equilinox",
@@ -2590,6 +2590,19 @@
    "sheet": {
     "game": "Gemcraft: Frostborn Wrath",
     "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Geoguessr",
+   "file": "games/geoguessr.json",
+   "source": "custom",
+   "apworld": "geoguessr.apworld",
+   "world_version": "0.1.1",
+   "guides": "guides/geoguessr.json",
+   "sheet": {
+    "game": "Geoguessr",
+    "stability": "Unstable",
+    "pr_status": "Not PRing"
    }
   },
   {
@@ -3033,7 +3046,7 @@
    "file": "games/homura-hime.json",
    "source": "custom",
    "apworld": "homura_hime.apworld",
-   "world_version": "0.4.2",
+   "world_version": "0.4.3",
    "guides": "guides/homura-hime.json",
    "sheet": {
     "game": "Homura-Hime",
@@ -5267,7 +5280,7 @@
    "file": "games/pokemon-crystal.json",
    "source": "custom",
    "apworld": "pokemon_crystal.apworld",
-   "world_version": "6.0.5",
+   "world_version": "6.0.6",
    "guides": "guides/pokemon-crystal.json",
    "sheet": {
     "game": "Pokémon Crystal",
@@ -6572,6 +6585,19 @@
    }
   },
   {
+   "game": "Sonic Mania",
+   "file": "games/sonic-mania.json",
+   "source": "custom",
+   "apworld": "sonicmania.apworld",
+   "world_version": "0.4.1",
+   "guides": "guides/sonic-mania.json",
+   "sheet": {
+    "game": "Sonic Mania",
+    "stability": "Unstable",
+    "pr_status": "Not PRing"
+   }
+  },
+  {
    "game": "Sonic Riders",
    "file": "games/sonic-riders.json",
    "source": "custom",
@@ -6866,18 +6892,6 @@
     "game": "Stick Ranger",
     "stability": "Stable",
     "pr_status": "In Review"
-   }
-  },
-  {
-   "game": "Stray",
-   "file": "games/stray.json",
-   "source": "custom",
-   "apworld": "stray.apworld",
-   "world_version": "0.0.4",
-   "guides": "guides/stray.json",
-   "sheet": {
-    "game": "Stray",
-    "stability": "Unstable"
    }
   },
   {
@@ -7331,7 +7345,7 @@
    "file": "games/the-legend-of-zelda-phantom-hourglass.json",
    "source": "custom",
    "apworld": "tloz_ph.apworld",
-   "world_version": "0.10.2",
+   "world_version": "0.10.3",
    "guides": "guides/the-legend-of-zelda-phantom-hourglass.json",
    "sheet": {
     "game": "The Legend of Zelda: Phantom Hourglass",
@@ -7403,7 +7417,7 @@
    "guides": "guides/the-murder-of-sonic-the-hedgehog.json",
    "sheet": {
     "game": "The Murder of Sonic the Hedgehog",
-    "stability": "Unstable"
+    "stability": "Stable"
    }
   },
   {
@@ -7634,7 +7648,7 @@
    "file": "games/toy-story-2.json",
    "source": "custom",
    "apworld": "toystory2.apworld",
-   "world_version": "3.1.1",
+   "world_version": "3.1.2",
    "guides": "guides/toy-story-2.json",
    "sheet": {
     "game": "Toy Story 2 (PS1)",

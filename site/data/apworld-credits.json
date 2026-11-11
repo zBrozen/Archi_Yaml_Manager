@@ -1710,7 +1710,7 @@
  },
  {
   "game": "Castlevania: Lords of Shadow",
-  "version": "0.7.6",
+  "version": "0.7.7",
   "authors": [
    "Simon"
   ],
@@ -1725,8 +1725,8 @@
    "game": "Castlevania: Lords of Shadow",
    "stability": "Unstable"
   },
-  "download": "https://github.com/Haywire32/LoS-Archipelago/releases/download/v0.7.6/los.apworld",
-  "release": "https://github.com/Haywire32/LoS-Archipelago/releases/tag/v0.7.6",
+  "download": "https://github.com/Haywire32/LoS-Archipelago/releases/download/v0.7.7/los.apworld",
+  "release": "https://github.com/Haywire32/LoS-Archipelago/releases/tag/v0.7.7",
   "links": [
    "https://github.com/Haywire32/LoS-Archipelago/releases"
   ]
@@ -2640,7 +2640,7 @@
  },
  {
   "game": "Cult of the Lamb",
-  "version": "0.9.6",
+  "version": "0.9.7",
   "authors": [
    "IanCichy"
   ],
@@ -2655,8 +2655,8 @@
    "game": "Cult of the Lamb",
    "stability": "Unstable"
   },
-  "download": "https://github.com/IanCichy/CultOfTheLamb_Archipelago/releases/download/v0.9.6/cult_of_the_lamb.apworld",
-  "release": "https://github.com/IanCichy/CultOfTheLamb_Archipelago/releases/tag/v0.9.6",
+  "download": "https://github.com/IanCichy/CultOfTheLamb_Archipelago/releases/download/v0.9.7/cult_of_the_lamb.apworld",
+  "release": "https://github.com/IanCichy/CultOfTheLamb_Archipelago/releases/tag/v0.9.7",
   "links": [
    "https://github.com/IanCichy/CultOfTheLamb_Archipelago/releases/latest"
   ]
@@ -3786,7 +3786,7 @@
  },
  {
   "game": "Equilinox",
-  "version": "0.0.1",
+  "version": "0.2.0",
   "authors": [
    "AAces"
   ],
@@ -3799,8 +3799,8 @@
    "game": "Equilinox",
    "stability": "Unstable"
   },
-  "download": "https://github.com/AAces17/EquilinoxAPClient/releases/download/0.1.2/equilinox.apworld",
-  "release": "https://github.com/AAces17/EquilinoxAPClient/releases/tag/0.1.2",
+  "download": "https://github.com/AAces17/EquilinoxAPClient/releases/download/0.2.0/equilinox.apworld",
+  "release": "https://github.com/AAces17/EquilinoxAPClient/releases/tag/0.2.0",
   "links": [
    "https://github.com/AAces17/EquilinoxAPClient/releases"
   ]
@@ -4542,6 +4542,32 @@
   "release": "https://github.com/Levisaxos/Archipelago_GemcraftFrostbornWrath/releases/tag/v0.0.6.4",
   "links": [
    "https://github.com/Levisaxos/Archipelago_GemcraftFrostbornWrath/releases"
+  ]
+ },
+ {
+  "game": "Geoguessr",
+  "version": "0.1.1",
+  "authors": [
+   "Evandar",
+   "LeRemiii"
+  ],
+  "file": "geoguessr.apworld",
+  "source": "https://github.com/remigranotier/geoguessr-archipelago",
+  "license": "BSD",
+  "license_url": "https://github.com/remigranotier/geoguessr-archipelago/blob/HEAD/LICENSE.md",
+  "copyright": [
+   "Copyright 2026 LeRemiii",
+   "Copyright 2026 Evandar"
+  ],
+  "sheet": {
+   "game": "Geoguessr",
+   "stability": "Unstable",
+   "pr_status": "Not PRing"
+  },
+  "download": "https://github.com/remigranotier/geoguessr-archipelago/releases/download/v0.1.1/geoguessr.apworld",
+  "release": "https://github.com/remigranotier/geoguessr-archipelago/releases/tag/v0.1.1",
+  "links": [
+   "https://github.com/remigranotier/geoguessr-archipelago/releases/latest"
   ]
  },
  {
@@ -5342,7 +5368,7 @@
  },
  {
   "game": "Homura-Hime",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "authors": [
    "Kevin Anderson"
   ],
@@ -5357,8 +5383,8 @@
    "game": "Homura-Hime",
    "stability": "Unstable"
   },
-  "download": "https://github.com/Kevanderson97/homura-hime-archipelago/releases/download/v0.4.2/homura_hime.apworld",
-  "release": "https://github.com/Kevanderson97/homura-hime-archipelago/releases/tag/v0.4.2",
+  "download": "https://github.com/Kevanderson97/homura-hime-archipelago/releases/download/v0.4.3/homura_hime.apworld",
+  "release": "https://github.com/Kevanderson97/homura-hime-archipelago/releases/tag/v0.4.3",
   "links": [
    "https://github.com/Kevanderson97/homura-hime-archipelago/releases"
   ]
@@ -5820,8 +5846,8 @@
    "game": "Jak 3",
    "stability": "Stable"
   },
-  "download": "https://github.com/Blake645/Archipelago/releases/download/3.0.2/jak3.apworld",
-  "release": "https://github.com/Blake645/Archipelago/releases/tag/3.0.2",
+  "download": "https://github.com/Blake645/Archipelago/releases/download/3.1.0/jak3.apworld",
+  "release": "https://github.com/Blake645/Archipelago/releases/tag/3.1.0",
   "links": [
    "https://github.com/Blake645/Archipelago/releases"
   ]
@@ -8301,8 +8327,8 @@
    "game": "Nuclear Throne",
    "stability": "Unstable"
   },
-  "download": "https://github.com/GraphiteGraphic/NuclearThroneArchipelago/releases/download/nt_v1.5/nuclear_throne.apworld",
-  "release": "https://github.com/GraphiteGraphic/NuclearThroneArchipelago/releases/tag/nt_v1.5",
+  "download": "https://github.com/GraphiteGraphic/NuclearThroneArchipelago/releases/download/nt_v1.5.1/nuclear_throne.apworld",
+  "release": "https://github.com/GraphiteGraphic/NuclearThroneArchipelago/releases/tag/nt_v1.5.1",
   "links": [
    "https://github.com/GraphiteGraphic/NuclearThroneArchipelago/releases"
   ]
@@ -9418,7 +9444,7 @@
  },
  {
   "game": "Pokemon Crystal",
-  "version": "6.0.5",
+  "version": "6.0.6",
   "authors": [
    "gerbiljames"
   ],
@@ -9436,8 +9462,8 @@
    "stability": "Stable",
    "pr_status": "Not PRing"
   },
-  "download": "https://github.com/gerbiljames/Archipelago-Crystal/releases/download/6.0.5/pokemon_crystal.apworld",
-  "release": "https://github.com/gerbiljames/Archipelago-Crystal/releases/tag/6.0.5",
+  "download": "https://github.com/gerbiljames/Archipelago-Crystal/releases/download/6.0.6/pokemon_crystal.apworld",
+  "release": "https://github.com/gerbiljames/Archipelago-Crystal/releases/tag/6.0.6",
   "links": [
    "https://github.com/gerbiljames/Archipelago/releases/latest"
   ]
@@ -11835,6 +11861,28 @@
   ]
  },
  {
+  "game": "Sonic Mania",
+  "version": "0.4.1",
+  "authors": [
+   "GraymonDgt"
+  ],
+  "file": "sonicmania.apworld",
+  "source": "https://github.com/GraymonDgt/SonicManiaAP",
+  "license": null,
+  "license_url": null,
+  "copyright": [],
+  "sheet": {
+   "game": "Sonic Mania",
+   "stability": "Unstable",
+   "pr_status": "Not PRing"
+  },
+  "download": "https://github.com/GraymonDgt/SonicManiaAP/releases/download/0.4.1/sonicmania.apworld",
+  "release": "https://github.com/GraymonDgt/SonicManiaAP/releases/tag/0.4.1",
+  "links": [
+   "https://github.com/GraymonDgt/SonicManiaAP/releases/latest"
+  ]
+ },
+ {
   "game": "Sonic Riders",
   "version": "0.2.3",
   "authors": [
@@ -12377,27 +12425,6 @@
   "release": "https://github.com/Kryen112/AP_Stick_Ranger/releases/tag/2.0.0",
   "links": [
    "https://github.com/Kryen112/AP_Stick_Ranger/releases/"
-  ]
- },
- {
-  "game": "Stray",
-  "version": "0.0.4",
-  "authors": [
-   "Nichologeam"
-  ],
-  "file": "stray.apworld",
-  "source": "https://github.com/Nichologeam/StrayAP",
-  "license": null,
-  "license_url": null,
-  "copyright": [],
-  "sheet": {
-   "game": "Stray",
-   "stability": "Unstable"
-  },
-  "download": "https://github.com/Nichologeam/StrayAP/releases/download/v0.0.4/stray.apworld",
-  "release": "https://github.com/Nichologeam/StrayAP/releases/tag/v0.0.4",
-  "links": [
-   "https://github.com/Nichologeam/StrayAP/releases/latest"
   ]
  },
  {
@@ -13183,7 +13210,7 @@
  },
  {
   "game": "The Legend of Zelda - Phantom Hourglass",
-  "version": "0.10.2",
+  "version": "0.10.3",
   "authors": [
    "carrotinator",
    "Tanker50207",
@@ -13207,8 +13234,8 @@
    "game": "The Legend of Zelda: Phantom Hourglass",
    "stability": "Stable"
   },
-  "download": "https://github.com/carrotinator/Archipelago/releases/download/ph-v0.10.2/tloz_ph.apworld",
-  "release": "https://github.com/carrotinator/Archipelago/releases/tag/ph-v0.10.2",
+  "download": "https://github.com/carrotinator/Archipelago/releases/download/ph-v0.10.3/tloz_ph.apworld",
+  "release": "https://github.com/carrotinator/Archipelago/releases/tag/ph-v0.10.3",
   "links": [
    "https://github.com/carrotinator/Archipelago/releases/"
   ]
@@ -13277,7 +13304,7 @@
   ],
   "sheet": {
    "game": "The Murder of Sonic the Hedgehog",
-   "stability": "Unstable"
+   "stability": "Stable"
   },
   "download": "https://github.com/TwinklePillar/MurderOfSonicAP/releases/download/v0.4.0-beta/tmosth.apworld",
   "release": "https://github.com/TwinklePillar/MurderOfSonicAP/releases/tag/v0.4.0-beta",
@@ -13697,7 +13724,7 @@
  },
  {
   "game": "Toy Story 2",
-  "version": "3.1.1",
+  "version": "3.1.2",
   "authors": [
    "imklubb"
   ],
@@ -13710,8 +13737,8 @@
    "game": "Toy Story 2 (PS1)",
    "stability": "Stable"
   },
-  "download": "https://github.com/imklubb/Archipelago-Toy-Story-2/releases/download/3.1.1/toystory2.apworld",
-  "release": "https://github.com/imklubb/Archipelago-Toy-Story-2/releases/tag/3.1.1",
+  "download": "https://github.com/imklubb/Archipelago-Toy-Story-2/releases/download/3.1.2/toystory2.apworld",
+  "release": "https://github.com/imklubb/Archipelago-Toy-Story-2/releases/tag/3.1.2",
   "links": [
    "https://github.com/imklubb/Archipelago-Toy-Story-2/releases/latest"
   ]
