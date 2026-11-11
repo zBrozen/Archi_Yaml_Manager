@@ -1079,6 +1079,11 @@
    "wikidata": "Q774773",
    "checked": "2026-11-03"
   },
+  "Donkey Kong Country 2": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-11"
+  },
   "Don't Starve Together": {
    "genres": [
     "survie"
@@ -2023,24 +2028,11 @@
    "wikidata": "Q2181182",
    "checked": "2026-11-03"
   },
-  "Kirby: Planet Robobot": {
-   "genres": [
-    "action",
-    "plateforme"
-   ],
-   "wikidata": "Q23011263",
-   "checked": "2026-11-03"
-  },
   "Kirby's Dream Land 3": {
    "genres": [
     "plateforme"
    ],
    "wikidata": "Q1202713",
-   "checked": "2026-11-03"
-  },
-  "Kirby Squeak Squad": {
-   "genres": [],
-   "wikidata": null,
    "checked": "2026-11-03"
   },
   "Kirby Super Star Ultra": {
@@ -2290,6 +2282,13 @@
    ],
    "wikidata": "Q5721431",
    "checked": "2026-11-03"
+  },
+  "Mario Kart Wii": {
+   "genres": [
+    "course"
+   ],
+   "wikidata": "Q838707",
+   "checked": "2026-11-11"
   },
   "Mario & Luigi Superstar Saga": {
    "genres": [
