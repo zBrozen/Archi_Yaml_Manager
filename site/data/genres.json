@@ -1519,6 +1519,11 @@
    "wikidata": null,
    "checked": "2026-11-03"
   },
+  "Geoguessr": {
+   "genres": [],
+   "wikidata": "Q13576160",
+   "checked": "2026-11-12"
+  },
   "Geometry Dash": {
    "genres": [
     "plateforme",
@@ -3819,6 +3824,13 @@
    "wikidata": "Q1068962",
    "checked": "2026-11-03"
   },
+  "Sonic Mania": {
+   "genres": [
+    "plateforme"
+   ],
+   "wikidata": "Q25991770",
+   "checked": "2026-11-12"
+  },
   "Sonic Riders": {
    "genres": [
     "course"
@@ -3989,14 +4001,6 @@
   "Stick Ranger": {
    "genres": [],
    "wikidata": null,
-   "checked": "2026-11-03"
-  },
-  "Stray": {
-   "genres": [
-    "aventure",
-    "puzzle"
-   ],
-   "wikidata": "Q96247255",
    "checked": "2026-11-03"
   },
   "Streets of Rage": {

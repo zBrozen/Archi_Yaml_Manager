@@ -727,7 +727,7 @@
     {"game": "Voices of the Void", "stability": "Unstable"},
     {"game": "Voidloop", "stability": "Unstable", "pr_status": "Not PRing"},
     {"game": "Void Sols", "stability": "Stable", "pr_status": "In Review"},
-    {"game": "Void Stranger", "stability": "Unstable"},
+    {"game": "Void Stranger", "stability": "Stable"},
     {"game": "Voltorb Flip (from Pokémon HG & SS)", "stability": "Stable"},
     {"game": "VRChat", "stability": "Unstable"},
     {"game": "V Rising", "stability": "Unstable"},
