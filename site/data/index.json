@@ -1,6 +1,6 @@
 {
  "ap_version": "0.6.8",
- "generated_at": "2026-11-11T12:32:57+00:00",
+ "generated_at": "2026-11-12T13:39:14+00:00",
  "games": [
   {
    "game": "2048",
@@ -566,7 +566,7 @@
    "file": "games/bayonetta.json",
    "source": "custom",
    "apworld": "bayonetta.apworld",
-   "world_version": "3.3.0",
+   "world_version": null,
    "guides": "guides/bayonetta.json",
    "sheet": {
     "game": "Bayonetta",
@@ -1640,7 +1640,7 @@
    "file": "games/dead-cells.json",
    "source": "custom",
    "apworld": "dead_cells.apworld",
-   "world_version": "0.2.0",
+   "world_version": "0.2.1",
    "guides": "guides/dead-cells.json",
    "sheet": {
     "game": "Dead Cells",
@@ -1809,7 +1809,7 @@
    "file": "games/dome-keeper.json",
    "source": "custom",
    "apworld": "dome_keeper.apworld",
-   "world_version": null,
+   "world_version": "2.1.1",
    "guides": "guides/dome-keeper.json",
    "sheet": {
     "game": "Dome Keeper",
@@ -2335,7 +2335,7 @@
    "file": "games/final-fantasy-1-psp.json",
    "source": "custom",
    "apworld": "ff1psp.apworld",
-   "world_version": "0.2.4",
+   "world_version": "0.3.0",
    "guides": "guides/final-fantasy-1-psp.json",
    "sheet": {
     "game": "Final Fantasy 1 (PSP)",
@@ -2503,7 +2503,7 @@
    "file": "games/ftl-faster-than-light.json",
    "source": "custom",
    "apworld": "ftl.apworld",
-   "world_version": "0.5.0",
+   "world_version": "0.6.0",
    "guides": "guides/ftl-faster-than-light.json",
    "sheet": {
     "game": "FTL: Faster Than Light",
@@ -2710,7 +2710,7 @@
    "file": "games/grand-theft-auto-iii.json",
    "source": "custom",
    "apworld": "gta3.apworld",
-   "world_version": "0.2.0",
+   "world_version": "0.3.0",
    "guides": "guides/grand-theft-auto-iii.json",
    "sheet": {
     "game": "Grand Theft Auto III",
@@ -2824,7 +2824,7 @@
    "file": "games/hades2rogue.json",
    "source": "custom",
    "apworld": "Hades2Rogue.apworld",
-   "world_version": "0.10.0",
+   "world_version": "0.11.0",
    "guides": "guides/hades2rogue.json",
    "sheet": {
     "game": "Hades 2 (Rogue)",
@@ -3400,7 +3400,7 @@
    "file": "games/kerbal-space-program-1.json",
    "source": "custom",
    "apworld": "ksp1.apworld",
-   "world_version": "0.9.1",
+   "world_version": "0.9.2",
    "guides": "guides/kerbal-space-program-1.json",
    "sheet": {
     "game": "Kerbal Space Program",
@@ -3997,7 +3997,7 @@
    "file": "games/mario-sports-mix.json",
    "source": "custom",
    "apworld": "mario_sports_mix.apworld",
-   "world_version": "3.1.3",
+   "world_version": "3.1.4",
    "guides": "guides/mario-sports-mix.json",
    "sheet": {
     "game": "Mario Sports Mix",
@@ -5538,7 +5538,7 @@
    "file": "games/puzzle-bobble-4.json",
    "source": "custom",
    "apworld": "puzzlebobble4.apworld",
-   "world_version": "1.2.0",
+   "world_version": "1.3.0",
    "guides": "guides/puzzle-bobble-4.json",
    "sheet": {
     "game": "Puzzle Bobble 4",
@@ -6403,7 +6403,7 @@
    "file": "games/sly-2-band-of-thieves.json",
    "source": "custom",
    "apworld": "sly2.apworld",
-   "world_version": "1.1.2",
+   "world_version": "1.2.0",
    "guides": "guides/sly-2-band-of-thieves.json",
    "sheet": {
     "game": "Sly 2: Band of Thieves",
@@ -6663,7 +6663,7 @@
    "file": "games/spelunky-2.json",
    "source": "custom",
    "apworld": "spelunky2.apworld",
-   "world_version": "0.5.0",
+   "world_version": "0.5.1",
    "guides": "guides/spelunky-2.json",
    "sheet": {
     "game": "Spelunky 2",
@@ -7648,7 +7648,7 @@
    "file": "games/toy-story-2.json",
    "source": "custom",
    "apworld": "toystory2.apworld",
-   "world_version": "3.1.2",
+   "world_version": "3.1.3",
    "guides": "guides/toy-story-2.json",
    "sheet": {
     "game": "Toy Story 2 (PS1)",
@@ -8060,7 +8060,7 @@
    "guides": "guides/void-stranger.json",
    "sheet": {
     "game": "Void Stranger",
-    "stability": "Unstable"
+    "stability": "Stable"
    }
   },
   {
@@ -8373,7 +8373,7 @@
    "file": "games/xenoblade-x.json",
    "source": "custom",
    "apworld": "xenobladex.apworld",
-   "world_version": "0.3.0",
+   "world_version": "0.3.1",
    "guides": "guides/xenoblade-x.json",
    "sheet": {
     "game": "Xenoblade Chronicles X",
