@@ -1,6 +1,6 @@
 {
  "ap_version": "0.6.8",
- "generated_at": "2026-11-12T13:39:14+00:00",
+ "generated_at": "2026-11-13T12:59:41+00:00",
  "games": [
   {
    "game": "2048",
@@ -1460,7 +1460,7 @@
    "file": "games/crosscode.json",
    "source": "custom",
    "apworld": "crosscode.apworld",
-   "world_version": "0.10.0",
+   "world_version": "0.10.1",
    "guides": "guides/crosscode.json",
    "sheet": {
     "game": "CrossCode",
@@ -4593,7 +4593,7 @@
    "file": "games/nine-sols.json",
    "source": "custom",
    "apworld": "nine_sols.apworld",
-   "world_version": "0.6.4",
+   "world_version": "0.6.5",
    "guides": "guides/nine-sols.json",
    "sheet": {
     "game": "Nine Sols",
@@ -6180,6 +6180,18 @@
    }
   },
   {
+   "game": "Shape of Dreams",
+   "file": "games/shape-of-dreams.json",
+   "source": "custom",
+   "apworld": "shape_of_dreams.apworld",
+   "world_version": "0.6.2",
+   "guides": "guides/shape-of-dreams.json",
+   "sheet": {
+    "game": "Shape of Dreams",
+    "stability": "Unstable"
+   }
+  },
+  {
    "game": "shapez",
    "file": "games/shapez.json",
    "source": "core",
@@ -6367,7 +6379,7 @@
    "file": "games/slay-the-spire-ii.json",
    "source": "custom",
    "apworld": "spire2.apworld",
-   "world_version": "1.2.1",
+   "world_version": "1.3.0",
    "guides": "guides/slay-the-spire-ii.json",
    "sheet": {
     "game": "Slay the Spire 2",
@@ -6539,7 +6551,7 @@
    "file": "games/sonic-colours-wii.json",
    "source": "custom",
    "apworld": "sonic_colours_wii.apworld",
-   "world_version": "0.2.1",
+   "world_version": "0.2.2",
    "guides": "guides/sonic-colours-wii.json",
    "sheet": {
     "game": "Sonic Colors (Wii)",
@@ -6956,7 +6968,7 @@
    "file": "games/super-hexagon.json",
    "source": "custom",
    "apworld": "super_hexagon.apworld",
-   "world_version": "1.1.0",
+   "world_version": "1.1.1",
    "guides": "guides/super-hexagon.json",
    "sheet": {
     "game": "Super Hexagon",

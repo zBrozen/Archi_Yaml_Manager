@@ -2514,7 +2514,7 @@
  },
  {
   "game": "CrossCode",
-  "version": "0.10.0",
+  "version": "0.10.1",
   "authors": [],
   "file": "crosscode.apworld",
   "source": "https://github.com/CodeTriangle/CCMultiworldRandomizer",
@@ -2527,8 +2527,8 @@
    "game": "CrossCode",
    "stability": "Stable"
   },
-  "download": "https://github.com/CodeTriangle/CCMultiworldRandomizer/releases/download/0.10.0/crosscode.apworld",
-  "release": "https://github.com/CodeTriangle/CCMultiworldRandomizer/releases/tag/0.10.0",
+  "download": "https://github.com/CodeTriangle/CCMultiworldRandomizer/releases/download/0.10.1/crosscode.apworld",
+  "release": "https://github.com/CodeTriangle/CCMultiworldRandomizer/releases/tag/0.10.1",
   "links": [
    "https://github.com/CodeTriangle/CCMultiworldRandomizer/releases/latest"
   ]
@@ -5850,8 +5850,8 @@
    "game": "Jak 3",
    "stability": "Stable"
   },
-  "download": "https://github.com/Blake645/Archipelago/releases/download/3.1.0/jak3.apworld",
-  "release": "https://github.com/Blake645/Archipelago/releases/tag/3.1.0",
+  "download": "https://github.com/Blake645/Archipelago/releases/download/3.1.1/jak3.apworld",
+  "release": "https://github.com/Blake645/Archipelago/releases/tag/3.1.1",
   "links": [
    "https://github.com/Blake645/Archipelago/releases"
   ]
@@ -8155,7 +8155,7 @@
  },
  {
   "game": "Nine Sols",
-  "version": "0.6.4",
+  "version": "0.6.5",
   "authors": [],
   "file": "nine_sols.apworld",
   "source": "https://github.com/Ixrec/NineSolsArchipelagoRandomizer",
@@ -8169,8 +8169,8 @@
    "stability": "Stable",
    "pr_status": "Not PRing"
   },
-  "download": "https://github.com/IxrecsRandomizers/NineSolsArchipelagoRandomizer/releases/download/0.6.4/nine_sols.apworld",
-  "release": "https://github.com/IxrecsRandomizers/NineSolsArchipelagoRandomizer/releases/tag/0.6.4",
+  "download": "https://github.com/IxrecsRandomizers/NineSolsArchipelagoRandomizer/releases/download/0.6.5/nine_sols.apworld",
+  "release": "https://github.com/IxrecsRandomizers/NineSolsArchipelagoRandomizer/releases/tag/0.6.5",
   "links": [
    "https://github.com/Ixrec/NineSolsArchipelagoRandomizer/releases/latest"
   ]
@@ -9106,8 +9106,8 @@
    "game": "Phoenotopia: Awakening",
    "stability": "Unstable"
   },
-  "download": "https://github.com/Amphyros/Phoenotopia-Awakening-AP-client/releases/download/v0.4.1/phoa.apworld",
-  "release": "https://github.com/Amphyros/Phoenotopia-Awakening-AP-client/releases/tag/v0.4.1",
+  "download": "https://github.com/Amphyros/Phoenotopia-Awakening-AP-client/releases/download/v0.4.2/phoa.apworld",
+  "release": "https://github.com/Amphyros/Phoenotopia-Awakening-AP-client/releases/tag/v0.4.2",
   "links": [
    "https://github.com/Amphyros/Phoenotopia-Awakening-AP-client/releases"
   ]
@@ -11110,6 +11110,29 @@
   ]
  },
  {
+  "game": "Shape of Dreams",
+  "version": "0.6.2",
+  "authors": [
+   "Chainfire"
+  ],
+  "file": "shape_of_dreams.apworld",
+  "source": "https://github.com/FruityShuffles/SoDArchipelago",
+  "license": "MIT",
+  "license_url": "https://github.com/FruityShuffles/SoDArchipelago/blob/HEAD/LICENSE",
+  "copyright": [
+   "Copyright (c) 2026 FruityShuffles"
+  ],
+  "sheet": {
+   "game": "Shape of Dreams",
+   "stability": "Unstable"
+  },
+  "download": "https://github.com/FruityShuffles/SoDArchipelago/releases/download/v0.6.2/shape_of_dreams.apworld",
+  "release": "https://github.com/FruityShuffles/SoDArchipelago/releases/tag/v0.6.2",
+  "links": [
+   "https://github.com/FruityShuffles/SoDArchipelago/releases/latest"
+  ]
+ },
+ {
   "game": "shapez 2",
   "version": "1.0.1",
   "authors": [
@@ -11454,7 +11477,7 @@
  },
  {
   "game": "Slay the Spire II",
-  "version": "1.2.1",
+  "version": "1.3.0",
   "authors": [
    "Kirbyfanner",
    "Platano Bailando",
@@ -11471,8 +11494,8 @@
    "game": "Slay the Spire 2",
    "stability": "Unstable"
   },
-  "download": "https://github.com/dlueben1/Slay-the-Spire-2-Archipelago/releases/download/2.0.1/spire2.apworld",
-  "release": "https://github.com/dlueben1/Slay-the-Spire-2-Archipelago/releases/tag/2.0.1",
+  "download": "https://github.com/dlueben1/Slay-the-Spire-2-Archipelago/releases/download/2.1.0/spire2.apworld",
+  "release": "https://github.com/dlueben1/Slay-the-Spire-2-Archipelago/releases/tag/2.1.0",
   "links": [
    "https://github.com/dlueben1/Slay-the-Spire-2-Archipelago/releases"
   ]
@@ -11772,7 +11795,7 @@
  },
  {
   "game": "Sonic Colours (Wii)",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "authors": [
    "Luma"
   ],
@@ -11790,8 +11813,8 @@
    "game": "Sonic Colors (Wii)",
    "stability": "Unstable"
   },
-  "download": "https://github.com/mariokirby1703/Lumas-Archipelago/releases/download/sonic_colours_v0.2.1/sonic_colours_wii.apworld",
-  "release": "https://github.com/mariokirby1703/Lumas-Archipelago/releases/tag/sonic_colours_v0.2.1",
+  "download": "https://github.com/mariokirby1703/Lumas-Archipelago/releases/download/sonic_colours_v0.2.2/sonic_colours_wii.apworld",
+  "release": "https://github.com/mariokirby1703/Lumas-Archipelago/releases/tag/sonic_colours_v0.2.2",
   "links": [
    "https://github.com/mariokirby1703/Lumas-Archipelago/releases?q=Sonic+Colours&expanded=true"
   ]
@@ -12499,7 +12522,7 @@
  },
  {
   "game": "Super Hexagon",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "authors": [
    "Jeffdev"
   ],
@@ -12518,8 +12541,8 @@
    "stability": "Unstable",
    "pr_status": "Not PRing"
   },
-  "download": "https://github.com/Jeffdev-Archipelago-Implementations/Archipelago-Hexagon/releases/download/1.1.0/super_hexagon.apworld",
-  "release": "https://github.com/Jeffdev-Archipelago-Implementations/Archipelago-Hexagon/releases/tag/1.1.0",
+  "download": "https://github.com/Jeffdev-Archipelago-Implementations/Archipelago-Hexagon/releases/download/1.1.1/super_hexagon.apworld",
+  "release": "https://github.com/Jeffdev-Archipelago-Implementations/Archipelago-Hexagon/releases/tag/1.1.1",
   "links": [
    "https://github.com/Jeffdev-Archipelago-Implementations/Archipelago-Hexagon/releases/"
   ]
@@ -15190,8 +15213,8 @@
    "pr_status": "Not PRing",
    "adult": true
   },
-  "download": "https://github.com/msent0/Yarimono-Archipelago/releases/download/v1.1.1/yarimono.apworld",
-  "release": "https://github.com/msent0/Yarimono-Archipelago/releases/tag/v1.1.1",
+  "download": "https://github.com/msent0/Yarimono-Archipelago/releases/download/v1.1.2/yarimono.apworld",
+  "release": "https://github.com/msent0/Yarimono-Archipelago/releases/tag/v1.1.2",
   "links": [
    "https://github.com/msent0/Yarimono-Archipelago/releases/latest"
   ]
