@@ -160,8 +160,8 @@
    "Copyright (c) 2025 dmwever"
   ],
   "sheet": {
-   "game": "Age of Empires II: Definite Edition",
-   "stability": "Unstable"
+   "game": "Age of Empires II: Definitive Edition",
+   "stability": "Stable"
   },
   "download": "https://github.com/dmwever/Ageipelago/releases/download/v0.2.3/age2de.apworld",
   "release": "https://github.com/dmwever/Ageipelago/releases/tag/v0.2.3",
@@ -1848,7 +1848,7 @@
  },
  {
   "game": "C&C Reloaded",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "authors": [
    "C&C Reloaded Randomizer contributors"
   ],
@@ -1864,8 +1864,8 @@
    "stability": "Unstable",
    "pr_status": "Not PRing"
   },
-  "download": "https://github.com/Heinki/Reloaded-Randomizer/releases/download/V2.1/cnc_reloaded.apworld",
-  "release": "https://github.com/Heinki/Reloaded-Randomizer/releases/tag/V2.1",
+  "download": "https://github.com/Heinki/Reloaded-Randomizer/releases/download/V2.2/cnc_reloaded.apworld",
+  "release": "https://github.com/Heinki/Reloaded-Randomizer/releases/tag/V2.2",
   "links": [
    "https://github.com/Heinki/Reloaded-Randomizer/releases"
   ]
@@ -2003,7 +2003,7 @@
  },
  {
   "game": "Chrono Trigger Rando-Dalton Imperial",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "authors": [
    "Pseudoarc",
    "Anguirel"
@@ -2021,8 +2021,8 @@
    "stability": "Unstable",
    "pr_status": "Not PRing"
   },
-  "download": "https://github.com/Anguirel86/ap_ctrdi/releases/download/v0.0.4/ctrdi.apworld",
-  "release": "https://github.com/Anguirel86/ap_ctrdi/releases/tag/v0.0.4",
+  "download": "https://github.com/Anguirel86/ap_ctrdi/releases/download/v0.0.5/ctrdi.apworld",
+  "release": "https://github.com/Anguirel86/ap_ctrdi/releases/tag/v0.0.5",
   "links": [
    "https://github.com/Anguirel86/ap_ctrdi/releases"
   ]
@@ -6907,8 +6907,8 @@
    "stability": "Unstable",
    "pr_status": "Not PRing"
   },
-  "download": "https://github.com/MnL-Modding/Piillomizer/releases/download/v0.1.3/mldt.apworld",
-  "release": "https://github.com/MnL-Modding/Piillomizer/releases/tag/v0.1.3",
+  "download": "https://github.com/MnL-Modding/Piillomizer/releases/download/v0.1.4/mldt.apworld",
+  "release": "https://github.com/MnL-Modding/Piillomizer/releases/tag/v0.1.4",
   "links": [
    "https://github.com/MnL-Modding/Piillomizer/releases/latest"
   ]
@@ -7325,7 +7325,7 @@
  },
  {
   "game": "Mental Omega",
-  "version": "0.7.0",
+  "version": "1.49.0",
   "authors": [
    "Mental Omega Randomizer contributors"
   ],
@@ -7341,8 +7341,8 @@
    "stability": "Unstable",
    "pr_status": "Not PRing"
   },
-  "download": "https://github.com/Heinki/Mental-Omega-Randomizer/releases/download/V1.48/mental_omega.apworld",
-  "release": "https://github.com/Heinki/Mental-Omega-Randomizer/releases/tag/V1.48",
+  "download": "https://github.com/Heinki/Mental-Omega-Randomizer/releases/download/V1.49/mental_omega.apworld",
+  "release": "https://github.com/Heinki/Mental-Omega-Randomizer/releases/tag/V1.49",
   "links": [
    "https://github.com/Heinki/Mental-Omega-Randomizer/releases/latest"
   ]
@@ -7439,8 +7439,8 @@
    "game": "Metroid Fusion",
    "stability": "Stable"
   },
-  "download": "https://github.com/StalledStorm/ArchipelagoMine/releases/download/v1.22.5/metroidfusion.apworld",
-  "release": "https://github.com/StalledStorm/ArchipelagoMine/releases/tag/v1.22.5",
+  "download": "https://github.com/StalledStorm/ArchipelagoMine/releases/download/v1.22.7/metroidfusion.apworld",
+  "release": "https://github.com/StalledStorm/ArchipelagoMine/releases/tag/v1.22.7",
   "links": [
    "https://github.com/StalledStorm/ArchipelagoMine/releases?q=Fusion&expanded=true"
   ]
@@ -10664,9 +10664,11 @@
   ]
  },
  {
-  "game": "rusted_moss",
-  "version": null,
-  "authors": [],
+  "game": "Rusted Moss",
+  "version": "0.1.8",
+  "authors": [
+   "Mr. L"
+  ],
   "file": "rusted_moss.apworld",
   "source": "https://github.com/dgrossmann144/Archipelago",
   "license": "MIT",
@@ -10681,8 +10683,8 @@
    "game": "Rusted Moss",
    "stability": "Stable"
   },
-  "download": "https://github.com/dgrossmann144/Archipelago/releases/download/v0.1.7-alpha/rusted_moss.apworld",
-  "release": "https://github.com/dgrossmann144/Archipelago/releases/tag/v0.1.7-alpha",
+  "download": "https://github.com/dgrossmann144/Archipelago/releases/download/v0.1.8-alpha/rusted_moss.apworld",
+  "release": "https://github.com/dgrossmann144/Archipelago/releases/tag/v0.1.8-alpha",
   "links": [
    "https://github.com/dgrossmann144/Archipelago/releases"
   ]
@@ -12849,7 +12851,7 @@
  },
  {
   "game": "Team Fortress 2 Mann vs Machine",
-  "version": "1.18.7",
+  "version": "1.18.8",
   "authors": [
    "mathis"
   ],
@@ -12864,8 +12866,8 @@
    "game": "Team Fortress 2 (Mann vs Machine)",
    "stability": "Unstable"
   },
-  "download": "https://github.com/m-this/tf2-archipelago/releases/download/v1.18.7/tf2_mvm.apworld",
-  "release": "https://github.com/m-this/tf2-archipelago/releases/tag/v1.18.7",
+  "download": "https://github.com/m-this/tf2-archipelago/releases/download/v1.18.8/tf2_mvm.apworld",
+  "release": "https://github.com/m-this/tf2-archipelago/releases/tag/v1.18.8",
   "links": [
    "https://github.com/m-this/tf2-archipelago/releases/latest"
   ]
@@ -13751,7 +13753,7 @@
  },
  {
   "game": "Toy Story 2",
-  "version": "3.1.3",
+  "version": "3.1.4",
   "authors": [
    "imklubb"
   ],
@@ -13764,8 +13766,8 @@
    "game": "Toy Story 2 (PS1)",
    "stability": "Stable"
   },
-  "download": "https://github.com/imklubb/Archipelago-Toy-Story-2/releases/download/3.1.3/toystory2.apworld",
-  "release": "https://github.com/imklubb/Archipelago-Toy-Story-2/releases/tag/3.1.3",
+  "download": "https://github.com/imklubb/Archipelago-Toy-Story-2/releases/download/3.1.4/toystory2.apworld",
+  "release": "https://github.com/imklubb/Archipelago-Toy-Story-2/releases/tag/3.1.4",
   "links": [
    "https://github.com/imklubb/Archipelago-Toy-Story-2/releases/latest"
   ]

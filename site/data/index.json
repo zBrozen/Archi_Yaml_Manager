@@ -1,6 +1,6 @@
 {
  "ap_version": "0.6.8",
- "generated_at": "2026-11-13T12:59:41+00:00",
+ "generated_at": "2026-11-14T12:02:39+00:00",
  "games": [
   {
    "game": "2048",
@@ -146,8 +146,8 @@
    "world_version": "0.0.1",
    "guides": "guides/age-of-empires-ii-definitive-edition.json",
    "sheet": {
-    "game": "Age of Empires II: Definite Edition",
-    "stability": "Unstable"
+    "game": "Age of Empires II: Definitive Edition",
+    "stability": "Stable"
    }
   },
   {
@@ -899,7 +899,7 @@
    "file": "games/c-c-reloaded.json",
    "source": "custom",
    "apworld": "cnc_reloaded.apworld",
-   "world_version": "2.1.0",
+   "world_version": "2.2.0",
    "guides": "guides/c-c-reloaded.json",
    "sheet": {
     "game": "C&C Reloaded",
@@ -1169,7 +1169,7 @@
    "file": "games/chrono-trigger-rando-dalton-imperial.json",
    "source": "custom",
    "apworld": "ctrdi.apworld",
-   "world_version": "0.0.4",
+   "world_version": "0.0.5",
    "guides": "guides/chrono-trigger-rando-dalton-imperial.json",
    "sheet": {
     "game": "Chrono Trigger Rando-Dalton Imperial (SNES)",
@@ -4185,7 +4185,7 @@
    "file": "games/mental-omega.json",
    "source": "custom",
    "apworld": "mental_omega.apworld",
-   "world_version": "0.7.0",
+   "world_version": "1.49.0",
    "guides": "guides/mental-omega.json",
    "sheet": {
     "game": "Command & Conquer: Mental Omega",
@@ -5942,7 +5942,7 @@
    "file": "games/rusted-moss.json",
    "source": "custom",
    "apworld": "rusted_moss.apworld",
-   "world_version": null,
+   "world_version": "0.1.8",
    "guides": "guides/rusted-moss.json",
    "sheet": {
     "game": "Rusted Moss",
@@ -7164,7 +7164,7 @@
    "file": "games/team-fortress-2-mann-vs-machine.json",
    "source": "custom",
    "apworld": "tf2_mvm.apworld",
-   "world_version": "1.18.7",
+   "world_version": "1.18.8",
    "guides": "guides/team-fortress-2-mann-vs-machine.json",
    "sheet": {
     "game": "Team Fortress 2 (Mann vs Machine)",
@@ -7660,7 +7660,7 @@
    "file": "games/toy-story-2.json",
    "source": "custom",
    "apworld": "toystory2.apworld",
-   "world_version": "3.1.3",
+   "world_version": "3.1.4",
    "guides": "guides/toy-story-2.json",
    "sheet": {
     "game": "Toy Story 2 (PS1)",
