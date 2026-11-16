@@ -1,10 +1,11 @@
 """Rassemble les apworlds du serveur dans le dossier custom_worlds d'Archipelago.
 
 Sources (voir `apworlds.json`) :
-  - "games" : jeux de la liste des jeux du Discord d'Archipelago (tableur Google), recopiés
-    automatiquement par tools/sync_sheet.py. Le dépôt est trouvé dans la colonne
-    « Links & Downloads » du tableur, puis l'apworld est téléchargé depuis sa dernière release
-    (GitHub ou GitLab) ;
+  - "games" : jeux de la liste des jeux du Discord d'Archipelago (tableur Google), complétée par la liste
+    de johatrot, recopiés automatiquement par tools/sync_sheet.py. Le dépôt est trouvé dans la colonne
+    « Links & Downloads » du tableur (déjà recopié pour un jeu de la seule liste de johatrot, "list": "index"),
+    puis l'apworld est téléchargé depuis sa dernière release (GitHub ou GitLab). Un jeu de la liste de
+    johatrot dont l'apworld se déclare sous le nom d'un jeu déjà fourni est écarté ;
   - "github" : dépôts GitHub ajoutés à la main (jeu absent du tableur) ;
   - les fichiers .apworld déposés dans le dossier `apworlds/` du dépôt.
 
@@ -129,63 +130,117 @@ class Http:
 
 # --- Tableur des jeux -----------------------------------------------------------
 
-def read_sheet(http: Http, sheet_id: str) -> dict[str, dict]:
-    """Jeux de la feuille « Playable Worlds », par nom normalisé :
-    nom affiché, stabilité, statut de PR, 18+, liens (colonne « Links & Downloads » en premier),
-    liens de la seule colonne « Links & Downloads » (downloads)."""
-    url = f"https://docs.google.com/spreadsheets/d/{sheet_id}/export?format=xlsx"
-    book = zipfile.ZipFile(io.BytesIO(http.read(url)))
+def xlsx_tables(data: bytes, wanted: set[str]):
+    """Feuilles d'un classeur xlsx qui ont une ligne de titres commençant par « Game » et contenant les
+    colonnes `wanted` : pour chacune, (colonnes par titre, lignes suivant les titres), chaque ligne étant
+    (cellules par colonne, liens par colonne). Les feuilles sont lues dans l'ordre du classeur."""
+    book = zipfile.ZipFile(io.BytesIO(data))
 
     def xml(path: str):
         return ET.fromstring(book.read(path))
 
-    strings = ["".join(si.itertext()) for si in xml("xl/sharedStrings.xml").findall("m:si", XLSX)]
+    strings = ["".join(si.itertext()) for si in xml("xl/sharedStrings.xml").findall("m:si", XLSX)] \
+        if "xl/sharedStrings.xml" in book.namelist() else []
     targets = {r.get("Id"): r.get("Target") for r in xml("xl/_rels/workbook.xml.rels")}
-    games: dict[str, dict] = {}
     for sheet in xml("xl/workbook.xml").find("m:sheets", XLSX):
         path = "xl/" + targets[sheet.get(REL_ID)].lstrip("/").removeprefix("xl/")
         root = xml(path)
         rels_path = path.replace("worksheets/", "worksheets/_rels/") + ".rels"
         rels = {r.get("Id"): r.get("Target") for r in xml(rels_path)} if rels_path in book.namelist() else {}
-        links: dict[str, str] = {}
+        links: dict[str, dict[str, str]] = {}
         for link in root.findall(".//m:hyperlink", XLSX):
-            if link.get(REL_ID) in rels:
-                links[link.get("ref")] = rels[link.get(REL_ID)]
+            if link.get(REL_ID) in rels and (m := re.fullmatch(r"([A-Z]+)(\d+)", link.get("ref") or "")):
+                links.setdefault(m.group(2), {})[m.group(1)] = rels[link.get(REL_ID)]
 
-        columns = None
+        columns, rows = None, []
         for row in root.findall(".//m:row", XLSX):
             cells = {}
             for cell in row.findall("m:c", XLSX):
                 value = cell.find("m:v", XLSX)
-                if value is not None:
+                if value is None:
+                    value = cell.find("m:is/m:t", XLSX)  # texte en ligne
+                if value is not None and value.text is not None:
                     col = re.match(r"[A-Z]+", cell.get("r")).group()
                     # Un nombre entier est stocké « 2048.0 » (jeu « 2048 »).
                     cells[col] = strings[int(value.text)] if cell.get("t") == "s" \
                         else re.sub(r"^(-?\d+)\.0$", r"\1", value.text)
             if columns is None:
-                # Seule la feuille des jeux jouables a ces colonnes (les outils n'ont pas de stabilité).
-                names = {text: col for col, text in cells.items()}
-                if cells.get("A") == "Game" and {"Links & Downloads", "Stability"} <= names.keys():
+                # Les titres des colonnes ne sont pas forcément sur la première ligne.
+                names = {text.strip(): col for col, text in cells.items()}
+                if cells.get("A") == "Game" and wanted <= names.keys():
                     columns = names
                 continue
+            rows.append((cells, links.get(row.get("r"), {})))
+        if columns:
+            yield columns, rows
+
+
+def read_sheet(http: Http, sheet_id: str) -> dict[str, dict]:
+    """Jeux de la feuille « Playable Worlds », par nom normalisé :
+    nom affiché, stabilité, statut de PR, 18+, liens (colonne « Links & Downloads » en premier),
+    liens de la seule colonne « Links & Downloads » (downloads)."""
+    url = f"https://docs.google.com/spreadsheets/d/{sheet_id}/export?format=xlsx"
+    games: dict[str, dict] = {}
+    # Seule la feuille des jeux jouables a ces colonnes (les outils n'ont pas de stabilité).
+    for columns, rows in xlsx_tables(http.read(url), {"Links & Downloads", "Stability"}):
+        downloads = columns["Links & Downloads"]
+        for cells, row_links in rows:
             name = (cells.get("A") or "").strip()
             if not name:
                 continue
-            downloads = columns["Links & Downloads"]
-            number = row.get("r")
-            row_links = sorted(((m.group(1), url) for ref, url in links.items()
-                                if (m := re.fullmatch(r"([A-Z]+)" + number, ref)) and m.group(1) != "A"),
-                               key=lambda item: (item[0] != downloads, len(item[0]), item[0]))
+            ordered = sorted(((col, url) for col, url in row_links.items() if col != "A"),
+                             key=lambda item: (item[0] != downloads, len(item[0]), item[0]))
             games.setdefault(normalize(name), {
                 "name": name,
                 "stability": cells.get(columns["Stability"]),
                 "pr_status": cells.get(columns.get("PR Status", ""), None),
                 "adult": cells.get(columns.get("18+ / Unrated", ""), "0") == "1",
-                "links": [url for _, url in row_links],
-                "downloads": [url for col, url in row_links if col == downloads],
+                "links": [url for _, url in ordered],
+                "downloads": [url for col, url in ordered if col == downloads],
             })
-        if columns:
-            break
+        break
+    return games
+
+
+# Liste de johatrot (serveur non officiel d'Archipelago), qui rassemble plusieurs listes dont le tableur
+# ci-dessus : elle dit où un jeu peut se jouer (serveur principal, After Dark 18+, serveur non officiel),
+# sa plateforme et des remarques. Sa stabilité n'est qu'indicative (« Unknown » pour la plupart des jeux).
+INDEX_SHEET = "11rQWNdF4dAuVq-bfsECvZnONyJujcp5O6Q_2Strish0"
+PLAYABLE = {"Main": "main", "After Dark": "after_dark", "Unofficial Server": "unofficial"}
+# Stabilité de cette liste, ramenée au vocabulaire du tableur principal.
+INDEX_STABILITY = {"Yes": "Stable", "Fairly": "Stable", "Probably Not": "Unstable", "No": "Unstable",
+                   "Broken": "Broken on Main"}
+BUNDLED = "Bundled with Archipelago"
+# Infos des listes recopiées dans les crédits (`sheet`), puis dans index.json : « list » vaut « index » pour un
+# jeu de la seule liste de johatrot (stabilité de cette liste).
+SHEET_KEYS = ("game", "stability", "pr_status", "adult", "playable", "platform", "note", "list")
+
+
+def read_index(http: Http, sheet_id: str = INDEX_SHEET) -> dict[str, dict]:
+    """Jeux de la feuille « APWorlds » de la liste de johatrot, par nom normalisé : nom affiché, lien de
+    l'apworld (link), jeu inclus à Archipelago (bundled), où il se joue (playable : main, after_dark,
+    unofficial), plateforme, stabilité ramenée à celle du tableur principal et remarque."""
+    url = f"https://docs.google.com/spreadsheets/d/{sheet_id}/export?format=xlsx"
+    games: dict[str, dict] = {}
+    for columns, rows in xlsx_tables(http.read(url), {"APWorld Link", "Playable in", "Stable Enough?"}):
+        col = lambda title: columns.get(title, "")
+        for cells, row_links in rows:
+            name = (cells.get("A") or "").strip()
+            if not name:
+                continue
+            text = (cells.get(col("APWorld Link")) or "").strip()
+            link = row_links.get(col("APWorld Link")) or (text if re.match(r"https?://", text) else None)
+            note = re.sub(r"\s+", " ", cells.get(col("Note")) or "").strip()
+            games.setdefault(normalize(name), {
+                "name": name,
+                "link": link,
+                "bundled": text == BUNDLED,
+                "playable": PLAYABLE.get((cells.get(col("Playable in")) or "").strip()),
+                "platform": (cells.get(col("Platform")) or "").strip() or None,
+                "stability": INDEX_STABILITY.get((cells.get(col("Stable Enough?")) or "").strip()),
+                "note": note[:500] or None,
+            })
+        break
     return games
 
 
@@ -421,7 +476,8 @@ def load_entries(http: Http, settings: dict) -> list[dict]:
         for game in games:
             row = sheet.get(normalize(game["game"]))
             if row is None:
-                if sheet:
+                # Un jeu de la seule liste de johatrot a déjà son dépôt (sync_sheet.py).
+                if sheet and "repo" not in game and "gitlab" not in game:
                     close = difflib.get_close_matches(game["game"], [r["name"] for r in sheet.values()], n=3)
                     warn(f"{game['game']} : absent du tableur" + (f" (voulez-vous dire : {', '.join(close)} ?)" if close else ""))
             else:
@@ -513,12 +569,14 @@ def main() -> int:
 
     config = Path(args.config)
     settings = json.loads(config.read_text(encoding="utf-8")) if config.exists() else {}
-    entries = load_entries(http, settings)
+    # Jeux de la seule liste de johatrot en dernier : un jeu déjà fourni sous un autre nom n'est pas remplacé.
+    entries = sorted(load_entries(http, settings), key=lambda e: e.get("list") == "index")
 
     with ThreadPoolExecutor(WORKERS) as pool:
         results = list(pool.map(lambda e: fetch(http, e, cache, last), entries))
 
     taken = {path.name for path, _, _ in files}
+    provided = {normalize(game): path.name for path, _, _ in files if (game := manifest_game(path.read_bytes()))}
     new_last = {}
     for entry, downloaded in zip(entries, results):
         if downloaded:
@@ -528,8 +586,17 @@ def main() -> int:
                 warn(f"{entry_key(entry)} : {f['name']} écarté, {problem}")
                 continue
             if f["name"] in taken:
-                warn(f"{entry_key(entry)} : {f['name']} déjà fourni par un autre jeu, ignoré")
+                if entry.get("list") == "index":  # le même jeu, nommé autrement dans le tableur
+                    entry["_skipped"] = f"{f['name']} déjà fourni par un autre jeu"
+                else:
+                    warn(f"{entry_key(entry)} : {f['name']} déjà fourni par un autre jeu, ignoré")
                 continue
+            game = manifest_game(f["data"])
+            if entry.get("list") == "index" and game and normalize(game) in provided:
+                entry["_skipped"] = f"même jeu que {provided[normalize(game)]}"
+                continue
+            if game:
+                provided.setdefault(normalize(game), f["name"])
             taken.add(f["name"])
             (dest / f["name"]).write_bytes(f["data"])
             files.append((dest / f["name"], f["page"], {**entry, "tag": f["tag"], "url": f.get("url"),
@@ -558,7 +625,7 @@ def main() -> int:
             if info.get("license") is not None or not http.rate_limited:
                 kept[key] = info
             if entry.get("game"):
-                info = {**info, "sheet": {k: entry[k] for k in ("game", "stability", "pr_status", "adult") if k in entry}}
+                info = {**info, "sheet": {k: entry[k] for k in SHEET_KEYS if k in entry}}
             # Pour installer le jeu : hors du cache des licences, ces liens changent à chaque release.
             install = {
                 "download": entry.get("url") if page else f"https://github.com/{SITE_REPO}/raw/HEAD/apworlds/{path.name}",

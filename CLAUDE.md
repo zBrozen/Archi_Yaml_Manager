@@ -3,7 +3,12 @@
 - Jeux non officiels : la clé `"games"` de `apworlds.json` est **réécrite automatiquement** par
   `tools/sync_sheet.py` (job `sync` du workflow `update-data.yml`) à partir de la feuille
   « Playable Worlds » du tableur des jeux du Discord d'Archipelago. Ne pas la modifier à la main : les
-  réglages vont dans `"options"` (par nom de jeu du tableur), `"exclude"` et `"github"`.
+  réglages vont dans `"options"` (par nom de jeu du tableur), `"exclude"` et `"github"`. Seconde source : la liste
+  des apworlds de johatrot (`INDEX_SHEET`, `read_index` dans `fetch_apworlds.py`, feuille « APWorlds ») apporte
+  `playable` (`after_dark`, `unofficial`), `platform` et `note` aux jeux du tableur, et ajoute ses jeux absents du
+  tableur avec un dépôt (`"list": "index"`, téléchargés en dernier, écartés si leur apworld est déjà fourni). Sa
+  stabilité est indicative ; le tableur principal reste prioritaire. multiworld.gg (fork MultiworldGG, ses propres
+  versions des mondes) n'est pas une source : il ne liste qu'un sous-ensemble des jeux déjà suivis.
 - `tools/fetch_apworlds.py` trouve le dépôt de chaque jeu (colonne « Links & Downloads »), télécharge
   l'apworld de la dernière release (avec cache ETag et repli sur la dernière version connue), et écrit
   `site/data/apworld-credits.json` (auteurs, source, licence, infos du tableur). `extract_options.py`

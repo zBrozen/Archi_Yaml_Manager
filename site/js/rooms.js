@@ -976,8 +976,12 @@ async function checkRoom(room, players, slots, roomApworlds = []) {
   if (unstable.length && room.mode === "async") {
     notes.push({ level: "warn", text: `Jeux instables : ${unstable.join(", ")}. Une partie async dure longtemps : un bug bloquant pèse sur tout le monde.` });
   }
-  const adult = [...games].filter((g) => gameEntry(g)?.sheet?.adult);
+  const adult = [...games].filter((g) => gameEntry(g)?.sheet?.adult || gameEntry(g)?.sheet?.playable === "after_dark");
   if (adult.length) notes.push({ level: "info", text: `Jeux 18+ : ${adult.join(", ")}.` });
+  const unofficial = [...games].filter((g) => gameEntry(g)?.sheet?.playable === "unofficial");
+  if (unofficial.length) {
+    notes.push({ level: "info", text: `Jeux interdits sur le Discord d'Archipelago : ${unofficial.join(", ")}. Pour annoncer la partie, passez par le serveur non officiel ou restez entre vous.` });
+  }
 
   // Apworlds déposés dans la room (par l'hôte ou avec les YAML d'un joueur) : vérification et génération se font avec eux.
   const inRoom = new Map(roomApworlds.map((a) => [a.game, a]));

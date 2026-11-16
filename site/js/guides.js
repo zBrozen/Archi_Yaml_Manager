@@ -3,7 +3,7 @@
 // dossier docs/ de son monde (les mêmes que sur archipelago.gg), le README de son dépôt et les notes de sa release
 // (souvent là que l'auteur explique comment modder le jeu), relevés par tools/extract_options.py.
 import { html, useState, useEffect } from "../vendor/preact-htm.js";
-import { SheetBadges, GamePicker, loadCredits } from "./ui.js";
+import { SheetBadges, PLAYABLE, GamePicker, loadCredits } from "./ui.js";
 import { Markdown } from "./markdown.js";
 import { useTrackers, packsFor, trackerLink } from "./trackers.js";
 
@@ -116,8 +116,11 @@ function GameGuide({ entry, onCreate }) {
       <h2>3. ${entry.game}</h2>
       <span class=${`badge ${official ? "" : "accent"}`}>${official ? "Jeu officiel" : "Jeu non officiel"}</span>
       <${SheetBadges} sheet=${entry.sheet} />
+      ${entry.sheet?.platform && html`<span class="badge" title="Plateforme du jeu">${entry.sheet.platform}</span>`}
       ${entry.world_version && html`<span class="badge">v${entry.world_version}</span>`}
     </div>
+    ${entry.sheet?.note && html`<p class="notice full"><strong>Remarque de la liste des apworlds</strong> (johatrot, en anglais) : ${entry.sheet.note}</p>`}
+    ${PLAYABLE[entry.sheet?.playable] && html`<p class="hint full">${PLAYABLE[entry.sheet.playable].title}.</p>`}
 
     <ol class="steps full">
       ${official

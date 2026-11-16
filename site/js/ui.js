@@ -55,12 +55,23 @@ export const STABILITY = {
   "Broken on Main": { label: "Cassé sur la version actuelle", group: "cassés sur la version actuelle", cls: "danger" },
 };
 
+// Où se joue un jeu d'après la liste de johatrot, quand ce n'est pas le Discord principal d'Archipelago.
+export const PLAYABLE = {
+  after_dark: { label: "After Dark", cls: "", title: "Sur le Discord d'Archipelago, ce jeu ne s'organise que sur le serveur 18+ After Dark" },
+  unofficial: { label: "Serveur non officiel", cls: "warn", title: "Interdit sur le Discord d'Archipelago : à jouer sur le serveur non officiel ou en partie privée" },
+};
+
 export function SheetBadges({ sheet }) {
   if (!sheet) return null;
   const stability = STABILITY[sheet.stability];
-  return html`${stability && html`<span class=${`badge ${stability.cls}`} title="Stabilité indiquée dans la liste des jeux du Discord d'Archipelago">${stability.label}</span>`}
+  const playable = PLAYABLE[sheet.playable];
+  const source = sheet.list === "index"
+    ? "Stabilité indiquée dans la liste des apworlds de johatrot (Discord d'Archipelago), à titre indicatif"
+    : "Stabilité indiquée dans la liste des jeux du Discord d'Archipelago";
+  return html`${stability && html`<span class=${`badge ${stability.cls}`} title=${source}>${stability.label}</span>`}
     ${sheet.pr_status === "In Review" && html`<span class="badge" title="En cours d'intégration aux jeux officiels">Bientôt officiel</span>`}
-    ${sheet.adult && html`<span class="badge danger" title="Contenu pour adultes ou non classé">18+</span>`}`;
+    ${sheet.adult && html`<span class="badge danger" title="Contenu pour adultes ou non classé">18+</span>`}
+    ${playable && html`<span class=${`badge ${playable.cls}`} title=${playable.title}>${playable.label}</span>`}`;
 }
 
 // Liste des jeux avec recherche et filtres : le tableur en compte des centaines, trop pour un menu déroulant.
@@ -217,15 +228,17 @@ function useGenres() {
   return genres;
 }
 
+const UNKNOWN_GROUP = "Jeux non officiels de stabilité inconnue";
+
 function customGroups(custom) {
   const groups = new Map();
   for (const g of custom) {
     const stability = STABILITY[g.sheet?.stability];
-    const label = stability ? `Jeux non officiels ${stability.group}` : "Jeux du serveur";
+    const label = stability ? `Jeux non officiels ${stability.group}` : g.sheet ? UNKNOWN_GROUP : "Jeux du serveur";
     if (!groups.has(label)) groups.set(label, []);
     groups.get(label).push(g);
   }
-  const order = ["Jeux du serveur", ...Object.values(STABILITY).map((s) => `Jeux non officiels ${s.group}`)];
+  const order = ["Jeux du serveur", ...Object.values(STABILITY).map((s) => `Jeux non officiels ${s.group}`), UNKNOWN_GROUP];
   return [...groups].sort((a, b) => order.indexOf(a[0]) - order.indexOf(b[0]));
 }
 

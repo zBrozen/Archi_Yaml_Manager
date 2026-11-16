@@ -126,11 +126,27 @@ Tous les jeux de la [liste des jeux du Discord d'Archipelago](https://docs.googl
    un jeu par ligne du tableur, avec sa stabilité (`Stable`, `Unstable`, `Broken on Main`), son statut
    d'intégration (`In Review`, `Not PRing`) et l'indication 18+. Les jeux déjà officiels (`Core`) et ceux
    sans lien GitHub ou GitLab (apworld publié sur Discord, itch.io…) sont laissés de côté.
+   La [liste des apworlds de johatrot](https://docs.google.com/spreadsheets/d/11rQWNdF4dAuVq-bfsECvZnONyJujcp5O6Q_2Strish0)
+   (feuille « APWorlds », tenue sur le serveur non officiel, qui rassemble plusieurs listes dont ce tableur)
+   complète la liste :
+   - pour un jeu du tableur, l'endroit où il se joue s'il est banni du serveur principal (`playable` :
+     `after_dark` pour le serveur 18+, `unofficial` pour le serveur non officiel), sa plateforme
+     (`platform`) et la remarque de la liste (`note`) ;
+   - ses jeux absents du tableur, s'ils ont un lien GitHub ou GitLab et ne sont pas inclus à Archipelago, sont
+     ajoutés avec `"list": "index"`, leur dépôt et leur lien recopiés. Leur stabilité vient de cette liste
+     (`Yes`/`Fairly` → `Stable`, `No`/`Probably Not` → `Unstable`, `Broken` → `Broken on Main`, rien pour
+     `Unknown`), qui ne la donne qu'à titre indicatif. Les autres versions d'un jeu (« (Alternate - …) »)
+     et un jeu dont le dépôt ne publie que lui, déjà dans le tableur sous un autre nom, sont laissés de côté.
+   Si cette liste est illisible, ce qu'elle avait apporté à la dernière synchronisation est gardé.
 2. [`tools/fetch_apworlds.py`](tools/fetch_apworlds.py) trouve le dépôt de chaque jeu dans la colonne
    « Links & Downloads » et télécharge l'apworld de sa dernière release. Si le dépôt publie plusieurs jeux,
-   il prend le fichier qui porte le nom du jeu, et refuse un apworld d'un autre jeu.
+   il prend le fichier qui porte le nom du jeu, et refuse un apworld d'un autre jeu. Les jeux de la seule liste
+   de johatrot passent en dernier : celui dont l'apworld (nom de fichier ou jeu de son `archipelago.json`) est
+   déjà fourni par un autre jeu est écarté.
 3. Sur le site, ces jeux apparaissent dans la liste de choix, rangés par stabilité, avec une mention 18+,
-   et leur page affiche les mêmes badges.
+   et leur page affiche les mêmes badges, ainsi que « After Dark » ou « Serveur non officiel ». La page
+   « Installer un jeu » montre aussi la plateforme et la remarque de la liste de johatrot, et la vérification
+   d'une room signale les jeux interdits sur le Discord d'Archipelago.
 
 Un jeu sans release avec un `.apworld` est simplement ignoré (résumé à la fin du journal du workflow).
 Les apworlds téléchargés et les réponses de l'API GitHub sont gardés en cache d'une exécution à l'autre :
