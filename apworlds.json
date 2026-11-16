@@ -203,6 +203,7 @@
     {"game": "Deep Rock Galactic", "stability": "Stable", "platform": "PC"},
     {"game": "Delivering Hope", "stability": "Unstable"},
     {"game": "DELTARUNE", "stability": "Stable", "platform": "PC", "note": "Includes Chapters 1-5"},
+    {"game": "Derail Valley", "stability": "Unstable"},
     {"game": "Devil May Cry 3: Dante's Awakening (Special Edition)", "list": "index", "repo": "AshIndigo/DMC3ArchipelagoClient", "links": ["https://github.com/AshIndigo/DMC3ArchipelagoClient/releases/"], "platform": "PC"},
     {"game": "Devil May Cry 3 (Special Edition)", "stability": "Unstable"},
     {"game": "Dicey Dungeons", "stability": "Unstable"},
@@ -981,7 +982,7 @@
     {"game": "Zelda II: The Adventure of Link", "list": "index", "repo": "PinkSwitch/Archipelago", "links": ["https://github.com/PinkSwitch/Archipelago/releases?q=zelda&expanded=true"], "stability": "Stable", "platform": "NES"},
     {"game": "Zelda's Adventure GDX", "stability": "Unstable"},
     {"game": "Zone of the Enders", "list": "index", "repo": "1theory/Archipelago-ZOE", "links": ["https://github.com/1theory/Archipelago-ZOE/tree/main/worlds/zoe"], "stability": "Unstable", "platform": "PS2", "note": "Doesn't have a releases page."},
-    {"game": "Zoominoes", "stability": "Unstable", "platform": "PC"},
+    {"game": "Zoominoes", "stability": "Stable", "platform": "PC"},
     {"game": "Zork: Grand Inquisitor", "stability": "Stable", "pr_status": "Not PRing", "platform": "PC"},
     {"game": "Zuma Deluxe", "stability": "Unstable", "platform": "PC"}
   ]
