@@ -1,6 +1,6 @@
 {
  "ap_version": "0.6.8",
- "generated_at": "2026-11-16T08:08:10+00:00",
+ "generated_at": "2026-11-16T13:32:49+00:00",
  "games": [
   {
    "game": "'Weird Al' Yankovic Discography",
@@ -1949,7 +1949,7 @@
    "file": "games/crosscode.json",
    "source": "custom",
    "apworld": "crosscode.apworld",
-   "world_version": "0.10.1",
+   "world_version": "0.10.2",
    "guides": "guides/crosscode.json",
    "sheet": {
     "game": "CrossCode",
@@ -2091,7 +2091,7 @@
    "file": "games/cyberpunk-2077.json",
    "source": "custom",
    "apworld": "cyberpunk2077.apworld",
-   "world_version": "0.7.5",
+   "world_version": "0.7.6",
    "guides": "guides/cyberpunk-2077.json",
    "sheet": {
     "game": "Cyberpunk 2077",
@@ -2320,6 +2320,18 @@
     "stability": "Stable",
     "platform": "PC",
     "note": "Includes Chapters 1-5"
+   }
+  },
+  {
+   "game": "Derail Valley",
+   "file": "games/derail-valley.json",
+   "source": "custom",
+   "apworld": "derail_valley.apworld",
+   "world_version": "0.3.0",
+   "guides": "guides/derail-valley.json",
+   "sheet": {
+    "game": "Derail Valley",
+    "stability": "Unstable"
    }
   },
   {
@@ -4439,7 +4451,7 @@
    "file": "games/kirby-the-amazing-mirror.json",
    "source": "custom",
    "apworld": "kirbyam.apworld",
-   "world_version": "0.5.0",
+   "world_version": "0.5.1",
    "guides": "guides/kirby-the-amazing-mirror.json",
    "sheet": {
     "game": "Kirby & The Amazing Mirror",
@@ -7955,7 +7967,7 @@
    "file": "games/slime-rancher-2.json",
    "source": "custom",
    "apworld": "slime_rancher_2.apworld",
-   "world_version": "0.17.0",
+   "world_version": "0.17.1",
    "guides": "guides/slime-rancher-2.json",
    "sheet": {
     "game": "Slime Rancher 2",
@@ -9470,7 +9482,7 @@
    "file": "games/tony-hawk-s-pro-skater-3.json",
    "source": "custom",
    "apworld": "thps3.apworld",
-   "world_version": "1.0.6",
+   "world_version": "1.0.7",
    "guides": "guides/tony-hawk-s-pro-skater-3.json",
    "sheet": {
     "game": "Tony Hawk's Pro Skater 3",
@@ -10825,7 +10837,7 @@
    "guides": "guides/zoominoes.json",
    "sheet": {
     "game": "Zoominoes",
-    "stability": "Unstable",
+    "stability": "Stable",
     "platform": "PC"
    }
   },
@@ -10865,7 +10877,7 @@
   "LostButFound": "ModuleNotFoundError: No module named 'worlds.LostButFound'",
   "pokemon_hgss": "worlds.Files.ImproperlyConfiguredAutoPatchError: Two auto patch containers are using the same file extension: <class 'worlds.pokemon_hgss.rom.PokemonHeartgoldPatch'>, <class 'output_patch.HeartGoldProcedurePatch'>",
   "pokemon_xy": "ModuleNotFoundError: No module named 'worlds.pokemon_xy'",
-  "Salt and Sanctuary": "Did not load /tmp/tmpufgebgi8/tmpj99tzo5x/custom_worlds/salt_and_sanctuary.apworld as its maximum core version Version(major=0, minor=6, build=6) is lower than current core version Version(major=0, minor=6, build=8).",
+  "Salt and Sanctuary": "Did not load /tmp/tmpplqkysvq/tmpp_swxskd/custom_worlds/salt_and_sanctuary.apworld as its maximum core version Version(major=0, minor=6, build=6) is lower than current core version Version(major=0, minor=6, build=8).",
   "scooby_doo_unmasked": "AssertionError: Choice option 'random' cannot be manually assigned.",
   "smash64": "AssertionError: Choice option 'random' cannot be manually assigned.",
   "spyro_seasonofice": "ModuleNotFoundError: No module named 'worlds.spyro_seasonofice'",

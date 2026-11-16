@@ -3324,7 +3324,7 @@
  },
  {
   "game": "CrossCode",
-  "version": "0.10.1",
+  "version": "0.10.2",
   "authors": [],
   "file": "crosscode.apworld",
   "source": "https://github.com/CodeTriangle/CCMultiworldRandomizer",
@@ -3338,8 +3338,8 @@
    "stability": "Stable",
    "platform": "PC"
   },
-  "download": "https://github.com/CodeTriangle/CCMultiworldRandomizer/releases/download/0.10.1/crosscode.apworld",
-  "release": "https://github.com/CodeTriangle/CCMultiworldRandomizer/releases/tag/0.10.1",
+  "download": "https://github.com/CodeTriangle/CCMultiworldRandomizer/releases/download/0.10.2/crosscode.apworld",
+  "release": "https://github.com/CodeTriangle/CCMultiworldRandomizer/releases/tag/0.10.2",
   "links": [
    "https://github.com/CodeTriangle/CCMultiworldRandomizer/releases/latest"
   ]
@@ -3587,7 +3587,7 @@
  },
  {
   "game": "Cyberpunk 2077",
-  "version": "0.7.5",
+  "version": "0.7.6",
   "authors": [
    "247Tossing"
   ],
@@ -3605,8 +3605,8 @@
    "platform": "PC",
    "note": "Unstable Release"
   },
-  "download": "https://github.com/247Tossing/cyberpunk_archipelago/releases/download/v0.7.5/cyberpunk2077.apworld",
-  "release": "https://github.com/247Tossing/cyberpunk_archipelago/releases/tag/v0.7.5",
+  "download": "https://github.com/247Tossing/cyberpunk_archipelago/releases/download/v0.7.6/cyberpunk2077.apworld",
+  "release": "https://github.com/247Tossing/cyberpunk_archipelago/releases/tag/v0.7.6",
   "links": [
    "https://github.com/247Tossing/cyberpunk_archipelago/releases/latest"
   ]
@@ -3994,6 +3994,30 @@
   "release": "https://github.com/theemeraldsword85/DELTARUNEAP/releases/tag/v2.3.0%2Bhotfix1",
   "links": [
    "https://github.com/theemeraldsword85/DELTARUNEAP/releases/latest"
+  ]
+ },
+ {
+  "game": "Derail Valley",
+  "version": "0.3.0",
+  "authors": [
+   "Bacucysone",
+   "Xelaph"
+  ],
+  "file": "derail_valley.apworld",
+  "source": "https://github.com/Bacucysone/DvMod-Randomizer",
+  "license": "MIT",
+  "license_url": "https://github.com/Bacucysone/DvMod-Randomizer/blob/HEAD/LICENSE",
+  "copyright": [
+   "Copyright (c) 2026 Bacucysone"
+  ],
+  "sheet": {
+   "game": "Derail Valley",
+   "stability": "Unstable"
+  },
+  "download": "https://github.com/Bacucysone/DvMod-Randomizer/releases/download/v0.5.0/derail_valley.apworld",
+  "release": "https://github.com/Bacucysone/DvMod-Randomizer/releases/tag/v0.5.0",
+  "links": [
+   "https://github.com/Bacucysone/DvMod-Randomizer/releases"
   ]
  },
  {
@@ -7809,7 +7833,7 @@
  },
  {
   "game": "Kirby & The Amazing Mirror",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "authors": [
    "Harrison Sherwin"
   ],
@@ -7826,8 +7850,8 @@
    "stability": "Unstable",
    "platform": "GBA"
   },
-  "download": "https://github.com/hasherwi/Archipelago-kirbyam/releases/download/kirbyam-v0.5.0/kirbyam.apworld",
-  "release": "https://github.com/hasherwi/Archipelago-kirbyam/releases/tag/kirbyam-v0.5.0",
+  "download": "https://github.com/hasherwi/Archipelago-kirbyam/releases/download/kirbyam-v0.5.1/kirbyam.apworld",
+  "release": "https://github.com/hasherwi/Archipelago-kirbyam/releases/tag/kirbyam-v0.5.1",
   "links": [
    "https://github.com/hasherwi/Archipelago-kirbyam/releases/latest"
   ]
@@ -14080,7 +14104,7 @@
  },
  {
   "game": "Slime Rancher 2",
-  "version": "0.17.0",
+  "version": "0.17.1",
   "authors": [
    "Rhelys"
   ],
@@ -14094,8 +14118,8 @@
    "stability": "Stable",
    "platform": "PC"
   },
-  "download": "https://github.com/Rhelys/SlimeRancher2-AP/releases/download/v0.17.0/slime_rancher_2.apworld",
-  "release": "https://github.com/Rhelys/SlimeRancher2-AP/releases/tag/v0.17.0",
+  "download": "https://github.com/Rhelys/SlimeRancher2-AP/releases/download/v0.17.1/slime_rancher_2.apworld",
+  "release": "https://github.com/Rhelys/SlimeRancher2-AP/releases/tag/v0.17.1",
   "links": [
    "https://github.com/Rhelys/SlimeRancher2-AP/releases"
   ]
@@ -16737,7 +16761,7 @@
  },
  {
   "game": "Tony Hawk's Pro Skater 3",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "authors": [
    "Rando"
   ],
@@ -16753,8 +16777,8 @@
    "platform": "PC",
    "list": "index"
   },
-  "download": "https://github.com/randomcodegen/partymod-thps3_ap/releases/download/1.0.6/thps3.apworld",
-  "release": "https://github.com/randomcodegen/partymod-thps3_ap/releases/tag/1.0.6",
+  "download": "https://github.com/randomcodegen/partymod-thps3_ap/releases/download/1.0.7/thps3.apworld",
+  "release": "https://github.com/randomcodegen/partymod-thps3_ap/releases/tag/1.0.7",
   "links": [
    "https://github.com/randomcodegen/partymod-thps3_ap/releases"
   ]
@@ -19246,7 +19270,7 @@
   ],
   "sheet": {
    "game": "Zoominoes",
-   "stability": "Unstable",
+   "stability": "Stable",
    "platform": "PC"
   },
   "download": "https://github.com/chickentuna/Archipelago-Zoominoes/releases/download/v0.1.2/zoominoes.apworld",
