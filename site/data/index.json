@@ -1,7 +1,35 @@
 {
  "ap_version": "0.6.8",
- "generated_at": "2026-11-15T12:36:49+00:00",
+ "generated_at": "2026-11-16T08:08:10+00:00",
  "games": [
+  {
+   "game": "'Weird Al' Yankovic Discography",
+   "file": "games/weird-al-yankovic-discography.json",
+   "source": "custom",
+   "apworld": "weirdal.apworld",
+   "world_version": "1.0.2",
+   "guides": "guides/weird-al-yankovic-discography.json",
+   "sheet": {
+    "game": "\"Weird Al\" Yankovic Discography",
+    "playable": "unofficial",
+    "platform": "PC",
+    "list": "index"
+   }
+  },
+  {
+   "game": "20 Minutes Till Dawn",
+   "file": "games/20-minutes-till-dawn.json",
+   "source": "custom",
+   "apworld": "twenty_minutes_till_dawn.apworld",
+   "world_version": "1.0.0",
+   "guides": "guides/20-minutes-till-dawn.json",
+   "sheet": {
+    "game": "20 Minutes Till Dawn",
+    "stability": "Stable",
+    "platform": "PC",
+    "list": "index"
+   }
+  },
   {
    "game": "2048",
    "file": "games/2048.json",
@@ -11,7 +39,8 @@
    "guides": "guides/2048.json",
    "sheet": {
     "game": "2048",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -25,7 +54,9 @@
     "game": "7 Days to Die",
     "stability": "Unstable",
     "pr_status": "Not PRing",
-    "adult": true
+    "adult": true,
+    "playable": "after_dark",
+    "platform": "PC"
    }
   },
   {
@@ -37,7 +68,8 @@
    "guides": "guides/a-dance-of-fire-and-ice.json",
    "sheet": {
     "game": "A Dance Of Fire And Ice",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC"
    }
   },
   {
@@ -49,7 +81,8 @@
    "guides": "guides/a-difficult-game-about-climbing.json",
    "sheet": {
     "game": "A Difficult Game About Climbing",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC"
    }
   },
   {
@@ -61,6 +94,20 @@
    "guides": "guides/a-hat-in-time.json"
   },
   {
+   "game": "A Koopa's Revenge 2",
+   "file": "games/a-koopa-s-revenge-2.json",
+   "source": "custom",
+   "apworld": "koopas_revenge_2.apworld",
+   "world_version": "0.1.2",
+   "guides": "guides/a-koopa-s-revenge-2.json",
+   "sheet": {
+    "game": "A Koopa's Revenge 2",
+    "playable": "unofficial",
+    "platform": "PC",
+    "list": "index"
+   }
+  },
+  {
    "game": "A Link Between Worlds",
    "file": "games/a-link-between-worlds.json",
    "source": "custom",
@@ -69,7 +116,8 @@
    "guides": "guides/a-link-between-worlds.json",
    "sheet": {
     "game": "The Legend of Zelda: A Link Between Worlds",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "3DS"
    }
   },
   {
@@ -85,6 +133,21 @@
     "description": "ALTTP v1.0 J ROM File"
    },
    "guides": "guides/a-link-to-the-past.json"
+  },
+  {
+   "game": "A Little to the Left",
+   "file": "games/a-little-to-the-left.json",
+   "source": "custom",
+   "apworld": "alttl.apworld",
+   "world_version": "1.0.2",
+   "guides": "guides/a-little-to-the-left.json",
+   "sheet": {
+    "game": "A Little to the Left",
+    "stability": "Unstable",
+    "playable": "unofficial",
+    "platform": "PC",
+    "list": "index"
+   }
   },
   {
    "game": "A Short Hike",
@@ -103,7 +166,8 @@
    "guides": "guides/actraiser.json",
    "sheet": {
     "game": "ActRaiser",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "SNES"
    }
   },
   {
@@ -135,7 +199,8 @@
    "guides": "guides/against-the-storm.json",
    "sheet": {
     "game": "Against the Storm",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC"
    }
   },
   {
@@ -147,7 +212,8 @@
    "guides": "guides/age-of-empires-ii-definitive-edition.json",
    "sheet": {
     "game": "Age of Empires II: Definitive Edition",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC"
    }
   },
   {
@@ -159,7 +225,8 @@
    "guides": "guides/age-of-mythology-retold.json",
    "sheet": {
     "game": "Age of Mythology: Retold",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC"
    }
   },
   {
@@ -171,7 +238,8 @@
    "guides": "guides/air-delivery.json",
    "sheet": {
     "game": "Air Delivery",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PICO-8"
    }
   },
   {
@@ -183,7 +251,37 @@
    "guides": "guides/alabaster-dawn.json",
    "sheet": {
     "game": "Alabaster Dawn",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC"
+   }
+  },
+  {
+   "game": "Alundra",
+   "file": "games/alundra.json",
+   "source": "custom",
+   "apworld": "alundra.apworld",
+   "world_version": "0.2.3",
+   "guides": "guides/alundra.json",
+   "sheet": {
+    "game": "Alundra",
+    "stability": "Unstable",
+    "platform": "PSX"
+   }
+  },
+  {
+   "game": "AM2R",
+   "file": "games/am2r.json",
+   "source": "custom",
+   "apworld": "am2r.apworld",
+   "world_version": "1.4.6",
+   "guides": "guides/am2r.json",
+   "sheet": {
+    "game": "AM2R",
+    "stability": "Stable",
+    "playable": "unofficial",
+    "platform": "PC",
+    "note": "There is a known bug when generating AP games featuring both AM2R and Link to the Past, I believe the fix was to enable \"add_metroids_and_a6\" in your yaml.",
+    "list": "index"
    }
   },
   {
@@ -195,7 +293,8 @@
    "guides": "guides/an-untitled-story.json",
    "sheet": {
     "game": "An Untitled Story",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC"
    }
   },
   {
@@ -208,7 +307,8 @@
    "sheet": {
     "game": "Angband",
     "stability": "Unstable",
-    "pr_status": "Not PRing"
+    "pr_status": "Not PRing",
+    "platform": "PC"
    }
   },
   {
@@ -233,7 +333,8 @@
    "sheet": {
     "game": "ANIMAL WELL",
     "stability": "Stable",
-    "pr_status": "Not PRing"
+    "pr_status": "Not PRing",
+    "platform": "PC"
    }
   },
   {
@@ -245,7 +346,8 @@
    "guides": "guides/anno-1800.json",
    "sheet": {
     "game": "Anno 1800",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC"
    }
   },
   {
@@ -257,7 +359,8 @@
    "guides": "guides/anodyne.json",
    "sheet": {
     "game": "Anodyne",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC"
    }
   },
   {
@@ -269,7 +372,8 @@
    "guides": "guides/another-crabs-treasure.json",
    "sheet": {
     "game": "Another Crab's Treasure",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -294,7 +398,48 @@
    "sheet": {
     "game": "AP Rummy",
     "stability": "Unstable",
-    "pr_status": "Not PRing"
+    "pr_status": "Not PRing",
+    "platform": "PC"
+   }
+  },
+  {
+   "game": "AP_10",
+   "file": "games/ap-10.json",
+   "source": "custom",
+   "apworld": "AP_10.apworld",
+   "world_version": "1.10.0",
+   "guides": "guides/ap-10.json",
+   "sheet": {
+    "game": "AP_10",
+    "platform": "Web",
+    "list": "index"
+   }
+  },
+  {
+   "game": "AP_Bo",
+   "file": "games/ap-bo.json",
+   "source": "custom",
+   "apworld": "apbo.apworld",
+   "world_version": "0.2.0",
+   "guides": "guides/ap-bo.json",
+   "sheet": {
+    "game": "AP_Bo",
+    "platform": "Web",
+    "list": "index"
+   }
+  },
+  {
+   "game": "APBingo",
+   "file": "games/apbingo.json",
+   "source": "custom",
+   "apworld": "APBingo.apworld",
+   "world_version": "1.1.2",
+   "guides": "guides/apbingo.json",
+   "sheet": {
+    "game": "APBingo",
+    "stability": "Stable",
+    "platform": "PC",
+    "list": "index"
    }
   },
   {
@@ -306,7 +451,8 @@
    "guides": "guides/ape-escape.json",
    "sheet": {
     "game": "Ape Escape",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PSX"
    }
   },
   {
@@ -318,7 +464,8 @@
    "guides": "guides/ape-escape-2.json",
    "sheet": {
     "game": "Ape Escape 2",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PS2"
    }
   },
   {
@@ -330,7 +477,8 @@
    "guides": "guides/ape-escape-3.json",
    "sheet": {
     "game": "Ape Escape 3",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PS2"
    }
   },
   {
@@ -358,7 +506,8 @@
    "guides": "guides/archipela-go.json",
    "sheet": {
     "game": "Archipela-Go!",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "Android"
    }
   },
   {
@@ -370,7 +519,8 @@
    "guides": "guides/archipelacode.json",
    "sheet": {
     "game": "Archipelacode",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -395,7 +545,8 @@
    "guides": "guides/ark-survival-evolved.json",
    "sheet": {
     "game": "Ark: Survival Evolved",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -407,7 +558,8 @@
    "guides": "guides/arkham-horror-the-card-game.json",
    "sheet": {
     "game": "Arkham Horror The Card Game",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "Web"
    }
   },
   {
@@ -431,7 +583,8 @@
    "guides": "guides/armored-core-3.json",
    "sheet": {
     "game": "Armored Core 3",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PS2"
    }
   },
   {
@@ -443,7 +596,8 @@
    "guides": "guides/arzette-the-jewel-of-faramore.json",
    "sheet": {
     "game": "Arzette: The Jewel of Faramore",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -456,7 +610,21 @@
    "sheet": {
     "game": "Astalon: Tears of the Earth",
     "stability": "Stable",
-    "pr_status": "Not PRing"
+    "pr_status": "Not PRing",
+    "platform": "PC"
+   }
+  },
+  {
+   "game": "Astral Ascent",
+   "file": "games/astral-ascent.json",
+   "source": "custom",
+   "apworld": "astral_ascent.apworld",
+   "world_version": "0.2.0",
+   "guides": "guides/astral-ascent.json",
+   "sheet": {
+    "game": "Astral Ascent",
+    "platform": "PC",
+    "list": "index"
    }
   },
   {
@@ -469,7 +637,8 @@
    "sheet": {
     "game": "Autopelago",
     "stability": "Stable",
-    "pr_status": "In Review"
+    "pr_status": "In Review",
+    "platform": "PC"
    }
   },
   {
@@ -481,7 +650,8 @@
    "guides": "guides/axiom-verge.json",
    "sheet": {
     "game": "Axiom Verge",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC"
    }
   },
   {
@@ -493,7 +663,21 @@
    "guides": "guides/baba-is-you.json",
    "sheet": {
     "game": "Baba Is You",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
+   }
+  },
+  {
+   "game": "Backlog Expedition",
+   "file": "games/backlog-expedition.json",
+   "source": "custom",
+   "apworld": "backlog_expedition.apworld",
+   "world_version": "1.3.0",
+   "guides": "guides/backlog-expedition.json",
+   "sheet": {
+    "game": "Backlog Expedition",
+    "platform": "Web",
+    "list": "index"
    }
   },
   {
@@ -505,7 +689,9 @@
    "guides": "guides/balatro.json",
    "sheet": {
     "game": "Balatro",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC",
+    "note": "Strange logic choices resulting in a large sphere 1."
    }
   },
   {
@@ -519,7 +705,9 @@
     "game": "Baldur's Gate 3",
     "stability": "Stable",
     "pr_status": "Not PRing",
-    "adult": true
+    "adult": true,
+    "playable": "after_dark",
+    "platform": "PC"
    }
   },
   {
@@ -533,7 +721,10 @@
     "game": "Baldur's Gate 3 - Trials of Tav",
     "stability": "Unstable",
     "pr_status": "Not PRing",
-    "adult": true
+    "adult": true,
+    "playable": "after_dark",
+    "platform": "PC",
+    "note": "Mod of Baldur's Gate 3"
    }
   },
   {
@@ -546,7 +737,8 @@
    "sheet": {
     "game": "Banjo-Tooie",
     "stability": "Stable",
-    "pr_status": "In Review"
+    "pr_status": "In Review",
+    "platform": "N64"
    }
   },
   {
@@ -572,7 +764,9 @@
     "game": "Bayonetta",
     "stability": "Unstable",
     "pr_status": "Not PRing",
-    "adult": true
+    "adult": true,
+    "playable": "after_dark",
+    "platform": "PC"
    }
   },
   {
@@ -584,7 +778,74 @@
    "guides": "guides/beat-saber.json",
    "sheet": {
     "game": "Beat Saber",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC",
+    "note": "Requires building an apworld"
+   }
+  },
+  {
+   "game": "Beatblockapelago",
+   "file": "games/beatblockapelago.json",
+   "source": "custom",
+   "apworld": "beatblock.apworld",
+   "world_version": "0.2.0",
+   "guides": "guides/beatblockapelago.json",
+   "sheet": {
+    "game": "Beatblock Plus",
+    "platform": "PC",
+    "list": "index"
+   }
+  },
+  {
+   "game": "Before We Leave",
+   "file": "games/before-we-leave.json",
+   "source": "custom",
+   "apworld": "before_we_leave.apworld",
+   "world_version": null,
+   "guides": "guides/before-we-leave.json",
+   "sheet": {
+    "game": "Before We Leave",
+    "platform": "PC",
+    "list": "index"
+   }
+  },
+  {
+   "game": "Bendy and the Ink Machine",
+   "file": "games/bendy-and-the-ink-machine.json",
+   "source": "custom",
+   "apworld": "batim.apworld",
+   "world_version": "2.0.2",
+   "guides": "guides/bendy-and-the-ink-machine.json",
+   "sheet": {
+    "game": "Bendy and the Ink Machine",
+    "platform": "PC",
+    "list": "index"
+   }
+  },
+  {
+   "game": "Big Walk",
+   "file": "games/big-walk.json",
+   "source": "custom",
+   "apworld": "bigwalk.apworld",
+   "world_version": "1.0.14",
+   "guides": "guides/big-walk.json",
+   "sheet": {
+    "game": "Big Walk",
+    "platform": "PC",
+    "list": "index"
+   }
+  },
+  {
+   "game": "Bitburner",
+   "file": "games/bitburner.json",
+   "source": "custom",
+   "apworld": "bitburner.apworld",
+   "world_version": "0.6.0",
+   "guides": "guides/bitburner.json",
+   "sheet": {
+    "game": "Bitburner",
+    "platform": "PC",
+    "list": "index"
    }
   },
   {
@@ -596,7 +857,8 @@
    "guides": "guides/bits-bops.json",
    "sheet": {
     "game": "Bits & Bops",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -608,7 +870,22 @@
    "guides": "guides/bitty-buddies.json",
    "sheet": {
     "game": "Bitty Buddies",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
+   }
+  },
+  {
+   "game": "BK - Furnace Fun Only",
+   "file": "games/bk-furnace-fun-only.json",
+   "source": "custom",
+   "apworld": "bk_furnace_fun.apworld",
+   "world_version": "0.1.0",
+   "guides": "guides/bk-furnace-fun-only.json",
+   "sheet": {
+    "game": "BKBK But It's Only Furnace Fun",
+    "platform": "N64",
+    "note": "Furnace Fun from Banjo-Kazooie",
+    "list": "index"
    }
   },
   {
@@ -621,7 +898,8 @@
    "sheet": {
     "game": "BK Simulator",
     "stability": "Stable",
-    "pr_status": "In Review"
+    "pr_status": "In Review",
+    "platform": "PC"
    }
   },
   {
@@ -633,7 +911,8 @@
    "guides": "guides/black-market-of-bulletphilia-100th-black-market.json",
    "sheet": {
     "game": "Black Market of Bulletphilia ~ 100th Black Market (Touhou 18.5)",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC"
    }
   },
   {
@@ -659,6 +938,20 @@
    "guides": "guides/blasphemous.json"
   },
   {
+   "game": "Blasphemous 2",
+   "file": "games/blasphemous-2.json",
+   "source": "custom",
+   "apworld": "blasphemous2.apworld",
+   "world_version": "1.2.0",
+   "guides": "guides/blasphemous-2.json",
+   "sheet": {
+    "game": "Blasphemous II",
+    "platform": "PC",
+    "note": "Randomizer Link: https://github.com/BrandenEK/BlasII.Randomizer",
+    "list": "index"
+   }
+  },
+  {
    "game": "Blender",
    "file": "games/blender.json",
    "source": "custom",
@@ -667,7 +960,8 @@
    "guides": "guides/blender.json",
    "sheet": {
     "game": "Blender",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -679,7 +973,9 @@
    "guides": "guides/blockupelago.json",
    "sheet": {
     "game": "Blockupelago",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "Web",
+    "note": "Game: https://stefanducharme.github.io/blockupelago/"
    }
   },
   {
@@ -691,7 +987,8 @@
    "guides": "guides/bloodstained-ritual-of-the-night.json",
    "sheet": {
     "game": "Bloodstained: Ritual of the Night",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -704,7 +1001,8 @@
    "sheet": {
     "game": "Bloons Tower Defense 6",
     "stability": "Stable",
-    "pr_status": "Not PRing"
+    "pr_status": "Not PRing",
+    "platform": "PC"
    }
   },
   {
@@ -728,7 +1026,21 @@
    "guides": "guides/blue-prince.json",
    "sheet": {
     "game": "Blue Prince",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
+   }
+  },
+  {
+   "game": "Blue Sphere",
+   "file": "games/blue-sphere.json",
+   "source": "custom",
+   "apworld": "bluesphere.apworld",
+   "world_version": "0.1.0",
+   "guides": "guides/blue-sphere.json",
+   "sheet": {
+    "game": "Blue Sphere [Hint Game]",
+    "platform": "GEN",
+    "list": "index"
    }
   },
   {
@@ -748,7 +1060,8 @@
    "guides": "guides/bomberman-hero.json",
    "sheet": {
     "game": "Bomberman Hero",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "N64"
    }
   },
   {
@@ -760,7 +1073,8 @@
    "guides": "guides/bomberman-quest.json",
    "sheet": {
     "game": "Bomberman 64",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "N64"
    }
   },
   {
@@ -774,7 +1088,9 @@
     "game": "Borderlands 2",
     "stability": "Unstable",
     "pr_status": "Not PRing",
-    "adult": true
+    "adult": true,
+    "playable": "after_dark",
+    "platform": "PC"
    }
   },
   {
@@ -786,7 +1102,22 @@
    "guides": "guides/brave-fencer-musashi.json",
    "sheet": {
     "game": "Brave Fencer Musashi",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PSX"
+   }
+  },
+  {
+   "game": "Breath of the Wild",
+   "file": "games/breath-of-the-wild.json",
+   "source": "custom",
+   "apworld": "botw.apworld",
+   "world_version": "0.3.3",
+   "guides": "guides/breath-of-the-wild.json",
+   "sheet": {
+    "game": "The Legend of Zelda: Breath of the Wild",
+    "playable": "unofficial",
+    "platform": "Wii U",
+    "list": "index"
    }
   },
   {
@@ -798,7 +1129,8 @@
    "guides": "guides/brotato.json",
    "sheet": {
     "game": "Brotato",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC"
    }
   },
   {
@@ -810,7 +1142,8 @@
    "guides": "guides/bubble-bobble.json",
    "sheet": {
     "game": "Bubble Bobble",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "NES"
    }
   },
   {
@@ -822,7 +1155,21 @@
    "guides": "guides/buckshot-roulette.json",
    "sheet": {
     "game": "Buckshot Roulette",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC"
+   }
+  },
+  {
+   "game": "Bug Fables",
+   "file": "games/bug-fables.json",
+   "source": "custom",
+   "apworld": "bug_fables.apworld",
+   "world_version": "0.4.0",
+   "guides": "guides/bug-fables.json",
+   "sheet": {
+    "game": "Bug Fables: The Everlasting Sapling",
+    "platform": "PC",
+    "list": "index"
    }
   },
   {
@@ -834,7 +1181,8 @@
    "guides": "guides/bugs-bunny-lost-in-time.json",
    "sheet": {
     "game": "Bugs Bunny Lost in Time",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PSX"
    }
   },
   {
@@ -846,7 +1194,8 @@
    "guides": "guides/bugsnax.json",
    "sheet": {
     "game": "Bugsnax",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -859,7 +1208,8 @@
    "sheet": {
     "game": "Build a Jetpack",
     "stability": "Stable",
-    "pr_status": "Not PRing"
+    "pr_status": "Not PRing",
+    "platform": "PICO-8"
    }
   },
   {
@@ -879,7 +1229,8 @@
    "guides": "guides/burger-shop.json",
    "sheet": {
     "game": "Burger Shop",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -891,7 +1242,20 @@
    "guides": "guides/burnout-3.json",
    "sheet": {
     "game": "Burnout 3: Takedown",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PS2"
+   }
+  },
+  {
+   "game": "Burnout Paradise Remastered",
+   "file": "games/burnout-paradise-remastered.json",
+   "source": "custom",
+   "apworld": "burnout_paradise_remastered.apworld",
+   "world_version": "1.0.5",
+   "guides": "guides/burnout-paradise-remastered.json",
+   "sheet": {
+    "game": "Burnout Paradise Remastered",
+    "list": "index"
    }
   },
   {
@@ -899,7 +1263,7 @@
    "file": "games/c-c-reloaded.json",
    "source": "custom",
    "apworld": "cnc_reloaded.apworld",
-   "world_version": "2.2.0",
+   "world_version": "2.3.0",
    "guides": "guides/c-c-reloaded.json",
    "sheet": {
     "game": "C&C Reloaded",
@@ -917,7 +1281,8 @@
    "sheet": {
     "game": "Candy Box 2",
     "stability": "Stable",
-    "pr_status": "In Review"
+    "pr_status": "In Review",
+    "platform": "Web"
    }
   },
   {
@@ -929,7 +1294,8 @@
    "guides": "guides/carnival-games-minigolf.json",
    "sheet": {
     "game": "Carnival Games MiniGolf",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "Wii"
    }
   },
   {
@@ -941,7 +1307,8 @@
    "guides": "guides/cash-cleaner-simulator.json",
    "sheet": {
     "game": "Cash Cleaner Simulator",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -953,7 +1320,8 @@
    "guides": "guides/cassette-beasts.json",
    "sheet": {
     "game": "Cassette Beasts",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -981,7 +1349,8 @@
    "guides": "guides/castlevania-legacy-of-darkness.json",
    "sheet": {
     "game": "Castlevania: Harmony of Dissonance",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "GBA"
    }
   },
   {
@@ -993,7 +1362,8 @@
    "guides": "guides/castlevania-lords-of-shadow.json",
    "sheet": {
     "game": "Castlevania: Lords of Shadow",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -1005,7 +1375,8 @@
    "guides": "guides/castlevania-order-of-ecclesia.json",
    "sheet": {
     "game": "Castlevania: Dawn of Sorrow",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "DS"
    }
   },
   {
@@ -1031,7 +1402,8 @@
    "guides": "guides/cave-story.json",
    "sheet": {
     "game": "Cave Story",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC"
    }
   },
   {
@@ -1043,7 +1415,8 @@
    "guides": "guides/cavern-of-dreams.json",
    "sheet": {
     "game": "Cavern of Dreams",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC"
    }
   },
   {
@@ -1055,7 +1428,8 @@
    "guides": "guides/caves-of-qud.json",
    "sheet": {
     "game": "Caves of Qud",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -1084,7 +1458,8 @@
    "sheet": {
     "game": "Celeste Classic",
     "stability": "Unstable",
-    "pr_status": "Not PRing"
+    "pr_status": "Not PRing",
+    "platform": "PICO-8"
    }
   },
   {
@@ -1096,7 +1471,8 @@
    "guides": "guides/chained-echoes.json",
    "sheet": {
     "game": "Chained Echoes",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -1104,11 +1480,12 @@
    "file": "games/chants-of-sennaar.json",
    "source": "custom",
    "apworld": "chants_of_sennaar.apworld",
-   "world_version": "0.3.0",
+   "world_version": "0.3.1",
    "guides": "guides/chants-of-sennaar.json",
    "sheet": {
     "game": "Chants of Sennaar",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -1141,7 +1518,8 @@
    "guides": "guides/chibi-robo.json",
    "sheet": {
     "game": "Chibi Robo! Plug into Adventure",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "GC"
    }
   },
   {
@@ -1153,7 +1531,8 @@
    "guides": "guides/children-of-morta.json",
    "sheet": {
     "game": "Children of Morta",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -1163,6 +1542,20 @@
    "apworld": null,
    "world_version": null,
    "guides": "guides/choo-choo-charles.json"
+  },
+  {
+   "game": "Chrono Gear",
+   "file": "games/chrono-gear.json",
+   "source": "custom",
+   "apworld": "chrono_gear.apworld",
+   "world_version": null,
+   "guides": "guides/chrono-gear.json",
+   "sheet": {
+    "game": "Chrono Gear: Warden of Time",
+    "stability": "Unstable",
+    "platform": "PC",
+    "list": "index"
+   }
   },
   {
    "game": "Chrono Trigger Rando-Dalton Imperial",
@@ -1220,7 +1613,9 @@
     "game": "Clair Obscur Expedition 33",
     "stability": "Unstable",
     "pr_status": "Not PRing",
-    "adult": true
+    "adult": true,
+    "playable": "after_dark",
+    "platform": "PC"
    }
   },
   {
@@ -1244,7 +1639,8 @@
    "guides": "guides/clustertruck.json",
    "sheet": {
     "game": "ClusterTruck",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC"
    }
   },
   {
@@ -1304,7 +1700,8 @@
    "guides": "guides/content-warning.json",
    "sheet": {
     "game": "Content Warning",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -1316,7 +1713,9 @@
    "guides": "guides/control.json",
    "sheet": {
     "game": "Control (Ultimate Edition)",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "playable": "after_dark",
+    "platform": "PC"
    }
   },
   {
@@ -1329,7 +1728,9 @@
    "sheet": {
     "game": "Cookie Clicker",
     "stability": "Unstable",
-    "pr_status": "Not PRing"
+    "pr_status": "Not PRing",
+    "platform": "Web",
+    "note": "Previous repo: https://github.com/Simik1997/AP_CookieClicker/releases"
    }
   },
   {
@@ -1341,7 +1742,21 @@
    "guides": "guides/cooking-mama-3.json",
    "sheet": {
     "game": "Cooking Mama 3",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "DS"
+   }
+  },
+  {
+   "game": "Core Keeper",
+   "file": "games/core-keeper.json",
+   "source": "custom",
+   "apworld": "core_keeper.apworld",
+   "world_version": "1.1.0",
+   "guides": "guides/core-keeper.json",
+   "sheet": {
+    "game": "Core Keeper",
+    "platform": "PC",
+    "list": "index"
    }
   },
   {
@@ -1353,7 +1768,8 @@
    "guides": "guides/corn-kidz-64.json",
    "sheet": {
     "game": "Corn Kidz 64",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC"
    }
   },
   {
@@ -1365,7 +1781,21 @@
    "guides": "guides/corruobserver.json",
    "sheet": {
     "game": "corru.observer",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "note": "It has approximately 30 RNG checks that are incredibly boring and you just need to know to exclude, and two vital QoL items are marked as filler. Those two issues mutually exacerbate the other."
+   }
+  },
+  {
+   "game": "Cow",
+   "file": "games/cow.json",
+   "source": "custom",
+   "apworld": "cow.apworld",
+   "world_version": "0.2.0",
+   "guides": "guides/cow.json",
+   "sheet": {
+    "game": "Cow",
+    "platform": "PC",
+    "list": "index"
    }
   },
   {
@@ -1379,7 +1809,8 @@
     "game": "Cowtastic Cafe",
     "stability": "Stable",
     "pr_status": "Not PRing",
-    "adult": true
+    "adult": true,
+    "playable": "after_dark"
    }
   },
   {
@@ -1391,7 +1822,8 @@
    "guides": "guides/crab-champions.json",
    "sheet": {
     "game": "Crab Champions",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -1404,7 +1836,8 @@
    "sheet": {
     "game": "Crash Bandicoot 3: Warped",
     "stability": "Unstable",
-    "pr_status": "Not PRing"
+    "pr_status": "Not PRing",
+    "platform": "PSX"
    }
   },
   {
@@ -1416,7 +1849,8 @@
    "guides": "guides/crash-bandicoot-n-sane-trilogy.json",
    "sheet": {
     "game": "Crash Bandicoot N. Sane Trilogy",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -1428,7 +1862,8 @@
    "guides": "guides/crash-bash.json",
    "sheet": {
     "game": "Crash Bash",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PSX"
    }
   },
   {
@@ -1440,7 +1875,33 @@
    "guides": "guides/crash-team-racing.json",
    "sheet": {
     "game": "Crash Team Racing",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PSX"
+   }
+  },
+  {
+   "game": "Crashout Crew",
+   "file": "games/crashout-crew.json",
+   "source": "custom",
+   "apworld": "crashout_crew.apworld",
+   "world_version": "1.0.0",
+   "sheet": {
+    "game": "Crashout Crew",
+    "platform": "PC",
+    "list": "index"
+   }
+  },
+  {
+   "game": "Crazy Taxi",
+   "file": "games/crazy-taxi.json",
+   "source": "custom",
+   "apworld": "crazy_taxi.apworld",
+   "world_version": null,
+   "guides": "guides/crazy-taxi.json",
+   "sheet": {
+    "game": "Crazy Taxi",
+    "platform": "GC",
+    "list": "index"
    }
   },
   {
@@ -1452,7 +1913,35 @@
    "guides": "guides/create.json",
    "sheet": {
     "game": "Create",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "Wii"
+   }
+  },
+  {
+   "game": "Creature Kitchen",
+   "file": "games/creature-kitchen.json",
+   "source": "custom",
+   "apworld": "creature_kitchen.apworld",
+   "world_version": "0.1.0",
+   "guides": "guides/creature-kitchen.json",
+   "sheet": {
+    "game": "Creature Kitchen",
+    "list": "index"
+   }
+  },
+  {
+   "game": "Creeper World 4",
+   "file": "games/creeper-world-4.json",
+   "source": "custom",
+   "apworld": "cw4.apworld",
+   "world_version": "0.2.3",
+   "guides": "guides/creeper-world-4.json",
+   "sheet": {
+    "game": "Creeper World 4",
+    "stability": "Unstable",
+    "playable": "unofficial",
+    "platform": "PC",
+    "list": "index"
    }
   },
   {
@@ -1464,7 +1953,8 @@
    "guides": "guides/crosscode.json",
    "sheet": {
     "game": "CrossCode",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC"
    }
   },
   {
@@ -1476,7 +1966,20 @@
    "guides": "guides/crossword.json",
    "sheet": {
     "game": "Crosswords",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
+   }
+  },
+  {
+   "game": "Crusader Kings 3",
+   "file": "games/crusader-kings-3.json",
+   "source": "custom",
+   "apworld": "crusader_kings_3.apworld",
+   "world_version": "0.1.0",
+   "guides": "guides/crusader-kings-3.json",
+   "sheet": {
+    "game": "Crusader Kings III",
+    "list": "index"
    }
   },
   {
@@ -1488,7 +1991,8 @@
    "guides": "guides/crypt-of-the-necrodancer.json",
    "sheet": {
     "game": "Crypt of the NecroDancer",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC"
    }
   },
   {
@@ -1501,7 +2005,8 @@
    "sheet": {
     "game": "Crystal Project",
     "stability": "Stable",
-    "pr_status": "Not PRing"
+    "pr_status": "Not PRing",
+    "platform": "PC"
    }
   },
   {
@@ -1513,7 +2018,8 @@
    "guides": "guides/crystalis.json",
    "sheet": {
     "game": "Crystalis",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "NES"
    }
   },
   {
@@ -1525,7 +2031,8 @@
    "guides": "guides/cult-of-the-lamb.json",
    "sheet": {
     "game": "Cult of the Lamb",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -1537,7 +2044,8 @@
    "guides": "guides/cuphead.json",
    "sheet": {
     "game": "Cuphead",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC"
    }
   },
   {
@@ -1561,7 +2069,8 @@
    "guides": "guides/custom-robo.json",
    "sheet": {
     "game": "Custom Robo",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "GC"
    }
   },
   {
@@ -1573,7 +2082,8 @@
    "guides": "guides/cyber-hook.json",
    "sheet": {
     "game": "Cyber Hook",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -1587,7 +2097,10 @@
     "game": "Cyberpunk 2077",
     "stability": "Unstable",
     "pr_status": "Not PRing",
-    "adult": true
+    "adult": true,
+    "playable": "after_dark",
+    "platform": "PC",
+    "note": "Unstable Release"
    }
   },
   {
@@ -1611,7 +2124,9 @@
    "guides": "guides/dark-souls-ii.json",
    "sheet": {
     "game": "Dark Souls II",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC",
+    "note": "Stable, though DLC is missing logic."
    }
   },
   {
@@ -1632,7 +2147,35 @@
    "sheet": {
     "game": "Dark Souls Remastered",
     "stability": "Unstable",
-    "pr_status": "Not PRing"
+    "pr_status": "Not PRing",
+    "platform": "PC"
+   }
+  },
+  {
+   "game": "Dawnsbury Days",
+   "file": "games/dawnsbury-days.json",
+   "source": "custom",
+   "apworld": "dawnsbury.apworld",
+   "world_version": null,
+   "guides": "guides/dawnsbury-days.json",
+   "sheet": {
+    "game": "Dawnsbury Days",
+    "platform": "PC",
+    "list": "index"
+   }
+  },
+  {
+   "game": "Day of the Tentacle",
+   "file": "games/day-of-the-tentacle.json",
+   "source": "custom",
+   "apworld": "day_of_the_tentacle.apworld",
+   "world_version": "1.0.0",
+   "guides": "guides/day-of-the-tentacle.json",
+   "sheet": {
+    "game": "Day of the Tentacle",
+    "stability": "Stable",
+    "platform": "PC",
+    "list": "index"
    }
   },
   {
@@ -1644,7 +2187,8 @@
    "guides": "guides/dead-cells.json",
    "sheet": {
     "game": "Dead Cells",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "note": "Multiplayer is not recommended."
    }
   },
   {
@@ -1670,7 +2214,21 @@
    "guides": "guides/deadlock.json",
    "sheet": {
     "game": "Deadlock",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
+   }
+  },
+  {
+   "game": "Deadzone Rogue",
+   "file": "games/deadzone-rogue.json",
+   "source": "custom",
+   "apworld": "deadzone_rogue.apworld",
+   "world_version": "0.8.2",
+   "guides": "guides/deadzone-rogue.json",
+   "sheet": {
+    "game": "Deadzone: Rogue",
+    "platform": "PC",
+    "list": "index"
    }
   },
   {
@@ -1682,7 +2240,8 @@
    "guides": "guides/death-road-to-canada.json",
    "sheet": {
     "game": "Death Road to Canada",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -1707,7 +2266,21 @@
    "guides": "guides/deathbulge.json",
    "sheet": {
     "game": "Deathbulge Battle of the Bands",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
+   }
+  },
+  {
+   "game": "DeathLinkipelago",
+   "file": "games/deathlinkipelago.json",
+   "source": "custom",
+   "apworld": "deathlinkipelago.apworld",
+   "world_version": "0.13.0",
+   "guides": "guides/deathlinkipelago.json",
+   "sheet": {
+    "game": "DeathLinkipelago",
+    "platform": "PC",
+    "list": "index"
    }
   },
   {
@@ -1719,7 +2292,8 @@
    "guides": "guides/deep-rock-galactic.json",
    "sheet": {
     "game": "Deep Rock Galactic",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC"
    }
   },
   {
@@ -1743,7 +2317,9 @@
    "guides": "guides/deltarune.json",
    "sheet": {
     "game": "DELTARUNE",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC",
+    "note": "Includes Chapters 1-5"
    }
   },
   {
@@ -1779,7 +2355,21 @@
    "guides": "guides/diddy-kong-racing.json",
    "sheet": {
     "game": "Diddy Kong Racing",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "N64"
+   }
+  },
+  {
+   "game": "Disney's Magical Mirror",
+   "file": "games/disney-s-magical-mirror.json",
+   "source": "custom",
+   "apworld": "mickey.apworld",
+   "world_version": "1.0.0",
+   "guides": "guides/disney-s-magical-mirror.json",
+   "sheet": {
+    "game": "Disney's Magical Mirror Starring Mickey Mouse",
+    "platform": "GC",
+    "list": "index"
    }
   },
   {
@@ -1793,7 +2383,9 @@
     "game": "Divinity: Original Sin 2",
     "stability": "Unstable",
     "pr_status": "Not PRing",
-    "adult": true
+    "adult": true,
+    "playable": "after_dark",
+    "platform": "PC"
    }
   },
   {
@@ -1813,7 +2405,8 @@
    "guides": "guides/dome-keeper.json",
    "sheet": {
     "game": "Dome Keeper",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC"
    }
   },
   {
@@ -1826,7 +2419,8 @@
    "sheet": {
     "game": "Don't Starve Together",
     "stability": "Stable",
-    "pr_status": "Not PRing"
+    "pr_status": "Not PRing",
+    "platform": "PC"
    }
   },
   {
@@ -1834,11 +2428,12 @@
    "file": "games/donkey-kong-64.json",
    "source": "custom",
    "apworld": "dk64.apworld",
-   "world_version": "2.0.8",
+   "world_version": "2.0.9",
    "guides": "guides/donkey-kong-64.json",
    "sheet": {
     "game": "Donkey Kong 64",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "N64"
    }
   },
   {
@@ -1851,7 +2446,8 @@
    "sheet": {
     "game": "Donkey Kong Country",
     "stability": "Stable",
-    "pr_status": "Not PRing"
+    "pr_status": "Not PRing",
+    "platform": "SNES"
    }
   },
   {
@@ -1864,7 +2460,8 @@
    "sheet": {
     "game": "Donut County",
     "stability": "Unstable",
-    "pr_status": "Not PRing"
+    "pr_status": "Not PRing",
+    "platform": "PC"
    }
   },
   {
@@ -1885,7 +2482,9 @@
    "sheet": {
     "game": "DOOM Eternal",
     "stability": "Unstable",
-    "adult": true
+    "adult": true,
+    "playable": "after_dark",
+    "platform": "PC"
    }
   },
   {
@@ -1905,7 +2504,21 @@
    "guides": "guides/door-to-door-door-salesman.json",
    "sheet": {
     "game": "Door to Door Door Salesman",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC"
+   }
+  },
+  {
+   "game": "Dorfromantik",
+   "file": "games/dorfromantik.json",
+   "source": "custom",
+   "apworld": "dorfromantik.apworld",
+   "world_version": "0.1.0",
+   "guides": "guides/dorfromantik.json",
+   "sheet": {
+    "game": "Dorfromantik",
+    "platform": "PC",
+    "list": "index"
    }
   },
   {
@@ -1917,7 +2530,9 @@
    "guides": "guides/doronko-wanko.json",
    "sheet": {
     "game": "DORONKO WANKO",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC",
+    "note": "Several known client issues. Can be worked around (and because the game is so small, resetting is pretty trivial anyways)"
    }
   },
   {
@@ -1930,7 +2545,21 @@
    "sheet": {
     "game": "DOTA 2",
     "stability": "Unstable",
-    "pr_status": "Not PRing"
+    "pr_status": "Not PRing",
+    "platform": "PC"
+   }
+  },
+  {
+   "game": "Dr. Mario",
+   "file": "games/dr-mario.json",
+   "source": "custom",
+   "apworld": "dr_mario.apworld",
+   "world_version": "1.0.0",
+   "guides": "guides/dr-mario.json",
+   "sheet": {
+    "game": "Dr. Mario",
+    "platform": "NES",
+    "list": "index"
    }
   },
   {
@@ -1943,7 +2572,8 @@
    "sheet": {
     "game": "Dracomino",
     "stability": "Stable",
-    "pr_status": "Not PRing"
+    "pr_status": "Not PRing",
+    "platform": "PC"
    }
   },
   {
@@ -1955,7 +2585,8 @@
    "guides": "guides/dragon-ball-z-budokai-3.json",
    "sheet": {
     "game": "Dragon Ball Z: Budokai 3",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PS2"
    }
   },
   {
@@ -1967,7 +2598,8 @@
    "guides": "guides/dragon-ball-z-budokai-tenkaichi-2.json",
    "sheet": {
     "game": "Dragon Ball Z: Budokai Tenkaichi 2",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PS2"
    }
   },
   {
@@ -1979,7 +2611,21 @@
    "guides": "guides/dragon-quest-iii-hd-2d-remake.json",
    "sheet": {
     "game": "Dragon Quest III HD-2D Remake",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC"
+   }
+  },
+  {
+   "game": "Dragon Quest Monsters 2",
+   "file": "games/dragon-quest-monsters-2.json",
+   "source": "custom",
+   "apworld": "dqm2.apworld",
+   "world_version": "0.2.1",
+   "guides": "guides/dragon-quest-monsters-2.json",
+   "sheet": {
+    "game": "Dragon Warrior Monsters 2",
+    "platform": "GBC",
+    "list": "index"
    }
   },
   {
@@ -2016,7 +2662,8 @@
    "guides": "guides/drehmal.json",
    "sheet": {
     "game": "Drehmal APOTHEOSIS (Minecraft Map)",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -2040,7 +2687,8 @@
    "guides": "guides/duckgame.json",
    "sheet": {
     "game": "Duck Game",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC"
    }
   },
   {
@@ -2064,7 +2712,8 @@
    "guides": "guides/dungeon-defenders.json",
    "sheet": {
     "game": "Dungeon Defenders",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -2109,7 +2758,8 @@
    "sheet": {
     "game": "Elden Ring Nightreign",
     "stability": "Unstable",
-    "pr_status": "Not PRing"
+    "pr_status": "Not PRing",
+    "platform": "PC"
    }
   },
   {
@@ -2135,7 +2785,9 @@
     "game": "The Elder Scrolls Online",
     "stability": "Unstable",
     "pr_status": "Not PRing",
-    "adult": true
+    "adult": true,
+    "playable": "after_dark",
+    "platform": "PC"
    }
   },
   {
@@ -2159,7 +2811,21 @@
    "guides": "guides/ender-magnolia.json",
    "sheet": {
     "game": "Ender Magnolia: Bloom In The Mist",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
+   }
+  },
+  {
+   "game": "Enter The Gungeon",
+   "file": "games/enter-the-gungeon.json",
+   "source": "custom",
+   "apworld": "enter_the_gungeon.apworld",
+   "world_version": null,
+   "guides": "guides/enter-the-gungeon.json",
+   "sheet": {
+    "game": "Enter the Gungeon",
+    "platform": "PC",
+    "list": "index"
    }
   },
   {
@@ -2171,7 +2837,8 @@
    "guides": "guides/equilinox.json",
    "sheet": {
     "game": "Equilinox",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -2227,7 +2894,8 @@
    "guides": "guides/factorio-space-age-without-space.json",
    "sheet": {
     "game": "Factorio - Space Age Without Space",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC"
    }
   },
   {
@@ -2251,7 +2919,8 @@
    "guides": "guides/factorio-platformer.json",
    "sheet": {
     "game": "Factorio Platformer",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -2263,7 +2932,8 @@
    "guides": "guides/fakutori.json",
    "sheet": {
     "game": "Fakutori",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -2275,7 +2945,8 @@
    "guides": "guides/fall-guys.json",
    "sheet": {
     "game": "Fall Guys",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -2287,7 +2958,8 @@
    "guides": "guides/fantastic-fist.json",
    "sheet": {
     "game": "Fantastic Fist",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -2319,7 +2991,8 @@
    "guides": "guides/ff1-pixel-remaster.json",
    "sheet": {
     "game": "Final Fantasy 1: Pixel Remaster",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -2339,7 +3012,8 @@
    "guides": "guides/final-fantasy-1-psp.json",
    "sheet": {
     "game": "Final Fantasy 1 (PSP)",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PSP"
    }
   },
   {
@@ -2351,7 +3025,8 @@
    "guides": "guides/final-fantasy-12-open-world.json",
    "sheet": {
     "game": "Final Fantasy XII: Open World",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC"
    }
   },
   {
@@ -2363,7 +3038,8 @@
    "guides": "guides/final-fantasy-crystal-chronicles.json",
    "sheet": {
     "game": "Final Fantasy: Crystal Chronicles",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "GC"
    }
   },
   {
@@ -2395,7 +3071,22 @@
    "guides": "guides/final-fantasy-vii.json",
    "sheet": {
     "game": "Final Fantasy VII",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC",
+    "note": "Required Randomizer: https://github.com/blazerwazey/Gold-Saucer/releases/latest"
+   }
+  },
+  {
+   "game": "Final Fantasy VIII",
+   "file": "games/final-fantasy-viii.json",
+   "source": "custom",
+   "apworld": "ff8.apworld",
+   "world_version": "0.10.0",
+   "guides": "guides/final-fantasy-viii.json",
+   "sheet": {
+    "game": "Final Fantasy VIII",
+    "platform": "PC",
+    "list": "index"
    }
   },
   {
@@ -2408,7 +3099,9 @@
    "sheet": {
     "game": "Final Fantasy X",
     "stability": "Stable",
-    "pr_status": "Not PRing"
+    "pr_status": "Not PRing",
+    "platform": "PC",
+    "note": "Required Client: https://github.com/FFX-AP/Archipelago-FFX-Client/releases"
    }
   },
   {
@@ -2420,7 +3113,8 @@
    "guides": "guides/final-fantasy-xiii-2.json",
    "sheet": {
     "game": "Final Fantasy XIII-2",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -2432,7 +3126,53 @@
    "guides": "guides/fire-emblem-sacred-stones.json",
    "sheet": {
     "game": "Fire Emblem: The Sacred Stones",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "GBA"
+   }
+  },
+  {
+   "game": "Five Nights at Frickbear's 3",
+   "file": "games/five-nights-at-frickbear-s-3.json",
+   "source": "custom",
+   "apworld": "frickbears3.apworld",
+   "world_version": null,
+   "guides": "guides/five-nights-at-frickbear-s-3.json",
+   "sheet": {
+    "game": "Five Nights at Frickbear's 3",
+    "stability": "Unstable",
+    "playable": "unofficial",
+    "platform": "PC",
+    "list": "index"
+   }
+  },
+  {
+   "game": "Five Nights at Fuckboy's",
+   "file": "games/five-nights-at-fuckboy-s.json",
+   "source": "custom",
+   "apworld": "fnafb1.apworld",
+   "world_version": "1.1.0",
+   "guides": "guides/five-nights-at-fuckboy-s.json",
+   "sheet": {
+    "game": "Five Nights at Fuckboy's",
+    "stability": "Stable",
+    "playable": "unofficial",
+    "platform": "PC",
+    "list": "index"
+   }
+  },
+  {
+   "game": "Five Nights at Fuckboy's 2",
+   "file": "games/five-nights-at-fuckboy-s-2.json",
+   "source": "custom",
+   "apworld": "fnafb2.apworld",
+   "world_version": "0.4.3",
+   "guides": "guides/five-nights-at-fuckboy-s-2.json",
+   "sheet": {
+    "game": "Five Nights at Fuckboy's 2",
+    "stability": "Stable",
+    "playable": "unofficial",
+    "platform": "PC",
+    "list": "index"
    }
   },
   {
@@ -2458,7 +3198,8 @@
    "guides": "guides/fnafw.json",
    "sheet": {
     "game": "FNAF World",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC"
    }
   },
   {
@@ -2470,7 +3211,22 @@
    "guides": "guides/forager.json",
    "sheet": {
     "game": "Forager",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
+   }
+  },
+  {
+   "game": "ForgeAP",
+   "file": "games/forgeap.json",
+   "source": "custom",
+   "apworld": "ForgeAP.apworld",
+   "world_version": "0.1.1",
+   "guides": "guides/forgeap.json",
+   "sheet": {
+    "game": "Card Forge",
+    "playable": "unofficial",
+    "platform": "PC",
+    "list": "index"
    }
   },
   {
@@ -2482,7 +3238,8 @@
    "guides": "guides/forged-curse.json",
    "sheet": {
     "game": "The Forged Curse",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PICO-8"
    }
   },
   {
@@ -2495,7 +3252,8 @@
    "sheet": {
     "game": "Frogmonster",
     "stability": "Stable",
-    "pr_status": "Not PRing"
+    "pr_status": "Not PRing",
+    "platform": "PC"
    }
   },
   {
@@ -2507,7 +3265,8 @@
    "guides": "guides/ftl-faster-than-light.json",
    "sheet": {
     "game": "FTL: Faster Than Light",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -2520,7 +3279,8 @@
    "sheet": {
     "game": "Funi Raccoon Game",
     "stability": "Stable",
-    "pr_status": "Not PRing"
+    "pr_status": "Not PRing",
+    "platform": "PC"
    }
   },
   {
@@ -2533,7 +3293,8 @@
    "sheet": {
     "game": "Garfield Kart: Furious Racing",
     "stability": "Stable",
-    "pr_status": "Not PRing"
+    "pr_status": "Not PRing",
+    "platform": "PC"
    }
   },
   {
@@ -2557,7 +3318,8 @@
    "guides": "guides/gato-roboto-b-side.json",
    "sheet": {
     "game": "Gato Roboto B-Side",
-    "stability": "Stable"
+    "stability": "Stable",
+    "note": "Alternate version of Gato Roboto"
    }
   },
   {
@@ -2597,7 +3359,7 @@
    "file": "games/geoguessr.json",
    "source": "custom",
    "apworld": "geoguessr.apworld",
-   "world_version": "0.1.1",
+   "world_version": "0.2.0",
    "guides": "guides/geoguessr.json",
    "sheet": {
     "game": "Geoguessr",
@@ -2614,7 +3376,8 @@
    "guides": "guides/geometry-dash.json",
    "sheet": {
     "game": "Geometry Dash",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -2626,7 +3389,21 @@
    "guides": "guides/getting-over-it.json",
    "sheet": {
     "game": "Getting Over It with Bennett Foddy",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC"
+   }
+  },
+  {
+   "game": "Glass Animals Discography",
+   "file": "games/glass-animals-discography.json",
+   "source": "custom",
+   "apworld": "glassanimals.apworld",
+   "world_version": "1.1.0",
+   "guides": "guides/glass-animals-discography.json",
+   "sheet": {
+    "game": "Glass Animals Discography",
+    "platform": "PC",
+    "list": "index"
    }
   },
   {
@@ -2639,7 +3416,8 @@
    "sheet": {
     "game": "Glover",
     "stability": "Stable",
-    "pr_status": "In Review"
+    "pr_status": "In Review",
+    "platform": "N64"
    }
   },
   {
@@ -2678,7 +3456,8 @@
    "sheet": {
     "game": "Gnosia",
     "stability": "Unstable",
-    "pr_status": "Not PRing"
+    "pr_status": "Not PRing",
+    "platform": "PC"
    }
   },
   {
@@ -2690,7 +3469,8 @@
    "guides": "guides/golden-sun-the-lost-age.json",
    "sheet": {
     "game": "Golden Sun: The Lost Age",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "GBA"
    }
   },
   {
@@ -2702,7 +3482,8 @@
    "guides": "guides/goldeneye-007.json",
    "sheet": {
     "game": "GoldenEye 007",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "N64"
    }
   },
   {
@@ -2716,7 +3497,39 @@
     "game": "Grand Theft Auto III",
     "stability": "Unstable",
     "pr_status": "Not PRing",
-    "adult": true
+    "adult": true,
+    "playable": "after_dark",
+    "platform": "PC"
+   }
+  },
+  {
+   "game": "Grand Theft Auto V",
+   "file": "games/grand-theft-auto-v.json",
+   "source": "custom",
+   "apworld": "gtav.apworld",
+   "world_version": "1.10.1",
+   "guides": "guides/grand-theft-auto-v.json",
+   "sheet": {
+    "game": "Grand Theft Auto 5",
+    "adult": true,
+    "playable": "after_dark",
+    "platform": "PC",
+    "list": "index"
+   }
+  },
+  {
+   "game": "Grand Theft Auto Vice City",
+   "file": "games/grand-theft-auto-vice-city.json",
+   "source": "custom",
+   "apworld": "gta_vice_city.apworld",
+   "world_version": "2.1.2",
+   "guides": "guides/grand-theft-auto-vice-city.json",
+   "sheet": {
+    "game": "Grand Theft Auto: Vice City",
+    "adult": true,
+    "playable": "after_dark",
+    "platform": "PC",
+    "list": "index"
    }
   },
   {
@@ -2730,7 +3543,9 @@
     "game": "Grand Theft Auto: San Andreas",
     "stability": "Unstable",
     "pr_status": "Not PRing",
-    "adult": true
+    "adult": true,
+    "playable": "after_dark",
+    "platform": "PC"
    }
   },
   {
@@ -2742,7 +3557,8 @@
    "guides": "guides/grandia.json",
    "sheet": {
     "game": "Grandia HD Remaster",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC"
    }
   },
   {
@@ -2754,7 +3570,21 @@
    "guides": "guides/grapple-dog.json",
    "sheet": {
     "game": "Grapple Dog",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
+   }
+  },
+  {
+   "game": "Gravity Circuit (MuratDev's Implementation)",
+   "file": "games/gravity-circuit-muratdev-s-implementation.json",
+   "source": "custom",
+   "apworld": "gravity_circuit.apworld",
+   "world_version": "0.10.1",
+   "guides": "guides/gravity-circuit-muratdev-s-implementation.json",
+   "sheet": {
+    "game": "Gravity Circuit (MuratDev's Implementation)",
+    "platform": "PC",
+    "list": "index"
    }
   },
   {
@@ -2766,7 +3596,8 @@
    "guides": "guides/grim-dawn.json",
    "sheet": {
     "game": "Grim Dawn",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC"
    }
   },
   {
@@ -2778,7 +3609,8 @@
    "guides": "guides/grunn.json",
    "sheet": {
     "game": "Grunn",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -2790,7 +3622,8 @@
    "guides": "guides/gtfo-vanilla.json",
    "sheet": {
     "game": "GTFO",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -2816,7 +3649,8 @@
    "sheet": {
     "game": "Hades",
     "stability": "Stable",
-    "pr_status": "In Review"
+    "pr_status": "In Review",
+    "platform": "PC"
    }
   },
   {
@@ -2856,6 +3690,21 @@
    }
   },
   {
+   "game": "Half-Life 2",
+   "file": "games/half-life-2.json",
+   "source": "custom",
+   "apworld": "half_life_2.apworld",
+   "world_version": "0.1.1",
+   "guides": "guides/half-life-2.json",
+   "sheet": {
+    "game": "Half-Life 2",
+    "adult": true,
+    "playable": "after_dark",
+    "platform": "PC",
+    "list": "index"
+   }
+  },
+  {
    "game": "Halo The Master Chief Collection",
    "file": "games/halo-the-master-chief-collection.json",
    "source": "custom",
@@ -2864,7 +3713,8 @@
    "guides": "guides/halo-the-master-chief-collection.json",
    "sheet": {
     "game": "Halo The Master Chief Collection",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "note": "Currently only includes Halo CE: The Maw"
    }
   },
   {
@@ -2876,7 +3726,20 @@
    "guides": "guides/hammerwatch.json",
    "sheet": {
     "game": "Hammerwatch",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC"
+   }
+  },
+  {
+   "game": "Hangman",
+   "file": "games/hangman.json",
+   "source": "custom",
+   "apworld": "hangman.apworld",
+   "world_version": null,
+   "guides": "guides/hangman.json",
+   "sheet": {
+    "game": "Hangman",
+    "list": "index"
    }
   },
   {
@@ -2900,7 +3763,8 @@
    "guides": "guides/hatsune-miku-project-diva-mega-mix.json",
    "sheet": {
     "game": "Hatsune Miku: Project Diva Megamix+",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC"
    }
   },
   {
@@ -2912,7 +3776,8 @@
    "guides": "guides/here-comes-niko.json",
    "sheet": {
     "game": "Here Comes Niko!",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC"
    }
   },
   {
@@ -2968,7 +3833,8 @@
    "guides": "guides/hi-fi-rush.json",
    "sheet": {
     "game": "Hi-Fi Rush",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -2980,7 +3846,8 @@
    "guides": "guides/high-roller.json",
    "sheet": {
     "game": "High Roller",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -2994,7 +3861,8 @@
     "game": "HITMAN: World of Assassination",
     "stability": "Unstable",
     "pr_status": "Not PRing",
-    "adult": true
+    "adult": true,
+    "playable": "after_dark"
    }
   },
   {
@@ -3026,7 +3894,21 @@
    "guides": "guides/holo8.json",
    "sheet": {
     "game": "holo8",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
+   }
+  },
+  {
+   "game": "HoloCure",
+   "file": "games/holocure.json",
+   "source": "custom",
+   "apworld": "holocure.apworld",
+   "world_version": "0.2.3",
+   "guides": "guides/holocure.json",
+   "sheet": {
+    "game": "HoloCure",
+    "platform": "PC",
+    "list": "index"
    }
   },
   {
@@ -3038,7 +3920,8 @@
    "guides": "guides/hololive-treasure-mountain.json",
    "sheet": {
     "game": "Hololive Treasure Mountain",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -3050,7 +3933,8 @@
    "guides": "guides/homura-hime.json",
    "sheet": {
     "game": "Homura-Hime",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -3062,7 +3946,20 @@
    "guides": "guides/horse-magnifier.json",
    "sheet": {
     "game": "Horse Magnifier: The Full Horse",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC"
+   }
+  },
+  {
+   "game": "Horse Riding Classic",
+   "file": "games/horse-riding-classic.json",
+   "source": "custom",
+   "apworld": "horse_riding_classic.apworld",
+   "world_version": null,
+   "guides": "guides/horse-riding-classic.json",
+   "sheet": {
+    "game": "Horse Riding Classic",
+    "list": "index"
    }
   },
   {
@@ -3074,7 +3971,8 @@
    "guides": "guides/hot-lava.json",
    "sheet": {
     "game": "Hot Lava",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -3100,7 +3998,9 @@
     "game": "Huniecam Studio",
     "stability": "Unstable",
     "pr_status": "Not PRing",
-    "adult": true
+    "adult": true,
+    "playable": "after_dark",
+    "platform": "PC"
    }
   },
   {
@@ -3114,7 +4014,9 @@
     "game": "Huniepop",
     "stability": "Stable",
     "pr_status": "Not PRing",
-    "adult": true
+    "adult": true,
+    "playable": "after_dark",
+    "platform": "PC"
    }
   },
   {
@@ -3128,7 +4030,9 @@
     "game": "Huniepop 2: Double Date",
     "stability": "Stable",
     "pr_status": "Not PRing",
-    "adult": true
+    "adult": true,
+    "playable": "after_dark",
+    "platform": "PC"
    }
   },
   {
@@ -3164,6 +4068,20 @@
    }
   },
   {
+   "game": "Hyrule Warriors Age of Calamity",
+   "file": "games/hyrule-warriors-age-of-calamity.json",
+   "source": "custom",
+   "apworld": "hyrule_warriors_aoc.apworld",
+   "world_version": "0.9.89",
+   "guides": "guides/hyrule-warriors-age-of-calamity.json",
+   "sheet": {
+    "game": "Hyrule Warriors: Age of Calamity",
+    "playable": "unofficial",
+    "platform": "Switch",
+    "list": "index"
+   }
+  },
+  {
    "game": "hytale",
    "file": "games/hytale.json",
    "source": "custom",
@@ -3172,7 +4090,8 @@
    "guides": "guides/hytale.json",
    "sheet": {
     "game": "Hytale",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -3208,7 +4127,8 @@
    "guides": "guides/iamyourbeast.json",
    "sheet": {
     "game": "I am Your Beast",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -3219,7 +4139,8 @@
    "world_version": null,
    "sheet": {
     "game": "ICEwall",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -3231,7 +4152,8 @@
    "guides": "guides/idle-loops.json",
    "sheet": {
     "game": "Idle Loops",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "Web"
    }
   },
   {
@@ -3243,7 +4165,8 @@
    "guides": "guides/iji.json",
    "sheet": {
     "game": "Iji",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC"
    }
   },
   {
@@ -3263,7 +4186,8 @@
    "guides": "guides/into-the-breach.json",
    "sheet": {
     "game": "Into the Breach",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -3288,7 +4212,8 @@
    "sheet": {
     "game": "Isles of Trials",
     "stability": "Stable",
-    "pr_status": "Not PRing"
+    "pr_status": "Not PRing",
+    "platform": "PICO-8"
    }
   },
   {
@@ -3300,7 +4225,8 @@
    "guides": "guides/ittle-dew-2.json",
    "sheet": {
     "game": "Ittle Dew 2+",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC"
    }
   },
   {
@@ -3312,7 +4238,8 @@
    "guides": "guides/jak-3.json",
    "sheet": {
     "game": "Jak 3",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PS2"
    }
   },
   {
@@ -3332,7 +4259,8 @@
    "guides": "guides/jak-ii.json",
    "sheet": {
     "game": "Jak II",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PS2"
    }
   },
   {
@@ -3356,7 +4284,8 @@
    "guides": "guides/johnny-upgrade.json",
    "sheet": {
     "game": "Johnny Upgrade",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "Web"
    }
   },
   {
@@ -3380,7 +4309,8 @@
    "guides": "guides/k-on-after-school-live.json",
    "sheet": {
     "game": "K-On! After School Live!!",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PSP"
    }
   },
   {
@@ -3392,7 +4322,8 @@
    "guides": "guides/keep-talking-and-nobody-explodes.json",
    "sheet": {
     "game": "Keep Talking and Nobody Explodes",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC"
    }
   },
   {
@@ -3404,7 +4335,8 @@
    "guides": "guides/kerbal-space-program-1.json",
    "sheet": {
     "game": "Kerbal Space Program",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -3416,7 +4348,8 @@
    "guides": "guides/keywe.json",
    "sheet": {
     "game": "KeyWe",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -3430,7 +4363,9 @@
     "game": "Kindergarten 2",
     "stability": "Stable",
     "pr_status": "Not PRing",
-    "adult": true
+    "adult": true,
+    "playable": "after_dark",
+    "platform": "PC"
    }
   },
   {
@@ -3495,7 +4430,8 @@
    "sheet": {
     "game": "Kingdom Hearts: RE Chain of Memories",
     "stability": "Stable",
-    "pr_status": "In Review"
+    "pr_status": "In Review",
+    "platform": "PC"
    }
   },
   {
@@ -3507,7 +4443,8 @@
    "guides": "guides/kirby-the-amazing-mirror.json",
    "sheet": {
     "game": "Kirby & The Amazing Mirror",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "GBA"
    }
   },
   {
@@ -3519,7 +4456,36 @@
    "guides": "guides/kirby-air-ride.json",
    "sheet": {
     "game": "Kirby Air Ride",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "GC"
+   }
+  },
+  {
+   "game": "Kirby Nightmare in Dream Land",
+   "file": "games/kirby-nightmare-in-dream-land.json",
+   "source": "custom",
+   "apworld": "kirbynidl.apworld",
+   "world_version": null,
+   "guides": "guides/kirby-nightmare-in-dream-land.json",
+   "sheet": {
+    "game": "Kirby Nightmare in Dream Land",
+    "platform": "GBA",
+    "list": "index"
+   }
+  },
+  {
+   "game": "Kirby Squeak Squad",
+   "file": "games/kirby-squeak-squad.json",
+   "source": "custom",
+   "apworld": "kirby_squeak_squad.apworld",
+   "world_version": "0.0.9",
+   "guides": "guides/kirby-squeak-squad.json",
+   "sheet": {
+    "game": "Kirby Squeak Squad",
+    "stability": "Unstable",
+    "playable": "unofficial",
+    "platform": "DS",
+    "list": "index"
    }
   },
   {
@@ -3531,7 +4497,8 @@
    "guides": "guides/kirby-super-star-ultra.json",
    "sheet": {
     "game": "Kirby Super Star Ultra",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "DS"
    }
   },
   {
@@ -3543,6 +4510,21 @@
    "guides": "guides/kirby-s-dream-land-3.json"
   },
   {
+   "game": "Kirby: Planet Robobot",
+   "file": "games/kirby-planet-robobot.json",
+   "source": "custom",
+   "apworld": "kirby_robobot.apworld",
+   "world_version": "0.1.0",
+   "guides": "guides/kirby-planet-robobot.json",
+   "sheet": {
+    "game": "Kirby: Planet Robobot",
+    "stability": "Unstable",
+    "playable": "unofficial",
+    "platform": "3DS",
+    "list": "index"
+   }
+  },
+  {
    "game": "La-Mulana 2",
    "file": "games/la-mulana-2.json",
    "source": "custom",
@@ -3551,7 +4533,8 @@
    "guides": "guides/la-mulana-2.json",
    "sheet": {
     "game": "La-Mulana 2",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -3583,7 +4566,8 @@
    "guides": "guides/layer8problem.json",
    "sheet": {
     "game": "Layer8Problem",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -3595,7 +4579,8 @@
    "guides": "guides/league-of-legends.json",
    "sheet": {
     "game": "League of Legends",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC"
    }
   },
   {
@@ -3607,7 +4592,21 @@
    "guides": "guides/lego-batman-the-video-game.json",
    "sheet": {
     "game": "LEGO Batman: The Video Game",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
+   }
+  },
+  {
+   "game": "Lego Harry Potter 5-7",
+   "file": "games/lego-harry-potter-5-7.json",
+   "source": "custom",
+   "apworld": "lhp2.apworld",
+   "world_version": null,
+   "guides": "guides/lego-harry-potter-5-7.json",
+   "sheet": {
+    "game": "Lego Harry Potter: Years 5–7",
+    "platform": "PC",
+    "list": "index"
    }
   },
   {
@@ -3631,7 +4630,8 @@
    "guides": "guides/lego-star-wars-the-complete-saga.json",
    "sheet": {
     "game": "Lego Star Wars: The Complete Saga",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC"
    }
   },
   {
@@ -3643,7 +4643,9 @@
    "guides": "guides/lethal-company.json",
    "sheet": {
     "game": "Lethal Company",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC",
+    "note": "Strange logic choices resulting in a large sphere 1."
    }
   },
   {
@@ -3655,7 +4657,8 @@
    "guides": "guides/lethal-crisis.json",
    "sheet": {
     "game": "Lethal Crisis",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -3667,7 +4670,8 @@
    "guides": "guides/librarian-tidy-up-the-arcane-library.json",
    "sheet": {
     "game": "Librarian: Tidy Up the Arcane Library",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -3721,7 +4725,8 @@
    "guides": "guides/little-witch-nobeta.json",
    "sheet": {
     "game": "Little Witch Nobeta",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC"
    }
   },
   {
@@ -3735,7 +4740,9 @@
     "game": "Lobotomy Corporation",
     "stability": "Unstable",
     "pr_status": "Not PRing",
-    "adult": true
+    "adult": true,
+    "playable": "after_dark",
+    "platform": "PC"
    }
   },
   {
@@ -3759,7 +4766,8 @@
    "guides": "guides/look-outside.json",
    "sheet": {
     "game": "Look Outside",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -3772,7 +4780,8 @@
    "sheet": {
     "game": "Loonyland: Halloween Hill",
     "stability": "Stable",
-    "pr_status": "In Review"
+    "pr_status": "In Review",
+    "platform": "PC/Web"
    }
   },
   {
@@ -3785,6 +4794,19 @@
    "sheet": {
     "game": "Lost Kingdoms 2",
     "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Luck be a Landlord",
+   "file": "games/luck-be-a-landlord.json",
+   "source": "custom",
+   "apworld": "luck_be_a_landlord.apworld",
+   "world_version": "1.0.0",
+   "guides": "guides/luck-be-a-landlord.json",
+   "sheet": {
+    "game": "Luck Be a Landlord",
+    "platform": "PC",
+    "list": "index"
    }
   },
   {
@@ -3810,7 +4832,8 @@
    "guides": "guides/luigi-s-mansion.json",
    "sheet": {
     "game": "Luigi's Mansion",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "GC"
    }
   },
   {
@@ -3823,7 +4846,8 @@
    "sheet": {
     "game": "Lunacid",
     "stability": "Stable",
-    "pr_status": "Not PRing"
+    "pr_status": "Not PRing",
+    "platform": "PC"
    }
   },
   {
@@ -3835,7 +4859,8 @@
    "guides": "guides/madou-monogatari-hanamaru-daiyouchienji.json",
    "sheet": {
     "game": "Madou Monogatari Hanamaru Dai Youchienji",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "playable": "unofficial"
    }
   },
   {
@@ -3847,7 +4872,8 @@
    "guides": "guides/majora-s-mask-recompiled.json",
    "sheet": {
     "game": "The Legend of Zelda: Majora's Mask",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "N64/PC"
    }
   },
   {
@@ -3871,7 +4897,21 @@
    "guides": "guides/manual-freedomplanet2-knuxfan24.json",
    "sheet": {
     "game": "Freedom Planet 2",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
+   }
+  },
+  {
+   "game": "Map Map - A Game About Maps",
+   "file": "games/map-map-a-game-about-maps.json",
+   "source": "custom",
+   "apworld": "mapmap.apworld",
+   "world_version": "0.1.1",
+   "guides": "guides/map-map-a-game-about-maps.json",
+   "sheet": {
+    "game": "Map Map - A Game About Maps",
+    "platform": "PC",
+    "list": "index"
    }
   },
   {
@@ -3883,7 +4923,8 @@
    "guides": "guides/marble-it-up-ultra.json",
    "sheet": {
     "game": "Marble It Up! Ultra",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -3895,7 +4936,8 @@
    "guides": "guides/marbles-balance-challenge.json",
    "sheet": {
     "game": "Marbles! Balance Challenge",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "Wii"
    }
   },
   {
@@ -3916,7 +4958,21 @@
    "sheet": {
     "game": "Mario & Luigi: Dream Team",
     "stability": "Unstable",
-    "pr_status": "Not PRing"
+    "pr_status": "Not PRing",
+    "platform": "3DS"
+   }
+  },
+  {
+   "game": "Mario Golf 64",
+   "file": "games/mario-golf-64.json",
+   "source": "custom",
+   "apworld": "mario_golf_64.apworld",
+   "world_version": null,
+   "guides": "guides/mario-golf-64.json",
+   "sheet": {
+    "game": "Mario Golf 64",
+    "platform": "N64",
+    "list": "index"
    }
   },
   {
@@ -3952,7 +5008,8 @@
    "guides": "guides/mario-kart-64.json",
    "sheet": {
     "game": "Mario Kart 64",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "N64"
    }
   },
   {
@@ -3965,7 +5022,8 @@
    "sheet": {
     "game": "Mario Kart: Double Dash",
     "stability": "Stable",
-    "pr_status": "Not PRing"
+    "pr_status": "Not PRing",
+    "platform": "GC"
    }
   },
   {
@@ -3977,7 +5035,8 @@
    "guides": "guides/mario-kart-wii.json",
    "sheet": {
     "game": "Mario Kart Wii",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "Wii"
    }
   },
   {
@@ -3989,7 +5048,8 @@
    "guides": "guides/mario-party-advance.json",
    "sheet": {
     "game": "Mario Party Advance",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "GBA"
    }
   },
   {
@@ -4002,7 +5062,8 @@
    "sheet": {
     "game": "Mario Sports Mix",
     "stability": "Unstable",
-    "pr_status": "Not PRing"
+    "pr_status": "Not PRing",
+    "platform": "Wii"
    }
   },
   {
@@ -4014,7 +5075,8 @@
    "guides": "guides/mario-super-sluggers.json",
    "sheet": {
     "game": "Mario Super Sluggers",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "Wii"
    }
   },
   {
@@ -4028,6 +5090,32 @@
     "game": "Mario Tennis (GBC)",
     "stability": "Unstable",
     "pr_status": "Not PRing"
+   }
+  },
+  {
+   "game": "Mathbreakers",
+   "file": "games/mathbreakers.json",
+   "source": "custom",
+   "apworld": "mathbreakers.apworld",
+   "world_version": "3.0.0",
+   "guides": "guides/mathbreakers.json",
+   "sheet": {
+    "game": "MathBreakers",
+    "playable": "unofficial",
+    "list": "index"
+   }
+  },
+  {
+   "game": "MathQuest",
+   "file": "games/mathquest.json",
+   "source": "custom",
+   "apworld": "mathquest.apworld",
+   "world_version": "16.0.0",
+   "guides": "guides/mathquest.json",
+   "sheet": {
+    "game": "MathQuest",
+    "playable": "unofficial",
+    "list": "index"
    }
   },
   {
@@ -4050,7 +5138,8 @@
    "world_version": "0.2.3",
    "sheet": {
     "game": "MediEvil 2",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PSX"
    }
   },
   {
@@ -4078,7 +5167,8 @@
    "guides": "guides/mega-man-x-command-mission.json",
    "sheet": {
     "game": "Mega Man X Command Mission",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "GC"
    }
   },
   {
@@ -4091,7 +5181,8 @@
    "sheet": {
     "game": "Mega Man X2",
     "stability": "Stable",
-    "pr_status": "Not PRing"
+    "pr_status": "Not PRing",
+    "platform": "SNES"
    }
   },
   {
@@ -4103,7 +5194,8 @@
    "guides": "guides/mega-man-x4.json",
    "sheet": {
     "game": "Mega Man X4",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PSX"
    }
   },
   {
@@ -4115,7 +5207,8 @@
    "guides": "guides/mega-man-zero-3.json",
    "sheet": {
     "game": "Mega Man Zero 3",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "GBA"
    }
   },
   {
@@ -4127,7 +5220,8 @@
    "guides": "guides/mega-man-zx.json",
    "sheet": {
     "game": "Mega Man ZX",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "DS"
    }
   },
   {
@@ -4153,7 +5247,8 @@
    "guides": "guides/megaman-battle-network-6.json",
    "sheet": {
     "game": "Mega Man Battle Network 6",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "GBA"
    }
   },
   {
@@ -4165,7 +5260,8 @@
    "guides": "guides/melatonin.json",
    "sheet": {
     "game": "Melatonin",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -4177,7 +5273,8 @@
    "guides": "guides/memories-in-orbit.json",
    "sheet": {
     "game": "MIO: Memories in Orbit",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -4185,7 +5282,7 @@
    "file": "games/mental-omega.json",
    "source": "custom",
    "apworld": "mental_omega.apworld",
-   "world_version": "1.49.0",
+   "world_version": "1.50.0",
    "guides": "guides/mental-omega.json",
    "sheet": {
     "game": "Command & Conquer: Mental Omega",
@@ -4212,7 +5309,10 @@
     "game": "Metal Gear Solid",
     "stability": "Unstable",
     "pr_status": "Not PRing",
-    "adult": true
+    "adult": true,
+    "playable": "after_dark",
+    "platform": "PSX",
+    "note": "Setup requires use of the `Archipelago\\worlds` folder, which either needs to be manually created for normal AP installs, or it must be ran through source. Also leaves behind residual files that need to be cleaned out after each run. Not user friendly, and there is no issues page or discord thread to report anything without directly submitting a PR."
    }
   },
   {
@@ -4224,7 +5324,8 @@
    "guides": "guides/metal-hellsinger.json",
    "sheet": {
     "game": "Metal Hellsinger",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -4236,7 +5337,23 @@
    "guides": "guides/metrocubevania.json",
    "sheet": {
     "game": "MetroCUBEvania",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PICO-8"
+   }
+  },
+  {
+   "game": "Metroid Dread",
+   "file": "games/metroid-dread.json",
+   "source": "custom",
+   "apworld": "dread.apworld",
+   "world_version": "0.27.0",
+   "guides": "guides/metroid-dread.json",
+   "sheet": {
+    "game": "Metroid Dread",
+    "stability": "Stable",
+    "playable": "unofficial",
+    "platform": "Switch",
+    "list": "index"
    }
   },
   {
@@ -4248,7 +5365,8 @@
    "guides": "guides/metroid-fusion.json",
    "sheet": {
     "game": "Metroid Fusion",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "GBA"
    }
   },
   {
@@ -4261,7 +5379,8 @@
    "sheet": {
     "game": "Metroid Prime",
     "stability": "Stable",
-    "pr_status": "In Review"
+    "pr_status": "In Review",
+    "platform": "GC"
    }
   },
   {
@@ -4273,7 +5392,8 @@
    "guides": "guides/metroid-samus-returns.json",
    "sheet": {
     "game": "Metroid: Samus Returns",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "3DS"
    }
   },
   {
@@ -4285,7 +5405,8 @@
    "guides": "guides/metroid-zero-mission.json",
    "sheet": {
     "game": "Metroid: Zero Mission",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "GBA"
    }
   },
   {
@@ -4303,6 +5424,19 @@
    }
   },
   {
+   "game": "Mike Tyson's Punch-Out!!",
+   "file": "games/mike-tyson-s-punch-out.json",
+   "source": "custom",
+   "apworld": "mtpo.apworld",
+   "world_version": "0.1.1",
+   "guides": "guides/mike-tyson-s-punch-out.json",
+   "sheet": {
+    "game": "Mike Tyson's Punch-Out!!",
+    "platform": "NES",
+    "list": "index"
+   }
+  },
+  {
    "game": "Mina The Hollower",
    "file": "games/mina-the-hollower.json",
    "source": "custom",
@@ -4311,7 +5445,8 @@
    "guides": "guides/mina-the-hollower.json",
    "sheet": {
     "game": "Mina the Hollower",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC"
    }
   },
   {
@@ -4335,7 +5470,21 @@
    "guides": "guides/minecraft-dig.json",
    "sheet": {
     "game": "Minecraft Dig",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC"
+   }
+  },
+  {
+   "game": "Minecraft Dungeons",
+   "file": "games/minecraft-dungeons.json",
+   "source": "custom",
+   "apworld": "mcdungeons.apworld",
+   "world_version": "0.0.3",
+   "guides": "guides/minecraft-dungeons.json",
+   "sheet": {
+    "game": "Minecraft Dungeons",
+    "platform": "PC",
+    "list": "index"
    }
   },
   {
@@ -4347,7 +5496,8 @@
    "guides": "guides/minecraft-fabric.json",
    "sheet": {
     "game": "Minecraft Fabric",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -4359,7 +5509,8 @@
    "guides": "guides/mini-metro.json",
    "sheet": {
     "game": "Mini Metro",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -4371,7 +5522,8 @@
    "guides": "guides/minishoot-adventures.json",
    "sheet": {
     "game": "Minishoot' Adventures",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC"
    }
   },
   {
@@ -4383,7 +5535,8 @@
    "guides": "guides/minit.json",
    "sheet": {
     "game": "Minit",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC"
    }
   },
   {
@@ -4419,7 +5572,8 @@
    "guides": "guides/momodora-moonlit-farewell.json",
    "sheet": {
     "game": "Momodora: Moonlit Farewell",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC"
    }
   },
   {
@@ -4431,7 +5585,21 @@
    "guides": "guides/monster-hunter-freedom-unite.json",
    "sheet": {
     "game": "Monster Hunter Freedom Unite",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PSP"
+   }
+  },
+  {
+   "game": "Monster Hunter Frontier",
+   "file": "games/monster-hunter-frontier.json",
+   "source": "custom",
+   "apworld": "monsterhunterfrontier.apworld",
+   "world_version": null,
+   "sheet": {
+    "game": "Monster Hunter Frontier",
+    "playable": "unofficial",
+    "platform": "PC",
+    "list": "index"
    }
   },
   {
@@ -4443,7 +5611,8 @@
    "guides": "guides/monster-hunter-rise.json",
    "sheet": {
     "game": "Monster Hunter Rise",
-    "stability": "Stable"
+    "stability": "Stable",
+    "note": "Previous Repo: https://github.com/HillbillyDroid/MHRise-APWorld/releases"
    }
   },
   {
@@ -4455,7 +5624,8 @@
    "guides": "guides/monster-hunter-world.json",
    "sheet": {
     "game": "Monster Hunter World",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -4467,7 +5637,8 @@
    "guides": "guides/monster-sanctuary.json",
    "sheet": {
     "game": "Monster Sanctuary",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC"
    }
   },
   {
@@ -4479,7 +5650,8 @@
    "guides": "guides/moonlighter.json",
    "sheet": {
     "game": "Moonlighter",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -4492,7 +5664,9 @@
    "sheet": {
     "game": "Mortal Kombat: Shaolin Monks",
     "stability": "Unstable",
-    "adult": true
+    "adult": true,
+    "playable": "after_dark",
+    "platform": "PS2"
    }
   },
   {
@@ -4504,7 +5678,8 @@
    "guides": "guides/mount-and-blade-bannerlord.json",
    "sheet": {
     "game": "Mount & Blade II: Bannerlord",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -4520,12 +5695,38 @@
    }
   },
   {
+   "game": "Muppet Monster Adventure",
+   "file": "games/muppet-monster-adventure.json",
+   "source": "custom",
+   "apworld": "muppet_monster_adventure.apworld",
+   "world_version": null,
+   "guides": "guides/muppet-monster-adventure.json",
+   "sheet": {
+    "game": "Muppet Monster Adventure",
+    "platform": "PSX",
+    "list": "index"
+   }
+  },
+  {
    "game": "Muse Dash",
    "file": "games/muse-dash.json",
    "source": "core",
    "apworld": null,
    "world_version": "1.5.37",
    "guides": "guides/muse-dash.json"
+  },
+  {
+   "game": "Mystical Ninja Starring Goemon",
+   "file": "games/mystical-ninja-starring-goemon.json",
+   "source": "custom",
+   "apworld": "mnsg.apworld",
+   "world_version": "1.0.0",
+   "guides": "guides/mystical-ninja-starring-goemon.json",
+   "sheet": {
+    "game": "Mystical Ninja Starring Goemon",
+    "platform": "N64",
+    "list": "index"
+   }
   },
   {
    "game": "Naruto Clash of Ninja 2",
@@ -4536,7 +5737,8 @@
    "guides": "guides/naruto-clash-of-ninja-2.json",
    "sheet": {
     "game": "Naruto Clash of Ninja 2",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "GC"
    }
   },
   {
@@ -4573,7 +5775,8 @@
    "guides": "guides/new-super-mario-bros-ds.json",
    "sheet": {
     "game": "New Super Mario Bros DS",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "DS"
    }
   },
   {
@@ -4585,7 +5788,8 @@
    "guides": "guides/nicktoons-battle-for-volcano-island.json",
    "sheet": {
     "game": "Nicktoons: Battle for Volcano Island",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "GBA"
    }
   },
   {
@@ -4593,12 +5797,13 @@
    "file": "games/nine-sols.json",
    "source": "custom",
    "apworld": "nine_sols.apworld",
-   "world_version": "0.6.5",
+   "world_version": "0.7.0",
    "guides": "guides/nine-sols.json",
    "sheet": {
     "game": "Nine Sols",
     "stability": "Stable",
-    "pr_status": "Not PRing"
+    "pr_status": "Not PRing",
+    "platform": "PC"
    }
   },
   {
@@ -4610,7 +5815,8 @@
    "guides": "guides/nodebuster.json",
    "sheet": {
     "game": "Nodebuster",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -4642,7 +5848,8 @@
    "guides": "guides/nonograhmm.json",
    "sheet": {
     "game": "Nonograhmm",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC"
    }
   },
   {
@@ -4658,6 +5865,34 @@
    }
   },
   {
+   "game": "Northgard",
+   "file": "games/northgard.json",
+   "source": "custom",
+   "apworld": "northgard.apworld",
+   "world_version": "2026.11.13",
+   "guides": "guides/northgard.json",
+   "sheet": {
+    "game": "Northgard",
+    "stability": "Unstable",
+    "playable": "unofficial",
+    "platform": "PC",
+    "list": "index"
+   }
+  },
+  {
+   "game": "nothing_archipelago",
+   "file": "games/nothing-archipelago.json",
+   "source": "custom",
+   "apworld": "nothing_archipelago.apworld",
+   "world_version": "0.2.3",
+   "guides": "guides/nothing-archipelago.json",
+   "sheet": {
+    "game": "Nothing",
+    "platform": "PC",
+    "list": "index"
+   }
+  },
+  {
    "game": "Nova Lands",
    "file": "games/nova-lands.json",
    "source": "custom",
@@ -4666,7 +5901,8 @@
    "guides": "guides/nova-lands.json",
    "sheet": {
     "game": "Nova Lands",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -4678,7 +5914,8 @@
    "guides": "guides/nubby-s-number-factory.json",
    "sheet": {
     "game": "Nubby's Number Factory",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -4690,7 +5927,8 @@
    "guides": "guides/nuclear-throne.json",
    "sheet": {
     "game": "Nuclear Throne",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -4704,7 +5942,9 @@
     "game": "The Elder Scrolls IV: Oblivion Remastered",
     "stability": "Stable",
     "pr_status": "Not PRing",
-    "adult": true
+    "adult": true,
+    "playable": "after_dark",
+    "platform": "PC"
    }
   },
   {
@@ -4732,7 +5972,9 @@
     "game": "Oh So Hero",
     "stability": "Unstable",
     "pr_status": "Not PRing",
-    "adult": true
+    "adult": true,
+    "playable": "after_dark",
+    "platform": "PC"
    }
   },
   {
@@ -4744,7 +5986,8 @@
    "guides": "guides/okami-hd.json",
    "sheet": {
     "game": "Okami HD",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -4764,7 +6007,21 @@
    "guides": "guides/once-upon-a-katamari.json",
    "sheet": {
     "game": "Once Upon a Katamari",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
+   }
+  },
+  {
+   "game": "One Finger Death Punch 2",
+   "file": "games/one-finger-death-punch-2.json",
+   "source": "custom",
+   "apworld": "ofdp2.apworld",
+   "world_version": "0.1.2",
+   "guides": "guides/one-finger-death-punch-2.json",
+   "sheet": {
+    "game": "One Finger Death Punch 2",
+    "platform": "PC",
+    "list": "index"
    }
   },
   {
@@ -4776,6 +6033,18 @@
    "guides": "guides/one-must-fall-2097.json",
    "sheet": {
     "game": "One Must Fall: 2097",
+    "stability": "Unstable"
+   }
+  },
+  {
+   "game": "One Piece Unlimited Cruise 1",
+   "file": "games/one-piece-unlimited-cruise-1.json",
+   "source": "custom",
+   "apworld": "opuc1.apworld",
+   "world_version": "1.0.3",
+   "guides": "guides/one-piece-unlimited-cruise-1.json",
+   "sheet": {
+    "game": "ONE PIECE: Unlimited Cruise 1: The Treasure Beneath The Waves",
     "stability": "Unstable"
    }
   },
@@ -4801,7 +6070,8 @@
    "sheet": {
     "game": "OpenRCT2",
     "stability": "Stable",
-    "pr_status": "In Review"
+    "pr_status": "In Review",
+    "platform": "PC"
    }
   },
   {
@@ -4813,7 +6083,8 @@
    "guides": "guides/openttd.json",
    "sheet": {
     "game": "OpenTTD",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -4837,7 +6108,8 @@
    "guides": "guides/operation-octo.json",
    "sheet": {
     "game": "Operation Octo",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -4849,7 +6121,8 @@
    "guides": "guides/ori-and-the-blind-forest.json",
    "sheet": {
     "game": "Ori and the Blind Forest Definitive Edition",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC"
    }
   },
   {
@@ -4861,7 +6134,8 @@
    "guides": "guides/ori-and-the-will-of-the-wisps.json",
    "sheet": {
     "game": "Ori and the Will of the Wisps",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC"
    }
   },
   {
@@ -4874,7 +6148,8 @@
    "sheet": {
     "game": "osu!",
     "stability": "Stable",
-    "pr_status": "Not PRing"
+    "pr_status": "Not PRing",
+    "platform": "PC"
    }
   },
   {
@@ -4899,7 +6174,8 @@
    "sheet": {
     "game": "Outer Wilds",
     "stability": "Stable",
-    "pr_status": "Not PRing"
+    "pr_status": "Not PRing",
+    "platform": "PC"
    }
   },
   {
@@ -4932,7 +6208,21 @@
    "sheet": {
     "game": "Oxygen Not Included",
     "stability": "Stable",
-    "pr_status": "Not PRing"
+    "pr_status": "Not PRing",
+    "platform": "PC"
+   }
+  },
+  {
+   "game": "Pac-Man World 2",
+   "file": "games/pac-man-world-2.json",
+   "source": "custom",
+   "apworld": "pacman_world_2.apworld",
+   "world_version": "1.1.0",
+   "guides": "guides/pac-man-world-2.json",
+   "sheet": {
+    "game": "Pac-Man World 2",
+    "platform": "PS2",
+    "list": "index"
    }
   },
   {
@@ -4945,7 +6235,8 @@
    "sheet": {
     "game": "PAC-MAN WORLD 2 Re-PAC",
     "stability": "Stable",
-    "pr_status": "Not PRing"
+    "pr_status": "Not PRing",
+    "platform": "PC"
    }
   },
   {
@@ -4955,6 +6246,19 @@
    "apworld": null,
    "world_version": "0.5.2",
    "guides": "guides/paint.json"
+  },
+  {
+   "game": "PapaLouie2",
+   "file": "games/papalouie2.json",
+   "source": "custom",
+   "apworld": "PapaLouie2.apworld",
+   "world_version": null,
+   "guides": "guides/papalouie2.json",
+   "sheet": {
+    "game": "Papa Louie 2: When Burgers Attack!",
+    "platform": "PC",
+    "list": "index"
+   }
   },
   {
    "game": "Paper Mario",
@@ -4977,7 +6281,8 @@
    "guides": "guides/paper-mario-the-thousand-year-door.json",
    "sheet": {
     "game": "Paper Mario: The Thousand Year Door",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "GC"
    }
   },
   {
@@ -5015,7 +6320,8 @@
     "game": "Path of Exile",
     "stability": "Stable",
     "pr_status": "Not PRing",
-    "adult": true
+    "adult": true,
+    "playable": "after_dark"
    }
   },
   {
@@ -5029,7 +6335,9 @@
     "game": "PAYDAY 2: Criminal Dawn",
     "stability": "Unstable",
     "pr_status": "Not PRing",
-    "adult": true
+    "adult": true,
+    "playable": "after_dark",
+    "platform": "PC"
    }
   },
   {
@@ -5041,7 +6349,8 @@
    "guides": "guides/peak.json",
    "sheet": {
     "game": "PEAK",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC"
    }
   },
   {
@@ -5054,7 +6363,8 @@
    "sheet": {
     "game": "Peggle Deluxe",
     "stability": "Stable",
-    "pr_status": "Not PRing"
+    "pr_status": "Not PRing",
+    "platform": "PC"
    }
   },
   {
@@ -5067,7 +6377,8 @@
    "sheet": {
     "game": "Peggle Nights",
     "stability": "Stable",
-    "pr_status": "Not PRing"
+    "pr_status": "Not PRing",
+    "platform": "PC"
    }
   },
   {
@@ -5080,7 +6391,9 @@
    "sheet": {
     "game": "Perfect Dark",
     "stability": "Unstable",
-    "adult": true
+    "adult": true,
+    "playable": "after_dark",
+    "platform": "N64"
    }
   },
   {
@@ -5091,7 +6404,9 @@
    "world_version": null,
    "sheet": {
     "game": "Persona 5 Royal",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC",
+    "note": "Currently only supports 1st Palace."
    }
   },
   {
@@ -5103,7 +6418,8 @@
    "guides": "guides/phantasy-star-ii.json",
    "sheet": {
     "game": "Phantasy Star II",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "SMS"
    }
   },
   {
@@ -5139,7 +6455,8 @@
    "guides": "guides/pikmin-2.json",
    "sheet": {
     "game": "Pikmin 2",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "GC"
    }
   },
   {
@@ -5152,7 +6469,8 @@
    "sheet": {
     "game": "Pikuniku",
     "stability": "Stable",
-    "pr_status": "Not PRing"
+    "pr_status": "Not PRing",
+    "platform": "PC"
    }
   },
   {
@@ -5164,7 +6482,8 @@
    "guides": "guides/pipistrello-and-the-cursed-yoyo.json",
    "sheet": {
     "game": "Pipistrello and the Cursed Yoyo",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -5176,7 +6495,8 @@
    "guides": "guides/pixeldraw.json",
    "sheet": {
     "game": "PixelDraw",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "Web"
    }
   },
   {
@@ -5188,7 +6508,8 @@
    "guides": "guides/pizza-tower.json",
    "sheet": {
     "game": "Pizza Tower",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC"
    }
   },
   {
@@ -5200,7 +6521,8 @@
    "guides": "guides/placid-plastic-duck-simulator.json",
    "sheet": {
     "game": "Placid Plastic Duck Simulator",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC"
    }
   },
   {
@@ -5212,7 +6534,22 @@
    "guides": "guides/planet-zoo.json",
    "sheet": {
     "game": "Planet Zoo",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
+   }
+  },
+  {
+   "game": "Plants Vs Zombies Fusion",
+   "file": "games/plants-vs-zombies-fusion.json",
+   "source": "custom",
+   "apworld": "pvzf.apworld",
+   "world_version": "1.8.1",
+   "guides": "guides/plants-vs-zombies-fusion.json",
+   "sheet": {
+    "game": "Plants vs. Zombies: Fusion",
+    "playable": "unofficial",
+    "platform": "PC",
+    "list": "index"
    }
   },
   {
@@ -5236,7 +6573,8 @@
    "guides": "guides/plateup.json",
    "sheet": {
     "game": "Plateup!",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC"
    }
   },
   {
@@ -5248,7 +6586,8 @@
    "guides": "guides/plok.json",
    "sheet": {
     "game": "Plok",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "SNES"
    }
   },
   {
@@ -5260,7 +6599,22 @@
    "guides": "guides/poco.json",
    "sheet": {
     "game": "Poco",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
+   }
+  },
+  {
+   "game": "Pokeclicker",
+   "file": "games/pokeclicker.json",
+   "source": "custom",
+   "apworld": "pokeclicker.apworld",
+   "world_version": null,
+   "guides": "guides/pokeclicker.json",
+   "sheet": {
+    "game": "Pokéclicker",
+    "playable": "unofficial",
+    "platform": "Web",
+    "list": "index"
    }
   },
   {
@@ -5272,7 +6626,8 @@
    "guides": "guides/pokemon-black-and-white.json",
    "sheet": {
     "game": "Pokémon Black and White",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "DS"
    }
   },
   {
@@ -5285,7 +6640,8 @@
    "sheet": {
     "game": "Pokémon Crystal",
     "stability": "Stable",
-    "pr_status": "Not PRing"
+    "pr_status": "Not PRing",
+    "platform": "GBC"
    }
   },
   {
@@ -5305,7 +6661,8 @@
    "guides": "guides/pokemon-firered-and-leafgreen.json",
    "sheet": {
     "game": "Pokémon FireRed and LeafGreen",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "GBA"
    }
   },
   {
@@ -5329,7 +6686,8 @@
    "guides": "guides/pokemon-mystery-dungeon-explorers-of-sky.json",
    "sheet": {
     "game": "Pokémon Mystery Dungeon: Explorers of Sky",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "DS"
    }
   },
   {
@@ -5341,7 +6699,8 @@
    "guides": "guides/pokemon-pinball-ruby-sapphire.json",
    "sheet": {
     "game": "Pokémon Pinball Ruby & Sapphire",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "GBA"
    }
   },
   {
@@ -5353,7 +6712,8 @@
    "guides": "guides/pokemon-platinum.json",
    "sheet": {
     "game": "Pokémon Platinum",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "DS"
    }
   },
   {
@@ -5365,7 +6725,8 @@
    "guides": "guides/pokemon-ranger-quest.json",
    "sheet": {
     "game": "Pokémon Ranger (Quest)",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "DS"
    }
   },
   {
@@ -5385,7 +6746,8 @@
    "guides": "guides/pokemon-snap.json",
    "sheet": {
     "game": "Pokémon Snap",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "N64"
    }
   },
   {
@@ -5397,7 +6759,8 @@
    "guides": "guides/pokemon-stadium.json",
    "sheet": {
     "game": "Pokémon Stadium",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "N64"
    }
   },
   {
@@ -5409,7 +6772,8 @@
    "guides": "guides/pokemon-trozei.json",
    "sheet": {
     "game": "Pokémon Trozei / Link",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "DS"
    }
   },
   {
@@ -5421,7 +6785,8 @@
    "guides": "guides/pokemon-xd-gale-of-darkness.json",
    "sheet": {
     "game": "Pokémon XD: Gale of Darkness",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "GC"
    }
   },
   {
@@ -5433,7 +6798,8 @@
    "guides": "guides/pokepark.json",
    "sheet": {
     "game": "PokéPark Wii: Pikachu's Adventure",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "Wii"
    }
   },
   {
@@ -5445,7 +6811,8 @@
    "guides": "guides/pokepelago.json",
    "sheet": {
     "game": "Poképelago",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "Web"
    }
   },
   {
@@ -5457,7 +6824,8 @@
    "guides": "guides/pok-mon-battle-revolution.json",
    "sheet": {
     "game": "Pokémon Battle Revolution",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "Wii"
    }
   },
   {
@@ -5469,7 +6837,9 @@
    "guides": "guides/portal-2.json",
    "sheet": {
     "game": "Portal 2",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC",
+    "note": "Does not work with SteamOS"
    }
   },
   {
@@ -5481,7 +6851,8 @@
    "guides": "guides/powerwash-simulator.json",
    "sheet": {
     "game": "PowerWash Simulator",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC"
    }
   },
   {
@@ -5493,7 +6864,8 @@
    "guides": "guides/prisma-road.json",
    "sheet": {
     "game": "Prisma Road",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -5505,7 +6877,21 @@
    "guides": "guides/prodigal.json",
    "sheet": {
     "game": "Prodigal",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC"
+   }
+  },
+  {
+   "game": "Project Base",
+   "file": "games/project-base.json",
+   "source": "custom",
+   "apworld": "projectbase.apworld",
+   "world_version": "1.0.1",
+   "guides": "guides/project-base.json",
+   "sheet": {
+    "game": "Super Metroid (Project Base)",
+    "platform": "SNES",
+    "list": "index"
    }
   },
   {
@@ -5517,7 +6903,8 @@
    "guides": "guides/pseudoregalia.json",
    "sheet": {
     "game": "Pseudoregalia",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC"
    }
   },
   {
@@ -5530,7 +6917,8 @@
    "sheet": {
     "game": "Psychonauts",
     "stability": "Stable",
-    "pr_status": "In Review"
+    "pr_status": "In Review",
+    "platform": "PC"
    }
   },
   {
@@ -5542,7 +6930,22 @@
    "guides": "guides/puzzle-bobble-4.json",
    "sheet": {
     "game": "Puzzle Bobble 4",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PSX"
+   }
+  },
+  {
+   "game": "PvZ2 Gardendless",
+   "file": "games/pvz2-gardendless.json",
+   "source": "custom",
+   "apworld": "pvz2gardendless.apworld",
+   "world_version": null,
+   "guides": "guides/pvz2-gardendless.json",
+   "sheet": {
+    "game": "Plants vs. Zombies 2 Gardenless",
+    "playable": "unofficial",
+    "platform": "PC",
+    "list": "index"
    }
   },
   {
@@ -5554,7 +6957,8 @@
    "guides": "guides/q-up.json",
    "sheet": {
     "game": "Q-Up",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -5568,7 +6972,23 @@
     "game": "Quake",
     "stability": "Unstable",
     "pr_status": "Not PRing",
-    "adult": true
+    "adult": true,
+    "playable": "after_dark",
+    "platform": "PC"
+   }
+  },
+  {
+   "game": "Qualatro",
+   "file": "games/qualatro.json",
+   "source": "custom",
+   "apworld": "qualatro.apworld",
+   "world_version": null,
+   "guides": "guides/qualatro.json",
+   "sheet": {
+    "game": "Qualatro (Balatro)",
+    "playable": "unofficial",
+    "platform": "PC",
+    "list": "index"
    }
   },
   {
@@ -5593,7 +7013,8 @@
    "guides": "guides/r-e-p-o.json",
    "sheet": {
     "game": "R.E.P.O",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -5605,7 +7026,8 @@
    "guides": "guides/rabbit-and-steel.json",
    "sheet": {
     "game": "Rabbit and Steel",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -5617,7 +7039,8 @@
    "guides": "guides/rabi-ribi.json",
    "sheet": {
     "game": "Rabi-Ribi",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC"
    }
   },
   {
@@ -5637,7 +7060,8 @@
    "guides": "guides/rain-world.json",
    "sheet": {
     "game": "Rain World",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC"
    }
   },
   {
@@ -5649,7 +7073,8 @@
    "guides": "guides/ratchet-clank-2.json",
    "sheet": {
     "game": "Ratchet & Clank 2: Going Commando",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PS2"
    }
   },
   {
@@ -5661,7 +7086,8 @@
    "guides": "guides/ratchet-clank-size-matters.json",
    "sheet": {
     "game": "Ratchet & Clank: Size Matters",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PS2"
    }
   },
   {
@@ -5673,7 +7099,8 @@
    "guides": "guides/ratchet-and-clank.json",
    "sheet": {
     "game": "Ratchet & Clank",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PS3"
    }
   },
   {
@@ -5685,7 +7112,8 @@
    "guides": "guides/ratchet-and-clank-3.json",
    "sheet": {
     "game": "Ratchet & Clank 3: Up Your Arsenal",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PS2"
    }
   },
   {
@@ -5697,7 +7125,8 @@
    "guides": "guides/rayman-2.json",
    "sheet": {
     "game": "Rayman 2: The Great Escape",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC"
    }
   },
   {
@@ -5711,7 +7140,9 @@
     "game": "Resident Evil 3 Remake",
     "stability": "Stable",
     "pr_status": "Not PRing",
-    "adult": true
+    "adult": true,
+    "playable": "after_dark",
+    "platform": "PC"
    }
   },
   {
@@ -5723,7 +7154,8 @@
    "guides": "guides/re-run.json",
    "sheet": {
     "game": "RE:RUN",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -5735,7 +7167,8 @@
    "guides": "guides/recettear-an-item-shop-s-tale.json",
    "sheet": {
     "game": "Recettear: An Item Shop's Tale",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -5749,7 +7182,8 @@
     "game": "Red Faction Guerrilla Re-Mars-tered",
     "stability": "Unstable",
     "pr_status": "Not PRing",
-    "adult": true
+    "adult": true,
+    "platform": "PC"
    }
   },
   {
@@ -5761,7 +7195,8 @@
    "guides": "guides/refunct.json",
    "sheet": {
     "game": "Refunct",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC"
    }
   },
   {
@@ -5775,7 +7210,9 @@
     "game": "Resident Evil 2 Remake",
     "stability": "Stable",
     "pr_status": "Not PRing",
-    "adult": true
+    "adult": true,
+    "playable": "after_dark",
+    "platform": "PC"
    }
   },
   {
@@ -5803,7 +7240,35 @@
     "game": "Return of the Obra Dinn",
     "stability": "Stable",
     "pr_status": "Not PRing",
-    "adult": true
+    "adult": true,
+    "playable": "after_dark"
+   }
+  },
+  {
+   "game": "Reus 2",
+   "file": "games/reus-2.json",
+   "source": "custom",
+   "apworld": "reus2.apworld",
+   "world_version": "0.1.0",
+   "guides": "guides/reus-2.json",
+   "sheet": {
+    "game": "Reus 2",
+    "platform": "PC",
+    "list": "index"
+   }
+  },
+  {
+   "game": "Rhythm Heaven Advance",
+   "file": "games/rhythm-heaven-advance.json",
+   "source": "custom",
+   "apworld": "rhythm_heaven_advance.apworld",
+   "world_version": "1.1.0",
+   "guides": "guides/rhythm-heaven-advance.json",
+   "sheet": {
+    "game": "Rhythm Heaven Advance",
+    "playable": "unofficial",
+    "platform": "GBA",
+    "list": "index"
    }
   },
   {
@@ -5815,7 +7280,8 @@
    "guides": "guides/rhythm-tengoku.json",
    "sheet": {
     "game": "Rhythm Tengoku",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "GBA"
    }
   },
   {
@@ -5827,7 +7293,8 @@
    "guides": "guides/rift-of-the-necrodancer.json",
    "sheet": {
     "game": "Rift of the Necrodancer",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC"
    }
   },
   {
@@ -5839,7 +7306,8 @@
    "guides": "guides/rift-wizard.json",
    "sheet": {
     "game": "Rift Wizard",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC"
    }
   },
   {
@@ -5853,7 +7321,22 @@
     "game": "Rimworld",
     "stability": "Unstable",
     "pr_status": "Not PRing",
-    "adult": true
+    "adult": true,
+    "playable": "after_dark",
+    "platform": "PC"
+   }
+  },
+  {
+   "game": "Rise to Ruins",
+   "file": "games/rise-to-ruins.json",
+   "source": "custom",
+   "apworld": "RiseToRuins.apworld",
+   "world_version": null,
+   "guides": "guides/rise-to-ruins.json",
+   "sheet": {
+    "game": "Rise to Ruins",
+    "platform": "PC",
+    "list": "index"
    }
   },
   {
@@ -5865,7 +7348,8 @@
    "guides": "guides/risk-of-rain.json",
    "sheet": {
     "game": "Risk of Rain",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -5885,7 +7369,8 @@
    "guides": "guides/road-trip-adventure.json",
    "sheet": {
     "game": "Road Trip Adventure",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PS2"
    }
   },
   {
@@ -5898,7 +7383,8 @@
    "sheet": {
     "game": "Rogue Legacy",
     "stability": "Stable",
-    "pr_status": "Not PRing"
+    "pr_status": "Not PRing",
+    "platform": "PC"
    }
   },
   {
@@ -5910,7 +7396,8 @@
    "guides": "guides/rogue-legacy-2.json",
    "sheet": {
     "game": "Rogue Legacy 2",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC"
    }
   },
   {
@@ -5934,7 +7421,8 @@
    "guides": "guides/running-with-rifles.json",
    "sheet": {
     "game": "Running with Rifles",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "note": "Very unstable. Some locations are duplicated with different casings or don't properly exist so unachiveable and require admin to send locations. Goal doesn't release game properly either."
    }
   },
   {
@@ -5946,7 +7434,8 @@
    "guides": "guides/rusted-moss.json",
    "sheet": {
     "game": "Rusted Moss",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC"
    }
   },
   {
@@ -5972,7 +7461,9 @@
     "game": "Saints Row 2",
     "stability": "Unstable",
     "pr_status": "Not PRing",
-    "adult": true
+    "adult": true,
+    "playable": "after_dark",
+    "platform": "PC"
    }
   },
   {
@@ -6026,7 +7517,9 @@
     "game": "Schedule I",
     "stability": "Unstable",
     "pr_status": "Not PRing",
-    "adult": true
+    "adult": true,
+    "playable": "after_dark",
+    "platform": "PC"
    }
   },
   {
@@ -6039,7 +7532,8 @@
    "sheet": {
     "game": "Scooby-Doo! Night of 100 Frights",
     "stability": "Stable",
-    "pr_status": "In Review"
+    "pr_status": "In Review",
+    "platform": "GC"
    }
   },
   {
@@ -6052,6 +7546,19 @@
    "sheet": {
     "game": "Scorpion Swamp",
     "stability": "Stable"
+   }
+  },
+  {
+   "game": "Secret Agent Clank",
+   "file": "games/secret-agent-clank.json",
+   "source": "custom",
+   "apworld": "secret_agent_clank.apworld",
+   "world_version": "0.0.10",
+   "guides": "guides/secret-agent-clank.json",
+   "sheet": {
+    "game": "Secret Agent Clank",
+    "platform": "PS2",
+    "list": "index"
    }
   },
   {
@@ -6091,7 +7598,8 @@
     "game": "Sekiro: Shadows Die Twice",
     "stability": "Stable",
     "pr_status": "Not PRing",
-    "adult": true
+    "adult": true,
+    "playable": "after_dark"
    }
   },
   {
@@ -6103,7 +7611,8 @@
    "guides": "guides/sentinels-of-the-multiverse.json",
    "sheet": {
     "game": "Sentinels of the Multiverse",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC / Physical"
    }
   },
   {
@@ -6115,7 +7624,8 @@
    "guides": "guides/seum-speedrunners-from-hell.json",
    "sheet": {
     "game": "SEUM: Speedrunners from Hell",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -6139,7 +7649,8 @@
    "guides": "guides/severed-steel.json",
    "sheet": {
     "game": "Severed Steel",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -6152,7 +7663,20 @@
    "sheet": {
     "game": "Shadow Generations",
     "stability": "Unstable",
-    "pr_status": "Not PRing"
+    "pr_status": "Not PRing",
+    "platform": "PC"
+   }
+  },
+  {
+   "game": "Shadow of the Colossus",
+   "file": "games/shadow-of-the-colossus.json",
+   "source": "custom",
+   "apworld": "sotc.apworld",
+   "world_version": "0.0.1",
+   "guides": "guides/shadow-of-the-colossus.json",
+   "sheet": {
+    "game": "Shadow of the Colossus",
+    "list": "index"
    }
   },
   {
@@ -6164,7 +7688,8 @@
    "guides": "guides/shadow-the-hedgehog.json",
    "sheet": {
     "game": "Shadow the Hedgehog",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "GC"
    }
   },
   {
@@ -6176,7 +7701,8 @@
    "guides": "guides/shadowgate-64.json",
    "sheet": {
     "game": "Shadowgate 64: Trials of the Four Towers",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "N64"
    }
   },
   {
@@ -6188,7 +7714,8 @@
    "guides": "guides/shape-of-dreams.json",
    "sheet": {
     "game": "Shape of Dreams",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -6208,7 +7735,8 @@
    "guides": "guides/shapez-2.json",
    "sheet": {
     "game": "shapez 2",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -6221,7 +7749,8 @@
    "sheet": {
     "game": "Shellipelago",
     "stability": "Stable",
-    "pr_status": "Not PRing"
+    "pr_status": "Not PRing",
+    "platform": "PC"
    }
   },
   {
@@ -6239,7 +7768,8 @@
    "guides": "guides/shining-in-the-darkness.json",
    "sheet": {
     "game": "Shining in the Darkness",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "GEN"
    }
   },
   {
@@ -6251,7 +7781,8 @@
    "guides": "guides/ship-of-harkinian.json",
    "sheet": {
     "game": "The Legend of Zelda: Ocarina of Time - Ship of Harkinian",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "N64/PC"
    }
   },
   {
@@ -6271,7 +7802,8 @@
    "guides": "guides/shovel-knight-pocket-dungeon.json",
    "sheet": {
     "game": "Shovel Knight Pocket Dungeon",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -6283,7 +7815,23 @@
    "guides": "guides/signalis.json",
    "sheet": {
     "game": "Signalis",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
+   }
+  },
+  {
+   "game": "Silent Hill 3",
+   "file": "games/silent-hill-3.json",
+   "source": "custom",
+   "apworld": "sh3.apworld",
+   "world_version": "1.0.6",
+   "guides": "guides/silent-hill-3.json",
+   "sheet": {
+    "game": "Silent Hill 3",
+    "stability": "Unstable",
+    "playable": "unofficial",
+    "platform": "PC",
+    "list": "index"
    }
   },
   {
@@ -6307,7 +7855,8 @@
    "guides": "guides/simon-tatham-s-portable-puzzle-collection.json",
    "sheet": {
     "game": "Simon Tatham's Portable Puzzle Collection",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "Web"
    }
   },
   {
@@ -6344,7 +7893,8 @@
    "guides": "guides/skyward-sword.json",
    "sheet": {
     "game": "The Legend of Zelda: Skyward Sword",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "Wii"
    }
   },
   {
@@ -6352,7 +7902,7 @@
    "file": "games/slay-the-princess.json",
    "source": "custom",
    "apworld": "slay_the_princess.apworld",
-   "world_version": "1.0.0",
+   "world_version": "1.3.0",
    "guides": "guides/slay-the-princess.json",
    "sheet": {
     "game": "Slay the Princess — The Pristine Cut",
@@ -6371,7 +7921,8 @@
    "sheet": {
     "game": "Slay the Spire",
     "stability": "Stable",
-    "pr_status": "Not PRing"
+    "pr_status": "Not PRing",
+    "platform": "PC"
    }
   },
   {
@@ -6395,7 +7946,8 @@
    "guides": "guides/slime-rancher.json",
    "sheet": {
     "game": "Slime Rancher",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC"
    }
   },
   {
@@ -6407,7 +7959,8 @@
    "guides": "guides/slime-rancher-2.json",
    "sheet": {
     "game": "Slime Rancher 2",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC"
    }
   },
   {
@@ -6419,7 +7972,8 @@
    "guides": "guides/sly-2-band-of-thieves.json",
    "sheet": {
     "game": "Sly 2: Band of Thieves",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PS2"
    }
   },
   {
@@ -6431,7 +7985,8 @@
    "guides": "guides/sly-3-honor-among-thieves.json",
    "sheet": {
     "game": "Sly 3: Honor Among Thieves",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PS2"
    }
   },
   {
@@ -6443,7 +7998,27 @@
    "guides": "guides/sly-cooper-and-the-thievius-raccoonus.json",
    "sheet": {
     "game": "Sly Cooper and the Thievius Raccoonus",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PS2"
+   }
+  },
+  {
+   "game": "SM64 Romhack",
+   "file": "games/sm64-romhack.json",
+   "source": "custom",
+   "apworld": "sm64hacks.apworld",
+   "world_version": "1.1.15",
+   "rom": {
+    "section": "sm64hacks_options"
+   },
+   "guides": "guides/sm64-romhack.json",
+   "sheet": {
+    "game": "Super Mario 64 Romhacks",
+    "stability": "Stable",
+    "playable": "unofficial",
+    "platform": "N64",
+    "note": "List of Supported Romhacks",
+    "list": "index"
    }
   },
   {
@@ -6456,6 +8031,18 @@
    "sheet": {
     "game": "Super Mario 64 - Spicy Mycena 64",
     "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Smol Ame",
+   "file": "games/smol-ame.json",
+   "source": "custom",
+   "apworld": "smol_ame.apworld",
+   "world_version": "0.1.0",
+   "guides": "guides/smol-ame.json",
+   "sheet": {
+    "game": "Smol Ame",
+    "list": "index"
    }
   },
   {
@@ -6487,7 +8074,8 @@
    "guides": "guides/sneak-king.json",
    "sheet": {
     "game": "Sneak King",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "Xbox"
    }
   },
   {
@@ -6499,7 +8087,8 @@
    "guides": "guides/sonic-advance-2.json",
    "sheet": {
     "game": "Sonic Advance 2",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "GBA"
    }
   },
   {
@@ -6519,7 +8108,8 @@
    "guides": "guides/sonic-adventure-dx.json",
    "sheet": {
     "game": "Sonic Adventure DX",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC"
    }
   },
   {
@@ -6531,7 +8121,8 @@
    "guides": "guides/sonic-battle.json",
    "sheet": {
     "game": "Sonic Battle",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "GBA"
    }
   },
   {
@@ -6569,7 +8160,9 @@
     "game": "Sonic Dreams Collection",
     "stability": "Unstable",
     "pr_status": "Not PRing",
-    "adult": true
+    "adult": true,
+    "playable": "after_dark",
+    "platform": "PC"
    }
   },
   {
@@ -6581,7 +8174,8 @@
    "guides": "guides/sonic-frontiers.json",
    "sheet": {
     "game": "Sonic Frontiers",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -6593,7 +8187,8 @@
    "guides": "guides/sonic-heroes.json",
    "sheet": {
     "game": "Sonic Heroes",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC"
    }
   },
   {
@@ -6619,7 +8214,23 @@
    "sheet": {
     "game": "Sonic Riders",
     "stability": "Stable",
-    "pr_status": "Not PRing"
+    "pr_status": "Not PRing",
+    "platform": "GC"
+   }
+  },
+  {
+   "game": "Sonic Robo Blast 2",
+   "file": "games/sonic-robo-blast-2.json",
+   "source": "custom",
+   "apworld": "srb2.apworld",
+   "world_version": "1.7.3",
+   "guides": "guides/sonic-robo-blast-2.json",
+   "sheet": {
+    "game": "Sonic Robo Blast 2",
+    "stability": "Stable",
+    "playable": "unofficial",
+    "platform": "PC",
+    "list": "index"
    }
   },
   {
@@ -6631,7 +8242,8 @@
    "guides": "guides/sonic-rush.json",
    "sheet": {
     "game": "Sonic Rush",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "DS"
    }
   },
   {
@@ -6643,7 +8255,8 @@
    "guides": "guides/sonic-the-hedgehog-1.json",
    "sheet": {
     "game": "Sonic the Hedgehog",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "GEN"
    }
   },
   {
@@ -6655,7 +8268,8 @@
    "guides": "guides/soul-blazer.json",
    "sheet": {
     "game": "SoulBlazer",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "SNES"
    }
   },
   {
@@ -6667,7 +8281,8 @@
    "guides": "guides/spark-the-electric-jester-3.json",
    "sheet": {
     "game": "Spark the Electric Jester 3",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -6679,7 +8294,8 @@
    "guides": "guides/spelunky-2.json",
    "sheet": {
     "game": "Spelunky 2",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC"
    }
   },
   {
@@ -6691,7 +8307,8 @@
    "guides": "guides/spinball.json",
    "sheet": {
     "game": "Spinball",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "Web"
    }
   },
   {
@@ -6703,7 +8320,8 @@
    "guides": "guides/spirit-island.json",
    "sheet": {
     "game": "Spirit Island",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -6715,7 +8333,8 @@
    "guides": "guides/spirit-tracks.json",
    "sheet": {
     "game": "The Legend of Zelda: Spirit Tracks",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "DS"
    }
   },
   {
@@ -6729,7 +8348,9 @@
     "game": "Spirit Valley",
     "stability": "Unstable",
     "pr_status": "Not PRing",
-    "adult": true
+    "adult": true,
+    "playable": "after_dark",
+    "platform": "PC"
    }
   },
   {
@@ -6753,7 +8374,8 @@
    "guides": "guides/spyro-2.json",
    "sheet": {
     "game": "Spyro 2: Ripto's Rage",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PSX"
    }
   },
   {
@@ -6765,7 +8387,8 @@
    "guides": "guides/spyro-3.json",
    "sheet": {
     "game": "Spyro 3: Year of the Dragon",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PSX"
    }
   },
   {
@@ -6777,7 +8400,23 @@
    "guides": "guides/spyro-a-hero-s-tail.json",
    "sheet": {
     "game": "Spyro: A Hero's Tail",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "GC"
+   }
+  },
+  {
+   "game": "Spyro: Attack of the Rhynocs",
+   "file": "games/spyro-attack-of-the-rhynocs.json",
+   "source": "custom",
+   "apworld": "spyro3gba.apworld",
+   "world_version": null,
+   "guides": "guides/spyro-attack-of-the-rhynocs.json",
+   "sheet": {
+    "game": "Spyro: Attack of the Rhynocs",
+    "stability": "Unstable",
+    "platform": "GBA",
+    "note": "Built APworld in discord thread only and doesn't interact with AP",
+    "list": "index"
    }
   },
   {
@@ -6789,7 +8428,8 @@
    "guides": "guides/stacklands.json",
    "sheet": {
     "game": "Stacklands",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC"
    }
   },
   {
@@ -6801,7 +8441,8 @@
    "guides": "guides/star-fox-64.json",
    "sheet": {
     "game": "Star Fox 64",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "N64"
    }
   },
   {
@@ -6813,7 +8454,8 @@
    "guides": "guides/star-fox-adventures.json",
    "sheet": {
     "game": "Star Fox Adventures",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "GC"
    }
   },
   {
@@ -6854,7 +8496,20 @@
    "sheet": {
     "game": "Starship Titanic",
     "stability": "Unstable",
-    "pr_status": "Not PRing"
+    "pr_status": "Not PRing",
+    "platform": "PC"
+   }
+  },
+  {
+   "game": "Status Lock",
+   "file": "games/status-lock.json",
+   "source": "custom",
+   "apworld": "status_lock.apworld",
+   "world_version": "0.4.1",
+   "guides": "guides/status-lock.json",
+   "sheet": {
+    "game": "Status Lock",
+    "list": "index"
    }
   },
   {
@@ -6866,7 +8521,8 @@
    "guides": "guides/steamworld-dig-2.json",
    "sheet": {
     "game": "SteamWorld Dig 2",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -6878,7 +8534,8 @@
    "guides": "guides/stella.json",
    "sheet": {
     "game": "Stella",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -6890,7 +8547,8 @@
    "guides": "guides/sternly-worded-adventures.json",
    "sheet": {
     "game": "Sternly Worded Adventures",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -6903,7 +8561,21 @@
    "sheet": {
     "game": "Stick Ranger",
     "stability": "Stable",
-    "pr_status": "In Review"
+    "pr_status": "In Review",
+    "platform": "PC"
+   }
+  },
+  {
+   "game": "Stray",
+   "file": "games/stray.json",
+   "source": "custom",
+   "apworld": "stray.apworld",
+   "world_version": "0.0.4",
+   "guides": "guides/stray.json",
+   "sheet": {
+    "game": "Stray",
+    "platform": "PC",
+    "list": "index"
    }
   },
   {
@@ -6915,7 +8587,8 @@
    "guides": "guides/streets-of-rage.json",
    "sheet": {
     "game": "Streets of Rage",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "GEN"
    }
   },
   {
@@ -6927,7 +8600,8 @@
    "guides": "guides/streets-of-rogue.json",
    "sheet": {
     "game": "Streets of Rogue",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -6948,7 +8622,8 @@
    "sheet": {
     "game": "Suikapelago",
     "stability": "Unstable",
-    "pr_status": "Not PRing"
+    "pr_status": "Not PRing",
+    "platform": "Web"
    }
   },
   {
@@ -6960,7 +8635,8 @@
    "guides": "guides/super-cat-planet.json",
    "sheet": {
     "game": "Super Cat Planet",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC"
    }
   },
   {
@@ -6973,7 +8649,8 @@
    "sheet": {
     "game": "Super Hexagon",
     "stability": "Unstable",
-    "pr_status": "Not PRing"
+    "pr_status": "Not PRing",
+    "platform": "PC"
    }
   },
   {
@@ -6985,7 +8662,8 @@
    "guides": "guides/super-junkoid.json",
    "sheet": {
     "game": "Super Junkoid",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "SNES"
    }
   },
   {
@@ -6997,6 +8675,47 @@
    "guides": "guides/super-mario-64.json"
   },
   {
+   "game": "Super Mario 64: Beyond the Cursed Mirror",
+   "file": "games/super-mario-64-beyond-the-cursed-mirror.json",
+   "source": "custom",
+   "apworld": "sm64btcm.apworld",
+   "world_version": "0.5.1",
+   "guides": "guides/super-mario-64-beyond-the-cursed-mirror.json",
+   "sheet": {
+    "game": "SM64: Beyond the Cursed Mirror",
+    "playable": "unofficial",
+    "platform": "N64",
+    "list": "index"
+   }
+  },
+  {
+   "game": "Super Mario Bros Wonder",
+   "file": "games/super-mario-bros-wonder.json",
+   "source": "custom",
+   "apworld": "smbwonder.apworld",
+   "world_version": "0.19.0",
+   "guides": "guides/super-mario-bros-wonder.json",
+   "sheet": {
+    "game": "Super Mario Bros. Wonder",
+    "playable": "unofficial",
+    "platform": "Switch",
+    "list": "index"
+   }
+  },
+  {
+   "game": "Super Mario Bros.",
+   "file": "games/super-mario-bros.json",
+   "source": "custom",
+   "apworld": "smb1.apworld",
+   "world_version": null,
+   "guides": "guides/super-mario-bros.json",
+   "sheet": {
+    "game": "Super Mario Bros.",
+    "platform": "NES",
+    "list": "index"
+   }
+  },
+  {
    "game": "Super Mario Galaxy",
    "file": "games/super-mario-galaxy.json",
    "source": "custom",
@@ -7005,7 +8724,8 @@
    "guides": "guides/super-mario-galaxy.json",
    "sheet": {
     "game": "Super Mario Galaxy",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "Wii"
    }
   },
   {
@@ -7017,7 +8737,8 @@
    "guides": "guides/super-mario-land.json",
    "sheet": {
     "game": "Super Mario Land",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "GB"
    }
   },
   {
@@ -7029,6 +8750,21 @@
    "guides": "guides/super-mario-land-2.json"
   },
   {
+   "game": "Super Mario Odyssey",
+   "file": "games/super-mario-odyssey.json",
+   "source": "custom",
+   "apworld": "smo.apworld",
+   "world_version": "1.7.7",
+   "guides": "guides/super-mario-odyssey.json",
+   "sheet": {
+    "game": "Super Mario Odyssey",
+    "playable": "unofficial",
+    "platform": "Switch",
+    "note": "Previous Repo",
+    "list": "index"
+   }
+  },
+  {
    "game": "Super Mario Sunshine",
    "file": "games/super-mario-sunshine.json",
    "source": "custom",
@@ -7037,7 +8773,9 @@
    "guides": "guides/super-mario-sunshine.json",
    "sheet": {
     "game": "Super Mario Sunshine",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "GC",
+    "note": "Sometimes has issues unlocking corona mountain (goal stage)"
    }
   },
   {
@@ -7063,7 +8801,8 @@
    "guides": "guides/super-meat-boy.json",
    "sheet": {
     "game": "Super Meat Boy",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -7083,7 +8822,21 @@
    "guides": "guides/super-smash-bros-brawl-the-subspace-emissary.json",
    "sheet": {
     "game": "Super Smash Bros. Brawl - The Subspace Emissary",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "Wii"
+   }
+  },
+  {
+   "game": "Super Tux Kart",
+   "file": "games/super-tux-kart.json",
+   "source": "custom",
+   "apworld": "supertuxkart.apworld",
+   "world_version": "0.9.0",
+   "guides": "guides/super-tux-kart.json",
+   "sheet": {
+    "game": "Super Tux Kart",
+    "platform": "PC",
+    "list": "index"
    }
   },
   {
@@ -7095,7 +8848,8 @@
    "guides": "guides/superhot.json",
    "sheet": {
     "game": "SUPERHOT",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -7107,7 +8861,8 @@
    "guides": "guides/supermarket-simulator.json",
    "sheet": {
     "game": "Supermarket Simulator",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -7119,7 +8874,8 @@
    "guides": "guides/symphony-of-the-night.json",
    "sheet": {
     "game": "Castlevania: Symphony of the Night",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PSX"
    }
   },
   {
@@ -7127,12 +8883,50 @@
    "file": "games/symphony-of-the-night-recomp.json",
    "source": "custom",
    "apworld": "sotn_recomp.apworld",
-   "world_version": "0.5.3",
+   "world_version": "0.5.4",
    "guides": "guides/symphony-of-the-night-recomp.json",
    "sheet": {
     "game": "Castlevania: Symphony of the Night (SymphonyRecomp)",
     "stability": "Unstable",
     "pr_status": "Not PRing"
+   }
+  },
+  {
+   "game": "Tales of Maj'Eyal",
+   "file": "games/tales-of-maj-eyal.json",
+   "source": "custom",
+   "apworld": "tome.apworld",
+   "world_version": "0.0.7",
+   "guides": "guides/tales-of-maj-eyal.json",
+   "sheet": {
+    "game": "Tales of Maj'Eyal",
+    "platform": "PC",
+    "list": "index"
+   }
+  },
+  {
+   "game": "Taskipelago",
+   "file": "games/taskipelago.json",
+   "source": "custom",
+   "apworld": "taskipelago.apworld",
+   "world_version": "1.2.0",
+   "guides": "guides/taskipelago.json",
+   "sheet": {
+    "game": "Taskipelago",
+    "list": "index"
+   }
+  },
+  {
+   "game": "Taylor Swift Discography",
+   "file": "games/taylor-swift-discography.json",
+   "source": "custom",
+   "apworld": "taylorswift.apworld",
+   "world_version": "1.3.0",
+   "guides": "guides/taylor-swift-discography.json",
+   "sheet": {
+    "game": "Taylor Swift Discography",
+    "platform": "PC",
+    "list": "index"
    }
   },
   {
@@ -7144,7 +8938,8 @@
    "guides": "guides/taz-wanted.json",
    "sheet": {
     "game": "Taz: Wanted",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PS2"
    }
   },
   {
@@ -7156,7 +8951,8 @@
    "guides": "guides/tcg-card-shop-simulator.json",
    "sheet": {
     "game": "TCG Card Shop Simulator",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC"
    }
   },
   {
@@ -7168,7 +8964,8 @@
    "guides": "guides/team-fortress-2-mann-vs-machine.json",
    "sheet": {
     "game": "Team Fortress 2 (Mann vs Machine)",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -7180,7 +8977,8 @@
    "guides": "guides/teardown.json",
    "sheet": {
     "game": "Teardown",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -7192,7 +8990,8 @@
    "guides": "guides/terranil.json",
    "sheet": {
     "game": "Terra Nil",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -7216,6 +9015,18 @@
    }
   },
   {
+   "game": "Tetris Effect: Connected",
+   "file": "games/tetris-effect-connected.json",
+   "source": "custom",
+   "apworld": "tetriseffect.apworld",
+   "world_version": "0.2.0",
+   "guides": "guides/tetris-effect-connected.json",
+   "sheet": {
+    "game": "Tetris Effect",
+    "list": "index"
+   }
+  },
+  {
    "game": "Tevi",
    "file": "games/tevi.json",
    "source": "custom",
@@ -7224,7 +9035,21 @@
    "guides": "guides/tevi.json",
    "sheet": {
     "game": "Tevi",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC"
+   }
+  },
+  {
+   "game": "The Bazaar",
+   "file": "games/the-bazaar.json",
+   "source": "custom",
+   "apworld": "bazaar.apworld",
+   "world_version": "0.9.4",
+   "guides": "guides/the-bazaar.json",
+   "sheet": {
+    "game": "The Bazaar",
+    "platform": "PC",
+    "list": "index"
    }
   },
   {
@@ -7237,7 +9062,8 @@
    "sheet": {
     "game": "The Binding of Isaac: Repentance",
     "stability": "Stable",
-    "pr_status": "Not PRing"
+    "pr_status": "Not PRing",
+    "platform": "PC"
    }
   },
   {
@@ -7249,7 +9075,8 @@
    "guides": "guides/the-escapists-2.json",
    "sheet": {
     "game": "The Escapists 2",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -7261,7 +9088,8 @@
    "guides": "guides/the-forest-s-end.json",
    "sheet": {
     "game": "The Forest's End",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -7273,7 +9101,8 @@
    "guides": "guides/the-grinch.json",
    "sheet": {
     "game": "The Grinch",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PSX"
    }
   },
   {
@@ -7287,7 +9116,9 @@
     "game": "The Guardian Legend",
     "stability": "Stable",
     "pr_status": "Not PRing",
-    "adult": true
+    "adult": true,
+    "playable": "after_dark",
+    "platform": "NES"
    }
   },
   {
@@ -7299,7 +9130,9 @@
    "guides": "guides/the-henry-stickmin-collection.json",
    "sheet": {
     "game": "The Henry Stickmin Collection",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "playable": "unofficial",
+    "platform": "PC"
    }
   },
   {
@@ -7337,7 +9170,8 @@
    "guides": "guides/the-legend-of-zelda-oracle-of-ages.json",
    "sheet": {
     "game": "The Legend of Zelda: Oracle of Ages",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "GBC"
    }
   },
   {
@@ -7345,11 +9179,12 @@
    "file": "games/the-legend-of-zelda-oracle-of-seasons.json",
    "source": "custom",
    "apworld": "tloz_oos.apworld",
-   "world_version": "20.1.13",
+   "world_version": "26.2.2",
    "guides": "guides/the-legend-of-zelda-oracle-of-seasons.json",
    "sheet": {
     "game": "The Legend of Zelda: Oracle of Seasons",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "GBC"
    }
   },
   {
@@ -7361,7 +9196,8 @@
    "guides": "guides/the-legend-of-zelda-phantom-hourglass.json",
    "sheet": {
     "game": "The Legend of Zelda: Phantom Hourglass",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "DS"
    }
   },
   {
@@ -7397,7 +9233,8 @@
    "guides": "guides/the-magical-quest-starring-mickey-mouse.json",
    "sheet": {
     "game": "The Magical Quest starring Mickey Mouse",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "SNES"
    }
   },
   {
@@ -7417,7 +9254,8 @@
    "guides": "guides/the-minish-cap.json",
    "sheet": {
     "game": "The Legend of Zelda: The Minish Cap",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "GBA"
    }
   },
   {
@@ -7441,7 +9279,9 @@
    "guides": "guides/the-sims-4.json",
    "sheet": {
     "game": "The Sims 4",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC",
+    "note": "fairly stable, no generation issues, client can have occasional issues with sending checks and a rare crash"
    }
   },
   {
@@ -7453,7 +9293,8 @@
    "guides": "guides/the-talos-principle-reawakened.json",
    "sheet": {
     "game": "The Talos Principle Reawakened",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -7465,7 +9306,8 @@
    "guides": "guides/the-werecleaner.json",
    "sheet": {
     "game": "The WereCleaner",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC"
    }
   },
   {
@@ -7505,7 +9347,8 @@
    "guides": "guides/three-goblin-wobblin.json",
    "sheet": {
     "game": "Three Goblin Wobblin'",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -7517,7 +9360,8 @@
    "guides": "guides/time-rifters.json",
    "sheet": {
     "game": "Time Rifters",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -7532,11 +9376,11 @@
    "game": "TimeSplitters 2",
    "file": "games/timesplitters-2.json",
    "source": "custom",
-   "apworld": "timesplitters_2.apworld",
-   "world_version": "1.0.1",
+   "apworld": "timesplitters2.apworld",
+   "world_version": "1.0.3",
    "guides": "guides/timesplitters-2.json",
    "sheet": {
-    "game": "Timesplitters 2",
+    "game": "Timesplitters 2 (Str8UpWHITE64)",
     "stability": "Unstable"
    }
   },
@@ -7548,7 +9392,7 @@
    "world_version": "1.3.1",
    "guides": "guides/timesplitters-future-perfect.json",
    "sheet": {
-    "game": "TimeSplitters: Future Perfect",
+    "game": "TimeSplitters: Future Perfect (CaptPurpleHeart)",
     "stability": "Unstable",
     "pr_status": "Not PRing",
     "adult": true
@@ -7563,7 +9407,8 @@
    "guides": "guides/toejam-and-earl.json",
    "sheet": {
     "game": "Toejam & Earl",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "GEN"
    }
   },
   {
@@ -7575,7 +9420,8 @@
    "guides": "guides/toem-a-photo-adventure.json",
    "sheet": {
     "game": "TOEM: A Photo Adventure",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC"
    }
   },
   {
@@ -7591,6 +9437,21 @@
    }
   },
   {
+   "game": "TomTom Adventures Flaming Special",
+   "file": "games/tomtom-adventures-flaming-special.json",
+   "source": "custom",
+   "apworld": "tomtom4.apworld",
+   "world_version": "0.2.0",
+   "guides": "guides/tomtom-adventures-flaming-special.json",
+   "sheet": {
+    "game": "TomTom Adventures Flaming Special",
+    "stability": "Stable",
+    "playable": "unofficial",
+    "platform": "PC",
+    "list": "index"
+   }
+  },
+  {
    "game": "Tony Hawk's American Wasteland",
    "file": "games/tony-hawk-s-american-wasteland.json",
    "source": "custom",
@@ -7599,7 +9460,37 @@
    "guides": "guides/tony-hawk-s-american-wasteland.json",
    "sheet": {
     "game": "Tony Hawk's American Wasteland",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PS2",
+    "note": "Only includes the first stage."
+   }
+  },
+  {
+   "game": "Tony Hawk's Pro Skater 3",
+   "file": "games/tony-hawk-s-pro-skater-3.json",
+   "source": "custom",
+   "apworld": "thps3.apworld",
+   "world_version": "1.0.6",
+   "guides": "guides/tony-hawk-s-pro-skater-3.json",
+   "sheet": {
+    "game": "Tony Hawk's Pro Skater 3",
+    "platform": "PC",
+    "list": "index"
+   }
+  },
+  {
+   "game": "Toontown",
+   "file": "games/toontown.json",
+   "source": "custom",
+   "apworld": "toontown.apworld",
+   "world_version": "0.21.0",
+   "guides": "guides/toontown.json",
+   "sheet": {
+    "game": "Toontown",
+    "stability": "Stable",
+    "playable": "unofficial",
+    "platform": "PC",
+    "list": "index"
    }
   },
   {
@@ -7613,7 +9504,9 @@
     "game": "Touhou Eiyashou ~ Imperishable Night",
     "stability": "Unstable",
     "pr_status": "Not PRing",
-    "adult": true
+    "adult": true,
+    "playable": "after_dark",
+    "platform": "PC"
    }
   },
   {
@@ -7625,7 +9518,8 @@
    "guides": "guides/touhou-fuujinroku-mountain-of-faith.json",
    "sheet": {
     "game": "Touhou Fuujinroku ~ Mountain of Faith",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -7633,12 +9527,13 @@
    "file": "games/touhou-koumakyou-the-embodiment-of-scarlet-devil.json",
    "source": "custom",
    "apworld": "th06.apworld",
-   "world_version": "1.5.0",
+   "world_version": "1.6.0",
    "guides": "guides/touhou-koumakyou-the-embodiment-of-scarlet-devil.json",
    "sheet": {
     "game": "Touhou Koumakyou ~ the Embodiment of Scarlet Devil",
     "stability": "Stable",
-    "pr_status": "Not PRing"
+    "pr_status": "Not PRing",
+    "platform": "PC"
    }
   },
   {
@@ -7652,7 +9547,9 @@
     "game": "Touhou Youyoumu ~ Perfect Cherry Blossom",
     "stability": "Stable",
     "pr_status": "Not PRing",
-    "adult": true
+    "adult": true,
+    "playable": "after_dark",
+    "platform": "PC"
    }
   },
   {
@@ -7676,7 +9573,8 @@
    "guides": "guides/toy-story-racer.json",
    "sheet": {
     "game": "Toy Story Racer",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PSX"
    }
   },
   {
@@ -7689,7 +9587,23 @@
    "sheet": {
     "game": "Trackmania",
     "stability": "Stable",
-    "pr_status": "In Review"
+    "pr_status": "In Review",
+    "platform": "PC"
+   }
+  },
+  {
+   "game": "Trails Beyond the Horizon",
+   "file": "games/trails-beyond-the-horizon.json",
+   "source": "custom",
+   "apworld": "beyondthehorizon.apworld",
+   "world_version": "0.1.3",
+   "guides": "guides/trails-beyond-the-horizon.json",
+   "sheet": {
+    "game": "The Legend of Heroes: Trails Beyond the Horizon",
+    "adult": true,
+    "playable": "after_dark",
+    "platform": "PC",
+    "list": "index"
    }
   },
   {
@@ -7701,7 +9615,8 @@
    "guides": "guides/trails-in-the-sky-the-3rd.json",
    "sheet": {
     "game": "The Legend of Heroes: Trails in the Sky the 3rd",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -7721,7 +9636,8 @@
    "guides": "guides/turnipboy.json",
    "sheet": {
     "game": "Turnip Boy Commits Tax Evasion",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC"
    }
   },
   {
@@ -7737,6 +9653,19 @@
    }
   },
   {
+   "game": "Twiddly Gems",
+   "file": "games/twiddly-gems.json",
+   "source": "custom",
+   "apworld": "twiddlygems.apworld",
+   "world_version": "0.1.2",
+   "guides": "guides/twiddly-gems.json",
+   "sheet": {
+    "game": "Twiddly Gems",
+    "platform": "Web",
+    "list": "index"
+   }
+  },
+  {
    "game": "Twilight Princess",
    "file": "games/twilight-princess.json",
    "source": "custom",
@@ -7745,7 +9674,8 @@
    "guides": "guides/twilight-princess.json",
    "sheet": {
     "game": "The Legend of Zelda: Twilight Princess",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "GC"
    }
   },
   {
@@ -7757,7 +9687,8 @@
    "guides": "guides/twisty-cube.json",
    "sheet": {
     "game": "Twisty Cube",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "Web"
    }
   },
   {
@@ -7780,7 +9711,8 @@
    "world_version": null,
    "sheet": {
     "game": "Ty the Tasmanian Tiger 2",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -7792,7 +9724,8 @@
    "guides": "guides/ty-the-tasmanian-tiger-3.json",
    "sheet": {
     "game": "Ty the Tasmanian Tiger 3",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -7817,7 +9750,21 @@
    "sheet": {
     "game": "UFO 50",
     "stability": "Stable",
-    "pr_status": "Not PRing"
+    "pr_status": "Not PRing",
+    "platform": "PC",
+    "note": "Downpatching via Steam is required."
+   }
+  },
+  {
+   "game": "Ufouria",
+   "file": "games/ufouria.json",
+   "source": "custom",
+   "apworld": "ufouria.apworld",
+   "world_version": "0.0.1",
+   "guides": "guides/ufouria.json",
+   "sheet": {
+    "game": "Ufouria: The Saga / Hebereke",
+    "list": "index"
    }
   },
   {
@@ -7842,7 +9789,22 @@
    "sheet": {
     "game": "ULTRAKILL",
     "stability": "Stable",
-    "pr_status": "Not PRing"
+    "pr_status": "Not PRing",
+    "platform": "PC"
+   }
+  },
+  {
+   "game": "Umamusume Pretty Derby",
+   "file": "games/umamusume-pretty-derby.json",
+   "source": "custom",
+   "apworld": "umamusume.apworld",
+   "world_version": "0.17.0",
+   "guides": "guides/umamusume-pretty-derby.json",
+   "sheet": {
+    "game": "Umamusume: Pretty Derby",
+    "playable": "unofficial",
+    "platform": "PC",
+    "list": "index"
    }
   },
   {
@@ -7854,7 +9816,8 @@
    "guides": "guides/unbeatable-arcade.json",
    "sheet": {
     "game": "UNBEATABLE",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -7867,7 +9830,8 @@
    "sheet": {
     "game": "Uncanny Cat Golf",
     "stability": "Stable",
-    "pr_status": "Not PRing"
+    "pr_status": "Not PRing",
+    "platform": "PC"
    }
   },
   {
@@ -7879,6 +9843,20 @@
    "guides": "guides/undertale.json"
   },
   {
+   "game": "Undertale 2",
+   "file": "games/undertale-2.json",
+   "source": "custom",
+   "apworld": "undertale2.apworld",
+   "world_version": "0.2.7",
+   "guides": "guides/undertale-2.json",
+   "sheet": {
+    "game": "Undertale 2",
+    "playable": "unofficial",
+    "platform": "PC",
+    "list": "index"
+   }
+  },
+  {
    "game": "Undertale Yellow",
    "file": "games/undertale-yellow.json",
    "source": "custom",
@@ -7887,7 +9865,8 @@
    "guides": "guides/undertale-yellow.json",
    "sheet": {
     "game": "Undertale Yellow",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -7900,7 +9879,21 @@
    "sheet": {
     "game": "Unfair Flips",
     "stability": "Stable",
-    "pr_status": "Not PRing"
+    "pr_status": "Not PRing",
+    "platform": "PC"
+   }
+  },
+  {
+   "game": "Unreal Tournament 99",
+   "file": "games/unreal-tournament-99.json",
+   "source": "custom",
+   "apworld": "ut99.apworld",
+   "world_version": "1.0.1",
+   "guides": "guides/unreal-tournament-99.json",
+   "sheet": {
+    "game": "Unreal Tournament 99",
+    "platform": "PC",
+    "list": "index"
    }
   },
   {
@@ -7912,7 +9905,8 @@
    "guides": "guides/untitled-goose-game.json",
    "sheet": {
     "game": "Untitled Goose Game",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -7924,7 +9918,8 @@
    "guides": "guides/v-rising.json",
    "sheet": {
     "game": "V Rising",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -7936,7 +9931,20 @@
    "guides": "guides/vacation-simulator.json",
    "sheet": {
     "game": "Vacation Simulator",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "VR"
+   }
+  },
+  {
+   "game": "Vagrant Story",
+   "file": "games/vagrant-story.json",
+   "source": "custom",
+   "apworld": "vagrantstory.apworld",
+   "world_version": "0.0.1",
+   "sheet": {
+    "game": "Vagrant Story",
+    "platform": "PSX",
+    "list": "index"
    }
   },
   {
@@ -7960,7 +9968,8 @@
    "guides": "guides/vampire-survivors.json",
    "sheet": {
     "game": "Vampire Survivors",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -7972,7 +9981,8 @@
    "guides": "guides/vardrain.json",
    "sheet": {
     "game": "vardrain--",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -7984,7 +9994,8 @@
    "guides": "guides/vault-hunters.json",
    "sheet": {
     "game": "Minecraft: Vault Hunters (Modpack)",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -7997,7 +10008,8 @@
    "sheet": {
     "game": "Vertical Drop Heroes HD",
     "stability": "Unstable",
-    "pr_status": "Not PRing"
+    "pr_status": "Not PRing",
+    "platform": "PC"
    }
   },
   {
@@ -8009,7 +10021,8 @@
    "guides": "guides/very-very-valet.json",
    "sheet": {
     "game": "Very Very Valet",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -8025,6 +10038,19 @@
    }
   },
   {
+   "game": "Vex2",
+   "file": "games/vex2.json",
+   "source": "custom",
+   "apworld": "vex2.apworld",
+   "world_version": "16.0.0",
+   "guides": "guides/vex2.json",
+   "sheet": {
+    "game": "Vex 2",
+    "playable": "unofficial",
+    "list": "index"
+   }
+  },
+  {
    "game": "Viscera Cleanup Detail",
    "file": "games/viscera-cleanup-detail.json",
    "source": "custom",
@@ -8032,10 +10058,12 @@
    "world_version": null,
    "guides": "guides/viscera-cleanup-detail.json",
    "sheet": {
-    "game": "Viscera Cleanup Details",
+    "game": "Viscera Cleanup Detail",
     "stability": "Unstable",
     "pr_status": "Not PRing",
-    "adult": true
+    "adult": true,
+    "playable": "after_dark",
+    "platform": "PC"
    }
   },
   {
@@ -8047,6 +10075,19 @@
    "guides": "guides/vision-soft-reset.json",
    "sheet": {
     "game": "Vision Soft Reset",
+    "stability": "Unstable",
+    "platform": "PC"
+   }
+  },
+  {
+   "game": "VIVIDLOPE",
+   "file": "games/vividlope.json",
+   "source": "custom",
+   "apworld": "vividlope.apworld",
+   "world_version": "1.0.0",
+   "guides": "guides/vividlope.json",
+   "sheet": {
+    "game": "VIVIDLOPE",
     "stability": "Unstable"
    }
   },
@@ -8060,7 +10101,8 @@
    "sheet": {
     "game": "Void Sols",
     "stability": "Stable",
-    "pr_status": "In Review"
+    "pr_status": "In Review",
+    "platform": "PC"
    }
   },
   {
@@ -8072,7 +10114,9 @@
    "guides": "guides/void-stranger.json",
    "sheet": {
     "game": "Void Stranger",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC",
+    "note": "Might have logic issues."
    }
   },
   {
@@ -8085,7 +10129,8 @@
    "sheet": {
     "game": "Voidloop",
     "stability": "Unstable",
-    "pr_status": "Not PRing"
+    "pr_status": "Not PRing",
+    "platform": "PC"
    }
   },
   {
@@ -8109,7 +10154,8 @@
    "guides": "guides/vrchat.json",
    "sheet": {
     "game": "VRChat",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -8150,7 +10196,8 @@
    "sheet": {
     "game": "Wargroove 2",
     "stability": "Stable",
-    "pr_status": "In Review"
+    "pr_status": "In Review",
+    "platform": "PC"
    }
   },
   {
@@ -8181,7 +10228,8 @@
    "sheet": {
     "game": "Wario Land 3",
     "stability": "Stable",
-    "pr_status": "Not PRing"
+    "pr_status": "Not PRing",
+    "platform": "GBC"
    }
   },
   {
@@ -8194,7 +10242,8 @@
    "sheet": {
     "game": "Wario Land 4",
     "stability": "Stable",
-    "pr_status": "In Review"
+    "pr_status": "In Review",
+    "platform": "GBA"
    }
   },
   {
@@ -8210,6 +10259,19 @@
    }
   },
   {
+   "game": "Warioworld",
+   "file": "games/warioworld.json",
+   "source": "custom",
+   "apworld": "WarioworldAP.apworld",
+   "world_version": "0.1.9",
+   "guides": "guides/warioworld.json",
+   "sheet": {
+    "game": "Wario World",
+    "platform": "GC",
+    "list": "index"
+   }
+  },
+  {
    "game": "Watery Words",
    "file": "games/watery-words.json",
    "source": "custom",
@@ -8218,7 +10280,8 @@
    "guides": "guides/watery-words.json",
    "sheet": {
     "game": "Watery Words",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "Web"
    }
   },
   {
@@ -8242,7 +10305,24 @@
    "guides": "guides/webfishing.json",
    "sheet": {
     "game": "WEBFISHING",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC",
+    "note": "Repository archived, no longer maintained."
+   }
+  },
+  {
+   "game": "Wedding Witch",
+   "file": "games/wedding-witch.json",
+   "source": "custom",
+   "apworld": "wedding_witch.apworld",
+   "world_version": "0.1.0",
+   "guides": "guides/wedding-witch.json",
+   "sheet": {
+    "game": "Wedding Witch",
+    "adult": true,
+    "playable": "after_dark",
+    "platform": "PC",
+    "list": "index"
    }
   },
   {
@@ -8268,7 +10348,8 @@
    "sheet": {
     "game": "West of Loathing",
     "stability": "Stable",
-    "pr_status": "Not PRing"
+    "pr_status": "Not PRing",
+    "platform": "PC"
    }
   },
   {
@@ -8280,7 +10361,8 @@
    "guides": "guides/white-knuckle.json",
    "sheet": {
     "game": "White Knuckle",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -8304,7 +10386,8 @@
    "guides": "guides/wikipelago.json",
    "sheet": {
     "game": "Wikipelago",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "Web"
    }
   },
   {
@@ -8316,7 +10399,8 @@
    "guides": "guides/witchspring-r.json",
    "sheet": {
     "game": "Witchspring R",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -8341,7 +10425,8 @@
    "guides": "guides/wordipelago.json",
    "sheet": {
     "game": "Wordipelago",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "Web"
    }
   },
   {
@@ -8353,7 +10438,8 @@
    "guides": "guides/wordsearch.json",
    "sheet": {
     "game": "Word Search",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "Web"
    }
   },
   {
@@ -8365,7 +10451,8 @@
    "guides": "guides/wynncraft.json",
    "sheet": {
     "game": "Wynncraft (Minecraft Server)",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC"
    }
   },
   {
@@ -8377,7 +10464,8 @@
    "guides": "guides/xcom-2-war-of-the-chosen.json",
    "sheet": {
     "game": "XCOM 2: War of the Chosen",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC"
    }
   },
   {
@@ -8389,7 +10477,21 @@
    "guides": "guides/xenoblade-x.json",
    "sheet": {
     "game": "Xenoblade Chronicles X",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "Wii U"
+   }
+  },
+  {
+   "game": "Y2ROLL",
+   "file": "games/y2roll.json",
+   "source": "custom",
+   "apworld": "y2roll.apworld",
+   "world_version": "0.0.6",
+   "guides": "guides/y2roll.json",
+   "sheet": {
+    "game": "Y2ROLL",
+    "platform": "PC",
+    "list": "index"
    }
   },
   {
@@ -8425,6 +10527,32 @@
    }
   },
   {
+   "game": "YARGBandHero",
+   "file": "games/yargbandhero.json",
+   "source": "custom",
+   "apworld": "YARGBandHero.apworld",
+   "world_version": "26.9.17",
+   "guides": "guides/yargbandhero.json",
+   "sheet": {
+    "game": "YARG Band Hero",
+    "platform": "PC",
+    "list": "index"
+   }
+  },
+  {
+   "game": "YARGGreenDayRockBand",
+   "file": "games/yarggreendayrockband.json",
+   "source": "custom",
+   "apworld": "YARGGreenDayRockBand.apworld",
+   "world_version": null,
+   "guides": "guides/yarggreendayrockband.json",
+   "sheet": {
+    "game": "YARG Green Day Rock Band",
+    "platform": "PC",
+    "list": "index"
+   }
+  },
+  {
    "game": "YARGGuitarHero1",
    "file": "games/yargguitarhero1.json",
    "source": "custom",
@@ -8434,6 +10562,84 @@
    "sheet": {
     "game": "YARG (Guitar Hero/Rockband)",
     "stability": "Unstable"
+   }
+  },
+  {
+   "game": "YARGGuitarHero2",
+   "file": "games/yargguitarhero2.json",
+   "source": "custom",
+   "apworld": "YARGGuitarHero2.apworld",
+   "world_version": "26.9.17",
+   "guides": "guides/yargguitarhero2.json",
+   "sheet": {
+    "game": "YARG Guitar Hero 2",
+    "platform": "PC",
+    "list": "index"
+   }
+  },
+  {
+   "game": "YARGGuitarHero3",
+   "file": "games/yargguitarhero3.json",
+   "source": "custom",
+   "apworld": "YARGGuitarHero3.apworld",
+   "world_version": "26.9.17",
+   "guides": "guides/yargguitarhero3.json",
+   "sheet": {
+    "game": "YARG Guitar Hero 3",
+    "platform": "PC",
+    "list": "index"
+   }
+  },
+  {
+   "game": "YARGGuitarHeroWarriorsOfRock",
+   "file": "games/yargguitarherowarriorsofrock.json",
+   "source": "custom",
+   "apworld": "YARGGuitarHeroWarriorsOfRock.apworld",
+   "world_version": "26.9.17",
+   "guides": "guides/yargguitarherowarriorsofrock.json",
+   "sheet": {
+    "game": "YARG Guitar Hero Warriors of Rock",
+    "platform": "PC",
+    "list": "index"
+   }
+  },
+  {
+   "game": "YARGGuitarHeroWorldTour",
+   "file": "games/yargguitarheroworldtour.json",
+   "source": "custom",
+   "apworld": "YARGGuitarHeroWorldTour.apworld",
+   "world_version": "26.9.17",
+   "guides": "guides/yargguitarheroworldtour.json",
+   "sheet": {
+    "game": "YARG Guitar Hero World Tour",
+    "platform": "PC",
+    "list": "index"
+   }
+  },
+  {
+   "game": "YARGLEGORockBand",
+   "file": "games/yarglegorockband.json",
+   "source": "custom",
+   "apworld": "YARGLEGORockBand.apworld",
+   "world_version": "26.9.17",
+   "guides": "guides/yarglegorockband.json",
+   "sheet": {
+    "game": "YARG LEGO Rock Band",
+    "platform": "PC",
+    "list": "index"
+   }
+  },
+  {
+   "game": "YARGRockBand2",
+   "file": "games/yargrockband2.json",
+   "source": "custom",
+   "apworld": "YARGRockBand2.apworld",
+   "world_version": "26.9.17",
+   "guides": "guides/yargrockband2.json",
+   "sheet": {
+    "game": "YARG Rock Band 2",
+    "platform": "PC",
+    "list": "index"
    }
   },
   {
@@ -8447,7 +10653,9 @@
     "game": "Yarimono",
     "stability": "Unstable",
     "pr_status": "Not PRing",
-    "adult": true
+    "adult": true,
+    "playable": "after_dark",
+    "platform": "PC"
    }
   },
   {
@@ -8471,7 +10679,8 @@
    "guides": "guides/yellow-taxi-goes-vroom.json",
    "sheet": {
     "game": "Yellow Taxi Goes Vroom",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PC"
    }
   },
   {
@@ -8483,7 +10692,8 @@
    "guides": "guides/yohane-the-parhelion-blaze-in-the-deepblue.json",
    "sheet": {
     "game": "YOHANE THE PARHELION -BLAZE in the DEEPBLUE-",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -8495,7 +10705,8 @@
    "guides": "guides/yooka-replaylee.json",
    "sheet": {
     "game": "Yooka-Replaylee",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -8521,7 +10732,8 @@
    "guides": "guides/you-have-to-win-the-game.json",
    "sheet": {
     "game": "You Have to Win the Game",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -8533,7 +10745,8 @@
    "guides": "guides/ys-origin.json",
    "sheet": {
     "game": "Ys Origin",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -8553,7 +10766,8 @@
    "guides": "guides/yu-gi-oh-dungeon-dice-monsters.json",
    "sheet": {
     "game": "Yu-Gi-Oh! Dungeon Dice Monsters",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "GBA"
    }
   },
   {
@@ -8565,7 +10779,8 @@
    "guides": "guides/yu-gi-oh-forbidden-memories.json",
    "sheet": {
     "game": "Yu-Gi-Oh! Forbidden Memories",
-    "stability": "Stable"
+    "stability": "Stable",
+    "platform": "PSX"
    }
   },
   {
@@ -8577,7 +10792,8 @@
    "guides": "guides/yu-gi-oh-world-championship-2008.json",
    "sheet": {
     "game": "Yu-Gi-Oh! World Championship 2008",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "DS"
    }
   },
   {
@@ -8609,7 +10825,8 @@
    "guides": "guides/zoominoes.json",
    "sheet": {
     "game": "Zoominoes",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   },
   {
@@ -8622,7 +10839,8 @@
    "sheet": {
     "game": "Zork: Grand Inquisitor",
     "stability": "Stable",
-    "pr_status": "Not PRing"
+    "pr_status": "Not PRing",
+    "platform": "PC"
    }
   },
   {
@@ -8634,18 +10852,26 @@
    "guides": "guides/zuma-deluxe.json",
    "sheet": {
     "game": "Zuma Deluxe",
-    "stability": "Unstable"
+    "stability": "Unstable",
+    "platform": "PC"
    }
   }
  ],
  "errors": {
+  "batboy": "ImportError: cannot import name 'RegionType' from 'BaseClasses' (/home/runner/work/_temp/Archipelago/BaseClasses.py)",
   "bugsbunnylit": "TypeError: 'NoneType' object is not iterable",
+  "kao2UPDATE": "ModuleNotFoundError: No module named 'worlds.kao2UPDATE'",
   "lil_gator_game": "ImportError: cannot import name 'RuleWorldMixin' from 'rule_builder' (/home/runner/work/_temp/Archipelago/rule_builder/__init__.py)",
   "LostButFound": "ModuleNotFoundError: No module named 'worlds.LostButFound'",
   "pokemon_hgss": "worlds.Files.ImproperlyConfiguredAutoPatchError: Two auto patch containers are using the same file extension: <class 'worlds.pokemon_hgss.rom.PokemonHeartgoldPatch'>, <class 'output_patch.HeartGoldProcedurePatch'>",
+  "pokemon_xy": "ModuleNotFoundError: No module named 'worlds.pokemon_xy'",
+  "Salt and Sanctuary": "Did not load /tmp/tmpufgebgi8/tmpj99tzo5x/custom_worlds/salt_and_sanctuary.apworld as its maximum core version Version(major=0, minor=6, build=6) is lower than current core version Version(major=0, minor=6, build=8).",
   "scooby_doo_unmasked": "AssertionError: Choice option 'random' cannot be manually assigned.",
   "smash64": "AssertionError: Choice option 'random' cannot be manually assigned.",
+  "spyro_seasonofice": "ModuleNotFoundError: No module named 'worlds.spyro_seasonofice'",
+  "sshd": "AssertionError: Choice option 'random' cannot be manually assigned.",
   "super_chipflake_u_0.1.0": "ModuleNotFoundError: No module named 'worlds.super_chipflake_u_0'",
-  "tww3": "ModuleNotFoundError: No module named 'pygments'"
+  "tww3": "ModuleNotFoundError: No module named 'pygments'",
+  "warioswoods_nes": "ModuleNotFoundError: No module named 'worlds.warioswoods_nes'"
  }
 }
