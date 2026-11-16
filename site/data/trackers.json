@@ -120,9 +120,9 @@
    {
     "page": "https://github.com/DDogeOneeSama/Borderlands-2-PopTracker/releases/latest",
     "repo": "DDogeOneeSama/Borderlands-2-PopTracker",
-    "tag": "0.3.5",
-    "asset": "bl2_poptracker_0_3_5.zip",
-    "url": "https://github.com/DDogeOneeSama/Borderlands-2-PopTracker/releases/download/0.3.5/bl2_poptracker_0_3_5.zip"
+    "tag": "0.4.0",
+    "asset": "bl2_poptracker_0_4_0.zip",
+    "url": "https://github.com/DDogeOneeSama/Borderlands-2-PopTracker/releases/download/0.4.0/bl2_poptracker_0_4_0.zip"
    }
   ],
   "Castlevania: Aria of Sorrow": [
@@ -198,9 +198,9 @@
    {
     "page": "https://github.com/Ayden123kitten/Choo-Choo-Charles-PopTracker-Remake/releases",
     "repo": "Ayden123kitten/Choo-Choo-Charles-PopTracker-Remake",
-    "tag": "3.0.7",
+    "tag": "3.0.9",
     "asset": "Choo-Choo-Charles-Tracker.zip",
-    "url": "https://github.com/Ayden123kitten/Choo-Choo-Charles-PopTracker-Remake/releases/download/3.0.7/Choo-Choo-Charles-Tracker.zip"
+    "url": "https://github.com/Ayden123kitten/Choo-Choo-Charles-PopTracker-Remake/releases/download/3.0.9/Choo-Choo-Charles-Tracker.zip"
    }
   ],
   "Civilization V": [
@@ -225,9 +225,9 @@
    {
     "page": "https://github.com/Demorck/ClairObscur-Archipelago-Poptracker",
     "repo": "Demorck/ClairObscur-Archipelago-Poptracker",
-    "tag": "v0.4.3",
+    "tag": "v0.5.0",
     "asset": "ClairObscurAP_Poptracker.zip",
-    "url": "https://github.com/Demorck/ClairObscur-Archipelago-Poptracker/releases/download/v0.4.3/ClairObscurAP_Poptracker.zip"
+    "url": "https://github.com/Demorck/ClairObscur-Archipelago-Poptracker/releases/download/v0.5.0/ClairObscurAP_Poptracker.zip"
    }
   ],
   "CloverPit": [
@@ -324,9 +324,9 @@
    {
     "page": "https://github.com/Fylcoast/Dicey-Dungeons-AP-Tracker/releases",
     "repo": "Fylcoast/Dicey-Dungeons-AP-Tracker",
-    "tag": "v0.0.8",
+    "tag": "v0.0.9",
     "asset": "Dicey-Dungeons-AP-Tracker.zip",
-    "url": "https://github.com/Fylcoast/Dicey-Dungeons-AP-Tracker/releases/download/v0.0.8/Dicey-Dungeons-AP-Tracker.zip"
+    "url": "https://github.com/Fylcoast/Dicey-Dungeons-AP-Tracker/releases/download/v0.0.9/Dicey-Dungeons-AP-Tracker.zip"
    }
   ],
   "Digimon World 1": [
@@ -579,9 +579,9 @@
    {
     "page": "https://github.com/culk/Kingdom-Hearts-FM-AP-Tracker/releases",
     "repo": "culk/Kingdom-Hearts-FM-AP-Tracker",
-    "tag": "v1.6.0",
+    "tag": "v1.6.1",
     "asset": "kh1_ap_tracker.zip",
-    "url": "https://github.com/culk/Kingdom-Hearts-FM-AP-Tracker/releases/download/v1.6.0/kh1_ap_tracker.zip"
+    "url": "https://github.com/culk/Kingdom-Hearts-FM-AP-Tracker/releases/download/v1.6.1/kh1_ap_tracker.zip"
    }
   ],
   "Kingdom Hearts 2": [
@@ -614,9 +614,9 @@
    {
     "page": "https://github.com/z3xox/kh3-archipelago-poptracker/releases/latest",
     "repo": "z3xox/kh3-archipelago-poptracker",
-    "tag": "v1.0.1",
-    "asset": "kh3-archipelago-poptracker-v1.0.1.zip",
-    "url": "https://github.com/z3xox/kh3-archipelago-poptracker/releases/download/v1.0.1/kh3-archipelago-poptracker-v1.0.1.zip"
+    "tag": "v1.1.0-beta.1",
+    "asset": "kh3-archipelago-poptracker-v1.1.0-beta.1.zip",
+    "url": "https://github.com/z3xox/kh3-archipelago-poptracker/releases/download/v1.1.0-beta.1/kh3-archipelago-poptracker-v1.1.0-beta.1.zip"
    }
   ],
   "Kirby 64 - The Crystal Shards": [
@@ -929,9 +929,9 @@
    {
     "page": "https://github.com/Radis7Noir/pokemon-bw-ap-tracker/releases/latest",
     "repo": "Radis7Noir/pokemon-bw-ap-tracker",
-    "tag": "4.0.3",
+    "tag": "4.1.1",
     "asset": "pokemon-bw-ap-tracker.zip",
-    "url": "https://github.com/Radis7Noir/pokemon-bw-ap-tracker/releases/download/4.0.3/pokemon-bw-ap-tracker.zip"
+    "url": "https://github.com/Radis7Noir/pokemon-bw-ap-tracker/releases/download/4.1.1/pokemon-bw-ap-tracker.zip"
    }
   ],
   "Pokémon Crystal": [
@@ -1048,9 +1048,9 @@
    {
     "page": "https://github.com/jdmccork/Rain-World-PopTracker/releases/latest",
     "repo": "jdmccork/Rain-World-PopTracker",
-    "tag": "v0.7.7",
-    "asset": "Rain-World-PopTracker-0.7.7.zip",
-    "url": "https://github.com/jdmccork/Rain-World-PopTracker/releases/download/v0.7.7/Rain-World-PopTracker-0.7.7.zip"
+    "tag": "v0.8.0.0",
+    "asset": "Rain-World-PopTracker-0.8.0.0.zip",
+    "url": "https://github.com/jdmccork/Rain-World-PopTracker/releases/download/v0.8.0.0/Rain-World-PopTracker-0.8.0.0.zip"
    }
   ],
   "Ratchet & Clank": [
@@ -1565,9 +1565,9 @@
    {
     "page": "https://github.com/imklubb/Toy-Story-2-Poptracker/releases/latest",
     "repo": "imklubb/Toy-Story-2-Poptracker",
-    "tag": "3.1.1",
-    "asset": "toystory2_ap_3.1.1.zip",
-    "url": "https://github.com/imklubb/Toy-Story-2-Poptracker/releases/download/3.1.1/toystory2_ap_3.1.1.zip"
+    "tag": "3.1.3",
+    "asset": "toystory2_ap_3.1.3.zip",
+    "url": "https://github.com/imklubb/Toy-Story-2-Poptracker/releases/download/3.1.3/toystory2_ap_3.1.3.zip"
    }
   ],
   "TUNIC": [

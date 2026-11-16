@@ -1079,6 +1079,11 @@
    "wikidata": "Q774773",
    "checked": "2026-11-03"
   },
+  "Donkey Kong Country 2": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-11"
+  },
   "Don't Starve Together": {
    "genres": [
     "survie"
@@ -1513,6 +1518,11 @@
    "genres": [],
    "wikidata": null,
    "checked": "2026-11-03"
+  },
+  "Geoguessr": {
+   "genres": [],
+   "wikidata": "Q13576160",
+   "checked": "2026-11-12"
   },
   "Geometry Dash": {
    "genres": [
@@ -2023,24 +2033,11 @@
    "wikidata": "Q2181182",
    "checked": "2026-11-03"
   },
-  "Kirby: Planet Robobot": {
-   "genres": [
-    "action",
-    "plateforme"
-   ],
-   "wikidata": "Q23011263",
-   "checked": "2026-11-03"
-  },
   "Kirby's Dream Land 3": {
    "genres": [
     "plateforme"
    ],
    "wikidata": "Q1202713",
-   "checked": "2026-11-03"
-  },
-  "Kirby Squeak Squad": {
-   "genres": [],
-   "wikidata": null,
    "checked": "2026-11-03"
   },
   "Kirby Super Star Ultra": {
@@ -2290,6 +2287,13 @@
    ],
    "wikidata": "Q5721431",
    "checked": "2026-11-03"
+  },
+  "Mario Kart Wii": {
+   "genres": [
+    "course"
+   ],
+   "wikidata": "Q838707",
+   "checked": "2026-11-11"
   },
   "Mario & Luigi Superstar Saga": {
    "genres": [
@@ -3583,6 +3587,13 @@
    "wikidata": "Q1140411",
    "checked": "2026-11-03"
   },
+  "Shape of Dreams": {
+   "genres": [
+    "roguelike"
+   ],
+   "wikidata": "Q135031834",
+   "checked": "2026-11-14"
+  },
   "shapez": {
    "genres": [],
    "wikidata": null,
@@ -3820,6 +3831,13 @@
    "wikidata": "Q1068962",
    "checked": "2026-11-03"
   },
+  "Sonic Mania": {
+   "genres": [
+    "plateforme"
+   ],
+   "wikidata": "Q25991770",
+   "checked": "2026-11-12"
+  },
   "Sonic Riders": {
    "genres": [
     "course"
@@ -3990,14 +4008,6 @@
   "Stick Ranger": {
    "genres": [],
    "wikidata": null,
-   "checked": "2026-11-03"
-  },
-  "Stray": {
-   "genres": [
-    "aventure",
-    "puzzle"
-   ],
-   "wikidata": "Q96247255",
    "checked": "2026-11-03"
   },
   "Streets of Rage": {
@@ -4461,13 +4471,6 @@
     "course"
    ],
    "wikidata": "Q3997141",
-   "checked": "2026-11-03"
-  },
-  "Trails Beyond the Horizon": {
-   "genres": [
-    "rpg"
-   ],
-   "wikidata": "Q123975105",
    "checked": "2026-11-03"
   },
   "Trails in the Sky the 3rd": {
