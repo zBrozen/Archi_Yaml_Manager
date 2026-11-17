@@ -1,6 +1,6 @@
 {
  "ap_version": "0.6.8",
- "generated_at": "2026-11-16T13:32:49+00:00",
+ "generated_at": "2026-11-17T14:14:58+00:00",
  "games": [
   {
    "game": "'Weird Al' Yankovic Discography",
@@ -827,7 +827,7 @@
    "file": "games/big-walk.json",
    "source": "custom",
    "apworld": "bigwalk.apworld",
-   "world_version": "1.0.14",
+   "world_version": "1.0.15",
    "guides": "guides/big-walk.json",
    "sheet": {
     "game": "Big Walk",
@@ -5122,7 +5122,7 @@
    "file": "games/mathquest.json",
    "source": "custom",
    "apworld": "mathquest.apworld",
-   "world_version": "16.0.0",
+   "world_version": "19.0.0",
    "guides": "guides/mathquest.json",
    "sheet": {
     "game": "MathQuest",
@@ -9056,7 +9056,7 @@
    "file": "games/the-bazaar.json",
    "source": "custom",
    "apworld": "bazaar.apworld",
-   "world_version": "0.9.4",
+   "world_version": "0.9.5",
    "guides": "guides/the-bazaar.json",
    "sheet": {
     "game": "The Bazaar",
@@ -9993,7 +9993,7 @@
    "guides": "guides/vardrain.json",
    "sheet": {
     "game": "vardrain--",
-    "stability": "Unstable",
+    "stability": "Stable",
     "platform": "PC"
    }
   },
@@ -10837,7 +10837,7 @@
    "guides": "guides/zoominoes.json",
    "sheet": {
     "game": "Zoominoes",
-    "stability": "Stable",
+    "stability": "Unstable",
     "platform": "PC"
    }
   },
@@ -10877,7 +10877,7 @@
   "LostButFound": "ModuleNotFoundError: No module named 'worlds.LostButFound'",
   "pokemon_hgss": "worlds.Files.ImproperlyConfiguredAutoPatchError: Two auto patch containers are using the same file extension: <class 'worlds.pokemon_hgss.rom.PokemonHeartgoldPatch'>, <class 'output_patch.HeartGoldProcedurePatch'>",
   "pokemon_xy": "ModuleNotFoundError: No module named 'worlds.pokemon_xy'",
-  "Salt and Sanctuary": "Did not load /tmp/tmpplqkysvq/tmpp_swxskd/custom_worlds/salt_and_sanctuary.apworld as its maximum core version Version(major=0, minor=6, build=6) is lower than current core version Version(major=0, minor=6, build=8).",
+  "Salt and Sanctuary": "Did not load /tmp/tmpnl0k86fu/tmpv6f_q5uq/custom_worlds/salt_and_sanctuary.apworld as its maximum core version Version(major=0, minor=6, build=6) is lower than current core version Version(major=0, minor=6, build=8).",
   "scooby_doo_unmasked": "AssertionError: Choice option 'random' cannot be manually assigned.",
   "smash64": "AssertionError: Choice option 'random' cannot be manually assigned.",
   "spyro_seasonofice": "ModuleNotFoundError: No module named 'worlds.spyro_seasonofice'",
