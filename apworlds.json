@@ -898,7 +898,7 @@
     {"game": "Vagrant Story", "list": "index", "repo": "riezahughes/VagrantStoryAPWorld", "links": ["https://github.com/riezahughes/VagrantStoryAPWorld/releases"], "platform": "PSX"},
     {"game": "Valheim", "stability": "Unstable"},
     {"game": "Vampire Survivors", "stability": "Unstable", "platform": "PC"},
-    {"game": "vardrain--", "stability": "Unstable", "platform": "PC"},
+    {"game": "vardrain--", "stability": "Stable", "platform": "PC"},
     {"game": "Vertical Drop Heroes HD", "stability": "Unstable", "pr_status": "Not PRing", "platform": "PC"},
     {"game": "Very Very Valet", "stability": "Unstable", "platform": "PC"},
     {"game": "Vespadian", "stability": "Unstable"},
@@ -982,7 +982,7 @@
     {"game": "Zelda II: The Adventure of Link", "list": "index", "repo": "PinkSwitch/Archipelago", "links": ["https://github.com/PinkSwitch/Archipelago/releases?q=zelda&expanded=true"], "stability": "Stable", "platform": "NES"},
     {"game": "Zelda's Adventure GDX", "stability": "Unstable"},
     {"game": "Zone of the Enders", "list": "index", "repo": "1theory/Archipelago-ZOE", "links": ["https://github.com/1theory/Archipelago-ZOE/tree/main/worlds/zoe"], "stability": "Unstable", "platform": "PS2", "note": "Doesn't have a releases page."},
-    {"game": "Zoominoes", "stability": "Stable", "platform": "PC"},
+    {"game": "Zoominoes", "stability": "Unstable", "platform": "PC"},
     {"game": "Zork: Grand Inquisitor", "stability": "Stable", "pr_status": "Not PRing", "platform": "PC"},
     {"game": "Zuma Deluxe", "stability": "Unstable", "platform": "PC"}
   ]
