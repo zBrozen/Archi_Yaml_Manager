@@ -1,6 +1,6 @@
 {
  "ap_version": "0.6.8",
- "generated_at": "2026-11-17T14:14:58+00:00",
+ "generated_at": "2026-11-18T13:49:11+00:00",
  "games": [
   {
    "game": "'Weird Al' Yankovic Discography",
@@ -433,7 +433,7 @@
    "file": "games/apbingo.json",
    "source": "custom",
    "apworld": "APBingo.apworld",
-   "world_version": "1.1.2",
+   "world_version": "1.2.1",
    "guides": "guides/apbingo.json",
    "sheet": {
     "game": "APBingo",
@@ -779,8 +779,7 @@
    "sheet": {
     "game": "Beat Saber",
     "stability": "Unstable",
-    "platform": "PC",
-    "note": "Requires building an apworld"
+    "platform": "PC"
    }
   },
   {
@@ -1111,7 +1110,7 @@
    "file": "games/breath-of-the-wild.json",
    "source": "custom",
    "apworld": "botw.apworld",
-   "world_version": "0.3.3",
+   "world_version": "0.3.4",
    "guides": "guides/breath-of-the-wild.json",
    "sheet": {
     "game": "The Legend of Zelda: Breath of the Wild",
@@ -1384,7 +1383,7 @@
    "file": "games/casualties-unknown.json",
    "source": "custom",
    "apworld": "casualtiesunknown.apworld",
-   "world_version": "0.13.0",
+   "world_version": "0.13.1",
    "guides": "guides/casualties-unknown.json",
    "sheet": {
     "game": "Casualties: Unknown (Scav Prototype Demo)",
@@ -2142,7 +2141,7 @@
    "file": "games/dark-souls-remastered.json",
    "source": "custom",
    "apworld": "dsr.apworld",
-   "world_version": "0.3.0",
+   "world_version": "0.3.1",
    "guides": "guides/dark-souls-remastered.json",
    "sheet": {
     "game": "Dark Souls Remastered",
@@ -3371,7 +3370,7 @@
    "file": "games/geoguessr.json",
    "source": "custom",
    "apworld": "geoguessr.apworld",
-   "world_version": "0.2.0",
+   "world_version": "0.2.1",
    "guides": "guides/geoguessr.json",
    "sheet": {
     "game": "Geoguessr",
@@ -6181,7 +6180,7 @@
    "file": "games/outer-wilds.json",
    "source": "custom",
    "apworld": "outer_wilds.apworld",
-   "world_version": "1.4.1",
+   "world_version": "1.4.2",
    "guides": "guides/outer-wilds.json",
    "sheet": {
     "game": "Outer Wilds",
@@ -7451,6 +7450,18 @@
    }
   },
   {
+   "game": "RVGL",
+   "file": "games/rvgl.json",
+   "source": "custom",
+   "apworld": "rvgl.apworld",
+   "world_version": "0.1.0",
+   "guides": "guides/rvgl.json",
+   "sheet": {
+    "game": "Re-Volt (RVGL)",
+    "stability": "Unstable"
+   }
+  },
+  {
    "game": "RWBY Grimm Eclipse",
    "file": "games/rwby-grimm-eclipse.json",
    "source": "custom",
@@ -8067,6 +8078,19 @@
    "sheet": {
     "game": "Smushi Come Home",
     "stability": "Unstable"
+   }
+  },
+  {
+   "game": "SMW: Spicy Mycena Waffles",
+   "file": "games/smw-spicy-mycena-waffles.json",
+   "source": "custom",
+   "apworld": "waffles.apworld",
+   "world_version": "1.3.11",
+   "guides": "guides/smw-spicy-mycena-waffles.json",
+   "sheet": {
+    "game": "Super Mario World: Spicy Mycena Waffles",
+    "stability": "Stable",
+    "pr_status": "Not PRing"
    }
   },
   {
@@ -9191,7 +9215,7 @@
    "file": "games/the-legend-of-zelda-oracle-of-seasons.json",
    "source": "custom",
    "apworld": "tloz_oos.apworld",
-   "world_version": "26.2.2",
+   "world_version": "26.2.3",
    "guides": "guides/the-legend-of-zelda-oracle-of-seasons.json",
    "sheet": {
     "game": "The Legend of Zelda: Oracle of Seasons",
@@ -9217,7 +9241,7 @@
    "file": "games/the-legend-of-zelda-a-link-to-the-past.json",
    "source": "custom",
    "apworld": "alttpr.apworld",
-   "world_version": "1.8.1",
+   "world_version": "1.8.2",
    "guides": "guides/the-legend-of-zelda-a-link-to-the-past.json",
    "sheet": {
     "game": "The Legend of Zelda: A Link to the Past OWR",
@@ -9388,11 +9412,11 @@
    "game": "TimeSplitters 2",
    "file": "games/timesplitters-2.json",
    "source": "custom",
-   "apworld": "timesplitters2.apworld",
-   "world_version": "1.0.3",
+   "apworld": "timesplitters_2.apworld",
+   "world_version": "1.2.1",
    "guides": "guides/timesplitters-2.json",
    "sheet": {
-    "game": "Timesplitters 2 (Str8UpWHITE64)",
+    "game": "Timesplitters 2 (CaptPurpleHeart)",
     "stability": "Unstable"
    }
   },
@@ -9401,7 +9425,7 @@
    "file": "games/timesplitters-future-perfect.json",
    "source": "custom",
    "apworld": "timesplitters_future_perfect.apworld",
-   "world_version": "1.3.1",
+   "world_version": "1.5.0",
    "guides": "guides/timesplitters-future-perfect.json",
    "sheet": {
     "game": "TimeSplitters: Future Perfect (CaptPurpleHeart)",
@@ -9569,7 +9593,7 @@
    "file": "games/toy-story-2.json",
    "source": "custom",
    "apworld": "toystory2.apworld",
-   "world_version": "3.1.4",
+   "world_version": "3.2.0",
    "guides": "guides/toy-story-2.json",
    "sheet": {
     "game": "Toy Story 2 (PS1)",
@@ -9824,7 +9848,7 @@
    "file": "games/unbeatable-arcade.json",
    "source": "custom",
    "apworld": "unbeatable_arcade.apworld",
-   "world_version": "0.8.0",
+   "world_version": "0.9.0",
    "guides": "guides/unbeatable-arcade.json",
    "sheet": {
     "game": "UNBEATABLE",
@@ -10485,7 +10509,7 @@
    "file": "games/xenoblade-x.json",
    "source": "custom",
    "apworld": "xenobladex.apworld",
-   "world_version": "0.3.1",
+   "world_version": "0.3.2",
    "guides": "guides/xenoblade-x.json",
    "sheet": {
     "game": "Xenoblade Chronicles X",
@@ -10877,7 +10901,7 @@
   "LostButFound": "ModuleNotFoundError: No module named 'worlds.LostButFound'",
   "pokemon_hgss": "worlds.Files.ImproperlyConfiguredAutoPatchError: Two auto patch containers are using the same file extension: <class 'worlds.pokemon_hgss.rom.PokemonHeartgoldPatch'>, <class 'output_patch.HeartGoldProcedurePatch'>",
   "pokemon_xy": "ModuleNotFoundError: No module named 'worlds.pokemon_xy'",
-  "Salt and Sanctuary": "Did not load /tmp/tmpnl0k86fu/tmpv6f_q5uq/custom_worlds/salt_and_sanctuary.apworld as its maximum core version Version(major=0, minor=6, build=6) is lower than current core version Version(major=0, minor=6, build=8).",
+  "Salt and Sanctuary": "Did not load /tmp/tmp8c2xj403/tmp4s5h1wtu/custom_worlds/salt_and_sanctuary.apworld as its maximum core version Version(major=0, minor=6, build=6) is lower than current core version Version(major=0, minor=6, build=8).",
   "scooby_doo_unmasked": "AssertionError: Choice option 'random' cannot be manually assigned.",
   "smash64": "AssertionError: Choice option 'random' cannot be manually assigned.",
   "spyro_seasonofice": "ModuleNotFoundError: No module named 'worlds.spyro_seasonofice'",
