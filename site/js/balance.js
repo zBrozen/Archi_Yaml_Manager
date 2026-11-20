@@ -361,7 +361,7 @@ export function BalanceReport({ report }) {
     ${shown === "now" ? html`<${NowView} report=${report} />` : html`<${StartView} report=${report} />`}`;
 }
 
-// Carte de l'onglet « Avancement » (hôte) et de l'onglet Hôte : `balance` (useBalance), `status` / `tracker` de la
+// Carte des onglets « Équilibre » (hôte, partie en ligne) et Hôte (avant l'hébergement) : `balance` (useBalance), `status` / `tracker` de la
 // partie en ligne, `balancing` (équilibrage de chaque joueur, lu dans le spoiler).
 export function BalanceCard({ balance, status, tracker, balancing }) {
   const { saved, action } = balance;

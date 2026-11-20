@@ -294,7 +294,7 @@ function HostAdvancement({ room, online, tracker, data, setData }) {
   const spoiler = useSpoiler(room);
   const balance = useBalance(room);
   const busy = spoiler.action.busy;
-  // Le .zip de la partie générée chez soi a aussi la partie elle-même : elle sert à l'équilibre entre les joueurs.
+  // Le .zip de la partie générée chez soi a aussi la partie elle-même : gardée pour l'onglet « Équilibre ».
   const load = (input) => {
     spoiler.load(input);
     if (input && /\.zip$/i.test(input.name)) balance.load(input, true);
@@ -303,7 +303,6 @@ function HostAdvancement({ room, online, tracker, data, setData }) {
     <input type="file" accept=".txt,.zip" hidden disabled=${busy} onChange=${(e) => { load(e.target.files[0]); e.target.value = ""; }} />${label}</label>`;
   const { file } = spoiler;
   return html`<${Advancement} room=${room} online=${online} tracker=${tracker} file=${file}
-    extra=${(parsed) => html`<${BalanceSection} balance=${balance} online=${online} tracker=${tracker} spoiler=${parsed?.spoiler} />`}
     intro="Réservé à l'hôte, et aux joueurs à qui vous l'ouvrez : le spoiler de la génération, croisé avec le tracker d'archipelago.gg, montre où en est le chemin de victoire et qui peut le faire avancer."
     source=${(parsed) => html`
       ${file === undefined && html`<p class="hint">Lecture du spoiler…</p>`}
@@ -347,16 +346,22 @@ function PlayerAdvancement({ room, online, tracker, shared }) {
       ${state.error && html`<div class="notice error full">${state.error}</div>`}`} />`;
 }
 
-// Partie commune : lecture du spoiler, analyse et affichage. `source(parsed)` : d'où vient le spoiler.
-// Un joueur commence objets et lieux masqués : le spoiler dit aussi où sont les siens.
-// Équilibre entre les joueurs (hôte) : la partie générée, et l'équilibrage de chacun lu dans le spoiler.
-function BalanceSection({ balance, online, tracker, spoiler }) {
-  const balancing = useMemo(() => new Map((spoiler?.players || []).filter((p) => p.balancing != null).map((p) => [p.slot, p.balancing])), [spoiler]);
+// Onglet « Équilibre » (hôte) : la partie générée (balance.js), et l'équilibrage de chacun lu dans le spoiler s'il est
+// connu (génération en ligne, ou spoiler déposé dans l'onglet « Avancement »).
+export function BalanceView({ room, online, tracker }) {
+  const balance = useBalance(room);
+  const { file } = useSpoiler(room);
+  const balancing = useMemo(() => {
+    let players = [];
+    try { players = file ? parseSpoiler(file.text).players : []; } catch { /* spoiler illisible : équilibrage inconnu */ }
+    return new Map(players.filter((p) => p.balancing != null).map((p) => [p.slot, p.balancing]));
+  }, [file]);
   return html`<${BalanceCard} balance=${balance} status=${online.status} tracker=${tracker} balancing=${balancing} />`;
 }
 
-// `extra(parsed)` : cartes affichées sous l'en-tête, avec ou sans spoiler.
-function Advancement({ room, online, tracker, file, intro, source, extra, player = false }) {
+// Partie commune : lecture du spoiler, analyse et affichage. `source(parsed)` : d'où vient le spoiler.
+// Un joueur commence objets et lieux masqués : le spoiler dit aussi où sont les siens.
+function Advancement({ room, online, tracker, file, intro, source, player = false }) {
   const [hide, setHide] = useSetting(player ? "spoilerHidePlayer" : "spoilerHide", player);
   const { status } = online;
   const parsed = useMemo(() => {
@@ -382,7 +387,6 @@ function Advancement({ room, online, tracker, file, intro, source, extra, player
     ${parsed?.spoiler && !parsed.spoiler.playthrough && html`<div class="notice warn full">Ce spoiler n'a pas de chemin de
       victoire (niveau de spoiler 1) : générez la partie avec un spoiler complet (niveau 2, celui par défaut d'Archipelago).</div>`}
   </section>
-  ${extra?.(parsed)}
   ${parsed?.spoiler?.playthrough && html`<${Report} report=${report} spoiler=${parsed.spoiler} status=${status} online=${online}
     tracker=${tracker} loading=${loading} packagesError=${packages.error} hide=${hide} mode=${room.mode} />`}`;
 }

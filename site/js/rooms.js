@@ -11,7 +11,7 @@ import { makeZip } from "./zip.js";
 import { guideLink } from "./guides.js";
 import { ItemsPanel, ProgressPanel, TextClient, defaultItemSlots, useTracker } from "./room-live.js";
 import { ScreensTab } from "./screens.js";
-import { AdvancementView } from "./spoiler.js";
+import { AdvancementView, BalanceView } from "./spoiler.js";
 import { BalanceCard, useBalance } from "./balance.js";
 import { FishingRoomCard, useFishingFeed } from "./fishing.js";
 import { WishNotice, WishlistView, useWishNotices, useWishState } from "./wishlist.js";
@@ -360,6 +360,7 @@ export function RoomPage({ index, code, onCreate, onEdit }) {
   const live = room.ap_room_url ? [
     ["partie", "Progression"],
     ...(admin || me?.spoiler_access ? [["avancement", "Avancement"]] : []),
+    ...(admin ? [["equilibre", "Équilibre"]] : []),
     ["wishlist", notices.fresh.length ? `Wishlist (♥ ${notices.fresh.length})` : "Wishlist"],
     ["client", "Client texte"],
   ] : [];
@@ -399,6 +400,7 @@ export function RoomPage({ index, code, onCreate, onEdit }) {
     ${active === "partie" && html`<${GameView} room=${room} online=${online} tracker=${tracker} mine=${mine} fishing=${data.fishing} />`}
     ${active === "avancement" && html`<${AdvancementView} room=${room} online=${online} tracker=${tracker}
       data=${data} setData=${setData} admin=${admin} />`}
+    ${active === "equilibre" && html`<${BalanceView} room=${room} online=${online} tracker=${tracker} />`}
     ${active === "wishlist" && (online.status
       ? html`<${WishlistView} room=${room} status=${online.status} tracker=${tracker} lists=${wishes} mine=${mine} admin=${admin}
           wishlists=${data.wishlists} onSaved=${savedWishlist} notices=${notices} />`

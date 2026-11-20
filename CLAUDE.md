@@ -107,7 +107,7 @@
   numéro est un événement, non suivi). Le spoiler reste dans le navigateur de l'hôte (IndexedDB `room-spoilers`), sauf
   s'il ouvre l'onglet à des joueurs (`players.spoiler_access`) : copie dans le KV (`CODE/shared-spoiler`,
   `rooms.shared_spoiler`), lue par `GET /spoiler` (hôte ou joueur autorisé), supprimée au dernier joueur décoché.
-  Équilibre entre les joueurs (`balance.js`, hôte seulement : onglet Avancement, et onglet Hôte avant l'hébergement) :
+  Équilibre entre les joueurs (`balance.js`, hôte seulement : onglet « Équilibre » de la room en ligne, et onglet Hôte avant l'hébergement) :
   lit le `.archipelago` (sortie de la génération en ligne, ou `.zip` déposé) avec `pickle.js`, qui lit le pickle comme
   des données (classes en `PyObject` inertes, jamais appelées : ne pas y ajouter d'exécution). Sphères `spheres` de
   la multidata (`get_sendable_spheres`, Archipelago 0.5+), résumé gardé en IndexedDB `room-balance`. Il dit où sont
