@@ -112,6 +112,10 @@ export const api = {
     { code, body: new Blob([text], { type: "text/plain" }) }),
   unshareSpoiler: (code) => call("DELETE", at(code, "/spoiler"), { code }),
   sharedSpoiler: (code) => call("GET", at(code, "/spoiler"), { code, file: true }),
+  // Équilibre entre les joueurs (balance.js) : résumé de la partie, envoyé avec le spoiler, retiré avec lui.
+  shareBalance: (code, { name, at: when, data }) => call("PUT", at(code, `/balance?name=${encodeURIComponent(name)}&at=${when}`),
+    { code, body: new Blob([JSON.stringify(data)], { type: "application/json" }) }),
+  sharedBalance: (code) => call("GET", at(code, "/balance"), { code }),
   saveWishlist: (code, slot, items) => call("PUT", at(code, `/wishlists/${encodeURIComponent(slot)}`), { code, body: { items } }),
   saveFishing: (code, body) => call("PUT", at(code, "/fishing"), { code, body }),
   // Photos des cartes : `shot` « joueur-lieu », `name` le joueur de la partie qui a trouvé l'objet.

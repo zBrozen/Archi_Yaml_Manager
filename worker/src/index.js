@@ -316,7 +316,10 @@ async function getRoom(request, env, room) {
     apworlds: await roomApworlds(env, room.code),
     me: me ? { id: me.id, pseudo: me.pseudo, spoiler_access: !!me.spoiler_access } : null,
     // Copie du spoiler (onglet « Avancement ») : pour l'hôte et les joueurs à qui il l'a ouvert.
-    ...(admin || me?.spoiler_access ? { shared_spoiler: JSON.parse(room.shared_spoiler || "null") } : {}),
+    ...(admin || me?.spoiler_access ? {
+      shared_spoiler: JSON.parse(room.shared_spoiler || "null"),
+      shared_balance: JSON.parse(room.shared_balance || "null"),
+    } : {}),
     wishlists: Object.fromEntries(wishes.results.map((w) => [w.slot, JSON.parse(w.items)])),
     fishing: fishingSummary(fishing.results, players.results),
     shots: shots.results.map((r) => r.shot),
@@ -357,11 +360,12 @@ async function deleteFiles(env, code) {
 }
 
 const sharedSpoilerKey = (code) => `${code}/shared-spoiler`;
+const sharedBalanceKey = (code) => `${code}/shared-balance`;
 
 // Fichiers et lignes d'une room supprimée (par l'hôte ou faute d'activité).
 async function purgeRoom(env, code) {
   await deleteFiles(env, code);
-  if (env.FILES) await env.FILES.delete(sharedSpoilerKey(code));
+  if (env.FILES) await Promise.all([env.FILES.delete(sharedSpoilerKey(code)), env.FILES.delete(sharedBalanceKey(code))]);
   await deleteShots(env, code, null);
   await Promise.all((await roomApworlds(env, code)).map((a) => deleteApworldFiles(env, code, a.file)));
   await env.DB.batch([
@@ -562,23 +566,58 @@ async function shareSpoiler(request, env, room) {
   return json({ shared_spoiler: JSON.parse(shared) });
 }
 
+// Retire aussi la copie de l'équilibre entre les joueurs, envoyée avec le spoiler.
 async function unshareSpoiler(request, env, room) {
   await requireAdmin(request, room);
-  if (env.FILES) await env.FILES.delete(sharedSpoilerKey(room.code));
+  if (env.FILES) await Promise.all([env.FILES.delete(sharedSpoilerKey(room.code)), env.FILES.delete(sharedBalanceKey(room.code))]);
   await env.DB.batch([
-    env.DB.prepare("UPDATE rooms SET shared_spoiler = NULL WHERE code = ?").bind(room.code),
+    env.DB.prepare("UPDATE rooms SET shared_spoiler = NULL, shared_balance = NULL WHERE code = ?").bind(room.code),
     env.DB.prepare("UPDATE players SET spoiler_access = 0 WHERE room_code = ?").bind(room.code),
   ]);
-  return json({ shared_spoiler: null });
+  return json({ shared_spoiler: null, shared_balance: null });
 }
 
-async function getSharedSpoiler(request, env, room) {
+async function requireSpoilerAccess(request, env, room) {
   if (!(await isAdmin(request, room)) && !(await requirePlayer(request, env, room)).spoiler_access) {
     throw new HttpError(403, "L'hôte ne vous a pas ouvert l'onglet « Avancement ».");
   }
+}
+
+async function getSharedSpoiler(request, env, room) {
+  await requireSpoilerAccess(request, env, room);
   const file = room.shared_spoiler && env.FILES ? await env.FILES.get(sharedSpoilerKey(room.code), "stream") : null;
   if (!file) throw new HttpError(404, "L'hôte n'a pas partagé de spoiler.");
   return new Response(file, { headers: { "Content-Type": "text/plain; charset=utf-8", ...CORS } });
+}
+
+// Équilibre entre les joueurs : résumé de la partie générée calculé par le navigateur de l'hôte (balance.js), lu par
+// les joueurs qui ont accès à l'onglet « Avancement ». Il dit où sont les objets, comme le spoiler.
+async function shareBalance(request, env, room) {
+  await requireAdmin(request, room);
+  if (!env.FILES) throw new HttpError(501, "Le partage n'est pas configuré sur ce serveur.");
+  const params = new URL(request.url).searchParams;
+  const name = text(params.get("name"), "nom du fichier", LIMITS.filename);
+  const at = Number(params.get("at"));
+  if (!Number.isFinite(at)) throw new HttpError(400, "Date de la partie invalide.");
+  const data = await request.text();
+  if (!data || data.length > MAX_FILE_SIZE) throw new HttpError(413, "Résumé vide ou trop gros (25 Mo au maximum).");
+  let summary;
+  try { summary = JSON.parse(data); } catch { summary = null; }
+  if (!summary || !Array.isArray(summary.players) || !Number.isInteger(summary.spheres)
+    || !summary.locations || typeof summary.locations !== "object" || Array.isArray(summary.locations)) {
+    throw new HttpError(400, "Ce n'est pas un résumé de partie.");
+  }
+  const shared = JSON.stringify({ name, at, size: data.length });
+  await env.FILES.put(sharedBalanceKey(room.code), data);
+  await env.DB.prepare("UPDATE rooms SET shared_balance = ? WHERE code = ?").bind(shared, room.code).run();
+  return json({ shared_balance: JSON.parse(shared) });
+}
+
+async function getSharedBalance(request, env, room) {
+  await requireSpoilerAccess(request, env, room);
+  const file = room.shared_balance && env.FILES ? await env.FILES.get(sharedBalanceKey(room.code), "stream") : null;
+  if (!file) throw new HttpError(404, "L'hôte n'a pas partagé l'équilibre entre les joueurs.");
+  return new Response(file, { headers: { "Content-Type": "application/json; charset=utf-8", ...CORS } });
 }
 
 // --- Partie hébergée -----------------------------------------------------------------
@@ -1509,6 +1548,9 @@ async function route(request, env) {
     if (method === "GET") return getSharedSpoiler(request, env, room);
     if (method === "PUT") return shareSpoiler(request, env, room);
     if (method === "DELETE") return unshareSpoiler(request, env, room);
+  } else if (sub === "balance" && !id) {
+    if (method === "GET") return getSharedBalance(request, env, room);
+    if (method === "PUT") return shareBalance(request, env, room);
   } else if (sub === "wishlists" && id && method === "PUT") {
     return saveWishlist(request, env, room, id);
   } else if (sub === "fishing" && !id && method === "PUT") {

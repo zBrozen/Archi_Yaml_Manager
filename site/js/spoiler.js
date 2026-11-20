@@ -287,7 +287,8 @@ const pct = (a, b) => (b ? Math.floor((a / b) * 100) : 0);
 export function AdvancementView({ room, online, tracker, data, setData, admin }) {
   return admin
     ? html`<${HostAdvancement} room=${room} online=${online} tracker=${tracker} data=${data} setData=${setData} />`
-    : html`<${PlayerAdvancement} room=${room} online=${online} tracker=${tracker} shared=${data.shared_spoiler} />`;
+    : html`<${PlayerAdvancement} room=${room} online=${online} tracker=${tracker} shared=${data.shared_spoiler}
+        sharedBalance=${data.shared_balance} />`;
 }
 
 function HostAdvancement({ room, online, tracker, data, setData }) {
@@ -318,13 +319,38 @@ function HostAdvancement({ room, online, tracker, data, setData }) {
       </div>`}
       ${file === null && html`<${SpoilerDrop} spoiler=${spoiler} onFile=${load} />`}
       ${spoiler.action.error && html`<div class="notice error full">${spoiler.action.error}</div>`}
-      <${SpoilerSharing} room=${room} data=${data} setData=${setData} file=${parsed?.spoiler ? file : null} />`} />`;
+      <${SpoilerSharing} room=${room} data=${data} setData=${setData} file=${parsed?.spoiler ? file : null}
+        balance=${balance.saved || null} />`} />`;
+}
+
+// Équilibre entre les joueurs partagé par l'hôte (balance.js), lu une fois par version le temps de la visite :
+// { saved: { data, name, at } | null | undefined (lecture en cours), action: { error } }, comme useBalance.
+const sharedBalances = new Map();
+function useSharedBalance(room, shared) {
+  const [state, setState] = useState({ saved: undefined, error: null });
+  const key = shared ? `${room.code}@${shared.at}@${shared.name}` : null;
+  useEffect(() => {
+    if (!shared) { setState({ saved: null, error: null }); return undefined; }
+    let alive = true;
+    if (!sharedBalances.has(key)) {
+      sharedBalances.set(key, api.sharedBalance(room.code).catch((e) => { sharedBalances.delete(key); throw e; }));
+    }
+    setState({ saved: undefined, error: null });
+    sharedBalances.get(key).then(
+      (data) => alive && setState({ saved: { data, name: shared.name, at: shared.at }, error: null }),
+      (e) => alive && setState({ saved: null, error: e.message }),
+    );
+    return () => { alive = false; };
+  }, [key]);
+  return { saved: state.saved, action: { busy: false, error: state.error }, generated: null };
 }
 
 // Copie du spoiler partagé par l'hôte, lue une fois par version le temps de la visite.
 const sharedTexts = new Map();
-function PlayerAdvancement({ room, online, tracker, shared }) {
+function PlayerAdvancement({ room, online, tracker, shared, sharedBalance }) {
   const [state, setState] = useState({ file: undefined, error: null });
+  const balance = useSharedBalance(room, sharedBalance);
+  const balancing = useMemo(() => balancingOf(state.file), [state.file]);
   const key = shared ? `${room.code}@${shared.at}` : null;
   useEffect(() => {
     if (!shared) { setState({ file: null, error: null }); return undefined; }
@@ -340,7 +366,9 @@ function PlayerAdvancement({ room, online, tracker, shared }) {
     );
     return () => { alive = false; };
   }, [key]);
-  return html`<${Advancement} room=${room} online=${online} tracker=${tracker} file=${state.file} player
+  return html`${sharedBalance && html`<${BalanceCard} fold shared balance=${balance} status=${online.status} tracker=${tracker}
+    balancing=${balancing} />`}
+  <${Advancement} room=${room} online=${online} tracker=${tracker} file=${state.file} player
     intro="L'hôte vous a ouvert cet onglet : le spoiler de la partie, croisé avec le tracker d'archipelago.gg, montre où en est le chemin de victoire et qui peut le faire avancer. Il dit où sont les objets de tous les joueurs, les vôtres compris : ils restent masqués tant que vous ne décochez pas la case."
     source=${() => html`
       ${state.file === undefined && html`<p class="hint">Lecture du spoiler…</p>`}
@@ -388,26 +416,35 @@ function Advancement({ room, online, tracker, file, intro, source, player = fals
 }
 
 // Joueurs à qui l'hôte ouvre l'onglet. Le service garde une copie du spoiler de l'hôte (renvoyée quand il change :
-// nouvelle génération, autre fichier), retirée quand l'hôte décoche le dernier joueur.
-function SpoilerSharing({ room, data, setData, file }) {
+// nouvelle génération, autre fichier), et du résumé de la partie pour l'équilibre entre les joueurs (`balance` :
+// useBalance().saved), retirées quand l'hôte décoche le dernier joueur.
+function SpoilerSharing({ room, data, setData, file, balance }) {
   const action = useAction();
   const shared = data.shared_spoiler;
+  const sharedBalance = data.shared_balance;
   const players = data.players.filter((p) => p.id !== data.me?.id);
   const allowed = players.filter((p) => p.spoiler_access);
   const current = !!file && !!shared && shared.at === file.at && shared.name === file.name;
+  const balanceCurrent = !balance || (!!sharedBalance && sharedBalance.at === balance.at && sharedBalance.name === balance.name);
   const upload = async () => {
-    const result = await api.shareSpoiler(room.code, file);
-    setData((d) => ({ ...d, shared_spoiler: result.shared_spoiler }));
+    if (!current) {
+      const result = await api.shareSpoiler(room.code, file);
+      setData((d) => ({ ...d, shared_spoiler: result.shared_spoiler }));
+    }
+    if (!balanceCurrent) {
+      const result = await api.shareBalance(room.code, balance);
+      setData((d) => ({ ...d, shared_balance: result.shared_balance }));
+    }
   };
   useEffect(() => {
-    if (file && allowed.length && !current && !action.busy && !action.error) action.run(upload);
-  }, [file, current, allowed.length, action.busy]);
+    if (file && allowed.length && (!current || !balanceCurrent) && !action.busy && !action.error) action.run(upload);
+  }, [file, current, balanceCurrent, allowed.length, action.busy]);
 
   const toggle = (player, on) => action.run(async () => {
-    if (on && !current) await upload();
+    if (on) await upload();
     if (!on && allowed.every((p) => p.id === player.id)) {
-      await api.unshareSpoiler(room.code); // retire aussi l'accès de tous
-      setData((d) => ({ ...d, shared_spoiler: null, players: d.players.map((p) => ({ ...p, spoiler_access: false })) }));
+      await api.unshareSpoiler(room.code); // retire aussi l'équilibre, et l'accès de tous
+      setData((d) => ({ ...d, shared_spoiler: null, shared_balance: null, players: d.players.map((p) => ({ ...p, spoiler_access: false })) }));
       return;
     }
     await api.setSpoilerAccess(room.code, player.id, on);
@@ -417,9 +454,9 @@ function SpoilerSharing({ room, data, setData, file }) {
   return html`<details class="group full" open=${allowed.length > 0}>
     <summary>Ouvrir l'onglet à des joueurs${allowed.length ? ` (${allowed.length})` : ""}</summary>
     <div class="group-body stack spoiler-share">
-      <p class="hint">Les joueurs cochés voient cet onglet dans la room. Ils reçoivent tout le spoiler : où sont les objets de
-        chacun, les leurs compris (la case « Masquer » ne cache que l'affichage). Le service en garde une copie tant qu'un
-        joueur y a accès.</p>
+      <p class="hint">Les joueurs cochés voient cet onglet dans la room, équilibre entre les joueurs compris. Ils reçoivent tout le
+        spoiler : où sont les objets de chacun, les leurs compris (la case « Masquer » ne cache que l'affichage). Le service en
+        garde une copie tant qu'un joueur y a accès.</p>
       ${!players.length ? html`<p class="hint">Personne n'a encore rejoint la room.</p>`
         : html`<div class="items-players-list">${players.map((p) => html`<label class=${`player-check ${p.spoiler_access ? "on" : ""}`}>
           <input type="checkbox" checked=${!!p.spoiler_access} disabled=${action.busy || (!file && !p.spoiler_access)}
@@ -427,7 +464,7 @@ function SpoilerSharing({ room, data, setData, file }) {
           <span><strong>${p.pseudo}</strong>${p.slots?.length ? html` <span class="hint">${p.slots.map((s) => s.name).join(", ")}</span>` : ""}</span>
         </label>`)}</div>`}
       ${!file && html`<p class="hint">Chargez d'abord un spoiler pour l'ouvrir à des joueurs.</p>`}
-      ${allowed.length > 0 && file && !current && html`<p class="hint">Envoi du spoiler à jour aux joueurs…</p>`}
+      ${allowed.length > 0 && file && (!current || !balanceCurrent) && html`<p class="hint">Envoi de la version à jour aux joueurs…</p>`}
       ${action.error && html`<div class="notice error">${action.error}</div>`}
     </div>
   </details>`;

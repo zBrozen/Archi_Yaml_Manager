@@ -375,15 +375,16 @@ function headline(saved, report) {
 
 // Carte « Équilibre entre les joueurs » : en tête de l'onglet « Avancement » (hôte, partie en ligne), repliable
 // (`fold`, état gardé), et dans l'onglet Hôte avant l'hébergement. `balance` : useBalance ; `status` / `tracker` : partie
-// en ligne ; `balancing` : équilibrage de chaque joueur, lu dans le spoiler.
-export function BalanceCard({ balance, status, tracker, balancing, fold = false }) {
+// en ligne ; `balancing` : équilibrage de chaque joueur, lu dans le spoiler. `shared` : vue d'un joueur à qui l'hôte a
+// ouvert l'onglet (copie envoyée par l'hôte, sans choix de fichier).
+export function BalanceCard({ balance, status, tracker, balancing, fold = false, shared = false }) {
   const { saved, action } = balance;
   const [open, setOpen] = useSetting("balanceOpen", false);
   const live = tracker?.data?.live || null;
   const report = useMemo(() => (saved?.data ? analyzeBalance(saved.data, {
     status, live, fixed: tracker?.data?.fixed, balancing,
   }) : null), [saved, status, live, balancing]);
-  const actions = html`<div class="row">
+  const actions = !shared && html`<div class="row">
     <label class="button ghost small">
       <input type="file" accept=".archipelago,.zip" hidden disabled=${action.busy}
         onChange=${(e) => { balance.load(e.target.files[0]); e.target.value = ""; }} />${saved ? "Autre partie" : "Choisir la partie"}</label>
@@ -391,13 +392,14 @@ export function BalanceCard({ balance, status, tracker, balancing, fold = false 
       ${balance.generated ? "Revenir à la génération en ligne" : "Oublier"}</button>`}
   </div>`;
   const body = html`
-    ${saved === undefined && html`<p class="hint">${balance.generated ? "Lecture de la partie générée…" : "Chargement…"}</p>`}
+    ${saved === undefined && html`<p class="hint">${balance.generated || shared ? "Lecture de la partie…" : "Chargement…"}</p>`}
     ${saved === null && html`<p class="hint">Qui a des checks à faire et qui attend les autres. Déposez le <code>.zip</code> de la partie
-      (dossier <code>output</code> d'Archipelago) ou son <code>.archipelago</code> : il reste dans ce navigateur, rien n'est envoyé.</p>`}
+      (dossier <code>output</code> d'Archipelago) ou son <code>.archipelago</code>. Il reste dans ce navigateur ; seuls les joueurs à
+      qui vous ouvrez l'onglet « Avancement » en reçoivent une copie, avec le spoiler.</p>`}
     ${action.error && html`<div class="notice error full">${action.error}</div>`}
     ${report && html`<${BalanceReport} report=${report} />`}
-    ${saved && html`<p class="hint">Partie : ${saved.name}${saved.data.version ? ` (Archipelago ${saved.data.version})` : ""} ·
-      gardée dans ce navigateur, pour vous seul.</p>`}`;
+    ${saved && html`<p class="hint">Partie : ${saved.name}${saved.data.version ? ` (Archipelago ${saved.data.version})` : ""} · ${shared
+      ? "partagée par l'hôte." : "gardée dans ce navigateur, et envoyée avec le spoiler aux joueurs à qui vous ouvrez l'onglet."}</p>`}`;
 
   if (!fold) {
     return html`<section class="card stack">
