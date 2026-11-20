@@ -11,7 +11,7 @@ import { html, useState, useEffect, useMemo } from "../vendor/preact-htm.js";
 import { api } from "./rooms-api.js";
 import { readZip } from "./unzip.js";
 import { readMultidata, PyObject } from "./pickle.js";
-import { progressRows, receivedItems, slotTracker } from "./room-live.js";
+import { progressRows, receivedItems, slotTracker, usePackages } from "./room-live.js";
 import { plural, useAction, useSetting } from "./ui.js";
 
 // --- Données de la partie -------------------------------------------------------------------
@@ -154,7 +154,10 @@ export function analyzeBalance(data, { status = null, live = null, fixed = null,
       const list = data.locations[p.slot] || [];
       p.limit = missing.length ? Math.min(...missing.map((i) => i.sphere)) : Infinity;
       p.done = checked.get(p.slot)?.size || 0;
-      p.open = list.filter(([address, sphere]) => sphere > 0 && sphere <= p.limit && !done(p.slot, address)).length;
+      // Ses checks sûrs (lieux de son monde), pour la liste dépliable : { address, sphere }.
+      p.openChecks = list.filter(([address, sphere]) => sphere > 0 && sphere <= p.limit && !done(p.slot, address))
+        .map(([address, sphere]) => ({ address, sphere }));
+      p.open = p.openChecks.length;
       const checkedIn = Array(n + 1).fill(0);
       for (const [address, sphere] of list) if (done(p.slot, address)) checkedIn[sphere]++;
       let front = 0;
@@ -320,8 +323,28 @@ function StartView({ report }) {
     </details>`;
 }
 
+// Noms de ses checks sûrs, par sphère : repliés par défaut (en stream, rien ne s'affiche sans le vouloir). Les lieux de
+// son propre monde seulement, jamais les objets qu'ils contiennent.
+function SureChecks({ p, locationName }) {
+  if (!p.openChecks?.length) return null;
+  const spheres = new Map();
+  for (const c of p.openChecks) {
+    if (!spheres.has(c.sphere)) spheres.set(c.sphere, []);
+    spheres.get(c.sphere).push(locationName(p, c.address) ?? `Lieu n° ${c.address}`);
+  }
+  const unnamed = p.openChecks.every((c) => locationName(p, c.address) === undefined);
+  return html`<details class="balance-checks">
+    <summary>Voir ses ${plural(p.open, "check sûr", "checks sûrs")}</summary>
+    ${unnamed && html`<p class="hint">Chargement des noms des lieux…</p>`}
+    <div class="balance-checks-list">${[...spheres].sort((a, b) => a[0] - b[0]).map(([sphere, list]) => html`
+      <div><h4>Sphère ${sphere} <span class="hint">${list.length}</span></h4>
+        <ul>${list.sort((a, b) => a.localeCompare(b)).map((name) => html`<li>${name}</li>`)}</ul></div>`)}</div>
+  </details>`;
+}
+
 // `logicLink(p)` : adresse du tracker du site connecté en tant que ce joueur (logique du jeu : compte exact), ou null.
-function NowView({ report, logicLink }) {
+// `locationName(p, lieu)` : nom du lieu d'après le datapackage de son jeu (undefined tant qu'il n'est pas chargé).
+function NowView({ report, logicLink, locationName }) {
   const { players } = report;
   const starved = players.filter((p) => p.kind === "starved");
   const playing = players.filter((p) => !p.finished);
@@ -351,7 +374,8 @@ function NowView({ report, logicLink }) {
             ? ", et en a commencé de plus lointaines" : ""}${p.reach > p.limit ? ` (tout lui est sûr jusqu'à la ${p.limit})` : ""}.
             Ses premiers objets clés qui manquent : ${waits(p)}.`}
           ${p.gives.length ? ` Peut débloquer ${p.gives.map((g) => `${g.name} (${plural(g.count, "objet clé", "objets clés")})`).join(", ")}.` : ""}
-          ${logicLink && html` <a href=${logicLink(p)}>Compte exact avec la logique du jeu →</a>`}</p>`}
+          ${logicLink && html` <a href=${logicLink(p)}>Compte exact avec la logique du jeu →</a>`}</p>
+        <${SureChecks} p=${p} locationName=${locationName} />`}
     </${Row}>`)}</ul>
     ${starved.length === 1 && !report.slowStart.length && html`<${Advice} who=${starved[0]} others=${players.filter((p) => p !== starved[0])} />`}
     <details class="group full">
@@ -383,7 +407,7 @@ function Advice({ who, others }) {
 }
 
 // `report` : analyzeBalance (sans tracker : seulement « Au lancement »).
-export function BalanceReport({ report, logicLink = null }) {
+export function BalanceReport({ report, logicLink = null, locationName = () => undefined }) {
   const [view, setView] = useState("now");
   if (report.wrong) {
     return html`<div class="notice error full">${report.wrong === "players"
@@ -402,7 +426,7 @@ export function BalanceReport({ report, logicLink = null }) {
     ${tabs.length > 1 && html`<div class="segmented balance-tabs" role="group" aria-label="Vue">${tabs.map(([id, label, alert]) => html`
       <button type="button" class=${shown === id ? "active" : ""} aria-pressed=${shown === id} onClick=${() => setView(id)}>
         ${label}${alert && html` <span aria-label="(déséquilibre)" title="Déséquilibre">⚠</span>`}</button>`)}</div>`}
-    ${shown === "now" ? html`<${NowView} report=${report} logicLink=${logicLink} />` : html`<${StartView} report=${report} />`}`;
+    ${shown === "now" ? html`<${NowView} report=${report} logicLink=${logicLink} locationName=${locationName} />` : html`<${StartView} report=${report} />`}`;
 }
 
 // En une ligne, pour le titre replié : ce qui mérite d'ouvrir la carte. Écrit en toutes lettres (⚠ en plus).
@@ -431,6 +455,10 @@ export function BalanceCard({ balance, status, tracker, balancing, code = null, 
   const report = useMemo(() => (saved?.data ? analyzeBalance(saved.data, {
     status, live, fixed: tracker?.data?.fixed, balancing,
   }) : null), [saved, status, live, balancing]);
+  // Noms des lieux (liste des checks sûrs) : datapackages des jeux de la partie, déjà lus par l'onglet Avancement.
+  const games = status ? [...new Set(status.slots.map((s) => s.game))].sort() : [];
+  const packages = usePackages(status?.origin, tracker?.data?.fixed, live ? games : []);
+  const locationName = (p, address) => packages.loaded[p.game]?.locations.get(address);
   const actions = !shared && html`<div class="row">
     <label class="button ghost small">
       <input type="file" accept=".archipelago,.zip" hidden disabled=${action.busy}
@@ -448,7 +476,8 @@ export function BalanceCard({ balance, status, tracker, balancing, code = null, 
           (dossier <code>output</code> d'Archipelago) ou son <code>.archipelago</code>. Il reste dans ce navigateur ; seuls les joueurs à
           qui vous ouvrez l'onglet « Avancement » en reçoivent une copie, avec le spoiler.</p>`)}
     ${action.error && html`<div class="notice error full">${action.error}</div>`}
-    ${report && html`<${BalanceReport} report=${report} logicLink=${status && code ? (p) => slotTracker(status, p, code) : null} />`}
+    ${report && html`<${BalanceReport} report=${report} locationName=${locationName}
+      logicLink=${status && code ? (p) => slotTracker(status, p, code) : null} />`}
     ${saved && html`<p class="hint">Partie : ${saved.name}${saved.data.version ? ` (Archipelago ${saved.data.version})` : ""} · ${shared
       ? "partagée par l'hôte." : player ? "gardée dans ce navigateur."
       : "gardée dans ce navigateur, et envoyée avec le spoiler aux joueurs à qui vous ouvrez l'onglet."}</p>`}`;

@@ -853,6 +853,11 @@ a.button.small, label.button.small { padding: .25rem .7rem; font-size: .875rem; 
 .balance-who strong, .balance-main p { overflow-wrap: anywhere; }
 .balance-tabs { justify-self: start; max-width: 100%; }
 .balance-basis { margin: 0; color: var(--muted); }
+.balance-checks > summary { cursor: pointer; font-weight: 600; width: fit-content; }
+.balance-checks[open] > summary { margin-bottom: .5rem; }
+.balance-checks-list { display: grid; gap: .6rem; max-height: 22rem; overflow: auto; padding-right: .25rem; }
+.balance-checks-list h4 { margin: 0 0 .2rem; font-size: .95rem; }
+.balance-checks-list ul { margin: 0; padding-left: 1.2rem; display: grid; gap: .15rem; }
 .balance-tabs button { padding: .5rem 1.1rem; font-size: 1rem; }
 .balance-rows { list-style: none; margin: 0; padding: 0; display: grid; gap: .6rem; }
 .balance-row { display: grid; grid-template-columns: minmax(9rem, 13rem) minmax(0, 1fr); gap: .4rem 1.25rem; align-items: start;
