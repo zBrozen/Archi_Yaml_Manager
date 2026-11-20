@@ -306,9 +306,9 @@
    {
     "page": "https://github.com/routhken/Dark_Souls_Remastered_tracker/releases",
     "repo": "routhken/Dark_Souls_Remastered_tracker",
-    "tag": "v1.3.2",
+    "tag": "v1.4.0",
     "asset": "Dark_Souls_Remastered_aptracker.zip",
-    "url": "https://github.com/routhken/Dark_Souls_Remastered_tracker/releases/download/v1.3.2/Dark_Souls_Remastered_aptracker.zip"
+    "url": "https://github.com/routhken/Dark_Souls_Remastered_tracker/releases/download/v1.4.0/Dark_Souls_Remastered_aptracker.zip"
    }
   ],
   "Deadlock": [
@@ -614,9 +614,9 @@
    {
     "page": "https://github.com/z3xox/kh3-archipelago-poptracker/releases/latest",
     "repo": "z3xox/kh3-archipelago-poptracker",
-    "tag": "v1.1.0-beta.1",
-    "asset": "kh3-archipelago-poptracker-v1.1.0-beta.1.zip",
-    "url": "https://github.com/z3xox/kh3-archipelago-poptracker/releases/download/v1.1.0-beta.1/kh3-archipelago-poptracker-v1.1.0-beta.1.zip"
+    "tag": "v1.1.0-beta.2",
+    "asset": "kh3-archipelago-poptracker-v1.1.0-beta.2.zip",
+    "url": "https://github.com/z3xox/kh3-archipelago-poptracker/releases/download/v1.1.0-beta.2/kh3-archipelago-poptracker-v1.1.0-beta.2.zip"
    }
   ],
   "Kirby 64 - The Crystal Shards": [
@@ -758,9 +758,9 @@
    {
     "page": "https://github.com/drothe/megaman3-ap-poptracker/releases/latest",
     "repo": "drothe/megaman3-ap-poptracker",
-    "tag": "v0.0.2.2",
+    "tag": "v0.0.2.3",
     "asset": "megaman3-ap-poptracker.zip",
-    "url": "https://github.com/drothe/megaman3-ap-poptracker/releases/download/v0.0.2.2/megaman3-ap-poptracker.zip"
+    "url": "https://github.com/drothe/megaman3-ap-poptracker/releases/download/v0.0.2.3/megaman3-ap-poptracker.zip"
    }
   ],
   "Mega Man Battle Network 3": [
@@ -1075,9 +1075,9 @@
    {
     "page": "https://github.com/SomeLazyGamer/RaC-3-UYA-AP-Poptracker",
     "repo": "SomeLazyGamer/RaC-3-UYA-AP-Poptracker",
-    "tag": "1.8.0",
-    "asset": "RaC3_Tracker_SLG_1.8.0.zip",
-    "url": "https://github.com/SomeLazyGamer/RaC-3-UYA-AP-Poptracker/releases/download/1.8.0/RaC3_Tracker_SLG_1.8.0.zip"
+    "tag": "1.8.3",
+    "asset": "RaC3_Tracker_SLG_1.8.3.zip",
+    "url": "https://github.com/SomeLazyGamer/RaC-3-UYA-AP-Poptracker/releases/download/1.8.3/RaC3_Tracker_SLG_1.8.3.zip"
    }
   ],
   "Ratchet & Clank: Size Matters": [
