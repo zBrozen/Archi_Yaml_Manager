@@ -191,9 +191,10 @@ function store(mode, action) {
 }
 
 // { saved: { data, name, source: "room" | "file", at } | null | undefined (lecture en cours), load(fichier, quiet), forget(), action }
-export function useBalance(room) {
+// `download` : partie de la génération en ligne téléchargée d'elle-même (hôte seulement : le service la refuse aux joueurs).
+export function useBalance(room, { download = true } = {}) {
   const gen = room.generation;
-  const generated = gen?.status === "done" && gen.files?.output ? gen.at : null;
+  const generated = download && gen?.status === "done" && gen.files?.output ? gen.at : null;
   const [saved, setSaved] = useState(undefined);
   const [reload, setReload] = useState(0);
   const action = useAction();
@@ -362,9 +363,9 @@ export function BalanceReport({ report }) {
 }
 
 // En une ligne, pour le titre replié : ce qui mérite d'ouvrir la carte. Écrit en toutes lettres (⚠ en plus).
-function headline(saved, report) {
+function headline(saved, report, player) {
   if (saved === undefined) return { text: "lecture…" };
-  if (!saved) return { text: "déposez la partie générée" };
+  if (!saved) return { text: player ? "pas encore partagée par l'hôte" : "déposez la partie générée" };
   if (!report || report.wrong) return { text: "partie différente de celle en ligne", alert: true };
   const starved = report.live ? report.players.filter((p) => p.kind === "starved").map((p) => p.name) : [];
   if (starved.length) return { text: `${names(starved)} ${starved.length > 1 ? "attendent" : "attend"} des objets`, alert: true };
@@ -376,8 +377,9 @@ function headline(saved, report) {
 // Carte « Équilibre entre les joueurs » : en tête de l'onglet « Avancement » (hôte, partie en ligne), repliable
 // (`fold`, état gardé), et dans l'onglet Hôte avant l'hébergement. `balance` : useBalance ; `status` / `tracker` : partie
 // en ligne ; `balancing` : équilibrage de chaque joueur, lu dans le spoiler. `shared` : vue d'un joueur à qui l'hôte a
-// ouvert l'onglet (copie envoyée par l'hôte, sans choix de fichier).
-export function BalanceCard({ balance, status, tracker, balancing, fold = false, shared = false }) {
+// ouvert l'onglet (copie envoyée par l'hôte, sans choix de fichier). `player` : un joueur sans copie de l'hôte, qui peut
+// déposer la partie s'il l'a (gardée dans son navigateur).
+export function BalanceCard({ balance, status, tracker, balancing, fold = false, shared = false, player = false }) {
   const { saved, action } = balance;
   const [open, setOpen] = useSetting("balanceOpen", false);
   const live = tracker?.data?.live || null;
@@ -393,13 +395,18 @@ export function BalanceCard({ balance, status, tracker, balancing, fold = false,
   </div>`;
   const body = html`
     ${saved === undefined && html`<p class="hint">${balance.generated || shared ? "Lecture de la partie…" : "Chargement…"}</p>`}
-    ${saved === null && html`<p class="hint">Qui a des checks à faire et qui attend les autres. Déposez le <code>.zip</code> de la partie
-      (dossier <code>output</code> d'Archipelago) ou son <code>.archipelago</code>. Il reste dans ce navigateur ; seuls les joueurs à
-      qui vous ouvrez l'onglet « Avancement » en reçoivent une copie, avec le spoiler.</p>`}
+    ${saved === null && (player
+      ? html`<p class="hint">Qui a des checks à faire et qui attend les autres. L'hôte n'a pas encore partagé la partie générée : elle
+          vous arrive avec le spoiler dès qu'il ouvre l'onglet « Avancement » de son côté, s'il y a chargé la partie (génération en
+          ligne, ou son <code>.zip</code>). Si vous avez ce <code>.zip</code>, vous pouvez aussi le déposer ici.</p>`
+      : html`<p class="hint">Qui a des checks à faire et qui attend les autres. Déposez le <code>.zip</code> de la partie
+          (dossier <code>output</code> d'Archipelago) ou son <code>.archipelago</code>. Il reste dans ce navigateur ; seuls les joueurs à
+          qui vous ouvrez l'onglet « Avancement » en reçoivent une copie, avec le spoiler.</p>`)}
     ${action.error && html`<div class="notice error full">${action.error}</div>`}
     ${report && html`<${BalanceReport} report=${report} />`}
     ${saved && html`<p class="hint">Partie : ${saved.name}${saved.data.version ? ` (Archipelago ${saved.data.version})` : ""} · ${shared
-      ? "partagée par l'hôte." : "gardée dans ce navigateur, et envoyée avec le spoiler aux joueurs à qui vous ouvrez l'onglet."}</p>`}`;
+      ? "partagée par l'hôte." : player ? "gardée dans ce navigateur."
+      : "gardée dans ce navigateur, et envoyée avec le spoiler aux joueurs à qui vous ouvrez l'onglet."}</p>`}`;
 
   if (!fold) {
     return html`<section class="card stack">
@@ -407,7 +414,7 @@ export function BalanceCard({ balance, status, tracker, balancing, fold = false,
       ${body}
     </section>`;
   }
-  const head = headline(saved, report);
+  const head = headline(saved, report, player && !shared);
   return html`<details class="card balance-fold" open=${open} onToggle=${(e) => setOpen(e.currentTarget.open)}>
     <summary>
       <h2>Équilibre entre les joueurs</h2>

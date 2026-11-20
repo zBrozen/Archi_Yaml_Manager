@@ -113,7 +113,8 @@
   la multidata (`get_sendable_spheres`, Archipelago 0.5+), résumé gardé en IndexedDB `room-balance`. Il dit où sont
   tous les objets : comme le spoiler, il ne quitte le navigateur de l'hôte que pour les joueurs à qui il ouvre l'onglet
   (envoyé avec le spoiler par `SpoilerSharing` : `PUT /balance`, KV `CODE/shared-balance`, `rooms.shared_balance`,
-  migration 0017 ; retiré avec le spoiler) ; la vue ne nomme aucun objet.
+  migration 0017 ; retiré avec le spoiler) ; la vue ne nomme aucun objet. Un tel joueur voit toujours le dépliable : sans
+  copie de l'hôte, il explique pourquoi et accepte le `.zip` du joueur (`useBalance(room, { download: false })`).
 - Trackers (`#/tracker`, section « Trackers » du README) : packs PopTracker relevés par `tools/fetch_trackers.py`
   (`site/data/trackers.json`, page HTML du tableur car l'export xlsx perd les liens multiples d'une cellule),
   téléchargés par le relais `/api/packs` du Worker. `tracker-engine.js` reproduit le format des packs d'après la
