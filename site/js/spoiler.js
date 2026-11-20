@@ -304,7 +304,7 @@ function HostAdvancement({ room, online, tracker, data, setData }) {
     <input type="file" accept=".txt,.zip" hidden disabled=${busy} onChange=${(e) => { load(e.target.files[0]); e.target.value = ""; }} />${label}</label>`;
   const { file } = spoiler;
   const balancing = useMemo(() => balancingOf(file), [file]);
-  return html`<${BalanceCard} fold balance=${balance} status=${online.status} tracker=${tracker} balancing=${balancing} />
+  return html`<${BalanceCard} fold code=${room.code} balance=${balance} status=${online.status} tracker=${tracker} balancing=${balancing} />
   <${Advancement} room=${room} online=${online} tracker=${tracker} file=${file}
     intro="Réservé à l'hôte, et aux joueurs à qui vous l'ouvrez : le spoiler de la génération, croisé avec le tracker d'archipelago.gg, montre où en est le chemin de victoire et qui peut le faire avancer."
     source=${(parsed) => html`
@@ -369,7 +369,7 @@ function PlayerAdvancement({ room, online, tracker, shared, sharedBalance }) {
     );
     return () => { alive = false; };
   }, [key]);
-  return html`<${BalanceCard} fold shared=${!!sharedBalance} player balance=${balance} status=${online.status} tracker=${tracker}
+  return html`<${BalanceCard} fold code=${room.code} shared=${!!sharedBalance} player balance=${balance} status=${online.status} tracker=${tracker}
     balancing=${balancing} />
   <${Advancement} room=${room} online=${online} tracker=${tracker} file=${state.file} player
     intro="L'hôte vous a ouvert cet onglet : le spoiler de la partie, croisé avec le tracker d'archipelago.gg, montre où en est le chemin de victoire et qui peut le faire avancer. Il dit où sont les objets de tous les joueurs, les vôtres compris : ils restent masqués tant que vous ne décochez pas la case."
