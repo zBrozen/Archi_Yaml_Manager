@@ -115,10 +115,11 @@
   (envoyé avec le spoiler par `SpoilerSharing` : `PUT /balance`, KV `CODE/shared-balance`, `rooms.shared_balance`,
   migration 0017 ; retiré avec le spoiler) ; la vue ne nomme aucun objet. Un tel joueur voit toujours le dépliable : sans
   copie de l'hôte, il explique pourquoi et accepte le `.zip` du joueur (`useBalance(room, { download: false })`).
-  « En ce moment » : la mesure sûre (`limit`/`open`, jusqu'à la première sphère où manque un objet clé) s'effondre en
-  async (un objet clé manquant tôt borne tout) ; l'état « à court » repose donc sur l'estimation (`reach`/`likely` :
-  sphères faites au moins à moitié depuis la première, puis au prorata de ce qui est fait dans les suivantes). Compte exact : lien vers le tracker du site (UT).
-  Noms des checks sûrs de chaque joueur (`SureChecks`, datapackages via `usePackages`) : repliés par défaut, lieux seulement.
+  « En ce moment » montre ce que seule la room sait, pas des comptes de checks (le tracker du site, UT, les donne
+  exactement ; des chiffres approchés à côté embrouillaient) : qui attend qui (`helpers` : objets clés manquants d'un
+  joueur à la portée de chacun) et qui peut aider (`gives`), plus un niveau en toutes lettres par joueur. Portée et
+  niveau sont estimés (`reach`/`likely` : sphères faites au moins à moitié depuis la première, puis au prorata de ce
+  qui est fait dans les suivantes) ; la mesure sûre (`limit`, première sphère où manque un objet clé) s'effondre en async.
 - Trackers (`#/tracker`, section « Trackers » du README) : packs PopTracker relevés par `tools/fetch_trackers.py`
   (`site/data/trackers.json`, page HTML du tableur car l'export xlsx perd les liens multiples d'une cellule),
   téléchargés par le relais `/api/packs` du Worker. `tracker-engine.js` reproduit le format des packs d'après la

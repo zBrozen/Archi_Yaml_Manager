@@ -11,7 +11,7 @@ import { html, useState, useEffect, useMemo } from "../vendor/preact-htm.js";
 import { api } from "./rooms-api.js";
 import { readZip } from "./unzip.js";
 import { readMultidata, PyObject } from "./pickle.js";
-import { progressRows, receivedItems, slotTracker, usePackages } from "./room-live.js";
+import { progressRows, receivedItems, slotTracker } from "./room-live.js";
 import { plural, useAction, useSetting } from "./ui.js";
 
 // --- Données de la partie -------------------------------------------------------------------
@@ -74,6 +74,8 @@ const UNEVEN = 0.5;
 // (avec un très grand monde dans la partie, 30 checks à faire restent de quoi jouer). Rien à signaler si personne n'en
 // a au moins 10.
 const STARVED = { count: 3, share: 0.15, most: 10, min: 10 };
+// Peu à faire : moins de 15 checks estimés (sans être à court).
+const LOW = 15;
 // Front d'avancée d'un joueur : les sphères, depuis la première, dont il a fait au moins la moitié des checks.
 const FRONT = 0.5;
 
@@ -154,10 +156,7 @@ export function analyzeBalance(data, { status = null, live = null, fixed = null,
       const list = data.locations[p.slot] || [];
       p.limit = missing.length ? Math.min(...missing.map((i) => i.sphere)) : Infinity;
       p.done = checked.get(p.slot)?.size || 0;
-      // Ses checks sûrs (lieux de son monde), pour la liste dépliable : { address, sphere }.
-      p.openChecks = list.filter(([address, sphere]) => sphere > 0 && sphere <= p.limit && !done(p.slot, address))
-        .map(([address, sphere]) => ({ address, sphere }));
-      p.open = p.openChecks.length;
+      p.open = list.filter(([address, sphere]) => sphere > 0 && sphere <= p.limit && !done(p.slot, address)).length;
       const checkedIn = Array(n + 1).fill(0);
       for (const [address, sphere] of list) if (done(p.slot, address)) checkedIn[sphere]++;
       let front = 0;
@@ -189,13 +188,21 @@ export function analyzeBalance(data, { status = null, live = null, fixed = null,
       p.gives = players.filter((o) => o.slot !== p.slot && !o.finished).map((o) => ({
         slot: o.slot, name: o.name,
         count: o.missing.filter((i) => i.finder === p.slot && i.sphere <= p.reach).length,
-      })).filter((g) => g.count);
+      })).filter((g) => g.count).sort((a, b) => b.count - a.count);
+    }
+    for (const p of players) {
+      // Qui a ses objets clés manquants à sa portée (lui-même compris) : ceux qui peuvent le faire avancer maintenant.
+      p.helpers = players.filter((o) => !o.finished).map((o) => ({
+        slot: o.slot, name: o.name, self: o.slot === p.slot,
+        count: p.missing.filter((i) => i.finder === o.slot && i.sphere <= o.reach).length,
+      })).filter((h) => h.count).sort((a, b) => Number(a.self) - Number(b.self) || b.count - a.count);
     }
     const playing = players.filter((p) => !p.finished);
     const most = Math.max(0, ...playing.map((p) => p.likely));
     for (const p of players) {
       p.kind = p.finished ? "finished"
         : most >= STARVED.min && (p.likely <= STARVED.count || (p.likely <= STARVED.most && p.likely < most * STARVED.share)) ? "starved"
+        : p.likely < LOW ? "low"
         : "ok";
     }
   }
@@ -276,8 +283,9 @@ const pct = (a, b) => (b ? Math.round((a / b) * 100) : 0);
 const names = (list) => (list.length < 2 ? list.join("") : `${list.slice(0, -1).join(", ")} et ${list.at(-1)}`);
 const STATES = {
   finished: { label: "But atteint", cls: "ok" },
-  starved: { label: "À court de checks", cls: "warn" },
-  ok: { label: "A de quoi jouer", cls: "accent" },
+  starved: { label: "Bloqué ou presque", cls: "warn" },
+  low: { label: "Peu à faire", cls: "" },
+  ok: { label: "De quoi jouer", cls: "accent" },
 };
 
 function Meter({ value, max }) {
@@ -323,72 +331,61 @@ function StartView({ report }) {
     </details>`;
 }
 
-// Noms de ses checks sûrs, par sphère : repliés par défaut (en stream, rien ne s'affiche sans le vouloir). Les lieux de
-// son propre monde seulement, jamais les objets qu'ils contiennent.
-function SureChecks({ p, locationName }) {
-  if (!p.openChecks?.length) return null;
-  const spheres = new Map();
-  for (const c of p.openChecks) {
-    if (!spheres.has(c.sphere)) spheres.set(c.sphere, []);
-    spheres.get(c.sphere).push(locationName(p, c.address) ?? `Lieu n° ${c.address}`);
-  }
-  const unnamed = p.openChecks.every((c) => locationName(p, c.address) === undefined);
-  return html`<details class="balance-checks">
-    <summary>Voir ses ${plural(p.open, "check sûr", "checks sûrs")}</summary>
-    ${unnamed && html`<p class="hint">Chargement des noms des lieux…</p>`}
-    <div class="balance-checks-list">${[...spheres].sort((a, b) => a[0] - b[0]).map(([sphere, list]) => html`
-      <div><h4>Sphère ${sphere} <span class="hint">${list.length}</span></h4>
-        <ul>${list.sort((a, b) => a.localeCompare(b)).map((name) => html`<li>${name}</li>`)}</ul></div>`)}</div>
-  </details>`;
-}
-
-// `logicLink(p)` : adresse du tracker du site connecté en tant que ce joueur (logique du jeu : compte exact), ou null.
-// `locationName(p, lieu)` : nom du lieu d'après le datapackage de son jeu (undefined tant qu'il n'est pas chargé).
-function NowView({ report, logicLink, locationName }) {
+// « En ce moment », ce que seule la room sait : qui attend qui, et qui peut aider (l'emplacement des objets clés de
+// chacun, exact) ; le niveau de chacun en toutes lettres (estimé). Le détail exact d'un joueur est dans le tracker.
+// `logicLink(p)` : adresse du tracker du site connecté en tant que ce joueur (logique du jeu), ou null.
+const keys = (n) => plural(n, "objet clé", "objets clés");
+function NowView({ report, logicLink }) {
   const { players } = report;
-  const starved = players.filter((p) => p.kind === "starved");
   const playing = players.filter((p) => !p.finished);
-  const most = Math.max(1, ...playing.map((p) => p.likely));
-  // Qui peut débloquer les joueurs à court : ceux qui ont leurs objets clés à portée.
-  const helpers = players.filter((p) => p.gives.some((g) => starved.some((s) => s.slot === g.slot))).map((p) => p.name);
+  const order = { starved: 0, low: 1 };
+  const waiting = playing.filter((p) => p.kind in order).sort((a, b) => order[a.kind] - order[b.kind] || a.likely - b.likely);
+  const stuck = new Set(waiting.map((p) => p.slot));
+  const starved = waiting.filter((p) => p.kind === "starved");
+  // Qui peut aider : objets clés des autres à sa portée, d'abord ceux qui débloquent des joueurs qui attendent.
+  const helping = playing.map((p) => ({ p, forWaiting: p.gives.filter((g) => stuck.has(g.slot)), total: p.gives.reduce((n, g) => n + g.count, 0) }))
+    .filter((h) => h.total).sort((a, b) => b.forWaiting.length - a.forWaiting.length || b.total - a.total).slice(0, 5);
   const verdict = !playing.length ? { cls: "ok", text: "Tous les joueurs ont atteint leur but." }
-    : starved.length ? {
-      cls: "warn",
-      text: `${names(starved.map((p) => p.name))} ${starved.length > 1 ? "n'ont" : "n'a"} presque plus de checks à faire : ${starved.length > 1
-        ? "ils attendent" : "il attend"} des objets des autres.${helpers.length ? ` ${names(helpers)} ${helpers.length > 1 ? "peuvent" : "peut"} ${starved.length > 1 ? "les" : "le"} débloquer.` : ""}`,
-    }
-    : { cls: "ok", text: "Chacun a des checks à faire avec les objets déjà reçus." };
-  const waits = (p) => p.waitsOn.map((w) => (w.self ? `${plural(w.count, "objet")} dans son propre monde`
-    : `${plural(w.count, "objet")} chez ${w.name} (${w.ready ? "à sa portée" : `${w.name} doit d'abord avancer`})`)).join(", ");
+    : starved.length ? { cls: "warn", text: `${names(starved.map((p) => p.name))} ${starved.length > 1 ? "n'ont" : "n'a"} presque plus rien
+        à faire : ${starved.length > 1 ? "ils attendent" : "il attend"} des objets des autres.` }
+    : waiting.length ? { cls: "ok", text: `Personne n'est bloqué. ${names(waiting.map((p) => p.name))} ${waiting.length > 1 ? "ont" : "a"} peu à faire.` }
+    : { cls: "ok", text: "Chacun a de quoi jouer avec les objets déjà reçus." };
+  const tracker = (p) => logicLink && html`<a href=${logicLink(p)}>Détail dans le tracker →</a>`;
   return html`
-    <p class="balance-basis">Estimé d'après les objets que chacun a déjà reçus et les checks qu'il a déjà faits (tracker
-      d'archipelago.gg, relu chaque minute). Chaque joueur avance à son rythme, il n'y a pas de sphère commune.</p>
+    <p class="balance-basis">D'après les objets que chacun a déjà reçus, les checks qu'il a déjà faits (tracker d'archipelago.gg,
+      relu chaque minute) et l'emplacement des objets clés de chacun.</p>
     <p class=${`notice full ${verdict.cls}`}>${verdict.text}</p>
-    <ul class="balance-rows full">${players.map((p) => html`<${Row} p=${p} badge=${STATES[p.kind]}>
-      ${p.finished ? html`<p class="hint">${p.done} / ${p.total} checks faits.</p>` : html`
-        <p class="balance-figure">${p.likely ? html`<strong>~${p.likely}</strong> checks à faire` : html`<strong>Aucun</strong> check à faire`}${" "}
-          <span class="hint">(${p.open < p.likely ? `dont ${p.open} à coup sûr · ` : ""}${p.done} / ${p.total} faits)</span></p>
-        <${Meter} value=${p.likely} max=${most} />
-        <p class="hint">${p.limit === Infinity ? "A reçu tous ses objets clés : tout son monde lui est ouvert."
-          : `${p.reach ? `A fait l'essentiel des sphères 1 à ${p.reach} sur ${report.spheres}` : "Débute la sphère 1"}${p.further
-            ? ", et en a commencé de plus lointaines" : ""}${p.reach > p.limit ? ` (tout lui est sûr jusqu'à la ${p.limit})` : ""}.
-            Ses premiers objets clés qui manquent : ${waits(p)}.`}
-          ${p.gives.length ? ` Peut débloquer ${p.gives.map((g) => `${g.name} (${plural(g.count, "objet clé", "objets clés")})`).join(", ")}.` : ""}
-          ${logicLink && html` <a href=${logicLink(p)}>Compte exact avec la logique du jeu →</a>`}</p>
-        <${SureChecks} p=${p} locationName=${locationName} />`}
-    </${Row}>`)}</ul>
+    ${waiting.length > 0 && html`<h3 class="balance-sub">Qui attend qui</h3>
+      <ul class="balance-rows full">${waiting.map((p) => html`<${Row} p=${p} badge=${STATES[p.kind]}>
+        <p>${p.helpers.length
+          ? html`Ses objets clés à portée : ${p.helpers.map((h, i) => html`${i ? ", " : ""}${h.count} ${h.self ? "dans son propre monde"
+              : html`chez <strong>${h.name}</strong>`}`)}.`
+          : "Aucun de ses objets clés n'est encore à la portée de quelqu'un : d'autres doivent d'abord avancer."}</p>
+        <p class="hint">${tracker(p)}</p>
+      </${Row}>`)}</ul>`}
+    ${helping.length > 0 && html`<h3 class="balance-sub">Qui peut aider</h3>
+      <ul class="balance-help full">${helping.map(({ p, forWaiting, total }) => html`<li>
+        <strong>${p.name}</strong> : ${keys(total)} à sa portée pour ${plural(p.gives.length, "joueur")}${forWaiting.length
+          ? html`, dont <strong>${names(forWaiting.map((g) => g.name))}</strong> qui ${forWaiting.length > 1 ? "attendent" : "attend"}` : ""}.
+      </li>`)}</ul>`}
+    <details class="group full">
+      <summary>Tous les joueurs (${players.length})</summary>
+      <ul class="group-body balance-all">${players.map((p) => html`<li>
+        <span class=${`badge ${STATES[p.kind].cls}`}>${STATES[p.kind].label}</span>
+        <strong>${p.name}</strong> <span class="hint">${p.game}</span>
+        ${!p.finished && logicLink && html`<a href=${logicLink(p)}>Tracker →</a>`}
+      </li>`)}</ul>
+    </details>
     ${starved.length === 1 && !report.slowStart.length && html`<${Advice} who=${starved[0]} others=${players.filter((p) => p !== starved[0])} />`}
     <details class="group full">
       <summary>Comment c'est calculé</summary>
-      <p class="group-body hint balance-note">Archipelago découpe la partie en sphères, des étapes : sphère 1, ce qui est
-        accessible dès le départ ; sphère 2, ce qui s'ouvre avec les objets trouvés en sphère 1, et ainsi de suite.
-        « À coup sûr » : jusqu'à la première sphère où il lui manque un de ses objets clés, tout son monde lui est accessible.
-        C'est un minimum, souvent très bas en async : un seul objet clé manquant tôt le borne, même si la plupart de son monde
-        n'en a pas besoin. L'estimation part de ce qu'il a déjà fait : les sphères dont il a fait au moins la moitié (depuis la
-        première) comptent en entier ; dans celles qu'il a seulement commencées, la part de ce qui reste égale à la part qu'il
-        y a déjà faite (s'il a fait 20 % d'une sphère, on compte 20 % de ce qui y reste). Le compte exact vient de la logique du jeu
-        (lien sous chaque joueur : le tracker du site, connecté en tant que ce joueur). La barre compare les joueurs entre eux.
-        Les objets ne sont jamais nommés.</p>
+      <p class="group-body hint balance-note">Objets clés : les objets de progression de chaque joueur, à leur place réelle dans
+        la partie (aucun n'est nommé). Archipelago découpe la partie en sphères, des étapes : sphère 1, ce qui est accessible
+        dès le départ ; sphère 2, ce qui s'ouvre avec les objets de la sphère 1, et ainsi de suite. Un joueur atteint les
+        sphères dont il a déjà fait au moins la moitié des checks (et un peu de celles qu'il a commencées) : un objet clé
+        rangé là est « à sa portée ». Le niveau de chacun (de quoi jouer, peu à faire, bloqué ou presque) est estimé de la
+        même façon, à partir de ce qu'il lui reste dans ces sphères. Pour la liste exacte de ce qu'un joueur peut faire, le
+        tracker du site fait tourner la logique de son jeu (lien sous chaque joueur).</p>
     </details>`;
 }
 
@@ -407,7 +404,7 @@ function Advice({ who, others }) {
 }
 
 // `report` : analyzeBalance (sans tracker : seulement « Au lancement »).
-export function BalanceReport({ report, logicLink = null, locationName = () => undefined }) {
+export function BalanceReport({ report, logicLink = null }) {
   const [view, setView] = useState("now");
   if (report.wrong) {
     return html`<div class="notice error full">${report.wrong === "players"
@@ -426,7 +423,7 @@ export function BalanceReport({ report, logicLink = null, locationName = () => u
     ${tabs.length > 1 && html`<div class="segmented balance-tabs" role="group" aria-label="Vue">${tabs.map(([id, label, alert]) => html`
       <button type="button" class=${shown === id ? "active" : ""} aria-pressed=${shown === id} onClick=${() => setView(id)}>
         ${label}${alert && html` <span aria-label="(déséquilibre)" title="Déséquilibre">⚠</span>`}</button>`)}</div>`}
-    ${shown === "now" ? html`<${NowView} report=${report} logicLink=${logicLink} locationName=${locationName} />` : html`<${StartView} report=${report} />`}`;
+    ${shown === "now" ? html`<${NowView} report=${report} logicLink=${logicLink} />` : html`<${StartView} report=${report} />`}`;
 }
 
 // En une ligne, pour le titre replié : ce qui mérite d'ouvrir la carte. Écrit en toutes lettres (⚠ en plus).
@@ -455,10 +452,6 @@ export function BalanceCard({ balance, status, tracker, balancing, code = null, 
   const report = useMemo(() => (saved?.data ? analyzeBalance(saved.data, {
     status, live, fixed: tracker?.data?.fixed, balancing,
   }) : null), [saved, status, live, balancing]);
-  // Noms des lieux (liste des checks sûrs) : datapackages des jeux de la partie, déjà lus par l'onglet Avancement.
-  const games = status ? [...new Set(status.slots.map((s) => s.game))].sort() : [];
-  const packages = usePackages(status?.origin, tracker?.data?.fixed, live ? games : []);
-  const locationName = (p, address) => packages.loaded[p.game]?.locations.get(address);
   const actions = !shared && html`<div class="row">
     <label class="button ghost small">
       <input type="file" accept=".archipelago,.zip" hidden disabled=${action.busy}
@@ -476,7 +469,7 @@ export function BalanceCard({ balance, status, tracker, balancing, code = null, 
           (dossier <code>output</code> d'Archipelago) ou son <code>.archipelago</code>. Il reste dans ce navigateur ; seuls les joueurs à
           qui vous ouvrez l'onglet « Avancement » en reçoivent une copie, avec le spoiler.</p>`)}
     ${action.error && html`<div class="notice error full">${action.error}</div>`}
-    ${report && html`<${BalanceReport} report=${report} locationName=${locationName}
+    ${report && html`<${BalanceReport} report=${report}
       logicLink=${status && code ? (p) => slotTracker(status, p, code) : null} />`}
     ${saved && html`<p class="hint">Partie : ${saved.name}${saved.data.version ? ` (Archipelago ${saved.data.version})` : ""} · ${shared
       ? "partagée par l'hôte." : player ? "gardée dans ce navigateur."
