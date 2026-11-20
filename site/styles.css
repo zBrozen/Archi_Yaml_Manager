@@ -847,7 +847,10 @@ a.button.small, label.button.small { padding: .25rem .7rem; font-size: .875rem; 
 .balance-fold:not([open]) > summary::after { transform: rotate(-90deg); }
 .balance-fold > summary h2 { display: inline; margin: 0; }
 .balance-fold[open] > summary { margin-bottom: 1rem; }
-.balance-fold .badge { font-size: .9rem; }
+.balance-fold .badge { font-size: .9rem; white-space: normal; overflow-wrap: anywhere; }
+.balance-fold, .balance-fold-body, .balance-fold-body > *, .balance-rows, .balance-row, .balance-who { min-width: 0; }
+.balance-fold { overflow-wrap: anywhere; }
+.balance-who strong, .balance-main p { overflow-wrap: anywhere; }
 .balance-tabs { justify-self: start; max-width: 100%; }
 .balance-tabs button { padding: .5rem 1.1rem; font-size: 1rem; }
 .balance-rows { list-style: none; margin: 0; padding: 0; display: grid; gap: .6rem; }

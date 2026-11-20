@@ -70,8 +70,10 @@ async function balanceOfFile(buffer) {
 const EARLY = 3;
 // Écart notable : un joueur qui a moins de la moitié (en part de son monde) de ce qu'a le mieux loti.
 const UNEVEN = 0.5;
-// Joueur à court de checks : au plus 3 lieux sûrs, ou moins de 15 % de ce qu'a celui qui en a le plus.
-const STARVED = { count: 3, share: 0.15, min: 10 };
+// Joueur à court de checks : au plus 3 lieux sûrs, ou au plus 10 et moins de 15 % de ce qu'a celui qui en a le plus
+// (avec un très grand monde dans la partie, 30 checks à faire restent de quoi jouer). Rien à signaler si personne n'en
+// a au moins 10.
+const STARVED = { count: 3, share: 0.15, most: 10, min: 10 };
 
 // `status` : joueurs de la partie en ligne (ou null avant), `live` / `fixed` : tracker d'archipelago.gg (ou null),
 // `balancing` : Map(slot → progression_balancing), lue dans l'en-tête du spoiler s'il est chargé.
@@ -165,7 +167,7 @@ export function analyzeBalance(data, { status = null, live = null, fixed = null,
     const most = Math.max(0, ...playing.map((p) => p.open));
     for (const p of players) {
       p.kind = p.finished ? "finished"
-        : most >= STARVED.min && (p.open <= STARVED.count || p.open < most * STARVED.share) ? "starved"
+        : most >= STARVED.min && (p.open <= STARVED.count || (p.open <= STARVED.most && p.open < most * STARVED.share)) ? "starved"
         : "ok";
     }
   }
@@ -367,10 +369,12 @@ function headline(saved, report, player) {
   if (saved === undefined) return { text: "lecture…" };
   if (!saved) return { text: player ? "pas encore partagée par l'hôte" : "déposez la partie générée" };
   if (!report || report.wrong) return { text: "partie différente de celle en ligne", alert: true };
+  // Au-delà de deux joueurs, leur nombre seulement : le titre doit tenir sur une ligne (le détail est dans la carte).
+  const who = (list) => (list.length > 2 ? `${list.length} joueurs` : names(list));
   const starved = report.live ? report.players.filter((p) => p.kind === "starved").map((p) => p.name) : [];
-  if (starved.length) return { text: `${names(starved)} ${starved.length > 1 ? "attendent" : "attend"} des objets`, alert: true };
+  if (starved.length) return { text: `${who(starved)} ${starved.length > 1 ? "attendent" : "attend"} des objets`, alert: true };
   const slow = report.slowStart.map((p) => p.name);
-  if (slow.length) return { text: `${names(slow)} ${slow.length > 1 ? "démarrent" : "démarre"} lentement`, alert: true };
+  if (slow.length) return { text: `${who(slow)} ${slow.length > 1 ? "démarrent" : "démarre"} lentement`, alert: true };
   return { text: "équilibré" };
 }
 
