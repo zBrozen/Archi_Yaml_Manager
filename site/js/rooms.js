@@ -12,6 +12,7 @@ import { guideLink } from "./guides.js";
 import { ItemsPanel, ProgressPanel, TextClient, defaultItemSlots, useTracker } from "./room-live.js";
 import { ScreensTab } from "./screens.js";
 import { AdvancementView } from "./spoiler.js";
+import { BalanceCard, useBalance } from "./balance.js";
 import { FishingRoomCard, useFishingFeed } from "./fishing.js";
 import { WishNotice, WishlistView, useWishNotices, useWishState } from "./wishlist.js";
 import {
@@ -934,8 +935,15 @@ function HostPanel({ room, setData, data }) {
   </section>
   ${!room.direct && html`<section class="card stack"><${RoomCheck} room=${room} /></section>
   <section class="card stack"><${Generation} room=${room} setData=${setData} data=${data} online=${data.online_generation} /></section>`}
+  ${!room.ap_room_url && html`<${BalancePreview} room=${room} />`}
   <section class="card stack"><${HostedRoom} room=${room} setData=${setData} data=${data} /></section>
   <button type="button" class="link danger-link" onClick=${destroy}>Supprimer la room</button>`;
+}
+
+// Avant l'hébergement : l'équilibre entre les joueurs se voit dès la génération (ensuite, onglet « Avancement »).
+function BalancePreview({ room }) {
+  const balance = useBalance(room);
+  return html`<${BalanceCard} balance=${balance} />`;
 }
 
 // Vérification de toute la room : chaque YAML (dans le navigateur de l'hôte) et les règles du type de partie.
