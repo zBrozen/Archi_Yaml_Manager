@@ -12,7 +12,7 @@ import { api } from "./rooms-api.js";
 import { readZip } from "./unzip.js";
 import { readMultidata, PyObject } from "./pickle.js";
 import { progressRows, receivedItems } from "./room-live.js";
-import { plural, useAction } from "./ui.js";
+import { plural, useAction, useSetting } from "./ui.js";
 
 // --- Données de la partie -------------------------------------------------------------------
 
@@ -361,29 +361,56 @@ export function BalanceReport({ report }) {
     ${shown === "now" ? html`<${NowView} report=${report} />` : html`<${StartView} report=${report} />`}`;
 }
 
-// Carte des onglets « Équilibre » (hôte, partie en ligne) et Hôte (avant l'hébergement) : `balance` (useBalance), `status` / `tracker` de la
-// partie en ligne, `balancing` (équilibrage de chaque joueur, lu dans le spoiler).
-export function BalanceCard({ balance, status, tracker, balancing }) {
+// En une ligne, pour le titre replié : ce qui mérite d'ouvrir la carte. Écrit en toutes lettres (⚠ en plus).
+function headline(saved, report) {
+  if (saved === undefined) return { text: "lecture…" };
+  if (!saved) return { text: "déposez la partie générée" };
+  if (!report || report.wrong) return { text: "partie différente de celle en ligne", alert: true };
+  const starved = report.live ? report.players.filter((p) => p.kind === "starved").map((p) => p.name) : [];
+  if (starved.length) return { text: `${names(starved)} ${starved.length > 1 ? "attendent" : "attend"} des objets`, alert: true };
+  const slow = report.slowStart.map((p) => p.name);
+  if (slow.length) return { text: `${names(slow)} ${slow.length > 1 ? "démarrent" : "démarre"} lentement`, alert: true };
+  return { text: "équilibré" };
+}
+
+// Carte « Équilibre entre les joueurs » : en tête de l'onglet « Avancement » (hôte, partie en ligne), repliable
+// (`fold`, état gardé), et dans l'onglet Hôte avant l'hébergement. `balance` : useBalance ; `status` / `tracker` : partie
+// en ligne ; `balancing` : équilibrage de chaque joueur, lu dans le spoiler.
+export function BalanceCard({ balance, status, tracker, balancing, fold = false }) {
   const { saved, action } = balance;
+  const [open, setOpen] = useSetting("balanceOpen", false);
   const live = tracker?.data?.live || null;
   const report = useMemo(() => (saved?.data ? analyzeBalance(saved.data, {
     status, live, fixed: tracker?.data?.fixed, balancing,
   }) : null), [saved, status, live, balancing]);
-  return html`<section class="card stack">
-    <div class="row full">
-      <h2 class="grow">Équilibre entre les joueurs</h2>
-      <label class="button ghost small">
-        <input type="file" accept=".archipelago,.zip" hidden disabled=${action.busy}
-          onChange=${(e) => { balance.load(e.target.files[0]); e.target.value = ""; }} />${saved ? "Autre partie" : "Choisir la partie"}</label>
-      ${saved?.source === "file" && html`<button type="button" class="ghost small" disabled=${action.busy} onClick=${balance.forget}>
-        ${balance.generated ? "Revenir à la génération en ligne" : "Oublier"}</button>`}
-    </div>
+  const actions = html`<div class="row">
+    <label class="button ghost small">
+      <input type="file" accept=".archipelago,.zip" hidden disabled=${action.busy}
+        onChange=${(e) => { balance.load(e.target.files[0]); e.target.value = ""; }} />${saved ? "Autre partie" : "Choisir la partie"}</label>
+    ${saved?.source === "file" && html`<button type="button" class="ghost small" disabled=${action.busy} onClick=${balance.forget}>
+      ${balance.generated ? "Revenir à la génération en ligne" : "Oublier"}</button>`}
+  </div>`;
+  const body = html`
     ${saved === undefined && html`<p class="hint">${balance.generated ? "Lecture de la partie générée…" : "Chargement…"}</p>`}
     ${saved === null && html`<p class="hint">Qui a des checks à faire et qui attend les autres. Déposez le <code>.zip</code> de la partie
       (dossier <code>output</code> d'Archipelago) ou son <code>.archipelago</code> : il reste dans ce navigateur, rien n'est envoyé.</p>`}
     ${action.error && html`<div class="notice error full">${action.error}</div>`}
     ${report && html`<${BalanceReport} report=${report} />`}
     ${saved && html`<p class="hint">Partie : ${saved.name}${saved.data.version ? ` (Archipelago ${saved.data.version})` : ""} ·
-      gardée dans ce navigateur, pour vous seul.</p>`}
-  </section>`;
+      gardée dans ce navigateur, pour vous seul.</p>`}`;
+
+  if (!fold) {
+    return html`<section class="card stack">
+      <div class="row full"><h2 class="grow">Équilibre entre les joueurs</h2>${actions}</div>
+      ${body}
+    </section>`;
+  }
+  const head = headline(saved, report);
+  return html`<details class="card balance-fold" open=${open} onToggle=${(e) => setOpen(e.currentTarget.open)}>
+    <summary>
+      <h2>Équilibre entre les joueurs</h2>
+      <span class=${`badge ${head.alert ? "warn" : ""}`}>${head.alert ? "⚠ " : ""}${head.text}</span>
+    </summary>
+    <div class="stack balance-fold-body">${body}${actions}</div>
+  </details>`;
 }

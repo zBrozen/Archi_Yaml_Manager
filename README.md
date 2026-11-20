@@ -268,7 +268,7 @@ leur nom dans la partie, qui sert à retrouver leurs fichiers.
    Pour chaque joueur : ses checks requis restants, les objets requis qu'il attend et de qui, ou s'il a déjà tout
    reçu pour finir. Le spoiler reste dans le navigateur de l'hôte (IndexedDB) ; un spoiler d'une autre génération
    est repéré en comparant les objets déjà reçus. Une case masque objets et lieux pour un stream.
-   L'hôte a aussi l'onglet **Équilibre** (et la même carte dans l'onglet Hôte dès la génération, avant l'hébergement) : il lit la
+   En tête de l'onglet, la carte repliable **Équilibre entre les joueurs** (aussi dans l'onglet Hôte dès la génération) lit la
    partie générée elle-même (fichier `.archipelago` du `.zip`) : sphère par sphère, la part du monde de chaque joueur
    accessible si chacun fait ce qu'il peut. Un joueur qui démarre avec bien moins que les autres est signalé avant
    même de jouer, avec les réglages qui l'aident (`progression_balancing`, `early_items`, `start_inventory`). Pendant

@@ -841,6 +841,13 @@ a.button.small, label.button.small { padding: .25rem .7rem; font-size: .875rem; 
 .sphere details[open] > summary { margin-bottom: .6rem; }
 .adv-table td { vertical-align: top; }
 /* Équilibre entre les joueurs : une ligne par joueur, barre et nombre côte à côte */
+.balance-fold > summary { cursor: pointer; display: flex; flex-wrap: wrap; align-items: center; gap: .4rem 1rem; list-style: none; }
+.balance-fold > summary::-webkit-details-marker { display: none; }
+.balance-fold > summary::after { content: "▾"; margin-left: auto; color: var(--muted); font-size: 1.2rem; transition: transform .15s; }
+.balance-fold:not([open]) > summary::after { transform: rotate(-90deg); }
+.balance-fold > summary h2 { display: inline; margin: 0; }
+.balance-fold[open] > summary { margin-bottom: 1rem; }
+.balance-fold .badge { font-size: .9rem; }
 .balance-tabs { justify-self: start; max-width: 100%; }
 .balance-tabs button { padding: .5rem 1.1rem; font-size: 1rem; }
 .balance-rows { list-style: none; margin: 0; padding: 0; display: grid; gap: .6rem; }

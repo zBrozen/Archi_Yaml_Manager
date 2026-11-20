@@ -294,7 +294,7 @@ function HostAdvancement({ room, online, tracker, data, setData }) {
   const spoiler = useSpoiler(room);
   const balance = useBalance(room);
   const busy = spoiler.action.busy;
-  // Le .zip de la partie générée chez soi a aussi la partie elle-même : gardée pour l'onglet « Équilibre ».
+  // Le .zip de la partie générée chez soi a aussi la partie elle-même : elle sert à l'équilibre entre les joueurs.
   const load = (input) => {
     spoiler.load(input);
     if (input && /\.zip$/i.test(input.name)) balance.load(input, true);
@@ -302,7 +302,9 @@ function HostAdvancement({ room, online, tracker, data, setData }) {
   const picker = (label, cls = "button ghost small") => html`<label class=${cls}>
     <input type="file" accept=".txt,.zip" hidden disabled=${busy} onChange=${(e) => { load(e.target.files[0]); e.target.value = ""; }} />${label}</label>`;
   const { file } = spoiler;
-  return html`<${Advancement} room=${room} online=${online} tracker=${tracker} file=${file}
+  const balancing = useMemo(() => balancingOf(file), [file]);
+  return html`<${BalanceCard} fold balance=${balance} status=${online.status} tracker=${tracker} balancing=${balancing} />
+  <${Advancement} room=${room} online=${online} tracker=${tracker} file=${file}
     intro="Réservé à l'hôte, et aux joueurs à qui vous l'ouvrez : le spoiler de la génération, croisé avec le tracker d'archipelago.gg, montre où en est le chemin de victoire et qui peut le faire avancer."
     source=${(parsed) => html`
       ${file === undefined && html`<p class="hint">Lecture du spoiler…</p>`}
@@ -346,17 +348,11 @@ function PlayerAdvancement({ room, online, tracker, shared }) {
       ${state.error && html`<div class="notice error full">${state.error}</div>`}`} />`;
 }
 
-// Onglet « Équilibre » (hôte) : la partie générée (balance.js), et l'équilibrage de chacun lu dans le spoiler s'il est
-// connu (génération en ligne, ou spoiler déposé dans l'onglet « Avancement »).
-export function BalanceView({ room, online, tracker }) {
-  const balance = useBalance(room);
-  const { file } = useSpoiler(room);
-  const balancing = useMemo(() => {
-    let players = [];
-    try { players = file ? parseSpoiler(file.text).players : []; } catch { /* spoiler illisible : équilibrage inconnu */ }
-    return new Map(players.filter((p) => p.balancing != null).map((p) => [p.slot, p.balancing]));
-  }, [file]);
-  return html`<${BalanceCard} balance=${balance} status=${online.status} tracker=${tracker} balancing=${balancing} />`;
+// Équilibrage de chaque joueur (Map slot → valeur), lu dans l'en-tête du spoiler s'il est connu.
+function balancingOf(file) {
+  let players = [];
+  try { players = file ? parseSpoiler(file.text).players : []; } catch { /* spoiler illisible : équilibrage inconnu */ }
+  return new Map(players.filter((p) => p.balancing != null).map((p) => [p.slot, p.balancing]));
 }
 
 // Partie commune : lecture du spoiler, analyse et affichage. `source(parsed)` : d'où vient le spoiler.
