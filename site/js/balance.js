@@ -241,7 +241,7 @@ export function useBalance(room, { download = true } = {}) {
 }
 
 // --- Vue -----------------------------------------------------------------------------------------
-// Deux vues, une ligne par joueur : « Maintenant » (avec le tracker) et « Au départ » (dès la génération). Chaque
+// Deux vues, une ligne par joueur : « En ce moment » (avec le tracker) et « Au lancement » (dès la génération). Chaque
 // barre a son nombre écrit à côté, et chaque état son badge en toutes lettres : la couleur ne porte rien seule.
 
 const pct = (a, b) => (b ? Math.round((a / b) * 100) : 0);
@@ -271,6 +271,8 @@ function StartView({ report }) {
   const { players, spheres, early, slowStart } = report;
   const slow = slowStart.map((p) => p.name);
   return html`
+    <p class="balance-basis">D'après la génération, avant que quiconque joue : la part du monde de chacun qu'il peut faire
+      sur ${early === 1 ? "la première sphère" : `les ${early} premières sphères`} (les premières étapes de la partie).</p>
     <p class=${`notice full ${slow.length ? "warn" : "ok"}`}>${slow.length
       ? `${names(slow)} ${slow.length > 1 ? "démarrent" : "démarre"} lentement : bien moins de checks à faire au début que les autres, donc de l'attente probable.`
       : "Démarrage équilibré : chacun a une part comparable de son monde à faire au début."}</p>
@@ -285,10 +287,11 @@ function StartView({ report }) {
     ${slowStart.length === 1 && html`<${Advice} who=${slowStart[0]} others=${players.filter((p) => p !== slowStart[0])} />`}
     <details class="group full">
       <summary>Comment c'est calculé</summary>
-      <p class="group-body hint balance-note">« Au début » : ${early === 1 ? "la première sphère" : `les ${early} premières sphères`} de la partie.
-        Sphère 1 : ce qui est accessible dès le départ ; sphère 2 : ce qui s'ouvre avec les objets de la sphère 1, et ainsi de
-        suite, si chacun fait tout ce qu'il peut. La barre montre cette part, de 0 à 100 % de son monde.
-        Calculé à la génération : visible avant même de jouer.</p>
+      <p class="group-body hint balance-note">Archipelago découpe la partie en sphères, des étapes : sphère 1, ce qui est
+        accessible dès le départ ; sphère 2, ce qui s'ouvre avec les objets trouvés en sphère 1, et ainsi de suite (${spheres}
+        sphères ici). « Au lancement » compte, pour chaque joueur, les lieux de son monde dans ${early === 1 ? "la première sphère"
+        : `les ${early} premières sphères`}, si tout le monde fait ce qui lui est accessible. La barre montre cette part, de 0 à
+        100 % de son monde. Un joueur bien en dessous des autres dépend tôt de leurs objets : il risque d'attendre.</p>
     </details>`;
 }
 
@@ -307,23 +310,28 @@ function NowView({ report }) {
     }
     : { cls: "ok", text: "Chacun a des checks à faire avec les objets déjà reçus." };
   return html`
+    <p class="balance-basis">D'après les objets que chacun a déjà reçus (tracker d'archipelago.gg, relu chaque minute) : les
+      checks de son monde qu'il peut faire à coup sûr. Chaque joueur avance à son rythme, il n'y a pas de sphère commune.</p>
     <p class=${`notice full ${verdict.cls}`}>${verdict.text}</p>
     <ul class="balance-rows full">${players.map((p) => html`<${Row} p=${p} badge=${STATES[p.kind]}>
       ${p.finished ? html`<p class="hint">${p.done} / ${p.total} checks faits.</p>` : html`
         <p class="balance-figure">${p.open ? html`<strong>${p.open}</strong> checks sûrs à faire` : html`<strong>Aucun</strong> check sûr à faire`}${" "}
           <span class="hint">(${p.done} / ${p.total} faits)</span></p>
         <${Meter} value=${p.open} max=${most} />
-        <p class="hint">${!p.waitsOn.length ? "A reçu tous ses objets clés."
-          : `Sa suite : ${p.waitsOn.map((w) => (w.self ? `${plural(w.count, "objet")} dans son propre monde`
+        <p class="hint">${!p.waitsOn.length ? "A reçu tous ses objets clés : tout son monde lui est ouvert."
+          : `Ouvert jusqu'à la sphère ${p.limit} sur ${report.spheres}. Sa suite : ${p.waitsOn.map((w) => (w.self ? `${plural(w.count, "objet")} dans son propre monde`
             : `${plural(w.count, "objet")} chez ${w.name} (${w.ready ? "trouvable" + (w.count > 1 ? "s" : "") + " maintenant" : `${w.name} doit d'abord avancer`})`)).join(", ")}.`}
           ${p.gives.length ? ` Peut débloquer ${p.gives.map((g) => `${g.name} (${plural(g.count, "objet clé", "objets clés")})`).join(", ")}.` : ""}</p>`}
     </${Row}>`)}</ul>
     ${starved.length === 1 && !report.slowStart.length && html`<${Advice} who=${starved[0]} others=${players.filter((p) => p !== starved[0])} />`}
     <details class="group full">
       <summary>Comment c'est calculé</summary>
-      <p class="group-body hint balance-note">Checks sûrs : lieux de son monde accessibles avec les objets qu'il a déjà reçus, d'après les
-        sphères de la génération. C'est un minimum : on en trouve souvent d'autres. La barre compare les joueurs entre eux.
-        Les objets ne sont jamais nommés.</p>
+      <p class="group-body hint balance-note">Archipelago découpe la partie en sphères, des étapes : sphère 1, ce qui est
+        accessible dès le départ ; sphère 2, ce qui s'ouvre avec les objets trouvés en sphère 1, et ainsi de suite. Pour chaque
+        joueur, on cherche la première sphère où il lui manque encore un de ses objets clés : jusqu'à cette sphère, tous les
+        lieux de son monde lui sont accessibles (« ouvert jusqu'à la sphère n »). Ceux qu'il n'a pas encore faits sont ses
+        checks sûrs. C'est un minimum : on en trouve souvent d'autres. « Sa suite » : où sont les objets clés qui lui ouvriront
+        la sphère d'après. La barre compare les joueurs entre eux. Les objets ne sont jamais nommés.</p>
     </details>`;
 }
 
@@ -341,7 +349,7 @@ function Advice({ who, others }) {
   </details>`;
 }
 
-// `report` : analyzeBalance (sans tracker : seulement « Au départ »).
+// `report` : analyzeBalance (sans tracker : seulement « Au lancement »).
 export function BalanceReport({ report }) {
   const [view, setView] = useState("now");
   if (report.wrong) {
@@ -353,8 +361,8 @@ export function BalanceReport({ report }) {
   const solo = report.players.length === 1;
   if (solo && !report.live) return html`<p class="hint">Un seul joueur : pas d'équilibre à comparer.</p>`;
   const tabs = [
-    ...(report.live ? [["now", "Maintenant", report.players.some((p) => p.kind === "starved")]] : []),
-    ...(solo ? [] : [["start", "Au départ", report.slowStart.length > 0]]),
+    ...(report.live ? [["now", "En ce moment", report.players.some((p) => p.kind === "starved")]] : []),
+    ...(solo ? [] : [["start", "Au lancement", report.slowStart.length > 0]]),
   ];
   const shown = tabs.some(([id]) => id === view) ? view : tabs[0][0];
   return html`
