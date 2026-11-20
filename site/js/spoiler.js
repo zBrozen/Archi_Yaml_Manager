@@ -5,6 +5,7 @@ import { api } from "./rooms-api.js";
 import { readZip, bytesToText } from "./unzip.js";
 import { ago, progressRows, receivedItems, usePackages } from "./room-live.js";
 import { plural, useAction, useSetting } from "./ui.js";
+import { BalanceCard, useBalance } from "./balance.js";
 
 const IDLE_WARNING = 48 * 3600 * 1000; // en async, comme l'onglet « Progression »
 
@@ -45,7 +46,7 @@ export function parseSpoiler(text) {
   const lines = text.replace(/^\uFEFF/, "").split(/\r?\n/);
   const head = /^Archipelago Version (\S+)\s+-\s+Seed: (\S+)/.exec(lines[0] || "");
   if (!head) throw new Error("Ce fichier n'est pas un spoiler d'Archipelago (fichier AP_…_Spoiler.txt).");
-  const players = []; // { slot, name, game } ; name null pour une partie à un seul joueur
+  const players = []; // { slot, name, game, balancing } ; name null pour une partie à un seul joueur
   const result = {
     version: head[1], seed: head[2], players, playthrough: false,
     spheres: [], // [{ n, entries: [{ location, finder, item, receiver, receiverName }] }], finder et receiver : numéros de slot
@@ -81,6 +82,8 @@ export function parseSpoiler(text) {
       } else if ((m = /^Game:\s+(.+)$/.exec(line))) {
         if (players.length && !players.at(-1).game) players.at(-1).game = m[1];
         else if (!players.length) players.push({ slot: 1, name: null, game: m[1] });
+      } else if ((m = /^Progression Balancing:\s+(\d+)/.exec(line)) && players.length) {
+        players.at(-1).balancing = Number(m[1]);
       }
     } else if (section === "Locations:" && line) {
       const p = read(line);
@@ -289,11 +292,18 @@ export function AdvancementView({ room, online, tracker, data, setData, admin })
 
 function HostAdvancement({ room, online, tracker, data, setData }) {
   const spoiler = useSpoiler(room);
+  const balance = useBalance(room);
   const busy = spoiler.action.busy;
+  // Le .zip de la partie générée chez soi a aussi la partie elle-même : elle sert à l'équilibre entre les joueurs.
+  const load = (input) => {
+    spoiler.load(input);
+    if (input && /\.zip$/i.test(input.name)) balance.load(input, true);
+  };
   const picker = (label, cls = "button ghost small") => html`<label class=${cls}>
-    <input type="file" accept=".txt,.zip" hidden disabled=${busy} onChange=${(e) => { spoiler.load(e.target.files[0]); e.target.value = ""; }} />${label}</label>`;
+    <input type="file" accept=".txt,.zip" hidden disabled=${busy} onChange=${(e) => { load(e.target.files[0]); e.target.value = ""; }} />${label}</label>`;
   const { file } = spoiler;
   return html`<${Advancement} room=${room} online=${online} tracker=${tracker} file=${file}
+    extra=${(parsed) => html`<${BalanceSection} balance=${balance} online=${online} tracker=${tracker} spoiler=${parsed?.spoiler} />`}
     intro="Réservé à l'hôte, et aux joueurs à qui vous l'ouvrez : le spoiler de la génération, croisé avec le tracker d'archipelago.gg, montre où en est le chemin de victoire et qui peut le faire avancer."
     source=${(parsed) => html`
       ${file === undefined && html`<p class="hint">Lecture du spoiler…</p>`}
@@ -305,7 +315,7 @@ function HostAdvancement({ room, online, tracker, data, setData }) {
         ${file.source === "file" && html`<button type="button" class="ghost small" disabled=${busy} onClick=${spoiler.forget}>
           ${spoiler.generated ? "Revenir à celui de la génération" : "Oublier"}</button>`}
       </div>`}
-      ${file === null && html`<${SpoilerDrop} spoiler=${spoiler} />`}
+      ${file === null && html`<${SpoilerDrop} spoiler=${spoiler} onFile=${load} />`}
       ${spoiler.action.error && html`<div class="notice error full">${spoiler.action.error}</div>`}
       <${SpoilerSharing} room=${room} data=${data} setData=${setData} file=${parsed?.spoiler ? file : null} />`} />`;
 }
@@ -339,7 +349,14 @@ function PlayerAdvancement({ room, online, tracker, shared }) {
 
 // Partie commune : lecture du spoiler, analyse et affichage. `source(parsed)` : d'où vient le spoiler.
 // Un joueur commence objets et lieux masqués : le spoiler dit aussi où sont les siens.
-function Advancement({ room, online, tracker, file, intro, source, player = false }) {
+// Équilibre entre les joueurs (hôte) : la partie générée, et l'équilibrage de chacun lu dans le spoiler.
+function BalanceSection({ balance, online, tracker, spoiler }) {
+  const balancing = useMemo(() => new Map((spoiler?.players || []).filter((p) => p.balancing != null).map((p) => [p.slot, p.balancing])), [spoiler]);
+  return html`<${BalanceCard} balance=${balance} status=${online.status} tracker=${tracker} balancing=${balancing} />`;
+}
+
+// `extra(parsed)` : cartes affichées sous l'en-tête, avec ou sans spoiler.
+function Advancement({ room, online, tracker, file, intro, source, extra, player = false }) {
   const [hide, setHide] = useSetting(player ? "spoilerHidePlayer" : "spoilerHide", player);
   const { status } = online;
   const parsed = useMemo(() => {
@@ -365,6 +382,7 @@ function Advancement({ room, online, tracker, file, intro, source, player = fals
     ${parsed?.spoiler && !parsed.spoiler.playthrough && html`<div class="notice warn full">Ce spoiler n'a pas de chemin de
       victoire (niveau de spoiler 1) : générez la partie avec un spoiler complet (niveau 2, celui par défaut d'Archipelago).</div>`}
   </section>
+  ${extra?.(parsed)}
   ${parsed?.spoiler?.playthrough && html`<${Report} report=${report} spoiler=${parsed.spoiler} status=${status} online=${online}
     tracker=${tracker} loading=${loading} packagesError=${packages.error} hide=${hide} mode=${room.mode} />`}`;
 }
@@ -415,13 +433,13 @@ function SpoilerSharing({ room, data, setData, file }) {
   </details>`;
 }
 
-function SpoilerDrop({ spoiler }) {
+function SpoilerDrop({ spoiler, onFile }) {
   const [hover, setHover] = useState(false);
   return html`<label class=${`drop compact full ${hover ? "hover" : ""} ${spoiler.action.busy ? "busy" : ""}`}
     onDragOver=${(e) => { e.preventDefault(); setHover(true); }}
     onDragLeave=${() => setHover(false)}
-    onDrop=${(e) => { e.preventDefault(); setHover(false); spoiler.load(e.dataTransfer.files[0]); }}>
-    <input type="file" accept=".txt,.zip" hidden onChange=${(e) => { spoiler.load(e.target.files[0]); e.target.value = ""; }} />
+    onDrop=${(e) => { e.preventDefault(); setHover(false); onFile(e.dataTransfer.files[0]); }}>
+    <input type="file" accept=".txt,.zip" hidden onChange=${(e) => { onFile(e.target.files[0]); e.target.value = ""; }} />
     <strong>${spoiler.action.busy ? "Lecture du spoiler…" : "Déposez le spoiler de la partie"}</strong>
     <span>ou cliquez pour le choisir</span>
     <span class="hint">Fichier <code>AP_…_Spoiler.txt</code>, ou le <code>.zip</code> de la partie générée sur votre ordinateur

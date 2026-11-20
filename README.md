@@ -268,6 +268,12 @@ leur nom dans la partie, qui sert à retrouver leurs fichiers.
    Pour chaque joueur : ses checks requis restants, les objets requis qu'il attend et de qui, ou s'il a déjà tout
    reçu pour finir. Le spoiler reste dans le navigateur de l'hôte (IndexedDB) ; un spoiler d'une autre génération
    est repéré en comparant les objets déjà reçus. Une case masque objets et lieux pour un stream.
+   Sa carte **Équilibre entre les joueurs** (aussi dans l'onglet Hôte dès la génération, avant l'hébergement) lit la
+   partie générée elle-même (fichier `.archipelago` du `.zip`) : sphère par sphère, la part du monde de chaque joueur
+   accessible si chacun fait ce qu'il peut. Un joueur qui démarre avec bien moins que les autres est signalé avant
+   même de jouer, avec les réglages qui l'aident (`progression_balancing`, `early_items`, `start_inventory`). Pendant
+   la partie, croisée avec le tracker : les checks sûrs qui restent à chacun, ce qui lui ouvre la suite (objets chez
+   qui, trouvables maintenant ou non) et les objets clés qu'il peut donner aux autres. Aucun objet n'est nommé.
    L'hôte peut ouvrir l'onglet à des joueurs (« Ouvrir l'onglet à des joueurs », une case par joueur) : son
    navigateur envoie alors au service une copie du spoiler (KV, clé `CODE/shared-spoiler`, renvoyée quand l'hôte
    change de spoiler), lisible par ces joueurs seulement, et retirée quand il décoche le dernier. Ces joueurs
@@ -609,6 +615,8 @@ npx wrangler dev
 | `site/js/room-live.js` | Partie en cours : progression des joueurs et client texte |
 | `site/js/wishlist.js` | Wishlists des joueurs et bandeau des objets attendus reçus |
 | `site/js/spoiler.js` | Onglet « Avancement » de l'hôte : spoiler (sphères du chemin de victoire) croisé avec le tracker |
+| `site/js/balance.js` | Équilibre entre les joueurs : sphères de la partie générée (`.archipelago`), croisées avec le tracker |
+| `site/js/pickle.js` | Lecture des données d'une partie `.archipelago` (pickle Python lu comme données, rien n'est exécuté) |
 | `site/js/tracker-*.js`, `site/js/trackers.js`, `site/js/unzip.js` | Trackers des packs PopTracker (voir « Trackers ») |
 | `site/js/ut.js`, `site/js/ut-worker.js`, `site/py/ut_core.py` | Logique du jeu à la manière d'Universal Tracker (voir « Trackers ») |
 | `site/js/guides.js`, `site/js/markdown.js` | Page « Installer un jeu » et affichage des guides |
