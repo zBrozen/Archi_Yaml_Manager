@@ -74,8 +74,8 @@ const UNEVEN = 0.5;
 // (avec un très grand monde dans la partie, 30 checks à faire restent de quoi jouer). Rien à signaler si personne n'en
 // a au moins 10.
 const STARVED = { count: 3, share: 0.15, most: 10, min: 10 };
-// Sphère atteinte d'après les checks déjà faits : au moins 3 checks dedans (ou tous, si elle en a moins).
-const REACHED = 3;
+// Front d'avancée d'un joueur : les sphères, depuis la première, dont il a fait au moins la moitié des checks.
+const FRONT = 0.5;
 
 // `status` : joueurs de la partie en ligne (ou null avant), `live` / `fixed` : tracker d'archipelago.gg (ou null),
 // `balancing` : Map(slot → progression_balancing), lue dans l'en-tête du spoiler s'il est chargé.
@@ -144,9 +144,10 @@ export function analyzeBalance(data, { status = null, live = null, fixed = null,
   // - sûre (`limit`, `open`) : jusqu'à la première sphère où il lui manque un de ses objets clés, tout son monde lui est
   //   accessible. C'est un minimum, qui s'effondre quand la partie ne suit pas l'ordre des sphères (une async) : un seul
   //   objet clé manquant tôt le borne, même si la plupart de son monde n'en a pas besoin.
-  // - estimée (`reach`, `likely`) : il atteint au moins la sphère la plus haute où il a déjà fait des checks (REACHED au
-  //   moins : un check isolé peut venir d'un autre chemin ou d'un !collect) ; ses lieux pas encore faits jusque-là.
-  //   Elle peut compter des lieux qui demandent un objet manquant : la logique du jeu (tracker du site) donne le compte exact.
+  // - estimée (`reach`, `likely`) : les sphères de son front d'avancée (au moins la moitié faite, depuis la première) et
+  //   celles où tout lui est sûr comptent en entier ; au-delà, seule la part de ce qui y reste égale à la part qu'il y a
+  //   déjà faite (il a commencé des sphères plus loin par d'autres chemins, sans y avoir tout accès). Sur une async de
+  //   14 joueurs : 173 pour un joueur que la logique de son jeu (tracker du site) donnait à 180.
   if (live) {
     for (const p of players) {
       const missing = incoming.get(p.slot).filter((i) => i.sphere > 0 && !done(i.finder, i.address));
@@ -156,10 +157,19 @@ export function analyzeBalance(data, { status = null, live = null, fixed = null,
       p.open = list.filter(([address, sphere]) => sphere > 0 && sphere <= p.limit && !done(p.slot, address)).length;
       const checkedIn = Array(n + 1).fill(0);
       for (const [address, sphere] of list) if (done(p.slot, address)) checkedIn[sphere]++;
-      let seen = 0;
-      for (let s = n; s >= 1; s--) if (checkedIn[s] && checkedIn[s] >= Math.min(REACHED, p.counts[s])) { seen = s; break; }
-      p.reach = Math.max(Math.min(p.limit, n), seen);
-      p.likely = list.filter(([address, sphere]) => sphere > 0 && sphere <= p.reach && !done(p.slot, address)).length;
+      let front = 0;
+      for (let s = 1; s <= n; s++) {
+        if (p.counts[s] && checkedIn[s] < p.counts[s] * FRONT) break;
+        front = s;
+      }
+      p.reach = Math.max(Math.min(p.limit, n), front);
+      p.further = checkedIn.some((c, s) => s > p.reach && c > 0); // a commencé des sphères plus loin
+      let likely = 0;
+      for (let s = 1; s <= n; s++) {
+        const left = p.counts[s] - checkedIn[s];
+        likely += s <= p.reach ? left : p.counts[s] ? (left * checkedIn[s]) / p.counts[s] : 0;
+      }
+      p.likely = Math.round(likely);
       p.missing = missing;
       p.finished = !!p.row?.finished;
     }
@@ -337,7 +347,8 @@ function NowView({ report, logicLink }) {
           <span class="hint">(${p.open < p.likely ? `dont ${p.open} à coup sûr · ` : ""}${p.done} / ${p.total} faits)</span></p>
         <${Meter} value=${p.likely} max=${most} />
         <p class="hint">${p.limit === Infinity ? "A reçu tous ses objets clés : tout son monde lui est ouvert."
-          : `Avance jusqu'à la sphère ${p.reach} sur ${report.spheres}${p.reach > p.limit ? ` (sûr jusqu'à la ${p.limit})` : ""}.
+          : `${p.reach ? `A fait l'essentiel des sphères 1 à ${p.reach} sur ${report.spheres}` : "Débute la sphère 1"}${p.further
+            ? ", et en a commencé de plus lointaines" : ""}${p.reach > p.limit ? ` (tout lui est sûr jusqu'à la ${p.limit})` : ""}.
             Ses premiers objets clés qui manquent : ${waits(p)}.`}
           ${p.gives.length ? ` Peut débloquer ${p.gives.map((g) => `${g.name} (${plural(g.count, "objet clé", "objets clés")})`).join(", ")}.` : ""}
           ${logicLink && html` <a href=${logicLink(p)}>Compte exact avec la logique du jeu →</a>`}</p>`}
@@ -349,8 +360,9 @@ function NowView({ report, logicLink }) {
         accessible dès le départ ; sphère 2, ce qui s'ouvre avec les objets trouvés en sphère 1, et ainsi de suite.
         « À coup sûr » : jusqu'à la première sphère où il lui manque un de ses objets clés, tout son monde lui est accessible.
         C'est un minimum, souvent très bas en async : un seul objet clé manquant tôt le borne, même si la plupart de son monde
-        n'en a pas besoin. L'estimation va jusqu'à la sphère la plus haute où il a déjà fait au moins 3 checks : il l'atteint
-        donc. Elle peut compter quelques lieux qui demandent un objet manquant. Le compte exact vient de la logique du jeu
+        n'en a pas besoin. L'estimation part de ce qu'il a déjà fait : les sphères dont il a fait au moins la moitié (depuis la
+        première) comptent en entier ; dans celles qu'il a seulement commencées, la part de ce qui reste égale à la part qu'il
+        y a déjà faite (s'il a fait 20 % d'une sphère, on compte 20 % de ce qui y reste). Le compte exact vient de la logique du jeu
         (lien sous chaque joueur : le tracker du site, connecté en tant que ce joueur). La barre compare les joueurs entre eux.
         Les objets ne sont jamais nommés.</p>
     </details>`;

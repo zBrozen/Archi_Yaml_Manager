@@ -117,7 +117,7 @@
   copie de l'hôte, il explique pourquoi et accepte le `.zip` du joueur (`useBalance(room, { download: false })`).
   « En ce moment » : la mesure sûre (`limit`/`open`, jusqu'à la première sphère où manque un objet clé) s'effondre en
   async (un objet clé manquant tôt borne tout) ; l'état « à court » repose donc sur l'estimation (`reach`/`likely` :
-  jusqu'à la plus haute sphère où le joueur a déjà fait 3 checks). Compte exact : lien vers le tracker du site (UT).
+  sphères faites au moins à moitié depuis la première, puis au prorata de ce qui est fait dans les suivantes). Compte exact : lien vers le tracker du site (UT).
 - Trackers (`#/tracker`, section « Trackers » du README) : packs PopTracker relevés par `tools/fetch_trackers.py`
   (`site/data/trackers.json`, page HTML du tableur car l'export xlsx perd les liens multiples d'une cellule),
   téléchargés par le relais `/api/packs` du Worker. `tracker-engine.js` reproduit le format des packs d'après la
