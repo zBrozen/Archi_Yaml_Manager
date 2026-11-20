@@ -420,7 +420,7 @@
  },
  {
   "game": "Animal Crossing",
-  "version": "0.5.5",
+  "version": "0.6.0",
   "authors": [
    "haloopdy"
   ],
@@ -436,8 +436,8 @@
    "game": "Animal Crossing (GameCube)",
    "stability": "Stable"
   },
-  "download": "https://github.com/randomouscrap98/AP_ACGC_PC/releases/download/v0.5.5/animal_crossing.apworld",
-  "release": "https://github.com/randomouscrap98/AP_ACGC_PC/releases/tag/v0.5.5",
+  "download": "https://github.com/randomouscrap98/AP_ACGC_PC/releases/download/v0.6.0/animal_crossing.apworld",
+  "release": "https://github.com/randomouscrap98/AP_ACGC_PC/releases/tag/v0.6.0",
   "links": [
    "https://github.com/randomouscrap98/AP_ACGC_PC/releases"
   ]
@@ -610,8 +610,8 @@
    "platform": "PC",
    "list": "index"
   },
-  "download": "https://github.com/Cynichill/APBingo/releases/download/1.2.3/APBingo.apworld",
-  "release": "https://github.com/Cynichill/APBingo/releases/tag/1.2.3",
+  "download": "https://github.com/Cynichill/APBingo/releases/download/1.2.4/APBingo.apworld",
+  "release": "https://github.com/Cynichill/APBingo/releases/tag/1.2.4",
   "links": [
    "https://github.com/Cynichill/APBingo/releases"
   ]
@@ -4749,6 +4749,29 @@
   ]
  },
  {
+  "game": "Echidna Wars DX",
+  "version": "0.0.9",
+  "authors": [
+   "0x40"
+  ],
+  "file": "ewdx.apworld",
+  "source": "https://gitlab.com/0x40/ewdx-apworld",
+  "license": "Other",
+  "license_url": "https://gitlab.com/0x40/ewdx-apworld/-/blob/ewdx-main/LICENSE",
+  "copyright": [],
+  "sheet": {
+   "game": "Echidna Wars DX",
+   "stability": "Unstable",
+   "pr_status": "Not PRing",
+   "adult": true
+  },
+  "download": "https://gitlab.com/api/v4/projects/88417897/packages/generic/apworld/0.0.9/ewdx.apworld",
+  "release": "https://gitlab.com/0x40/ewdx-apworld/-/releases/ewdx_v0.0.9",
+  "links": [
+   "https://gitlab.com/0x40/ewdx-apworld/-/releases"
+  ]
+ },
+ {
   "game": "EldenRing",
   "version": "0.1.4",
   "authors": [
@@ -4794,8 +4817,8 @@
    "pr_status": "Not PRing",
    "platform": "PC"
   },
-  "download": "https://github.com/jacksonstubblefield/nightreign-ap/releases/download/v0.4.9/nightreign.apworld",
-  "release": "https://github.com/jacksonstubblefield/nightreign-ap/releases/tag/v0.4.9",
+  "download": "https://github.com/jacksonstubblefield/nightreign-ap/releases/download/v0.4.10/nightreign.apworld",
+  "release": "https://github.com/jacksonstubblefield/nightreign-ap/releases/tag/v0.4.10",
   "links": [
    "https://github.com/jacksonstubblefield/nightreign-ap/releases/latest"
   ]
@@ -5258,7 +5281,7 @@
  },
  {
   "game": "Final Fantasy Crystal Chronicles",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "authors": [
    "EverydaySimpleDev"
   ],
@@ -5277,8 +5300,8 @@
    "stability": "Unstable",
    "platform": "GC"
   },
-  "download": "https://github.com/EverydaySimpleDev/Archipelago/releases/download/ffcc-beta-0.3.0/ffcc.apworld",
-  "release": "https://github.com/EverydaySimpleDev/Archipelago/releases/tag/ffcc-beta-0.3.0",
+  "download": "https://github.com/EverydaySimpleDev/Archipelago/releases/download/ffcc-beta-0.4.0/ffcc.apworld",
+  "release": "https://github.com/EverydaySimpleDev/Archipelago/releases/tag/ffcc-beta-0.4.0",
   "links": [
    "https://github.com/EverydaySimpleDev/Archipelago/releases?q=Crystal+Chronicles&expanded=true"
   ]
@@ -6858,7 +6881,7 @@
  },
  {
   "game": "Homura-Hime",
-  "version": "0.4.3",
+  "version": "0.4.4",
   "authors": [
    "Kevin Anderson"
   ],
@@ -6874,8 +6897,8 @@
    "stability": "Unstable",
    "platform": "PC"
   },
-  "download": "https://github.com/Kevanderson97/homura-hime-archipelago/releases/download/v0.4.3/homura_hime.apworld",
-  "release": "https://github.com/Kevanderson97/homura-hime-archipelago/releases/tag/v0.4.3",
+  "download": "https://github.com/Kevanderson97/homura-hime-archipelago/releases/download/v0.4.4/homura_hime.apworld",
+  "release": "https://github.com/Kevanderson97/homura-hime-archipelago/releases/tag/v0.4.4",
   "links": [
    "https://github.com/Kevanderson97/homura-hime-archipelago/releases"
   ]
@@ -8757,7 +8780,7 @@
  },
  {
   "game": "Mario Sports Mix",
-  "version": "3.1.4",
+  "version": "3.1.5",
   "authors": [
    "ElectroStarz",
    "Puffy"
@@ -8773,8 +8796,8 @@
    "pr_status": "Not PRing",
    "platform": "Wii"
   },
-  "download": "https://github.com/ElectroStarz/ArchipelagoMSM/releases/download/v3.1.4/mario_sports_mix.apworld",
-  "release": "https://github.com/ElectroStarz/ArchipelagoMSM/releases/tag/v3.1.4",
+  "download": "https://github.com/ElectroStarz/ArchipelagoMSM/releases/download/v3.1.5/mario_sports_mix.apworld",
+  "release": "https://github.com/ElectroStarz/ArchipelagoMSM/releases/tag/v3.1.5",
   "links": [
    "https://github.com/ElectroStarz/ArchipelagoMSM/releases"
   ]
@@ -8895,8 +8918,8 @@
    "game": "MediEvil (1998)",
    "stability": "Unstable"
   },
-  "download": "https://github.com/riezahughes/MedievilAPWorld/releases/download/v0.5.1/medievil.apworld",
-  "release": "https://github.com/riezahughes/MedievilAPWorld/releases/tag/v0.5.1",
+  "download": "https://github.com/riezahughes/MedievilAPWorld/releases/download/v0.5.3/medievil.apworld",
+  "release": "https://github.com/riezahughes/MedievilAPWorld/releases/tag/v0.5.3",
   "links": [
    "https://github.com/riezahughes/MedievilAPWorld/releases"
   ]
@@ -10996,7 +11019,7 @@
  },
  {
   "game": "Paper Mario",
-  "version": "0.6.9",
+  "version": "0.6.10",
   "authors": [],
   "file": "papermario.apworld",
   "source": "https://github.com/icebound777/PMR_APWorld",
@@ -11010,8 +11033,8 @@
    "game": "Paper Mario 64",
    "stability": "Stable"
   },
-  "download": "https://github.com/icebound777/PMR_APWorld/releases/download/0.6.9/papermario.apworld",
-  "release": "https://github.com/icebound777/PMR_APWorld/releases/tag/0.6.9",
+  "download": "https://github.com/icebound777/PMR_APWorld/releases/download/0.6.10/papermario.apworld",
+  "release": "https://github.com/icebound777/PMR_APWorld/releases/tag/0.6.10",
   "links": [
    "https://github.com/icebound777/PMR_APWorld/releases/latest"
   ]
@@ -12287,8 +12310,8 @@
    "platform": "PC",
    "list": "index"
   },
-  "download": "https://github.com/kurt-cole/pvz2ge-ap/releases/download/v0.4/pvz2gardendless.apworld",
-  "release": "https://github.com/kurt-cole/pvz2ge-ap/releases/tag/v0.4",
+  "download": "https://github.com/kurt-cole/pvz2ge-ap/releases/download/v0.5/pvz2gardendless.apworld",
+  "release": "https://github.com/kurt-cole/pvz2ge-ap/releases/tag/v0.5",
   "links": [
    "https://github.com/kurt-cole/pvz2ge-ap/releases"
   ]
@@ -12482,8 +12505,8 @@
    "stability": "Stable",
    "platform": "PS2"
   },
-  "download": "https://github.com/Taoshix/Archipelago-RaC3/releases/download/v0.7.0/rac3.apworld",
-  "release": "https://github.com/Taoshix/Archipelago-RaC3/releases/tag/v0.7.0",
+  "download": "https://github.com/Taoshix/Archipelago-RaC3/releases/download/v0.7.5/rac3.apworld",
+  "release": "https://github.com/Taoshix/Archipelago-RaC3/releases/tag/v0.7.5",
   "links": [
    "https://github.com/Taoshix/Archipelago-RaC3/releases/latest"
   ]
@@ -12826,8 +12849,8 @@
    "platform": "PC",
    "list": "index"
   },
-  "download": "https://github.com/chickentuna/Reus2APMod/releases/download/v0.1.0/reus2.apworld",
-  "release": "https://github.com/chickentuna/Reus2APMod/releases/tag/v0.1.0",
+  "download": "https://github.com/chickentuna/Reus2APMod/releases/download/v0.2.0/reus2.apworld",
+  "release": "https://github.com/chickentuna/Reus2APMod/releases/tag/v0.2.0",
   "links": [
    "https://github.com/chickentuna/Reus2APMod/releases"
   ]
@@ -14728,6 +14751,26 @@
   ]
  },
  {
+  "game": "Sonic Unleashed",
+  "version": null,
+  "authors": [],
+  "file": "sonic_unleashed.apworld",
+  "source": "https://github.com/TwinklePillar/Unleashed-Archipelago",
+  "license": "GPL-3.0",
+  "license_url": "https://github.com/TwinklePillar/Unleashed-Archipelago/blob/HEAD/COPYING",
+  "copyright": [],
+  "sheet": {
+   "game": "Sonic Unleashed",
+   "stability": "Unstable",
+   "pr_status": "Not PRing"
+  },
+  "download": "https://github.com/TwinklePillar/Unleashed-Archipelago/releases/download/v0.1.0-alpha/sonic_unleashed.apworld",
+  "release": "https://github.com/TwinklePillar/Unleashed-Archipelago/releases/tag/v0.1.0-alpha",
+  "links": [
+   "https://github.com/TwinklePillar/Unleashed-Archipelago/releases/latest"
+  ]
+ },
+ {
   "game": "SoRWorld",
   "version": null,
   "authors": [],
@@ -16007,7 +16050,7 @@
  },
  {
   "game": "Tetris Effect: Connected",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "authors": [
    "ZatchyBeeps"
   ],
@@ -16025,8 +16068,8 @@
    "game": "Tetris Effect",
    "list": "index"
   },
-  "download": "https://github.com/ZatchyBeeps/Archipelago-TEC/releases/download/V0.2.0/tetriseffect.apworld",
-  "release": "https://github.com/ZatchyBeeps/Archipelago-TEC/releases/tag/V0.2.0",
+  "download": "https://github.com/ZatchyBeeps/Archipelago-TEC/releases/download/V0.2.1/tetriseffect.apworld",
+  "release": "https://github.com/ZatchyBeeps/Archipelago-TEC/releases/tag/V0.2.1",
   "links": [
    "https://github.com/ZatchyBeeps/Archipelago-TEC/releases"
   ]
@@ -16535,7 +16578,7 @@
   "copyright": [],
   "sheet": {
    "game": "The WereCleaner",
-   "stability": "Stable",
+   "stability": "Unstable",
    "platform": "PC"
   },
   "download": "https://github.com/SWCreeperKing/Werepelago/releases/download/v0.1.2/the_werecleaner.apworld",
@@ -16887,7 +16930,7 @@
  },
  {
   "game": "Total War Warhammer III",
-  "version": "0.10.18",
+  "version": "0.11.5",
   "authors": [
    "jordansds"
   ],
@@ -16905,8 +16948,8 @@
    "game": "Total War: Warhammer III",
    "stability": "Unstable"
   },
-  "download": "https://github.com/jordansds/Archipelago_TWW3_Alt/releases/download/v0.10.19/tww3.apworld",
-  "release": "https://github.com/jordansds/Archipelago_TWW3_Alt/releases/tag/v0.10.19",
+  "download": "https://github.com/jordansds/Archipelago_TWW3_Alt/releases/download/v0.11.5/tww3.apworld",
+  "release": "https://github.com/jordansds/Archipelago_TWW3_Alt/releases/tag/v0.11.5",
   "links": [
    "https://github.com/jordansds/Archipelago_TWW3_Alt"
   ]

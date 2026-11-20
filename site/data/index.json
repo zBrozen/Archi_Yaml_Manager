@@ -1,6 +1,6 @@
 {
  "ap_version": "0.6.8",
- "generated_at": "2026-11-19T14:14:50+00:00",
+ "generated_at": "2026-11-20T13:58:03+00:00",
  "games": [
   {
    "game": "'Weird Al' Yankovic Discography",
@@ -316,7 +316,7 @@
    "file": "games/animal-crossing.json",
    "source": "custom",
    "apworld": "animal_crossing.apworld",
-   "world_version": "0.5.5",
+   "world_version": "0.6.0",
    "guides": "guides/animal-crossing.json",
    "sheet": {
     "game": "Animal Crossing (GameCube)",
@@ -2760,6 +2760,20 @@
    }
   },
   {
+   "game": "Echidna Wars DX",
+   "file": "games/echidna-wars-dx.json",
+   "source": "custom",
+   "apworld": "ewdx.apworld",
+   "world_version": "0.0.9",
+   "guides": "guides/echidna-wars-dx.json",
+   "sheet": {
+    "game": "Echidna Wars DX",
+    "stability": "Unstable",
+    "pr_status": "Not PRing",
+    "adult": true
+   }
+  },
+  {
    "game": "Elden Ring Nightreign",
    "file": "games/elden-ring-nightreign.json",
    "source": "custom",
@@ -3045,7 +3059,7 @@
    "file": "games/final-fantasy-crystal-chronicles.json",
    "source": "custom",
    "apworld": "ffcc.apworld",
-   "world_version": "0.3.0",
+   "world_version": "0.4.0",
    "guides": "guides/final-fantasy-crystal-chronicles.json",
    "sheet": {
     "game": "Final Fantasy: Crystal Chronicles",
@@ -3956,7 +3970,7 @@
    "file": "games/homura-hime.json",
    "source": "custom",
    "apworld": "homura_hime.apworld",
-   "world_version": "0.4.3",
+   "world_version": "0.4.4",
    "guides": "guides/homura-hime.json",
    "sheet": {
     "game": "Homura-Hime",
@@ -5084,7 +5098,7 @@
    "file": "games/mario-sports-mix.json",
    "source": "custom",
    "apworld": "mario_sports_mix.apworld",
-   "world_version": "3.1.4",
+   "world_version": "3.1.5",
    "guides": "guides/mario-sports-mix.json",
    "sheet": {
     "game": "Mario Sports Mix",
@@ -6292,7 +6306,7 @@
    "file": "games/paper-mario.json",
    "source": "custom",
    "apworld": "papermario.apworld",
-   "world_version": "0.6.9",
+   "world_version": "0.6.10",
    "guides": "guides/paper-mario.json",
    "sheet": {
     "game": "Paper Mario 64",
@@ -7135,7 +7149,7 @@
    "file": "games/ratchet-and-clank-3.json",
    "source": "custom",
    "apworld": "rac3.apworld",
-   "world_version": "0.7.0",
+   "world_version": "0.7.5",
    "guides": "guides/ratchet-and-clank-3.json",
    "sheet": {
     "game": "Ratchet & Clank 3: Up Your Arsenal",
@@ -8047,6 +8061,9 @@
    "source": "custom",
    "apworld": "sm64hacks.apworld",
    "world_version": "1.1.15",
+   "rom": {
+    "section": "sm64hacks_options"
+   },
    "guides": "guides/sm64-romhack.json",
    "sheet": {
     "game": "Super Mario 64 Romhacks",
@@ -8306,6 +8323,19 @@
     "game": "Sonic the Hedgehog",
     "stability": "Stable",
     "platform": "GEN"
+   }
+  },
+  {
+   "game": "Sonic Unleashed",
+   "file": "games/sonic-unleashed.json",
+   "source": "custom",
+   "apworld": "sonic_unleashed.apworld",
+   "world_version": null,
+   "guides": "guides/sonic-unleashed.json",
+   "sheet": {
+    "game": "Sonic Unleashed",
+    "stability": "Unstable",
+    "pr_status": "Not PRing"
    }
   },
   {
@@ -9068,7 +9098,7 @@
    "file": "games/tetris-effect-connected.json",
    "source": "custom",
    "apworld": "tetriseffect.apworld",
-   "world_version": "0.2.0",
+   "world_version": "0.2.1",
    "guides": "guides/tetris-effect-connected.json",
    "sheet": {
     "game": "Tetris Effect",
@@ -9355,7 +9385,7 @@
    "guides": "guides/the-werecleaner.json",
    "sheet": {
     "game": "The WereCleaner",
-    "stability": "Stable",
+    "stability": "Unstable",
     "platform": "PC"
    }
   },
@@ -10914,7 +10944,7 @@
   "LostButFound": "ModuleNotFoundError: No module named 'worlds.LostButFound'",
   "pokemon_hgss": "worlds.Files.ImproperlyConfiguredAutoPatchError: Two auto patch containers are using the same file extension: <class 'worlds.pokemon_hgss.rom.PokemonHeartgoldPatch'>, <class 'output_patch.HeartGoldProcedurePatch'>",
   "pokemon_xy": "ModuleNotFoundError: No module named 'worlds.pokemon_xy'",
-  "Salt and Sanctuary": "Did not load /tmp/tmpymzf5apd/tmpxnt7lc91/custom_worlds/salt_and_sanctuary.apworld as its maximum core version Version(major=0, minor=6, build=6) is lower than current core version Version(major=0, minor=6, build=8).",
+  "Salt and Sanctuary": "Did not load /tmp/tmp0mae2002/tmppxsp3tif/custom_worlds/salt_and_sanctuary.apworld as its maximum core version Version(major=0, minor=6, build=6) is lower than current core version Version(major=0, minor=6, build=8).",
   "scooby_doo_unmasked": "AssertionError: Choice option 'random' cannot be manually assigned.",
   "smash64": "AssertionError: Choice option 'random' cannot be manually assigned.",
   "spyro_seasonofice": "ModuleNotFoundError: No module named 'worlds.spyro_seasonofice'",
