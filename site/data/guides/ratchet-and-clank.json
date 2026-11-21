@@ -1,1 +1,1 @@
-{"info":[],"tutorials":[],"notes":{"text":"General bugfixes to skillpoint logic and some typos","url":"https://github.com/Panda291/Archipelago/releases/tag/v0.3.1","tag":"v0.3.1"}}
+{"info":[],"tutorials":[],"notes":{"text":"Fixed a bug where any progressive option besides \"normal\" for weapons would cause generation to fail.\r\n\r\nFixed the logic to complete the `Tricky` Skillpoint.","url":"https://github.com/Panda291/Archipelago/releases/tag/v0.3.2","tag":"v0.3.2"}}

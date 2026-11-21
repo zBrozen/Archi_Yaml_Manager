@@ -1,6 +1,6 @@
 {
  "ap_version": "0.6.8",
- "generated_at": "2026-11-20T13:58:03+00:00",
+ "generated_at": "2026-11-21T13:21:57+00:00",
  "games": [
   {
    "game": "'Weird Al' Yankovic Discography",
@@ -162,7 +162,7 @@
    "file": "games/actraiser.json",
    "source": "custom",
    "apworld": "actraiser.apworld",
-   "world_version": "1.3.4",
+   "world_version": "1.3.5",
    "guides": "guides/actraiser.json",
    "sheet": {
     "game": "ActRaiser",
@@ -1561,7 +1561,7 @@
    "file": "games/chrono-trigger-rando-dalton-imperial.json",
    "source": "custom",
    "apworld": "ctrdi.apworld",
-   "world_version": "0.0.6",
+   "world_version": "0.0.7",
    "guides": "guides/chrono-trigger-rando-dalton-imperial.json",
    "sheet": {
     "game": "Chrono Trigger Rando-Dalton Imperial (SNES)",
@@ -3858,7 +3858,7 @@
    "file": "games/hexcells-infinite.json",
    "source": "custom",
    "apworld": "hexcells_infinite.apworld",
-   "world_version": "1.3.4",
+   "world_version": "1.3.5",
    "guides": "guides/hexcells-infinite.json",
    "sheet": {
     "game": "Hexcells Infinite",
@@ -6331,7 +6331,7 @@
    "file": "games/paquerette-down-the-bunburrows.json",
    "source": "custom",
    "apworld": "paquerette_down_the_bunburrows.apworld",
-   "world_version": "0.2.0",
+   "world_version": "0.2.1",
    "guides": "guides/paquerette-down-the-bunburrows.json",
    "sheet": {
     "game": "Paquerette Down the Bunburrows",
@@ -7136,7 +7136,7 @@
    "file": "games/ratchet-and-clank.json",
    "source": "custom",
    "apworld": "rac1.apworld",
-   "world_version": "0.3.1",
+   "world_version": "0.3.2",
    "guides": "guides/ratchet-and-clank.json",
    "sheet": {
     "game": "Ratchet & Clank",
@@ -7983,7 +7983,7 @@
    "file": "games/slay-the-spire-ii.json",
    "source": "custom",
    "apworld": "spire2.apworld",
-   "world_version": "1.4.0",
+   "world_version": "1.4.1",
    "guides": "guides/slay-the-spire-ii.json",
    "sheet": {
     "game": "Slay the Spire 2",
@@ -9636,7 +9636,7 @@
    "file": "games/toy-story-2.json",
    "source": "custom",
    "apworld": "toystory2.apworld",
-   "world_version": "3.2.2",
+   "world_version": "3.3.0",
    "guides": "guides/toy-story-2.json",
    "sheet": {
     "game": "Toy Story 2 (PS1)",
@@ -10944,7 +10944,7 @@
   "LostButFound": "ModuleNotFoundError: No module named 'worlds.LostButFound'",
   "pokemon_hgss": "worlds.Files.ImproperlyConfiguredAutoPatchError: Two auto patch containers are using the same file extension: <class 'worlds.pokemon_hgss.rom.PokemonHeartgoldPatch'>, <class 'output_patch.HeartGoldProcedurePatch'>",
   "pokemon_xy": "ModuleNotFoundError: No module named 'worlds.pokemon_xy'",
-  "Salt and Sanctuary": "Did not load /tmp/tmp0mae2002/tmppxsp3tif/custom_worlds/salt_and_sanctuary.apworld as its maximum core version Version(major=0, minor=6, build=6) is lower than current core version Version(major=0, minor=6, build=8).",
+  "Salt and Sanctuary": "Did not load /tmp/tmply85_iqk/tmp209xt3_m/custom_worlds/salt_and_sanctuary.apworld as its maximum core version Version(major=0, minor=6, build=6) is lower than current core version Version(major=0, minor=6, build=8).",
   "scooby_doo_unmasked": "AssertionError: Choice option 'random' cannot be manually assigned.",
   "smash64": "AssertionError: Choice option 'random' cannot be manually assigned.",
   "spyro_seasonofice": "ModuleNotFoundError: No module named 'worlds.spyro_seasonofice'",
