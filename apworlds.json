@@ -379,6 +379,7 @@
     {"game": "Jak 3", "stability": "Stable", "platform": "PS2"},
     {"game": "Jak II", "stability": "Unstable", "platform": "PS2"},
     {"game": "Jet Island", "stability": "Unstable"},
+    {"game": "Jet Set Radio Future", "stability": "Unstable", "pr_status": "Not PRing"},
     {"game": "Jigsaw Puzzle for Archipelago", "stability": "Stable"},
     {"game": "Johnny Upgrade", "stability": "Unstable", "platform": "Web"},
     {"game": "Jump King Quest", "stability": "Unstable", "platform": "PC"},

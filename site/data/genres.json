@@ -1491,6 +1491,11 @@
    "wikidata": "Q134120345",
    "checked": "2026-11-03"
   },
+  "Echidna Wars DX": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-21"
+  },
   "EldenRing": {
    "genres": [],
    "wikidata": null,
@@ -4436,6 +4441,13 @@
    ],
    "wikidata": "Q37123",
    "checked": "2026-11-03"
+  },
+  "Sonic Unleashed": {
+   "genres": [
+    "plateforme"
+   ],
+   "wikidata": "Q1150928",
+   "checked": "2026-11-21"
   },
   "Soul Blazer": {
    "genres": [
