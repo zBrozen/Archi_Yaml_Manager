@@ -441,7 +441,7 @@
  },
  {
   "game": "ANIMAL WELL",
-  "version": "0.5.4",
+  "version": "0.5.5",
   "authors": [],
   "file": "animal_well.apworld",
   "source": "https://github.com/ScipioWright/Archipelago-SW",
@@ -459,8 +459,8 @@
    "pr_status": "Not PRing",
    "platform": "PC"
   },
-  "download": "https://github.com/ScipioWright/Archipelago-SW/releases/download/0.5.4/animal_well.apworld",
-  "release": "https://github.com/ScipioWright/Archipelago-SW/releases/tag/0.5.4",
+  "download": "https://github.com/ScipioWright/Archipelago-SW/releases/download/0.5.5/animal_well.apworld",
+  "release": "https://github.com/ScipioWright/Archipelago-SW/releases/tag/0.5.5",
   "links": [
    "https://github.com/ScipioWright/Archipelago-SW/releases/latest"
   ]
@@ -567,7 +567,7 @@
  },
  {
   "game": "AP_10",
-  "version": "1.10.0",
+  "version": "1.11.0",
   "authors": [
    "lighting8282"
   ],
@@ -581,8 +581,8 @@
    "platform": "Web",
    "list": "index"
   },
-  "download": "https://github.com/lighting8282/AP-Phase10/releases/download/v1.10.0/AP_10.apworld",
-  "release": "https://github.com/lighting8282/AP-Phase10/releases/tag/v1.10.0",
+  "download": "https://github.com/lighting8282/AP-Phase10/releases/download/v1.11.0/AP_10.apworld",
+  "release": "https://github.com/lighting8282/AP-Phase10/releases/tag/v1.11.0",
   "links": [
    "https://github.com/lighting8282/AP-Phase10/releases"
   ]
@@ -844,8 +844,8 @@
    "stability": "Unstable",
    "platform": "PC"
   },
-  "download": "https://github.com/Jbaker16163/Ark-Survival-Archipelago/releases/download/v0.3.3/ark_ase.apworld",
-  "release": "https://github.com/Jbaker16163/Ark-Survival-Archipelago/releases/tag/v0.3.3",
+  "download": "https://github.com/Jbaker16163/Ark-Survival-Archipelago/releases/download/v0.3.4/ark_ase.apworld",
+  "release": "https://github.com/Jbaker16163/Ark-Survival-Archipelago/releases/tag/v0.3.4",
   "links": [
    "https://github.com/Jbaker16163/Ark-Survival-Archipelago/releases/latest"
   ]
@@ -2163,7 +2163,7 @@
  },
  {
   "game": "Burnout Paradise Remastered",
-  "version": "1.0.5",
+  "version": "1.0.8",
   "authors": [
    "FyreDay",
    "Schaackii"
@@ -2182,8 +2182,8 @@
    "game": "Burnout Paradise Remastered",
    "list": "index"
   },
-  "download": "https://github.com/DanielSchaack/Archipelago-BurnoutParadiseRemastered/releases/download/v1.0.5/burnout_paradise_remastered.apworld",
-  "release": "https://github.com/DanielSchaack/Archipelago-BurnoutParadiseRemastered/releases/tag/v1.0.5",
+  "download": "https://github.com/DanielSchaack/Archipelago-BurnoutParadiseRemastered/releases/download/v1.0.8/burnout_paradise_remastered.apworld",
+  "release": "https://github.com/DanielSchaack/Archipelago-BurnoutParadiseRemastered/releases/tag/v1.0.8",
   "links": [
    "https://github.com/DanielSchaack/Archipelago-BurnoutParadiseRemastered/releases"
   ]
@@ -2691,8 +2691,8 @@
    "game": "Civilization IV",
    "stability": "Unstable"
   },
-  "download": "https://github.com/VincentBorchardt/Civ4-Archipelago-Mod/releases/download/Alpha_0_3/civ_4.apworld",
-  "release": "https://github.com/VincentBorchardt/Civ4-Archipelago-Mod/releases/tag/Alpha_0_3",
+  "download": "https://github.com/VincentBorchardt/Civ4-Archipelago-Mod/releases/download/Alpha_0_4/civ_4.apworld",
+  "release": "https://github.com/VincentBorchardt/Civ4-Archipelago-Mod/releases/tag/Alpha_0_4",
   "links": [
    "https://github.com/VincentBorchardt/Civ4-Archipelago-Mod/releases/latest"
   ]
@@ -6256,7 +6256,7 @@
  },
  {
   "game": "Gravity Circuit (MuratDev's Implementation)",
-  "version": "0.10.1",
+  "version": "0.11.0",
   "authors": [
    "Murat Kaan Tekeli"
   ],
@@ -6272,8 +6272,8 @@
    "platform": "PC",
    "list": "index"
   },
-  "download": "https://github.com/MuratDev41/gravity-circuit-ap/releases/download/v0.10.1/gravity_circuit.apworld",
-  "release": "https://github.com/MuratDev41/gravity-circuit-ap/releases/tag/v0.10.1",
+  "download": "https://github.com/MuratDev41/gravity-circuit-ap/releases/download/v0.11.0/gravity_circuit.apworld",
+  "release": "https://github.com/MuratDev41/gravity-circuit-ap/releases/tag/v0.11.0",
   "links": [
    "https://github.com/MuratDev41/gravity-circuit-ap/releases"
   ]
@@ -7117,7 +7117,7 @@
  },
  {
   "game": "Hyrule Warriors Age of Calamity",
-  "version": "0.9.89",
+  "version": "0.9.92",
   "authors": [],
   "file": "hyrule_warriors_aoc.apworld",
   "source": "https://github.com/DrPuffball/aoc-archipelago",
@@ -7132,8 +7132,8 @@
    "platform": "Switch",
    "list": "index"
   },
-  "download": "https://github.com/DrPuffball/aoc-archipelago/releases/download/v0.9.89/hyrule_warriors_aoc.apworld",
-  "release": "https://github.com/DrPuffball/aoc-archipelago/releases/tag/v0.9.89",
+  "download": "https://github.com/DrPuffball/aoc-archipelago/releases/download/v0.9.92/hyrule_warriors_aoc.apworld",
+  "release": "https://github.com/DrPuffball/aoc-archipelago/releases/tag/v0.9.92",
   "links": [
    "https://github.com/DrPuffball/aoc-archipelago/releases"
   ]
@@ -7447,6 +7447,28 @@
   "release": "https://github.com/narramoment/Archipelago/releases/tag/1.2.0",
   "links": [
    "https://github.com/narramoment/Archipelago/releases/latest"
+  ]
+ },
+ {
+  "game": "Jet Set Radio Future",
+  "version": "1.0.0",
+  "authors": [],
+  "file": "jsrf.apworld",
+  "source": "https://github.com/rvanmatre50/JSRF-Archipelago-Randomizer",
+  "license": "MIT",
+  "license_url": "https://github.com/rvanmatre50/JSRF-Archipelago-Randomizer/blob/HEAD/LICENSE",
+  "copyright": [
+   "Copyright (c) 2026 Robbie"
+  ],
+  "sheet": {
+   "game": "Jet Set Radio Future",
+   "stability": "Unstable",
+   "pr_status": "Not PRing"
+  },
+  "download": "https://github.com/rvanmatre50/JSRF-Archipelago-Randomizer/releases/download/v1.2a/jsrf.apworld",
+  "release": "https://github.com/rvanmatre50/JSRF-Archipelago-Randomizer/releases/tag/v1.2a",
+  "links": [
+   "https://github.com/rvanmatre50/JSRF-Archipelago-Randomizer/releases"
   ]
  },
  {
@@ -8162,22 +8184,24 @@
  },
  {
   "game": "Librarian Tidy Up the Arcane Library",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "authors": [
    "Str8UpWHITE64"
   ],
   "file": "librarian.apworld",
   "source": "https://github.com/Str8UpWHITE64/Librarian-AP",
-  "license": null,
-  "license_url": null,
-  "copyright": [],
+  "license": "MIT",
+  "license_url": "https://github.com/Str8UpWHITE64/Librarian-AP/blob/HEAD/LICENSE",
+  "copyright": [
+   "Copyright (c) 2026 Str8UpWHITE64"
+  ],
   "sheet": {
    "game": "Librarian: Tidy Up the Arcane Library",
    "stability": "Unstable",
    "platform": "PC"
   },
-  "download": "https://github.com/Str8UpWHITE64/Librarian-AP/releases/download/3.0.2/librarian.apworld",
-  "release": "https://github.com/Str8UpWHITE64/Librarian-AP/releases/tag/3.0.2",
+  "download": "https://github.com/Str8UpWHITE64/Librarian-AP/releases/download/3.0.3/librarian.apworld",
+  "release": "https://github.com/Str8UpWHITE64/Librarian-AP/releases/tag/3.0.3",
   "links": [
    "https://github.com/Str8UpWHITE64/Librarian-AP/releases"
   ]
@@ -9326,6 +9350,28 @@
   ]
  },
  {
+  "game": "Metroid Prime Origins",
+  "version": null,
+  "authors": [
+   "DodoBirb"
+  ],
+  "file": "metroid_prime_origins.apworld",
+  "source": "https://github.com/DodoBirby/metroid-prime-origins-archi-rando",
+  "license": null,
+  "license_url": null,
+  "copyright": [],
+  "sheet": {
+   "game": "Metroid Prime Origins",
+   "playable": "unofficial",
+   "list": "index"
+  },
+  "download": "https://github.com/DodoBirby/metroid-prime-origins-archi-rando/releases/download/1.0/metroid_prime_origins.apworld",
+  "release": "https://github.com/DodoBirby/metroid-prime-origins-archi-rando/releases/tag/1.0",
+  "links": [
+   "https://github.com/DodoBirby/metroid-prime-origins-archi-rando/releases"
+  ]
+ },
+ {
   "game": "Metroid: Samus Returns",
   "version": "0.3.2",
   "authors": [
@@ -10160,7 +10206,7 @@
  },
  {
   "game": "Nine Sols",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "authors": [],
   "file": "nine_sols.apworld",
   "source": "https://github.com/Ixrec/NineSolsArchipelagoRandomizer",
@@ -10175,8 +10221,8 @@
    "pr_status": "Not PRing",
    "platform": "PC"
   },
-  "download": "https://github.com/IxrecsRandomizers/NineSolsArchipelagoRandomizer/releases/download/0.7.0/nine_sols.apworld",
-  "release": "https://github.com/IxrecsRandomizers/NineSolsArchipelagoRandomizer/releases/tag/0.7.0",
+  "download": "https://github.com/IxrecsRandomizers/NineSolsArchipelagoRandomizer/releases/download/0.7.1/nine_sols.apworld",
+  "release": "https://github.com/IxrecsRandomizers/NineSolsArchipelagoRandomizer/releases/tag/0.7.1",
   "links": [
    "https://github.com/Ixrec/NineSolsArchipelagoRandomizer/releases/latest"
   ]
@@ -12787,7 +12833,7 @@
  },
  {
   "game": "Resident Evil 7",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "authors": [],
   "file": "residentevil7biohazard.apworld",
   "source": "https://github.com/ElGrenier/RE7_AP_World",
@@ -12800,8 +12846,8 @@
    "pr_status": "Not PRing",
    "adult": true
   },
-  "download": "https://github.com/ElGrenier/RE7_AP_World/releases/download/0.4.0/residentevil7biohazard.apworld",
-  "release": "https://github.com/ElGrenier/RE7_AP_World/releases/tag/0.4.0",
+  "download": "https://github.com/ElGrenier/RE7_AP_World/releases/download/0.5.0/residentevil7biohazard.apworld",
+  "release": "https://github.com/ElGrenier/RE7_AP_World/releases/tag/0.5.0",
   "links": [
    "https://github.com/ElGrenier/RE7_AP_World/releases/"
   ]
@@ -17057,7 +17103,7 @@
  },
  {
   "game": "Toy Story 2",
-  "version": "3.3.0",
+  "version": "3.3.1",
   "authors": [
    "imklubb"
   ],
@@ -17070,8 +17116,8 @@
    "game": "Toy Story 2 (PS1)",
    "stability": "Stable"
   },
-  "download": "https://github.com/imklubb/Archipelago-Toy-Story-2/releases/download/3.3.0/toystory2.apworld",
-  "release": "https://github.com/imklubb/Archipelago-Toy-Story-2/releases/tag/3.3.0",
+  "download": "https://github.com/imklubb/Archipelago-Toy-Story-2/releases/download/3.3.1/toystory2.apworld",
+  "release": "https://github.com/imklubb/Archipelago-Toy-Story-2/releases/tag/3.3.1",
   "links": [
    "https://github.com/imklubb/Archipelago-Toy-Story-2/releases/latest"
   ]
@@ -17526,8 +17572,8 @@
    "platform": "PC",
    "list": "index"
   },
-  "download": "https://github.com/maplehugs/umamusume_apworld/releases/download/v0.17.0/umamusume.apworld",
-  "release": "https://github.com/maplehugs/umamusume_apworld/releases/tag/v0.17.0",
+  "download": "https://github.com/maplehugs/umamusume_apworld/releases/download/v0.17.1/umamusume.apworld",
+  "release": "https://github.com/maplehugs/umamusume_apworld/releases/tag/v0.17.1",
   "links": [
    "https://github.com/maplehugs/umamusume_apworld/releases"
   ]

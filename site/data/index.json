@@ -1,6 +1,6 @@
 {
  "ap_version": "0.6.8",
- "generated_at": "2026-11-21T13:21:57+00:00",
+ "generated_at": "2026-11-22T13:12:21+00:00",
  "games": [
   {
    "game": "'Weird Al' Yankovic Discography",
@@ -328,7 +328,7 @@
    "file": "games/animal-well.json",
    "source": "custom",
    "apworld": "animal_well.apworld",
-   "world_version": "0.5.4",
+   "world_version": "0.5.5",
    "guides": "guides/animal-well.json",
    "sheet": {
     "game": "ANIMAL WELL",
@@ -407,7 +407,7 @@
    "file": "games/ap-10.json",
    "source": "custom",
    "apworld": "AP_10.apworld",
-   "world_version": "1.10.0",
+   "world_version": "1.11.0",
    "guides": "guides/ap-10.json",
    "sheet": {
     "game": "AP_10",
@@ -1250,7 +1250,7 @@
    "file": "games/burnout-paradise-remastered.json",
    "source": "custom",
    "apworld": "burnout_paradise_remastered.apworld",
-   "world_version": "1.0.5",
+   "world_version": "1.0.8",
    "guides": "guides/burnout-paradise-remastered.json",
    "sheet": {
     "game": "Burnout Paradise Remastered",
@@ -3620,7 +3620,7 @@
    "file": "games/gravity-circuit-muratdev-s-implementation.json",
    "source": "custom",
    "apworld": "gravity_circuit.apworld",
-   "world_version": "0.10.1",
+   "world_version": "0.11.0",
    "guides": "guides/gravity-circuit-muratdev-s-implementation.json",
    "sheet": {
     "game": "Gravity Circuit (MuratDev's Implementation)",
@@ -4113,7 +4113,7 @@
    "file": "games/hyrule-warriors-age-of-calamity.json",
    "source": "custom",
    "apworld": "hyrule_warriors_aoc.apworld",
-   "world_version": "0.9.89",
+   "world_version": "0.9.92",
    "guides": "guides/hyrule-warriors-age-of-calamity.json",
    "sheet": {
     "game": "Hyrule Warriors: Age of Calamity",
@@ -4302,6 +4302,19 @@
     "game": "Jak II",
     "stability": "Unstable",
     "platform": "PS2"
+   }
+  },
+  {
+   "game": "Jet Set Radio Future",
+   "file": "games/jet-set-radio-future.json",
+   "source": "custom",
+   "apworld": "jsrf.apworld",
+   "world_version": "1.0.0",
+   "guides": "guides/jet-set-radio-future.json",
+   "sheet": {
+    "game": "Jet Set Radio Future",
+    "stability": "Unstable",
+    "pr_status": "Not PRing"
    }
   },
   {
@@ -4707,7 +4720,7 @@
    "file": "games/librarian-tidy-up-the-arcane-library.json",
    "source": "custom",
    "apworld": "librarian.apworld",
-   "world_version": "3.0.2",
+   "world_version": "3.0.3",
    "guides": "guides/librarian-tidy-up-the-arcane-library.json",
    "sheet": {
     "game": "Librarian: Tidy Up the Arcane Library",
@@ -5425,6 +5438,19 @@
    }
   },
   {
+   "game": "Metroid Prime Origins",
+   "file": "games/metroid-prime-origins.json",
+   "source": "custom",
+   "apworld": "metroid_prime_origins.apworld",
+   "world_version": null,
+   "guides": "guides/metroid-prime-origins.json",
+   "sheet": {
+    "game": "Metroid Prime Origins",
+    "playable": "unofficial",
+    "list": "index"
+   }
+  },
+  {
    "game": "Metroid: Samus Returns",
    "file": "games/metroid-samus-returns.json",
    "source": "custom",
@@ -5838,7 +5864,7 @@
    "file": "games/nine-sols.json",
    "source": "custom",
    "apworld": "nine_sols.apworld",
-   "world_version": "0.7.0",
+   "world_version": "0.7.1",
    "guides": "guides/nine-sols.json",
    "sheet": {
     "game": "Nine Sols",
@@ -7261,7 +7287,7 @@
    "file": "games/resident-evil-7.json",
    "source": "custom",
    "apworld": "residentevil7biohazard.apworld",
-   "world_version": "0.4.0",
+   "world_version": "0.5.0",
    "guides": "guides/resident-evil-7.json",
    "sheet": {
     "game": "Resident Evil 7",
@@ -9636,7 +9662,7 @@
    "file": "games/toy-story-2.json",
    "source": "custom",
    "apworld": "toystory2.apworld",
-   "world_version": "3.3.0",
+   "world_version": "3.3.1",
    "guides": "guides/toy-story-2.json",
    "sheet": {
     "game": "Toy Story 2 (PS1)",
@@ -10944,7 +10970,7 @@
   "LostButFound": "ModuleNotFoundError: No module named 'worlds.LostButFound'",
   "pokemon_hgss": "worlds.Files.ImproperlyConfiguredAutoPatchError: Two auto patch containers are using the same file extension: <class 'worlds.pokemon_hgss.rom.PokemonHeartgoldPatch'>, <class 'output_patch.HeartGoldProcedurePatch'>",
   "pokemon_xy": "ModuleNotFoundError: No module named 'worlds.pokemon_xy'",
-  "Salt and Sanctuary": "Did not load /tmp/tmply85_iqk/tmp209xt3_m/custom_worlds/salt_and_sanctuary.apworld as its maximum core version Version(major=0, minor=6, build=6) is lower than current core version Version(major=0, minor=6, build=8).",
+  "Salt and Sanctuary": "Did not load /tmp/tmpajawxyog/tmpkznc242l/custom_worlds/salt_and_sanctuary.apworld as its maximum core version Version(major=0, minor=6, build=6) is lower than current core version Version(major=0, minor=6, build=8).",
   "scooby_doo_unmasked": "AssertionError: Choice option 'random' cannot be manually assigned.",
   "smash64": "AssertionError: Choice option 'random' cannot be manually assigned.",
   "spyro_seasonofice": "ModuleNotFoundError: No module named 'worlds.spyro_seasonofice'",
