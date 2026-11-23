@@ -1,6 +1,6 @@
 {
  "ap_version": "0.6.8",
- "generated_at": "2026-11-22T13:12:21+00:00",
+ "generated_at": "2026-11-23T15:48:35+00:00",
  "games": [
   {
    "game": "'Weird Al' Yankovic Discography",
@@ -1137,7 +1137,7 @@
    "file": "games/bubble-bobble.json",
    "source": "custom",
    "apworld": "bubblebobble.apworld",
-   "world_version": "1.2.2",
+   "world_version": "1.2.3",
    "guides": "guides/bubble-bobble.json",
    "sheet": {
     "game": "Bubble Bobble",
@@ -1262,7 +1262,7 @@
    "file": "games/c-c-reloaded.json",
    "source": "custom",
    "apworld": "cnc_reloaded.apworld",
-   "world_version": "2.3.0",
+   "world_version": "2.4.0",
    "guides": "guides/c-c-reloaded.json",
    "sheet": {
     "game": "C&C Reloaded",
@@ -1561,7 +1561,7 @@
    "file": "games/chrono-trigger-rando-dalton-imperial.json",
    "source": "custom",
    "apworld": "ctrdi.apworld",
-   "world_version": "0.0.7",
+   "world_version": "0.0.8",
    "guides": "guides/chrono-trigger-rando-dalton-imperial.json",
    "sheet": {
     "game": "Chrono Trigger Rando-Dalton Imperial (SNES)",
@@ -2439,7 +2439,7 @@
    "file": "games/donkey-kong-64.json",
    "source": "custom",
    "apworld": "dk64.apworld",
-   "world_version": "2.0.9",
+   "world_version": "2.0.10",
    "guides": "guides/donkey-kong-64.json",
    "sheet": {
     "game": "Donkey Kong 64",
@@ -2719,7 +2719,7 @@
    "file": "games/dungeon-defenders.json",
    "source": "custom",
    "apworld": "dungeon_defenders.apworld",
-   "world_version": "0.8.2",
+   "world_version": "0.8.3",
    "guides": "guides/dungeon-defenders.json",
    "sheet": {
     "game": "Dungeon Defenders",
@@ -2979,7 +2979,7 @@
    "file": "games/fantastic-fist.json",
    "source": "custom",
    "apworld": "fantastic_fist.apworld",
-   "world_version": "1.1.0",
+   "world_version": "1.2.0",
    "guides": "guides/fantastic-fist.json",
    "sheet": {
     "game": "Fantastic Fist",
@@ -3620,7 +3620,7 @@
    "file": "games/gravity-circuit-muratdev-s-implementation.json",
    "source": "custom",
    "apworld": "gravity_circuit.apworld",
-   "world_version": "0.11.0",
+   "world_version": "1.0.0",
    "guides": "guides/gravity-circuit-muratdev-s-implementation.json",
    "sheet": {
     "game": "Gravity Circuit (MuratDev's Implementation)",
@@ -3633,7 +3633,7 @@
    "file": "games/grim-dawn.json",
    "source": "custom",
    "apworld": "grim_dawn.apworld",
-   "world_version": "0.4.1",
+   "world_version": "0.5.0",
    "guides": "guides/grim-dawn.json",
    "sheet": {
     "game": "Grim Dawn",
@@ -4049,7 +4049,7 @@
    "file": "games/hunie-pop.json",
    "source": "custom",
    "apworld": "huniepop.apworld",
-   "world_version": "3.0.0",
+   "world_version": "3.0.2",
    "guides": "guides/hunie-pop.json",
    "sheet": {
     "game": "Huniepop",
@@ -4493,7 +4493,7 @@
    "file": "games/kirby-the-amazing-mirror.json",
    "source": "custom",
    "apworld": "kirbyam.apworld",
-   "world_version": "0.5.1",
+   "world_version": "0.6.0",
    "guides": "guides/kirby-the-amazing-mirror.json",
    "sheet": {
     "game": "Kirby & The Amazing Mirror",
@@ -5111,7 +5111,7 @@
    "file": "games/mario-sports-mix.json",
    "source": "custom",
    "apworld": "mario_sports_mix.apworld",
-   "world_version": "3.1.5",
+   "world_version": "3.1.6",
    "guides": "guides/mario-sports-mix.json",
    "sheet": {
     "game": "Mario Sports Mix",
@@ -5336,7 +5336,7 @@
    "file": "games/mental-omega.json",
    "source": "custom",
    "apworld": "mental_omega.apworld",
-   "world_version": "1.50.0",
+   "world_version": "1.51.0",
    "guides": "guides/mental-omega.json",
    "sheet": {
     "game": "Command & Conquer: Mental Omega",
@@ -6689,7 +6689,7 @@
    "file": "games/pokemon-black-and-white.json",
    "source": "custom",
    "apworld": "pokemon_bw.apworld",
-   "world_version": "0.4.5",
+   "world_version": "0.4.6",
    "guides": "guides/pokemon-black-and-white.json",
    "sheet": {
     "game": "Pokémon Black and White",
@@ -7459,7 +7459,7 @@
    "file": "games/rogue-legacy-2.json",
    "source": "custom",
    "apworld": "rogue_legacy_2.apworld",
-   "world_version": "0.1.0",
+   "world_version": "1.2.0",
    "guides": "guides/rogue-legacy-2.json",
    "sheet": {
     "game": "Rogue Legacy 2",
@@ -8009,7 +8009,7 @@
    "file": "games/slay-the-spire-ii.json",
    "source": "custom",
    "apworld": "spire2.apworld",
-   "world_version": "1.4.1",
+   "world_version": "1.4.2",
    "guides": "guides/slay-the-spire-ii.json",
    "sheet": {
     "game": "Slay the Spire 2",
@@ -9662,7 +9662,7 @@
    "file": "games/toy-story-2.json",
    "source": "custom",
    "apworld": "toystory2.apworld",
-   "world_version": "3.3.1",
+   "world_version": "3.3.2",
    "guides": "guides/toy-story-2.json",
    "sheet": {
     "game": "Toy Story 2 (PS1)",
@@ -9750,7 +9750,7 @@
    "file": "games/turok-2.json",
    "source": "custom",
    "apworld": "turok2.apworld",
-   "world_version": "0.6.0",
+   "world_version": "0.6.1",
    "guides": "guides/turok-2.json",
    "sheet": {
     "game": "Turok 2",
@@ -10364,6 +10364,19 @@
    }
   },
   {
+   "game": "WarioWare: Twisted!",
+   "file": "games/warioware-twisted.json",
+   "source": "custom",
+   "apworld": "wario_ware_twisted.apworld",
+   "world_version": "1.1.0",
+   "guides": "guides/warioware-twisted.json",
+   "sheet": {
+    "game": "WarioWare: Twisted!",
+    "platform": "GBA",
+    "list": "index"
+   }
+  },
+  {
    "game": "Warioworld",
    "file": "games/warioworld.json",
    "source": "custom",
@@ -10970,7 +10983,7 @@
   "LostButFound": "ModuleNotFoundError: No module named 'worlds.LostButFound'",
   "pokemon_hgss": "worlds.Files.ImproperlyConfiguredAutoPatchError: Two auto patch containers are using the same file extension: <class 'worlds.pokemon_hgss.rom.PokemonHeartgoldPatch'>, <class 'output_patch.HeartGoldProcedurePatch'>",
   "pokemon_xy": "ModuleNotFoundError: No module named 'worlds.pokemon_xy'",
-  "Salt and Sanctuary": "Did not load /tmp/tmpajawxyog/tmpkznc242l/custom_worlds/salt_and_sanctuary.apworld as its maximum core version Version(major=0, minor=6, build=6) is lower than current core version Version(major=0, minor=6, build=8).",
+  "Salt and Sanctuary": "Did not load /tmp/tmpc5hhezro/tmpgnrrfnxe/custom_worlds/salt_and_sanctuary.apworld as its maximum core version Version(major=0, minor=6, build=6) is lower than current core version Version(major=0, minor=6, build=8).",
   "scooby_doo_unmasked": "AssertionError: Choice option 'random' cannot be manually assigned.",
   "smash64": "AssertionError: Choice option 'random' cannot be manually assigned.",
   "spyro_seasonofice": "ModuleNotFoundError: No module named 'worlds.spyro_seasonofice'",

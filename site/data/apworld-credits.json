@@ -1937,7 +1937,7 @@
  },
  {
   "game": "Bubble Bobble",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "authors": [
    "Sensokaeru"
   ],
@@ -1951,8 +1951,8 @@
    "stability": "Unstable",
    "platform": "NES"
   },
-  "download": "https://github.com/sensokaeru/bubblebobbleAP/releases/download/v1.2.2/bubblebobble.apworld",
-  "release": "https://github.com/sensokaeru/bubblebobbleAP/releases/tag/v1.2.2",
+  "download": "https://github.com/sensokaeru/bubblebobbleAP/releases/download/v1.2.3/bubblebobble.apworld",
+  "release": "https://github.com/sensokaeru/bubblebobbleAP/releases/tag/v1.2.3",
   "links": [
    "https://github.com/sensokaeru/bubblebobbleAP/releases"
   ]
@@ -2463,7 +2463,7 @@
  },
  {
   "game": "C&C Reloaded",
-  "version": "2.3.0",
+  "version": "2.4.0",
   "authors": [
    "C&C Reloaded Randomizer contributors"
   ],
@@ -2479,8 +2479,8 @@
    "stability": "Unstable",
    "pr_status": "Not PRing"
   },
-  "download": "https://github.com/Heinki/Reloaded-Randomizer/releases/download/V2.3/cnc_reloaded.apworld",
-  "release": "https://github.com/Heinki/Reloaded-Randomizer/releases/tag/V2.3",
+  "download": "https://github.com/Heinki/Reloaded-Randomizer/releases/download/V2.4/cnc_reloaded.apworld",
+  "release": "https://github.com/Heinki/Reloaded-Randomizer/releases/tag/V2.4",
   "links": [
    "https://github.com/Heinki/Reloaded-Randomizer/releases"
   ]
@@ -2652,7 +2652,7 @@
  },
  {
   "game": "Chrono Trigger Rando-Dalton Imperial",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "authors": [
    "Pseudoarc",
    "Anguirel"
@@ -2670,8 +2670,8 @@
    "stability": "Unstable",
    "pr_status": "Not PRing"
   },
-  "download": "https://github.com/Anguirel86/ap_ctrdi/releases/download/v0.0.7/ctrdi.apworld",
-  "release": "https://github.com/Anguirel86/ap_ctrdi/releases/tag/v0.0.7",
+  "download": "https://github.com/Anguirel86/ap_ctrdi/releases/download/v0.0.8/ctrdi.apworld",
+  "release": "https://github.com/Anguirel86/ap_ctrdi/releases/tag/v0.0.8",
   "links": [
    "https://github.com/Anguirel86/ap_ctrdi/releases"
   ]
@@ -4203,7 +4203,7 @@
  },
  {
   "game": "Donkey Kong 64",
-  "version": "2.0.9",
+  "version": "2.0.10",
   "authors": [
    "2dos",
    "AlmostSeagull",
@@ -4226,8 +4226,8 @@
    "stability": "Stable",
    "platform": "N64"
   },
-  "download": "https://github.com/2dos/DK64-Randomizer-Dev/releases/download/v2.0.9/dk64.apworld",
-  "release": "https://github.com/2dos/DK64-Randomizer-Dev/releases/tag/v2.0.9",
+  "download": "https://github.com/2dos/DK64-Randomizer-Dev/releases/download/v2.0.10/dk64.apworld",
+  "release": "https://github.com/2dos/DK64-Randomizer-Dev/releases/tag/v2.0.10",
   "links": [
    "https://github.com/2dos/DK64-Randomizer-Dev/releases/latest"
   ]
@@ -4426,8 +4426,8 @@
    "pr_status": "Not PRing",
    "platform": "PC"
   },
-  "download": "https://github.com/CaptainBoscar/Archipelago-DOTA2/releases/download/v0.1.0/dota_2.apworld",
-  "release": "https://github.com/CaptainBoscar/Archipelago-DOTA2/releases/tag/v0.1.0",
+  "download": "https://github.com/CaptainBoscar/Archipelago-DOTA2/releases/download/v.0.2.0/dota_2.apworld",
+  "release": "https://github.com/CaptainBoscar/Archipelago-DOTA2/releases/tag/v.0.2.0",
   "links": [
    "https://github.com/CaptainBoscar/Archipelago-DOTA2/releases/latest"
   ]
@@ -4692,8 +4692,8 @@
    "stability": "Unstable",
    "platform": "PC"
   },
-  "download": "https://github.com/Haywire32/DD1-AP/releases/download/v0.8.2/dungeon_defenders.apworld",
-  "release": "https://github.com/Haywire32/DD1-AP/releases/tag/v0.8.2",
+  "download": "https://github.com/Haywire32/DD1-AP/releases/download/v0.8.3/dungeon_defenders.apworld",
+  "release": "https://github.com/Haywire32/DD1-AP/releases/tag/v0.8.3",
   "links": [
    "https://github.com/Haywire32/DD1-AP/releases"
   ]
@@ -5135,7 +5135,7 @@
  },
  {
   "game": "Fantastic Fist",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "authors": [
    "WaluigiGoesWa"
   ],
@@ -5151,8 +5151,8 @@
    "stability": "Unstable",
    "platform": "PC"
   },
-  "download": "https://github.com/DannySchultzDev/Fantastic-Fist-Archipelago-Client/releases/download/V1.1.0/fantastic_fist.apworld",
-  "release": "https://github.com/DannySchultzDev/Fantastic-Fist-Archipelago-Client/releases/tag/V1.1.0",
+  "download": "https://github.com/DannySchultzDev/Fantastic-Fist-Archipelago-Client/releases/download/V1.2.0/fantastic_fist.apworld",
+  "release": "https://github.com/DannySchultzDev/Fantastic-Fist-Archipelago-Client/releases/tag/V1.2.0",
   "links": [
    "https://github.com/DannySchultzDev/Fantastic-Fist-Archipelago-Client/releases"
   ]
@@ -6195,8 +6195,8 @@
    "platform": "PC",
    "list": "index"
   },
-  "download": "https://github.com/dudleydehenau/GTAV-Archipelago/releases/download/v1.4.0/gtav.apworld",
-  "release": "https://github.com/dudleydehenau/GTAV-Archipelago/releases/tag/v1.4.0",
+  "download": "https://github.com/dudleydehenau/GTAV-Archipelago/releases/download/v1.4.1/gtav.apworld",
+  "release": "https://github.com/dudleydehenau/GTAV-Archipelago/releases/tag/v1.4.1",
   "links": [
    "https://github.com/dudleydehenau/GTAV-Archipelago/releases"
   ]
@@ -6256,7 +6256,7 @@
  },
  {
   "game": "Gravity Circuit (MuratDev's Implementation)",
-  "version": "0.11.0",
+  "version": "1.0.0",
   "authors": [
    "Murat Kaan Tekeli"
   ],
@@ -6272,15 +6272,15 @@
    "platform": "PC",
    "list": "index"
   },
-  "download": "https://github.com/MuratDev41/gravity-circuit-ap/releases/download/v0.11.0/gravity_circuit.apworld",
-  "release": "https://github.com/MuratDev41/gravity-circuit-ap/releases/tag/v0.11.0",
+  "download": "https://github.com/MuratDev41/gravity-circuit-ap/releases/download/v1.0.0/gravity_circuit.apworld",
+  "release": "https://github.com/MuratDev41/gravity-circuit-ap/releases/tag/v1.0.0",
   "links": [
    "https://github.com/MuratDev41/gravity-circuit-ap/releases"
   ]
  },
  {
   "game": "Grim Dawn",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "authors": [
    "DaKennyMan22"
   ],
@@ -6299,8 +6299,8 @@
    "stability": "Stable",
    "platform": "PC"
   },
-  "download": "https://github.com/routhken/Archipelago/releases/download/v0.4.1/grim_dawn.apworld",
-  "release": "https://github.com/routhken/Archipelago/releases/tag/v0.4.1",
+  "download": "https://github.com/routhken/Archipelago/releases/download/grim_dawn_v0.5.0/grim_dawn.apworld",
+  "release": "https://github.com/routhken/Archipelago/releases/tag/grim_dawn_v0.5.0",
   "links": [
    "https://github.com/routhken/Archipelago/releases"
   ]
@@ -7022,7 +7022,7 @@
  },
  {
   "game": "Hunie Pop",
-  "version": "3.0.0",
+  "version": "3.0.2",
   "authors": [
    "Dotsofdarkness"
   ],
@@ -7041,8 +7041,8 @@
    "playable": "after_dark",
    "platform": "PC"
   },
-  "download": "https://github.com/DotsofdarknessArchipelago/HuniePopArchipelago/releases/download/V3.0.0/huniepop.apworld",
-  "release": "https://github.com/DotsofdarknessArchipelago/HuniePopArchipelago/releases/tag/V3.0.0",
+  "download": "https://github.com/DotsofdarknessArchipelago/HuniePopArchipelago/releases/download/V3.0.2/huniepop.apworld",
+  "release": "https://github.com/DotsofdarknessArchipelago/HuniePopArchipelago/releases/tag/V3.0.2",
   "links": [
    "https://github.com/DotsofdarknessArchipelago/HuniePopArchipelago/releases/latest"
   ]
@@ -7899,7 +7899,7 @@
  },
  {
   "game": "Kirby & The Amazing Mirror",
-  "version": "0.5.1",
+  "version": "0.6.0",
   "authors": [
    "Harrison Sherwin"
   ],
@@ -7916,8 +7916,8 @@
    "stability": "Unstable",
    "platform": "GBA"
   },
-  "download": "https://github.com/hasherwi/Archipelago-kirbyam/releases/download/kirbyam-v0.5.1/kirbyam.apworld",
-  "release": "https://github.com/hasherwi/Archipelago-kirbyam/releases/tag/kirbyam-v0.5.1",
+  "download": "https://github.com/hasherwi/Archipelago-kirbyam/releases/download/kirbyam-v0.6.0/kirbyam.apworld",
+  "release": "https://github.com/hasherwi/Archipelago-kirbyam/releases/tag/kirbyam-v0.6.0",
   "links": [
    "https://github.com/hasherwi/Archipelago-kirbyam/releases/latest"
   ]
@@ -8101,8 +8101,8 @@
    "game": "LEGO Star Wars III (Wii)",
    "stability": "Unstable"
   },
-  "download": "https://github.com/Newtboy/Newtboy-LSW3-Archipelago/releases/download/Hotfix-1.3.1/lsw3.apworld",
-  "release": "https://github.com/Newtboy/Newtboy-LSW3-Archipelago/releases/tag/Hotfix-1.3.1",
+  "download": "https://github.com/Newtboy/Newtboy-LSW3-Archipelago/releases/download/Release-1.4/lsw3.apworld",
+  "release": "https://github.com/Newtboy/Newtboy-LSW3-Archipelago/releases/tag/Release-1.4",
   "links": [
    "https://github.com/Newtboy/Newtboy-LSW3-Archipelago/releases/latest"
   ]
@@ -8801,7 +8801,7 @@
  },
  {
   "game": "Mario Sports Mix",
-  "version": "3.1.5",
+  "version": "3.1.6",
   "authors": [
    "ElectroStarz",
    "Puffy"
@@ -8817,8 +8817,8 @@
    "pr_status": "Not PRing",
    "platform": "Wii"
   },
-  "download": "https://github.com/ElectroStarz/ArchipelagoMSM/releases/download/v3.1.5/mario_sports_mix.apworld",
-  "release": "https://github.com/ElectroStarz/ArchipelagoMSM/releases/tag/v3.1.5",
+  "download": "https://github.com/ElectroStarz/ArchipelagoMSM/releases/download/v3.1.6/mario_sports_mix.apworld",
+  "release": "https://github.com/ElectroStarz/ArchipelagoMSM/releases/tag/v3.1.6",
   "links": [
    "https://github.com/ElectroStarz/ArchipelagoMSM/releases"
   ]
@@ -9163,15 +9163,15 @@
    "stability": "Unstable",
    "platform": "PC"
   },
-  "download": "https://github.com/ShackledMars261/mio-archipelago/releases/download/v0.0.2/mio.apworld",
-  "release": "https://github.com/ShackledMars261/mio-archipelago/releases/tag/v0.0.2",
+  "download": "https://github.com/ShackledMars261/mio-archipelago/releases/download/v0.0.3/mio.apworld",
+  "release": "https://github.com/ShackledMars261/mio-archipelago/releases/tag/v0.0.3",
   "links": [
    "https://github.com/ShackledMars261/mio-archipelago/releases/latest"
   ]
  },
  {
   "game": "Mental Omega",
-  "version": "1.50.0",
+  "version": "1.51.0",
   "authors": [
    "Mental Omega Randomizer contributors"
   ],
@@ -9187,8 +9187,8 @@
    "stability": "Unstable",
    "pr_status": "Not PRing"
   },
-  "download": "https://github.com/Heinki/Mental-Omega-Randomizer/releases/download/V1.50/mental_omega.apworld",
-  "release": "https://github.com/Heinki/Mental-Omega-Randomizer/releases/tag/V1.50",
+  "download": "https://github.com/Heinki/Mental-Omega-Randomizer/releases/download/V1.51/mental_omega.apworld",
+  "release": "https://github.com/Heinki/Mental-Omega-Randomizer/releases/tag/V1.51",
   "links": [
    "https://github.com/Heinki/Mental-Omega-Randomizer/releases/latest"
   ]
@@ -11739,7 +11739,7 @@
  },
  {
   "game": "Pokemon Black and White",
-  "version": "0.4.5",
+  "version": "0.4.6",
   "authors": [
    "BlastSlimey"
   ],
@@ -11754,8 +11754,8 @@
    "stability": "Stable",
    "platform": "DS"
   },
-  "download": "https://github.com/BlastSlimey/PokemonBWAP/releases/download/0.4.5/pokemon_bw.apworld",
-  "release": "https://github.com/BlastSlimey/PokemonBWAP/releases/tag/0.4.5",
+  "download": "https://github.com/BlastSlimey/PokemonBWAP/releases/download/0.4.6/pokemon_bw.apworld",
+  "release": "https://github.com/BlastSlimey/PokemonBWAP/releases/tag/0.4.6",
   "links": [
    "https://github.com/BlastSlimey/PokemonBWAP/releases/latest"
   ]
@@ -13099,7 +13099,7 @@
  },
  {
   "game": "Rogue Legacy 2",
-  "version": "0.1.0",
+  "version": "1.2.0",
   "authors": [],
   "file": "rogue_legacy_2.apworld",
   "source": "https://github.com/zaphim12/RL2Archipelago",
@@ -13113,8 +13113,8 @@
    "stability": "Stable",
    "platform": "PC"
   },
-  "download": "https://github.com/zaphim12/RL2Archipelago/releases/download/v1.1.3/rogue_legacy_2.apworld",
-  "release": "https://github.com/zaphim12/RL2Archipelago/releases/tag/v1.1.3",
+  "download": "https://github.com/zaphim12/RL2Archipelago/releases/download/v1.2.0/rogue_legacy_2.apworld",
+  "release": "https://github.com/zaphim12/RL2Archipelago/releases/tag/v1.2.0",
   "links": [
    "https://github.com/zaphim12/RL2Archipelago/releases"
   ]
@@ -14174,7 +14174,7 @@
  },
  {
   "game": "Slay the Spire II",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "authors": [
    "Kirbyfanner",
    "Platano Bailando",
@@ -14191,8 +14191,8 @@
    "game": "Slay the Spire 2",
    "stability": "Unstable"
   },
-  "download": "https://github.com/dlueben1/Slay-the-Spire-2-Archipelago/releases/download/2.2.2/spire2.apworld",
-  "release": "https://github.com/dlueben1/Slay-the-Spire-2-Archipelago/releases/tag/2.2.2",
+  "download": "https://github.com/dlueben1/Slay-the-Spire-2-Archipelago/releases/download/2.2.3/spire2.apworld",
+  "release": "https://github.com/dlueben1/Slay-the-Spire-2-Archipelago/releases/tag/2.2.3",
   "links": [
    "https://github.com/dlueben1/Slay-the-Spire-2-Archipelago/releases"
   ]
@@ -14664,8 +14664,8 @@
    "stability": "Unstable",
    "platform": "PC"
   },
-  "download": "https://github.com/OnakuTV/SonicFrontiersAPWorld/releases/download/v0.2.2/sonic_frontiers.apworld",
-  "release": "https://github.com/OnakuTV/SonicFrontiersAPWorld/releases/tag/v0.2.2",
+  "download": "https://github.com/OnakuTV/SonicFrontiersAPWorld/releases/download/v0.2.3/sonic_frontiers.apworld",
+  "release": "https://github.com/OnakuTV/SonicFrontiersAPWorld/releases/tag/v0.2.3",
   "links": [
    "https://github.com/OnakuTV/SonicFrontiersAPWorld/releases/"
   ]
@@ -17103,7 +17103,7 @@
  },
  {
   "game": "Toy Story 2",
-  "version": "3.3.1",
+  "version": "3.3.2",
   "authors": [
    "imklubb"
   ],
@@ -17116,8 +17116,8 @@
    "game": "Toy Story 2 (PS1)",
    "stability": "Stable"
   },
-  "download": "https://github.com/imklubb/Archipelago-Toy-Story-2/releases/download/3.3.1/toystory2.apworld",
-  "release": "https://github.com/imklubb/Archipelago-Toy-Story-2/releases/tag/3.3.1",
+  "download": "https://github.com/imklubb/Archipelago-Toy-Story-2/releases/download/3.3.2/toystory2.apworld",
+  "release": "https://github.com/imklubb/Archipelago-Toy-Story-2/releases/tag/3.3.2",
   "links": [
    "https://github.com/imklubb/Archipelago-Toy-Story-2/releases/latest"
   ]
@@ -17225,7 +17225,7 @@
  },
  {
   "game": "Turok 2",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "authors": [
    "Chikakoo"
   ],
@@ -17243,8 +17243,8 @@
    "game": "Turok 2",
    "stability": "Unstable"
   },
-  "download": "https://github.com/chikakoo/Turok-2-AP-World/releases/download/v0.6.0/turok2.apworld",
-  "release": "https://github.com/chikakoo/Turok-2-AP-World/releases/tag/v0.6.0",
+  "download": "https://github.com/chikakoo/Turok-2-AP-World/releases/download/v0.6.1/turok2.apworld",
+  "release": "https://github.com/chikakoo/Turok-2-AP-World/releases/tag/v0.6.1",
   "links": [
    "https://github.com/chikakoo/Turok-2-AP-World/releases"
   ]
@@ -18379,6 +18379,33 @@
   "release": "https://github.com/TheLX5/Archipelago/releases/tag/wariowareinc-v1.1.2",
   "links": [
    "https://github.com/TheLX5/Archipelago/releases?q=WarioWare%2C+Inc.&expanded=true"
+  ]
+ },
+ {
+  "game": "WarioWare: Twisted!",
+  "version": "1.1.0",
+  "authors": [
+   "lx5"
+  ],
+  "file": "wario_ware_twisted.apworld",
+  "source": "https://github.com/TheLX5/Archipelago",
+  "license": "MIT",
+  "license_url": "https://github.com/TheLX5/Archipelago/blob/HEAD/LICENSE",
+  "copyright": [
+   "Copyright (c) 2017 LLCoolDave",
+   "Copyright (c) 2025 Berserker66",
+   "Copyright (c) 2022 CaitSith2",
+   "Copyright (c) 2021 LegendaryLinux"
+  ],
+  "sheet": {
+   "game": "WarioWare: Twisted!",
+   "platform": "GBA",
+   "list": "index"
+  },
+  "download": "https://github.com/TheLX5/Archipelago/releases/download/wariotwisted-v1.1.0/wario_ware_twisted.apworld",
+  "release": "https://github.com/TheLX5/Archipelago/releases/tag/wariotwisted-v1.1.0",
+  "links": [
+   "https://github.com/TheLX5/Archipelago/releases?q=%22WarioWare%3A+Twisted%22&expanded=true"
   ]
  },
  {
