@@ -2285,6 +2285,14 @@
    "wikidata": "Q526700",
    "checked": "2026-11-03"
   },
+  "Jet Set Radio Future": {
+   "genres": [
+    "action",
+    "sport"
+   ],
+   "wikidata": "Q1063810",
+   "checked": "2026-11-23"
+  },
   "Jigsaw": {
    "genres": [
     "aventure"
@@ -2885,6 +2893,11 @@
    ],
    "wikidata": "Q1765733",
    "checked": "2026-11-03"
+  },
+  "Metroid Prime Origins": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-23"
   },
   "Metroid: Samus Returns": {
    "genres": [
