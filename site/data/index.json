@@ -1,6 +1,6 @@
 {
  "ap_version": "0.6.8",
- "generated_at": "2026-11-23T15:48:35+00:00",
+ "generated_at": "2026-11-24T15:39:10+00:00",
  "games": [
   {
    "game": "'Weird Al' Yankovic Discography",
@@ -528,7 +528,7 @@
    "file": "games/archipeladoku.json",
    "source": "custom",
    "apworld": "archipeladoku.apworld",
-   "world_version": "2026.9.26",
+   "world_version": "2026.11.23",
    "guides": "guides/archipeladoku.json",
    "sheet": {
     "game": "Archipeladoku (Sudoku)",
@@ -1110,7 +1110,7 @@
    "file": "games/breath-of-the-wild.json",
    "source": "custom",
    "apworld": "botw.apworld",
-   "world_version": "0.3.4",
+   "world_version": "0.4.0",
    "guides": "guides/breath-of-the-wild.json",
    "sheet": {
     "game": "The Legend of Zelda: Breath of the Wild",
@@ -1340,6 +1340,18 @@
    "guides": "guides/castlevania-64.json"
   },
   {
+   "game": "Castlevania II: Simon's Quest",
+   "file": "games/castlevania-ii-simon-s-quest.json",
+   "source": "custom",
+   "apworld": "cv2_sq.apworld",
+   "world_version": "1.0.0",
+   "guides": "guides/castlevania-ii-simon-s-quest.json",
+   "sheet": {
+    "game": "Castlevania II: Simon's Quest",
+    "stability": "Unstable"
+   }
+  },
+  {
    "game": "Castlevania: Legacy of Darkness",
    "file": "games/castlevania-legacy-of-darkness.json",
    "source": "custom",
@@ -1383,7 +1395,7 @@
    "file": "games/casualties-unknown.json",
    "source": "custom",
    "apworld": "casualtiesunknown.apworld",
-   "world_version": "0.13.1",
+   "world_version": "0.13.2",
    "guides": "guides/casualties-unknown.json",
    "sheet": {
     "game": "Casualties: Unknown (Scav Prototype Demo)",
@@ -2792,7 +2804,7 @@
    "file": "games/eldenring.json",
    "source": "custom",
    "apworld": "eldenring.apworld",
-   "world_version": "0.1.4",
+   "world_version": "0.2.0",
    "guides": "guides/eldenring.json",
    "sheet": {
     "game": "Elden Ring",
@@ -2858,7 +2870,7 @@
    "file": "games/equilinox.json",
    "source": "custom",
    "apworld": "equilinox.apworld",
-   "world_version": "0.2.0",
+   "world_version": "0.2.2",
    "guides": "guides/equilinox.json",
    "sheet": {
     "game": "Equilinox",
@@ -3400,7 +3412,7 @@
    "file": "games/geoguessr.json",
    "source": "custom",
    "apworld": "geoguessr.apworld",
-   "world_version": "0.2.1",
+   "world_version": "0.2.2",
    "guides": "guides/geoguessr.json",
    "sheet": {
     "game": "Geoguessr",
@@ -3620,7 +3632,7 @@
    "file": "games/gravity-circuit-muratdev-s-implementation.json",
    "source": "custom",
    "apworld": "gravity_circuit.apworld",
-   "world_version": "1.0.0",
+   "world_version": "1.1.0",
    "guides": "guides/gravity-circuit-muratdev-s-implementation.json",
    "sheet": {
     "game": "Gravity Circuit (MuratDev's Implementation)",
@@ -4113,7 +4125,7 @@
    "file": "games/hyrule-warriors-age-of-calamity.json",
    "source": "custom",
    "apworld": "hyrule_warriors_aoc.apworld",
-   "world_version": "0.9.92",
+   "world_version": "0.9.94",
    "guides": "guides/hyrule-warriors-age-of-calamity.json",
    "sheet": {
     "game": "Hyrule Warriors: Age of Calamity",
@@ -4208,6 +4220,19 @@
     "game": "Iji",
     "stability": "Stable",
     "platform": "PC"
+   }
+  },
+  {
+   "game": "Insaniquarium Deluxe",
+   "file": "games/insaniquarium-deluxe.json",
+   "source": "custom",
+   "apworld": "insaniquarium.apworld",
+   "world_version": "0.3.0",
+   "guides": "guides/insaniquarium-deluxe.json",
+   "sheet": {
+    "game": "Insaniquarium Deluxe",
+    "stability": "Unstable",
+    "pr_status": "Not PRing"
    }
   },
   {
@@ -4506,7 +4531,7 @@
    "file": "games/kirby-air-ride.json",
    "source": "custom",
    "apworld": "kirby_air_ride.apworld",
-   "world_version": "1.3.0",
+   "world_version": "1.3.1",
    "guides": "guides/kirby-air-ride.json",
    "sheet": {
     "game": "Kirby Air Ride",
@@ -5495,7 +5520,7 @@
    "file": "games/mike-tyson-s-punch-out.json",
    "source": "custom",
    "apworld": "mtpo.apworld",
-   "world_version": "0.1.1",
+   "world_version": "0.1.2",
    "guides": "guides/mike-tyson-s-punch-out.json",
    "sheet": {
     "game": "Mike Tyson's Punch-Out!!",
@@ -6474,6 +6499,19 @@
     "stability": "Unstable",
     "platform": "PC",
     "note": "Currently only supports 1st Palace."
+   }
+  },
+  {
+   "game": "Persona 5 Royal (luigiarc)",
+   "file": "games/persona-5-royal-luigiarc.json",
+   "source": "custom",
+   "apworld": "p5r-luigiarc.apworld",
+   "world_version": "0.2.0",
+   "guides": "guides/persona-5-royal-luigiarc.json",
+   "sheet": {
+    "game": "Persona 5 Royal (luigiarc)",
+    "stability": "Unstable",
+    "pr_status": "Not PRing"
    }
   },
   {
@@ -7806,19 +7844,6 @@
    "guides": "guides/shapez.json"
   },
   {
-   "game": "shapez 2",
-   "file": "games/shapez-2.json",
-   "source": "custom",
-   "apworld": "shapez_2.apworld",
-   "world_version": "1.0.1",
-   "guides": "guides/shapez-2.json",
-   "sheet": {
-    "game": "shapez 2",
-    "stability": "Unstable",
-    "platform": "PC"
-   }
-  },
-  {
    "game": "Shellipelago",
    "file": "games/shellipelago.json",
    "source": "custom",
@@ -8234,7 +8259,7 @@
    "file": "games/sonic-colours-wii.json",
    "source": "custom",
    "apworld": "sonic_colours_wii.apworld",
-   "world_version": "0.2.2",
+   "world_version": "0.2.3",
    "guides": "guides/sonic-colours-wii.json",
    "sheet": {
     "game": "Sonic Colors (Wii)",
@@ -10368,7 +10393,7 @@
    "file": "games/warioware-twisted.json",
    "source": "custom",
    "apworld": "wario_ware_twisted.apworld",
-   "world_version": "1.1.0",
+   "world_version": "1.1.1",
    "guides": "guides/warioware-twisted.json",
    "sheet": {
     "game": "WarioWare: Twisted!",
@@ -10591,7 +10616,7 @@
    "file": "games/xenoblade-x.json",
    "source": "custom",
    "apworld": "xenobladex.apworld",
-   "world_version": "0.3.2",
+   "world_version": "0.3.3",
    "guides": "guides/xenoblade-x.json",
    "sheet": {
     "game": "Xenoblade Chronicles X",
@@ -10983,8 +11008,10 @@
   "LostButFound": "ModuleNotFoundError: No module named 'worlds.LostButFound'",
   "pokemon_hgss": "worlds.Files.ImproperlyConfiguredAutoPatchError: Two auto patch containers are using the same file extension: <class 'worlds.pokemon_hgss.rom.PokemonHeartgoldPatch'>, <class 'output_patch.HeartGoldProcedurePatch'>",
   "pokemon_xy": "ModuleNotFoundError: No module named 'worlds.pokemon_xy'",
-  "Salt and Sanctuary": "Did not load /tmp/tmpc5hhezro/tmpgnrrfnxe/custom_worlds/salt_and_sanctuary.apworld as its maximum core version Version(major=0, minor=6, build=6) is lower than current core version Version(major=0, minor=6, build=8).",
+  "postal2": "AssertionError: Choice option 'random' cannot be manually assigned.",
+  "Salt and Sanctuary": "Did not load /tmp/tmpwr9x4mt4/tmpndaa7vqn/custom_worlds/salt_and_sanctuary.apworld as its maximum core version Version(major=0, minor=6, build=6) is lower than current core version Version(major=0, minor=6, build=8).",
   "scooby_doo_unmasked": "AssertionError: Choice option 'random' cannot be manually assigned.",
+  "shapez_2": "TypeError: unsupported operand type(s) for +: 'NoneType' and 'str'",
   "smash64": "AssertionError: Choice option 'random' cannot be manually assigned.",
   "spyro_seasonofice": "ModuleNotFoundError: No module named 'worlds.spyro_seasonofice'",
   "sshd": "AssertionError: Choice option 'random' cannot be manually assigned.",

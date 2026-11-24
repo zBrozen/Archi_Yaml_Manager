@@ -808,7 +808,7 @@
  },
  {
   "game": "Archipeladoku",
-  "version": "2026.09.26",
+  "version": "2026.11.23",
   "authors": [
    "Galdiuz"
   ],
@@ -824,8 +824,8 @@
    "stability": "Stable",
    "pr_status": "Not PRing"
   },
-  "download": "https://github.com/galdiuz/archipeladoku/releases/download/v2026.09.26/archipeladoku.apworld",
-  "release": "https://github.com/galdiuz/archipeladoku/releases/tag/v2026.09.26",
+  "download": "https://github.com/galdiuz/archipeladoku/releases/download/v2026.11.23/archipeladoku.apworld",
+  "release": "https://github.com/galdiuz/archipeladoku/releases/tag/v2026.11.23",
   "links": [
    "https://github.com/galdiuz/archipeladoku/releases/latest"
   ]
@@ -1889,7 +1889,7 @@
  },
  {
   "game": "Breath of the Wild",
-  "version": "0.3.4",
+  "version": "0.4.0",
   "authors": [
    "EIdras"
   ],
@@ -1905,8 +1905,8 @@
    "platform": "Wii U",
    "list": "index"
   },
-  "download": "https://github.com/EIdras/BOTW-Archipelago/releases/download/v0.3.4/botw.apworld",
-  "release": "https://github.com/EIdras/BOTW-Archipelago/releases/tag/v0.3.4",
+  "download": "https://github.com/EIdras/BOTW-Archipelago/releases/download/v0.4.0/botw.apworld",
+  "release": "https://github.com/EIdras/BOTW-Archipelago/releases/tag/v0.4.0",
   "links": [
    "https://github.com/EIdras/BOTW-Archipelago/releases"
   ]
@@ -2292,6 +2292,32 @@
   ]
  },
  {
+  "game": "Castlevania II: Simon's Quest",
+  "version": "1.0.0",
+  "authors": [
+   "Pink Switch"
+  ],
+  "file": "cv2_sq.apworld",
+  "source": "https://github.com/PinkSwitch/Archipelago",
+  "license": "MIT",
+  "license_url": "https://github.com/PinkSwitch/Archipelago/blob/HEAD/LICENSE",
+  "copyright": [
+   "Copyright (c) 2017 LLCoolDave",
+   "Copyright (c) 2025 Berserker66",
+   "Copyright (c) 2022 CaitSith2",
+   "Copyright (c) 2021 LegendaryLinux"
+  ],
+  "sheet": {
+   "game": "Castlevania II: Simon's Quest",
+   "stability": "Unstable"
+  },
+  "download": "https://github.com/PinkSwitch/Archipelago/releases/download/cv21.0/cv2_sq.apworld",
+  "release": "https://github.com/PinkSwitch/Archipelago/releases/tag/cv21.0",
+  "links": [
+   "https://github.com/PinkSwitch/Archipelago/releases?q=castlevania%20II&expanded=true"
+  ]
+ },
+ {
   "game": "Castlevania: Legacy of Darkness",
   "version": "2.0.2",
   "authors": [
@@ -2371,7 +2397,7 @@
  },
  {
   "game": "Casualties: Unknown",
-  "version": "0.13.1",
+  "version": "0.13.2",
   "authors": [
    "Nichologeam"
   ],
@@ -2386,8 +2412,8 @@
    "pr_status": "Not PRing",
    "adult": true
   },
-  "download": "https://github.com/Nichologeam/CUAP/releases/download/v0.13.1/casualtiesunknown.apworld",
-  "release": "https://github.com/Nichologeam/CUAP/releases/tag/v0.13.1",
+  "download": "https://github.com/Nichologeam/CUAP/releases/download/v0.13.2/casualtiesunknown.apworld",
+  "release": "https://github.com/Nichologeam/CUAP/releases/tag/v0.13.2",
   "links": [
    "https://github.com/Nichologeam/CUAP/releases/"
   ]
@@ -4770,7 +4796,7 @@
  },
  {
   "game": "EldenRing",
-  "version": "0.1.4",
+  "version": "0.2.0",
   "authors": [
    "Bedrock"
   ],
@@ -4786,8 +4812,8 @@
    "game": "Elden Ring",
    "stability": "Unstable"
   },
-  "download": "https://github.com/thefifthmatt/SoulsRandomizers/releases/download/eldenring-ap-0.1.4/eldenring.apworld",
-  "release": "https://github.com/thefifthmatt/SoulsRandomizers/releases/tag/eldenring-ap-0.1.4",
+  "download": "https://github.com/thefifthmatt/SoulsRandomizers/releases/download/eldenring-ap-0.2.0/eldenring.apworld",
+  "release": "https://github.com/thefifthmatt/SoulsRandomizers/releases/tag/eldenring-ap-0.2.0",
   "links": [
    "https://github.com/thefifthmatt/SoulsRandomizers/releases/latest"
   ]
@@ -4925,7 +4951,7 @@
  },
  {
   "game": "Equilinox",
-  "version": "0.2.0",
+  "version": "0.2.2",
   "authors": [
    "AAces"
   ],
@@ -4939,8 +4965,8 @@
    "stability": "Unstable",
    "platform": "PC"
   },
-  "download": "https://github.com/AAces17/EquilinoxAPClient/releases/download/0.2.1/equilinox.apworld",
-  "release": "https://github.com/AAces17/EquilinoxAPClient/releases/tag/0.2.1",
+  "download": "https://github.com/AAces17/EquilinoxAPClient/releases/download/0.2.2/equilinox.apworld",
+  "release": "https://github.com/AAces17/EquilinoxAPClient/releases/tag/0.2.2",
   "links": [
    "https://github.com/AAces17/EquilinoxAPClient/releases"
   ]
@@ -5861,7 +5887,7 @@
  },
  {
   "game": "Geoguessr",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "authors": [
    "Evandar",
    "LeRemiii"
@@ -5879,8 +5905,8 @@
    "stability": "Unstable",
    "pr_status": "Not PRing"
   },
-  "download": "https://github.com/remigranotier/geoguessr-archipelago/releases/download/v0.2.2/geoguessr.apworld",
-  "release": "https://github.com/remigranotier/geoguessr-archipelago/releases/tag/v0.2.2",
+  "download": "https://github.com/remigranotier/geoguessr-archipelago/releases/download/v0.2.3/geoguessr.apworld",
+  "release": "https://github.com/remigranotier/geoguessr-archipelago/releases/tag/v0.2.3",
   "links": [
    "https://github.com/remigranotier/geoguessr-archipelago/releases/latest"
   ]
@@ -6256,7 +6282,7 @@
  },
  {
   "game": "Gravity Circuit (MuratDev's Implementation)",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "authors": [
    "Murat Kaan Tekeli"
   ],
@@ -6272,8 +6298,8 @@
    "platform": "PC",
    "list": "index"
   },
-  "download": "https://github.com/MuratDev41/gravity-circuit-ap/releases/download/v1.0.0/gravity_circuit.apworld",
-  "release": "https://github.com/MuratDev41/gravity-circuit-ap/releases/tag/v1.0.0",
+  "download": "https://github.com/MuratDev41/gravity-circuit-ap/releases/download/v1.1.0/gravity_circuit.apworld",
+  "release": "https://github.com/MuratDev41/gravity-circuit-ap/releases/tag/v1.1.0",
   "links": [
    "https://github.com/MuratDev41/gravity-circuit-ap/releases"
   ]
@@ -7117,7 +7143,7 @@
  },
  {
   "game": "Hyrule Warriors Age of Calamity",
-  "version": "0.9.92",
+  "version": "0.9.94",
   "authors": [],
   "file": "hyrule_warriors_aoc.apworld",
   "source": "https://github.com/DrPuffball/aoc-archipelago",
@@ -7132,8 +7158,8 @@
    "platform": "Switch",
    "list": "index"
   },
-  "download": "https://github.com/DrPuffball/aoc-archipelago/releases/download/v0.9.92/hyrule_warriors_aoc.apworld",
-  "release": "https://github.com/DrPuffball/aoc-archipelago/releases/tag/v0.9.92",
+  "download": "https://github.com/DrPuffball/aoc-archipelago/releases/download/v0.9.94/hyrule_warriors_aoc.apworld",
+  "release": "https://github.com/DrPuffball/aoc-archipelago/releases/tag/v0.9.94",
   "links": [
    "https://github.com/DrPuffball/aoc-archipelago/releases"
   ]
@@ -7282,6 +7308,33 @@
   "release": "https://github.com/Minish-Link/Iji-Archipelago/releases/tag/v1.2.6",
   "links": [
    "https://github.com/Minish-Link/Iji-Archipelago/releases/latest"
+  ]
+ },
+ {
+  "game": "Insaniquarium Deluxe",
+  "version": "0.3.0",
+  "authors": [
+   "benyoung32, dmwever"
+  ],
+  "file": "insaniquarium.apworld",
+  "source": "https://github.com/benyoung32/Archipelago",
+  "license": "MIT",
+  "license_url": "https://github.com/benyoung32/Archipelago/blob/HEAD/LICENSE",
+  "copyright": [
+   "Copyright (c) 2017 LLCoolDave",
+   "Copyright (c) 2025 Berserker66",
+   "Copyright (c) 2022 CaitSith2",
+   "Copyright (c) 2021 LegendaryLinux"
+  ],
+  "sheet": {
+   "game": "Insaniquarium Deluxe",
+   "stability": "Unstable",
+   "pr_status": "Not PRing"
+  },
+  "download": "https://github.com/benyoung32/Archipelago/releases/download/release-insaniquarium-v0.3.0/insaniquarium.apworld",
+  "release": "https://github.com/benyoung32/Archipelago/releases/tag/release-insaniquarium-v0.3.0",
+  "links": [
+   "https://github.com/benyoung32/Archipelago/releases/latest"
   ]
  },
  {
@@ -7776,7 +7829,7 @@
  },
  {
   "game": "Kirby Air Ride",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "authors": [
    "DeDeDK"
   ],
@@ -7795,8 +7848,8 @@
    "stability": "Unstable",
    "platform": "GC"
   },
-  "download": "https://github.com/DeDeDeK/KARchipelago/releases/download/v1.3.0/kirby_air_ride.apworld",
-  "release": "https://github.com/DeDeDeK/KARchipelago/releases/tag/v1.3.0",
+  "download": "https://github.com/DeDeDeK/KARchipelago/releases/download/v1.3.1/kirby_air_ride.apworld",
+  "release": "https://github.com/DeDeDeK/KARchipelago/releases/tag/v1.3.1",
   "links": [
    "https://github.com/DeDeDeK/KARchipelago/releases/latest"
   ]
@@ -9450,7 +9503,7 @@
  },
  {
   "game": "Mike Tyson's Punch-Out!!",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "authors": [
    "Landa"
   ],
@@ -9467,8 +9520,8 @@
    "platform": "NES",
    "list": "index"
   },
-  "download": "https://github.com/Landapanda/Mike-Tysons-Punch-Out-Archipelago/releases/download/v0.1.1/mtpo.apworld",
-  "release": "https://github.com/Landapanda/Mike-Tysons-Punch-Out-Archipelago/releases/tag/v0.1.1",
+  "download": "https://github.com/Landapanda/Mike-Tysons-Punch-Out-Archipelago/releases/download/v0.1.2/mtpo.apworld",
+  "release": "https://github.com/Landapanda/Mike-Tysons-Punch-Out-Archipelago/releases/tag/v0.1.2",
   "links": [
    "https://github.com/Landapanda/Mike-Tysons-Punch-Out-Archipelago/releases"
   ]
@@ -11321,6 +11374,33 @@
   ]
  },
  {
+  "game": "Persona 5 Royal (luigiarc)",
+  "version": "0.2.0",
+  "authors": [
+   "luigiarc"
+  ],
+  "file": "p5r-luigiarc.apworld",
+  "source": "https://github.com/LuigiARC/Archipelago-P5R",
+  "license": "MIT",
+  "license_url": "https://github.com/LuigiARC/Archipelago-P5R/blob/HEAD/LICENSE",
+  "copyright": [
+   "Copyright (c) 2017 LLCoolDave",
+   "Copyright (c) 2025 Berserker66",
+   "Copyright (c) 2022 CaitSith2",
+   "Copyright (c) 2021 LegendaryLinux"
+  ],
+  "sheet": {
+   "game": "Persona 5 Royal (luigiarc)",
+   "stability": "Unstable",
+   "pr_status": "Not PRing"
+  },
+  "download": "https://github.com/LuigiARC/Archipelago-P5R/releases/download/V0.2.5/p5r-luigiarc.apworld",
+  "release": "https://github.com/LuigiARC/Archipelago-P5R/releases/tag/V0.2.5",
+  "links": [
+   "https://github.com/LuigiARC/Archipelago-P5R/releases/latest"
+  ]
+ },
+ {
   "game": "Phantasy Star II",
   "version": "0.1.3",
   "authors": [
@@ -12172,6 +12252,31 @@
   "release": "https://github.com/GlassToadstool/Portal2ArchipelagoMod/releases/tag/0.8.2",
   "links": [
    "https://github.com/GlassToadstool/Portal2ArchipelagoMod/releases/latest"
+  ]
+ },
+ {
+  "game": "Postal 2",
+  "version": "1.1.0",
+  "authors": [
+   "TheDogNerd"
+  ],
+  "file": "postal2.apworld",
+  "source": "https://github.com/SmashUniverse64/postal2-archipelago",
+  "license": "MIT",
+  "license_url": "https://github.com/SmashUniverse64/postal2-archipelago/blob/HEAD/LICENSE",
+  "copyright": [
+   "Copyright (c) 2026 TheDogNerd"
+  ],
+  "sheet": {
+   "game": "Postal 2",
+   "stability": "Unstable",
+   "pr_status": "Not PRing",
+   "adult": true
+  },
+  "download": "https://github.com/SmashUniverse64/postal2-archipelago/releases/download/1.1/postal2.apworld",
+  "release": "https://github.com/SmashUniverse64/postal2-archipelago/releases/tag/1.1",
+  "links": [
+   "https://github.com/SmashUniverse64/postal2-archipelago/releases/latest"
   ]
  },
  {
@@ -13777,7 +13882,7 @@
  },
  {
   "game": "shapez 2",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "authors": [
    "BlastSlimey"
   ],
@@ -13793,8 +13898,8 @@
    "stability": "Unstable",
    "platform": "PC"
   },
-  "download": "https://github.com/BlastSlimey/2hapezipelago/releases/download/1.0.1/shapez_2.apworld",
-  "release": "https://github.com/BlastSlimey/2hapezipelago/releases/tag/1.0.1",
+  "download": "https://github.com/BlastSlimey/2hapezipelago/releases/download/1.1.0/shapez_2.apworld",
+  "release": "https://github.com/BlastSlimey/2hapezipelago/releases/tag/1.1.0",
   "links": [
    "https://github.com/BlastSlimey/2hapezipelago/releases"
   ]
@@ -14601,7 +14706,7 @@
  },
  {
   "game": "Sonic Colours (Wii)",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "authors": [
    "Luma"
   ],
@@ -14619,8 +14724,8 @@
    "game": "Sonic Colors (Wii)",
    "stability": "Unstable"
   },
-  "download": "https://github.com/mariokirby1703/Lumas-Archipelago/releases/download/sonic_colours_v0.2.2/sonic_colours_wii.apworld",
-  "release": "https://github.com/mariokirby1703/Lumas-Archipelago/releases/tag/sonic_colours_v0.2.2",
+  "download": "https://github.com/mariokirby1703/Lumas-Archipelago/releases/download/sonic_colours_v0.2.3/sonic_colours_wii.apworld",
+  "release": "https://github.com/mariokirby1703/Lumas-Archipelago/releases/tag/sonic_colours_v0.2.3",
   "links": [
    "https://github.com/mariokirby1703/Lumas-Archipelago/releases?q=Sonic+Colours&expanded=true"
   ]
@@ -18383,7 +18488,7 @@
  },
  {
   "game": "WarioWare: Twisted!",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "authors": [
    "lx5"
   ],
@@ -18402,8 +18507,8 @@
    "platform": "GBA",
    "list": "index"
   },
-  "download": "https://github.com/TheLX5/Archipelago/releases/download/wariotwisted-v1.1.0/wario_ware_twisted.apworld",
-  "release": "https://github.com/TheLX5/Archipelago/releases/tag/wariotwisted-v1.1.0",
+  "download": "https://github.com/TheLX5/Archipelago/releases/download/wariotwisted-v1.1.1/wario_ware_twisted.apworld",
+  "release": "https://github.com/TheLX5/Archipelago/releases/tag/wariotwisted-v1.1.1",
   "links": [
    "https://github.com/TheLX5/Archipelago/releases?q=%22WarioWare%3A+Twisted%22&expanded=true"
   ]
@@ -18837,7 +18942,7 @@
  },
  {
   "game": "Xenoblade X",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "authors": [
    "Maragon",
    "Nina"
@@ -18857,8 +18962,8 @@
    "stability": "Unstable",
    "platform": "Wii U"
   },
-  "download": "https://github.com/MaragonMH/Archipelago/releases/download/XenoX0.3.2/xenobladex.apworld",
-  "release": "https://github.com/MaragonMH/Archipelago/releases/tag/XenoX0.3.2",
+  "download": "https://github.com/MaragonMH/Archipelago/releases/download/XenoX0.3.3/xenobladex.apworld",
+  "release": "https://github.com/MaragonMH/Archipelago/releases/tag/XenoX0.3.3",
   "links": [
    "https://github.com/MaragonMH/Archipelago/releases"
   ]
