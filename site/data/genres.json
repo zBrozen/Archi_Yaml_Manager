@@ -701,6 +701,11 @@
    "wikidata": null,
    "checked": "2026-11-03"
   },
+  "Castlevania II: Simon's Quest": {
+   "genres": [],
+   "wikidata": "Q111584805",
+   "checked": "2026-11-25"
+  },
   "Castlevania: Legacy of Darkness": {
    "genres": [
     "action",
@@ -2222,6 +2227,11 @@
    "wikidata": "Q13596262",
    "checked": "2026-11-03"
   },
+  "Insaniquarium Deluxe": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-25"
+  },
   "Inscryption": {
    "genres": [
     "roguelike",
@@ -3474,6 +3484,11 @@
    "wikidata": "Q63385672",
    "checked": "2026-11-03"
   },
+  "Persona 5 Royal (luigiarc)": {
+   "genres": [],
+   "wikidata": null,
+   "checked": "2026-11-25"
+  },
   "Phantasy Star II": {
    "genres": [
     "rpg"
@@ -4162,14 +4177,6 @@
   "shapez": {
    "genres": [],
    "wikidata": null,
-   "checked": "2026-11-03"
-  },
-  "shapez 2": {
-   "genres": [
-    "puzzle",
-    "simulation"
-   ],
-   "wikidata": "Q124262235",
    "checked": "2026-11-03"
   },
   "Shellipelago": {

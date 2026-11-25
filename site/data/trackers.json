@@ -234,9 +234,9 @@
    {
     "page": "https://github.com/snileaf/CloverPit-poptracker/releases/latest",
     "repo": "snileaf/CloverPit-poptracker",
-    "tag": "v1.1.1",
-    "asset": "CloverPit-PopTracker.v1.1.1.zip",
-    "url": "https://github.com/snileaf/CloverPit-poptracker/releases/download/v1.1.1/CloverPit-PopTracker.v1.1.1.zip"
+    "tag": "v1.2.0",
+    "asset": "CloverPit-PopTracker.v1.2.0.zip",
+    "url": "https://github.com/snileaf/CloverPit-poptracker/releases/download/v1.2.0/CloverPit-PopTracker.v1.2.0.zip"
    }
   ],
   "Commander Keen in Goodbye, Galaxy": [
@@ -1260,7 +1260,7 @@
     "url": "https://github.com/Ung-W/Splasher-AP-Poptracker/releases/download/v0.8.0/Splasher-AP-Poptracker-0.8.0.zip"
    }
   ],
-  "Spongebob Squarepants: Battle for Bikini Bottom": [
+  "SpongeBob SquarePants: Battle for Bikini Bottom": [
    {
     "page": "https://github.com/Cyb3RGER/bfbb_ap_pack/releases/latest",
     "repo": "Cyb3RGER/bfbb_ap_pack",
