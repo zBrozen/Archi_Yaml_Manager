@@ -1,6 +1,6 @@
 {
  "ap_version": "0.6.8",
- "generated_at": "2026-11-24T15:39:10+00:00",
+ "generated_at": "2026-11-25T15:26:48+00:00",
  "games": [
   {
    "game": "'Weird Al' Yankovic Discography",
@@ -1202,7 +1202,7 @@
    "file": "games/build-a-jetpack.json",
    "source": "custom",
    "apworld": "build_a_jetpack.apworld",
-   "world_version": "0.3.0",
+   "world_version": "0.3.1",
    "guides": "guides/build-a-jetpack.json",
    "sheet": {
     "game": "Build a Jetpack",
@@ -2153,7 +2153,7 @@
    "file": "games/dark-souls-remastered.json",
    "source": "custom",
    "apworld": "dsr.apworld",
-   "world_version": "0.3.1",
+   "world_version": "0.3.2",
    "guides": "guides/dark-souls-remastered.json",
    "sheet": {
     "game": "Dark Souls Remastered",
@@ -2260,7 +2260,7 @@
    "file": "games/death-s-door.json",
    "source": "custom",
    "apworld": "deaths_door.apworld",
-   "world_version": "0.4.2",
+   "world_version": "0.5.0",
    "guides": "guides/death-s-door.json",
    "sheet": {
     "game": "Death's Door",
@@ -3632,7 +3632,7 @@
    "file": "games/gravity-circuit-muratdev-s-implementation.json",
    "source": "custom",
    "apworld": "gravity_circuit.apworld",
-   "world_version": "1.1.0",
+   "world_version": "1.1.1",
    "guides": "guides/gravity-circuit-muratdev-s-implementation.json",
    "sheet": {
     "game": "Gravity Circuit (MuratDev's Implementation)",
@@ -4705,7 +4705,7 @@
    "file": "games/lego-star-wars-the-complete-saga.json",
    "source": "custom",
    "apworld": "lego_star_wars_tcs.apworld",
-   "world_version": "2.0.0",
+   "world_version": "2.0.1",
    "guides": "guides/lego-star-wars-the-complete-saga.json",
    "sheet": {
     "game": "Lego Star Wars: The Complete Saga",
@@ -4873,6 +4873,20 @@
    "sheet": {
     "game": "Lost Kingdoms 2",
     "stability": "Unstable"
+   }
+  },
+  {
+   "game": "Love Live! School idol festival",
+   "file": "games/love-live-school-idol-festival.json",
+   "source": "custom",
+   "apworld": "llsif.apworld",
+   "world_version": "0.1.0",
+   "guides": "guides/love-live-school-idol-festival.json",
+   "sheet": {
+    "game": "Love Live! School idol festival",
+    "playable": "unofficial",
+    "platform": "Android/iOS",
+    "list": "index"
    }
   },
   {
@@ -5699,7 +5713,7 @@
    "file": "games/monster-hunter-rise.json",
    "source": "custom",
    "apworld": "mhrise.apworld",
-   "world_version": "0.5.4",
+   "world_version": "0.5.5",
    "guides": "guides/monster-hunter-rise.json",
    "sheet": {
     "game": "Monster Hunter Rise",
@@ -6560,7 +6574,7 @@
    "guides": "guides/pikmin-2.json",
    "sheet": {
     "game": "Pikmin 2",
-    "stability": "Unstable",
+    "stability": "Stable",
     "platform": "GC"
    }
   },
@@ -6830,7 +6844,7 @@
    "guides": "guides/pokemon-ranger-quest.json",
    "sheet": {
     "game": "Pokémon Ranger (Quest)",
-    "stability": "Unstable",
+    "stability": "Stable",
     "platform": "DS"
    }
   },
@@ -7281,7 +7295,7 @@
    "file": "games/red-faction-guerrilla-re-mars-tered.json",
    "source": "custom",
    "apworld": "red_faction_guerrilla.apworld",
-   "world_version": "0.6.5",
+   "world_version": "0.6.6",
    "guides": "guides/red-faction-guerrilla-re-mars-tered.json",
    "sheet": {
     "game": "Red Faction Guerrilla Re-Mars-tered",
@@ -8130,7 +8144,7 @@
    "file": "games/sm64-spicy-mycena-64.json",
    "source": "custom",
    "apworld": "sm64ex_spicy.apworld",
-   "world_version": "1.0.4",
+   "world_version": "1.0.6",
    "guides": "guides/sm64-spicy-mycena-64.json",
    "sheet": {
     "game": "Super Mario 64 - Spicy Mycena 64",
@@ -10473,7 +10487,7 @@
    "file": "games/well-dweller.json",
    "source": "custom",
    "apworld": "well_dweller.apworld",
-   "world_version": "0.2.2",
+   "world_version": "0.2.3",
    "guides": "guides/well-dweller.json",
    "sheet": {
     "game": "Well Dweller",
@@ -11009,7 +11023,7 @@
   "pokemon_hgss": "worlds.Files.ImproperlyConfiguredAutoPatchError: Two auto patch containers are using the same file extension: <class 'worlds.pokemon_hgss.rom.PokemonHeartgoldPatch'>, <class 'output_patch.HeartGoldProcedurePatch'>",
   "pokemon_xy": "ModuleNotFoundError: No module named 'worlds.pokemon_xy'",
   "postal2": "AssertionError: Choice option 'random' cannot be manually assigned.",
-  "Salt and Sanctuary": "Did not load /tmp/tmpwr9x4mt4/tmpndaa7vqn/custom_worlds/salt_and_sanctuary.apworld as its maximum core version Version(major=0, minor=6, build=6) is lower than current core version Version(major=0, minor=6, build=8).",
+  "Salt and Sanctuary": "Did not load /tmp/tmpmjb2n6bj/tmpi6ovkw0u/custom_worlds/salt_and_sanctuary.apworld as its maximum core version Version(major=0, minor=6, build=6) is lower than current core version Version(major=0, minor=6, build=8).",
   "scooby_doo_unmasked": "AssertionError: Choice option 'random' cannot be manually assigned.",
   "shapez_2": "TypeError: unsupported operand type(s) for +: 'NoneType' and 'str'",
   "smash64": "AssertionError: Choice option 'random' cannot be manually assigned.",

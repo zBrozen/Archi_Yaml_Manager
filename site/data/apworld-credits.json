@@ -2091,23 +2091,26 @@
  },
  {
   "game": "Build a Jetpack",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "authors": [
    "ChromaNyan"
   ],
   "file": "build_a_jetpack.apworld",
   "source": "https://github.com/NyanMC/build-a-jetpack",
-  "license": "Creative Commons",
-  "license_url": "https://github.com/NyanMC/build-a-jetpack/blob/HEAD/LICENSE",
-  "copyright": [],
+  "license": "MIT",
+  "license_url": null,
+  "copyright": [
+   "Copyright (c) 2026 ChromaNyan"
+  ],
+  "license_file": "build_a_jetpack/LICENSE",
   "sheet": {
    "game": "Build a Jetpack",
    "stability": "Stable",
    "pr_status": "Not PRing",
    "platform": "PICO-8"
   },
-  "download": "https://github.com/NyanMC/build-a-jetpack/releases/download/0.3.0c/build_a_jetpack.apworld",
-  "release": "https://github.com/NyanMC/build-a-jetpack/releases/tag/0.3.0c",
+  "download": "https://github.com/NyanMC/build-a-jetpack/releases/download/0.3.1/build_a_jetpack.apworld",
+  "release": "https://github.com/NyanMC/build-a-jetpack/releases/tag/0.3.1",
   "links": [
    "https://github.com/NyanMC/build-a-jetpack/releases/latest"
   ]
@@ -3681,7 +3684,7 @@
  },
  {
   "game": "Dark Souls Remastered",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "authors": [
    "Noka",
    "ArsonAssassin"
@@ -3699,8 +3702,8 @@
    "pr_status": "Not PRing",
    "platform": "PC"
   },
-  "download": "https://github.com/tathxo/DSAP/releases/download/v0.3.1/dsr.apworld",
-  "release": "https://github.com/tathxo/DSAP/releases/tag/v0.3.1",
+  "download": "https://github.com/tathxo/DSAP/releases/download/v0.3.2/dsr.apworld",
+  "release": "https://github.com/tathxo/DSAP/releases/tag/v0.3.2",
   "links": [
    "https://github.com/tathxo/DSAP/releases"
   ]
@@ -3913,7 +3916,7 @@
  },
  {
   "game": "Death's Door",
-  "version": "0.4.2",
+  "version": "0.5.0",
   "authors": [
    "rose.as.romeo",
    "ChrisIsAwesome"
@@ -3931,8 +3934,8 @@
    "stability": "Unstable",
    "pr_status": "Not PRing"
   },
-  "download": "https://github.com/Chris-Is-Awesome/DDArchipelagoRandomizer/releases/download/v0.4.3/deaths_door.apworld",
-  "release": "https://github.com/Chris-Is-Awesome/DDArchipelagoRandomizer/releases/tag/v0.4.3",
+  "download": "https://github.com/Chris-Is-Awesome/DDArchipelagoRandomizer/releases/download/v0.5.0/deaths_door.apworld",
+  "release": "https://github.com/Chris-Is-Awesome/DDArchipelagoRandomizer/releases/tag/v0.5.0",
   "links": [
    "https://github.com/Chris-Is-Awesome/DDArchipelagoRandomizer/releases"
   ]
@@ -6282,7 +6285,7 @@
  },
  {
   "game": "Gravity Circuit (MuratDev's Implementation)",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "authors": [
    "Murat Kaan Tekeli"
   ],
@@ -6298,8 +6301,8 @@
    "platform": "PC",
    "list": "index"
   },
-  "download": "https://github.com/MuratDev41/gravity-circuit-ap/releases/download/v1.1.0/gravity_circuit.apworld",
-  "release": "https://github.com/MuratDev41/gravity-circuit-ap/releases/tag/v1.1.0",
+  "download": "https://github.com/MuratDev41/gravity-circuit-ap/releases/download/v1.1.1/gravity_circuit.apworld",
+  "release": "https://github.com/MuratDev41/gravity-circuit-ap/releases/tag/v1.1.1",
   "links": [
    "https://github.com/MuratDev41/gravity-circuit-ap/releases"
   ]
@@ -8162,7 +8165,7 @@
  },
  {
   "game": "Lego Star Wars: The Complete Saga",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "authors": [
    "Mysteryem"
   ],
@@ -8179,8 +8182,8 @@
    "stability": "Stable",
    "platform": "PC"
   },
-  "download": "https://github.com/Mysteryem/Archipelago-TCS/releases/download/v2.0.0/lego_star_wars_tcs.apworld",
-  "release": "https://github.com/Mysteryem/Archipelago-TCS/releases/tag/v2.0.0",
+  "download": "https://github.com/Mysteryem/Archipelago-TCS/releases/download/v2.0.1/lego_star_wars_tcs.apworld",
+  "release": "https://github.com/Mysteryem/Archipelago-TCS/releases/tag/v2.0.1",
   "links": [
    "https://github.com/Mysteryem/Archipelago-TCS/releases/latest"
   ]
@@ -8487,6 +8490,31 @@
   "release": "https://github.com/cokeman5/LK2Archipelago/releases/tag/V0.2.12",
   "links": [
    "https://github.com/cokeman5/LK2Archipelago/releases"
+  ]
+ },
+ {
+  "game": "Love Live! School idol festival",
+  "version": "0.1.0",
+  "authors": [
+   "heylookitsweb"
+  ],
+  "file": "llsif.apworld",
+  "source": "https://github.com/heylookitsweb/LLSIF-AP",
+  "license": "Licence spécifique",
+  "license_url": "https://github.com/heylookitsweb/LLSIF-AP/blob/HEAD/LICENSE.md",
+  "copyright": [
+   "Copyright (c) 2026 heylookitsweb"
+  ],
+  "sheet": {
+   "game": "Love Live! School idol festival",
+   "playable": "unofficial",
+   "platform": "Android/iOS",
+   "list": "index"
+  },
+  "download": "https://github.com/heylookitsweb/LLSIF-AP/releases/download/v0.1.1/llsif.apworld",
+  "release": "https://github.com/heylookitsweb/LLSIF-AP/releases/tag/v0.1.1",
+  "links": [
+   "https://github.com/heylookitsweb/LLSIF-AP/releases"
   ]
  },
  {
@@ -9890,7 +9918,7 @@
  },
  {
   "game": "Monster Hunter Rise",
-  "version": "0.5.4",
+  "version": "0.5.5",
   "authors": [
    "SolomonW",
    "LittleLudroth"
@@ -9908,8 +9936,8 @@
    "stability": "Stable",
    "note": "Previous Repo: https://github.com/HillbillyDroid/MHRise-APWorld/releases"
   },
-  "download": "https://github.com/LittleLudroth/MHRise-APWorld/releases/download/v0.5.4/mhrise.apworld",
-  "release": "https://github.com/LittleLudroth/MHRise-APWorld/releases/tag/v0.5.4",
+  "download": "https://github.com/LittleLudroth/MHRise-APWorld/releases/download/v0.5.5/mhrise.apworld",
+  "release": "https://github.com/LittleLudroth/MHRise-APWorld/releases/tag/v0.5.5",
   "links": [
    "https://github.com/LittleLudroth/MHRise-APWorld/releases/latest"
   ]
@@ -11487,7 +11515,7 @@
   "copyright": [],
   "sheet": {
    "game": "Pikmin 2",
-   "stability": "Unstable",
+   "stability": "Stable",
    "platform": "GC"
   },
   "download": "https://github.com/chpas/Pikmin2Archipelago/releases/download/v1.0.0/pikmin2.apworld",
@@ -11934,7 +11962,7 @@
   "license_file": "pokemon_hgss/LICENSE",
   "sheet": {
    "game": "Pokémon HeartGold & SoulSilver (TrueBlue)",
-   "stability": "Unstable"
+   "stability": "Stable"
   },
   "download": "https://github.com/ljtpetersen/hgss_archipelago/releases/download/v0.0.8/pokemon_hgss.apworld",
   "release": "https://github.com/ljtpetersen/hgss_archipelago/releases/tag/v0.0.8",
@@ -12042,7 +12070,7 @@
   ],
   "sheet": {
    "game": "Pokémon Ranger (Quest)",
-   "stability": "Unstable",
+   "stability": "Stable",
    "platform": "DS"
   },
   "download": "https://github.com/BlastSlimey/Archipelago/releases/download/pkmn_ranger_quest_1.0.5/pkmn_ranger_quest.apworld",
@@ -12822,7 +12850,7 @@
  },
  {
   "game": "Red Faction: Guerrilla Re-Mars-tered",
-  "version": "0.6.5",
+  "version": "0.6.6",
   "authors": [
    "Simon"
   ],
@@ -12839,8 +12867,8 @@
    "adult": true,
    "platform": "PC"
   },
-  "download": "https://github.com/Haywire32/RFG-AP/releases/download/v0.6.5/red_faction_guerrilla.apworld",
-  "release": "https://github.com/Haywire32/RFG-AP/releases/tag/v0.6.5",
+  "download": "https://github.com/Haywire32/RFG-AP/releases/download/v0.6.6/red_faction_guerrilla.apworld",
+  "release": "https://github.com/Haywire32/RFG-AP/releases/tag/v0.6.6",
   "links": [
    "https://github.com/Haywire32/RFG-AP/releases/latest"
   ]
@@ -14296,8 +14324,8 @@
    "game": "Slay the Spire 2",
    "stability": "Unstable"
   },
-  "download": "https://github.com/dlueben1/Slay-the-Spire-2-Archipelago/releases/download/2.2.3/spire2.apworld",
-  "release": "https://github.com/dlueben1/Slay-the-Spire-2-Archipelago/releases/tag/2.2.3",
+  "download": "https://github.com/dlueben1/Slay-the-Spire-2-Archipelago/releases/download/2.2.4/spire2.apworld",
+  "release": "https://github.com/dlueben1/Slay-the-Spire-2-Archipelago/releases/tag/2.2.4",
   "links": [
    "https://github.com/dlueben1/Slay-the-Spire-2-Archipelago/releases"
   ]
@@ -14445,7 +14473,7 @@
  },
  {
   "game": "SM64: Spicy Mycena 64",
-  "version": "1.0.4",
+  "version": "1.0.6",
   "authors": [
    "Alchav"
   ],
@@ -14463,8 +14491,8 @@
    "game": "Super Mario 64 - Spicy Mycena 64",
    "stability": "Unstable"
   },
-  "download": "https://github.com/Alchav/Archipelago/releases/download/spicy-1.0.4/sm64ex_spicy.apworld",
-  "release": "https://github.com/Alchav/Archipelago/releases/tag/spicy-1.0.4",
+  "download": "https://github.com/Alchav/Archipelago/releases/download/spicy-1.0.6/sm64ex_spicy.apworld",
+  "release": "https://github.com/Alchav/Archipelago/releases/tag/spicy-1.0.6",
   "links": [
    "https://github.com/Alchav/Archipelago/releases?q=%22Spicy%20Mycena%2064%22&expanded=true"
   ]
@@ -14913,8 +14941,8 @@
    "stability": "Unstable",
    "pr_status": "Not PRing"
   },
-  "download": "https://github.com/TwinklePillar/Unleashed-Archipelago/releases/download/v0.1.0-alpha/sonic_unleashed.apworld",
-  "release": "https://github.com/TwinklePillar/Unleashed-Archipelago/releases/tag/v0.1.0-alpha",
+  "download": "https://github.com/TwinklePillar/Unleashed-Archipelago/releases/download/v0.1.1-alpha/sonic_unleashed.apworld",
+  "release": "https://github.com/TwinklePillar/Unleashed-Archipelago/releases/tag/v0.1.1-alpha",
   "links": [
    "https://github.com/TwinklePillar/Unleashed-Archipelago/releases/latest"
   ]
@@ -17079,7 +17107,7 @@
  },
  {
   "game": "Total War Warhammer III",
-  "version": "0.11.5",
+  "version": "0.11.6",
   "authors": [
    "jordansds"
   ],
@@ -17097,8 +17125,8 @@
    "game": "Total War: Warhammer III",
    "stability": "Unstable"
   },
-  "download": "https://github.com/jordansds/Archipelago_TWW3_Alt/releases/download/v0.11.5/tww3.apworld",
-  "release": "https://github.com/jordansds/Archipelago_TWW3_Alt/releases/tag/v0.11.5",
+  "download": "https://github.com/jordansds/Archipelago_TWW3_Alt/releases/download/v0.11.6/tww3.apworld",
+  "release": "https://github.com/jordansds/Archipelago_TWW3_Alt/releases/tag/v0.11.6",
   "links": [
    "https://github.com/jordansds/Archipelago_TWW3_Alt"
   ]
@@ -18630,7 +18658,7 @@
  },
  {
   "game": "Well Dweller",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "authors": [
    "Soffocles"
   ],
@@ -18646,8 +18674,8 @@
    "stability": "Unstable",
    "pr_status": "Not PRing"
   },
-  "download": "https://github.com/OSoffocles/Well-Dweller-APWorld/releases/download/v0.2.2-alpha/well_dweller.apworld",
-  "release": "https://github.com/OSoffocles/Well-Dweller-APWorld/releases/tag/v0.2.2-alpha",
+  "download": "https://github.com/OSoffocles/Well-Dweller-APWorld/releases/download/v0.2.3-alpha/well_dweller.apworld",
+  "release": "https://github.com/OSoffocles/Well-Dweller-APWorld/releases/tag/v0.2.3-alpha",
   "links": [
    "https://github.com/OSoffocles/Well-Dweller-APWorld/releases/latest"
   ]
