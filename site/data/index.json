@@ -1,6 +1,6 @@
 {
  "ap_version": "0.6.8",
- "generated_at": "2026-11-25T15:26:48+00:00",
+ "generated_at": "2026-11-26T14:50:13+00:00",
  "games": [
   {
    "game": "'Weird Al' Yankovic Discography",
@@ -2424,7 +2424,7 @@
    "file": "games/dome-keeper.json",
    "source": "custom",
    "apworld": "dome_keeper.apworld",
-   "world_version": "2.1.1",
+   "world_version": "2.1.3",
    "guides": "guides/dome-keeper.json",
    "sheet": {
     "game": "Dome Keeper",
@@ -3327,7 +3327,7 @@
    "file": "games/funi-raccoon-game.json",
    "source": "custom",
    "apworld": "funi_raccoon.apworld",
-   "world_version": "1.8.1",
+   "world_version": "1.8.2",
    "guides": "guides/funi-raccoon-game.json",
    "sheet": {
     "game": "Funi Raccoon Game",
@@ -6147,7 +6147,7 @@
    "file": "games/one-piece-unlimited-cruise-1.json",
    "source": "custom",
    "apworld": "opuc1.apworld",
-   "world_version": "1.0.3",
+   "world_version": "1.1.0",
    "guides": "guides/one-piece-unlimited-cruise-1.json",
    "sheet": {
     "game": "ONE PIECE: Unlimited Cruise 1: The Treasure Beneath The Waves",
@@ -7201,7 +7201,7 @@
    "file": "games/ratchet-clank-size-matters.json",
    "source": "custom",
    "apworld": "rac_size_matters.apworld",
-   "world_version": "0.5.8",
+   "world_version": "0.6.0",
    "guides": "guides/ratchet-clank-size-matters.json",
    "sheet": {
     "game": "Ratchet & Clank: Size Matters",
@@ -9701,7 +9701,7 @@
    "file": "games/toy-story-2.json",
    "source": "custom",
    "apworld": "toystory2.apworld",
-   "world_version": "3.3.2",
+   "world_version": "3.4.0",
    "guides": "guides/toy-story-2.json",
    "sheet": {
     "game": "Toy Story 2 (PS1)",
@@ -9761,6 +9761,18 @@
     "game": "The Legend of Heroes: Trails in the Sky the 3rd",
     "stability": "Unstable",
     "platform": "PC"
+   }
+  },
+  {
+   "game": "Transformers (2004)",
+   "file": "games/transformers-2004.json",
+   "source": "custom",
+   "apworld": "TF04.apworld",
+   "world_version": "1.0.0",
+   "guides": "guides/transformers-2004.json",
+   "sheet": {
+    "game": "Transformers (2004)",
+    "stability": "Unstable"
    }
   },
   {
@@ -11023,7 +11035,7 @@
   "pokemon_hgss": "worlds.Files.ImproperlyConfiguredAutoPatchError: Two auto patch containers are using the same file extension: <class 'worlds.pokemon_hgss.rom.PokemonHeartgoldPatch'>, <class 'output_patch.HeartGoldProcedurePatch'>",
   "pokemon_xy": "ModuleNotFoundError: No module named 'worlds.pokemon_xy'",
   "postal2": "AssertionError: Choice option 'random' cannot be manually assigned.",
-  "Salt and Sanctuary": "Did not load /tmp/tmpmjb2n6bj/tmpi6ovkw0u/custom_worlds/salt_and_sanctuary.apworld as its maximum core version Version(major=0, minor=6, build=6) is lower than current core version Version(major=0, minor=6, build=8).",
+  "Salt and Sanctuary": "Did not load /tmp/tmpg2c13u01/tmpgr1uzyz6/custom_worlds/salt_and_sanctuary.apworld as its maximum core version Version(major=0, minor=6, build=6) is lower than current core version Version(major=0, minor=6, build=8).",
   "scooby_doo_unmasked": "AssertionError: Choice option 'random' cannot be manually assigned.",
   "shapez_2": "TypeError: unsupported operand type(s) for +: 'NoneType' and 'str'",
   "smash64": "AssertionError: Choice option 'random' cannot be manually assigned.",
