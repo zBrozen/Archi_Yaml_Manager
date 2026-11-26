@@ -1565,9 +1565,18 @@
    {
     "page": "https://github.com/imklubb/Toy-Story-2-Poptracker/releases/latest",
     "repo": "imklubb/Toy-Story-2-Poptracker",
-    "tag": "3.3.2",
-    "asset": "toystory2_ap_3.3.2.zip",
-    "url": "https://github.com/imklubb/Toy-Story-2-Poptracker/releases/download/3.3.2/toystory2_ap_3.3.2.zip"
+    "tag": "3.4.0",
+    "asset": "toystory2_ap_3.4.0.zip",
+    "url": "https://github.com/imklubb/Toy-Story-2-Poptracker/releases/download/3.4.0/toystory2_ap_3.4.0.zip"
+   }
+  ],
+  "Transformers (2004)": [
+   {
+    "page": "https://github.com/walle515/TF04_AP_Poptracker/releases/latest",
+    "repo": "walle515/TF04_AP_Poptracker",
+    "tag": "1.2.2",
+    "asset": "TF04_AP_Poptracker.zip",
+    "url": "https://github.com/walle515/TF04_AP_Poptracker/releases/download/1.2.2/TF04_AP_Poptracker.zip"
    }
   ],
   "TUNIC": [
@@ -1711,9 +1720,9 @@
    {
     "page": "https://github.com/AkagiCritMagnet/Ys-VIII-randomizer-poptracker-pack/releases",
     "repo": "AkagiCritMagnet/Ys-VIII-randomizer-poptracker-pack",
-    "tag": "v2.3",
+    "tag": "v2.4",
     "asset": "Ys.8.pack.zip",
-    "url": "https://github.com/AkagiCritMagnet/Ys-VIII-randomizer-poptracker-pack/releases/download/v2.3/Ys.8.pack.zip"
+    "url": "https://github.com/AkagiCritMagnet/Ys-VIII-randomizer-poptracker-pack/releases/download/v2.4/Ys.8.pack.zip"
    }
   ],
   "Yu-Gi-Oh! 2006": [

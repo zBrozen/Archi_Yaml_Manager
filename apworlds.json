@@ -882,6 +882,7 @@
     {"game": "Toy Story 2 (PS1)", "stability": "Stable"},
     {"game": "Toy Story Racer", "stability": "Unstable", "platform": "PSX"},
     {"game": "Trackmania", "stability": "Stable", "pr_status": "In Review", "platform": "PC"},
+    {"game": "Transformers (2004)", "stability": "Unstable"},
     {"game": "Turnip Boy Commits Tax Evasion", "stability": "Stable", "platform": "PC"},
     {"game": "Turok 2", "stability": "Unstable"},
     {"game": "Twiddly Gems", "list": "index", "repo": "mooinglemur/twiddlygems", "links": ["https://github.com/mooinglemur/twiddlygems/releases"], "platform": "Web"},
