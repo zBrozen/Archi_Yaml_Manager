@@ -899,7 +899,7 @@
  },
  {
   "game": "Armored Core 3",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "authors": [
    "Aleksandy"
   ],
@@ -913,8 +913,8 @@
    "stability": "Unstable",
    "platform": "PS2"
   },
-  "download": "https://github.com/Aleksandylmao/Armored-Core-3-PCSX2-Archipelago/releases/download/v0.2.0/armoredcore3.apworld",
-  "release": "https://github.com/Aleksandylmao/Armored-Core-3-PCSX2-Archipelago/releases/tag/v0.2.0",
+  "download": "https://github.com/Aleksandylmao/Armored-Core-3-PCSX2-Archipelago/releases/download/v0.3.0/armoredcore3.apworld",
+  "release": "https://github.com/Aleksandylmao/Armored-Core-3-PCSX2-Archipelago/releases/tag/v0.3.0",
   "links": [
    "https://github.com/Aleksandylmao/Armored-Core-3-PCSX2-Archipelago/releases"
   ]
@@ -4721,8 +4721,8 @@
    "stability": "Unstable",
    "platform": "PC"
   },
-  "download": "https://github.com/Haywire32/DD1-AP/releases/download/v0.8.3/dungeon_defenders.apworld",
-  "release": "https://github.com/Haywire32/DD1-AP/releases/tag/v0.8.3",
+  "download": "https://github.com/Haywire32/DD1-AP/releases/download/v0.8.3.1/dungeon_defenders.apworld",
+  "release": "https://github.com/Haywire32/DD1-AP/releases/tag/v0.8.3.1",
   "links": [
    "https://github.com/Haywire32/DD1-AP/releases"
   ]
@@ -5985,9 +5985,13 @@
   ]
  },
  {
-  "game": "glover",
-  "version": null,
-  "authors": [],
+  "game": "Glover",
+  "version": "1.1.1",
+  "authors": [
+   "Smg065",
+   "jjjj12212",
+   "CodeGorilla"
+  ],
   "file": "glover.apworld",
   "source": "https://github.com/Smg065/GloverArchipelago",
   "license": "MIT",
@@ -6004,8 +6008,8 @@
    "pr_status": "In Review",
    "platform": "N64"
   },
-  "download": "https://github.com/Smg065/GloverArchipelago/releases/download/v1.0.1/glover.apworld",
-  "release": "https://github.com/Smg065/GloverArchipelago/releases/tag/v1.0.1",
+  "download": "https://github.com/Smg065/GloverArchipelago/releases/download/v1.1.1/glover.apworld",
+  "release": "https://github.com/Smg065/GloverArchipelago/releases/tag/v1.1.1",
   "links": [
    "https://github.com/Smg065/GloverArchipelago/releases/latest"
   ]
@@ -6767,7 +6771,7 @@
  },
  {
   "game": "High Roller",
-  "version": "1.3.0",
+  "version": "1.3.2",
   "authors": [
    "E-A-V"
   ],
@@ -6781,8 +6785,8 @@
    "stability": "Unstable",
    "platform": "PC"
   },
-  "download": "https://github.com/ElireFeltores/High-Roller/releases/download/v1.3.1/high_roller.apworld",
-  "release": "https://github.com/ElireFeltores/High-Roller/releases/tag/v1.3.1",
+  "download": "https://github.com/ElireFeltores/High-Roller/releases/download/v1.3.2/high_roller.apworld",
+  "release": "https://github.com/ElireFeltores/High-Roller/releases/tag/v1.3.2",
   "links": [
    "https://github.com/ElireFeltores/High-Roller/releases"
   ]
@@ -7521,8 +7525,8 @@
    "stability": "Unstable",
    "pr_status": "Not PRing"
   },
-  "download": "https://github.com/rvanmatre50/JSRF-Archipelago-Randomizer/releases/download/v1.3a/jsrf.apworld",
-  "release": "https://github.com/rvanmatre50/JSRF-Archipelago-Randomizer/releases/tag/v1.3a",
+  "download": "https://github.com/rvanmatre50/JSRF-Archipelago-Randomizer/releases/download/v1.4a/jsrf.apworld",
+  "release": "https://github.com/rvanmatre50/JSRF-Archipelago-Randomizer/releases/tag/v1.4a",
   "links": [
    "https://github.com/rvanmatre50/JSRF-Archipelago-Randomizer/releases"
   ]
@@ -8980,7 +8984,7 @@
  },
  {
   "game": "MathQuest",
-  "version": "21.0.0",
+  "version": "22.0.0",
   "authors": [
    "rssaromeo"
   ],
@@ -8994,8 +8998,8 @@
    "playable": "unofficial",
    "list": "index"
   },
-  "download": "https://github.com/rsa17826/mqap/releases/download/21/mathquest.apworld",
-  "release": "https://github.com/rsa17826/mqap/releases/tag/21",
+  "download": "https://github.com/rsa17826/mqap/releases/download/22/mathquest.apworld",
+  "release": "https://github.com/rsa17826/mqap/releases/tag/22",
   "links": [
    "https://github.com/rsa17826/mqap/releases"
   ]
@@ -9502,7 +9506,7 @@
  },
  {
   "game": "MGS: Masala Garden Salad",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "authors": [
    "SDMichaud",
    "TheRealSolidusSnake"
@@ -9523,8 +9527,8 @@
    "pr_status": "Not PRing",
    "adult": true
   },
-  "download": "https://github.com/TheRealSolidusSnake/Archipelago/releases/download/1.0.0/mgsalad.apworld",
-  "release": "https://github.com/TheRealSolidusSnake/Archipelago/releases/tag/1.0.0",
+  "download": "https://github.com/TheRealSolidusSnake/Archipelago/releases/download/1.1.0/mgsalad.apworld",
+  "release": "https://github.com/TheRealSolidusSnake/Archipelago/releases/tag/1.1.0",
   "links": [
    "https://github.com/TheRealSolidusSnake/Archipelago/releases/"
   ]
@@ -13919,15 +13923,15 @@
   "license": "MIT",
   "license_url": "https://github.com/BlastSlimey/2hapezipelago/blob/HEAD/LICENSE.txt",
   "copyright": [
-   "Copyright (c) [year] [fullname]"
+   "Copyright (c) 2026 BlastSlimey"
   ],
   "sheet": {
    "game": "shapez 2",
    "stability": "Unstable",
    "platform": "PC"
   },
-  "download": "https://github.com/BlastSlimey/2hapezipelago/releases/download/1.1.0/shapez_2.apworld",
-  "release": "https://github.com/BlastSlimey/2hapezipelago/releases/tag/1.1.0",
+  "download": "https://github.com/BlastSlimey/2hapezipelago/releases/download/1.1.0-apworld/shapez_2.apworld",
+  "release": "https://github.com/BlastSlimey/2hapezipelago/releases/tag/1.1.0-apworld",
   "links": [
    "https://github.com/BlastSlimey/2hapezipelago/releases"
   ]
@@ -15443,7 +15447,7 @@
  },
  {
   "game": "SteamWorld Dig 2",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "authors": [
    "Tails"
   ],
@@ -15457,8 +15461,8 @@
    "stability": "Unstable",
    "platform": "PC"
   },
-  "download": "https://github.com/ClTYOFEVlL/SWD2-Archipelago/releases/download/v0.3.0/swd2.apworld",
-  "release": "https://github.com/ClTYOFEVlL/SWD2-Archipelago/releases/tag/v0.3.0",
+  "download": "https://github.com/ClTYOFEVlL/SWD2-Archipelago/releases/download/v0.3.1/swd2.apworld",
+  "release": "https://github.com/ClTYOFEVlL/SWD2-Archipelago/releases/tag/v0.3.1",
   "links": [
    "https://github.com/ClTYOFEVlL/SWD2-Archipelago/releases/latest"
   ]
@@ -16134,7 +16138,7 @@
  },
  {
   "game": "Team Fortress 2 Mann vs Machine",
-  "version": "1.18.8",
+  "version": "1.18.10",
   "authors": [
    "mathis"
   ],
@@ -16150,8 +16154,8 @@
    "stability": "Unstable",
    "platform": "PC"
   },
-  "download": "https://github.com/m-this/tf2-archipelago/releases/download/v1.18.8/tf2_mvm.apworld",
-  "release": "https://github.com/m-this/tf2-archipelago/releases/tag/v1.18.8",
+  "download": "https://github.com/m-this/tf2-archipelago/releases/download/v1.18.10/tf2_mvm.apworld",
+  "release": "https://github.com/m-this/tf2-archipelago/releases/tag/v1.18.10",
   "links": [
    "https://github.com/m-this/tf2-archipelago/releases/latest"
   ]
@@ -16372,7 +16376,7 @@
  },
  {
   "game": "The Grinch",
-  "version": "1.6.4",
+  "version": "1.6.5",
   "authors": [
    "MarioSpore",
    "SomeJakeGuy"
@@ -16392,8 +16396,8 @@
    "stability": "Stable",
    "platform": "PSX"
   },
-  "download": "https://github.com/MarioSpore/Grinch-AP/releases/download/v1.6.4/grinch.apworld",
-  "release": "https://github.com/MarioSpore/Grinch-AP/releases/tag/v1.6.4",
+  "download": "https://github.com/MarioSpore/Grinch-AP/releases/download/v1.6.5/grinch.apworld",
+  "release": "https://github.com/MarioSpore/Grinch-AP/releases/tag/v1.6.5",
   "links": [
    "https://github.com/MarioSpore/Grinch-AP/releases/latest"
   ]
@@ -16954,7 +16958,7 @@
  },
  {
   "game": "TOEM: A Photo Adventure",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "authors": [
    "DrTChops",
    "0xDEAFC0DE",
@@ -16972,8 +16976,8 @@
    "stability": "Stable",
    "platform": "PC"
   },
-  "download": "https://github.com/bbernardoni/Archipelago.TOEM/releases/download/2.1.0/toem.apworld",
-  "release": "https://github.com/bbernardoni/Archipelago.TOEM/releases/tag/2.1.0",
+  "download": "https://github.com/bbernardoni/Archipelago.TOEM/releases/download/2.2.0/toem.apworld",
+  "release": "https://github.com/bbernardoni/Archipelago.TOEM/releases/tag/2.2.0",
   "links": [
    "https://github.com/bbernardoni/Archipelago.TOEM/releases/latest"
   ]
@@ -17107,7 +17111,7 @@
  },
  {
   "game": "Total War Warhammer III",
-  "version": "0.11.6",
+  "version": "0.11.7",
   "authors": [
    "jordansds"
   ],
@@ -17125,8 +17129,8 @@
    "game": "Total War: Warhammer III",
    "stability": "Unstable"
   },
-  "download": "https://github.com/jordansds/Archipelago_TWW3_Alt/releases/download/v0.11.6/tww3.apworld",
-  "release": "https://github.com/jordansds/Archipelago_TWW3_Alt/releases/tag/v0.11.6",
+  "download": "https://github.com/jordansds/Archipelago_TWW3_Alt/releases/download/v0.11.7/tww3.apworld",
+  "release": "https://github.com/jordansds/Archipelago_TWW3_Alt/releases/tag/v0.11.7",
   "links": [
    "https://github.com/jordansds/Archipelago_TWW3_Alt"
   ]
@@ -17728,8 +17732,8 @@
    "platform": "PC",
    "list": "index"
   },
-  "download": "https://github.com/maplehugs/umamusume_apworld/releases/download/v0.17.1/umamusume.apworld",
-  "release": "https://github.com/maplehugs/umamusume_apworld/releases/tag/v0.17.1",
+  "download": "https://github.com/maplehugs/umamusume_apworld/releases/download/v0.17.2/umamusume.apworld",
+  "release": "https://github.com/maplehugs/umamusume_apworld/releases/tag/v0.17.2",
   "links": [
    "https://github.com/maplehugs/umamusume_apworld/releases"
   ]

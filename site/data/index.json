@@ -1,6 +1,6 @@
 {
  "ap_version": "0.6.8",
- "generated_at": "2026-11-26T14:50:13+00:00",
+ "generated_at": "2026-11-27T14:50:22+00:00",
  "games": [
   {
    "game": "'Weird Al' Yankovic Discography",
@@ -579,7 +579,7 @@
    "file": "games/armored-core-3.json",
    "source": "custom",
    "apworld": "armoredcore3.apworld",
-   "world_version": "0.2.0",
+   "world_version": "0.3.0",
    "guides": "guides/armored-core-3.json",
    "sheet": {
     "game": "Armored Core 3",
@@ -3464,7 +3464,7 @@
    "file": "games/glover.json",
    "source": "custom",
    "apworld": "glover.apworld",
-   "world_version": null,
+   "world_version": "1.1.1",
    "guides": "guides/glover.json",
    "sheet": {
     "game": "Glover",
@@ -3895,7 +3895,7 @@
    "file": "games/high-roller.json",
    "source": "custom",
    "apworld": "high_roller.apworld",
-   "world_version": "1.3.0",
+   "world_version": "1.3.2",
    "guides": "guides/high-roller.json",
    "sheet": {
     "game": "High Roller",
@@ -5203,7 +5203,7 @@
    "file": "games/mathquest.json",
    "source": "custom",
    "apworld": "mathquest.apworld",
-   "world_version": "21.0.0",
+   "world_version": "22.0.0",
    "guides": "guides/mathquest.json",
    "sheet": {
     "game": "MathQuest",
@@ -5520,7 +5520,7 @@
    "file": "games/mgs-masala-garden-salad.json",
    "source": "custom",
    "apworld": "mgsalad.apworld",
-   "world_version": "1.0.0",
+   "world_version": "1.0.1",
    "guides": "guides/mgs-masala-garden-salad.json",
    "sheet": {
     "game": "Metal Gear Solid - Masala Garden Salad",
@@ -8661,7 +8661,7 @@
    "file": "games/steamworld-dig-2.json",
    "source": "custom",
    "apworld": "swd2.apworld",
-   "world_version": "0.3.0",
+   "world_version": "0.3.1",
    "guides": "guides/steamworld-dig-2.json",
    "sheet": {
     "game": "SteamWorld Dig 2",
@@ -9104,7 +9104,7 @@
    "file": "games/team-fortress-2-mann-vs-machine.json",
    "source": "custom",
    "apworld": "tf2_mvm.apworld",
-   "world_version": "1.18.8",
+   "world_version": "1.18.10",
    "guides": "guides/team-fortress-2-mann-vs-machine.json",
    "sheet": {
     "game": "Team Fortress 2 (Mann vs Machine)",
@@ -9241,7 +9241,7 @@
    "file": "games/the-grinch.json",
    "source": "custom",
    "apworld": "grinch.apworld",
-   "world_version": "1.6.4",
+   "world_version": "1.6.5",
    "guides": "guides/the-grinch.json",
    "sheet": {
     "game": "The Grinch",
@@ -9560,7 +9560,7 @@
    "file": "games/toem-a-photo-adventure.json",
    "source": "custom",
    "apworld": "toem.apworld",
-   "world_version": "2.1.0",
+   "world_version": "2.2.0",
    "guides": "guides/toem-a-photo-adventure.json",
    "sheet": {
     "game": "TOEM: A Photo Adventure",
@@ -11035,7 +11035,7 @@
   "pokemon_hgss": "worlds.Files.ImproperlyConfiguredAutoPatchError: Two auto patch containers are using the same file extension: <class 'worlds.pokemon_hgss.rom.PokemonHeartgoldPatch'>, <class 'output_patch.HeartGoldProcedurePatch'>",
   "pokemon_xy": "ModuleNotFoundError: No module named 'worlds.pokemon_xy'",
   "postal2": "AssertionError: Choice option 'random' cannot be manually assigned.",
-  "Salt and Sanctuary": "Did not load /tmp/tmpg2c13u01/tmpgr1uzyz6/custom_worlds/salt_and_sanctuary.apworld as its maximum core version Version(major=0, minor=6, build=6) is lower than current core version Version(major=0, minor=6, build=8).",
+  "Salt and Sanctuary": "Did not load /tmp/tmp5pdt6__i/tmprec72w3n/custom_worlds/salt_and_sanctuary.apworld as its maximum core version Version(major=0, minor=6, build=6) is lower than current core version Version(major=0, minor=6, build=8).",
   "scooby_doo_unmasked": "AssertionError: Choice option 'random' cannot be manually assigned.",
   "shapez_2": "TypeError: unsupported operand type(s) for +: 'NoneType' and 'str'",
   "smash64": "AssertionError: Choice option 'random' cannot be manually assigned.",
